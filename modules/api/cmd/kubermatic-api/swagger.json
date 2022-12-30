@@ -14186,13 +14186,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14204,6 +14197,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14720,11 +14720,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14736,6 +14731,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -25384,6 +25384,40 @@
             "description": "SeedSettings",
             "schema": {
               "$ref": "#/definitions/SeedSettings"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/totalquota": {
+      "get": {
+        "description": "The endpoint lists all resource quotas and calculates the total amount of quota available/used.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "resourceQuota",
+          "admin"
+        ],
+        "summary": "Gets a Resource Quota which holds the total amount of resource quota available, and the total amount of quota used.",
+        "operationId": "getTotalResourceQuota",
+        "responses": {
+          "200": {
+            "description": "ResourceQuota",
+            "schema": {
+              "$ref": "#/definitions/ResourceQuota"
             }
           },
           "401": {

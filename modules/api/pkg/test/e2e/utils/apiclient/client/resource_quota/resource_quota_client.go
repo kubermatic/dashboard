@@ -34,6 +34,8 @@ type ClientService interface {
 
 	GetResourceQuota(params *GetResourceQuotaParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetResourceQuotaOK, error)
 
+	GetTotalResourceQuota(params *GetTotalResourceQuotaParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTotalResourceQuotaOK, error)
+
 	ListResourceQuotas(params *ListResourceQuotasParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourceQuotasOK, error)
 
 	PutResourceQuota(params *PutResourceQuotaParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PutResourceQuotaOK, error)
@@ -152,6 +154,46 @@ func (a *Client) GetResourceQuota(params *GetResourceQuotaParams, authInfo runti
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetResourceQuotaDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetTotalResourceQuota gets a resource quota which holds the total amount of resource quota available and the total amount of quota used
+
+The endpoint lists all resource quotas and calculates the total amount of quota available/used.
+*/
+func (a *Client) GetTotalResourceQuota(params *GetTotalResourceQuotaParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetTotalResourceQuotaOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetTotalResourceQuotaParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getTotalResourceQuota",
+		Method:             "GET",
+		PathPattern:        "/api/v2/totalquota",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetTotalResourceQuotaReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetTotalResourceQuotaOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetTotalResourceQuotaDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
