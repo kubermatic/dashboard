@@ -8769,17 +8769,17 @@ func (r Routing) deleteResourceQuota() http.Handler {
 
 // swagger:route GET /api/v2/totalquota resourceQuota admin getTotalResourceQuota
 //
-//		Gets a Resource Quota which holds the total amount of resource quota available, and the total amount of quota used.
-//		The endpoint lists all resource quotas and calculates the total amount of quota available/used.
+//	Gets a Resource Quota which holds the total amount of resource quota available, and the total amount of quota used.
+//	The endpoint lists all resource quotas and calculates the total amount of quota available/used.
 //
-//		Produces:
-//		- application/json
+//	Produces:
+//	- application/json
 //
-//		Responses:
-//		  default: errorResponse
-//		  200: ResourceQuota
-//		  401: empty
-//		  403: empty
+//	Responses:
+//	  default: errorResponse
+//	  200: ResourceQuota
+//	  401: empty
+//	  403: empty
 func (r Routing) getTotalResourceQuota() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
