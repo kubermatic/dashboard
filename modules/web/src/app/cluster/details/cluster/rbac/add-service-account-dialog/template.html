@@ -24,8 +24,11 @@ limitations under the License.
         <input matInput
                required
                [formControl]="form.controls.name" />
-        <mat-error *ngIf="form.controls.name.hasError('required')">
+        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Required)">
           Name is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Pattern)">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
         </mat-error>
       </mat-form-field>
 
@@ -39,7 +42,7 @@ limitations under the License.
           <mat-option *ngFor="let namespace of namespaces"
                       [value]="namespace"> {{ namespace }} </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls.namespace.hasError('required')">
+        <mat-error *ngIf="form.get(Controls.Namespace).hasError(ErrorType.Required)">
           Namespace is <strong>required</strong>
         </mat-error>
       </mat-form-field>

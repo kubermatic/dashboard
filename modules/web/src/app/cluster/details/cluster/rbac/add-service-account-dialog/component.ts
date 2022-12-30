@@ -23,6 +23,8 @@ import {takeUntil} from 'rxjs/operators';
 import {Cluster} from '@shared/entity/cluster';
 import {ControlsOf} from '@shared/model/shared';
 import {ClusterServiceAccount} from '@shared/entity/rbac';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {ErrorType} from '@app/shared/types/error-type';
 
 interface AddServiceAccountControls {
   name: string;
@@ -42,6 +44,7 @@ export enum Controls {
 export class AddServiceAccountDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
+  readonly ErrorType = ErrorType;
 
   namespaces: string[] = [];
   form: FormGroup<ControlsOf<AddServiceAccountControls>>;
@@ -84,7 +87,7 @@ export class AddServiceAccountDialogComponent implements OnInit, OnDestroy {
 
   private _initForm(): void {
     this.form = this._builder.nonNullable.group({
-      [Controls.Name]: this._builder.control('', [Validators.required]),
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Namespace]: this._builder.control('', [Validators.required]),
     });
   }
