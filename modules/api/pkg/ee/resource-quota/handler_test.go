@@ -910,6 +910,11 @@ func (r *rqBuilder) withGlobalUsage(cpu, mem, storage string) *rqBuilder {
 	return r
 }
 
+func (r *rqBuilder) withName(name string) *rqBuilder {
+	r.resourceQuota.Name = name
+	return r
+}
+
 func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {
 	return &kubermaticv1.ResourceQuota{
 		ObjectMeta: metav1.ObjectMeta{
@@ -971,4 +976,106 @@ func (r *rqUpdateCalculationBuilder) withMessage(msg string) *rqUpdateCalculatio
 
 func (r *rqUpdateCalculationBuilder) build() *apiv2.ResourceQuotaUpdateCalculation {
 	return &r.cr
+}
+
+func TestGetTotalQuota(t *testing.T) {
+	t.Parallel()
+	testCases := []struct {
+		Name                      string
+		ExistingKubermaticObjects []ctrlruntimeclient.Object
+		ExistingAPIUser           *apiv1.User
+		ExpectedHTTPStatusCode    int
+		ExpectedResponse          *apiv2.ResourceQuota
+	}{
+		{
+			Name:                      "should get unauthorized if not admin",
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(),
+			ExistingAPIUser:           test.GenDefaultAPIUser(),
+			ExpectedHTTPStatusCode:    http.StatusForbidden,
+			ExpectedResponse:          nil,
+		},
+		{
+			Name: "should get zero available/used if no quota exist",
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				test.GenAdminUser("John", "john@acme.com", true)),
+			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newTotalResourceQuotaBuilder().
+				withQuota(genAPIQuota(0, 0, 0)).
+				withGlobalUsage(genAPIQuota(0, 0, 0)).
+				build(),
+		},
+		{
+			Name: "should get proper calculated available/used with multiple quotas existing",
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				test.GenAdminUser("John", "john@acme.com", true),
+				newRQBuilder().
+					withQuota("2", "5G", "10G").
+					withGlobalUsage("1", "3G", "4G").
+					build(),
+				newRQBuilder().
+					withQuota("5", "10G", "15G").
+					withGlobalUsage("3", "5G", "10G").
+					withName("second").
+					build()),
+			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newTotalResourceQuotaBuilder().
+				withQuota(genAPIQuota(7, 15, 25)).
+				withGlobalUsage(genAPIQuota(4, 8, 14)).
+				build(),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, "/api/v2/totalquota", strings.NewReader(""))
+			resp := httptest.NewRecorder()
+
+			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+			ep.ServeHTTP(resp, req)
+
+			if resp.Code != tc.ExpectedHTTPStatusCode {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, resp.Code, resp.Body.String())
+			}
+			// skip the comparison for error codes and when the name is generated
+			if resp.Code == http.StatusOK {
+				b, err := json.Marshal(tc.ExpectedResponse)
+				if err != nil {
+					t.Fatalf("failed to marshal expected response %v", err)
+				}
+				test.CompareWithResult(t, resp, string(b))
+			}
+		})
+	}
+}
+
+type totalResourceQuotaBuilder struct {
+	rq apiv2.ResourceQuota
+}
+
+func newTotalResourceQuotaBuilder() *totalResourceQuotaBuilder {
+	return &totalResourceQuotaBuilder{
+		rq: apiv2.ResourceQuota{
+			Name:                     "totalquota",
+			SubjectHumanReadableName: "totalquota",
+		},
+	}
+}
+
+func (r *totalResourceQuotaBuilder) withQuota(quota apiv2.Quota) *totalResourceQuotaBuilder {
+	r.rq.Quota = quota
+	return r
+}
+
+func (r *totalResourceQuotaBuilder) withGlobalUsage(usage apiv2.Quota) *totalResourceQuotaBuilder {
+	r.rq.Status.GlobalUsage = usage
+	return r
+}
+
+func (r *totalResourceQuotaBuilder) build() *apiv2.ResourceQuota {
+	return &r.rq
 }

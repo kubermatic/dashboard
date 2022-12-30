@@ -1440,6 +1440,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.getResourceQuota())
 
 	mux.Methods(http.MethodGet).
+		Path("/totalquota").
+		Handler(r.getTotalResourceQuota())
+
+	mux.Methods(http.MethodGet).
 		Path("/quotas").
 		Handler(r.listResourceQuotas())
 
@@ -8758,6 +8762,31 @@ func (r Routing) deleteResourceQuota() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(resourcequota.DeleteResourceQuotaEndpoint(r.userInfoGetter, r.resourceQuotaProvider)),
 		resourcequota.DecodeResourceQuotasReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/totalquota resourceQuota admin getTotalResourceQuota
+//
+//		Gets a Resource Quota which holds the total amount of resource quota available, and the total amount of quota used.
+//	 The endpoint lists all resource quotas and calculates the total amount of quota available/used.
+//
+//		Produces:
+//		- application/json
+//
+//		Responses:
+//		  default: errorResponse
+//		  200: ResourceQuota
+//		  401: empty
+//		  403: empty
+func (r Routing) getTotalResourceQuota() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(resourcequota.GetTotalResourceQuotaEndpoint(r.userInfoGetter, r.resourceQuotaProvider)),
+		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

@@ -48,7 +48,10 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
-const DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+const (
+	DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+	totalQuotaName                   = "totalquota"
+)
 
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
@@ -228,6 +231,47 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 	}
 
 	return convertToAPIStruct(projectResourceQuota, projectName), nil
+}
+
+func GetTotalResourceQuota(ctx context.Context, quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuota, error) {
+	rqList, err := quotaProvider.ListUnsecured(ctx, nil)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+
+	for _, quota := range rqList.Items {
+		if quota.Spec.Quota.CPU != nil {
+			rdAvailable.CPU.Add(*quota.Spec.Quota.CPU)
+		}
+		if quota.Spec.Quota.Memory != nil {
+			rdAvailable.Memory.Add(*quota.Spec.Quota.Memory)
+		}
+		if quota.Spec.Quota.Storage != nil {
+			rdAvailable.Storage.Add(*quota.Spec.Quota.Storage)
+		}
+
+		if quota.Status.GlobalUsage.CPU != nil {
+			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
+		}
+		if quota.Status.GlobalUsage.Memory != nil {
+			rdUsed.Memory.Add(*quota.Status.GlobalUsage.Memory)
+		}
+		if quota.Status.GlobalUsage.Storage != nil {
+			rdUsed.Storage.Add(*quota.Status.GlobalUsage.Storage)
+		}
+	}
+
+	return &apiv2.ResourceQuota{
+		Name:  totalQuotaName,
+		Quota: convertToAPIQuota(*rdAvailable),
+		Status: apiv2.ResourceQuotaStatus{
+			GlobalUsage: convertToAPIQuota(*rdUsed),
+		},
+		SubjectHumanReadableName: totalQuotaName,
+	}, nil
 }
 
 func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
