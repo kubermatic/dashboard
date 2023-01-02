@@ -222,8 +222,8 @@ func OpenstackTenantEndpoint(seedsGetter provider.SeedsGetter, presetProvider pr
 			Username:                    reqTenant.Username,
 			Password:                    reqTenant.Password,
 			Domain:                      reqTenant.Domain,
-			Tenant:                      "",
-			TenantID:                    "",
+			OpenstackTenant:             "",
+			OpenstackTenantID:           "",
 			DatacenterName:              reqTenant.DatacenterName,
 			ApplicationCredentialID:     reqTenant.ApplicationCredentialID,
 			ApplicationCredentialSecret: reqTenant.ApplicationCredentialSecret,
@@ -478,17 +478,17 @@ type OpenstackReq struct {
 	// Domain OpenStack domain name
 	Domain string
 	// in: header
-	// Tenant OpenStack tenant name (depreciated in favor of Project instead)
-	Tenant string
+	// OpenstackTenant OpenStack tenant name (depreciated in favor of Project instead)
+	OpenstackTenant string
 	// in: header
-	// TenantID OpenStack tenant ID (depreciated in favor of  ProjectID instead)
-	TenantID string
+	// OpenstackTenantID OpenStack tenant ID (depreciated in favor of  ProjectID instead)
+	OpenstackTenantID string
 	// in: header
-	// Project OpenStack project name
-	Project string
+	// OpenstackProject OpenStack project name
+	OpenstackProject string
 	// in: header
-	// ProjectID OpenStack project ID
-	ProjectID string
+	// OpenstackProjectID OpenStack project ID
+	OpenstackProjectID string
 	// in: header
 	// DatacenterName Openstack datacenter name
 	DatacenterName string
@@ -509,24 +509,24 @@ type OpenstackReq struct {
 
 // GetProjectOrDefaultToTenant returns the the project if defined otherwise fallback to tenant.
 func (r OpenstackReq) GetProjectOrDefaultToTenant() string {
-	if len(r.Project) > 0 {
-		return r.Project
+	if len(r.OpenstackProject) > 0 {
+		return r.OpenstackProject
 	} else {
-		return r.Tenant
+		return r.OpenstackTenant
 	}
 }
 
 // GetProjectIdOrDefaultToTenantId returns the the projectID if defined otherwise fallback to tenantID.
 func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
-	if len(r.ProjectID) > 0 {
-		return r.ProjectID
+	if len(r.OpenstackProjectID) > 0 {
+		return r.OpenstackProjectID
 	} else {
-		return r.TenantID
+		return r.OpenstackTenantID
 	}
 }
 
 // OpenstackProjectReq represent a request for Openstack data within the context of a KKP project.
-// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listOpenstackServerGroups
+// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listProjectOpenstackServerGroups
 type OpenstackProjectReq struct {
 	OpenstackReq
 	common.ProjectReq
@@ -593,10 +593,10 @@ func DecodeOpenstackReq(_ context.Context, r *http.Request) (interface{}, error)
 
 	req.Username = r.Header.Get("Username")
 	req.Password = r.Header.Get("Password")
-	req.Tenant = r.Header.Get("Tenant")
-	req.TenantID = r.Header.Get("TenantID")
-	req.Tenant = r.Header.Get("Project")
-	req.TenantID = r.Header.Get("ProjectID")
+	req.OpenstackTenant = r.Header.Get("Tenant")
+	req.OpenstackTenantID = r.Header.Get("TenantID")
+	req.OpenstackTenant = r.Header.Get("Project")
+	req.OpenstackTenantID = r.Header.Get("ProjectID")
 	req.Domain = r.Header.Get("Domain")
 	req.DatacenterName = r.Header.Get("DatacenterName")
 	req.ApplicationCredentialID = r.Header.Get("ApplicationCredentialID")
