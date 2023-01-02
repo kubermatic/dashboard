@@ -111,7 +111,7 @@ replace (
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.7.0
 )
 
-require k8c.io/kubermatic/v2 v2.21.1-0.20221228182316-2fa3f8f46894
+require k8c.io/kubermatic/v2 v2.21.1-0.20230102135420-257923bd42f2
 
 require (
 	cloud.google.com/go/compute v1.13.0 // indirect
