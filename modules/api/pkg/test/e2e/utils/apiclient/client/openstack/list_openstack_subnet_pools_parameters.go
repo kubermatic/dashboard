@@ -80,20 +80,20 @@ type ListOpenstackSubnetPoolsParams struct {
 	// OIDCAuthentication.
 	OIDCAuthentication *bool
 
+	// OpenstackProject.
+	OpenstackProject *string
+
+	// OpenstackProjectID.
+	OpenstackProjectID *string
+
+	// OpenstackTenant.
+	OpenstackTenant *string
+
+	// OpenstackTenantID.
+	OpenstackTenantID *string
+
 	// Password.
 	Password *string
-
-	// Project.
-	Project *string
-
-	// ProjectID.
-	ProjectID *string
-
-	// Tenant.
-	Tenant *string
-
-	// TenantID.
-	TenantID *string
 
 	// Username.
 	Username *string
@@ -222,6 +222,50 @@ func (o *ListOpenstackSubnetPoolsParams) SetOIDCAuthentication(oIDCAuthenticatio
 	o.OIDCAuthentication = oIDCAuthentication
 }
 
+// WithOpenstackProject adds the openstackProject to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) WithOpenstackProject(openstackProject *string) *ListOpenstackSubnetPoolsParams {
+	o.SetOpenstackProject(openstackProject)
+	return o
+}
+
+// SetOpenstackProject adds the openstackProject to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) SetOpenstackProject(openstackProject *string) {
+	o.OpenstackProject = openstackProject
+}
+
+// WithOpenstackProjectID adds the openstackProjectID to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) WithOpenstackProjectID(openstackProjectID *string) *ListOpenstackSubnetPoolsParams {
+	o.SetOpenstackProjectID(openstackProjectID)
+	return o
+}
+
+// SetOpenstackProjectID adds the openstackProjectId to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) SetOpenstackProjectID(openstackProjectID *string) {
+	o.OpenstackProjectID = openstackProjectID
+}
+
+// WithOpenstackTenant adds the openstackTenant to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) WithOpenstackTenant(openstackTenant *string) *ListOpenstackSubnetPoolsParams {
+	o.SetOpenstackTenant(openstackTenant)
+	return o
+}
+
+// SetOpenstackTenant adds the openstackTenant to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) SetOpenstackTenant(openstackTenant *string) {
+	o.OpenstackTenant = openstackTenant
+}
+
+// WithOpenstackTenantID adds the openstackTenantID to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) WithOpenstackTenantID(openstackTenantID *string) *ListOpenstackSubnetPoolsParams {
+	o.SetOpenstackTenantID(openstackTenantID)
+	return o
+}
+
+// SetOpenstackTenantID adds the openstackTenantId to the list openstack subnet pools params
+func (o *ListOpenstackSubnetPoolsParams) SetOpenstackTenantID(openstackTenantID *string) {
+	o.OpenstackTenantID = openstackTenantID
+}
+
 // WithPassword adds the password to the list openstack subnet pools params
 func (o *ListOpenstackSubnetPoolsParams) WithPassword(password *string) *ListOpenstackSubnetPoolsParams {
 	o.SetPassword(password)
@@ -231,50 +275,6 @@ func (o *ListOpenstackSubnetPoolsParams) WithPassword(password *string) *ListOpe
 // SetPassword adds the password to the list openstack subnet pools params
 func (o *ListOpenstackSubnetPoolsParams) SetPassword(password *string) {
 	o.Password = password
-}
-
-// WithProject adds the project to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) WithProject(project *string) *ListOpenstackSubnetPoolsParams {
-	o.SetProject(project)
-	return o
-}
-
-// SetProject adds the project to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) SetProject(project *string) {
-	o.Project = project
-}
-
-// WithProjectID adds the projectID to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) WithProjectID(projectID *string) *ListOpenstackSubnetPoolsParams {
-	o.SetProjectID(projectID)
-	return o
-}
-
-// SetProjectID adds the projectId to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) SetProjectID(projectID *string) {
-	o.ProjectID = projectID
-}
-
-// WithTenant adds the tenant to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) WithTenant(tenant *string) *ListOpenstackSubnetPoolsParams {
-	o.SetTenant(tenant)
-	return o
-}
-
-// SetTenant adds the tenant to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) SetTenant(tenant *string) {
-	o.Tenant = tenant
-}
-
-// WithTenantID adds the tenantID to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) WithTenantID(tenantID *string) *ListOpenstackSubnetPoolsParams {
-	o.SetTenantID(tenantID)
-	return o
-}
-
-// SetTenantID adds the tenantId to the list openstack subnet pools params
-func (o *ListOpenstackSubnetPoolsParams) SetTenantID(tenantID *string) {
-	o.TenantID = tenantID
 }
 
 // WithUsername adds the username to the list openstack subnet pools params
@@ -355,42 +355,42 @@ func (o *ListOpenstackSubnetPoolsParams) WriteToRequest(r runtime.ClientRequest,
 		}
 	}
 
+	if o.OpenstackProject != nil {
+
+		// header param OpenstackProject
+		if err := r.SetHeaderParam("OpenstackProject", *o.OpenstackProject); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackProjectID != nil {
+
+		// header param OpenstackProjectID
+		if err := r.SetHeaderParam("OpenstackProjectID", *o.OpenstackProjectID); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackTenant != nil {
+
+		// header param OpenstackTenant
+		if err := r.SetHeaderParam("OpenstackTenant", *o.OpenstackTenant); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackTenantID != nil {
+
+		// header param OpenstackTenantID
+		if err := r.SetHeaderParam("OpenstackTenantID", *o.OpenstackTenantID); err != nil {
+			return err
+		}
+	}
+
 	if o.Password != nil {
 
 		// header param Password
 		if err := r.SetHeaderParam("Password", *o.Password); err != nil {
-			return err
-		}
-	}
-
-	if o.Project != nil {
-
-		// header param Project
-		if err := r.SetHeaderParam("Project", *o.Project); err != nil {
-			return err
-		}
-	}
-
-	if o.ProjectID != nil {
-
-		// header param ProjectID
-		if err := r.SetHeaderParam("ProjectID", *o.ProjectID); err != nil {
-			return err
-		}
-	}
-
-	if o.Tenant != nil {
-
-		// header param Tenant
-		if err := r.SetHeaderParam("Tenant", *o.Tenant); err != nil {
-			return err
-		}
-	}
-
-	if o.TenantID != nil {
-
-		// header param TenantID
-		if err := r.SetHeaderParam("TenantID", *o.TenantID); err != nil {
 			return err
 		}
 	}

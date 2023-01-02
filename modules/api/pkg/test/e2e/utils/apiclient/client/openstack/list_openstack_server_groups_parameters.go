@@ -80,20 +80,20 @@ type ListOpenstackServerGroupsParams struct {
 	// OIDCAuthentication.
 	OIDCAuthentication *bool
 
+	// OpenstackProject.
+	OpenstackProject *string
+
+	// OpenstackProjectID.
+	OpenstackProjectID *string
+
+	// OpenstackTenant.
+	OpenstackTenant *string
+
+	// OpenstackTenantID.
+	OpenstackTenantID *string
+
 	// Password.
 	Password *string
-
-	// Project.
-	Project *string
-
-	// ProjectID.
-	ProjectID *string
-
-	// Tenant.
-	Tenant *string
-
-	// TenantID.
-	TenantID *string
 
 	// Username.
 	Username *string
@@ -217,6 +217,50 @@ func (o *ListOpenstackServerGroupsParams) SetOIDCAuthentication(oIDCAuthenticati
 	o.OIDCAuthentication = oIDCAuthentication
 }
 
+// WithOpenstackProject adds the openstackProject to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) WithOpenstackProject(openstackProject *string) *ListOpenstackServerGroupsParams {
+	o.SetOpenstackProject(openstackProject)
+	return o
+}
+
+// SetOpenstackProject adds the openstackProject to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) SetOpenstackProject(openstackProject *string) {
+	o.OpenstackProject = openstackProject
+}
+
+// WithOpenstackProjectID adds the openstackProjectID to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) WithOpenstackProjectID(openstackProjectID *string) *ListOpenstackServerGroupsParams {
+	o.SetOpenstackProjectID(openstackProjectID)
+	return o
+}
+
+// SetOpenstackProjectID adds the openstackProjectId to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) SetOpenstackProjectID(openstackProjectID *string) {
+	o.OpenstackProjectID = openstackProjectID
+}
+
+// WithOpenstackTenant adds the openstackTenant to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) WithOpenstackTenant(openstackTenant *string) *ListOpenstackServerGroupsParams {
+	o.SetOpenstackTenant(openstackTenant)
+	return o
+}
+
+// SetOpenstackTenant adds the openstackTenant to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) SetOpenstackTenant(openstackTenant *string) {
+	o.OpenstackTenant = openstackTenant
+}
+
+// WithOpenstackTenantID adds the openstackTenantID to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) WithOpenstackTenantID(openstackTenantID *string) *ListOpenstackServerGroupsParams {
+	o.SetOpenstackTenantID(openstackTenantID)
+	return o
+}
+
+// SetOpenstackTenantID adds the openstackTenantId to the list openstack server groups params
+func (o *ListOpenstackServerGroupsParams) SetOpenstackTenantID(openstackTenantID *string) {
+	o.OpenstackTenantID = openstackTenantID
+}
+
 // WithPassword adds the password to the list openstack server groups params
 func (o *ListOpenstackServerGroupsParams) WithPassword(password *string) *ListOpenstackServerGroupsParams {
 	o.SetPassword(password)
@@ -226,50 +270,6 @@ func (o *ListOpenstackServerGroupsParams) WithPassword(password *string) *ListOp
 // SetPassword adds the password to the list openstack server groups params
 func (o *ListOpenstackServerGroupsParams) SetPassword(password *string) {
 	o.Password = password
-}
-
-// WithProject adds the project to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) WithProject(project *string) *ListOpenstackServerGroupsParams {
-	o.SetProject(project)
-	return o
-}
-
-// SetProject adds the project to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) SetProject(project *string) {
-	o.Project = project
-}
-
-// WithProjectID adds the projectID to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) WithProjectID(projectID *string) *ListOpenstackServerGroupsParams {
-	o.SetProjectID(projectID)
-	return o
-}
-
-// SetProjectID adds the projectId to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) SetProjectID(projectID *string) {
-	o.ProjectID = projectID
-}
-
-// WithTenant adds the tenant to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) WithTenant(tenant *string) *ListOpenstackServerGroupsParams {
-	o.SetTenant(tenant)
-	return o
-}
-
-// SetTenant adds the tenant to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) SetTenant(tenant *string) {
-	o.Tenant = tenant
-}
-
-// WithTenantID adds the tenantID to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) WithTenantID(tenantID *string) *ListOpenstackServerGroupsParams {
-	o.SetTenantID(tenantID)
-	return o
-}
-
-// SetTenantID adds the tenantId to the list openstack server groups params
-func (o *ListOpenstackServerGroupsParams) SetTenantID(tenantID *string) {
-	o.TenantID = tenantID
 }
 
 // WithUsername adds the username to the list openstack server groups params
@@ -339,42 +339,42 @@ func (o *ListOpenstackServerGroupsParams) WriteToRequest(r runtime.ClientRequest
 		}
 	}
 
+	if o.OpenstackProject != nil {
+
+		// header param OpenstackProject
+		if err := r.SetHeaderParam("OpenstackProject", *o.OpenstackProject); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackProjectID != nil {
+
+		// header param OpenstackProjectID
+		if err := r.SetHeaderParam("OpenstackProjectID", *o.OpenstackProjectID); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackTenant != nil {
+
+		// header param OpenstackTenant
+		if err := r.SetHeaderParam("OpenstackTenant", *o.OpenstackTenant); err != nil {
+			return err
+		}
+	}
+
+	if o.OpenstackTenantID != nil {
+
+		// header param OpenstackTenantID
+		if err := r.SetHeaderParam("OpenstackTenantID", *o.OpenstackTenantID); err != nil {
+			return err
+		}
+	}
+
 	if o.Password != nil {
 
 		// header param Password
 		if err := r.SetHeaderParam("Password", *o.Password); err != nil {
-			return err
-		}
-	}
-
-	if o.Project != nil {
-
-		// header param Project
-		if err := r.SetHeaderParam("Project", *o.Project); err != nil {
-			return err
-		}
-	}
-
-	if o.ProjectID != nil {
-
-		// header param ProjectID
-		if err := r.SetHeaderParam("ProjectID", *o.ProjectID); err != nil {
-			return err
-		}
-	}
-
-	if o.Tenant != nil {
-
-		// header param Tenant
-		if err := r.SetHeaderParam("Tenant", *o.Tenant); err != nil {
-			return err
-		}
-	}
-
-	if o.TenantID != nil {
-
-		// header param TenantID
-		if err := r.SetHeaderParam("TenantID", *o.TenantID); err != nil {
 			return err
 		}
 	}
