@@ -947,11 +947,6 @@ func (r *rqBuilder) withGlobalUsage(cpu, mem, storage string) *rqBuilder {
 	return r
 }
 
-func (r *rqBuilder) withName(name string) *rqBuilder {
-	r.resourceQuota.Name = name
-	return r
-}
-
 func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {
 	return &kubermaticv1.ResourceQuota{
 		ObjectMeta: metav1.ObjectMeta{
