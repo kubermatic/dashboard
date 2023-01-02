@@ -539,7 +539,7 @@ type OpenstackProjectSubnetPoolReq struct {
 	common.ProjectReq
 }
 
-// OpenstackTenantReq represent a request for openstack tenants
+// OpenstackTenantReq represent a request for openstack tenants.
 type OpenstackTenantReq struct {
 	// in: header
 	// Username OpenStack user name
@@ -574,7 +574,7 @@ type OpenstackProjectTenantReq struct {
 	common.ProjectReq
 }
 
-// OpenstackSubnetReq represent a request for openstack subnets
+// OpenstackSubnetReq represent a request for openstack subnets.
 type OpenstackSubnetReq struct {
 	OpenstackReq
 	// in: query
