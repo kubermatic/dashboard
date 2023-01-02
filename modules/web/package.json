@@ -99,7 +99,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "14.2.9",
     "@angular/cli": "14.2.9",
-    "@angular/compiler-cli": "14.2.10",
+    "@angular/compiler-cli": "15.0.4",
     "@jest/globals": "29.3.1",
     "@types/jest": "29.2.3",
     "@types/js-yaml": "4.0.5",
