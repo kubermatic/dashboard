@@ -45,6 +45,13 @@ limitations under the License.
             <div value>{{SECRET_MASK}}</div>
           </km-property>
         </ng-container>
+        <!-- GCP -->
+        <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.gcp">
+          <km-property>
+            <div key>Service Account</div>
+            <div value>{{SECRET_MASK}}</div>
+          </km-property>
+        </ng-container>
       </div>
     </div>
   </div>
