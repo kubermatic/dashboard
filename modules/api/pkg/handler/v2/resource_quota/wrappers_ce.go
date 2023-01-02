@@ -56,10 +56,6 @@ func deleteResourceQuota(_ context.Context, _ interface{}, _ provider.ResourceQu
 	return nil
 }
 
-func getTotalResourceQuota(ctx context.Context, quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuota, error) {
-	return nil, nil
-}
-
 func DecodeResourceQuotasReq(_ context.Context, _ *http.Request) (interface{}, error) {
 	return nil, nil
 }

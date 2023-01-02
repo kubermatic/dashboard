@@ -93,6 +93,10 @@ type listResourceQuotas struct {
 	// in: query
 	// required: false
 	SubjectKind string `json:"subject_kind,omitempty"`
+
+	// in: query
+	// required: false
+	Accumulate string `json:"accumulate,omitempty"`
 }
 
 // swagger:parameters createResourceQuota
@@ -146,6 +150,7 @@ func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
 
 	req.SubjectName = r.URL.Query().Get("subjectName")
 	req.SubjectKind = r.URL.Query().Get("subjectKind")
+	req.Accumulate = r.URL.Query().Get("accumulate")
 
 	return req, nil
 }
@@ -233,12 +238,7 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 	return convertToAPIStruct(projectResourceQuota, projectName), nil
 }
 
-func GetTotalResourceQuota(ctx context.Context, quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuota, error) {
-	rqList, err := quotaProvider.ListUnsecured(ctx, nil)
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-
+func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuota {
 	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
 	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
 
@@ -271,7 +271,7 @@ func GetTotalResourceQuota(ctx context.Context, quotaProvider provider.ResourceQ
 			GlobalUsage: convertToAPIQuota(*rdUsed),
 		},
 		SubjectHumanReadableName: totalQuotaName,
-	}, nil
+	}
 }
 
 func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
@@ -647,6 +647,11 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 	resourceQuotaList, err := provider.ListUnsecured(ctx, labelSet)
 	if err != nil {
 		return nil, err
+	}
+
+	// if accumulate is true, accumulate all resource quota's quotas and global usage and return
+	if req.Accumulate == "true" {
+		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList)}, nil
 	}
 
 	// Fetching projects to get their human-readable names.

@@ -19,12 +19,10 @@ package resourcequota
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -133,23 +131,5 @@ func DeleteResourceQuotaEndpoint(userInfoGetter provider.UserInfoGetter, provide
 			return nil, err
 		}
 		return nil, nil
-	}
-}
-
-func GetTotalResourceQuotaEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.ResourceQuotaProvider) endpoint.Endpoint {
-	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, "non admin user is not permitted to access this resource")
-		}
-
-		resp, err := getTotalResourceQuota(ctx, provider)
-		if err != nil {
-			return nil, err
-		}
-		return resp, nil
 	}
 }
