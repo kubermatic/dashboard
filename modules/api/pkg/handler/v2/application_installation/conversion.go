@@ -33,6 +33,7 @@ func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.Applicatio
 			Name:              in.Name,
 		},
 		Namespace: in.Namespace,
+		Labels:    in.Labels,
 		Spec: &apiv2.ApplicationInstallationSpec{
 			Namespace: apiv1.NamespaceSpec{
 				Name:        in.Spec.Namespace.Name,
@@ -73,6 +74,7 @@ func convertInternalToAPIApplicationInstallationForList(in *appskubermaticv1.App
 				Labels:      in.Spec.Namespace.Labels,
 				Annotations: in.Spec.Namespace.Annotations,
 			},
+			Labels: in.Labels,
 			ApplicationRef: apiv1.ApplicationRef{
 				Name:    in.Spec.ApplicationRef.Name,
 				Version: in.Spec.ApplicationRef.Version,
@@ -98,6 +100,7 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      app.Name,
 			Namespace: app.Namespace,
+			Labels:    app.Labels,
 		},
 		Spec: appskubermaticv1.ApplicationInstallationSpec{
 			Namespace: appskubermaticv1.AppNamespaceSpec{

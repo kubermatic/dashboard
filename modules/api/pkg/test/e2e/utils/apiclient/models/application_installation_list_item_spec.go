@@ -18,6 +18,9 @@ import (
 // swagger:model ApplicationInstallationListItemSpec
 type ApplicationInstallationListItemSpec struct {
 
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// application ref
 	ApplicationRef *ApplicationRef `json:"applicationRef,omitempty"`
 
