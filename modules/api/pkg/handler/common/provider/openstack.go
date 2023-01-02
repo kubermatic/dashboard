@@ -374,7 +374,11 @@ func filterMachineFlavorsForOpenstack(instances []apiv1.OpenstackSize, machineFi
 	return filteredRecords
 }
 
-func MeetsOpenstackNodeSizeRequirement(apiSize apiv1.OpenstackSize, requirements kubermaticv1.OpenstackNodeSizeRequirements) bool {
+func MeetsOpenstackNodeSizeRequirement(apiSize apiv1.OpenstackSize, requirements *kubermaticv1.OpenstackNodeSizeRequirements) bool {
+	if requirements == nil {
+		return true
+	}
+
 	if apiSize.VCPUs < requirements.MinimumVCPUs {
 		return false
 	}
