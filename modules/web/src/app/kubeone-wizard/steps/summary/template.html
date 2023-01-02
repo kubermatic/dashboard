@@ -52,6 +52,25 @@ limitations under the License.
             <div value>{{SECRET_MASK}}</div>
           </km-property>
         </ng-container>
+        <!-- Azure -->
+        <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.azure">
+          <km-property>
+            <div key>Client ID</div>
+            <div value>{{SECRET_MASK}}</div>
+          </km-property>
+          <km-property>
+            <div key>Client Secret</div>
+            <div value>{{SECRET_MASK}}</div>
+          </km-property>
+          <km-property>
+            <div key>Subscription ID</div>
+            <div value>{{SECRET_MASK}}</div>
+          </km-property>
+          <km-property>
+            <div key>Tenant ID</div>
+            <div value>{{SECRET_MASK}}</div>
+          </km-property>
+        </ng-container>
       </div>
     </div>
   </div>
