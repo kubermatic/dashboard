@@ -27,13 +27,218 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	providerv1 "k8c.io/dashboard/v2/pkg/handler/v1/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
+	"k8s.io/utils/pointer"
 )
+
+func GetOpenstackAuthInfo(ctx context.Context, req OpenstackReq, projectID string, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider) (*provider.UserInfo, *resources.OpenstackCredentials, error) {
+	var cred resources.OpenstackCredentials
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return nil, nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	t := ctx.Value(middleware.RawTokenContextKey)
+	token, ok := t.(string)
+	if !ok || token == "" {
+		return nil, nil, utilerrors.NewNotAuthorized()
+	}
+
+	// No preset is used
+	presetName := req.Credential
+	if presetName == "" {
+		cred = resources.OpenstackCredentials{
+			Username:                    req.Username,
+			Password:                    req.Password,
+			Project:                     req.GetProjectOrDefaultToTenant(),
+			ProjectID:                   req.GetProjectIdOrDefaultToTenantId(),
+			Domain:                      req.Domain,
+			ApplicationCredentialID:     req.ApplicationCredentialID,
+			ApplicationCredentialSecret: req.ApplicationCredentialSecret,
+		}
+		if req.OIDCAuthentication {
+			cred.Token = token
+		}
+	} else {
+		// Preset is used
+		cred, err = getPresetCredentials(ctx, userInfo, presetName, projectID, presetProvider, token)
+		if err != nil {
+			return nil, nil, fmt.Errorf("error getting preset credentials for OpenStack: %w", err)
+		}
+	}
+
+	return userInfo, &cred, nil
+}
+
+func getPresetCredentials(ctx context.Context, userInfo *provider.UserInfo, presetName string, projectID string, presetProvider provider.PresetProvider, token string) (resources.OpenstackCredentials, error) {
+	p, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), presetName)
+	if err != nil {
+		return resources.OpenstackCredentials{}, fmt.Errorf("can not get preset %s for user %s", presetName, userInfo.Email)
+	}
+
+	if p.Spec.Openstack == nil {
+		return resources.OpenstackCredentials{}, fmt.Errorf("credentials for OpenStack provider not present in preset %s for the user %s", presetName, userInfo.Email)
+	}
+
+	credentials := resources.OpenstackCredentials{
+		Username:                    p.Spec.Openstack.Username,
+		Password:                    p.Spec.Openstack.Password,
+		Project:                     p.Spec.Openstack.Project,
+		ProjectID:                   p.Spec.Openstack.ProjectID,
+		Domain:                      p.Spec.Openstack.Domain,
+		ApplicationCredentialID:     p.Spec.Openstack.ApplicationCredentialID,
+		ApplicationCredentialSecret: p.Spec.Openstack.ApplicationCredentialSecret,
+	}
+
+	if p.Spec.Openstack.UseToken {
+		credentials.Token = token
+	}
+
+	return credentials, nil
+}
+
+func OpenstackSizeEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		datacenterName := req.DatacenterName
+		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+		if err != nil {
+			return nil, fmt.Errorf("error getting dc: %w", err)
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		filter := handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
+
+		return providercommon.GetOpenstackSizes(cred, datacenter, filter, caBundle)
+	}
+}
+
+func OpenstackAvailabilityZoneEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		datacenterName := req.DatacenterName
+		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+		if err != nil {
+			return nil, fmt.Errorf("error getting dc: %w", err)
+		}
+
+		return providercommon.GetOpenstackAvailabilityZones(ctx, datacenter, cred, caBundle)
+	}
+}
+
+func OpenstackNetworkEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.GetOpenstackNetworks(ctx, userInfo, seedsGetter, cred, req.DatacenterName, caBundle)
+	}
+}
+
+func OpenstackSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectSubnetReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.GetOpenstackSubnets(ctx, userInfo, seedsGetter, cred, req.NetworkID, req.DatacenterName, caBundle)
+	}
+}
+
+func OpenstackSecurityGroupEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(OpenstackProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.GetOpenstackSecurityGroups(ctx, userInfo, seedsGetter, cred, req.DatacenterName, caBundle)
+	}
+}
+
+func OpenstackTenantEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		reqTenant, ok := request.(OpenstackProjectTenantReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		// construct a pseudo req to get auth info
+		req := OpenstackReq{
+			Username:                    reqTenant.Username,
+			Password:                    reqTenant.Password,
+			Domain:                      reqTenant.Domain,
+			Tenant:                      "",
+			TenantID:                    "",
+			DatacenterName:              reqTenant.DatacenterName,
+			ApplicationCredentialID:     reqTenant.ApplicationCredentialID,
+			ApplicationCredentialSecret: reqTenant.ApplicationCredentialSecret,
+			Credential:                  reqTenant.Credential,
+			OIDCAuthentication:          reqTenant.OIDCAuthentication,
+		}
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req, reqTenant.GetProjectID(), userInfoGetter, presetProvider)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.GetOpenstackProjects(userInfo, seedsGetter, cred, reqTenant.DatacenterName, caBundle)
+	}
+}
 
 func OpenstackSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter,
@@ -86,14 +291,31 @@ func OpenstackServerGroupWithClusterCredentialsEndpoint(projectProvider provider
 }
 
 func OpenstackServerGroupEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
-	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(OpenstackReq)
-		if !ok {
-			return nil, fmt.Errorf("incorrect type of request, expected = OpenstackReq, got %T", request)
+		var (
+			req       OpenstackReq
+			projectID string
+		)
+
+		if !withProject {
+			openstackReq, ok := request.(OpenstackReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = openstackReq
+		} else {
+			openstackProjectReq, ok := request.(OpenstackProjectReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = openstackProjectReq.OpenstackReq
+			projectID = openstackProjectReq.GetProjectID()
 		}
 
-		userInfo, cred, err := providerv1.GetOpenstackAuthInfo(ctx, providerv1.OpenstackReq(req), userInfoGetter, presetProvider)
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req, projectID, userInfoGetter, presetProvider)
 		if err != nil {
 			return nil, err
 		}
@@ -122,13 +344,31 @@ func OpenstackAvailabilityZoneWithClusterCredentialsEndpoint(projectProvider pro
 }
 
 func OpenstackSubnetPoolEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
-	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(OpenstackSubnetPoolReq)
-		if !ok {
-			return nil, fmt.Errorf("incorrect type of request, expected = OpenstackReq, got %T", request)
+		var (
+			req       OpenstackSubnetPoolReq
+			projectID string
+		)
+
+		if !withProject {
+			subnetReq, ok := request.(OpenstackSubnetPoolReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = subnetReq
+		} else {
+			subnetProjectReq, ok := request.(OpenstackProjectSubnetPoolReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = subnetProjectReq.OpenstackSubnetPoolReq
+			projectID = subnetProjectReq.GetProjectID()
 		}
-		userInfo, cred, err := providerv1.GetOpenstackAuthInfo(ctx, req.OpenstackReq, userInfoGetter, presetProvider)
+
+		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, projectID, userInfoGetter, presetProvider)
 		if err != nil {
 			return nil, err
 		}
@@ -200,7 +440,7 @@ func DecodeOpenstackSubnetNoCredentialsReq(c context.Context, r *http.Request) (
 // OpenstackSubnetPoolReq represent a request for openstack subnet pools
 // swagger:parameters listOpenstackSubnetPools
 type OpenstackSubnetPoolReq struct {
-	providerv1.OpenstackReq
+	OpenstackReq
 	// in: query
 	IPVersion int `json:"ip_version,omitempty"`
 }
@@ -208,11 +448,11 @@ type OpenstackSubnetPoolReq struct {
 func DecodeOpenstackSubnetPoolReq(_ context.Context, r *http.Request) (interface{}, error) {
 	var req OpenstackSubnetPoolReq
 
-	openstackReq, err := providerv1.DecodeOpenstackReq(context.Background(), r)
+	openstackReq, err := DecodeOpenstackReq(context.Background(), r)
 	if err != nil {
 		return nil, err
 	}
-	req.OpenstackReq = openstackReq.(providerv1.OpenstackReq)
+	req.OpenstackReq = openstackReq.(OpenstackReq)
 
 	ipVersion := r.URL.Query().Get("ip_version")
 	if ipVersion != "" {
@@ -267,6 +507,87 @@ type OpenstackReq struct {
 	Credential string
 }
 
+// GetProjectOrDefaultToTenant returns the the project if defined otherwise fallback to tenant.
+func (r OpenstackReq) GetProjectOrDefaultToTenant() string {
+	if len(r.Project) > 0 {
+		return r.Project
+	} else {
+		return r.Tenant
+	}
+}
+
+// GetProjectIdOrDefaultToTenantId returns the the projectID if defined otherwise fallback to tenantID.
+func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
+	if len(r.ProjectID) > 0 {
+		return r.ProjectID
+	} else {
+		return r.TenantID
+	}
+}
+
+// OpenstackProjectReq represent a request for Openstack data within the context of a KKP project.
+// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listOpenstackServerGroups
+type OpenstackProjectReq struct {
+	OpenstackReq
+	common.ProjectReq
+}
+
+// OpenstackProjectSubnetPoolReq represent a request for openstack subnet pools within the context of a KKP project.
+// swagger:parameters listProjectOpenstackSubnetPools
+type OpenstackProjectSubnetPoolReq struct {
+	OpenstackSubnetPoolReq
+	common.ProjectReq
+}
+
+// OpenstackTenantReq represent a request for openstack tenants
+type OpenstackTenantReq struct {
+	// in: header
+	// Username OpenStack user name
+	Username string
+	// in: header
+	// Password OpenStack user password
+	Password string
+	// in: header
+	// Domain OpenStack domain name
+	Domain string
+	// in: header
+	// DatacenterName Openstack datacenter name
+	DatacenterName string
+	// in: header
+	// ApplicationCredentialID application credential ID
+	ApplicationCredentialID string
+	// in: header
+	// ApplicationCredentialSecret application credential Secret
+	ApplicationCredentialSecret string
+	// in: header
+	// OIDCAuthentication when true use OIDC token
+	OIDCAuthentication bool
+	// in: header
+	// Credential predefined Kubermatic credential name from the presets
+	Credential string
+}
+
+// OpenstackProjectTenantReq represent a request for openstack tenants within the context of a KKP project.
+// swagger:parameters listProjectOpenstackTenants
+type OpenstackProjectTenantReq struct {
+	OpenstackTenantReq
+	common.ProjectReq
+}
+
+// OpenstackSubnetReq represent a request for openstack subnets
+type OpenstackSubnetReq struct {
+	OpenstackReq
+	// in: query
+	NetworkID string `json:"network_id,omitempty"`
+}
+
+// OpenstackProjectSubnetReq represent a request for openstack subnets within the context of a KKP project.
+// swagger:parameters listProjectOpenstackSubnets
+type OpenstackProjectSubnetReq struct {
+	OpenstackSubnetReq
+	common.ProjectReq
+}
+
 func DecodeOpenstackReq(_ context.Context, r *http.Request) (interface{}, error) {
 	var req OpenstackReq
 
@@ -283,4 +604,102 @@ func DecodeOpenstackReq(_ context.Context, r *http.Request) (interface{}, error)
 	req.OIDCAuthentication = strings.EqualFold(r.Header.Get("OIDCAuthentication"), "true")
 	req.Credential = r.Header.Get("Credential")
 	return req, nil
+}
+
+func DecodeOpenstackProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return OpenstackProjectReq{
+		ProjectReq:   projectReq.(common.ProjectReq),
+		OpenstackReq: openstackReq.(OpenstackReq),
+	}, nil
+}
+
+func DecodeOpenstackProjectSubnetPoolReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackSubnetPoolReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return OpenstackProjectSubnetPoolReq{
+		ProjectReq:             projectReq.(common.ProjectReq),
+		OpenstackSubnetPoolReq: openstackReq.(OpenstackSubnetPoolReq),
+	}, nil
+}
+
+func DecodeOpenstackTenantReq(_ context.Context, r *http.Request) (interface{}, error) {
+	var req OpenstackTenantReq
+	req.Username = r.Header.Get("Username")
+	req.Password = r.Header.Get("Password")
+	req.Domain = r.Header.Get("Domain")
+	req.DatacenterName = r.Header.Get("DatacenterName")
+	req.ApplicationCredentialID = r.Header.Get("ApplicationCredentialID")
+	req.ApplicationCredentialSecret = r.Header.Get("ApplicationCredentialSecret")
+	req.OIDCAuthentication = strings.EqualFold(r.Header.Get("OIDCAuthentication"), "true")
+	req.Credential = r.Header.Get("Credential")
+	return req, nil
+}
+
+func DecodeOpenstackProjectTenantReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackTenantReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return OpenstackProjectTenantReq{
+		ProjectReq:         projectReq.(common.ProjectReq),
+		OpenstackTenantReq: openstackReq.(OpenstackTenantReq),
+	}, nil
+}
+
+func DecodeOpenstackSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
+	openstackReq, err := DecodeOpenstackReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	networkID := r.URL.Query().Get("network_id")
+	if networkID == "" {
+		return nil, fmt.Errorf("'network_id' is a required parameter and may not be empty")
+	}
+
+	return OpenstackSubnetReq{
+		OpenstackReq: openstackReq.(OpenstackReq),
+		NetworkID:    networkID,
+	}, nil
+}
+
+func DecodeOpenstackProjectSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackSubnetReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return OpenstackProjectSubnetReq{
+		ProjectReq:         projectReq.(common.ProjectReq),
+		OpenstackSubnetReq: openstackReq.(OpenstackSubnetReq),
+	}, nil
 }
