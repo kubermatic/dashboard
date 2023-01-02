@@ -61,6 +61,9 @@ ListResourceQuotasParams contains all the parameters to send to the API endpoint
 */
 type ListResourceQuotasParams struct {
 
+	// Accumulate.
+	Accumulate *string
+
 	// SubjectKind.
 	SubjectKind *string
 
@@ -120,6 +123,17 @@ func (o *ListResourceQuotasParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithAccumulate adds the accumulate to the list resource quotas params
+func (o *ListResourceQuotasParams) WithAccumulate(accumulate *string) *ListResourceQuotasParams {
+	o.SetAccumulate(accumulate)
+	return o
+}
+
+// SetAccumulate adds the accumulate to the list resource quotas params
+func (o *ListResourceQuotasParams) SetAccumulate(accumulate *string) {
+	o.Accumulate = accumulate
+}
+
 // WithSubjectKind adds the subjectKind to the list resource quotas params
 func (o *ListResourceQuotasParams) WithSubjectKind(subjectKind *string) *ListResourceQuotasParams {
 	o.SetSubjectKind(subjectKind)
@@ -149,6 +163,23 @@ func (o *ListResourceQuotasParams) WriteToRequest(r runtime.ClientRequest, reg s
 		return err
 	}
 	var res []error
+
+	if o.Accumulate != nil {
+
+		// query param accumulate
+		var qrAccumulate string
+
+		if o.Accumulate != nil {
+			qrAccumulate = *o.Accumulate
+		}
+		qAccumulate := qrAccumulate
+		if qAccumulate != "" {
+
+			if err := r.SetQueryParam("accumulate", qAccumulate); err != nil {
+				return err
+			}
+		}
+	}
 
 	if o.SubjectKind != nil {
 
