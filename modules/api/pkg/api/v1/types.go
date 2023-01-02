@@ -2019,6 +2019,21 @@ type KubevirtNodeSpec struct {
 	TopologySpreadConstraints []TopologySpreadConstraint `json:"topologySpreadConstraints"`
 }
 
+type KubevirtNodeSize struct {
+	// CPUs states how many cpus the kubevirt node will have.
+	// required: true
+	CPUs string `json:"cpus"`
+	// Memory states the memory that kubevirt node will have. The value should be in the
+	// format of https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/
+	// required: true
+	Memory string `json:"memory"`
+	// PrimaryDiskSize states the size of the provisioned pvc per node.
+	// required: true
+	PrimaryDiskSize string `json:"primaryDiskSize"`
+	// SecondaryDisks contains list of secondary-disks
+	SecondaryDisks []SecondaryDisks `json:"secondaryDisks"`
+}
+
 type SecondaryDisks struct {
 	Size             string `json:"size"`
 	StorageClassName string `json:"storageClassName"`

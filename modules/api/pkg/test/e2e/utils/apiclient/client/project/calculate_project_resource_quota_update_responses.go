@@ -329,6 +329,9 @@ type CalculateProjectResourceQuotaUpdateBody struct {
 	// hetzner size
 	HetznerSize *models.HetznerSize `json:"hetznerSize,omitempty"`
 
+	// kubevirt node size
+	KubevirtNodeSize *models.KubevirtNodeSize `json:"kubevirtNodeSize,omitempty"`
+
 	// nutanix node spec
 	NutanixNodeSpec *models.NutanixNodeSpec `json:"nutanixNodeSpec,omitempty"`
 
@@ -375,6 +378,10 @@ func (o *CalculateProjectResourceQuotaUpdateBody) Validate(formats strfmt.Regist
 	}
 
 	if err := o.validateHetznerSize(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.validateKubevirtNodeSize(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -552,6 +559,25 @@ func (o *CalculateProjectResourceQuotaUpdateBody) validateHetznerSize(formats st
 	return nil
 }
 
+func (o *CalculateProjectResourceQuotaUpdateBody) validateKubevirtNodeSize(formats strfmt.Registry) error {
+	if swag.IsZero(o.KubevirtNodeSize) { // not required
+		return nil
+	}
+
+	if o.KubevirtNodeSize != nil {
+		if err := o.KubevirtNodeSize.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "kubevirtNodeSize")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "kubevirtNodeSize")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (o *CalculateProjectResourceQuotaUpdateBody) validateNutanixNodeSpec(formats strfmt.Registry) error {
 	if swag.IsZero(o.NutanixNodeSpec) { // not required
 		return nil
@@ -661,6 +687,10 @@ func (o *CalculateProjectResourceQuotaUpdateBody) ContextValidate(ctx context.Co
 	}
 
 	if err := o.contextValidateHetznerSize(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.contextValidateKubevirtNodeSize(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -806,6 +836,22 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateHetznerSize(ctx
 				return ve.ValidateName("Body" + "." + "hetznerSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("Body" + "." + "hetznerSize")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateKubevirtNodeSize(ctx context.Context, formats strfmt.Registry) error {
+
+	if o.KubevirtNodeSize != nil {
+		if err := o.KubevirtNodeSize.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "kubevirtNodeSize")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "kubevirtNodeSize")
 			}
 			return err
 		}

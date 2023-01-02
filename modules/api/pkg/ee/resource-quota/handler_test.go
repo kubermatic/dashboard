@@ -578,6 +578,26 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				build(),
 		},
 		{
+			Name:      "should process kubevirt request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3G", "7G", "3G").
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
 			Name:      "should process nutanix request successfully",
 			ProjectID: test.GenDefaultProject().Name,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
@@ -709,20 +729,20 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 type calcReq struct {
 	Replicas int `json:"replicas"`
 	// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
-	DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
-	AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
-	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
-	AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
-	AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
-	DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
-	EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
-	GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
-	HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
-	// TODO Kubevirt
-	NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
-	OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
-	VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
-	VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+	DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
+	AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
+	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec              `json:"anexiaNodeSpec,omitempty"`
+	AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
+	AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
+	DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
+	EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
+	GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
+	HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
+	KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
+	NutanixNodeSpec     *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+	OpenstackSize       *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+	VMDirectorNodeSpec  *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+	VSphereNodeSpec     *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
 }
 
 func newCalcReq() *calcReq {
@@ -816,6 +836,18 @@ func (c *calcReq) withHetzner(cpu, memory, storage int) *calcReq {
 		Cores:  cpu,
 		Memory: float32(memory),
 		Disk:   storage,
+	}
+	return c
+}
+
+func (c *calcReq) withKubevirt(cpu, memory, primaryStorage, secondaryStorage string) *calcReq {
+	c.KubevirtNodeSize = &apiv1.KubevirtNodeSize{
+		CPUs:            cpu,
+		Memory:          memory,
+		PrimaryDiskSize: primaryStorage,
+		SecondaryDisks: []apiv1.SecondaryDisks{
+			{Size: secondaryStorage},
+		},
 	}
 	return c
 }

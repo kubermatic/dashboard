@@ -21982,6 +21982,9 @@
                 "hetznerSize": {
                   "$ref": "#/definitions/HetznerSize"
                 },
+                "kubevirtNodeSize": {
+                  "$ref": "#/definitions/KubevirtNodeSize"
+                },
                 "nutanixNodeSpec": {
                   "$ref": "#/definitions/NutanixNodeSpec"
                 },
@@ -32971,6 +32974,40 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubevirtNodeSize": {
+      "type": "object",
+      "required": [
+        "cpus",
+        "memory",
+        "primaryDiskSize"
+      ],
+      "properties": {
+        "cpus": {
+          "description": "CPUs states how many cpus the kubevirt node will have.",
+          "type": "string",
+          "x-go-name": "CPUs"
+        },
+        "memory": {
+          "description": "Memory states the memory that kubevirt node will have. The value should be in the\nformat of https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/",
+          "type": "string",
+          "x-go-name": "Memory"
+        },
+        "primaryDiskSize": {
+          "description": "PrimaryDiskSize states the size of the provisioned pvc per node.",
+          "type": "string",
+          "x-go-name": "PrimaryDiskSize"
+        },
+        "secondaryDisks": {
+          "description": "SecondaryDisks contains list of secondary-disks",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SecondaryDisks"
+          },
+          "x-go-name": "SecondaryDisks"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "KubevirtNodeSpec": {
       "description": "KubevirtNodeSpec kubevirt specific node settings",
