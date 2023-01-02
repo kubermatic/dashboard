@@ -1761,6 +1761,8 @@ type ApplicationInstallation struct {
 
 	Namespace string `json:"namespace,omitempty"`
 
+	Labels map[string]string `json:"labels,omitempty"`
+
 	Spec *ApplicationInstallationSpec `json:"spec"`
 
 	Status *ApplicationInstallationStatus `json:"status"`
@@ -1784,6 +1786,9 @@ type ApplicationInstallationListItemSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
 	Namespace apiv1.NamespaceSpec `json:"namespace"`
 
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// ApplicationRef is a reference to identify which Application should be deployed
 	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
 }
@@ -1805,6 +1810,8 @@ type ApplicationInstallationBody struct {
 	apiv1.ObjectMeta
 
 	Namespace string `json:"namespace,omitempty"`
+
+	Labels map[string]string `json:"labels,omitempty"`
 
 	Spec *ApplicationInstallationSpec `json:"spec"`
 }
@@ -1917,6 +1924,8 @@ type ApplicationDefinitionListItem struct {
 
 // ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.
 type ApplicationDefinitionListItemSpec struct {
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
 }

@@ -19,6 +19,9 @@ type ApplicationDefinitionListItemSpec struct {
 
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
+
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 // Validate validates this application definition list item spec

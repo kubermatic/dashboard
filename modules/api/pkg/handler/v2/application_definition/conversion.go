@@ -28,6 +28,7 @@ func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.A
 	return &apiv2.ApplicationDefinitionListItem{
 		Name: appDef.Name,
 		Spec: apiv2.ApplicationDefinitionListItemSpec{
+			Labels:      appDef.Labels,
 			Description: appDef.Spec.Description,
 		},
 	}
