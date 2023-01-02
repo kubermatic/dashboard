@@ -6402,7 +6402,7 @@ func (r Routing) listProjectOpenstackSubnetPools() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/servergroups openstack listOpenstackServerGroups
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/servergroups openstack listProjectOpenstackServerGroups
 //
 // Lists server groups from openstack
 //

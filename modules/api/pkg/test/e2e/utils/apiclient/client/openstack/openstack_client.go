@@ -76,6 +76,8 @@ type ClientService interface {
 
 	ListProjectOpenstackSecurityGroups(params *ListProjectOpenstackSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackSecurityGroupsOK, error)
 
+	ListProjectOpenstackServerGroups(params *ListProjectOpenstackServerGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackServerGroupsOK, error)
+
 	ListProjectOpenstackSizes(params *ListProjectOpenstackSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackSizesOK, error)
 
 	ListProjectOpenstackSubnetPools(params *ListProjectOpenstackSubnetPoolsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackSubnetPoolsOK, error)
@@ -996,6 +998,44 @@ func (a *Client) ListProjectOpenstackSecurityGroups(params *ListProjectOpenstack
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectOpenstackSecurityGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectOpenstackServerGroups Lists server groups from openstack
+*/
+func (a *Client) ListProjectOpenstackServerGroups(params *ListProjectOpenstackServerGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackServerGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectOpenstackServerGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectOpenstackServerGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/openstack/servergroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectOpenstackServerGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectOpenstackServerGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectOpenstackServerGroupsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
