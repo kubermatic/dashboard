@@ -829,14 +829,12 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 			mux.Methods(http.MethodGet).
 				Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
 				Handler(r.listProjectAWSSecurityGroups())
-
-
-			// Digitalocean endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/digitalocean/sizes").
-				Handler(r.listProjectDigitaloceanSizes())
-
 		*/
+
+	// Digitalocean endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/digitalocean/sizes").
+		Handler(r.listProjectDigitaloceanSizes())
 
 	// Openstack endpoints
 	mux.Methods(http.MethodGet).
@@ -6243,6 +6241,28 @@ func (r Routing) listProjectAnexiaTemplates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
 		provider.DecodeAnexiaProjectTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/digitalocean/sizes digitalocean listProjectDigitaloceanSizes
+//
+// Lists sizes from digitalocean.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: DigitaloceanSizeList
+func (r Routing) listProjectDigitaloceanSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.DigitaloceanSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeDoProjectSizesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
