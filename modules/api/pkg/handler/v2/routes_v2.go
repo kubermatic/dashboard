@@ -8853,16 +8853,16 @@ func (r Routing) getResourceQuota() http.Handler {
 
 // swagger:route GET /api/v2/quotas resourceQuota admin listResourceQuotas
 //
-//	Gets a Resource Quota list.
+//	 Gets a Resource Quota list. If `accumulate` is set to `true` then all the quota's quotas and global usage are accumulated and a `totalquota` is returned.
 //
-//	Produces:
-//	- application/json
+//			Produces:
+//			- application/json
 //
-//	Responses:
-//	  default: errorResponse
-//	  200: []ResourceQuota
-//	  401: empty
-//	  403: empty
+//			Responses:
+//			  default: errorResponse
+//			  200: []ResourceQuota
+//			  401: empty
+//			  403: empty
 func (r Routing) listResourceQuotas() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(

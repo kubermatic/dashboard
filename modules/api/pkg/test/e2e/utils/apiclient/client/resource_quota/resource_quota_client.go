@@ -156,7 +156,7 @@ func (a *Client) GetResourceQuota(params *GetResourceQuotaParams, authInfo runti
 }
 
 /*
-ListResourceQuotas gets a resource quota list
+ListResourceQuotas gets a resource quota list if accumulate is set to true then all the quota s quotas and global usage are accumulated and a totalquota is returned
 */
 func (a *Client) ListResourceQuotas(params *ListResourceQuotasParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListResourceQuotasOK, error) {
 	// TODO: Validate the params before sending

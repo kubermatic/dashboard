@@ -66,6 +66,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 			Quota: genQuota(resource.MustParse("5"), resource.MustParse("1235M"), resource.MustParse("125Gi")),
 		},
+		Status: kubermaticv1.ResourceQuotaStatus{
+			GlobalUsage: genQuota(resource.MustParse("2"), resource.MustParse("35M"), resource.MustParse("100Gi")),
+		},
 	}
 	rq2 := &kubermaticv1.ResourceQuota{
 		ObjectMeta: metav1.ObjectMeta{
@@ -81,6 +84,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
 			Quota: genQuota(resource.MustParse("0"), resource.MustParse("1234M"), resource.MustParse("0")),
+		},
+		Status: kubermaticv1.ResourceQuotaStatus{
+			GlobalUsage: genQuota(resource.MustParse("0"), resource.MustParse("300M"), resource.MustParse("0")),
 		},
 	}
 
@@ -159,7 +165,38 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 3: get a single resource quota",
+			name:            "scenario 3: list accumulated resource quotas",
+			method:          http.MethodGet,
+			url:             "/api/v2/quotas?accumulate=true",
+			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
+			existingObjects: existingObjects,
+			httpStatus:      http.StatusOK,
+			validateResp: func(resp *httptest.ResponseRecorder) error {
+				resourceQuotaList := []apiv2.ResourceQuota{}
+				err := json.Unmarshal(resp.Body.Bytes(), &resourceQuotaList)
+				if err != nil {
+					return err
+				}
+				listLen := len(resourceQuotaList)
+				if listLen != 1 {
+					return fmt.Errorf("expected list length %d, got %d", 1, listLen)
+				}
+				quota := resourceQuotaList[0]
+				expectedQuota := genAPIQuota(5, 2.47, 134.22)
+				if !diff.DeepEqual(expectedQuota, quota.Quota) {
+					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Quota))
+				}
+
+				expectedUsage := genAPIQuota(2, 0.34, 107.37)
+				if !diff.DeepEqual(expectedUsage, quota.Status.GlobalUsage) {
+					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Status.GlobalUsage))
+				}
+
+				return nil
+			},
+		},
+		{
+			name:            "scenario 4: get a single resource quota",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -190,7 +227,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 4: get a non-existing single resource quota",
+			name:            "scenario 5: get a non-existing single resource quota",
 			method:          http.MethodGet,
 			url:             "/api/v2/quotas/project-non-existing",
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -201,7 +238,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 5: create an existing resource quota",
+			name:   "scenario 6: create an existing resource quota",
 			method: http.MethodPost,
 			url:    "/api/v2/quotas",
 			body: `{
@@ -216,7 +253,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 6: create a new resource quota",
+			name:   "scenario 7: create a new resource quota",
 			method: http.MethodPost,
 			url:    "/api/v2/quotas",
 			body: `{
@@ -236,7 +273,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 7: update an existing resource quota",
+			name:   "scenario 8: update an existing resource quota",
 			method: http.MethodPut,
 			url:    fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			body: `{
@@ -262,7 +299,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 8: update a non-existing resource quota",
+			name:   "scenario 9: update a non-existing resource quota",
 			method: http.MethodPut,
 			url:    "/api/v2/quotas/project-non-existing",
 			body: `{
@@ -278,7 +315,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 9: delete an existing resource quota",
+			name:            "scenario 10: delete an existing resource quota",
 			method:          http.MethodDelete,
 			url:             fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -289,7 +326,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 10: delete a non-existing resource quota",
+			name:            "scenario 11: delete a non-existing resource quota",
 			method:          http.MethodDelete,
 			url:             "/api/v2/quotas/project-non-existing",
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -300,7 +337,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 11: get a project resource quota",
+			name:            "scenario 12: get a project resource quota",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/projects/%s/quota", projectName),
 			existingAPIUser: test.GenDefaultAPIUser(),
@@ -324,7 +361,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 12: user bob can't get a project resource quota from a project he doesn't belong to",
+			name:            "scenario 13: user bob can't get a project resource quota from a project he doesn't belong to",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/projects/%s-2/quota", projectName),
 			existingAPIUser: test.GenDefaultAPIUser(),

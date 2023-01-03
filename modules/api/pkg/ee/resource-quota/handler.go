@@ -48,7 +48,10 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
-const DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+const (
+	DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+	totalQuotaName                   = "totalquota"
+)
 
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
@@ -90,6 +93,10 @@ type listResourceQuotas struct {
 	// in: query
 	// required: false
 	SubjectKind string `json:"subject_kind,omitempty"`
+
+	// in: query
+	// required: false
+	Accumulate bool `json:"accumulate,omitempty"`
 }
 
 // swagger:parameters createResourceQuota
@@ -140,9 +147,20 @@ func DecodeResourceQuotaReq(r *http.Request) (interface{}, error) {
 
 func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
 	var req listResourceQuotas
+	var accumulate bool
+	var err error
 
 	req.SubjectName = r.URL.Query().Get("subjectName")
 	req.SubjectKind = r.URL.Query().Get("subjectKind")
+
+	queryParam := r.URL.Query().Get("accumulate")
+	if queryParam != "" {
+		accumulate, err = strconv.ParseBool(queryParam)
+		if err != nil {
+			return nil, fmt.Errorf("wrong query parameter `accumulate`: %w", err)
+		}
+	}
+	req.Accumulate = accumulate
 
 	return req, nil
 }
@@ -228,6 +246,42 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 	}
 
 	return convertToAPIStruct(projectResourceQuota, projectName), nil
+}
+
+func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuota {
+	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+
+	for _, quota := range rqList.Items {
+		if quota.Spec.Quota.CPU != nil {
+			rdAvailable.CPU.Add(*quota.Spec.Quota.CPU)
+		}
+		if quota.Spec.Quota.Memory != nil {
+			rdAvailable.Memory.Add(*quota.Spec.Quota.Memory)
+		}
+		if quota.Spec.Quota.Storage != nil {
+			rdAvailable.Storage.Add(*quota.Spec.Quota.Storage)
+		}
+
+		if quota.Status.GlobalUsage.CPU != nil {
+			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
+		}
+		if quota.Status.GlobalUsage.Memory != nil {
+			rdUsed.Memory.Add(*quota.Status.GlobalUsage.Memory)
+		}
+		if quota.Status.GlobalUsage.Storage != nil {
+			rdUsed.Storage.Add(*quota.Status.GlobalUsage.Storage)
+		}
+	}
+
+	return &apiv2.ResourceQuota{
+		Name:  totalQuotaName,
+		Quota: convertToAPIQuota(*rdAvailable),
+		Status: apiv2.ResourceQuotaStatus{
+			GlobalUsage: convertToAPIQuota(*rdUsed),
+		},
+		SubjectHumanReadableName: totalQuotaName,
+	}
 }
 
 func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
@@ -630,6 +684,11 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 	resourceQuotaList, err := provider.ListUnsecured(ctx, labelSet)
 	if err != nil {
 		return nil, err
+	}
+
+	// if accumulate is true, accumulate all resource quota's quotas and global usage and return
+	if req.Accumulate {
+		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList)}, nil
 	}
 
 	// Fetching projects to get their human-readable names.
