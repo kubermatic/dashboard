@@ -15,14 +15,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {KubeOneEditClusterDialogComponent} from '@app/cluster/details/kubeone/edit-cluster-dialog/component';
 import {AppConfigService} from '@app/config.service';
 import {View} from '@app/shared/entity/common';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
-import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
-import {MasterVersion} from '@shared/entity/cluster';
+import {ContainerRuntime, MasterVersion} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
@@ -41,6 +41,7 @@ import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 })
 export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   readonly Provider = ExternalClusterProvider;
+  readonly ContainerRuntime = ContainerRuntime;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
   private _user: Member;
@@ -151,18 +152,18 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
     return ExternalCluster.getStatusIcon(this.cluster);
   }
 
-  canEdit(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Edit);
-  }
-
-  edit(): void {
-    const dialog = this._matDialog.open(EditClusterConnectionDialogComponent);
-    dialog.componentInstance.projectId = this.projectID;
-    dialog.componentInstance.name = this.cluster.name;
-  }
-
   goBack(): void {
     this._router.navigate([`/projects/${this.projectID}/${View.KubeOneClusters}`]);
+  }
+
+  canEdit(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
+  }
+
+  editCluster(): void {
+    const modal = this._matDialog.open(KubeOneEditClusterDialogComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.projectID = this.projectID;
   }
 
   canDisconnect(): boolean {

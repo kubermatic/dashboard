@@ -17,7 +17,6 @@ export class KubeOneClusterSpec {
   deletionTimestamp?: Date;
   id?: string;
   cloudSpec: KubeOneCloudSpec;
-  containerRuntime?: string;
   manifest: string;
   sshKey: KubeOneSSHKeySpec;
   providerName?: string;
