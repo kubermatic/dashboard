@@ -20162,6 +20162,56 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/digitalocean/sizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "digitalocean"
+        ],
+        "summary": "Lists sizes from digitalocean.",
+        "operationId": "listProjectDigitaloceanSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "DoToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DigitaloceanSizeList",
+            "schema": {
+              "$ref": "#/definitions/DigitaloceanSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/eks/amitypes": {
       "get": {
         "produces": [
