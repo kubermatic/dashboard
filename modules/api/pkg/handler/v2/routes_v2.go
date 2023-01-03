@@ -836,32 +836,40 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 				Path("/projects/{project_id}/providers/digitalocean/sizes").
 				Handler(r.listProjectDigitaloceanSizes())
 
-			// Openstack endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/sizes").
-				Handler(r.listProjectOpenstackSizes())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/tenants").
-				Handler(r.listProjectOpenstackTenants())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/networks").
-				Handler(r.listProjectOpenstackNetworks())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/securitygroups").
-				Handler(r.listProjectOpenstackSecurityGroups())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/subnets").
-				Handler(r.listProjectOpenstackSubnets())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/availabilityzones").
-				Handler(r.listProjectOpenstackAvailabilityZones())
-
 		*/
+
+	// Openstack endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/sizes").
+		Handler(r.listProjectOpenstackSizes())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/tenants").
+		Handler(r.listProjectOpenstackTenants())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/networks").
+		Handler(r.listProjectOpenstackNetworks())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/securitygroups").
+		Handler(r.listProjectOpenstackSecurityGroups())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/subnets").
+		Handler(r.listProjectOpenstackSubnets())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/availabilityzones").
+		Handler(r.listProjectOpenstackAvailabilityZones())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/subnetpools").
+		Handler(r.listProjectOpenstackSubnetPools())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/servergroups").
+		Handler(r.listProjectOpenstackServerGroups())
 
 	// Equinix Metal (Packet) endpoints
 	mux.Methods(http.MethodGet).
@@ -4135,7 +4143,7 @@ func (r Routing) listOpenstackServerGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
 		provider.DecodeOpenstackReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4207,7 +4215,7 @@ func (r Routing) listOpenstackSubnetPools() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
 		provider.DecodeOpenstackSubnetPoolReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6235,6 +6243,182 @@ func (r Routing) listProjectAnexiaTemplates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
 		provider.DecodeAnexiaProjectTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/sizes openstack listProjectOpenstackSizes
+//
+// Lists sizes from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSize
+func (r Routing) listProjectOpenstackSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSizeEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.settingsProvider, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones openstack listProjectOpenstackAvailabilityZones
+//
+// Lists availability zones from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackAvailabilityZone
+func (r Routing) listProjectOpenstackAvailabilityZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackAvailabilityZoneEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/networks openstack listProjectOpenstackNetworks
+//
+// Lists networks from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackNetwork
+func (r Routing) listProjectOpenstackNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackNetworkEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/subnets openstack listProjectOpenstackSubnets
+//
+// Lists subnets from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSubnet
+func (r Routing) listProjectOpenstackSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSubnetsEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectSubnetReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/securitygroups openstack listProjectOpenstackSecurityGroups
+//
+// Lists security groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSecurityGroup
+func (r Routing) listProjectOpenstackSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSecurityGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/tenants openstack listProjectOpenstackTenants
+//
+// Lists tenants from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackTenant
+func (r Routing) listProjectOpenstackTenants() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackTenantEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectTenantReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/subnetpools openstack listProjectOpenstackSubnetPools
+//
+// Lists subnet pools from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSubnetPool
+func (r Routing) listProjectOpenstackSubnetPools() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeOpenstackProjectSubnetPoolReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/servergroups openstack listProjectOpenstackServerGroups
+//
+// Lists server groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackServerGroup
+func (r Routing) listProjectOpenstackServerGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeOpenstackProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
