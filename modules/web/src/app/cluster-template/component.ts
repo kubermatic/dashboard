@@ -23,10 +23,6 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {
-  ClusterFromTemplateDialogComponent,
-  ClusterFromTemplateDialogData,
-} from '@shared/components/cluster-from-template/dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
@@ -41,6 +37,10 @@ import {Subject} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {
+  AddClusterFromTemplateDialogComponent,
+  AddClusterFromTemplateDialogData,
+} from '@app/shared/components/add-cluster-from-template-dialog/component';
 
 @Component({
   selector: 'km-cluster-template',
@@ -57,6 +57,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   isGroupConfigLoading: boolean;
   projectViewOnlyToolTip =
     'You do not have permission to perform this action. Contact the project owner to change your membership role';
+  clusterTemplateFragment = this._route.snapshot.fragment;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -71,6 +72,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _ctService: ClusterTemplateService,
     private readonly _datacenterService: DatacenterService,
     private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
@@ -139,6 +141,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
         this.dataSource.data = this.templates;
         this.isInitializing = false;
         this._loadDatacenters();
+        this.clusterTemplateFragment && this._onCreateClusterFragment();
       });
   }
 
@@ -193,7 +196,9 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   create(): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
+    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
+      queryParams: {clusterTemplateWizard: 'Create'},
+    });
   }
 
   canDelete(template: ClusterTemplate): boolean {
@@ -241,20 +246,20 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createCluster(template: ClusterTemplate): void {
-    const dialogConfig: MatDialogConfig<ClusterFromTemplateDialogData> = {
+    const config: MatDialogConfig = {
       data: {
-        template: template,
-        projectID: this._selectedProject.id,
+        templateId: template.id,
+        projectId: this._selectedProject.id,
         quotaWidget: this.quotaWidget,
-      },
+      } as AddClusterFromTemplateDialogData,
     };
 
-    this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
+    this._matDialog.open(AddClusterFromTemplateDialogComponent, config);
   }
 
   editClusterTemplate(template: ClusterTemplate): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
-      queryParams: {clusterTemplateID: template.id},
+      queryParams: {clusterTemplateID: template.id, clusterTemplateWizard: 'Edit'},
     });
   }
 
@@ -273,5 +278,13 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
       component.projectId = id;
     });
+  }
+
+  private _onCreateClusterFragment(): void {
+    const clusterTemplate = this.templates.find((ct: ClusterTemplate) => ct.name === this.clusterTemplateFragment);
+    if (clusterTemplate) {
+      this.clusterTemplateFragment = '';
+      this.createCluster(clusterTemplate);
+    }
   }
 }

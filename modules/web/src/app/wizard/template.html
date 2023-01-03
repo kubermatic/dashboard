@@ -23,13 +23,13 @@ limitations under the License.
 <form [formGroup]="form"
       *ngIf="!loadingClusterTemplate">
   <mat-card fxFlex="100%">
-    <div *ngIf="clusterTemplateID"
+    <div *ngIf="!!clusterTemplateWizardType"
          fxLayout="row">
       <mat-card-header class="km-no-padding"
                        fxLayout="row"
                        fxLayoutGap="40px">
         <mat-card-title>
-          <div>Customize Cluster Template</div>
+          <div>{{getWizardTitleForClusterTemplate()}}</div>
         </mat-card-title>
       </mat-card-header>
     </div>
@@ -121,25 +121,25 @@ limitations under the License.
                   [disabled]="creating"
                   *ngIf="last"
                   kmThrottleClick
-                  (throttleClick)="onSaveClusterTemplate()">
+                  (throttleClick)="onSaveClusterTemplate(_,clusterTemplateWizardType === ClusterTemplateType.Create)">
             <i class="km-icon-mask km-icon-save"></i>
-            <span>{{ clusterTemplateID ? 'Save as new template' : 'Save Cluster Template' }}</span>
+            <span>{{ getTextForAlternativeButton() }}</span>
           </button>
           <button id="km-wizard-update-template-btn"
                   fxLayoutAlign="center center"
                   mat-flat-button
                   type="button"
                   [disabled]="creating"
-                  *ngIf="last && clusterTemplateID"
+                  *ngIf="last && !showCreateClusterButton"
                   kmThrottleClick
-                  (throttleClick)="onSaveClusterTemplate(true)">
+                  (throttleClick)="onSaveClusterTemplate(!!clusterTemplateID)">
             <i class="km-icon-mask km-icon-save"></i>
-            <span>Save changes to Template</span>
+            <span>{{getTextForPrimaryButton()}}</span>
           </button>
           <km-button buttonId="km-wizard-create-btn"
-                     *ngIf="last"
+                     *ngIf="showCreateClusterButton"
                      icon="km-icon-add"
-                     label="Create Cluster"
+                     [label]="getTextForPrimaryButton()"
                      [disabled]="creating"
                      [observable]="getObservable()"
                      (next)="onNext($event)">

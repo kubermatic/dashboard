@@ -14,7 +14,7 @@
 
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -60,6 +60,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService
@@ -112,6 +113,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
+    if (url === View.ClusterTemplates) {
+      return isProjectAndUrlExists || this._activatedRoute.snapshot.queryParams?.clusterTemplateWizard;
+    }
     if (url === View.Clusters) {
       return (
         (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOneClusters)) ||

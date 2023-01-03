@@ -31,6 +31,7 @@ export enum Step {
 export class AddClusterFromTemplateDialogData {
   projectId: string;
   quotaWidget: TemplateRef<QuotaWidgetComponent>;
+  templateId?: string;
 }
 
 @Component({
@@ -121,7 +122,7 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
 
     // We chose optional query params instead of creating new route or using state behind the curtain.
     this._router.navigate([`/projects/${this.data.projectId}/wizard`], {
-      queryParams: {clusterTemplateID: this.template.id},
+      queryParams: {clusterTemplateID: this.template.id, clusterTemplateWizard: 'Customize'},
     });
   }
 }
