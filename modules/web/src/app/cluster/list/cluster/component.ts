@@ -169,7 +169,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           const cluster = group[0];
           const datacenter = group[1];
           const health = group[2];
-
           this.nodeDC[cluster.id] = datacenter;
           this.health[cluster.id] = health;
           this._loadMachineDeployments(cluster);
