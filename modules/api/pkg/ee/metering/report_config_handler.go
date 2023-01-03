@@ -46,7 +46,7 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var ReportTypes = sets.NewString("cluster", "namespace")
+var ReportTypes = sets.New("cluster", "namespace")
 
 // swagger:parameters getMeteringReportConfiguration
 type getMeteringReportConfig struct {

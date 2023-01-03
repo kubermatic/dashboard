@@ -40,7 +40,7 @@ func GetAdmissionPluginEndpoint(admissionPluginProvider provider.AdmissionPlugin
 		}
 
 		// for the backward compatibility we have to keep those plugins as a default
-		plugins := sets.NewString(
+		plugins := sets.New(
 			"PodNodeSelector",
 			"EventRateLimit",
 		)

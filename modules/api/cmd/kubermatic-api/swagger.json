@@ -36964,6 +36964,18 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ResourceClaim": {
+      "type": "object",
+      "title": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
+      "properties": {
+        "name": {
+          "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
     "ResourceDetails": {
       "type": "object",
       "title": "ResourceDetails holds the CPU, Memory and Storage quantities.",
@@ -37062,6 +37074,14 @@
       "type": "object",
       "title": "ResourceRequirements describes the compute resource requirements.",
       "properties": {
+        "claims": {
+          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable.\n\n+listType=set\n+featureGate=DynamicResourceAllocation\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResourceClaim"
+          },
+          "x-go-name": "Claims"
+        },
         "limits": {
           "$ref": "#/definitions/ResourceList"
         },

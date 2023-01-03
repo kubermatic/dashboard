@@ -33,12 +33,12 @@ func TestProvider_GetVMFolders(t *testing.T) {
 	tests := []struct {
 		name            string
 		dc              *kubermaticv1.DatacenterSpecVSphere
-		expectedFolders sets.String
+		expectedFolders sets.Set[string]
 	}{
 		{
 			name: "successfully-list-default-folders",
 			dc:   getTestDC(),
-			expectedFolders: sets.NewString(
+			expectedFolders: sets.New(
 				path.Join("/", vSphereDatacenter, "vm"),
 				path.Join("/", vSphereDatacenter, "vm", "sig-infra"),
 				path.Join("/", vSphereDatacenter, "vm", "Kubermatic-dev"),
@@ -52,7 +52,7 @@ func TestProvider_GetVMFolders(t *testing.T) {
 				AllowInsecure: true,
 				RootPath:      path.Join("/", vSphereDatacenter, "vm"),
 			},
-			expectedFolders: sets.NewString(
+			expectedFolders: sets.New(
 				path.Join("/", vSphereDatacenter, "vm", "sig-infra"),
 				path.Join("/", vSphereDatacenter, "vm", "Kubermatic-dev"),
 			),
@@ -66,7 +66,7 @@ func TestProvider_GetVMFolders(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			gotFolders := sets.NewString()
+			gotFolders := sets.New[string]()
 			for _, folder := range folders {
 				gotFolders.Insert(folder.Path)
 			}

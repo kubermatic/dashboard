@@ -49,13 +49,13 @@ func ListAKSClusters(ctx context.Context, projectProvider provider.ProjectProvid
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	aksExternalCluster := make(map[string]sets.String)
+	aksExternalCluster := make(map[string]sets.Set[string])
 	for _, externalCluster := range clusterList.Items {
 		cloud := externalCluster.Spec.CloudSpec
 		if cloud.AKS != nil {
 			resourceGroup := cloud.AKS.ResourceGroup
 			if _, ok := aksExternalCluster[resourceGroup]; !ok {
-				aksExternalCluster[resourceGroup] = make(sets.String)
+				aksExternalCluster[resourceGroup] = make(sets.Set[string])
 			}
 			aksExternalCluster[resourceGroup] = aksExternalCluster[resourceGroup].Insert(cloud.AKS.Name)
 		}

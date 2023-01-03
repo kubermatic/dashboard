@@ -164,7 +164,7 @@ func ListAccessibleAddons(configGetter provider.KubermaticConfigurationGetter) e
 			return nil, err
 		}
 
-		return sets.NewString(config.Spec.API.AccessibleAddons...).List(), nil
+		return sets.New(config.Spec.API.AccessibleAddons...).List(), nil
 	}
 }
 

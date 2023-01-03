@@ -376,8 +376,8 @@ func TokenExtractor(o auth.TokenExtractor) transporthttp.RequestFunc {
 }
 
 func createUserInfo(ctx context.Context, user *kubermaticv1.User, projectID string, userProjectMapper provider.ProjectMemberMapper) (*provider.UserInfo, error) {
-	groups := sets.NewString()
-	roles := sets.NewString()
+	groups := sets.New[string]()
+	roles := sets.New[string]()
 
 	if projectID != "" {
 		var err error
@@ -394,7 +394,7 @@ func createUserInfo(ctx context.Context, user *kubermaticv1.User, projectID stri
 		groups.Insert(user.Spec.Groups...)
 	}
 
-	return &provider.UserInfo{Email: user.Spec.Email, Groups: groups.List(), Roles: roles}, nil
+	return &provider.UserInfo{Email: user.Spec.Email, Groups: sets.List(groups), Roles: roles}, nil
 }
 
 func GetClusterProvider(ctx context.Context, request interface{}, seedsGetter provider.SeedsGetter, clusterProviderGetter provider.ClusterProviderGetter) (provider.ClusterProvider, context.Context, error) {
@@ -451,7 +451,7 @@ func checkBlockedTokens(ctx context.Context, email, token string, userProvider p
 	if err != nil {
 		return common.KubernetesErrorToHTTPError(err)
 	}
-	tokenSet := sets.NewString(blockedTokens...)
+	tokenSet := sets.New(blockedTokens...)
 	if tokenSet.Has(token) {
 		return utilerrors.NewNotAuthorized()
 	}

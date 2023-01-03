@@ -420,7 +420,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 	}
 
 	// The default
-	allowedTaintEffects := sets.NewString(
+	allowedTaintEffects := sets.New(
 		string(corev1.TaintEffectNoExecute),
 		string(corev1.TaintEffectNoSchedule),
 		string(corev1.TaintEffectPreferNoSchedule),

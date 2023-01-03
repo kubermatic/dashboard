@@ -133,7 +133,7 @@ func execute(method string, url *url.URL, config *rest.Config, stdin io.Reader, 
 	if err != nil {
 		return err
 	}
-	return exec.Stream(remotecommand.StreamOptions{
+	return exec.StreamWithContext(remotecommand.StreamOptions{
 		Stdin:  stdin,
 		Stdout: stdout,
 		Stderr: stderr,

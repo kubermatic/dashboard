@@ -641,7 +641,7 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 	for _, project := range projects {
 		projectMap[project.Name] = project
 	}
-	projectSet := sets.StringKeySet(projectMap)
+	projectSet := sets.KeySet(projectMap)
 
 	resp := make([]*apiv2.ResourceQuota, len(resourceQuotaList.Items))
 	for idx, rq := range resourceQuotaList.Items {

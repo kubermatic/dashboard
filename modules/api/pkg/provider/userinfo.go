@@ -37,8 +37,8 @@ func UserInfoGetterFactory(userProjectMapper ProjectMemberMapper) (UserInfoGette
 			return nil, fmt.Errorf("unable to get authenticated user object")
 		}
 
-		groups := sets.NewString()
-		roles := sets.NewString()
+		groups := sets.New[string]()
+		roles := sets.New[string]()
 
 		if projectID != "" {
 			var err error
