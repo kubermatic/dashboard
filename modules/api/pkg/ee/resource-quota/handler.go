@@ -96,7 +96,7 @@ type listResourceQuotas struct {
 
 	// in: query
 	// required: false
-	Accumulate string `json:"accumulate,omitempty"`
+	Accumulate bool `json:"accumulate,omitempty"`
 }
 
 // swagger:parameters createResourceQuota
@@ -147,10 +147,20 @@ func DecodeResourceQuotaReq(r *http.Request) (interface{}, error) {
 
 func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
 	var req listResourceQuotas
+	var accumulate bool
+	var err error
 
 	req.SubjectName = r.URL.Query().Get("subjectName")
 	req.SubjectKind = r.URL.Query().Get("subjectKind")
-	req.Accumulate = r.URL.Query().Get("accumulate")
+
+	queryParam := r.URL.Query().Get("accumulate")
+	if queryParam != "" {
+		accumulate, err = strconv.ParseBool(queryParam)
+		if err != nil {
+			return nil, fmt.Errorf("wrong query parameter `accumulate`: %w", err)
+		}
+	}
+	req.Accumulate = accumulate
 
 	return req, nil
 }
@@ -650,7 +660,7 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 	}
 
 	// if accumulate is true, accumulate all resource quota's quotas and global usage and return
-	if req.Accumulate == "true" {
+	if req.Accumulate {
 		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList)}, nil
 	}
 

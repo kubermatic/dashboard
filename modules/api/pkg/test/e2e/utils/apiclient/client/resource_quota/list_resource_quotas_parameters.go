@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewListResourceQuotasParams creates a new ListResourceQuotasParams object,
@@ -62,7 +63,7 @@ ListResourceQuotasParams contains all the parameters to send to the API endpoint
 type ListResourceQuotasParams struct {
 
 	// Accumulate.
-	Accumulate *string
+	Accumulate *bool
 
 	// SubjectKind.
 	SubjectKind *string
@@ -124,13 +125,13 @@ func (o *ListResourceQuotasParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithAccumulate adds the accumulate to the list resource quotas params
-func (o *ListResourceQuotasParams) WithAccumulate(accumulate *string) *ListResourceQuotasParams {
+func (o *ListResourceQuotasParams) WithAccumulate(accumulate *bool) *ListResourceQuotasParams {
 	o.SetAccumulate(accumulate)
 	return o
 }
 
 // SetAccumulate adds the accumulate to the list resource quotas params
-func (o *ListResourceQuotasParams) SetAccumulate(accumulate *string) {
+func (o *ListResourceQuotasParams) SetAccumulate(accumulate *bool) {
 	o.Accumulate = accumulate
 }
 
@@ -167,12 +168,12 @@ func (o *ListResourceQuotasParams) WriteToRequest(r runtime.ClientRequest, reg s
 	if o.Accumulate != nil {
 
 		// query param accumulate
-		var qrAccumulate string
+		var qrAccumulate bool
 
 		if o.Accumulate != nil {
 			qrAccumulate = *o.Accumulate
 		}
-		qAccumulate := qrAccumulate
+		qAccumulate := swag.FormatBool(qrAccumulate)
 		if qAccumulate != "" {
 
 			if err := r.SetQueryParam("accumulate", qAccumulate); err != nil {

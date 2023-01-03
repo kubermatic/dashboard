@@ -24554,7 +24554,7 @@
             "in": "query"
           },
           {
-            "type": "string",
+            "type": "boolean",
             "x-go-name": "Accumulate",
             "name": "accumulate",
             "in": "query"
