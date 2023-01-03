@@ -19,7 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
 import {
-  fakeBinding,
+  fakeNamespaceBinding,
   fakeClusterBinding,
   fakeClusterRoleNames,
   fakeNamespaceRoleNames,
@@ -30,9 +30,9 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';
-import {AddBindingDialogComponent} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
+import {AddBindingDialogComponent, BindingType} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
 
-describe('AddBindingComponent', () => {
+describe('AddBindingDialogComponent', () => {
   let fixture: ComponentFixture<AddBindingDialogComponent>;
   let component: AddBindingDialogComponent;
 
@@ -41,13 +41,13 @@ describe('AddBindingComponent', () => {
       getClusterRoleNames: jest.fn(),
       getNamespaceRoleNames: jest.fn(),
       createClusterBinding: jest.fn(),
-      createBinding: jest.fn(),
+      createNamespaceBinding: jest.fn(),
     };
 
     rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
     rbacMock.getNamespaceRoleNames.mockReturnValue(asyncData(fakeNamespaceRoleNames()));
     rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
-    rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
+    rbacMock.createNamespaceBinding.mockReturnValue(asyncData(fakeNamespaceBinding()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
@@ -73,8 +73,8 @@ describe('AddBindingComponent', () => {
   }));
 
   it('cluster form should be validated correctly', fakeAsync(() => {
-    component.bindingType = 'cluster';
-    component.setValidators();
+    component.bindingType = BindingType.Cluster;
+    component.setNamespaceValidators();
     component.form.controls.email.setValue('');
     component.form.controls.role.setValue('');
     fixture.detectChanges();
@@ -88,8 +88,8 @@ describe('AddBindingComponent', () => {
   }));
 
   it('namespace form should be validated correctly', fakeAsync(() => {
-    component.bindingType = 'namespace';
-    component.setValidators();
+    component.bindingType = BindingType.Namespace;
+    component.setNamespaceValidators();
     component.form.controls.email.setValue('');
     component.form.controls.role.setValue('');
     fixture.detectChanges();

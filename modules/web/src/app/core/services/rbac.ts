@@ -14,21 +14,20 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, timer, startWith, Subject, merge} from 'rxjs';
+import {merge, Observable, Subject, timer} from 'rxjs';
 
 import {environment} from '@environments/environment';
-import _ from 'lodash';
-import {map, switchMap, tap, distinctUntilChanged} from 'rxjs/operators';
+import {map, shareReplay, switchMap} from 'rxjs/operators';
 import {
-  Binding,
   ClusterBinding,
+  ClusterNamespace,
   ClusterRoleName,
   CreateBinding,
   DeleteBindingBody,
   Kind,
+  NamespaceBinding,
   RoleName,
 } from '@shared/entity/rbac';
-import {ClusterNamespace} from '@shared/entity/cluster-namespace';
 import {AppConfigService} from '@app/config.service';
 
 @Injectable()
@@ -36,54 +35,126 @@ export class RBACService {
   private readonly _refreshTime = 10;
   private _newRestRoot: string = environment.newRestRoot;
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
-
   private _refreshClusterBindings$ = new Subject<void>();
   private _refreshNamespaceBindings$ = new Subject<void>();
-
-  private _clusterNamespacesMap = new Map<string, string[]>();
-  private _namespaceRoleNameMap = new Map<string, RoleName[]>();
-  private _clusterRoleNamesMap = new Map<string, ClusterRoleName[]>();
-  private _clusterBindingMap = new Map<string, ClusterBinding[]>();
-  private _namespaceBindingsMap = new Map<string, Binding[]>();
+  private _clusterNamespacesMap = new Map<string, Observable<string[]>>();
+  private _namespaceRoleNameMap = new Map<string, Observable<RoleName[]>>();
+  private _clusterRoleNamesMap = new Map<string, Observable<ClusterRoleName[]>>();
+  private _clusterBindingsMap = new Map<string, Observable<ClusterBinding[]>>();
+  private _namespaceBindingsMap = new Map<string, Observable<NamespaceBinding[]>>();
 
   constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   getClusterRoleNames(clusterID: string, projectID: string): Observable<ClusterRoleName[]> {
     const mapKey = projectID + '-' + clusterID;
-    const request$ = this._refreshTimer$.pipe(
-      switchMap(_ =>
-        this._http.get<ClusterRoleName[]>(
-          `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrolenames`
-        )
-      ),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(roleNames => this._clusterRoleNamesMap.set(mapKey, roleNames))
-    );
 
-    return this._clusterRoleNamesMap.has(mapKey)
-      ? request$.pipe(startWith(this._clusterRoleNamesMap.get(mapKey)))
-      : request$;
+    if (!this._clusterRoleNamesMap.has(mapKey)) {
+      const request$ = this._refreshTimer$.pipe(
+        switchMap(_ =>
+          this._http.get<ClusterRoleName[]>(
+            `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrolenames`
+          )
+        ),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        })
+      );
+
+      this._clusterRoleNamesMap.set(mapKey, request$);
+    }
+    return this._clusterRoleNamesMap.get(mapKey);
   }
 
   getClusterBindings(clusterID: string, projectID: string): Observable<ClusterBinding[]> {
     const mapKey = clusterID + '-' + projectID;
-    const request$ = merge(this._refreshTimer$, this._refreshClusterBindings$).pipe(
-      switchMap(_ =>
-        this._http.get<ClusterBinding[]>(
-          `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbindings`
-        )
-      ),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(clusterBinding => this._clusterBindingMap.set(mapKey, clusterBinding))
-    );
 
-    return this._clusterBindingMap.has(mapKey)
-      ? request$.pipe(startWith(this._clusterBindingMap.get(mapKey)))
-      : request$;
+    if (!this._clusterBindingsMap.has(mapKey)) {
+      const request$ = merge(this._refreshTimer$, this._refreshClusterBindings$).pipe(
+        switchMap(_ =>
+          this._http.get<ClusterBinding[]>(
+            `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbindings`
+          )
+        ),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        })
+      );
+
+      this._clusterBindingsMap.set(mapKey, request$);
+    }
+
+    return this._clusterBindingsMap.get(mapKey);
+  }
+
+  getNamespaceRoleNames(clusterID: string, projectID: string): Observable<RoleName[]> {
+    const mapKey = clusterID + '-' + projectID;
+
+    if (!this._namespaceRoleNameMap.has(mapKey)) {
+      const request$ = merge(this._refreshTimer$).pipe(
+        switchMap(_ =>
+          this._http.get<RoleName[]>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/rolenames`)
+        ),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        })
+      );
+
+      this._namespaceRoleNameMap.set(mapKey, request$);
+    }
+    return this._namespaceRoleNameMap.get(mapKey);
+  }
+
+  getNamespaceBindings(clusterID: string, projectID: string): Observable<NamespaceBinding[]> {
+    const mapKey = clusterID + '-' + projectID;
+
+    if (!this._namespaceBindingsMap.has(mapKey)) {
+      const request$ = merge(this._refreshTimer$, this._refreshNamespaceBindings$).pipe(
+        switchMap(_ =>
+          this._http.get<NamespaceBinding[]>(
+            `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/bindings`
+          )
+        ),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        })
+      );
+
+      this._namespaceBindingsMap.set(mapKey, request$);
+    }
+    return this._namespaceBindingsMap.get(mapKey);
+  }
+
+  getClusterNamespaces(projectID: string, clusterID: string): Observable<string[]> {
+    const mapKey = projectID + '-' + clusterID;
+
+    if (!this._clusterNamespacesMap.has(mapKey)) {
+      const request$ = this._refreshTimer$.pipe(
+        switchMap(_ =>
+          this._http.get<ClusterNamespace[]>(
+            `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/namespaces`
+          )
+        ),
+        map(namespaces => namespaces.map(namespace => namespace.name)),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        })
+      );
+      this._clusterNamespacesMap.set(mapKey, request$);
+    }
+    return this._clusterNamespacesMap.get(mapKey);
   }
 
   refreshClusterBindings() {
     this._refreshClusterBindings$.next();
+  }
+
+  refreshNamespaceBindings(): void {
+    this._refreshNamespaceBindings$.next();
   }
 
   createClusterBinding(
@@ -112,54 +183,18 @@ export class RBACService {
     return this._http.delete<ClusterBinding>(url, options);
   }
 
-  getNamespaceRoleNames(clusterID: string, projectID: string): Observable<RoleName[]> {
-    const mapKey = clusterID + '-' + projectID;
-    const request$ = merge(this._refreshTimer$).pipe(
-      switchMap(_ =>
-        this._http.get<RoleName[]>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/rolenames`)
-      ),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(roleNames => {
-        this._namespaceRoleNameMap.set(mapKey, roleNames);
-      })
-    );
-
-    return this._namespaceRoleNameMap.has(mapKey)
-      ? request$.pipe(startWith(this._namespaceRoleNameMap.get(mapKey)))
-      : request$;
-  }
-
-  getNamespaceBindings(clusterID: string, projectID: string): Observable<Binding[]> {
-    const mapKey = clusterID + '-' + projectID;
-    const request$ = merge(this._refreshTimer$, this._refreshNamespaceBindings$).pipe(
-      switchMap(_ =>
-        this._http.get<Binding[]>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/bindings`)
-      ),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(namespaceBindings => this._namespaceBindingsMap.set(mapKey, namespaceBindings))
-    );
-
-    return this._namespaceBindingsMap.has(mapKey)
-      ? request$.pipe(startWith(this._namespaceBindingsMap.get(mapKey)))
-      : request$;
-  }
-
-  refreshNamespaceBindings(): void {
-    this._refreshNamespaceBindings$.next();
-  }
-
-  createBinding(
+  createNamespaceBinding(
     clusterID: string,
     projectID: string,
     roleID: string,
     namespace: string,
     createRole: CreateBinding
-  ): Observable<Binding> {
+  ): Observable<NamespaceBinding> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
-    return this._http.post<Binding>(url, createRole);
+    return this._http.post<NamespaceBinding>(url, createRole);
   }
 
-  deleteBinding(
+  deleteNamespaceBinding(
     clusterID: string,
     projectID: string,
     roleID: string,
@@ -167,31 +202,13 @@ export class RBACService {
     kind: string,
     name: string,
     subjectNamespace: string
-  ): Observable<Binding> {
+  ): Observable<NamespaceBinding> {
     const options = {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name, subjectNamespace),
     };
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
-    return this._http.delete<Binding>(url, options);
-  }
-
-  getClusterNamespaces(projectID: string, clusterID: string): Observable<string[]> {
-    const mapKey = projectID + '-' + clusterID;
-    const request$ = this._refreshTimer$.pipe(
-      switchMap(_ =>
-        this._http.get<ClusterNamespace[]>(
-          `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/namespaces`
-        )
-      ),
-      map(namespaces => namespaces.map(namespace => namespace.name)),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(namespaces => this._clusterNamespacesMap.set(mapKey, namespaces))
-    );
-
-    return this._clusterNamespacesMap.has(mapKey)
-      ? request$.pipe(startWith(this._clusterNamespacesMap.get(mapKey)))
-      : request$;
+    return this._http.delete<NamespaceBinding>(url, options);
   }
 
   private _getDeleteBindingBody(kind: string, name: string, namespace: string): DeleteBindingBody {

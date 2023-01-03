@@ -12,62 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {ClusterBinding, ClusterServiceAccount, Kind, SimpleClusterBinding} from '@shared/entity/rbac';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {AddBindingDialogComponent} from './add-binding-dialog/component';
-import {Subject, timer, iif} from 'rxjs';
-import {ClusterService} from '@core/services/cluster';
-import {AppConfigService} from '@app/config.service';
-import {isClusterRunning} from '@shared/utils/health-status';
+import {iif, Subject} from 'rxjs';
 import {FormControl} from '@angular/forms';
 import {AddServiceAccountDialogComponent} from './add-service-account-dialog/component';
 import {AddServiceAccountBindingDialogComponent} from './add-service-account-binding-dialog/component';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
-import {ClusterServiceAccount} from '@shared/entity/rbac';
 
 @Component({
   selector: 'km-rbac',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class RBACComponent implements OnInit, OnDestroy {
+export class RBACComponent implements OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
+  @Input() isClusterRunning: boolean;
 
   readonly RBACKind = Kind;
   modes: Kind[] = [Kind.ServiceAccount, Kind.User, Kind.Group];
   modeControl = new FormControl<Kind>(Kind.ServiceAccount);
 
-  isClusterRunning: boolean;
-  private readonly _refreshTime = 10;
-  private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _clusterService: ClusterService,
     private readonly _rbacService: RBACService,
     private readonly _clusterServiceAccountService: ClusterServiceAccountService,
     private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService,
-    private readonly _appConfigService: AppConfigService
+    private readonly _notificationService: NotificationService
   ) {}
-
-  ngOnInit(): void {
-    this._refreshTimer$
-      .pipe(
-        switchMap(_ => this._clusterService.health(this.projectID, this.cluster.id)),
-        takeUntil(this._unsubscribe)
-      )
-      .subscribe(health => {
-        this.isClusterRunning = isClusterRunning(this.cluster, health);
-      });
-  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
@@ -83,7 +64,7 @@ export class RBACComponent implements OnInit, OnDestroy {
     modal
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => this._updateBindings());
+      .subscribe(_ => this._refreshBindings());
   }
 
   addServiceAccount($event: Event): void {
@@ -96,7 +77,7 @@ export class RBACComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(take(1))
       .subscribe(_ => {
-        this._updateBindings();
+        this._refreshBindings();
       });
   }
 
@@ -112,7 +93,33 @@ export class RBACComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(take(1))
       .subscribe(_ => {
-        this._updateBindings();
+        this._refreshBindings();
+      });
+  }
+
+  deleteServiceAccount(element: ClusterServiceAccount): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Service Account',
+        message: `Delete service account <b>${element.name}</b> of <b>${this.cluster.name}</b> cluster permanently?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter(isConfirmed => isConfirmed),
+        switchMap(_ =>
+          this._clusterServiceAccountService.delete(this.projectID, this.cluster.id, element.namespace, element.name)
+        ),
+        take(1)
+      )
+      .subscribe(() => {
+        this._refreshBindings();
+        this._notificationService.success(`Removed service account ${element.name} from ${this.cluster.name}`);
       });
   }
 
@@ -136,7 +143,7 @@ export class RBACComponent implements OnInit, OnDestroy {
         switchMap(_ =>
           iif(
             () => !!element.namespace,
-            this._rbacService.deleteBinding(
+            this._rbacService.deleteNamespaceBinding(
               this.cluster.id,
               this.projectID,
               element.clusterRole,
@@ -158,14 +165,14 @@ export class RBACComponent implements OnInit, OnDestroy {
         take(1)
       )
       .subscribe(() => {
-        this._updateBindings();
+        this._refreshBindings();
         this._notificationService.success(`Removed ${element.name} ${element.kind} from the binding`);
       });
   }
 
-  private _updateBindings(): void {
-    this._clusterServiceAccountService.update();
+  private _refreshBindings(): void {
     this._rbacService.refreshClusterBindings();
     this._rbacService.refreshNamespaceBindings();
+    this._clusterServiceAccountService.refreshServiceAccounts();
   }
 }

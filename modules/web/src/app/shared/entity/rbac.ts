@@ -39,7 +39,7 @@ export class ClusterServiceAccount {
   annotations?: Record<string, string>;
 }
 
-export class Namespace {
+export class ClusterNamespace {
   name: string;
 }
 
@@ -57,7 +57,7 @@ export class Role {
   rules: Rules[];
 }
 
-export class Binding {
+export class NamespaceBinding {
   namespace: string;
   roleRefName: string;
   subjects: Subjects[];

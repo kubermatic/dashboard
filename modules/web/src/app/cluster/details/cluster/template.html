@@ -451,7 +451,8 @@ limitations under the License.
     <km-tab label="RBAC"
             *ngIf="isRBACEnabled()">
       <km-rbac [cluster]="cluster"
-               [projectID]="projectID"></km-rbac>
+               [projectID]="projectID"
+               [isClusterRunning]="isClusterRunning"></km-rbac>
     </km-tab>
     <km-tab label="Addons">
       <div class="addon-tab-content">

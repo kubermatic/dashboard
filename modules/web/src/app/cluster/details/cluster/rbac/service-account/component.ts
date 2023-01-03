@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {combineLatest, Subject} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {RBACService} from '@core/services/rbac';
-import {Subject, combineLatest} from 'rxjs';
-import {takeUntil, map, filter, switchMap, take} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterBinding, Binding, SimpleClusterBinding, Kind, ClusterServiceAccount} from '@shared/entity/rbac';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {NamespaceBinding, ClusterBinding, ClusterServiceAccount, Kind, SimpleClusterBinding} from '@shared/entity/rbac';
 
 enum BindingMode {
   Cluster = 'Cluster',
@@ -40,7 +37,6 @@ enum Column {
 @Component({
   selector: 'km-rbac-service-account',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
@@ -53,13 +49,12 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
-  @Output() addBindingToServiceAccount = new EventEmitter<ClusterServiceAccount>();
+  @Output() addBinding = new EventEmitter<ClusterServiceAccount>();
   @Output() deleteBinding = new EventEmitter<SimpleClusterBinding>();
+  @Output() deleteClusterServiceAccount = new EventEmitter<ClusterServiceAccount>();
 
   constructor(
     private readonly _rbacService: RBACService,
-    private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService,
     private readonly _clusterServiceAccountService: ClusterServiceAccountService
   ) {}
 
@@ -77,10 +72,6 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
     this.clusterServiceAccountExpansion[id] = !this.clusterServiceAccountExpansion[id];
   }
 
-  addBinding(serviceAccount: ClusterServiceAccount): void {
-    this.addBindingToServiceAccount.emit(serviceAccount);
-  }
-
   download(serviceAccount: ClusterServiceAccount): void {
     window.open(
       this._clusterServiceAccountService.getKubeconfigUrl(
@@ -94,39 +85,15 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   deleteServiceAccount(element: ClusterServiceAccount): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        title: 'Delete Service Account',
-        message: `Delete service account <b>${element.name}</b> of <b>${this.cluster.name}</b> cluster permanently?`,
-        confirmLabel: 'Delete',
-      },
-    };
+    this.deleteClusterServiceAccount.emit(element);
+  }
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        filter(isConfirmed => isConfirmed),
-        switchMap(_ =>
-          this._clusterServiceAccountService.delete(this.projectID, this.cluster.id, element.namespace, element.name)
-        ),
-        take(1)
-      )
-      .subscribe(() => {
-        this._updateBindings();
-        this._notificationService.success(`Removed service account ${element.name} from ${this.cluster.name}`);
-      });
+  addServiceAccountBinding(serviceAccount: ClusterServiceAccount): void {
+    this.addBinding.emit(serviceAccount);
   }
 
   deleteServiceAccountBinding(element: SimpleClusterBinding): void {
     this.deleteBinding.emit(element);
-  }
-
-  private _updateBindings(): void {
-    this._clusterServiceAccountService.update();
-    this._rbacService.refreshClusterBindings();
-    this._rbacService.refreshNamespaceBindings();
   }
 
   private _getServiceAccounts(): void {
@@ -135,23 +102,15 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccount => {
         this.dataSource.data = serviceAccount;
-        this.clusterServiceAccountExpansion = serviceAccount.reduce(
-          (prev: Record<string, boolean>, {id}) => ({
-            ...prev,
-            [id]: false,
-          }),
-          {}
-        );
-
         this.isLoading = false;
       });
   }
 
   private _getBindings(): void {
-    const mapBinding = (binding: (Binding | ClusterBinding)[]) =>
+    const mapBinding = (binding: (NamespaceBinding | ClusterBinding)[]) =>
       binding
         .map(
-          ({namespace, roleRefName, subjects = []}): Binding => ({
+          ({namespace, roleRefName, subjects = []}): NamespaceBinding => ({
             namespace,
             roleRefName,
             subjects: subjects.filter(({kind}) => kind === Kind.ServiceAccount),

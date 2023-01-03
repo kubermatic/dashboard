@@ -37,7 +37,7 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, shareReplay, switchMapTo, tap, startWith, distinctUntilChanged} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -54,12 +54,11 @@ export class ClusterService {
   private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
   private _externalCluster$ = new Map<string, Observable<ExternalCluster>>();
+  private _clusterHealth$ = new Map<string, Observable<Health>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
   private _onExternalClustersUpdate = new Subject<void>();
   private _location: string = window.location.protocol + '//' + window.location.host;
-
-  private _clusterHealthMap = new Map<string, Health>();
 
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
@@ -287,15 +286,15 @@ export class ClusterService {
 
   health(projectID: string, clusterID: string): Observable<Health> {
     const mapKey = projectID + '-' + clusterID;
-    const request$ = this._http
-      .get<Health>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`)
-      .pipe(
-        distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-        tap(health => this._clusterHealthMap.set(mapKey, health)),
-        catchError(() => of<Health>(null))
-      );
+    if (!this._clusterHealth$.has(mapKey)) {
+      const request$ = this._http
+        .get<Health>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`)
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
 
-    return this._clusterHealthMap.has(mapKey) ? request$.pipe(startWith(this._clusterHealthMap.get(mapKey))) : request$;
+      this._clusterHealth$.set(mapKey, request$);
+    }
+
+    return this._clusterHealth$.get(mapKey);
   }
 
   upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<void> {

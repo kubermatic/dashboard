@@ -18,7 +18,7 @@ import {Subject, combineLatest} from 'rxjs';
 import {takeUntil, map} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterBinding, Binding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
+import {ClusterBinding, NamespaceBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
 
 enum BindingMode {
   Cluster = 'Cluster',
@@ -37,7 +37,6 @@ enum Column {
 @Component({
   selector: 'km-rbac-users-or-groups',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
@@ -47,8 +46,6 @@ export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
 
   isLoading = true;
   dataSource = new MatTableDataSource<SimpleClusterBinding>();
-  clusterBindings: ClusterBinding[] = [];
-  namespaceBindings: Binding[] = [];
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
@@ -71,9 +68,9 @@ export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
   }
 
   private _getBindings(): void {
-    const mapBinding = (binding: (Binding | ClusterBinding)[]) =>
+    const mapBinding = (binding: (NamespaceBinding | ClusterBinding)[]) =>
       binding
-        .map(({subjects = [], ...obj}): Binding | ClusterBinding => ({
+        .map(({subjects = [], ...obj}): NamespaceBinding | ClusterBinding => ({
           ...obj,
           subjects: subjects.filter(({kind}) => kind === this.rbacType),
         }))
@@ -90,9 +87,6 @@ export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
     combineLatest([clusterBindings$, namespaceBindings$])
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(([clusterBindings = [], namespaceBindings = []]) => {
-        this.clusterBindings = clusterBindings;
-        this.namespaceBindings = namespaceBindings as Binding[];
-
         this.dataSource.data = [...clusterBindings, ...namespaceBindings].reduce(
           (prev, {subjects = [], roleRefName, namespace}) => {
             subjects.forEach(({name, kind, namespace: subjectNamespace}) => {

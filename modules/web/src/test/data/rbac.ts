@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Binding, ClusterBinding, ClusterRoleName, Kind, RoleName} from '@shared/entity/rbac';
+import {NamespaceBinding, ClusterBinding, ClusterRoleName, Kind, RoleName} from '@shared/entity/rbac';
 
 export function fakeClusterBinding(): ClusterBinding {
   return {
@@ -27,7 +27,7 @@ export function fakeClusterBinding(): ClusterBinding {
   };
 }
 
-export function fakeBinding(): Binding {
+export function fakeNamespaceBinding(): NamespaceBinding {
   return {
     namespace: 'default',
     subjects: [

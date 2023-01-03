@@ -64,8 +64,6 @@ limitations under the License.
          fxLayoutGap="10px">
       <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
         <button mat-flat-button
-                color="quaternary"
-                *ngIf="isClusterRunning"
                 fxLayoutAlign="center center"
                 (click)="addServiceAccount($event)">
           <i class="km-icon-mask km-icon-add"></i>
@@ -73,8 +71,6 @@ limitations under the License.
         </button>
 
         <button mat-flat-button
-                color="quaternary"
-                *ngIf="isClusterRunning"
                 fxLayoutAlign="center center"
                 (click)="addServiceAccountBinding()">
           <i class="km-icon-mask km-icon-add"></i>
@@ -92,11 +88,8 @@ limitations under the License.
     </div>
   </div>
 
-
   <ng-template #userAndGroupBindingButton>
     <button mat-flat-button
-            color="quaternary"
-            *ngIf="isClusterRunning"
             fxLayoutAlign="center center"
             (click)="addBinding($event)">
       <i class="km-icon-mask km-icon-add"></i>
@@ -106,11 +99,12 @@ limitations under the License.
 
   <ng-container [ngSwitch]="modeControl.value">
     <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
-      <km-rbac-service-account *ngIf="isClusterRunning"
-                               [projectID]="projectID"
+      <km-rbac-service-account [projectID]="projectID"
                                [cluster]="cluster"
+                               (addBinding)="addServiceAccountBinding($event)"
                                (deleteBinding)="deleteBinding($event)"
-                               (addBindingToServiceAccount)="addServiceAccountBinding($event)"></km-rbac-service-account>
+                               (deleteClusterServiceAccount)="deleteServiceAccount($event)">
+      </km-rbac-service-account>
     </ng-container>
 
     <km-rbac-users-or-groups *ngSwitchCase="RBACKind.Group"

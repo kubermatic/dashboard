@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <div class="dialog">
-  <km-dialog-title>Create Service Account</km-dialog-title>
+  <km-dialog-title>Add Service Account</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="form"
           fxLayout="column">
@@ -25,7 +25,7 @@ limitations under the License.
                required
                [formControl]="form.controls.name" />
         <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Required)">
-          Name is <strong>required</strong>
+          <strong>Required</strong>
         </mat-error>
         <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Pattern)">
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
@@ -43,15 +43,14 @@ limitations under the License.
                       [value]="namespace"> {{ namespace }} </mat-option>
         </mat-select>
         <mat-error *ngIf="form.get(Controls.Namespace).hasError(ErrorType.Required)">
-          Namespace is <strong>required</strong>
+          <strong>Required</strong>
         </mat-error>
       </mat-form-field>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
     <km-button icon="km-icon-add"
-               #submitBtn
-               label="Create Service Account"
+               label="Add Service Account"
                [disabled]="!form.valid"
                [observable]="getObservable()"
                (next)="onNext($event)">

@@ -15,9 +15,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
-import _ from 'lodash';
-import {merge, Observable, startWith, Subject, timer} from 'rxjs';
-import {distinctUntilChanged, switchMap, tap} from 'rxjs/operators';
+import {merge, Observable, of, startWith, Subject, timer} from 'rxjs';
+import {catchError, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {AppConfigService} from '@app/config.service';
 import {ClusterServiceAccount} from '@shared/entity/rbac';
 
@@ -31,32 +30,42 @@ export class ClusterServiceAccountService {
   private readonly _restRoot: string = environment.newRestRoot;
   private readonly _refreshTime = 10;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
-  private _serviceAccountsMap = new Map<string, ClusterServiceAccount[]>();
-  private _updateServiceAccount$ = new Subject<void>();
+  private _serviceAccountsMap$ = new Map<string, Observable<ClusterServiceAccount[]>>();
+  private _previousServiceAccountsMap = new Map<string, ClusterServiceAccount[]>();
+  private _refreshServiceAccounts = new Subject<void>();
 
   constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
 
   get(projectID: string, clusterID: string): Observable<ClusterServiceAccount[]> {
     const mapKey = projectID + '-' + clusterID;
-    const serviceAccount$ = merge(this._refreshTimer$, this._updateServiceAccount$).pipe(
-      switchMap(_ =>
-        this._http.get<ClusterServiceAccount[]>(
-          `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/serviceaccount`
-        )
-      ),
-      distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
-      tap(serviceAccount => {
-        this._serviceAccountsMap.set(mapKey, serviceAccount);
-      })
-    );
+    if (!this._serviceAccountsMap$.has(mapKey)) {
+      const serviceAccounts$ = merge(this._refreshTimer$, this._refreshServiceAccounts).pipe(
+        switchMap(_ =>
+          this._http
+            .get<ClusterServiceAccount[]>(
+              `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/serviceaccount`
+            )
+            .pipe(catchError(_ => of(null)))
+        ),
+        shareReplay({
+          refCount: true,
+          bufferSize: 1,
+        }),
+        tap((serviceAccount: ClusterServiceAccount[]) => {
+          this._previousServiceAccountsMap.set(mapKey, serviceAccount);
+        })
+      );
 
-    return this._serviceAccountsMap.has(mapKey)
-      ? serviceAccount$.pipe(startWith(this._serviceAccountsMap.get(mapKey)))
-      : serviceAccount$;
+      this._serviceAccountsMap$.set(mapKey, serviceAccounts$);
+    }
+    if (this._previousServiceAccountsMap.has(mapKey)) {
+      return this._serviceAccountsMap$.get(mapKey).pipe(startWith(this._previousServiceAccountsMap.get(mapKey)));
+    }
+    return this._serviceAccountsMap$.get(mapKey);
   }
 
-  update(): void {
-    this._updateServiceAccount$.next();
+  refreshServiceAccounts(): void {
+    this._refreshServiceAccounts.next();
   }
 
   post(projectID: string, clusterID: string, serviceAccount: ClusterServiceAccount): Observable<ClusterServiceAccount> {

@@ -39,7 +39,6 @@ export enum Controls {
 @Component({
   selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class AddServiceAccountDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

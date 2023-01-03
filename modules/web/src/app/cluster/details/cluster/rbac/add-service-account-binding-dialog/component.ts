@@ -24,6 +24,7 @@ import {takeUntil, map} from 'rxjs/operators';
 import {Cluster} from '@shared/entity/cluster';
 import {ControlsOf} from '@shared/model/shared';
 import {ClusterBinding, ClusterServiceAccount} from '@shared/entity/rbac';
+import {ErrorType} from '@app/shared/types/error-type';
 
 type AddServiceAccountBindingControls = {
   serviceAccountID: string;
@@ -36,27 +37,51 @@ enum BindingMode {
   Namespace = 'Namespace',
 }
 
-export enum Controls {
+enum Controls {
   ServiceAccountID = 'serviceAccountID',
   RoleID = 'roleID',
+  RoleNamespace = 'roleNamespace',
+}
+
+enum ServiceAccountsState {
+  Ready = 'Service Account',
+  Loading = 'Loading...',
+  Empty = 'No Service Accounts Available',
+}
+
+enum RoleState {
+  Ready = 'Role',
+  Loading = 'Loading...',
+  Empty = 'No Roles available',
+}
+
+enum NamespaceState {
+  Ready = 'Namespace',
+  Loading = 'Loading...',
+  Empty = 'No Namespaces available',
 }
 
 @Component({
-  selector: 'km-add-service-account-dialog-binding',
+  selector: 'km-add-service-account-binding-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AddServiceAccountBindingDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly BindingMode = BindingMode;
+  readonly Controls = Controls;
+  readonly ErrorType = ErrorType;
 
   bindingModeControl = new FormControl(BindingMode.Cluster);
   namespaces: string[] = [];
   namespaceRoles: string[] = [];
+  namespaceLabel = NamespaceState.Ready;
   clusterRoles: string[] = [];
   roles: string[] = [];
+  roleLabel = RoleState.Ready;
   roleNamespacesMap: Record<string, string[]>; // Record of roleId and Namespaces associated with that role
   serviceAccounts: ClusterServiceAccount[] = [];
+  serviceAccountsLabel = ServiceAccountsState.Ready;
   form: FormGroup<ControlsOf<AddServiceAccountBindingControls>>;
 
   @Input() cluster: Cluster;
@@ -135,15 +160,18 @@ export class AddServiceAccountBindingDialogComponent implements OnInit, OnDestro
   }
 
   private _getServiceAccounts(): void {
+    this.serviceAccountsLabel = ServiceAccountsState.Loading;
     this._clusterServiceAccountService
       .get(this.projectID, this.cluster.id)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => {
         this.serviceAccounts = serviceAccounts;
+        this.serviceAccountsLabel = serviceAccounts.length ? ServiceAccountsState.Ready : ServiceAccountsState.Empty;
       });
   }
 
   private _getNamespaceRoles(): void {
+    this.namespaceLabel = NamespaceState.Loading;
     this._rbacService
       .getNamespaceRoleNames(this.cluster.id, this.projectID)
       .pipe(
@@ -154,10 +182,12 @@ export class AddServiceAccountBindingDialogComponent implements OnInit, OnDestro
         this.namespaceRoles = roles.map(role => role.name);
         this.roleNamespacesMap = roles.reduce((prev, {name, namespace}) => ({...prev, [name]: namespace}), {});
         this._setRoles();
+        this.namespaceLabel = roles.length ? NamespaceState.Ready : NamespaceState.Empty;
       });
   }
 
   private _getClusterRoles(): void {
+    this.roleLabel = RoleState.Loading;
     this._rbacService
       .getClusterRoleNames(this.cluster.id, this.projectID)
       .pipe(
@@ -173,5 +203,6 @@ export class AddServiceAccountBindingDialogComponent implements OnInit, OnDestro
 
   private _setRoles(): void {
     this.roles = this.bindingModeControl.value === BindingMode.Cluster ? this.clusterRoles : this.namespaceRoles;
+    this.roleLabel = this.roles.length ? RoleState.Ready : RoleState.Empty;
   }
 }

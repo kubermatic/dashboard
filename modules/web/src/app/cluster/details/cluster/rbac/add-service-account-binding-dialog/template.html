@@ -20,24 +20,23 @@ limitations under the License.
           fxLayout="column">
       <mat-button-toggle-group group="bindingType"
                                [formControl]="bindingModeControl">
-        <mat-button-toggle [value]="BindingMode.Cluster"> Cluster </mat-button-toggle>
-        <mat-button-toggle [value]="BindingMode.Namespace"> Namespace </mat-button-toggle>
+        <mat-button-toggle [value]="BindingMode.Cluster">Cluster</mat-button-toggle>
+        <mat-button-toggle [value]="BindingMode.Namespace">Namespace</mat-button-toggle>
       </mat-button-toggle-group>
 
       <mat-form-field>
         <mat-label>Service Account</mat-label>
         <mat-select panelClass="km-add-dialog-dropdown"
                     disableOptionCentering
-                    [formControl]="form.controls.serviceAccountID">
-          <mat-option *ngIf="!serviceAccounts.length"
-                      disabled>Loading...</mat-option>
+                    [formControl]="form.get(Controls.ServiceAccountID)"
+                    [placeholder]="serviceAccountsLabel">
           <mat-option *ngFor="let serviceAccount of serviceAccounts"
                       [value]="serviceAccount.id">
             {{ serviceAccount.name }} <span class="km-text-muted">(Namespace: {{ serviceAccount.namespace }})</span>
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls.serviceAccountID.hasError('required')">
-          Service account is <strong>required</strong>
+        <mat-error *ngIf="form.get(Controls.ServiceAccountID).hasError(ErrorType.Required)">
+          <strong>Required</strong>
         </mat-error>
       </mat-form-field>
 
@@ -45,32 +44,28 @@ limitations under the License.
         <mat-label>Role</mat-label>
         <mat-select panelClass="km-add-dialog-dropdown"
                     disableOptionCentering
-                    [formControl]="form.controls.roleID">
-          <mat-option *ngIf="!namespaceRoles.length"
-                      disabled>Loading...</mat-option>
+                    [formControl]="form.get(Controls.RoleID)"
+                    [placeholder]="roleLabel">
           <mat-option *ngFor="let role of roles"
                       [value]="role"> {{ role }} </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls.roleID.hasError('required')">
-          Role is <strong>required</strong>
+        <mat-error *ngIf="form.get(Controls.RoleID).hasError(ErrorType.Required)">
+          <strong>Required</strong>
         </mat-error>
       </mat-form-field>
 
       <mat-form-field *ngIf="bindingModeControl.value === BindingMode.Namespace">
         <mat-label>Namespace</mat-label>
         <mat-select panelClass="km-add-dialog-dropdown"
-                    [formControl]="form.controls.roleNamespace">
-
-          <!--          Todo: Update-->
-          <mat-option *ngIf="!roleNamespacesMap"
-                      disabled>Loading...</mat-option>
-          <mat-option *ngIf="!form.controls.roleID.value"
-                      disabled>Please select role</mat-option>
-          <mat-option *ngFor="let roleNamespace of roleNamespacesMap?.[form.controls.roleID.value]"
+                    [disabled]="!form.get(Controls.RoleID).value"
+                    [formControl]="form.get(Controls.RoleNamespace)"
+                    [placeholder]="namespaceLabel">
+          <mat-option *ngFor="let roleNamespace of roleNamespacesMap?.[form.get(Controls.RoleID).value]"
                       [value]="roleNamespace">{{ roleNamespace }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="form.controls.roleNamespace.hasError('required')">
-          Namespace is <strong>required</strong>
+        <mat-hint *ngIf="!form.get(Controls.RoleID).value">Please select role first.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.RoleNamespace).hasError(ErrorType.Required)">
+          <strong>Required</strong>
         </mat-error>
       </mat-form-field>
     </form>
