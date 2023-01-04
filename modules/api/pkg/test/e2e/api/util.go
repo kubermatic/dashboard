@@ -132,7 +132,7 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 
 		expected := sets.New(tc.expectedRoleNames...)
 		if !existing.IsSuperset(expected) {
-			return fmt.Errorf("expected Roles %v, got %v", expected.List(), existing.List()), nil
+			return fmt.Errorf("expected Roles %v, got %v", sets.List(expected), sets.List(existing)), nil
 		}
 
 		return nil, nil
@@ -154,7 +154,7 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 
 		expected := sets.New(tc.expectedClusterRoleNames...)
 		if !existing.IsSuperset(expected) {
-			return fmt.Errorf("expected ClusterRoles %v, got %v", expected.List(), existing.List()), nil
+			return fmt.Errorf("expected ClusterRoles %v, got %v", sets.List(expected), sets.List(existing)), nil
 		}
 
 		return nil, nil

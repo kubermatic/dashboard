@@ -386,7 +386,7 @@ func createMeteringReportConfiguration(ctx context.Context, reportCfgReq createR
 	}
 
 	if reportCfgReq.Body.Types == nil || len(*reportCfgReq.Body.Types) == 0 {
-		defaultTypes := ReportTypes.List()
+		defaultTypes := sets.List(ReportTypes)
 		reportCfgReq.Body.Types = &defaultTypes
 	}
 

@@ -433,7 +433,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 			return nil, errors.New("taint value must be set")
 		}
 		if !allowedTaintEffects.Has(taint.Effect) {
-			return nil, fmt.Errorf("taint effect '%s' not allowed. Allowed: %s", taint.Effect, strings.Join(allowedTaintEffects.List(), ", "))
+			return nil, fmt.Errorf("taint effect '%s' not allowed. Allowed: %s", taint.Effect, strings.Join(sets.List(allowedTaintEffects), ", "))
 		}
 	}
 

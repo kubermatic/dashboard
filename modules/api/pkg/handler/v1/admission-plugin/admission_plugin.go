@@ -57,7 +57,7 @@ func GetAdmissionPluginEndpoint(admissionPluginProvider provider.AdmissionPlugin
 		}
 		plugins.Insert(pluginResponse...)
 
-		return plugins.List(), nil
+		return sets.List(plugins), nil
 	}
 }
 

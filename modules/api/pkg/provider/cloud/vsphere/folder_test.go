@@ -24,8 +24,6 @@ import (
 	"testing"
 
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/test/diff"
-
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
@@ -70,10 +68,13 @@ func TestProvider_GetVMFolders(t *testing.T) {
 			for _, folder := range folders {
 				gotFolders.Insert(folder.Path)
 			}
-			t.Logf("Got folders: %v", gotFolders.List())
+			t.Logf("Got folders: %v", sets.List(gotFolders))
 
 			if test.expectedFolders.Difference(gotFolders).Len() > 0 {
-				t.Fatalf("Response is missing expected folders:\n%v", diff.SetDiff[string](test.expectedFolders, gotFolders))
+				t.Fatalf("Response is missing expected folders:\n")
+
+				// TODO: Uncomment this when SetDiff is fixed in KKP repo.
+				// t.Fatalf("Response is missing expected folders:\n%v", diff.SetDiff(test.expectedFolders, gotFolders))
 			}
 		})
 	}

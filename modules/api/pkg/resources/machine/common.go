@@ -418,8 +418,8 @@ func GetDigitaloceanProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeS
 		tags.Insert(fmt.Sprintf("system-project-%s", projectID))
 	}
 
-	config.Tags = make([]providerconfig.ConfigVarString, len(tags.List()))
-	for i, tag := range tags.List() {
+	config.Tags = make([]providerconfig.ConfigVarString, len(sets.List(tags)))
+	for i, tag := range sets.List(tags) {
 		config.Tags[i].Value = tag
 	}
 
@@ -446,16 +446,16 @@ func GetPacketProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 	if ok {
 		tags.Insert(fmt.Sprintf("system/project:%s", projectID))
 	}
-	config.Tags = make([]providerconfig.ConfigVarString, len(tags.List()))
-	for i, tag := range tags.List() {
+	config.Tags = make([]providerconfig.ConfigVarString, len(sets.List(tags)))
+	for i, tag := range sets.List(tags) {
 		config.Tags[i].Value = tag
 	}
 
 	var facilities = sets.Set[string]{}
 	if dc.Spec.Packet.Facilities != nil {
 		facilities = sets.New(dc.Spec.Packet.Facilities...)
-		config.Facilities = make([]providerconfig.ConfigVarString, len(facilities.List()))
-		for i, facility := range facilities.List() {
+		config.Facilities = make([]providerconfig.ConfigVarString, len(sets.List(facilities)))
+		for i, facility := range sets.List(facilities) {
 			config.Facilities[i].Value = facility
 		}
 	}
@@ -499,7 +499,7 @@ func GetGCPProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *
 	if ok {
 		tags.Insert(fmt.Sprintf("system-project-%s", projectID))
 	}
-	config.Tags = tags.List()
+	config.Tags = sets.List(tags)
 
 	config.Labels = map[string]string{}
 	for key, value := range nodeSpec.Cloud.GCP.Labels {

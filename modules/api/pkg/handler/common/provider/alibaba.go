@@ -105,7 +105,7 @@ func ListAlibabaInstanceTypes(accessKeyID string, accessKeySecret string, region
 	}
 
 	if machineFilter.EnableGPU {
-		recommendedInstanceFamilies.Insert(gpuInstanceFamilies.List()...)
+		recommendedInstanceFamilies.Insert(sets.List(gpuInstanceFamilies)...)
 	}
 
 	for _, instanceFamily := range instTypeFamilies.InstanceTypeFamilies.InstanceTypeFamily {

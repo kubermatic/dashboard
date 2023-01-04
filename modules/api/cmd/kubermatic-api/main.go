@@ -369,7 +369,11 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	if err != nil {
 		return providers{}, fmt.Errorf("failed to setup user informer: %w", err)
 	}
-	userInformer.AddEventHandler(userWatcher)
+
+	_, err = userInformer.AddEventHandler(userWatcher)
+	if err != nil {
+		return providers{}, fmt.Errorf("failed to setup event handler for user informer: %w", err)
+	}
 
 	settingsWatcher, err := kuberneteswatcher.NewSettingsWatcher(ctx, log)
 	if err != nil {
@@ -380,7 +384,11 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	if err != nil {
 		return providers{}, fmt.Errorf("failed to setup settings informer: %w", err)
 	}
-	settingsInformer.AddEventHandler(settingsWatcher)
+
+	_, err = settingsInformer.AddEventHandler(settingsWatcher)
+	if err != nil {
+		return providers{}, fmt.Errorf("failed to setup event handler for settings informer: %w", err)
+	}
 
 	featureGatesProvider := kubernetesprovider.NewFeatureGatesProvider(options.featureGates)
 

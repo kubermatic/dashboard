@@ -61,7 +61,7 @@ func NewRoundTripperWithRetries(t *testing.T, requestTimeout time.Duration, back
 	return &retryRoundTripper{
 		Backoff:            backoff,
 		test:               t,
-		ignoredStatusCodes: sets.NewInt(ignoredStatusCodes...),
+		ignoredStatusCodes: sets.New[int](ignoredStatusCodes...),
 		requestTimeout:     requestTimeout,
 	}
 }
@@ -70,7 +70,7 @@ type retryRoundTripper struct {
 	Backoff
 	requestTimeout     time.Duration
 	test               *testing.T
-	ignoredStatusCodes sets.Int
+	ignoredStatusCodes sets.Set[int]
 }
 
 func (r *retryRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
@@ -142,7 +142,7 @@ func (r *retryRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("request did not succeed after %d attempts (ignoring HTTP codes %v): %v", r.Steps, r.ignoredStatusCodes.List(), multiErr)
+		return nil, fmt.Errorf("request did not succeed after %d attempts (ignoring HTTP codes %v): %v", r.Steps, sets.List(r.ignoredStatusCodes), multiErr)
 	}
 
 	return response, nil
