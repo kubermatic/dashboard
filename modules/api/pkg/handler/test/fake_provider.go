@@ -46,6 +46,7 @@ const (
 	ExistingFakeProject        = "ExistingFakeProject"
 	ExistingFakeProjectID      = "ExistingFakeProject-ID"
 	ImpersonatedClientErrorMsg = "forbidden"
+	DefaultContainerRuntime    = "docker"
 )
 
 type FakePrivilegedProjectProvider struct {
@@ -173,6 +174,10 @@ func (p *FakeExternalClusterProvider) Update(ctx context.Context, userInfo *prov
 
 func (p *FakeExternalClusterProvider) GetVersion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (*semver.Semver, error) {
 	return defaulting.DefaultKubernetesVersioning.Default, nil
+}
+
+func (p *FakeExternalClusterProvider) GetContainerRutime(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
+	return DefaultContainerRuntime, nil
 }
 
 func (p *FakeExternalClusterProvider) VersionsEndpoint(ctx context.Context, configGetter provider.KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error) {

@@ -18,13 +18,8 @@ package kubernetes
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
 	"github.com/pkg/errors"
-
-	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -37,31 +32,7 @@ const (
 	NodeControlPlaneLabel = "node-role.kubernetes.io/control-plane"
 )
 
-func CheckContainerRuntime(ctx context.Context,
-	masterClient ctrlruntimeclient.Client,
-	externalCluster *kubermaticv1.ExternalCluster,
-	externalClusterProvider provider.ExternalClusterProvider,
-) (string, error) {
-	clusterClient, err := externalClusterProvider.GetClient(ctx, masterClient, externalCluster)
-	if err != nil {
-		return "", err
-	}
-
-	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient)
-	if err != nil {
-		return "", fmt.Errorf("failed to fetch container runtime: not able to list control plane nodes %w", err)
-	}
-
-	for _, node := range controlPlaneNode.Items {
-		containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
-		strSlice := strings.Split(containerRuntimeVersion, ":")
-		return strSlice[0], nil
-	}
-
-	return "", fmt.Errorf("failed to fetch container runtime")
-}
-
-func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.Client) (*corev1.NodeList, error) {
+func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.Client, limit *int64) (*corev1.NodeList, error) {
 	nodeReq, err := labels.NewRequirement(NodeControlPlaneLabel, selection.Exists, []string{})
 	if err != nil {
 		return nil, errors.Wrap(err, "error creating selector requirement")
@@ -72,15 +43,22 @@ func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.C
 		return nil, errors.Wrap(err, "error converting node label requirement to selector")
 	}
 
+	var listOpts ctrlruntimeclient.ListOption
 	nodes := &corev1.NodeList{}
-	listOpts := &ctrlruntimeclient.ListOptions{
-		Limit:         1,
-		LabelSelector: selector,
+	if limit != nil {
+		listOpts = &ctrlruntimeclient.ListOptions{
+			Limit:         *limit,
+			LabelSelector: selector,
+		}
+	} else {
+		listOpts = &ctrlruntimeclient.ListOptions{
+			LabelSelector: selector,
+		}
 	}
+
 	err = clusterClient.List(ctx, nodes, listOpts)
 	if err != nil {
 		return nil, err
 	}
-
 	return nodes, nil
 }

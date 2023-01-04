@@ -37,6 +37,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
 )
@@ -304,29 +305,28 @@ func getKubeOneClusterDetails(ctx context.Context,
 	masterClient ctrlruntimeclient.Client,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider) error {
-	var containerRuntime, region string
-
 	clusterClient, err := clusterProvider.GetClient(ctx, masterClient, cluster)
 	if err != nil {
 		return err
 	}
 
-	nodes, err := kuberneteshelper.ListControlPlaneNode(ctx, clusterClient)
+	controlPlaneNodeList, err := kuberneteshelper.ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
 	if err != nil {
 		return err
 	}
 
-	for _, node := range nodes.Items {
-		region = node.Labels[NodeRegionLabel]
-		containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
-		strSlice := strings.Split(containerRuntimeVersion, ":")
-		containerRuntime = strSlice[0]
-
-		clusterSpec := &apiv2.KubeOneClusterSpec{
-			Region: region,
+	controlPlaneNodes := controlPlaneNodeList.Items
+	for len(controlPlaneNodes) > 0 {
+		controlPlaneNode := controlPlaneNodes[0]
+		apiCluster.Spec.KubeOneClusterSpec = &apiv2.KubeOneClusterSpec{
+			Region: controlPlaneNode.Labels[NodeRegionLabel],
 		}
-		apiCluster.Spec.ContainerRuntime = containerRuntime
-		apiCluster.Spec.KubeOneClusterSpec = clusterSpec
+
+		containerRuntimeVersion := controlPlaneNode.Status.NodeInfo.ContainerRuntimeVersion
+		containerRuntime, _, found := strings.Cut(containerRuntimeVersion, ":")
+		if found {
+			apiCluster.Spec.ContainerRuntime = containerRuntime
+		}
 	}
 
 	return nil

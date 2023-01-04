@@ -21,11 +21,13 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"strings"
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -43,6 +45,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -248,6 +251,27 @@ func (p *ExternalClusterProvider) GetVersion(ctx context.Context, masterClient c
 		return nil, err
 	}
 	return v, nil
+}
+
+func (p *ExternalClusterProvider) GetContainerRutime(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
+	clusterClient, err := p.GetClient(ctx, masterClient, cluster)
+	if err != nil {
+		return "", err
+	}
+
+	controlPlaneNode, err := kuberneteshelper.ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
+	if err != nil {
+		return "", fmt.Errorf("failed to list control plane nodes %w", err)
+	}
+
+	for len(controlPlaneNode.Items) > 0 {
+		containerRuntimeVersion := controlPlaneNode.Items[0].Status.NodeInfo.ContainerRuntimeVersion
+		containerRuntime, _, found := strings.Cut(containerRuntimeVersion, ":")
+		if found {
+			return containerRuntime, nil
+		}
+	}
+	return "", fmt.Errorf("failed to get container runtime from node")
 }
 
 func (p *ExternalClusterProvider) VersionsEndpoint(ctx context.Context, configGetter provider.KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error) {

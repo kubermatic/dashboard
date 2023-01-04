@@ -32,7 +32,6 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/eks"
@@ -57,6 +56,10 @@ const (
 	DeleteAction     = "delete"
 	DisconnectAction = "disconnect"
 	Base64           = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
+)
+
+var (
+	rxBase64 = regexp.MustCompile(Base64)
 )
 
 // createClusterReq defines HTTP request for createExternalCluster
@@ -107,7 +110,6 @@ func (req createClusterReq) Validate() error {
 func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeOneCluster, error) {
 	var err error
 	var manifest []byte
-	rxBase64 := regexp.MustCompile(Base64)
 	kubeOneCluster := &kubeonev1beta2.KubeOneCluster{}
 
 	if rxBase64.MatchString(encodedManifest) {
@@ -677,15 +679,14 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 			return patchAKSCluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.AKS)
 		}
 		if cloud.KubeOne != nil {
-			containerRuntime, err := kuberneteshelper.CheckContainerRuntime(ctx, masterClient, cluster, clusterProvider)
+			clusterToPatch.Spec.ContainerRuntime, err = clusterProvider.GetContainerRutime(ctx, masterClient, cluster)
 			if err != nil {
-				return nil, err
+				return "", err
 			}
-			clusterToPatch.Spec.ContainerRuntime = containerRuntime
 			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}
-			return patchKubeOneCluster(ctx, cluster, clusterToPatch, patchedCluster, secretKeySelector, clusterProvider, privilegedClusterProvider.GetMasterClient())
+			return patchKubeOneCluster(ctx, cluster, clusterToPatch, patchedCluster, secretKeySelector, clusterProvider, masterClient)
 		}
 
 		return convertClusterToAPI(cluster), nil
