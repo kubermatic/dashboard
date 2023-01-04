@@ -88,7 +88,6 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 	ctrlruntime "sigs.k8s.io/controller-runtime"
-	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlruntimelog "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
@@ -147,10 +146,7 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to construct manager", zap.Error(err))
 	}
-	if err := mgr.GetFieldIndexer().IndexField(ctx, &corev1.Event{}, "involvedObject.name", func(rawObj ctrlruntimeclient.Object) []string {
-		event := rawObj.(*corev1.Event)
-		return []string{event.InvolvedObject.Name}
-	}); err != nil {
+	if err := mgr.GetFieldIndexer().IndexField(ctx, &corev1.Event{}, common.EventFieldIndexerKey, common.EventIndexer()); err != nil {
 		log.Fatalw("failed to add index on Event involvedObject name: %w", err)
 	}
 

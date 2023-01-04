@@ -27,6 +27,15 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const EventFieldIndexerKey = "involvedObject.name"
+
+func EventIndexer() ctrlruntimeclient.IndexerFunc {
+	return func(obj ctrlruntimeclient.Object) []string {
+		event := obj.(*corev1.Event)
+		return []string{event.InvolvedObject.Name}
+	}
+}
+
 // FilterEventsByType filters Kubernetes Events based on their type. Empty type string will return all of them.
 func FilterEventsByType(events []apiv1.Event, eventType string) []apiv1.Event {
 	if len(eventType) == 0 || len(events) == 0 {
@@ -47,7 +56,7 @@ func GetEvents(ctx context.Context, client ctrlruntimeclient.Client, obj metav1.
 	events := &corev1.EventList{}
 	listOpts := &ctrlruntimeclient.ListOptions{
 		Namespace:     objNamespace,
-		FieldSelector: fields.OneTermEqualSelector("involvedObject.name", obj.GetName()),
+		FieldSelector: fields.OneTermEqualSelector(EventFieldIndexerKey, obj.GetName()),
 	}
 	if err := client.List(ctx, events, listOpts); err != nil {
 		return nil, err
