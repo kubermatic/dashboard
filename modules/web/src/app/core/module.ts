@@ -31,6 +31,7 @@ import {EndOfLifeService} from '@core/services/eol';
 import {GlobalModule} from '@core/services/global/module';
 import {HistoryService} from '@core/services/history';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {LabelService} from '@core/services/label';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MLAService} from '@core/services/mla';
@@ -141,6 +142,7 @@ const services = [
   ApplicationService,
   OperatingSystemManagerService,
   KubeOneClusterSpecService,
+  KubeOnePresetsService,
 ];
 
 const interceptors = [

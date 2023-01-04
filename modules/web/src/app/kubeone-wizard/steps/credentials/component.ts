@@ -23,7 +23,8 @@ import {takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
 enum Controls {
-  Credentials = 'credentialsBasic',
+  Preset = 'preset',
+  CredentialsBasic = 'credentialsBasic',
 }
 
 @Component({
@@ -71,7 +72,8 @@ export class KubeOneCredentialsStepComponent extends StepBase implements OnInit 
 
   private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.Credentials]: this._builder.control(''),
+      [Controls.Preset]: this._builder.control(''),
+      [Controls.CredentialsBasic]: this._builder.control(''),
     });
   }
 }

@@ -15,6 +15,7 @@
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluster';
 import {KubeOneAWSCloudSpec, KubeOneCloudSpec, KubeOneClusterSpec} from '@shared/entity/kubeone-cluster';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -46,7 +47,11 @@ export enum Controls {
 export class KubeOneAWSCredentialsBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: KubeOneClusterSpecService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _clusterSpecService: KubeOneClusterSpecService,
+    private readonly _presetsService: KubeOnePresetsService
+  ) {
     super('AWS Credentials Basic');
   }
 
@@ -72,10 +77,30 @@ export class KubeOneAWSCredentialsBasicComponent extends BaseFormValidator imple
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
+    this.form.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ =>
+        this._presetsService.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
+      );
+
+    this._presetsService.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+
     merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+  }
+
+  private _enable(enable: boolean, name: string): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    }
+
+    if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 
   private _getClusterEntity(): ExternalCluster {
