@@ -57,7 +57,7 @@ func updateInfraStorageClassesInfo(ctx context.Context, client ctrlruntimeclient
 	if err != nil {
 		return err
 	}
-	existingStorageClassSet := sets.NewString(spec.Kubevirt.InfraStorageClasses...)
+	existingStorageClassSet := sets.New(spec.Kubevirt.InfraStorageClasses...)
 
 	for _, sc := range storageClassList {
 		if !existingStorageClassSet.Has(sc.Name) {

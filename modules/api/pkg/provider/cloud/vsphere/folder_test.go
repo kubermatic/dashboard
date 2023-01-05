@@ -24,7 +24,6 @@ import (
 	"testing"
 
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/test/diff"
 
 	"k8s.io/apimachinery/pkg/util/sets"
 )
@@ -33,12 +32,12 @@ func TestProvider_GetVMFolders(t *testing.T) {
 	tests := []struct {
 		name            string
 		dc              *kubermaticv1.DatacenterSpecVSphere
-		expectedFolders sets.String
+		expectedFolders sets.Set[string]
 	}{
 		{
 			name: "successfully-list-default-folders",
 			dc:   getTestDC(),
-			expectedFolders: sets.NewString(
+			expectedFolders: sets.New(
 				path.Join("/", vSphereDatacenter, "vm"),
 				path.Join("/", vSphereDatacenter, "vm", "sig-infra"),
 				path.Join("/", vSphereDatacenter, "vm", "Kubermatic-dev"),
@@ -52,7 +51,7 @@ func TestProvider_GetVMFolders(t *testing.T) {
 				AllowInsecure: true,
 				RootPath:      path.Join("/", vSphereDatacenter, "vm"),
 			},
-			expectedFolders: sets.NewString(
+			expectedFolders: sets.New(
 				path.Join("/", vSphereDatacenter, "vm", "sig-infra"),
 				path.Join("/", vSphereDatacenter, "vm", "Kubermatic-dev"),
 			),
@@ -66,14 +65,17 @@ func TestProvider_GetVMFolders(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			gotFolders := sets.NewString()
+			gotFolders := sets.New[string]()
 			for _, folder := range folders {
 				gotFolders.Insert(folder.Path)
 			}
-			t.Logf("Got folders: %v", gotFolders.List())
+			t.Logf("Got folders: %v", sets.List(gotFolders))
 
 			if test.expectedFolders.Difference(gotFolders).Len() > 0 {
-				t.Fatalf("Response is missing expected folders:\n%v", diff.SetDiff[string](test.expectedFolders, gotFolders))
+				t.Fatalf("Response is missing expected folders:\n")
+
+				// TODO: Uncomment this when SetDiff is fixed in KKP repo.
+				// t.Fatalf("Response is missing expected folders:\n%v", diff.SetDiff(test.expectedFolders, gotFolders))
 			}
 		})
 	}

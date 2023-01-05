@@ -163,7 +163,7 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 	}
 
 	// currently only migration to containerd is supported
-	if !sets.NewString("containerd").Has(wantedContainerRuntime) {
+	if !sets.New("containerd").Has(wantedContainerRuntime) {
 		return nil, fmt.Errorf("Operation not supported: Only migration from docker to containerd is supported: %s", wantedContainerRuntime)
 	}
 

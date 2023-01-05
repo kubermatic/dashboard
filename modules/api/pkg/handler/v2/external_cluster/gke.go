@@ -856,14 +856,14 @@ func (req GKEVersionsReq) Validate() error {
 	if len(req.Mode) == 0 {
 		return fmt.Errorf("GKE \"Mode\" cannot be empty")
 	}
-	if !sets.NewString(ManualMode, AutoMode).Has(req.Mode) {
+	if !sets.New(ManualMode, AutoMode).Has(req.Mode) {
 		return fmt.Errorf("provide valid GKE Mode: %s", req.Mode)
 	}
 	if req.Mode == AutoMode {
 		if len(req.ReleaseChannel) == 0 {
 			return fmt.Errorf("GKE \"ReleaseChannel\" cannot be empty")
 		}
-		if !sets.NewString(resources.GKERapidReleaseChannel, resources.GKERegularReleaseChannel, resources.GKEStableReleaseChannel).Has(req.ReleaseChannel) {
+		if !sets.New(resources.GKERapidReleaseChannel, resources.GKERegularReleaseChannel, resources.GKEStableReleaseChannel).Has(req.ReleaseChannel) {
 			return fmt.Errorf("provide valid GKE ReleaseChannel: %s", req.ReleaseChannel)
 		}
 	}

@@ -150,12 +150,12 @@ func ListInstallableAddonEndpoint(ctx context.Context, userInfoGetter provider.U
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	installedAddons := sets.NewString()
+	installedAddons := sets.New[string]()
 	for _, addon := range addons {
 		installedAddons.Insert(addon.Name)
 	}
 
-	return sets.NewString(config.Spec.API.AccessibleAddons...).Difference(installedAddons).UnsortedList(), nil
+	return sets.New(config.Spec.API.AccessibleAddons...).Difference(installedAddons).UnsortedList(), nil
 }
 
 func DeleteAddonEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, addonID string) (interface{}, error) {

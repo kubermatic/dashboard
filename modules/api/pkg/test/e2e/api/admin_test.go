@@ -242,11 +242,11 @@ func TestManageProjectMembersByAdmin(t *testing.T) {
 	tests := []struct {
 		name          string
 		group         string
-		expectedUsers sets.String
+		expectedUsers sets.Set[string]
 	}{
 		{
 			name:          "admin can manage project members for any project",
-			expectedUsers: sets.NewString("roxy@kubermatic.com"),
+			expectedUsers: sets.New("roxy@kubermatic.com"),
 		},
 	}
 
