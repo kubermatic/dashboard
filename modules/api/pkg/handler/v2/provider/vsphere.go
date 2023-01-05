@@ -192,6 +192,7 @@ func DecodeVSphereCommonReq(_ context.Context, r *http.Request) (interface{}, er
 }
 
 // vSphereProjectReq represents a request for vSphere data within the context of a KKP project.
+// swagger:parameters listProjectVSphereNetworks listProjectVSphereFolders listProjectVSphereDatastores
 type vSphereProjectReq struct {
 	common.ProjectReq
 	vSphereCommonReq
