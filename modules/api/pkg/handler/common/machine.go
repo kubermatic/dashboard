@@ -317,7 +317,7 @@ func ListNodesForCluster(ctx context.Context, userInfoGetter provider.UserInfoGe
 
 	// The following is a bit tricky. We might have a node which is not created by a machine and vice versa...
 	var nodesV1 []*apiv1.Node
-	matchedMachineNodes := sets.NewString()
+	matchedMachineNodes := sets.New[string]()
 
 	// Go over all machines first
 	for i := range machineList.Items {

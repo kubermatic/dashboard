@@ -20162,6 +20162,56 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/digitalocean/sizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "digitalocean"
+        ],
+        "summary": "Lists sizes from digitalocean.",
+        "operationId": "listProjectDigitaloceanSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "DoToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DigitaloceanSizeList",
+            "schema": {
+              "$ref": "#/definitions/DigitaloceanSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/eks/amitypes": {
       "get": {
         "produces": [
@@ -21824,6 +21874,957 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/openstack/availabilityzones": {
+      "get": {
+        "description": "Lists availability zones from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackAvailabilityZones",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackAvailabilityZone",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackAvailabilityZone"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/networks": {
+      "get": {
+        "description": "Lists networks from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackNetwork",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/securitygroups": {
+      "get": {
+        "description": "Lists security groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSecurityGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSecurityGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/servergroups": {
+      "get": {
+        "description": "Lists server groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackServerGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackServerGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackServerGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/sizes": {
+      "get": {
+        "description": "Lists sizes from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSize",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSize"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/subnetpools": {
+      "get": {
+        "description": "Lists subnet pools from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSubnetPools",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "IPVersion",
+            "name": "ip_version",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSubnetPool",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSubnetPool"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/subnets": {
+      "get": {
+        "description": "Lists subnets from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "NetworkID",
+            "name": "network_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSubnet",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSubnet"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/tenants": {
+      "get": {
+        "description": "Lists tenants from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackTenants",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackTenant",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackTenant"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/datastores": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists datastores from vSphere datacenter.",
+        "operationId": "listProjectVSphereDatastores",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereDatastoreList",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereDatastoreList"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/folders": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists folders from vSphere datacenter.",
+        "operationId": "listProjectVSphereFolders",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereFolder",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereFolder"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/networks": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists networks from vSphere datacenter.",
+        "operationId": "listProjectVSphereNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereNetwork",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/{provider_name}/presets": {
       "get": {
         "description": "Lists presets for the provider in a specific project",
@@ -21981,6 +22982,9 @@
                 },
                 "hetznerSize": {
                   "$ref": "#/definitions/HetznerSize"
+                },
+                "kubevirtNodeSize": {
+                  "$ref": "#/definitions/KubevirtNodeSize"
                 },
                 "nutanixNodeSpec": {
                   "$ref": "#/definitions/NutanixNodeSpec"
@@ -23715,22 +24719,22 @@
           },
           {
             "type": "string",
-            "name": "Tenant",
+            "name": "OpenstackTenant",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "TenantID",
+            "name": "OpenstackTenantID",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "Project",
+            "name": "OpenstackProject",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "ProjectID",
+            "name": "OpenstackProjectID",
             "in": "header"
           },
           {
@@ -23806,22 +24810,22 @@
           },
           {
             "type": "string",
-            "name": "Tenant",
+            "name": "OpenstackTenant",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "TenantID",
+            "name": "OpenstackTenantID",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "Project",
+            "name": "OpenstackProject",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "ProjectID",
+            "name": "OpenstackProjectID",
             "in": "header"
           },
           {
@@ -24538,7 +25542,7 @@
           "resourceQuota",
           "admin"
         ],
-        "summary": "Gets a Resource Quota list.",
+        "summary": "Gets a Resource Quota list. If `accumulate` is set to `true` then all the quota's quotas and global usage are accumulated and a `totalquota` is returned.",
         "operationId": "listResourceQuotas",
         "parameters": [
           {
@@ -24551,6 +25555,12 @@
             "type": "string",
             "x-go-name": "SubjectKind",
             "name": "subject_kind",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "x-go-name": "Accumulate",
+            "name": "accumulate",
             "in": "query"
           }
         ],
@@ -27132,6 +28142,14 @@
           "description": "Description of the application. what is its purpose",
           "type": "string",
           "x-go-name": "Description"
+        },
+        "labels": {
+          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -27191,6 +28209,13 @@
           "type": "string",
           "x-go-name": "ID"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "description": "Name represents human readable name for the resource",
           "type": "string",
@@ -27237,6 +28262,13 @@
           "description": "ID unique value that identifies the resource generated by the server. Read-Only.",
           "type": "string",
           "x-go-name": "ID"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         },
         "name": {
           "description": "Name represents human readable name for the resource",
@@ -27321,6 +28353,14 @@
       "properties": {
         "applicationRef": {
           "$ref": "#/definitions/ApplicationRef"
+        },
+        "labels": {
+          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         },
         "namespace": {
           "$ref": "#/definitions/NamespaceSpec"
@@ -29661,6 +30701,16 @@
         },
         "templates": {
           "$ref": "#/definitions/ImageList"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DefaultProjectResourceQuota": {
+      "description": "DefaultProjectResourceQuota contains the default resource quota which will be set for all\nprojects that do not have a custom quota already set.",
+      "type": "object",
+      "properties": {
+        "quota": {
+          "$ref": "#/definitions/ResourceDetails"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -32980,6 +34030,40 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "KubevirtNodeSize": {
+      "type": "object",
+      "required": [
+        "cpus",
+        "memory",
+        "primaryDiskSize"
+      ],
+      "properties": {
+        "cpus": {
+          "description": "CPUs states how many cpus the kubevirt node will have.",
+          "type": "string",
+          "x-go-name": "CPUs"
+        },
+        "memory": {
+          "description": "Memory states the memory that kubevirt node will have. The value should be in the\nformat of https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/",
+          "type": "string",
+          "x-go-name": "Memory"
+        },
+        "primaryDiskSize": {
+          "description": "PrimaryDiskSize states the size of the provisioned pvc per node.",
+          "type": "string",
+          "x-go-name": "PrimaryDiskSize"
+        },
+        "secondaryDisks": {
+          "description": "SecondaryDisks contains list of secondary-disks",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SecondaryDisks"
+          },
+          "x-go-name": "SecondaryDisks"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "KubevirtNodeSpec": {
       "description": "KubevirtNodeSpec kubevirt specific node settings",
       "type": "object",
@@ -36128,6 +37212,34 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ResourceClaim": {
+      "type": "object",
+      "title": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
+      "properties": {
+        "name": {
+          "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ResourceDetails": {
+      "type": "object",
+      "title": "ResourceDetails holds the CPU, Memory and Storage quantities.",
+      "properties": {
+        "cpu": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "memory": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "storage": {
+          "$ref": "#/definitions/Quantity"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ResourceLabelMap": {
       "type": "object",
       "title": "ResourceLabelMap defines list of labels grouped by specific resource types.",
@@ -36147,6 +37259,10 @@
     "ResourceQuota": {
       "type": "object",
       "properties": {
+        "isDefault": {
+          "type": "boolean",
+          "x-go-name": "IsDefault"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -36206,6 +37322,14 @@
       "type": "object",
       "title": "ResourceRequirements describes the compute resource requirements.",
       "properties": {
+        "claims": {
+          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable.\n\n+listType=set\n+featureGate=DynamicResourceAllocation\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResourceClaim"
+          },
+          "x-go-name": "Claims"
+        },
         "limits": {
           "$ref": "#/definitions/ResourceList"
         },
@@ -36827,6 +37951,9 @@
           "type": "integer",
           "format": "int8",
           "x-go-name": "DefaultNodeCount"
+        },
+        "defaultQuota": {
+          "$ref": "#/definitions/DefaultProjectResourceQuota"
         },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",

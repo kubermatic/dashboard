@@ -411,15 +411,15 @@ func GetDigitaloceanProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeS
 		PrivateNetworking: providerconfig.ConfigVarBool{Value: pointer.Bool(true)},
 	}
 
-	tags := sets.NewString(nodeSpec.Cloud.Digitalocean.Tags...)
+	tags := sets.New(nodeSpec.Cloud.Digitalocean.Tags...)
 	tags.Insert("kubernetes", fmt.Sprintf("kubernetes-cluster-%s", c.Name), fmt.Sprintf("system-cluster-%s", c.Name))
 	projectID, ok := c.Labels[kubermaticv1.ProjectIDLabelKey]
 	if ok {
 		tags.Insert(fmt.Sprintf("system-project-%s", projectID))
 	}
 
-	config.Tags = make([]providerconfig.ConfigVarString, len(tags.List()))
-	for i, tag := range tags.List() {
+	config.Tags = make([]providerconfig.ConfigVarString, len(sets.List(tags)))
+	for i, tag := range sets.List(tags) {
 		config.Tags[i].Value = tag
 	}
 
@@ -440,22 +440,22 @@ func GetPacketProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 		InstanceType: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Packet.InstanceType},
 	}
 
-	tags := sets.NewString(nodeSpec.Cloud.Packet.Tags...)
+	tags := sets.New(nodeSpec.Cloud.Packet.Tags...)
 	tags.Insert("kubernetes", fmt.Sprintf("kubernetes-cluster-%s", c.Name), fmt.Sprintf("system/cluster:%s", c.Name))
 	projectID, ok := c.Labels[kubermaticv1.ProjectIDLabelKey]
 	if ok {
 		tags.Insert(fmt.Sprintf("system/project:%s", projectID))
 	}
-	config.Tags = make([]providerconfig.ConfigVarString, len(tags.List()))
-	for i, tag := range tags.List() {
+	config.Tags = make([]providerconfig.ConfigVarString, len(sets.List(tags)))
+	for i, tag := range sets.List(tags) {
 		config.Tags[i].Value = tag
 	}
 
-	var facilities = sets.String{}
+	var facilities = sets.Set[string]{}
 	if dc.Spec.Packet.Facilities != nil {
-		facilities = sets.NewString(dc.Spec.Packet.Facilities...)
-		config.Facilities = make([]providerconfig.ConfigVarString, len(facilities.List()))
-		for i, facility := range facilities.List() {
+		facilities = sets.New(dc.Spec.Packet.Facilities...)
+		config.Facilities = make([]providerconfig.ConfigVarString, len(sets.List(facilities)))
+		for i, facility := range sets.List(facilities) {
 			config.Facilities[i].Value = facility
 		}
 	}
@@ -493,13 +493,13 @@ func GetGCPProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *
 		Regional:              providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
 	}
 
-	tags := sets.NewString(nodeSpec.Cloud.GCP.Tags...)
+	tags := sets.New(nodeSpec.Cloud.GCP.Tags...)
 	tags.Insert(fmt.Sprintf("kubernetes-cluster-%s", c.Name), fmt.Sprintf("system-cluster-%s", c.Name))
 	projectID, ok := c.Labels[kubermaticv1.ProjectIDLabelKey]
 	if ok {
 		tags.Insert(fmt.Sprintf("system-project-%s", projectID))
 	}
-	config.Tags = tags.List()
+	config.Tags = sets.List(tags)
 
 	config.Labels = map[string]string{}
 	for key, value := range nodeSpec.Cloud.GCP.Labels {
@@ -628,7 +628,6 @@ func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 		TemplateID: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.TemplateID},
 		CPUs:       nodeSpec.Cloud.Anexia.CPUs,
 		Memory:     int(nodeSpec.Cloud.Anexia.Memory),
-		DiskSize:   int(*nodeSpec.Cloud.Anexia.DiskSize),
 		LocationID: providerconfig.ConfigVarString{Value: dc.Spec.Anexia.LocationID},
 	}
 
@@ -648,7 +647,7 @@ func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 		}
 	}
 
-	if config.DiskSize >= 0 && len(config.Disks) > 0 {
+	if config.DiskSize > 0 && len(config.Disks) > 0 {
 		return nil, anexiaProvider.ErrConfigDiskSizeAndDisks
 	}
 

@@ -306,7 +306,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.24.8",
+						Version: "v1.24.9",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -316,7 +316,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.24.8",
+						Version: "v1.24.9",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -339,7 +339,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.24.8",
+						Version: "v1.24.9",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -349,7 +349,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.24.8",
+						Version: "v1.24.9",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -746,14 +746,14 @@ func TestGetClusterEvents(t *testing.T) {
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
 			ExistingNodes: []*corev1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "venus", UID: "venus-1-machine"}},
+				{ObjectMeta: metav1.ObjectMeta{Name: "testMachine", UID: "venus-1-machine"}},
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine"),
+				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
@@ -765,14 +765,14 @@ func TestGetClusterEvents(t *testing.T) {
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
 			ExistingNodes: []*corev1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "venus", UID: "venus-1-machine"}},
+				{ObjectMeta: metav1.ObjectMeta{Name: "testMachine", UID: "venus-1-machine"}},
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine"),
+				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
@@ -783,7 +783,7 @@ func TestGetClusterEvents(t *testing.T) {
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusOK,
 			ExistingNodes: []*corev1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "venus", UID: "venus-1-machine"}},
+				{ObjectMeta: metav1.ObjectMeta{Name: "testMachine", UID: "venus-1-machine"}},
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				genUser("John", "john@acme.com", true),
@@ -793,8 +793,8 @@ func TestGetClusterEvents(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine"),
+				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 		},
 		// scenario 4
@@ -804,7 +804,7 @@ func TestGetClusterEvents(t *testing.T) {
 			ClusterToGet:     "clusterAbcID",
 			HTTPStatus:       http.StatusForbidden,
 			ExistingNodes: []*corev1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "venus", UID: "venus-1-machine"}},
+				{ObjectMeta: metav1.ObjectMeta{Name: "testMachine", UID: "venus-1-machine"}},
 				{ObjectMeta: metav1.ObjectMeta{Name: "mars", UID: "mars-1-machine"}},
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
@@ -813,8 +813,8 @@ func TestGetClusterEvents(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeEvents: []*corev1.Event{
-				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine"),
-				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine"),
+				test.GenTestEvent("event-1", corev1.EventTypeNormal, "Started", "message started", "Node", "venus-1-machine", "testMachine"),
+				test.GenTestEvent("event-2", corev1.EventTypeWarning, "Killed", "message killed", "Node", "venus-1-machine", "testMachine"),
 			},
 		},
 	}

@@ -28,6 +28,12 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ListProjectVSphereDatastores(params *ListProjectVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereDatastoresOK, error)
+
+	ListProjectVSphereFolders(params *ListProjectVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereFoldersOK, error)
+
+	ListProjectVSphereNetworks(params *ListProjectVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereNetworksOK, error)
+
 	ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error)
 
 	ListVSphereFolders(params *ListVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersOK, error)
@@ -43,6 +49,120 @@ type ClientService interface {
 	ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsV2OK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+ListProjectVSphereDatastores lists datastores from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereDatastores(params *ListProjectVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereDatastoresOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereDatastoresParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereDatastores",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/datastores",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereDatastoresReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereDatastoresOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereDatastoresDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVSphereFolders lists folders from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereFolders(params *ListProjectVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereFoldersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereFoldersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereFolders",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/folders",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereFoldersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereFoldersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereFoldersDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVSphereNetworks lists networks from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereNetworks(params *ListProjectVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereNetworksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereNetworksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereNetworks",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/networks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereNetworksReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereNetworksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereNetworksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

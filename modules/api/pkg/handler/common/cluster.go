@@ -64,7 +64,7 @@ import (
 )
 
 // ClusterTypes holds a list of supported cluster types.
-var ClusterTypes = sets.NewString(apiv1.KubernetesClusterType)
+var ClusterTypes = sets.New(apiv1.KubernetesClusterType)
 
 // patchClusterSpec is equivalent of ClusterSpec but it uses default JSON marshalling method instead of custom
 // MarshalJSON defined for ClusterSpec type. This means it should be only used internally as it may contain

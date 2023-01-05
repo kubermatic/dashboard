@@ -25,11 +25,21 @@ export class ClusterRole {
 }
 
 export class ClusterBinding {
+  namespace?: string;
   roleRefName: string;
   subjects: Subjects[];
 }
 
-export class Namespace {
+export class ClusterServiceAccount {
+  id?: string;
+  name: string;
+  namespace: string;
+  creationTimestamp?: string;
+  deletionTimestamp?: string;
+  annotations?: Record<string, string>;
+}
+
+export class ClusterNamespace {
   name: string;
 }
 
@@ -47,7 +57,7 @@ export class Role {
   rules: Rules[];
 }
 
-export class Binding {
+export class NamespaceBinding {
   namespace: string;
   roleRefName: string;
   subjects: Subjects[];
@@ -67,15 +77,18 @@ export class Rules {
 }
 
 export class Subjects {
-  apiGroup?: string;
-  kind?: string;
+  kind?: Kind;
   name?: string;
+  namespace: string;
 }
 
 export class SimpleClusterBinding {
-  name: string;
-  role: string;
-  kind: string;
+  scope: 'Cluster' | 'Namespace';
+  name?: string;
+  kind?: string;
+  clusterRole: string;
+  namespace: string;
+  subjectNamespace: string;
 }
 
 export class SimpleBinding {
@@ -88,9 +101,12 @@ export class SimpleBinding {
 export class DeleteBindingBody {
   group: string;
   userEmail: string;
+  serviceAccount: string;
+  serviceAccountNamespace: string;
 }
 
 export enum Kind {
   Group = 'Group',
   User = 'User',
+  ServiceAccount = 'ServiceAccount',
 }

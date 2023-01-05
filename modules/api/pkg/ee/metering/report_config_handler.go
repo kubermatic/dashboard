@@ -46,7 +46,7 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var ReportTypes = sets.NewString("cluster", "namespace")
+var ReportTypes = sets.New("cluster", "namespace")
 
 // swagger:parameters getMeteringReportConfiguration
 type getMeteringReportConfig struct {
@@ -386,7 +386,7 @@ func createMeteringReportConfiguration(ctx context.Context, reportCfgReq createR
 	}
 
 	if reportCfgReq.Body.Types == nil || len(*reportCfgReq.Body.Types) == 0 {
-		defaultTypes := ReportTypes.List()
+		defaultTypes := sets.List(ReportTypes)
 		reportCfgReq.Body.Types = &defaultTypes
 	}
 

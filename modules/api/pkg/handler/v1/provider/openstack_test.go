@@ -328,7 +328,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 	tests := []struct {
 		name                string
 		apiSize             apiv1.OpenstackSize
-		nodeSizeRequirement kubermaticv1.OpenstackNodeSizeRequirements
+		nodeSizeRequirement *kubermaticv1.OpenstackNodeSizeRequirements
 		meetsRequirement    bool
 	}{
 		{
@@ -337,7 +337,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 				Memory: 2048,
 				VCPUs:  2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{
 				MinimumMemory: 4096,
 				MinimumVCPUs:  1,
 			},
@@ -349,7 +349,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 				Memory: 2048,
 				VCPUs:  2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{
 				MinimumMemory: 1024,
 				MinimumVCPUs:  4,
 			},
@@ -361,7 +361,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 				Memory: 2048,
 				VCPUs:  2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{
 				MinimumMemory: 1024,
 				MinimumVCPUs:  1,
 			},
@@ -373,7 +373,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 				Memory: 2048,
 				VCPUs:  2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{},
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{},
 			meetsRequirement:    true,
 		},
 		{
@@ -381,7 +381,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 			apiSize: apiv1.OpenstackSize{
 				VCPUs: 2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{
 				MinimumVCPUs: 2,
 			},
 			meetsRequirement: true,
@@ -391,7 +391,7 @@ func TestMeetsOpentackNodeSizeRequirement(t *testing.T) {
 			apiSize: apiv1.OpenstackSize{
 				Memory: 2,
 			},
-			nodeSizeRequirement: kubermaticv1.OpenstackNodeSizeRequirements{
+			nodeSizeRequirement: &kubermaticv1.OpenstackNodeSizeRequirements{
 				MinimumMemory: 2,
 			},
 			meetsRequirement: true,

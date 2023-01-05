@@ -125,14 +125,14 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 			return fmt.Errorf("failed to get Roles: %w", err), nil
 		}
 
-		existing := sets.NewString()
+		existing := sets.New[string]()
 		for _, roleName := range roleNameList {
 			existing.Insert(roleName.Name)
 		}
 
-		expected := sets.NewString(tc.expectedRoleNames...)
+		expected := sets.New(tc.expectedRoleNames...)
 		if !existing.IsSuperset(expected) {
-			return fmt.Errorf("expected Roles %v, got %v", expected.List(), existing.List()), nil
+			return fmt.Errorf("expected Roles %v, got %v", sets.List(expected), sets.List(existing)), nil
 		}
 
 		return nil, nil
@@ -147,14 +147,14 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 			return fmt.Errorf("failed to get ClusterRoles: %w", err), nil
 		}
 
-		existing := sets.NewString()
+		existing := sets.New[string]()
 		for _, roleName := range clusterRoleNameList {
 			existing.Insert(roleName.Name)
 		}
 
-		expected := sets.NewString(tc.expectedClusterRoleNames...)
+		expected := sets.New(tc.expectedClusterRoleNames...)
 		if !existing.IsSuperset(expected) {
-			return fmt.Errorf("expected ClusterRoles %v, got %v", expected.List(), existing.List()), nil
+			return fmt.Errorf("expected ClusterRoles %v, got %v", sets.List(expected), sets.List(existing)), nil
 		}
 
 		return nil, nil

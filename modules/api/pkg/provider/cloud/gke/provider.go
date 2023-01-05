@@ -94,7 +94,7 @@ func ListClusters(ctx context.Context, projectProvider provider.ProjectProvider,
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	gkeExternalClusterNames := sets.NewString()
+	gkeExternalClusterNames := sets.New[string]()
 	for _, externalCluster := range clusterList.Items {
 		cloud := externalCluster.Spec.CloudSpec
 		if cloud.GKE != nil {
@@ -102,13 +102,13 @@ func ListClusters(ctx context.Context, projectProvider provider.ProjectProvider,
 		}
 	}
 
-	gkeExternalCluster := make(map[string]sets.String)
+	gkeExternalCluster := make(map[string]sets.Set[string])
 	for _, externalCluster := range clusterList.Items {
 		cloud := externalCluster.Spec.CloudSpec
 		if cloud.GKE != nil {
 			zone := cloud.GKE.Zone
 			if _, ok := gkeExternalCluster[zone]; !ok {
-				gkeExternalCluster[zone] = make(sets.String)
+				gkeExternalCluster[zone] = make(sets.Set[string])
 			}
 			gkeExternalCluster[zone] = gkeExternalCluster[zone].Insert(cloud.GKE.Name)
 		}
@@ -461,7 +461,7 @@ func ListGKEDiskTypes(ctx context.Context, sa string, zone string) (apiv2.GKEDis
 	// Currently accepted values: 'pd-standard', 'pd-ssd' or 'pd-balanced'
 	// Reference: https://pkg.go.dev/google.golang.org/api/container/v1#NodeConfig
 
-	excludedDiskTypes := sets.NewString("local-ssd", "pd-extreme")
+	excludedDiskTypes := sets.New("local-ssd", "pd-extreme")
 	computeService, project, err := gcp.ConnectToComputeService(ctx, sa)
 	if err != nil {
 		return diskTypes, err

@@ -72,13 +72,13 @@ func ListEKSClusters(ctx context.Context, projectProvider provider.ProjectProvid
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	eksExternalCluster := make(map[string]sets.String)
+	eksExternalCluster := make(map[string]sets.Set[string])
 	for _, externalCluster := range clusterList.Items {
 		cloud := externalCluster.Spec.CloudSpec
 		if cloud.EKS != nil {
 			region := cloud.EKS.Region
 			if _, ok := eksExternalCluster[region]; !ok {
-				eksExternalCluster[region] = make(sets.String)
+				eksExternalCluster[region] = make(sets.Set[string])
 			}
 			eksExternalCluster[region] = eksExternalCluster[region].Insert(cloud.EKS.Name)
 		}

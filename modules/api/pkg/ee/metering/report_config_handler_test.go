@@ -37,6 +37,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
+	"k8s.io/apimachinery/pkg/util/sets"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -151,7 +152,7 @@ func TestCreateMeteringReportConfigEndpoint(t *testing.T) {
 				"weekly": {
 					Schedule: "0 1 * * 6",
 					Interval: 7,
-					Types:    metering.ReportTypes.List(),
+					Types:    sets.List(metering.ReportTypes),
 				},
 			},
 		}
@@ -313,7 +314,7 @@ func TestUpdateMeteringReportConfigEndpoint(t *testing.T) {
 					Schedule:  "0 1 * * 6",
 					Interval:  7,
 					Retention: &retention,
-					Types:     metering.ReportTypes.List(),
+					Types:     sets.List(metering.ReportTypes),
 				},
 			},
 		}
@@ -474,7 +475,7 @@ func TestDeleteMeteringReportConfigEndpoint(t *testing.T) {
 				"weekly": {
 					Schedule: "0 1 * * 6",
 					Interval: 7,
-					Types:    metering.ReportTypes.List(),
+					Types:    sets.List(metering.ReportTypes),
 				},
 			},
 		}

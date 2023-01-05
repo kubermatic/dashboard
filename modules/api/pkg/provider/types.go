@@ -395,7 +395,7 @@ type ProjectProvider interface {
 type UserInfo struct {
 	Email   string
 	Groups  []string
-	Roles   sets.String
+	Roles   sets.Set[string]
 	IsAdmin bool
 }
 
@@ -464,13 +464,13 @@ type ProjectMemberMapper interface {
 	// MapUserToRoles returns the roles of the user in the project. It searches across the user project bindings and the group
 	// project bindings for the user and returns the roles.
 	// This function is unsafe in a sense that it uses privileged account to list all userProjectBindings and groupProjectBindings in the system.
-	MapUserToRoles(ctx context.Context, user *kubermaticv1.User, projectID string) (sets.String, error)
+	MapUserToRoles(ctx context.Context, user *kubermaticv1.User, projectID string) (sets.Set[string], error)
 
 	// MapUserToGroups returns the groups of the user in the project. It combines identity provider groups with
 	// group from UserProjectBinding (if exists). Groups returned by this function are suffixed with project's ID to
 	// avoid leaking permissions among projects having binding with the same group but different roles.
 	// This function is unsafe in a sense that it uses privileged account to list all userProjectBindings in the system.
-	MapUserToGroups(ctx context.Context, user *kubermaticv1.User, projectID string) (sets.String, error)
+	MapUserToGroups(ctx context.Context, user *kubermaticv1.User, projectID string) (sets.Set[string], error)
 }
 
 // ClusterCloudProvider returns the provider for the given cluster where
