@@ -756,22 +756,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/aks/locations").
 		Handler(r.listProjectAKSLocations())
 
-		/*
+	// vSphere endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/networks").
+		Handler(r.listProjectVSphereNetworks())
 
-			// vSphere endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/networks").
-				Handler(r.listProjectVSphereNetworks())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/folders").
+		Handler(r.listProjectVSphereFolders())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/folders").
-				Handler(r.listProjectVSphereFolders())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/datastores").
-				Handler(r.listProjectVSphereDatastores())
-
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/datastores").
+		Handler(r.listProjectVSphereDatastores())
 
 	// Nutanix endpoints
 	mux.Methods(http.MethodGet).
@@ -4827,8 +4823,8 @@ func (r Routing) listVSphereDatastores() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
-		provider.DecodeVSphereDatastoresReq,
+		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
+		provider.DecodeVSphereCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6043,6 +6039,72 @@ func (r Routing) listProjectAKSLocations() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.ListAKSLocationsEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		externalcluster.DecodeAKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/networks vsphere listProjectVSphereNetworks
+//
+// Lists networks from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereNetwork
+func (r Routing) listProjectVSphereNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereNetworksEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/folders vsphere listProjectVSphereFolders
+//
+// Lists folders from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereFolder
+func (r Routing) listProjectVSphereFolders() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereFoldersEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/datastores vsphere listProjectVSphereDatastores
+//
+// Lists datastores from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereDatastoreList
+func (r Routing) listProjectVSphereDatastores() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeVSphereProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
