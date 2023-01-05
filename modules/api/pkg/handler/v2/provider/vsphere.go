@@ -55,24 +55,44 @@ func VsphereFoldersWithClusterCredentialsEndpoint(projectProvider provider.Proje
 }
 
 func VsphereDatastoreEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
-	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(vSphereDatastoresReq)
-		if !ok {
-			return nil, fmt.Errorf("incorrect type of request, expected = VSphereFoldersReq, got %T", request)
+		var (
+			req       vSphereCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(vSphereCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = commonReq
+		} else {
+			projectReq, ok := request.(vSphereProjectReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.vSphereCommonReq
+			projectID = projectReq.GetProjectID()
 		}
-		userInfo, err := userInfoGetter(ctx, "")
+
+		userInfo, err := userInfoGetter(ctx, projectID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
+
 		username := req.Username
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
+
 			if credentials := preset.Spec.VSphere; credentials != nil {
 				username = credentials.Username
 				password = credentials.Password
@@ -83,9 +103,72 @@ func VsphereDatastoreEndpoint(seedsGetter provider.SeedsGetter, presetProvider p
 	}
 }
 
-// VSphereFoldersReq represent a request for vsphere datastores
+func VsphereNetworksEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(vSphereProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, err := userInfoGetter(ctx, req.GetProjectID())
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		username := req.Username
+		password := req.Password
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.VSphere; credentials != nil {
+				username = credentials.Username
+				password = credentials.Password
+			}
+		}
+
+		return providercommon.GetVsphereNetworks(ctx, userInfo, seedsGetter, username, password, req.DatacenterName, caBundle)
+	}
+}
+
+func VsphereFoldersEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(vSphereProjectReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, err := userInfoGetter(ctx, req.GetProjectID())
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		username := req.Username
+		password := req.Password
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+
+			if credentials := preset.Spec.VSphere; credentials != nil {
+				username = credentials.Username
+				password = credentials.Password
+			}
+		}
+
+		return providercommon.GetVsphereFolders(ctx, userInfo, seedsGetter, username, password, req.DatacenterName, caBundle)
+	}
+}
+
+// VSphereCommonReq represents a request for vSphere data.
 // swagger:parameters listVSphereDatastores
-type vSphereDatastoresReq struct {
+type vSphereCommonReq struct {
 	// in: header
 	Username string
 	// in: header
@@ -97,8 +180,8 @@ type vSphereDatastoresReq struct {
 	Credential string
 }
 
-func DecodeVSphereDatastoresReq(_ context.Context, r *http.Request) (interface{}, error) {
-	var req vSphereDatastoresReq
+func DecodeVSphereCommonReq(_ context.Context, r *http.Request) (interface{}, error) {
+	var req vSphereCommonReq
 
 	req.Username = r.Header.Get("Username")
 	req.Password = r.Header.Get("Password")
@@ -106,6 +189,29 @@ func DecodeVSphereDatastoresReq(_ context.Context, r *http.Request) (interface{}
 	req.Credential = r.Header.Get("Credential")
 
 	return req, nil
+}
+
+// vSphereProjectReq represents a request for vSphere data within the context of a KKP project.
+type vSphereProjectReq struct {
+	common.ProjectReq
+	vSphereCommonReq
+}
+
+func DecodeVSphereProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	vsphereReq, err := DecodeVSphereCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return vSphereProjectReq{
+		ProjectReq:       projectReq.(common.ProjectReq),
+		vSphereCommonReq: vsphereReq.(vSphereCommonReq),
+	}, nil
 }
 
 // vSphereNoCredentialsReq represent a request for vsphere networks
