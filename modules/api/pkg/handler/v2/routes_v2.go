@@ -691,24 +691,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
-		/*
-			// Kubevirt endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/vmflavors").
-				Handler(r.listProjectKubeVirtVMIPresets())
+	// Kubevirt endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/instancetypes").
+		Handler(r.listProjectKubeVirtInstancetypes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/instancetypes").
-				Handler(r.listProjectKubeVirtInstancetypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/preferences").
+		Handler(r.listProjectKubeVirtPreferences())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/preferences").
-				Handler(r.listProjectKubeVirtPreferences())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
-				Handler(r.listProjectKubevirtStorageClasses())
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/storageclasses").
+		Handler(r.listProjectKubevirtStorageClasses())
 
 	// Azure endpoints
 	mux.Methods(http.MethodGet).
@@ -5802,6 +5796,72 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes kubevirt listProjectKubeVirtInstancetypes
+//
+// Lists available KubeVirt VirtualMachineInstancetype.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachineInstancetypeList
+func (r Routing) listProjectKubeVirtInstancetypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectListInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/preferences kubevirt listProjectKubeVirtPreferences
+//
+// Lists available KubeVirt VirtualMachinePreference.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachinePreferenceList
+func (r Routing) listProjectKubeVirtPreferences() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses kubevirt listProjectKubeVirtStorageClasses
+//
+// Lists available K8s StorageClasses in the Kubevirt cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: StorageClassList
+func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/azure/sizes azure listProjectAzureSizes
 //
 // Lists available VM sizes in an Azure region
@@ -8202,7 +8262,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtListInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -8224,14 +8284,14 @@ func (r Routing) listKubeVirtPreferences() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider)),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubevirtStorageClasses
+// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubeVirtStorageClasses
 //
 // Lists available K8s StorageClasses in the Kubevirt cluster.
 //
@@ -8246,7 +8306,7 @@ func (r Routing) listKubevirtStorageClasses() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
