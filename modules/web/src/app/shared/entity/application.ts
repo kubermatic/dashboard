@@ -26,6 +26,7 @@ export class ApplicationSpec {
   applicationRef: ApplicationRef;
   namespace: ApplicationNamespace;
   values: string | object;
+  labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
 }
 
 export class ApplicationRef {
