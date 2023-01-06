@@ -39,16 +39,28 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
-	kubeOneCluster, err := DecodeManifestFromKubeOneReq(cloud.KubeOne.Manifest)
+func importKubeOneCluster(ctx context.Context, name string, preset *kubermaticv1.Preset, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
+	if err := validatKubeOneReq(cloud.KubeOne); err != nil {
+		return nil, utilerrors.NewBadRequest(err.Error())
+	}
+	isImported := resources.ExternalClusterIsImportedTrue
+
+	kubeOneClusterObj, err := DecodeManifestFromKubeOneReq(cloud.KubeOne.Manifest)
 	if err != nil {
 		return nil, err
 	}
 
-	isImported := resources.ExternalClusterIsImportedTrue
-	newCluster := genExternalCluster(kubeOneCluster.Name, project.Name, isImported)
+	newCluster := genExternalCluster(kubeOneClusterObj.Name, project.Name, isImported)
 	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
+	}
+	newCluster = setKubeOneProvider(kubeOneClusterObj, *newCluster)
+
+	kubeOneAPICloudSpec := cloud.KubeOne.CloudSpec
+	if preset != nil {
+		if kubeOneAPICloudSpec, err = setKubeOneCloudCredentials(preset, newCluster.Spec.CloudSpec.KubeOne.ProviderName, *kubeOneAPICloudSpec); err != nil {
+			return nil, err
+		}
 	}
 
 	kubermaticNamespace := resources.KubermaticNamespace
@@ -61,7 +73,7 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, kubermaticNamespace, *kubeOneAPICloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -290,4 +302,85 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	}
 
 	return nodeDeployments, nil
+}
+
+func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if providerName == resources.KubeOneAWS {
+		return setAWSCredentials(preset, kubeOneCloudSpec)
+	} else if providerName == resources.KubeOneGCP {
+		return setGCPCredentials(preset, kubeOneCloudSpec)
+	} else if providerName == resources.KubeOneAzure {
+		return setAzureCredentials(preset, kubeOneCloudSpec)
+	}
+	return nil, fmt.Errorf("Provider %s not supported", providerName)
+}
+
+func emptyCredentialError(preset, provider string) error {
+	return fmt.Errorf("the preset %s doesn't contain credential for %s provider", preset, provider)
+}
+
+func setAWSCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.AWS == nil {
+		return nil, emptyCredentialError(preset.Name, "AWS")
+	}
+
+	credentials := preset.Spec.AWS
+
+	kubeOneCloudSpec.AWS.AccessKeyID = credentials.AccessKeyID
+	kubeOneCloudSpec.AWS.SecretAccessKey = credentials.SecretAccessKey
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setGCPCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.GCP == nil {
+		return nil, emptyCredentialError(preset.Name, "GCP")
+	}
+
+	credentials := preset.Spec.GCP
+
+	kubeOneCloudSpec.GCP.ServiceAccount = credentials.ServiceAccount
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setAzureCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.Azure == nil {
+		return nil, emptyCredentialError(preset.Name, "AZURE")
+	}
+
+	credentials := preset.Spec.Azure
+
+	kubeOneCloudSpec.Azure.ClientID = credentials.ClientID
+	kubeOneCloudSpec.Azure.TenantID = credentials.TenantID
+	kubeOneCloudSpec.Azure.ClientSecret = credentials.ClientSecret
+	kubeOneCloudSpec.Azure.SubscriptionID = credentials.SubscriptionID
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setKubeOneProvider(kubeOneCluster *kubeonev1beta2.KubeOneCluster, cluster kubermaticv1.ExternalCluster) *kubermaticv1.ExternalCluster {
+	switch {
+	case kubeOneCluster.CloudProvider.AWS != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
+	case kubeOneCluster.CloudProvider.GCE != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
+	case kubeOneCluster.CloudProvider.Azure != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
+	case kubeOneCluster.CloudProvider.DigitalOcean != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
+	case kubeOneCluster.CloudProvider.Hetzner != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
+	case kubeOneCluster.CloudProvider.Nutanix != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
+	case kubeOneCluster.CloudProvider.Openstack != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
+	case kubeOneCluster.CloudProvider.EquinixMetal != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
+	case kubeOneCluster.CloudProvider.Vsphere != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
+	case kubeOneCluster.CloudProvider.VMwareCloudDirector != nil:
+		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
+	}
+	return &cluster
 }

@@ -520,6 +520,9 @@ type KubeOneSpec struct {
 	SSHKey           KubeOneSSHKey     `json:"sshKey,omitempty"`
 	ContainerRuntime string            `json:"containerRuntime,omitempty"`
 	CloudSpec        *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
+	// Cloud Provider Name of KubeOne Cluster
+	// + readOnly
+	ProviderName string
 }
 
 // SSHKeySpec represents the details of a ssh key.
