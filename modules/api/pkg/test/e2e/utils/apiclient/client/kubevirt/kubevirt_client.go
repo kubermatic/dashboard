@@ -36,9 +36,15 @@ type ClientService interface {
 
 	ListKubeVirtPreferencesNoCredentials(params *ListKubeVirtPreferencesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtPreferencesNoCredentialsOK, error)
 
-	ListKubevirtStorageClasses(params *ListKubevirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesOK, error)
+	ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtStorageClassesOK, error)
 
 	ListKubevirtStorageClassesNoCredentials(params *ListKubevirtStorageClassesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesNoCredentialsOK, error)
+
+	ListProjectKubeVirtInstancetypes(params *ListProjectKubeVirtInstancetypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtInstancetypesOK, error)
+
+	ListProjectKubeVirtPreferences(params *ListProjectKubeVirtPreferencesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtPreferencesOK, error)
+
+	ListProjectKubeVirtStorageClasses(params *ListProjectKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtStorageClassesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -196,22 +202,22 @@ func (a *Client) ListKubeVirtPreferencesNoCredentials(params *ListKubeVirtPrefer
 }
 
 /*
-ListKubevirtStorageClasses lists available k8s storage classes in the kubevirt cluster
+ListKubeVirtStorageClasses lists available k8s storage classes in the kubevirt cluster
 */
-func (a *Client) ListKubevirtStorageClasses(params *ListKubevirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesOK, error) {
+func (a *Client) ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtStorageClassesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListKubevirtStorageClassesParams()
+		params = NewListKubeVirtStorageClassesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "listKubevirtStorageClasses",
+		ID:                 "listKubeVirtStorageClasses",
 		Method:             "GET",
 		PathPattern:        "/api/v2/providers/kubevirt/storageclasses",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListKubevirtStorageClassesReader{formats: a.formats},
+		Reader:             &ListKubeVirtStorageClassesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -224,12 +230,12 @@ func (a *Client) ListKubevirtStorageClasses(params *ListKubevirtStorageClassesPa
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListKubevirtStorageClassesOK)
+	success, ok := result.(*ListKubeVirtStorageClassesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*ListKubevirtStorageClassesDefault)
+	unexpectedSuccess := result.(*ListKubeVirtStorageClassesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -268,6 +274,120 @@ func (a *Client) ListKubevirtStorageClassesNoCredentials(params *ListKubevirtSto
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListKubevirtStorageClassesNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectKubeVirtInstancetypes lists available kube virt virtual machine instancetype
+*/
+func (a *Client) ListProjectKubeVirtInstancetypes(params *ListProjectKubeVirtInstancetypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtInstancetypesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectKubeVirtInstancetypesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectKubeVirtInstancetypes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/instancetypes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectKubeVirtInstancetypesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectKubeVirtInstancetypesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectKubeVirtInstancetypesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectKubeVirtPreferences lists available kube virt virtual machine preference
+*/
+func (a *Client) ListProjectKubeVirtPreferences(params *ListProjectKubeVirtPreferencesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtPreferencesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectKubeVirtPreferencesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectKubeVirtPreferences",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/preferences",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectKubeVirtPreferencesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectKubeVirtPreferencesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectKubeVirtPreferencesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectKubeVirtStorageClasses lists available k8s storage classes in the kubevirt cluster
+*/
+func (a *Client) ListProjectKubeVirtStorageClasses(params *ListProjectKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtStorageClassesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectKubeVirtStorageClassesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectKubeVirtStorageClasses",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/storageclasses",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectKubeVirtStorageClassesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectKubeVirtStorageClassesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectKubeVirtStorageClassesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
