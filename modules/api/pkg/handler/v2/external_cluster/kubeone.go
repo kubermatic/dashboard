@@ -19,17 +19,16 @@ package externalcluster
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -37,14 +36,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
-)
-
-const (
-	// NodeRegionLabel is the label on kubernetes control plane region.
-	NodeRegionLabel = "topology.kubernetes.io/region"
 )
 
 func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
@@ -55,8 +48,42 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 
 	isImported := resources.ExternalClusterIsImportedTrue
 	newCluster := genExternalCluster(kubeOneCluster.Name, project.Name, isImported)
+
+	version, err := ksemver.NewSemver(kubeOneCluster.Versions.Kubernetes)
+	if err != nil {
+		return nil, err
+	}
+	newCluster.Spec.Version = *version
+
+	if kubeOneCluster.ContainerRuntime.Docker != nil {
+		newCluster.Spec.ContainerRuntime = resources.ContainerRuntimeDocker
+	} else if kubeOneCluster.ContainerRuntime.Containerd != nil {
+		newCluster.Spec.ContainerRuntime = resources.ContainerRuntimeContainerd
+	}
+
 	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
+	}
+	if kubeOneCluster.CloudProvider.AWS != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
+	} else if kubeOneCluster.CloudProvider.GCE != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
+	} else if kubeOneCluster.CloudProvider.Azure != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
+	} else if kubeOneCluster.CloudProvider.DigitalOcean != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
+	} else if kubeOneCluster.CloudProvider.Hetzner != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
+	} else if kubeOneCluster.CloudProvider.Nutanix != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
+	} else if kubeOneCluster.CloudProvider.Openstack != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
+	} else if kubeOneCluster.CloudProvider.EquinixMetal != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
+	} else if kubeOneCluster.CloudProvider.Vsphere != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
+	} else if kubeOneCluster.CloudProvider.VMwareCloudDirector != nil {
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
 	}
 
 	kubermaticNamespace := resources.KubermaticNamespace
@@ -298,36 +325,4 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	}
 
 	return nodeDeployments, nil
-}
-
-func getKubeOneClusterDetails(ctx context.Context,
-	apiCluster *apiv2.ExternalCluster,
-	masterClient ctrlruntimeclient.Client,
-	cluster *kubermaticv1.ExternalCluster,
-	clusterProvider provider.ExternalClusterProvider) error {
-	clusterClient, err := clusterProvider.GetClient(ctx, masterClient, cluster)
-	if err != nil {
-		return err
-	}
-
-	controlPlaneNodeList, err := kuberneteshelper.ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
-	if err != nil {
-		return err
-	}
-
-	controlPlaneNodes := controlPlaneNodeList.Items
-	for len(controlPlaneNodes) > 0 {
-		controlPlaneNode := controlPlaneNodes[0]
-		apiCluster.Spec.KubeOneClusterSpec = &apiv2.KubeOneClusterSpec{
-			Region: controlPlaneNode.Labels[NodeRegionLabel],
-		}
-
-		containerRuntimeVersion := controlPlaneNode.Status.NodeInfo.ContainerRuntimeVersion
-		containerRuntime, _, found := strings.Cut(containerRuntimeVersion, ":")
-		if found {
-			apiCluster.Spec.ContainerRuntime = containerRuntime
-		}
-	}
-
-	return nil
 }

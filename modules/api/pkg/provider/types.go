@@ -725,6 +725,8 @@ type ExternalClusterProvider interface {
 
 	GetContainerRutime(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error)
 
+	GetControlPlaneRegion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error)
+
 	VersionsEndpoint(ctx context.Context, configGetter KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error)
 
 	ValidateKubeconfig(ctx context.Context, kubeconfig []byte) error

@@ -47,6 +47,7 @@ const (
 	ExistingFakeProjectID      = "ExistingFakeProject-ID"
 	ImpersonatedClientErrorMsg = "forbidden"
 	DefaultContainerRuntime    = "docker"
+	DefaultRegion              = "east-us"
 )
 
 type FakePrivilegedProjectProvider struct {
@@ -178,6 +179,10 @@ func (p *FakeExternalClusterProvider) GetVersion(ctx context.Context, masterClie
 
 func (p *FakeExternalClusterProvider) GetContainerRutime(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
 	return DefaultContainerRuntime, nil
+}
+
+func (p *FakeExternalClusterProvider) GetControlPlaneRegion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
+	return DefaultRegion, nil
 }
 
 func (p *FakeExternalClusterProvider) VersionsEndpoint(ctx context.Context, configGetter provider.KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error) {

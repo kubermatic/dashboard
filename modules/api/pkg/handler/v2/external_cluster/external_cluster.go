@@ -523,12 +523,6 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 				return nil, err
 			}
 		}
-		if cloud.KubeOne != nil {
-			err := getKubeOneClusterDetails(ctx, apiCluster, masterClient, cluster, clusterProvider)
-			if err != nil {
-				return nil, err
-			}
-		}
 
 		return apiCluster, nil
 	}
@@ -1066,8 +1060,11 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 		}
 	}
 	if cloud.KubeOne != nil {
+		cluster.Spec.Version = internalCluster.Spec.Version
+		cluster.Spec.ContainerRuntime = internalCluster.Spec.ContainerRuntime
 		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{
 			ProviderName: cloud.KubeOne.ProviderName,
+			Region:       cloud.KubeOne.Region,
 		}
 	}
 	if cloud.BringYourOwn != nil {
