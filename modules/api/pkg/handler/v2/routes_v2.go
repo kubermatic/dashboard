@@ -784,24 +784,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
 		Handler(r.listProjectNutanixCategoryValues())
 
+	// VMware Cloud Director endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
+		Handler(r.listProjectVMwareCloudDirectorNetworks())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
+		Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
+		Handler(r.listProjectVMwareCloudDirectorCatalogs())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
+		Handler(r.listProjectVMwareCloudDirectorTemplates())
 		/*
-
-			// VMware Cloud Director endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
-				Handler(r.listProjectVMwareCloudDirectorNetworks())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
-				Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
-				Handler(r.listProjectVMwareCloudDirectorCatalogs())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
-				Handler(r.listProjectVMwareCloudDirectorTemplates())
 
 			// AWS endpoints
 			mux.Methods(http.MethodGet).
@@ -4971,7 +4970,7 @@ func (r Routing) listVMwareCloudDirectorNetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4993,7 +4992,7 @@ func (r Routing) listVMwareCloudDirectorStorageProfiles() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5015,7 +5014,7 @@ func (r Routing) listVMwareCloudDirectorCatalogs() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5037,8 +5036,8 @@ func (r Routing) listVMwareCloudDirectorTemplates() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
-		provider.DecodeListTemplatesReq,
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
+		provider.DecodeVMwareCloudDirectorListTemplatesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6275,6 +6274,94 @@ func (r Routing) listProjectNutanixCategoryValues() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeNutanixProjectCategoryValueReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks vmwareclouddirector listProjectVMwareCloudDirectorNetworks
+//
+// List VMware Cloud Director OVDC Networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorNetworkList
+func (r Routing) listProjectVMwareCloudDirectorNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles vmwareclouddirector listProjectVMwareCloudDirectorStorageProfiles
+//
+// List VMware Cloud Director Storage Profiles
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorStorageProfileList
+func (r Routing) listProjectVMwareCloudDirectorStorageProfiles() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs vmwareclouddirector listProjectVMwareCloudDirectorCatalogs
+//
+// List VMware Cloud Director Catalogs
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorCatalogList
+func (r Routing) listProjectVMwareCloudDirectorCatalogs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name} vmwareclouddirector listProjectVMwareCloudDirectorTemplates
+//
+// List VMware Cloud Director Templates
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorTemplateList
+func (r Routing) listProjectVMwareCloudDirectorTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectListTemplatesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
