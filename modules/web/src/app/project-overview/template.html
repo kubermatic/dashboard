@@ -26,6 +26,12 @@ limitations under the License.
   <mat-card>
     <mat-card-header>
       <mat-card-title>Project Overview</mat-card-title>
+      <button mat-icon-button
+              color="tertiary"
+              class="edit-button"
+              (click)="editProject()">
+        <i class="km-icon-edit"></i>
+      </button>
       <km-create-resource-panel *ngIf="project"
                                 [project]="project"
                                 [clusterTemplates]="clusterTemplates"
@@ -105,9 +111,9 @@ limitations under the License.
         </div>
       </div>
       <div *ngIf="project?.labels"
-           fxLayoutAlign=" center"
+           fxLayoutAlign=" start"
            fxLayoutGap="15px">
-        <i class="km-icon-mask km-icon-labels"></i>
+        <i class="km-icon-mask km-icon-labels labels-icon"></i>
         <km-property>
           <div key>Labels</div>
           <div value>
