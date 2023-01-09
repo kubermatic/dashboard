@@ -25,7 +25,7 @@ limitations under the License.
         <input id="km-edit-project-dialog-input"
                matInput
                required
-               formControlName="name"
+               [formControlName]="Controls.Name"
                type="text"
                autocomplete="off"
                cdkFocusInitial>
@@ -36,7 +36,33 @@ limitations under the License.
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
-                     formControlName="labels"></km-label-form>
+                     [formControlName]="Controls.Labels"></km-label-form>
+      <mat-label *ngIf="projectQouta">Quota</mat-label>
+      <div class="km-quota-inputs"
+           *ngIf="projectQouta"
+           fxLayout="row"
+           fxLayoutGap="5px"
+           fxLayoutAlign="space-between center">
+        <km-number-stepper id="km-cpu-input"
+                           label="CPU"
+                           min="0"
+                           [formControlName]="Controls.CPUQuota">
+        </km-number-stepper>
+
+        <km-number-stepper id="km-memory-input"
+                           label="Memory (GB)"
+                           min="0"
+                           type="decimal"
+                           [formControlName]="Controls.MemoryQuota">
+        </km-number-stepper>
+
+        <km-number-stepper id="km-storage-input"
+                           label="Disk (GB)"
+                           min="0"
+                           type="decimal"
+                           [formControlName]="Controls.StorageQuota">
+        </km-number-stepper>
+      </div>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

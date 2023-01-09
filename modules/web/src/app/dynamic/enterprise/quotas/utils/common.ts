@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,37 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-:host {
-  display: flex;
-  flex: 0;
-  flex-direction: row;
-}
+import {ThemePalette} from '@angular/material/core';
 
-input[type='number'] {
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    appearance: none;
-  }
-}
-
-.stepper-button {
-  height: 45.5px;
-  width: 30px;
-
-  &.mat-icon-button {
-    margin: 4px 0 0;
-
-    &.left {
-      border-radius: 0;
-    }
-
-    &.right {
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0;
-    }
-  }
-}
-
-.mat-form-field.force-min-width {
-  min-width: 135px;
+export function getProgressBarAccent(percentage: number): ThemePalette {
+  const warn = 100;
+  if (percentage >= warn) return 'warn';
+  const accent = 70;
+  if (percentage >= accent) return 'accent';
+  return 'primary';
 }
