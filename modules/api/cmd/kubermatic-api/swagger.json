@@ -22791,6 +22791,286 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs": {
+      "get": {
+        "description": "List VMware Cloud Director Catalogs",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorCatalogs",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorCatalogList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorCatalogList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks": {
+      "get": {
+        "description": "List VMware Cloud Director OVDC Networks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorNetworkList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorNetworkList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles": {
+      "get": {
+        "description": "List VMware Cloud Director Storage Profiles",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorStorageProfiles",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorStorageProfileList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorStorageProfileList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}": {
+      "get": {
+        "description": "List VMware Cloud Director Templates",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorTemplates",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "CatalogName",
+            "description": "Catalog name to fetch the templates from",
+            "name": "catalog_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorTemplateList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorTemplateList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/vsphere/datastores": {
       "get": {
         "produces": [
