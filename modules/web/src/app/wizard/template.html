@@ -23,13 +23,12 @@ limitations under the License.
 <form [formGroup]="form"
       *ngIf="!loadingClusterTemplate">
   <mat-card fxFlex="100%">
-    <div *ngIf="!!clusterTemplateWizardType"
-         fxLayout="row">
+    <div fxLayout="row">
       <mat-card-header class="km-no-padding"
                        fxLayout="row"
                        fxLayoutGap="40px">
         <mat-card-title>
-          <div>{{getWizardTitleForClusterTemplate()}}</div>
+          <div>{{getTitle()}}</div>
         </mat-card-title>
       </mat-card-header>
     </div>
@@ -121,9 +120,9 @@ limitations under the License.
                   [disabled]="creating"
                   *ngIf="last"
                   kmThrottleClick
-                  (throttleClick)="onSaveClusterTemplate(_,clusterTemplateWizardType === ClusterTemplateType.Create)">
+                  (throttleClick)="onSaveClusterTemplate()">
             <i class="km-icon-mask km-icon-save"></i>
-            <span>{{ getTextForAlternativeButton() }}</span>
+            <span>{{ getSecondaryButtonLabel() }}</span>
           </button>
           <button id="km-wizard-update-template-btn"
                   fxLayoutAlign="center center"
@@ -132,14 +131,14 @@ limitations under the License.
                   [disabled]="creating"
                   *ngIf="last && !showCreateClusterButton"
                   kmThrottleClick
-                  (throttleClick)="onSaveClusterTemplate(!!clusterTemplateID)">
+                  (throttleClick)="onSaveClusterTemplate(true)">
             <i class="km-icon-mask km-icon-save"></i>
-            <span>{{getTextForPrimaryButton()}}</span>
+            <span>{{getPrimaryButtonLabel()}}</span>
           </button>
           <km-button buttonId="km-wizard-create-btn"
                      *ngIf="showCreateClusterButton"
                      icon="km-icon-add"
-                     [label]="getTextForPrimaryButton()"
+                     [label]="getPrimaryButtonLabel()"
                      [disabled]="creating"
                      [observable]="getObservable()"
                      (next)="onNext($event)">

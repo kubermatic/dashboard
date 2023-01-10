@@ -29,6 +29,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 @Component({
   selector: 'km-sidenav',
@@ -114,7 +115,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
     if (url === View.ClusterTemplates) {
-      return isProjectAndUrlExists || this._activatedRoute.snapshot.queryParams?.clusterTemplateWizard;
+      const mode = this._activatedRoute.snapshot.queryParams?.mode;
+      return (
+        isProjectAndUrlExists ||
+        mode === WizardMode.CreateClusterTemplate ||
+        mode === WizardMode.EditClusterTemplate ||
+        mode === WizardMode.CustomizeClusterTemplate
+      );
     }
     if (url === View.Clusters) {
       return (

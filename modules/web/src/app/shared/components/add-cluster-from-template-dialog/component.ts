@@ -22,6 +22,7 @@ import {ClusterTemplate, ClusterTemplateInstance} from '@shared/entity/cluster-t
 import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 export enum Step {
   Template = 'Select Template',
@@ -122,7 +123,7 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
 
     // We chose optional query params instead of creating new route or using state behind the curtain.
     this._router.navigate([`/projects/${this.data.projectId}/wizard`], {
-      queryParams: {clusterTemplateID: this.template.id, clusterTemplateWizard: 'Customize'},
+      queryParams: {clusterTemplateID: this.template.id, mode: WizardMode.CustomizeClusterTemplate},
     });
   }
 }

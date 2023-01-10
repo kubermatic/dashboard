@@ -41,6 +41,7 @@ import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,
 } from '@app/shared/components/add-cluster-from-template-dialog/component';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 @Component({
   selector: 'km-cluster-template',
@@ -141,7 +142,14 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
         this.dataSource.data = this.templates;
         this.isInitializing = false;
         this._loadDatacenters();
-        this.clusterTemplateFragment && this._onCreateClusterFragment();
+        const createClusterFromTemplateID = window.history.state.createClusterFromTemplateID;
+        if (createClusterFromTemplateID) {
+          const clusterTemplate = this.templates.find((ct: ClusterTemplate) => ct.id === createClusterFromTemplateID);
+          if (clusterTemplate) {
+            this.createCluster(clusterTemplate);
+            window.history.replaceState({createClusterFromTemplateID: null}, '');
+          }
+        }
       });
   }
 
@@ -197,7 +205,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   create(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
-      queryParams: {clusterTemplateWizard: 'Create'},
+      queryParams: {mode: WizardMode.CreateClusterTemplate},
     });
   }
 
@@ -259,7 +267,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   editClusterTemplate(template: ClusterTemplate): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
-      queryParams: {clusterTemplateID: template.id, clusterTemplateWizard: 'Edit'},
+      queryParams: {clusterTemplateID: template.id, mode: WizardMode.EditClusterTemplate},
     });
   }
 
@@ -278,13 +286,5 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
       component.projectId = id;
     });
-  }
-
-  private _onCreateClusterFragment(): void {
-    const clusterTemplate = this.templates.find((ct: ClusterTemplate) => ct.name === this.clusterTemplateFragment);
-    if (clusterTemplate) {
-      this.clusterTemplateFragment = '';
-      this.createCluster(clusterTemplate);
-    }
   }
 }
