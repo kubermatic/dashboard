@@ -32140,10 +32140,6 @@
       "description": "FeatureGates represents an object holding feature gate settings",
       "type": "object",
       "properties": {
-        "konnectivityService": {
-          "type": "boolean",
-          "x-go-name": "KonnectivityService"
-        },
         "oidcKubeCfgEndpoint": {
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"
