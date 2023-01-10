@@ -1950,3 +1950,10 @@ type SeedOverview struct {
 	Created               metav1.Time            `json:"created"`
 	DatacentersByProvider DatacentersByProvider  `json:"providers"`
 }
+
+// SeedStatus stores the current status of a Seed.
+// swagger:model SeedStatus
+type SeedStatus struct {
+	Name  string                 `json:"name"`
+	Phase kubermaticv1.SeedPhase `json:"phase"`
+}
