@@ -32,6 +32,7 @@ export interface Config {
   oidc_provider_scope?: string;
   oidc_provider_client_id?: string;
   oidc_connector_id?: string;
+  oidc_logout_url?: string;
   themes?: Theme[];
   enforced_theme?: string;
   end_of_life?: EndOfLife;
