@@ -473,10 +473,6 @@ limitations under the License.
                                  label="Disable auto-update"
                                  [value]="element.spec.operatingSystem.flatcar.disableAutoUpdate">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.sles"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.sles.distUpgradeOnBoot">
-            </km-property-boolean>
             <km-property-boolean *ngIf="!!element.spec.operatingSystem.amzn2"
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.amzn2.distUpgradeOnBoot">

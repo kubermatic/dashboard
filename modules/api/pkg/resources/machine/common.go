@@ -45,7 +45,6 @@ import (
 	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
 	"github.com/kubermatic/machine-controller/pkg/userdata/rhel"
 	"github.com/kubermatic/machine-controller/pkg/userdata/rockylinux"
-	"github.com/kubermatic/machine-controller/pkg/userdata/sles"
 	"github.com/kubermatic/machine-controller/pkg/userdata/ubuntu"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
@@ -64,9 +63,6 @@ func getOsName(nodeSpec apiv1.NodeSpec) (providerconfig.OperatingSystem, error) 
 	}
 	if nodeSpec.OperatingSystem.Ubuntu != nil {
 		return providerconfig.OperatingSystemUbuntu, nil
-	}
-	if nodeSpec.OperatingSystem.SLES != nil {
-		return providerconfig.OperatingSystemSLES, nil
 	}
 	if nodeSpec.OperatingSystem.RHEL != nil {
 		return providerconfig.OperatingSystemRHEL, nil
@@ -714,12 +710,6 @@ func getCentOSOperatingSystemSpec(nodeSpec apiv1.NodeSpec) (*runtime.RawExtensio
 func getUbuntuOperatingSystemSpec(nodeSpec apiv1.NodeSpec) (*runtime.RawExtension, error) {
 	return EncodeAsRawExtension(ubuntu.Config{
 		DistUpgradeOnBoot: nodeSpec.OperatingSystem.Ubuntu.DistUpgradeOnBoot,
-	})
-}
-
-func getSLESOperatingSystemSpec(nodeSpec apiv1.NodeSpec) (*runtime.RawExtension, error) {
-	return EncodeAsRawExtension(sles.Config{
-		DistUpgradeOnBoot: nodeSpec.OperatingSystem.SLES.DistUpgradeOnBoot,
 	})
 }
 

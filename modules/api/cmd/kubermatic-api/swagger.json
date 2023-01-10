@@ -36672,9 +36672,6 @@
         "rockylinux": {
           "$ref": "#/definitions/RockyLinuxSpec"
         },
-        "sles": {
-          "$ref": "#/definitions/SLESSpec"
-        },
         "ubuntu": {
           "$ref": "#/definitions/UbuntuSpec"
         }
@@ -37916,18 +37913,6 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "SLESSpec": {
-      "description": "SLESSpec contains SLES specific settings",
-      "type": "object",
-      "properties": {
-        "distUpgradeOnBoot": {
-          "description": "do a dist-upgrade on boot and reboot it required afterwards",
-          "type": "boolean",
-          "x-go-name": "DistUpgradeOnBoot"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "SSHKey": {
       "description": "SSHKey represents a ssh key",

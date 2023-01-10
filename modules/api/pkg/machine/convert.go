@@ -40,7 +40,6 @@ import (
 	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
 	"github.com/kubermatic/machine-controller/pkg/userdata/rhel"
 	"github.com/kubermatic/machine-controller/pkg/userdata/rockylinux"
-	"github.com/kubermatic/machine-controller/pkg/userdata/sles"
 	"github.com/kubermatic/machine-controller/pkg/userdata/ubuntu"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
@@ -87,15 +86,6 @@ func GetAPIV1OperatingSystemSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv
 			return nil, fmt.Errorf("failed to parse centos config: %w", err)
 		}
 		operatingSystemSpec.CentOS = &apiv1.CentOSSpec{
-			DistUpgradeOnBoot: config.DistUpgradeOnBoot,
-		}
-
-	case providerconfig.OperatingSystemSLES:
-		config := &sles.Config{}
-		if err := json.Unmarshal(decodedProviderSpec.OperatingSystemSpec.Raw, &config); err != nil {
-			return nil, fmt.Errorf("failed to parse sles config: %w", err)
-		}
-		operatingSystemSpec.SLES = &apiv1.SLESSpec{
 			DistUpgradeOnBoot: config.DistUpgradeOnBoot,
 		}
 
