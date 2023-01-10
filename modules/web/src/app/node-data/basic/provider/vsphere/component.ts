@@ -129,9 +129,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       case OperatingSystem.Ubuntu:
         this._defaultTemplate = this._templates.ubuntu;
         break;
-      case OperatingSystem.SLES:
-        this._defaultTemplate = this._templates.sles;
-        break;
       case OperatingSystem.Flatcar:
         this._defaultTemplate = this._templates.flatcar;
         break;
@@ -153,8 +150,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       return OperatingSystem.Ubuntu;
     } else if (this._templates.centos) {
       return OperatingSystem.CentOS;
-    } else if (this._templates.sles) {
-      return OperatingSystem.SLES;
     } else if (this._templates.flatcar) {
       return OperatingSystem.Flatcar;
     } else if (this._templates.rockylinux) {

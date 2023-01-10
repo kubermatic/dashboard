@@ -18,7 +18,7 @@
 $view-switch-height: 45px;
 $view-switch-width: 50px;
 $project-card-height-default: 200px;
-$project-card-height-extended: 263px;
+$project-card-height-extended: 290px;
 $project-card-width: 330px;
 
 .projects-spinner {
@@ -140,4 +140,8 @@ $project-card-width: 330px;
 
 .all-projects-toggle {
   padding-right: 16px;
+}
+
+.owners-card-view {
+  margin-top: 15px;
 }

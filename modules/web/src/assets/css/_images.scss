@@ -530,10 +530,6 @@
   @include mixins.background-image('/assets/images/os/ubuntu.svg', 24px);
 }
 
-.km-os-image-sles {
-  @include mixins.background-image('/assets/images/os/sles.svg', 24px);
-}
-
 .km-os-image-amazon-linux-2 {
   @include mixins.background-image('/assets/images/os/amazon-linux-2.svg', 24px);
 }

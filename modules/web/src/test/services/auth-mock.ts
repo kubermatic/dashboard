@@ -39,5 +39,7 @@ export class AuthMockService {
     return of(true);
   }
 
+  oidcProviderLogout(): void {}
+
   setNonce(): void {}
 }

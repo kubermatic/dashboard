@@ -30,7 +30,6 @@ import {
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
-import {FeatureGateService} from '@core/services/feature-gate';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -137,7 +136,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   editionVersion: string = getEditionVersion();
   exposeStrategies = [ExposeStrategy.loadbalancer, ExposeStrategy.nodePort, ExposeStrategy.tunneling];
-  isKonnectivityEnabled = false;
   isDualStackAllowed = false;
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   clusterTemplateEditMode = false;
@@ -166,7 +164,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
-    private readonly _featureGatesService: FeatureGateService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -174,10 +171,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   ngOnInit(): void {
     this._initForm();
-
-    this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
-      this.isKonnectivityEnabled = !!featureGates?.konnectivityService;
-    });
 
     this.clusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
 
@@ -718,7 +711,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const proxyModeControl = this.control(Controls.ProxyMode);
     let newValue: ProxyMode;
     if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
-      if (this.isKonnectivityEnabled && !!this.controlValue(Controls.Konnectivity)) {
+      if (this.controlValue(Controls.Konnectivity)) {
         this.availableProxyModes = [ProxyMode.iptables, ProxyMode.ebpf];
         if (proxyModeControl.value === ProxyMode.ipvs) {
           newValue = ProxyMode.ebpf;
@@ -762,7 +755,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
-    const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+    const konnectivity = this.controlValue(Controls.Konnectivity);
     const clusterNetwork = {
       ipFamily: this.controlValue(Controls.IPFamily),
       proxyMode: this.controlValue(Controls.ProxyMode),

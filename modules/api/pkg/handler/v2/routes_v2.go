@@ -691,24 +691,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
-		/*
-			// Kubevirt endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/vmflavors").
-				Handler(r.listProjectKubeVirtVMIPresets())
+	// Kubevirt endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/instancetypes").
+		Handler(r.listProjectKubeVirtInstancetypes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/instancetypes").
-				Handler(r.listProjectKubeVirtInstancetypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/preferences").
+		Handler(r.listProjectKubeVirtPreferences())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/preferences").
-				Handler(r.listProjectKubeVirtPreferences())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
-				Handler(r.listProjectKubevirtStorageClasses())
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/storageclasses").
+		Handler(r.listProjectKubevirtStorageClasses())
 
 	// Azure endpoints
 	mux.Methods(http.MethodGet).
@@ -790,24 +784,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
 		Handler(r.listProjectNutanixCategoryValues())
 
+	// VMware Cloud Director endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
+		Handler(r.listProjectVMwareCloudDirectorNetworks())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
+		Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
+		Handler(r.listProjectVMwareCloudDirectorCatalogs())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
+		Handler(r.listProjectVMwareCloudDirectorTemplates())
 		/*
-
-			// VMware Cloud Director endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
-				Handler(r.listProjectVMwareCloudDirectorNetworks())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
-				Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
-				Handler(r.listProjectVMwareCloudDirectorCatalogs())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
-				Handler(r.listProjectVMwareCloudDirectorTemplates())
 
 			// AWS endpoints
 			mux.Methods(http.MethodGet).
@@ -4977,7 +4970,7 @@ func (r Routing) listVMwareCloudDirectorNetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4999,7 +4992,7 @@ func (r Routing) listVMwareCloudDirectorStorageProfiles() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5021,7 +5014,7 @@ func (r Routing) listVMwareCloudDirectorCatalogs() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5043,8 +5036,8 @@ func (r Routing) listVMwareCloudDirectorTemplates() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
-		provider.DecodeListTemplatesReq,
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
+		provider.DecodeVMwareCloudDirectorListTemplatesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -5802,6 +5795,72 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes kubevirt listProjectKubeVirtInstancetypes
+//
+// Lists available KubeVirt VirtualMachineInstancetype.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachineInstancetypeList
+func (r Routing) listProjectKubeVirtInstancetypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectListInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/preferences kubevirt listProjectKubeVirtPreferences
+//
+// Lists available KubeVirt VirtualMachinePreference.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachinePreferenceList
+func (r Routing) listProjectKubeVirtPreferences() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses kubevirt listProjectKubeVirtStorageClasses
+//
+// Lists available K8s StorageClasses in the Kubevirt cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: StorageClassList
+func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/azure/sizes azure listProjectAzureSizes
 //
 // Lists available VM sizes in an Azure region
@@ -6215,6 +6274,94 @@ func (r Routing) listProjectNutanixCategoryValues() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeNutanixProjectCategoryValueReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks vmwareclouddirector listProjectVMwareCloudDirectorNetworks
+//
+// List VMware Cloud Director OVDC Networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorNetworkList
+func (r Routing) listProjectVMwareCloudDirectorNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles vmwareclouddirector listProjectVMwareCloudDirectorStorageProfiles
+//
+// List VMware Cloud Director Storage Profiles
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorStorageProfileList
+func (r Routing) listProjectVMwareCloudDirectorStorageProfiles() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs vmwareclouddirector listProjectVMwareCloudDirectorCatalogs
+//
+// List VMware Cloud Director Catalogs
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorCatalogList
+func (r Routing) listProjectVMwareCloudDirectorCatalogs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name} vmwareclouddirector listProjectVMwareCloudDirectorTemplates
+//
+// List VMware Cloud Director Templates
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorTemplateList
+func (r Routing) listProjectVMwareCloudDirectorTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectListTemplatesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -8202,7 +8349,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtListInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -8224,14 +8371,14 @@ func (r Routing) listKubeVirtPreferences() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider)),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubevirtStorageClasses
+// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubeVirtStorageClasses
 //
 // Lists available K8s StorageClasses in the Kubevirt cluster.
 //
@@ -8246,7 +8393,7 @@ func (r Routing) listKubevirtStorageClasses() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

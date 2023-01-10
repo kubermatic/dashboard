@@ -352,6 +352,7 @@ export class ClusterNetwork {
   nodeCidrMaskSizeIPv6?: number;
   nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
+  tunnelingAgentIP?: string;
 }
 
 export class CNIPluginConfig {

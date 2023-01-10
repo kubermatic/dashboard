@@ -110,11 +110,6 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 					SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
 				},
 				{
-					Name:                    "osp-sles",
-					OperatingSystem:         "sles",
-					SupportedCloudProviders: []string{"aws"},
-				},
-				{
 					Name:                    "osp-ubuntu",
 					OperatingSystem:         "ubuntu",
 					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
@@ -151,11 +146,6 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 					Name:                    "osp-rockylinux",
 					OperatingSystem:         "rockylinux",
 					SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
-				},
-				{
-					Name:                    "osp-sles",
-					OperatingSystem:         "sles",
-					SupportedCloudProviders: []string{"aws"},
 				},
 				{
 					Name:                    "osp-ubuntu",

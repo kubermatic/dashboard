@@ -27,6 +27,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 
@@ -52,7 +53,7 @@ func TestFeatureGatesEndpoint(t *testing.T) {
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode:    http.StatusOK,
 			ExpectedResponse: apiv2.FeatureGates{
-				KonnectivityService: &valTrue,
+				OIDCKubeCfgEndpoint: &valTrue,
 			},
 		},
 	}
@@ -65,6 +66,9 @@ func TestFeatureGatesEndpoint(t *testing.T) {
 		Spec: kubermaticv1.KubermaticConfigurationSpec{
 			Versions: kubermaticv1.KubermaticVersioningConfiguration{
 				Versions: test.GenDefaultVersions(),
+			},
+			FeatureGates: map[string]bool{
+				features.OIDCKubeCfgEndpoint: true,
 			},
 		},
 	}

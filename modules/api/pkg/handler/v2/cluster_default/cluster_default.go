@@ -156,9 +156,12 @@ func GetDefaultClusterEndpoint(
 
 func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster *kubermaticv1.Cluster) *kubermaticv1.Cluster {
 	cluster.Spec.ExposeStrategy = networkDefaults.ClusterExposeStrategy
-	cluster.Spec.ClusterNetwork.TunnelingAgentIP = networkDefaults.TunnelingAgentIP
+	if cluster.Spec.ExposeStrategy == kubermaticv1.ExposeStrategyTunneling {
+		cluster.Spec.ClusterNetwork.TunnelingAgentIP = networkDefaults.TunnelingAgentIP
+	}
 	cluster.Spec.ClusterNetwork.ProxyMode = networkDefaults.ProxyMode
 	cluster.Spec.ClusterNetwork.NodeLocalDNSCacheEnabled = pointer.Bool(networkDefaults.NodeLocalDNSCacheEnabled)
+	cluster.Spec.ClusterNetwork.IPFamily = kubermaticv1.IPFamilyIPv4 // always use IPv4 as the default address family (even if IPv6 defaults are provided)
 
 	// Mapping for IPv4
 	if networkDefaults.IPv4 != nil {

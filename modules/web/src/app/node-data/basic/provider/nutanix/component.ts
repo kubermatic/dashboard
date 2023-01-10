@@ -383,8 +383,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
         return this._images?.centos;
       case OperatingSystem.Ubuntu:
         return this._images?.ubuntu;
-      case OperatingSystem.SLES:
-        return this._images?.sles;
       case OperatingSystem.RHEL:
         return this._images?.rhel;
       case OperatingSystem.Flatcar:

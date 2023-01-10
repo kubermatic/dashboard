@@ -329,7 +329,6 @@ func setKubeOneProvider(kubeOneCluster *kubeonev1beta2.KubeOneCluster, newCluste
 		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
 	case kubeOneCluster.CloudProvider.VMwareCloudDirector != nil:
 		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
-
 	}
 
 	return &newCluster

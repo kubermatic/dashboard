@@ -82,7 +82,6 @@ export function fakeOpenstackDatacenter(): Datacenter {
         images: {
           centos: '',
           ubuntu: 'Ubuntu 16.04 LTS 2018.03.26',
-          sles: '',
           rhel: '',
         },
         enforceFloatingIP: false,

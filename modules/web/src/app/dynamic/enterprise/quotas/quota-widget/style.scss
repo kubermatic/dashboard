@@ -26,6 +26,7 @@
 }
 
 .km-quota-widget-container {
+  position: relative;
   width: 100%;
 
   .km-icon-quota {
@@ -43,7 +44,7 @@
 
     &.widget-border {
       border-radius: variables.$border-radius;
-      padding: 0 10px;
+      padding: 0 0 0 10px;
 
       km-property {
         padding-top: 6px;
@@ -66,10 +67,10 @@
   }
 
   .km-quota-details {
-    left: 0;
+    left: auto;
     position: absolute;
     top: 50px;
-    width: 100%;
+    width: 270px;
     z-index: 1;
 
     mat-card-content {
@@ -91,10 +92,13 @@
       }
     }
 
-    &.no-card {
-      left: auto;
-      top: 87px;
-      width: 272px;
+    &.quota-detail-project-cards-view {
+      left: 30px;
+      width: 250px;
+    }
+
+    &.quota-detail-project-table-view {
+      width: 215px;
     }
   }
 
@@ -121,7 +125,7 @@
     }
   }
 
-  .km-no-quota-top-margin {
-    margin-top: 13px;
+  .quota-bars-collapsed {
+    width: 230px;
   }
 }

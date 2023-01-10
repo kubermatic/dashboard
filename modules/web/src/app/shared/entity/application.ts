@@ -26,6 +26,7 @@ export class ApplicationSpec {
   applicationRef: ApplicationRef;
   namespace: ApplicationNamespace;
   values: string | object;
+  labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
 }
 
 export class ApplicationRef {
@@ -65,6 +66,7 @@ export class ApplicationDefinitionSpec {
   method: ApplicationMethod;
   versions: ApplicationVersion[];
   defaultValues?: string | object;
+  labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
 }
 
 export class ApplicationVersion {
@@ -122,4 +124,12 @@ export namespace ApplicationMethod {
         return '';
     }
   }
+}
+
+export enum ApplicationLabel {
+  ManagedBy = 'apps.kubermatic.k8c.io/managed-by',
+}
+
+export enum ApplicationLabelValue {
+  KKP = 'kkp',
 }
