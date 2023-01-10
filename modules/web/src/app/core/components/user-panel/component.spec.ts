@@ -19,6 +19,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {SettingsMockService} from '@test/services/settings-mock';
@@ -45,6 +47,7 @@ describe('UserPanelComponent', () => {
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: Auth, useClass: AuthMockService},
         {provide: SettingsService, useClass: SettingsMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
