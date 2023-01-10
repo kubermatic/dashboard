@@ -159,6 +159,7 @@ func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster 
 	cluster.Spec.ClusterNetwork.TunnelingAgentIP = networkDefaults.TunnelingAgentIP
 	cluster.Spec.ClusterNetwork.ProxyMode = networkDefaults.ProxyMode
 	cluster.Spec.ClusterNetwork.NodeLocalDNSCacheEnabled = pointer.Bool(networkDefaults.NodeLocalDNSCacheEnabled)
+	cluster.Spec.ClusterNetwork.IPFamily = kubermaticv1.IPFamilyIPv4 // always use IPv4 as the default address family (even if IPv6 defaults are provided)
 
 	// Mapping for IPv4
 	if networkDefaults.IPv4 != nil {
