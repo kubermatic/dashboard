@@ -26,6 +26,9 @@ type KubeOneSpec struct {
 	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
 	ProviderName string `json:"providerName,omitempty"`
 
+	// Region is the kubernetes control plane region.
+	Region string `json:"region,omitempty"`
+
 	// cloud spec
 	CloudSpec *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
 

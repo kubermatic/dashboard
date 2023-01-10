@@ -64,27 +64,7 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
 	}
-	if kubeOneCluster.CloudProvider.AWS != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
-	} else if kubeOneCluster.CloudProvider.GCE != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
-	} else if kubeOneCluster.CloudProvider.Azure != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
-	} else if kubeOneCluster.CloudProvider.DigitalOcean != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
-	} else if kubeOneCluster.CloudProvider.Hetzner != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
-	} else if kubeOneCluster.CloudProvider.Nutanix != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
-	} else if kubeOneCluster.CloudProvider.Openstack != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
-	} else if kubeOneCluster.CloudProvider.EquinixMetal != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
-	} else if kubeOneCluster.CloudProvider.Vsphere != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
-	} else if kubeOneCluster.CloudProvider.VMwareCloudDirector != nil {
-		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
-	}
+	newCluster = setKubeOneProvider(kubeOneCluster, *newCluster)
 
 	kubermaticNamespace := resources.KubermaticNamespace
 	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, kubermaticNamespace, cloud.KubeOne.SSHKey, newCluster)
@@ -325,4 +305,32 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	}
 
 	return nodeDeployments, nil
+}
+
+func setKubeOneProvider(kubeOneCluster *kubeonev1beta2.KubeOneCluster, newCluster kubermaticv1.ExternalCluster) *kubermaticv1.ExternalCluster {
+	switch {
+	case kubeOneCluster.CloudProvider.AWS != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
+	case kubeOneCluster.CloudProvider.GCE != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
+	case kubeOneCluster.CloudProvider.Azure != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
+	case kubeOneCluster.CloudProvider.DigitalOcean != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
+	case kubeOneCluster.CloudProvider.Hetzner != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
+	case kubeOneCluster.CloudProvider.Nutanix != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
+	case kubeOneCluster.CloudProvider.Openstack != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
+	case kubeOneCluster.CloudProvider.EquinixMetal != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
+	case kubeOneCluster.CloudProvider.Vsphere != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
+	case kubeOneCluster.CloudProvider.VMwareCloudDirector != nil:
+		newCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
+
+	}
+
+	return &newCluster
 }

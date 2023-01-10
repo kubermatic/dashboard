@@ -498,9 +498,9 @@ type ExternalClusterSpec struct {
 	Version          ksemver.Semver `json:"version"`
 	ContainerRuntime string         `json:"containerRuntime,omitempty"`
 
-	GKEClusterSpec *GKEClusterSpec `json:"gkeClusterSpec,omitempty"`
-	EKSClusterSpec *EKSClusterSpec `json:"eksClusterSpec,omitempty"`
-	AKSClusterSpec *AKSClusterSpec `json:"aksClusterSpec,omitempty"`
+	GKEClusterSpec *GKEClusterSpec `json:"gkeclusterSpec,omitempty"`
+	EKSClusterSpec *EKSClusterSpec `json:"eksclusterSpec,omitempty"`
+	AKSClusterSpec *AKSClusterSpec `json:"aksclusterSpec,omitempty"`
 }
 
 // ExternalClusterCloudSpec represents an object holding cluster cloud details
