@@ -67,7 +67,6 @@ export class NodeService {
     patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
     patch.spec.template.operatingSystem.flatcar = patch.spec.template.operatingSystem.flatcar || null;
     patch.spec.template.operatingSystem.rockylinux = patch.spec.template.operatingSystem.rockylinux || null;
-    patch.spec.template.operatingSystem.sles = patch.spec.template.operatingSystem.sles || null;
     patch.spec.template.operatingSystem.amzn2 = patch.spec.template.operatingSystem.amzn2 || null;
 
     return patch;
