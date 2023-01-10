@@ -116,8 +116,7 @@ limitations under the License.
                     kmPatternError="Input has to be a valid IPv4 or IPv6 address">
       </km-chip-list>
 
-      <mat-checkbox *ngIf="isKonnectivityEnabled"
-                    [formControlName]="Controls.Konnectivity"
+      <mat-checkbox [formControlName]="Controls.Konnectivity"
                     [class.km-text-muted]="form.get(Controls.Konnectivity).disabled">
         Konnectivity
       </mat-checkbox>
