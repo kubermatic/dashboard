@@ -495,7 +495,8 @@ type ExternalClusterStatus struct {
 // ExternalClusterSpec defines the external cluster specification.
 type ExternalClusterSpec struct {
 	// Version desired version of the kubernetes master components
-	Version ksemver.Semver `json:"version,omitempty"`
+	Version          ksemver.Semver `json:"version,omitempty"`
+	ContainerRuntime string         `json:"containerRuntime,omitempty"`
 
 	GKEClusterSpec *GKEClusterSpec `json:"gkeclusterSpec,omitempty"`
 	EKSClusterSpec *EKSClusterSpec `json:"eksclusterSpec,omitempty"`
@@ -516,10 +517,9 @@ type BringYourOwnSpec struct{}
 
 type KubeOneSpec struct {
 	// Manifest Base64 encoded manifest
-	Manifest         string            `json:"manifest,omitempty"`
-	SSHKey           KubeOneSSHKey     `json:"sshKey,omitempty"`
-	ContainerRuntime string            `json:"containerRuntime,omitempty"`
-	CloudSpec        *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
+	Manifest  string            `json:"manifest,omitempty"`
+	SSHKey    KubeOneSSHKey     `json:"sshKey,omitempty"`
+	CloudSpec *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
 }
 
 // SSHKeySpec represents the details of a ssh key.
