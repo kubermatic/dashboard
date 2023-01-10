@@ -32,7 +32,7 @@ import {OperatingSystemManagerService} from '@core/services/operating-system-man
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
