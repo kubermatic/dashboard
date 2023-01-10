@@ -892,9 +892,6 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 	if os.RockyLinux != nil {
 		counter++
 	}
-	if os.SLES != nil {
-		counter++
-	}
 	if os.Ubuntu != nil {
 		counter++
 	}
