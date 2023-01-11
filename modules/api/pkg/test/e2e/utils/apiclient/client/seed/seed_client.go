@@ -34,6 +34,8 @@ type ClientService interface {
 
 	ListSeedNames(params *ListSeedNamesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSeedNamesOK, error)
 
+	ListSeedStatus(params *ListSeedStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSeedStatusOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -148,6 +150,44 @@ func (a *Client) ListSeedNames(params *ListSeedNamesParams, authInfo runtime.Cli
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListSeedNamesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListSeedStatus lists seeds and their status
+*/
+func (a *Client) ListSeedStatus(params *ListSeedStatusParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSeedStatusOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListSeedStatusParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listSeedStatus",
+		Method:             "GET",
+		PathPattern:        "/api/v2/seeds/status",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListSeedStatusReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListSeedStatusOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListSeedStatusDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
