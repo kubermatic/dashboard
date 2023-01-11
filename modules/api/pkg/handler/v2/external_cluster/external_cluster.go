@@ -32,6 +32,7 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/eks"
@@ -673,10 +674,11 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 			return patchAKSCluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.AKS)
 		}
 		if cloud.KubeOne != nil {
-			clusterToPatch.Spec.ContainerRuntime, err = clusterProvider.GetContainerRutime(ctx, masterClient, cluster)
+			containerRuntime, err := kuberneteshelper.GetContainerRuntime(ctx, masterClient, cluster, clusterProvider)
 			if err != nil {
 				return "", err
 			}
+			clusterToPatch.Spec.ContainerRuntime = containerRuntime
 			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}

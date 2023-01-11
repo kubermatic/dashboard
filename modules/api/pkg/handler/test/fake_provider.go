@@ -177,14 +177,6 @@ func (p *FakeExternalClusterProvider) GetVersion(ctx context.Context, masterClie
 	return defaulting.DefaultKubernetesVersioning.Default, nil
 }
 
-func (p *FakeExternalClusterProvider) GetContainerRutime(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
-	return DefaultContainerRuntime, nil
-}
-
-func (p *FakeExternalClusterProvider) GetControlPlaneRegion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (string, error) {
-	return DefaultRegion, nil
-}
-
 func (p *FakeExternalClusterProvider) VersionsEndpoint(ctx context.Context, configGetter provider.KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error) {
 	return p.Provider.VersionsEndpoint(ctx, configGetter, providerType)
 }

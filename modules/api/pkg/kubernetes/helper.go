@@ -18,12 +18,18 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/pkg/errors"
+
+	"k8c.io/dashboard/v2/pkg/provider"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -61,4 +67,29 @@ func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.C
 		return nil, err
 	}
 	return nodes, nil
+}
+
+func GetContainerRuntime(ctx context.Context,
+	masterClient ctrlruntimeclient.Client,
+	externalCluster *kubermaticv1.ExternalCluster,
+	externalClusterProvider provider.ExternalClusterProvider,
+) (string, error) {
+	clusterClient, err := externalClusterProvider.GetClient(ctx, masterClient, externalCluster)
+	if err != nil {
+		return "", err
+	}
+
+	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
+	if err != nil {
+		return "", fmt.Errorf("failed to list control plane nodes %w", err)
+	}
+
+	for len(controlPlaneNode.Items) > 0 {
+		containerRuntimeVersion := controlPlaneNode.Items[0].Status.NodeInfo.ContainerRuntimeVersion
+		containerRuntime, _, found := strings.Cut(containerRuntimeVersion, ":")
+		if found {
+			return containerRuntime, nil
+		}
+	}
+	return "", fmt.Errorf("failed to get container runtime from node")
 }
