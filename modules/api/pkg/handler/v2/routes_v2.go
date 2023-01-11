@@ -800,25 +800,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
 		Handler(r.listProjectVMwareCloudDirectorTemplates())
-		/*
 
-			// AWS endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/sizes").
-				Handler(r.listProjectAWSSizes())
+		// AWS endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/sizes").
+		Handler(r.listProjectAWSSizes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/subnets").
-				Handler(r.listProjectAWSSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/subnets").
+		Handler(r.listProjectAWSSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
-				Handler(r.listProjectAWSVPCS())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
+		Handler(r.listProjectAWSVPCs())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
-				Handler(r.listProjectAWSSecurityGroups())
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
+		Handler(r.listProjectAWSSecurityGroups())
 
 	// Digitalocean endpoints
 	mux.Methods(http.MethodGet).
@@ -1521,6 +1519,94 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/seeds/{seed_name}/overview").
 		Handler(r.getSeedOverview())
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
+//
+// Lists available AWS sizes
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSizeList
+func (r Routing) listProjectAWSSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSizes(r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
+		provider.DecodeProjectAWSSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets project listProjectAWSSubnets
+//
+// Lists available AWS subnets
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSubnetList
+func (r Routing) listProjectAWSSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSubnets(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/vpcs project listProjectAWSVPCs
+//
+// Lists available AWS VPCs
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSVPCList
+func (r Routing) listProjectAWSVPCs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSVPCs(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups project listProjectAWSSecurityGroups
+//
+// Lists available AWS security groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSecurityGroupList
+func (r Routing) listProjectAWSSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSecurityGroups(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/gcp/disktypes project listProjectGCPDiskTypes
