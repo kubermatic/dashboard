@@ -47,11 +47,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
 	"net"
 	"net/http"
 	"os"
 	"time"
+
+	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
 
 	"github.com/go-logr/zapr"
 	"github.com/gorilla/handlers"
@@ -357,7 +358,13 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
-	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
+	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
+		mgr.GetRESTMapper(),
+		seedKubeconfigGetter,
+		options.oidcIssuerRedirectURI,
+		options.oidcSkipTLSVerify,
+		options.caBundle,
+	)
 
 	userWatcher, err := kuberneteswatcher.NewUserWatcher(ctx, log)
 	if err != nil {
