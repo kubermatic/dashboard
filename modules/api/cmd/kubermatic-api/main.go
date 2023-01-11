@@ -47,6 +47,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
 	"net"
 	"net/http"
 	"os"
@@ -154,12 +155,6 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
-	seeds, err := providers.seedsGetter()
-	if err != nil {
-		log.Fatal("bal")
-	}
-	seed := seeds["kubermatic"]
-	seedOIDCIssuerVerifyier, err := createOIDCSeedClients(seed, options)
 	oidcIssuerVerifier, err := createOIDCClients(options)
 	if err != nil {
 		log.Fatalw("failed to create an openid authenticator", "issuer", options.oidcURL, "oidcClientID", options.oidcAuthenticatorClientID, zap.Error(err))
@@ -168,7 +163,7 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, seedOIDCIssuerVerifyier, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, tokenVerifiers, tokenExtractors, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -362,6 +357,8 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
+	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
+
 	userWatcher, err := kuberneteswatcher.NewUserWatcher(ctx, log)
 	if err != nil {
 		return providers{}, fmt.Errorf("failed to setup user-watcher: %w", err)
@@ -444,6 +441,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		privilegedIPAMPoolProviderGetter:               privilegedIPAMPoolProviderGetter,
 		applicationDefinitionProvider:                  applicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
+		oidcIssuerVerifierProviderGetter:               oidcIssuerVerifierProviderGetter,
 	}, nil
 }
 
@@ -509,7 +507,7 @@ func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVeri
 }
 
 func createAPIHandler(
-	options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcSeedIssuerVerifier auth.OIDCIssuerVerifier,
+	options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier,
 	tokenVerifiers auth.TokenVerifier, tokenExtractors auth.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger,
 ) (http.HandlerFunc, error) {
 	var prometheusClient prometheusapi.Client
@@ -544,7 +542,6 @@ func createAPIHandler(
 		ProjectProvider:                                prov.project,
 		PrivilegedProjectProvider:                      prov.privilegedProject,
 		OIDCIssuerVerifier:                             oidcIssuerVerifier,
-		OIDCSeedIssuerVerifier:                         oidcSeedIssuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          prov.clusterProviderGetter,
@@ -587,9 +584,10 @@ func createAPIHandler(
 		PrivilegedIPAMPoolProviderGetter:               prov.privilegedIPAMPoolProviderGetter,
 		ApplicationDefinitionProvider:                  prov.applicationDefinitionProvider,
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
-		Versions: options.versions,
-		CABundle: options.caBundle.CertPool(),
-		Features: options.featureGates,
+		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
+		Versions:                                       options.versions,
+		CABundle:                                       options.caBundle.CertPool(),
+		Features:                                       options.featureGates,
 	}
 
 	r := handler.NewRouting(routingParams, mgr.GetClient())

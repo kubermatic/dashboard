@@ -191,6 +191,7 @@ type providers struct {
 	privilegedIPAMPoolProviderGetter               provider.PrivilegedIPAMPoolProviderGetter
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
+	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 }
 
 func loadKubermaticConfiguration(filename string) (*kubermaticv1.KubermaticConfiguration, error) {

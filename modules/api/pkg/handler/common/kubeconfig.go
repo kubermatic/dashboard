@@ -274,6 +274,7 @@ func CreateOIDCKubeconfigEndpoint(
 	oidcIssuer := oidcSeedIssuerVerifier.(auth.OIDCIssuer)
 	oidcVerifier := oidcSeedIssuerVerifier.(auth.TokenVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	//oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
 
 	if secureCookie == nil {
 		secureCookie = securecookie.New([]byte(oidcCfg.CookieHashKey), nil)

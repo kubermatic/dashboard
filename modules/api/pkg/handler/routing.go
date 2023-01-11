@@ -61,7 +61,6 @@ type Routing struct {
 	projectProvider                       provider.ProjectProvider
 	privilegedProjectProvider             provider.PrivilegedProjectProvider
 	oidcIssuerVerifier                    auth.OIDCIssuerVerifier
-	oidcSeedIssuerVerifier                auth.OIDCIssuerVerifier
 	tokenVerifiers                        auth.TokenVerifier
 	tokenExtractors                       auth.TokenExtractor
 	clusterProviderGetter                 provider.ClusterProviderGetter
@@ -86,6 +85,7 @@ type Routing struct {
 	features                              features.FeatureGate
 	seedProvider                          provider.SeedProvider
 	resourceQuotaProvider                 provider.ResourceQuotaProvider
+	oidcIssuerVerifierGetter              provider.OIDCIssuerVerifierGetter
 }
 
 // NewRouting creates a new Routing.
@@ -111,7 +111,6 @@ func NewRouting(routingParams RoutingParams, masterClient ctrlruntimeclient.Clie
 		projectProvider:                       routingParams.ProjectProvider,
 		privilegedProjectProvider:             routingParams.PrivilegedProjectProvider,
 		oidcIssuerVerifier:                    routingParams.OIDCIssuerVerifier,
-		oidcSeedIssuerVerifier:                routingParams.OIDCSeedIssuerVerifier,
 		tokenVerifiers:                        routingParams.TokenVerifiers,
 		tokenExtractors:                       routingParams.TokenExtractors,
 		prometheusClient:                      routingParams.PrometheusClient,
@@ -134,6 +133,7 @@ func NewRouting(routingParams RoutingParams, masterClient ctrlruntimeclient.Clie
 		features:                              routingParams.Features,
 		seedProvider:                          routingParams.SeedProvider,
 		resourceQuotaProvider:                 routingParams.ResourceQuotaProvider,
+		oidcIssuerVerifierGetter:              routingParams.OIDCIssuerVerifierProviderGetter,
 	}
 }
 
@@ -192,7 +192,6 @@ type RoutingParams struct {
 	ProjectProvider                                provider.ProjectProvider
 	PrivilegedProjectProvider                      provider.PrivilegedProjectProvider
 	OIDCIssuerVerifier                             auth.OIDCIssuerVerifier
-	OIDCSeedIssuerVerifier                         auth.OIDCIssuerVerifier
 	TokenVerifiers                                 auth.TokenVerifier
 	TokenExtractors                                auth.TokenExtractor
 	ClusterProviderGetter                          provider.ClusterProviderGetter
@@ -235,6 +234,7 @@ type RoutingParams struct {
 	PrivilegedIPAMPoolProviderGetter               provider.PrivilegedIPAMPoolProviderGetter
 	ApplicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	PrivilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
+	OIDCIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 	Versions                                       kubermatic.Versions
 	CABundle                                       *x509.CertPool
 	Features                                       features.FeatureGate
