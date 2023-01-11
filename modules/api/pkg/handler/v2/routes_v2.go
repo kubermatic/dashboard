@@ -812,7 +812,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
-		Handler(r.listProjectAWSVPCS())
+		Handler(r.listProjectAWSVPCs())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
@@ -1523,16 +1523,14 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
 //
-// # Lists available AWS sizes
+// Lists available AWS sizes
 //
-// Consumes:
-// - application/json
+//	Produces:
+//	- application/json
 //
-// Produces:
-// - application/json
-//
-//	default: errorResponse
-//	200: AWSSizeList
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSizeList
 func (r Routing) listProjectAWSSizes() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -1547,16 +1545,14 @@ func (r Routing) listProjectAWSSizes() http.Handler {
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets project listProjectAWSSubnets
 //
-// # List available subnets
+// Lists available AWS subnets
 //
-// Consumes:
-// - application/json
+//	Produces:
+//	- application/json
 //
-// Produces:
-// - application/json
-//
-//	default: errorResponse
-//	200: AWSSubnetList
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSubnetList
 func (r Routing) listProjectAWSSubnets() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -1569,19 +1565,17 @@ func (r Routing) listProjectAWSSubnets() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/vpcs project listProjectAWSVPCS
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/vpcs project listProjectAWSVPCs
 //
-// # List VPCs for AWS
+// Lists available AWS VPCs
 //
-// Consumes:
-// - application/json
+//	Produces:
+//	- application/json
 //
-// Produces:
-// - application/json
-//
-//	default: errorResponse
-//	200: AWSVPCList
-func (r Routing) listProjectAWSVPCS() http.Handler {
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSVPCList
+func (r Routing) listProjectAWSVPCs() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
@@ -1595,16 +1589,14 @@ func (r Routing) listProjectAWSVPCS() http.Handler {
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups project listProjectAWSSecurityGroups
 //
-// # List available security groups
+// Lists available AWS security groups
 //
-// Consumes:
-// - application/json
+//	Produces:
+//	- application/json
 //
-// Produces:
-// - application/json
-//
-//	default: errorResponse
-//	200: AWSSecurityGroupList
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSecurityGroupList
 func (r Routing) listProjectAWSSecurityGroups() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(

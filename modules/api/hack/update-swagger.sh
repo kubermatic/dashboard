@@ -21,7 +21,7 @@ source hack/lib.sh
 
 API=modules/api
 
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./$API/hack/update-swagger.sh
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-5 containerize ./$API/hack/update-swagger.sh
 
 echodate "Generating swagger spec"
 cd $API/cmd/kubermatic-api/
@@ -34,3 +34,4 @@ cd $API/cmd/kubermatic-api/
 # this workaround will be removed once api will be totally removed from kubermatic repository
 run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/*
 echodate "Completed."
+run_swagger validate swagger.json

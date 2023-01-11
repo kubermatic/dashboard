@@ -7,9 +7,12 @@ package project
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // ListProjectAWSSubnetsReader is a Reader for the ListProjectAWSSubnets structure.
@@ -19,14 +22,84 @@ type ListProjectAWSSubnetsReader struct {
 
 // ReadResponse reads a server response into the received o.
 func (o *ListProjectAWSSubnetsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
-	result := NewListProjectAWSSubnetsDefault(response.Code())
-	if err := result.readResponse(response, consumer, o.formats); err != nil {
-		return nil, err
-	}
-	if response.Code()/100 == 2 {
+	switch response.Code() {
+	case 200:
+		result := NewListProjectAWSSubnetsOK()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
 		return result, nil
+	default:
+		result := NewListProjectAWSSubnetsDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
-	return nil, result
+}
+
+// NewListProjectAWSSubnetsOK creates a ListProjectAWSSubnetsOK with default headers values
+func NewListProjectAWSSubnetsOK() *ListProjectAWSSubnetsOK {
+	return &ListProjectAWSSubnetsOK{}
+}
+
+/*
+ListProjectAWSSubnetsOK describes a response with status code 200, with default header values.
+
+AWSSubnetList
+*/
+type ListProjectAWSSubnetsOK struct {
+	Payload models.AWSSubnetList
+}
+
+// IsSuccess returns true when this list project a w s subnets o k response has a 2xx status code
+func (o *ListProjectAWSSubnetsOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list project a w s subnets o k response has a 3xx status code
+func (o *ListProjectAWSSubnetsOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list project a w s subnets o k response has a 4xx status code
+func (o *ListProjectAWSSubnetsOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list project a w s subnets o k response has a 5xx status code
+func (o *ListProjectAWSSubnetsOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list project a w s subnets o k response a status code equal to that given
+func (o *ListProjectAWSSubnetsOK) IsCode(code int) bool {
+	return code == 200
+}
+
+func (o *ListProjectAWSSubnetsOK) Error() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnetsOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSubnetsOK) String() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnetsOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSubnetsOK) GetPayload() models.AWSSubnetList {
+	return o.Payload
+}
+
+func (o *ListProjectAWSSubnetsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
 }
 
 // NewListProjectAWSSubnetsDefault creates a ListProjectAWSSubnetsDefault with default headers values
@@ -39,10 +112,12 @@ func NewListProjectAWSSubnetsDefault(code int) *ListProjectAWSSubnetsDefault {
 /*
 ListProjectAWSSubnetsDefault describes a response with status code -1, with default header values.
 
-ListProjectAWSSubnetsDefault list project a w s subnets default
+errorResponse
 */
 type ListProjectAWSSubnetsDefault struct {
 	_statusCode int
+
+	Payload *models.ErrorResponse
 }
 
 // Code gets the status code for the list project a w s subnets default response
@@ -76,14 +151,25 @@ func (o *ListProjectAWSSubnetsDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectAWSSubnetsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnets default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSubnetsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnets default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets][%d] listProjectAWSSubnets default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ListProjectAWSSubnetsDefault) GetPayload() *models.ErrorResponse {
+	return o.Payload
 }
 
 func (o *ListProjectAWSSubnetsDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

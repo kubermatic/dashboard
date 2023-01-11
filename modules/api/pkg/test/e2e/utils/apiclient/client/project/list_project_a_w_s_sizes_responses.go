@@ -7,9 +7,12 @@ package project
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // ListProjectAWSSizesReader is a Reader for the ListProjectAWSSizes structure.
@@ -19,14 +22,84 @@ type ListProjectAWSSizesReader struct {
 
 // ReadResponse reads a server response into the received o.
 func (o *ListProjectAWSSizesReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
-	result := NewListProjectAWSSizesDefault(response.Code())
-	if err := result.readResponse(response, consumer, o.formats); err != nil {
-		return nil, err
-	}
-	if response.Code()/100 == 2 {
+	switch response.Code() {
+	case 200:
+		result := NewListProjectAWSSizesOK()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
 		return result, nil
+	default:
+		result := NewListProjectAWSSizesDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
-	return nil, result
+}
+
+// NewListProjectAWSSizesOK creates a ListProjectAWSSizesOK with default headers values
+func NewListProjectAWSSizesOK() *ListProjectAWSSizesOK {
+	return &ListProjectAWSSizesOK{}
+}
+
+/*
+ListProjectAWSSizesOK describes a response with status code 200, with default header values.
+
+AWSSizeList
+*/
+type ListProjectAWSSizesOK struct {
+	Payload models.AWSSizeList
+}
+
+// IsSuccess returns true when this list project a w s sizes o k response has a 2xx status code
+func (o *ListProjectAWSSizesOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list project a w s sizes o k response has a 3xx status code
+func (o *ListProjectAWSSizesOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list project a w s sizes o k response has a 4xx status code
+func (o *ListProjectAWSSizesOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list project a w s sizes o k response has a 5xx status code
+func (o *ListProjectAWSSizesOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list project a w s sizes o k response a status code equal to that given
+func (o *ListProjectAWSSizesOK) IsCode(code int) bool {
+	return code == 200
+}
+
+func (o *ListProjectAWSSizesOK) Error() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSizesOK) String() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSizesOK) GetPayload() models.AWSSizeList {
+	return o.Payload
+}
+
+func (o *ListProjectAWSSizesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response payload
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
 }
 
 // NewListProjectAWSSizesDefault creates a ListProjectAWSSizesDefault with default headers values
@@ -39,10 +112,12 @@ func NewListProjectAWSSizesDefault(code int) *ListProjectAWSSizesDefault {
 /*
 ListProjectAWSSizesDefault describes a response with status code -1, with default header values.
 
-ListProjectAWSSizesDefault list project a w s sizes default
+errorResponse
 */
 type ListProjectAWSSizesDefault struct {
 	_statusCode int
+
+	Payload *models.ErrorResponse
 }
 
 // Code gets the status code for the list project a w s sizes default response
@@ -76,14 +151,25 @@ func (o *ListProjectAWSSizesDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectAWSSizesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSizesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ListProjectAWSSizesDefault) GetPayload() *models.ErrorResponse {
+	return o.Payload
 }
 
 func (o *ListProjectAWSSizesDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }

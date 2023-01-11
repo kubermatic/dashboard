@@ -7,9 +7,12 @@ package project
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // ListProjectAWSSecurityGroupsReader is a Reader for the ListProjectAWSSecurityGroups structure.
@@ -19,14 +22,86 @@ type ListProjectAWSSecurityGroupsReader struct {
 
 // ReadResponse reads a server response into the received o.
 func (o *ListProjectAWSSecurityGroupsReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
-	result := NewListProjectAWSSecurityGroupsDefault(response.Code())
-	if err := result.readResponse(response, consumer, o.formats); err != nil {
-		return nil, err
-	}
-	if response.Code()/100 == 2 {
+	switch response.Code() {
+	case 200:
+		result := NewListProjectAWSSecurityGroupsOK()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
 		return result, nil
+	default:
+		result := NewListProjectAWSSecurityGroupsDefault(response.Code())
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		if response.Code()/100 == 2 {
+			return result, nil
+		}
+		return nil, result
 	}
-	return nil, result
+}
+
+// NewListProjectAWSSecurityGroupsOK creates a ListProjectAWSSecurityGroupsOK with default headers values
+func NewListProjectAWSSecurityGroupsOK() *ListProjectAWSSecurityGroupsOK {
+	return &ListProjectAWSSecurityGroupsOK{}
+}
+
+/*
+ListProjectAWSSecurityGroupsOK describes a response with status code 200, with default header values.
+
+AWSSecurityGroupList
+*/
+type ListProjectAWSSecurityGroupsOK struct {
+	Payload *models.AWSSecurityGroupList
+}
+
+// IsSuccess returns true when this list project a w s security groups o k response has a 2xx status code
+func (o *ListProjectAWSSecurityGroupsOK) IsSuccess() bool {
+	return true
+}
+
+// IsRedirect returns true when this list project a w s security groups o k response has a 3xx status code
+func (o *ListProjectAWSSecurityGroupsOK) IsRedirect() bool {
+	return false
+}
+
+// IsClientError returns true when this list project a w s security groups o k response has a 4xx status code
+func (o *ListProjectAWSSecurityGroupsOK) IsClientError() bool {
+	return false
+}
+
+// IsServerError returns true when this list project a w s security groups o k response has a 5xx status code
+func (o *ListProjectAWSSecurityGroupsOK) IsServerError() bool {
+	return false
+}
+
+// IsCode returns true when this list project a w s security groups o k response a status code equal to that given
+func (o *ListProjectAWSSecurityGroupsOK) IsCode(code int) bool {
+	return code == 200
+}
+
+func (o *ListProjectAWSSecurityGroupsOK) Error() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSecurityGroupsOK) String() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK  %+v", 200, o.Payload)
+}
+
+func (o *ListProjectAWSSecurityGroupsOK) GetPayload() *models.AWSSecurityGroupList {
+	return o.Payload
+}
+
+func (o *ListProjectAWSSecurityGroupsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.AWSSecurityGroupList)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
+
+	return nil
 }
 
 // NewListProjectAWSSecurityGroupsDefault creates a ListProjectAWSSecurityGroupsDefault with default headers values
@@ -39,10 +114,12 @@ func NewListProjectAWSSecurityGroupsDefault(code int) *ListProjectAWSSecurityGro
 /*
 ListProjectAWSSecurityGroupsDefault describes a response with status code -1, with default header values.
 
-ListProjectAWSSecurityGroupsDefault list project a w s security groups default
+errorResponse
 */
 type ListProjectAWSSecurityGroupsDefault struct {
 	_statusCode int
+
+	Payload *models.ErrorResponse
 }
 
 // Code gets the status code for the list project a w s security groups default response
@@ -76,14 +153,25 @@ func (o *ListProjectAWSSecurityGroupsDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectAWSSecurityGroupsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSecurityGroupsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default ", o._statusCode)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default  %+v", o._statusCode, o.Payload)
+}
+
+func (o *ListProjectAWSSecurityGroupsDefault) GetPayload() *models.ErrorResponse {
+	return o.Payload
 }
 
 func (o *ListProjectAWSSecurityGroupsDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	o.Payload = new(models.ErrorResponse)
+
+	// response payload
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+		return err
+	}
 
 	return nil
 }
