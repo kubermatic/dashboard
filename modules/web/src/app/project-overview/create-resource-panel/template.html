@@ -33,33 +33,20 @@ limitations under the License.
          (click)="canCreateCluster ? openClusterWizard() : null">
       <i class="km-icon-mask km-icon-cluster"
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>Create Cluster</span>
+      <span>Cluster</span>
     </div>
-    <div class="entry"
-         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
+   <div  class="entry"
+         [ngClass]="canCreateCluster && clusterTemplates?.length ? 'km-option-hover-bg km-pointer' : 'km-text-muted'"
          fxLayoutAlign=" center"
          fxLayoutGap="10px"
          matRipple
-         [matTooltip]="projectViewOnlyToolTip"
-         [matTooltipDisabled]="canCreateCluster"
-         [matRippleDisabled]="!canCreateCluster"
-         (click)="canCreateCluster ? importExternalCluster(): null">
+         [matTooltip]="!canCreateCluster ? projectViewOnlyToolTip : 'No cluster templates available'"
+         [matTooltipDisabled]="canCreateCluster && !!clusterTemplates?.length"
+         [matRippleDisabled]="!canCreateCluster || !clusterTemplates?.length"
+         (click)="canCreateCluster && clusterTemplates?.length ? createClusterFromTemplate(): null">
       <i class="km-icon-mask km-icon-cluster"
-         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>Import External Cluster</span>
-    </div>
-    <div class="entry"
-         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
-         fxLayoutAlign=" center"
-         fxLayoutGap="10px"
-         matRipple
-         [matTooltip]="projectViewOnlyToolTip"
-         [matTooltipDisabled]="canCreateCluster"
-         [matRippleDisabled]="!canCreateCluster"
-         (click)="canCreateCluster ? openKubeOneClusterWizard(): null">
-      <i class="km-icon-mask km-icon-cluster"
-         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>Import KubeOne Cluster</span>
+         [ngClass]="{'km-muted-bg': !canCreateCluster || !clusterTemplates?.length}"></i>
+      <span>Cluster from Template</span>
     </div>
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
@@ -72,20 +59,7 @@ limitations under the License.
          (click)="canCreateCluster ? openExternalClusterWizard(): null">
       <i class="km-icon-mask km-icon-cluster"
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>Create External Cluster</span>
-    </div>
-    <div class="entry"
-         [ngClass]="canCreateCluster && clusterTemplates?.length ? 'km-option-hover-bg km-pointer' : 'km-text-muted'"
-         fxLayoutAlign=" center"
-         fxLayoutGap="10px"
-         matRipple
-         [matTooltip]="!canCreateCluster ? projectViewOnlyToolTip : 'No cluster templates available'"
-         [matTooltipDisabled]="canCreateCluster && !!clusterTemplates?.length"
-         [matRippleDisabled]="!canCreateCluster || !clusterTemplates?.length"
-         (click)="canCreateCluster && clusterTemplates?.length ? createClusterFromTemplate(): null">
-      <i class="km-icon-mask km-icon-cluster"
-         [ngClass]="{'km-muted-bg': !canCreateCluster || !clusterTemplates?.length}"></i>
-      <span>Cluster from Template</span>
+      <span>External Cluster</span>
     </div>
     <mat-divider></mat-divider>
     <div class="entry"
