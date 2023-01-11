@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
-import {Project} from '@shared/entity/project';
+import {Project, ProjectStatus} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
 import {getClusterMachinesCount} from '@shared/utils/cluster';
 import {catchError, filter, map, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
@@ -105,7 +105,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _params: ParamsService,
     private readonly _cookieService: CookieService,
-    private readonly _matDialog: MatDialog,
+    private readonly _matDialog: MatDialog
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
@@ -137,6 +137,17 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     component.projectId = this._currentProjectId;
     component.showQuotaWidgetDetails = true;
     component.showIcon = false;
+  }
+
+  isEditEnabled(): boolean {
+    return (
+      MemberUtils.hasPermission(
+        this.currentUser,
+        this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, this.project.id)),
+        View.Projects,
+        Permission.Edit
+      ) && this.project.status !== ProjectStatus.Terminating
+    );
   }
 
   editProject(): void {

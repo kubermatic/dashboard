@@ -17,8 +17,13 @@
   overflow: hidden;
 }
 
-.show-and-hide-labels-button {
-  min-width: 140px;
+.show-all-button {
+  min-width: 135px;
+  padding-right: 10px;
+
+  i {
+    margin: 6px 0 0 10px;
+  }
 
   &:hover {
     cursor: pointer;

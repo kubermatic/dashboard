@@ -29,8 +29,9 @@ limitations under the License.
       <button mat-icon-button
               color="tertiary"
               class="edit-button"
-              (click)="editProject()">
-        <i class="km-icon-edit"></i>
+              (click)="editProject()"
+              [disabled]="!isEditEnabled()">
+        <i class="km-icon-mask km-icon-edit"></i>
       </button>
       <km-create-resource-panel *ngIf="project"
                                 [project]="project"
@@ -40,23 +41,24 @@ limitations under the License.
                                 (refreshClusterTemplates)="clusterTemplatesChange.next()"
                                 (refreshBackups)="backupsChange.next()"></km-create-resource-panel>
     </mat-card-header>
-    <mat-card-content fxLayout="column wrap"
-                      fxLayoutGap="15px">
-                      
-                      <div fxLayout="row wrap">
-                      <div fxLayoutAlign=" center"
-                           fxLayoutGap="15px"
-                           class="project-name-property"
-                           >
-                        <i class="km-icon-mask km-icon-projects-card"></i>
-                        <km-property>
-                          <div key>Project</div>
-                          <div value>{{project?.name}}</div>
-                        </km-property>
-                      </div>
+
+    <mat-card-content fxLayout="row wrap"
+                      fxLayoutAlign="space-between center"
+                      fxLayoutGap="10px grid">
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex="auto">
+        <i class="km-icon-mask km-icon-projects-card"></i>
+        <km-property>
+          <div key>Project</div>
+          <div value>{{project?.name}}</div>
+        </km-property>
+      </div>
+
+      <div fxLayout="row wrap">
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-cluster"></i>
           <km-property>
             <div key>Clusters</div>
@@ -65,25 +67,25 @@ limitations under the License.
         </div>
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-cluster"></i>
           <km-property>
-            <div key>External Clusters</div>
+            <div key>External&nbsp;Clusters</div>
             <div value>{{externalClusters.length}}</div>
           </km-property>
         </div>
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-cluster-template"></i>
           <km-property>
-            <div key>Cluster Templates</div>
+            <div key>Cluster&nbsp;Templates</div>
             <div value>{{clusterTemplates.length}}</div>
           </km-property>
         </div>
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-backup"></i>
           <km-property>
             <div key>Backups</div>
@@ -92,19 +94,19 @@ limitations under the License.
         </div>
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-key"></i>
           <km-property>
-            <div key>SSH Keys</div>
+            <div key>SSH&nbsp;Keys</div>
             <div value>{{sshKeys.length}}</div>
           </km-property>
         </div>
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
-             >
+             fxFlex>
           <i class="km-icon-mask km-icon-serviceaccount"></i>
           <km-property>
-            <div key>Service Accounts</div>
+            <div key>Service&nbsp;Accounts</div>
             <div value>{{serviceAccounts.length}}</div>
           </km-property>
         </div>
