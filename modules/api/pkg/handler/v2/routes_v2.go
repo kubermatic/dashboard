@@ -868,22 +868,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/hetzner/sizes").
 		Handler(r.listProjectHetznerSizes())
 
-		/*
+	// Alibaba endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/instancetypes").
+		Handler(r.listProjectAlibabaInstanceTypes())
 
-			// Alibaba endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/instancetypes").
-				Handler(r.listProjectAlibabaInstanceTypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/zones").
+		Handler(r.listProjectAlibabaZones())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/zones").
-				Handler(r.listProjectAlibabaZones())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/vswitches").
-				Handler(r.listProjectAlibabaVSwitches())
-
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/vswitches").
+		Handler(r.listProjectAlibabaVSwitches())
 
 	// Anexia endpoints
 	mux.Methods(http.MethodGet).
@@ -6406,6 +6402,72 @@ func (r Routing) listProjectHetznerSizes() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.HetznerProjectSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
 		provider.DecodeHetznerProjectSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes alibaba listProjectAlibabaInstanceTypes
+//
+// Lists available Alibaba instance types.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaInstanceTypeList
+func (r Routing) listProjectAlibabaInstanceTypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaInstanceTypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeAlibabaProjectInstanceTypesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/zones alibaba listProjectAlibabaZones
+//
+// Lists available Alibaba zones.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaZoneList
+func (r Routing) listProjectAlibabaZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaZonesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAlibabaProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/vswitches alibaba listProjectAlibabaVSwitches
+//
+// Lists available Alibaba vSwitches.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaVSwitchList
+func (r Routing) listProjectAlibabaVSwitches() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaVSwitchesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAlibabaProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
