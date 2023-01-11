@@ -30,8 +30,7 @@ limitations under the License.
     </p>
   </div>
   <ng-container *ngIf="view === ApplicationListView.Default && applications?.length">
-    <mat-slide-toggle *ngIf="isAdmin"
-                      class="system-applications-toggle"
+    <mat-slide-toggle class="system-applications-toggle"
                       labelPosition="before"
                       [matTooltip]="'System applications are managed by KKP.'"
                       [ngModel]="showSystemApplications"

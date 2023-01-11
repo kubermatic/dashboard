@@ -17,17 +17,16 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ApplicationService} from '@core/services/application';
-import {UserService} from '@core/services/user';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Application, ApplicationDefinition, ApplicationLabel, ApplicationLabelValue} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
+import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {getEditionVersion} from '@shared/utils/common';
 
 export enum ApplicationsListView {
   Default,
@@ -100,7 +99,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   applicationsSourceMap: ApplicationSourceMap = {};
   applicationsStatusMap: ApplicationStatusMap = {};
   editionVersion: string = getEditionVersion();
-  isAdmin: boolean;
   showSystemApplications = false;
 
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
@@ -111,11 +109,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.applicationsDataSource.sort = this.sort;
   }
 
-  constructor(
-    private readonly _applicationService: ApplicationService,
-    private readonly _userService: UserService,
-    private readonly _matDialog: MatDialog
-  ) {}
+  constructor(private readonly _applicationService: ApplicationService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
     this._initSubscriptions();
@@ -161,10 +155,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   toggleSystemApplications() {
-    if (this.isAdmin) {
-      this.showSystemApplications = !this.showSystemApplications;
-      this.applicationsDataSource.data = this._visibleApplications;
-    }
+    this.showSystemApplications = !this.showSystemApplications;
+    this.applicationsDataSource.data = this._visibleApplications;
   }
 
   getAddBtnTooltip(): string {
@@ -264,10 +256,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   private _initSubscriptions(): void {
-    this._userService.currentUser.subscribe(user => {
-      this.isAdmin = user?.isAdmin;
-    });
-
     this._applicationService
       .applicationDefinitions()
       .pipe(takeUntil(this._unsubscribe))
