@@ -154,6 +154,12 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
+	seeds, err := providers.seedsGetter()
+	if err != nil {
+		log.Fatal("bal")
+	}
+	seed := seeds["kubermatic"]
+	seedOIDCIssuerVerifyier, err := createOIDCSeedClients(seed, options)
 	oidcIssuerVerifier, err := createOIDCClients(options)
 	if err != nil {
 		log.Fatalw("failed to create an openid authenticator", "issuer", options.oidcURL, "oidcClientID", options.oidcAuthenticatorClientID, zap.Error(err))
@@ -162,7 +168,7 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, seedOIDCIssuerVerifyier, tokenVerifiers, tokenExtractors, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -456,6 +462,22 @@ func createOIDCClients(options serverRunOptions) (auth.OIDCIssuerVerifier, error
 	)
 }
 
+func createOIDCSeedClients(seed *kubermaticv1.Seed, options serverRunOptions) (auth.OIDCIssuerVerifier, error) {
+	oidc := seed.Spec.OIDCProviderConfiguration
+	return auth.NewOpenIDClient(
+		oidc.IssuerUrl,
+		oidc.IssuerClientID,
+		oidc.IssuerClientIDSecret,
+		options.oidcIssuerRedirectURI,
+		auth.NewCombinedExtractor(
+			auth.NewHeaderBearerTokenExtractor("Authorization"),
+			auth.NewQueryParamBearerTokenExtractor("token"),
+		),
+		options.oidcSkipTLSVerify,
+		options.caBundle.CertPool(),
+	)
+}
+
 func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVerifier, auth.TokenExtractor, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcURL,
@@ -486,8 +508,10 @@ func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVeri
 	return tokenVerifiers, tokenExtractors, nil
 }
 
-func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier, tokenVerifiers auth.TokenVerifier,
-	tokenExtractors auth.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger) (http.HandlerFunc, error) {
+func createAPIHandler(
+	options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcSeedIssuerVerifier auth.OIDCIssuerVerifier,
+	tokenVerifiers auth.TokenVerifier, tokenExtractors auth.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger,
+) (http.HandlerFunc, error) {
 	var prometheusClient prometheusapi.Client
 	if options.featureGates.Enabled(features.PrometheusEndpoint) {
 		var err error
@@ -520,6 +544,7 @@ func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifi
 		ProjectProvider:                                prov.project,
 		PrivilegedProjectProvider:                      prov.privilegedProject,
 		OIDCIssuerVerifier:                             oidcIssuerVerifier,
+		OIDCSeedIssuerVerifier:                         oidcSeedIssuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          prov.clusterProviderGetter,

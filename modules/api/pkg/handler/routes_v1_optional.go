@@ -55,7 +55,9 @@ func (r Routing) createOIDCKubeconfig(oidcCfg common.OIDCConfiguration) http.Han
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.UserInfoUnauthorized(r.userProjectMapper, r.userProvider),
-		)(cluster.CreateOIDCKubeconfigEndpoint(r.projectProvider, r.privilegedProjectProvider, r.oidcIssuerVerifier, oidcCfg)),
+		)(cluster.CreateOIDCKubeconfigEndpoint(
+			r.projectProvider, r.privilegedProjectProvider, r.oidcIssuerVerifier, oidcCfg, r.seedsGetter, r.oidcSeedIssuerVerifier,
+		)),
 		cluster.DecodeCreateOIDCKubeconfig,
 		cluster.EncodeOIDCKubeconfig,
 		r.defaultServerOptions()...,

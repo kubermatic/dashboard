@@ -261,9 +261,18 @@ func GetClusterOidcEndpoint(ctx context.Context, userInfoGetter provider.UserInf
 	}, nil
 }
 
-func CreateOIDCKubeconfigEndpoint(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration, req CreateOIDCKubeconfigReq) (interface{}, error) {
-	oidcIssuer := oidcIssuerVerifier.(auth.OIDCIssuer)
-	oidcVerifier := oidcIssuerVerifier.(auth.TokenVerifier)
+func CreateOIDCKubeconfigEndpoint(
+	ctx context.Context,
+	projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider,
+	oidcIssuerVerifier auth.OIDCIssuerVerifier,
+	oidcCfg common.OIDCConfiguration,
+	req CreateOIDCKubeconfigReq,
+	seedsGetter provider.SeedsGetter,
+	oidcSeedIssuerVerifier auth.OIDCIssuerVerifier,
+) (interface{}, error) {
+	oidcIssuer := oidcSeedIssuerVerifier.(auth.OIDCIssuer)
+	oidcVerifier := oidcSeedIssuerVerifier.(auth.TokenVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	if secureCookie == nil {
@@ -356,6 +365,13 @@ func CreateOIDCKubeconfigEndpoint(ctx context.Context, projectProvider provider.
 	if req.phase != initialPhase {
 		return nil, utilerrors.NewBadRequest(fmt.Sprintf("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase))
 	}
+
+	// seeds, err := seedsGetter()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// TODO: map cluster to seed
+	// seed := seeds["kubermatic"]
 
 	rsp := createOIDCKubeconfigRsp{}
 	scopes := []string{"openid", "email", "groups"}

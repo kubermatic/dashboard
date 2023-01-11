@@ -61,6 +61,7 @@ type Routing struct {
 	projectProvider                       provider.ProjectProvider
 	privilegedProjectProvider             provider.PrivilegedProjectProvider
 	oidcIssuerVerifier                    auth.OIDCIssuerVerifier
+	oidcSeedIssuerVerifier                auth.OIDCIssuerVerifier
 	tokenVerifiers                        auth.TokenVerifier
 	tokenExtractors                       auth.TokenExtractor
 	clusterProviderGetter                 provider.ClusterProviderGetter
@@ -110,6 +111,7 @@ func NewRouting(routingParams RoutingParams, masterClient ctrlruntimeclient.Clie
 		projectProvider:                       routingParams.ProjectProvider,
 		privilegedProjectProvider:             routingParams.PrivilegedProjectProvider,
 		oidcIssuerVerifier:                    routingParams.OIDCIssuerVerifier,
+		oidcSeedIssuerVerifier:                routingParams.OIDCSeedIssuerVerifier,
 		tokenVerifiers:                        routingParams.TokenVerifiers,
 		tokenExtractors:                       routingParams.TokenExtractors,
 		prometheusClient:                      routingParams.PrometheusClient,
@@ -190,6 +192,7 @@ type RoutingParams struct {
 	ProjectProvider                                provider.ProjectProvider
 	PrivilegedProjectProvider                      provider.PrivilegedProjectProvider
 	OIDCIssuerVerifier                             auth.OIDCIssuerVerifier
+	OIDCSeedIssuerVerifier                         auth.OIDCIssuerVerifier
 	TokenVerifiers                                 auth.TokenVerifier
 	TokenExtractors                                auth.TokenExtractor
 	ClusterProviderGetter                          provider.ClusterProviderGetter

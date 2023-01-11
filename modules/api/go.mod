@@ -100,6 +100,8 @@ replace (
 
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
+replace k8c.io/kubermatic/v2 => /Users/patrykprzekwas/code/go/src/k8c.io/kubermatic
+
 require k8c.io/kubermatic/v2 v2.21.1-0.20230103082025-acf75bc4d20a
 
 require (
