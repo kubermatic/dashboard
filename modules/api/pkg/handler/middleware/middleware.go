@@ -73,6 +73,9 @@ const (
 	// ConstraintProviderContextKey key under which the current ConstraintProvider is kept in the ctx.
 	ConstraintProviderContextKey kubermaticcontext.Key = "constraint-provider"
 
+	// OIDCIssuerVerifierContextKey key under which the current OIDCIssuerVerifier is kept in the ctx.
+	OIDCIssuerVerifierContextKey kubermaticcontext.Key = "oidc-issuer-verifier"
+
 	// PrivilegedConstraintProviderContextKey key under which the current PrivilegedConstraintProvider is kept in the ctx.
 	PrivilegedConstraintProviderContextKey kubermaticcontext.Key = "privileged-constraint-provider"
 
@@ -975,4 +978,49 @@ func getPrivilegedOperatingSystemProfileProvider(ctx context.Context, clusterPro
 	}
 
 	return providerGetter(seed)
+}
+
+// OIDCProviders is a middleware that injects the current OIDCProviders into the ctx.
+func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter) endpoint.Middleware {
+	return func(next endpoint.Endpoint) endpoint.Endpoint {
+		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+			seedCluster := request.(seedClusterGetter).GetSeedCluster()
+
+			oidcIssuerVerifier, err := getOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.SeedName, seedCluster.ClusterID)
+			if err != nil {
+				return nil, err
+			}
+			ctx = context.WithValue(ctx, OIDCIssuerVerifierContextKey, oidcIssuerVerifier)
+			return next(ctx, request)
+		}
+	}
+}
+
+func getOIDCIssuerVerifier(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter, seedName, clusterID string) (auth.OIDCIssuerVerifier, error) {
+	seeds, err := seedsGetter()
+	if err != nil {
+		return nil, err
+	}
+
+	if clusterID != "" {
+		for _, seed := range seeds {
+			clusterProvider, err := clusterProviderGetter(seed)
+			if err != nil {
+				return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
+			}
+			if clusterProvider.IsCluster(ctx, clusterID) {
+				seedName = seed.Name
+				break
+			}
+		}
+	}
+
+	seed, found := seeds[seedName]
+	if !found {
+		return nil, fmt.Errorf("couldn't find seed %q", seedName)
+	}
+
+	// TODO get the oidc issuer verifier for that
+
+	return constraintProviderGetter(seed)
 }
