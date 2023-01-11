@@ -102,7 +102,7 @@ export class KubeOneAzureCredentialsBasicComponent extends BaseFormValidator imp
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
-  private _enable(enable: boolean, name: string): void {
+  private _enable(enable: boolean, name: Controls): void {
     if (enable && this.form.get(name).disabled) {
       this.form.get(name).enable();
     }
