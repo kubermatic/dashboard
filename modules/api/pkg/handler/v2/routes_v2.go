@@ -1519,6 +1519,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/seeds/{seed_name}/overview").
 		Handler(r.getSeedOverview())
+
+	mux.Methods(http.MethodGet).
+		Path("/seeds/status").
+		Handler(r.listSeedStatus())
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
@@ -10059,6 +10063,30 @@ func (r Routing) getSeedOverview() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(seedoverview.GetSeedOverview(r.userInfoGetter, r.seedsGetter)),
 		seedoverview.DecodeGetSeedOverviewReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/seeds/status seed listSeedStatus
+//
+//	Lists Seeds and their status.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []SeedStatus
+//	  401: empty
+//	  403: empty
+func (r Routing) listSeedStatus() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(seedoverview.ListSeedStatus(r.seedsGetter)),
+		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

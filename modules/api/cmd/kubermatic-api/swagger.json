@@ -26652,6 +26652,41 @@
         }
       }
     },
+    "/api/v2/seeds/status": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "seed"
+        ],
+        "summary": "Lists Seeds and their status.",
+        "operationId": "listSeedStatus",
+        "responses": {
+          "200": {
+            "description": "SeedStatus",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SeedStatus"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/seeds/{seed_name}/backupcredentials": {
       "put": {
         "description": "Creates or updates backup credentials for a given seed",
@@ -38659,6 +38694,20 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "SeedStatus": {
+      "type": "object",
+      "title": "SeedStatus stores the current status of a Seed.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "phase": {
+          "$ref": "#/definitions/SeedPhase"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "Semver": {
       "type": "string",
