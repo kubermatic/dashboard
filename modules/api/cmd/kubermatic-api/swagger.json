@@ -29081,6 +29081,9 @@
       "type": "object",
       "title": "ApplicationDefinitionSpec defines the desired state of ApplicationDefinition.",
       "properties": {
+        "defaultDeployOptions": {
+          "$ref": "#/definitions/DeployOptions"
+        },
         "defaultValues": {
           "$ref": "#/definitions/RawExtension"
         },
@@ -31647,6 +31650,16 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
+    "DeployOptions": {
+      "type": "object",
+      "title": "DeployOptions holds the settings specific to the templating method used to deploy the application.",
+      "properties": {
+        "helm": {
+          "$ref": "#/definitions/HelmDeployOptions"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
     "Digitalocean": {
       "type": "object",
       "properties": {
@@ -31792,6 +31805,11 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Duration": {
+      "description": "Duration is a wrapper around time.Duration which supports correct\nmarshaling to YAML and JSON. In particular, it marshals into strings, which\ncan be used as map keys in json.",
+      "type": "object",
+      "x-go-package": "k8s.io/apimachinery/pkg/apis/meta/v1"
     },
     "EKS": {
       "type": "object",
@@ -32839,6 +32857,10 @@
       "properties": {
         "aksclusterSpec": {
           "$ref": "#/definitions/AKSClusterSpec"
+        },
+        "containerRuntime": {
+          "type": "string",
+          "x-go-name": "ContainerRuntime"
         },
         "eksclusterSpec": {
           "$ref": "#/definitions/EKSClusterSpec"
@@ -33965,6 +33987,26 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
+    "HelmDeployOptions": {
+      "type": "object",
+      "title": "HelmDeployOptions holds the deployment settings when templating method is Helm.",
+      "properties": {
+        "atomic": {
+          "description": "Atomic corresponds to the --atomic flag on Helm cli.\nif set, the installation process deletes the installation on failure; the upgrade process rolls back changes made in case of failed upgrade.",
+          "type": "boolean",
+          "x-go-name": "Atomic"
+        },
+        "timeout": {
+          "$ref": "#/definitions/Duration"
+        },
+        "wait": {
+          "description": "Wait corresponds to the --wait flag on Helm cli.\nif set, will wait until all Pods, PVCs, Services, and minimum number of Pods of a Deployment, StatefulSet, or ReplicaSet are in a ready state before marking the release as successful. It will wait for as long as timeout",
+          "type": "boolean",
+          "x-go-name": "Wait"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
     "HelmSource": {
       "type": "object",
       "properties": {
@@ -34791,14 +34833,20 @@
         "cloudSpec": {
           "$ref": "#/definitions/KubeOneCloudSpec"
         },
-        "containerRuntime": {
-          "type": "string",
-          "x-go-name": "ContainerRuntime"
-        },
         "manifest": {
           "description": "Manifest Base64 encoded manifest",
           "type": "string",
           "x-go-name": "Manifest"
+        },
+        "providerName": {
+          "description": "ProviderName is the name of the cloud provider used, one of\n\"aws\", \"azure\", \"digitalocean\", \"gcp\",\n\"hetzner\", \"nutanix\", \"openstack\", \"packet\", \"vsphere\" KubeOne natively-supported providers",
+          "type": "string",
+          "x-go-name": "ProviderName"
+        },
+        "region": {
+          "description": "Region is the kubernetes control plane region.",
+          "type": "string",
+          "x-go-name": "Region"
         },
         "sshKey": {
           "$ref": "#/definitions/KubeOneSSHKey"

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
@@ -55,6 +56,11 @@ const (
 	normalType       = "normal"
 	DeleteAction     = "delete"
 	DisconnectAction = "disconnect"
+	Base64           = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
+)
+
+var (
+	rxBase64 = regexp.MustCompile(Base64)
 )
 
 // createClusterReq defines HTTP request for createExternalCluster
@@ -103,12 +109,19 @@ func (req createClusterReq) Validate() error {
 }
 
 func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeOneCluster, error) {
+	var err error
+	var manifest []byte
 	kubeOneCluster := &kubeonev1beta2.KubeOneCluster{}
 
-	manifest, err := base64.StdEncoding.DecodeString(encodedManifest)
-	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+	if rxBase64.MatchString(encodedManifest) {
+		manifest, err = base64.StdEncoding.DecodeString(encodedManifest)
+		if err != nil {
+			return nil, utilerrors.NewBadRequest(err.Error())
+		}
+	} else {
+		manifest = []byte(encodedManifest)
 	}
+
 	if err := yaml.UnmarshalStrict(manifest, kubeOneCluster); err != nil {
 		return nil, err
 	}
@@ -661,15 +674,15 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 			return patchAKSCluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.AKS)
 		}
 		if cloud.KubeOne != nil {
-			containerRuntime, err := kuberneteshelper.CheckContainerRuntime(ctx, masterClient, cluster, clusterProvider)
+			containerRuntime, err := kuberneteshelper.GetContainerRuntime(ctx, masterClient, cluster, clusterProvider)
 			if err != nil {
-				return nil, err
+				return "", err
 			}
-			clusterToPatch.Cloud.KubeOne.ContainerRuntime = containerRuntime
+			clusterToPatch.Spec.ContainerRuntime = containerRuntime
 			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}
-			return patchKubeOneCluster(ctx, cluster, clusterToPatch, patchedCluster, secretKeySelector, clusterProvider, privilegedClusterProvider.GetMasterClient())
+			return patchKubeOneCluster(ctx, cluster, clusterToPatch, patchedCluster, secretKeySelector, clusterProvider, masterClient)
 		}
 
 		return convertClusterToAPI(cluster), nil
@@ -1049,7 +1062,12 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 		}
 	}
 	if cloud.KubeOne != nil {
-		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{}
+		cluster.Spec.Version = internalCluster.Spec.Version
+		cluster.Spec.ContainerRuntime = internalCluster.Spec.ContainerRuntime
+		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{
+			ProviderName: cloud.KubeOne.ProviderName,
+			Region:       cloud.KubeOne.Region,
+		}
 	}
 	if cloud.BringYourOwn != nil {
 		cluster.Cloud.BringYourOwn = &apiv2.BringYourOwnSpec{}
