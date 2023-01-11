@@ -37,6 +37,7 @@ enum Control {
 })
 export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
+  @Input() templateId: string;
   control = Control;
   templates: ClusterTemplate[] = [];
   templateLabel: TemplateState = TemplateState.Ready;
@@ -55,6 +56,12 @@ export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
       .subscribe(templates => {
         this.templates = _.sortBy(templates, 'name');
         this.templateLabel = this.templates?.length ? TemplateState.Ready : TemplateState.Empty;
+        if (this.templateId) {
+          const selectedTemplate = this.templates.find(template => template.id === this.templateId);
+          if (selectedTemplate) {
+            this.form.controls.clusterTemplate.setValue(selectedTemplate.id);
+          }
+        }
       });
 
     this.form

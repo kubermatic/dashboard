@@ -18,10 +18,10 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {fakeProjects} from '@test/data/project';
-import {RouterLinkStubDirective, RouterTestingModule} from '@test/services/router-stubs';
+import {ActivatedRouteStub, RouterLinkStubDirective, RouterTestingModule} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {SettingsMockService} from '@test/services/settings-mock';
@@ -41,6 +41,7 @@ describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let linkDes: DebugElement[];
   let links: RouterLinkStubDirective[];
+  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -58,6 +59,7 @@ describe('SidenavComponent', () => {
         {provide: UserService, useClass: UserMockService},
         {provide: SettingsService, useClass: SettingsMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
         {
           provide: Router,
           useValue: {
@@ -77,6 +79,10 @@ describe('SidenavComponent', () => {
     component = fixture.componentInstance;
     linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkStubDirective));
     links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
+    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
+    activatedRoute.testParamMap = {
+      clusterTemplateWizard: 'create',
+    };
   });
 
   it('should initialize', waitForAsync(() => {

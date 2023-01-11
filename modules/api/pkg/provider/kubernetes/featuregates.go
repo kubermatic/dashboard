@@ -33,9 +33,6 @@ func NewFeatureGatesProvider(featureGates features.FeatureGate) provider.Feature
 func (fg featureGatesProvider) GetFeatureGates() (apiv2.FeatureGates, error) {
 	var f apiv2.FeatureGates
 
-	if v, ok := fg[features.KonnectivityService]; ok {
-		f.KonnectivityService = &v
-	}
 	if v, ok := fg[features.OIDCKubeCfgEndpoint]; ok {
 		f.OIDCKubeCfgEndpoint = &v
 	}

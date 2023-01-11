@@ -15,6 +15,7 @@
 import {DOCUMENT} from '@angular/common';
 import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -40,6 +41,7 @@ export class UserPanelComponent implements OnInit, OnDestroy {
     private readonly _auth: Auth,
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
+    private readonly _appConfigService: AppConfigService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -74,10 +76,14 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   logout(): void {
     this._auth.logout().subscribe(_ => {
       this._settingsService.refreshCustomLinks();
-      this._router.navigate(['']);
-      this._document.defaultView.location.reload();
-      this._isOpen = false;
-      delete this.user;
+      if (this._appConfigService.getConfig().oidc_logout_url) {
+        this._auth.oidcProviderLogout();
+      } else {
+        this._router.navigate(['']);
+        this._document.defaultView.location.reload();
+        this._isOpen = false;
+        delete this.user;
+      }
     });
   }
 
