@@ -69,7 +69,7 @@ func DecodeAlibabaNoCredentialReq(c context.Context, r *http.Request) (interface
 }
 
 // AlibabaProjectReq represent a request for Alibaba instance types.
-// swagger:parameters listProjectAlibabaInstanceTypes listProjectAlibabaZones
+// swagger:parameters listProjectAlibabaZones listProjectAlibabaVSwitches
 type AlibabaProjectReq struct {
 	common.ProjectReq
 

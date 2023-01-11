@@ -60,6 +60,22 @@ ListProjectAlibabaVSwitchesParams contains all the parameters to send to the API
 	Typically these are written to a http.Request.
 */
 type ListProjectAlibabaVSwitchesParams struct {
+
+	// AccessKeyID.
+	AccessKeyID *string
+
+	// AccessKeySecret.
+	AccessKeySecret *string
+
+	// Credential.
+	Credential *string
+
+	// Region.
+	Region *string
+
+	// ProjectID.
+	ProjectID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +129,61 @@ func (o *ListProjectAlibabaVSwitchesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithAccessKeyID adds the accessKeyID to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) WithAccessKeyID(accessKeyID *string) *ListProjectAlibabaVSwitchesParams {
+	o.SetAccessKeyID(accessKeyID)
+	return o
+}
+
+// SetAccessKeyID adds the accessKeyId to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) SetAccessKeyID(accessKeyID *string) {
+	o.AccessKeyID = accessKeyID
+}
+
+// WithAccessKeySecret adds the accessKeySecret to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) WithAccessKeySecret(accessKeySecret *string) *ListProjectAlibabaVSwitchesParams {
+	o.SetAccessKeySecret(accessKeySecret)
+	return o
+}
+
+// SetAccessKeySecret adds the accessKeySecret to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) SetAccessKeySecret(accessKeySecret *string) {
+	o.AccessKeySecret = accessKeySecret
+}
+
+// WithCredential adds the credential to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) WithCredential(credential *string) *ListProjectAlibabaVSwitchesParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithRegion adds the region to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) WithRegion(region *string) *ListProjectAlibabaVSwitchesParams {
+	o.SetRegion(region)
+	return o
+}
+
+// SetRegion adds the region to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) SetRegion(region *string) {
+	o.Region = region
+}
+
+// WithProjectID adds the projectID to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) WithProjectID(projectID string) *ListProjectAlibabaVSwitchesParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the list project alibaba v switches params
+func (o *ListProjectAlibabaVSwitchesParams) SetProjectID(projectID string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectAlibabaVSwitchesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +191,43 @@ func (o *ListProjectAlibabaVSwitchesParams) WriteToRequest(r runtime.ClientReque
 		return err
 	}
 	var res []error
+
+	if o.AccessKeyID != nil {
+
+		// header param AccessKeyID
+		if err := r.SetHeaderParam("AccessKeyID", *o.AccessKeyID); err != nil {
+			return err
+		}
+	}
+
+	if o.AccessKeySecret != nil {
+
+		// header param AccessKeySecret
+		if err := r.SetHeaderParam("AccessKeySecret", *o.AccessKeySecret); err != nil {
+			return err
+		}
+	}
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.Region != nil {
+
+		// header param Region
+		if err := r.SetHeaderParam("Region", *o.Region); err != nil {
+			return err
+		}
+	}
+
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

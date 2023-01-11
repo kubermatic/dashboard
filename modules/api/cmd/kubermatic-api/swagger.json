@@ -19652,6 +19652,35 @@
         ],
         "summary": "Lists available Alibaba vSwitches.",
         "operationId": "listProjectAlibabaVSwitches",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AccessKeySecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          }
+        ],
         "responses": {
           "200": {
             "description": "AlibabaVSwitchList",
