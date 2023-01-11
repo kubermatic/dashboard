@@ -37,6 +37,7 @@ import {PathParam} from '@core/services/params';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {ApplicationService} from '@core/services/application';
 import {Application} from '@shared/entity/application';
+import {WizardMode} from './types/wizard-mode';
 
 @Component({
   selector: 'km-wizard',
@@ -50,9 +51,11 @@ export class WizardComponent implements OnInit, OnDestroy {
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
   clusterTemplateID: string;
+  wizardMode: WizardMode;
   loadingClusterTemplate = true;
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
+  readonly clusterTemplateType = WizardMode;
 
   private _stepper: MatStepper;
   private _unsubscribe: Subject<void> = new Subject<void>();
@@ -104,12 +107,21 @@ export class WizardComponent implements OnInit, OnDestroy {
     return this._stepper ? this.form.get(this.active.name).invalid : false;
   }
 
+  get showCreateClusterButton(): boolean {
+    if (this.wizardMode) {
+      return this.last && this.wizardMode === WizardMode.CustomizeClusterTemplate;
+    }
+    return this.last;
+  }
+
   ngOnInit(): void {
     this._wizard.reset();
     this._initForm(this.steps);
 
     // Retrieve params
     this.clusterTemplateID = this._route.snapshot.queryParams?.clusterTemplateID;
+    this.wizardMode = this._route.snapshot.queryParams?.mode;
+
     this.project.id = this._route.snapshot.paramMap.get(PathParam.ProjectID);
 
     if (this.clusterTemplateID) {
@@ -154,7 +166,10 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
-  onSaveClusterTemplate(isEditMode?: boolean): void {
+  onSaveClusterTemplate(isPrimaryAction?: boolean): void {
+    const isNewTemplate = !isPrimaryAction || (isPrimaryAction && this.wizardMode === WizardMode.CreateClusterTemplate);
+    const createCluster = !isPrimaryAction && this.wizardMode === WizardMode.CreateClusterTemplate;
+
     const dialogConfig: MatDialogConfig = {
       data: {
         cluster: this._clusterSpecService.cluster,
@@ -165,9 +180,10 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
     };
 
-    if (isEditMode) {
+    if (this.clusterTemplate) {
       dialogConfig.data.name = this.clusterTemplate.name;
-      dialogConfig.data.clusterTemplateID = this.clusterTemplate.id;
+      dialogConfig.data.clusterTemplateID =
+        isPrimaryAction && this.wizardMode === WizardMode.EditClusterTemplate && this.clusterTemplate.id;
       dialogConfig.data.scope = this.clusterTemplate.scope;
     }
 
@@ -176,9 +192,61 @@ export class WizardComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(ct => !!ct))
       .pipe(take(1))
-      .subscribe(ct =>
-        this._notificationService.success(`${isEditMode ? 'Saved' : 'Updated'} the ${ct.name} cluster template`)
-      );
+      .subscribe(ct => {
+        this._notificationService.success(`${isNewTemplate ? 'Saved' : 'Updated'} the ${ct.name} cluster template`);
+        this._router.navigate([`/projects/${this.project.id}/clustertemplates`]);
+        if (
+          this.wizardMode === WizardMode.CreateClusterTemplate ||
+          (this.wizardMode === WizardMode.EditClusterTemplate && !isNewTemplate)
+        ) {
+          this._router.navigate([`/projects/${this.project.id}/clustertemplates`], {
+            state: createCluster
+              ? {
+                  createClusterFromTemplateID: ct.id,
+                }
+              : null,
+          });
+        }
+      });
+  }
+
+  getSecondaryButtonLabel(): string {
+    switch (this.wizardMode) {
+      case WizardMode.CreateClusterTemplate:
+        return 'Save Template and Create Cluster';
+      case WizardMode.EditClusterTemplate:
+        return 'Save as New Template';
+      case WizardMode.CustomizeClusterTemplate:
+        return 'Save as New Template';
+      default:
+        return 'Save Cluster Template';
+    }
+  }
+
+  getPrimaryButtonLabel(): string {
+    switch (this.wizardMode) {
+      case WizardMode.CreateClusterTemplate:
+        return 'Save Template';
+      case WizardMode.EditClusterTemplate:
+        return 'Save Changes to Template';
+      case WizardMode.CustomizeClusterTemplate:
+        return 'Create Cluster from Customized Template';
+      default:
+        return 'Create Cluster';
+    }
+  }
+
+  getTitle(): string {
+    switch (this.wizardMode) {
+      case WizardMode.CreateClusterTemplate:
+        return 'Create Cluster Template';
+      case WizardMode.EditClusterTemplate:
+        return 'Edit Cluster Template';
+      case WizardMode.CustomizeClusterTemplate:
+        return 'Customize Cluster Template';
+      default:
+        return 'Create Cluster';
+    }
   }
 
   private _getCreateClusterModel(
