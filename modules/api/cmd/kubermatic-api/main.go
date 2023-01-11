@@ -460,22 +460,6 @@ func createOIDCClients(options serverRunOptions) (auth.OIDCIssuerVerifier, error
 	)
 }
 
-func createOIDCSeedClients(seed *kubermaticv1.Seed, options serverRunOptions) (auth.OIDCIssuerVerifier, error) {
-	oidc := seed.Spec.OIDCProviderConfiguration
-	return auth.NewOpenIDClient(
-		oidc.IssuerUrl,
-		oidc.IssuerClientID,
-		oidc.IssuerClientIDSecret,
-		options.oidcIssuerRedirectURI,
-		auth.NewCombinedExtractor(
-			auth.NewHeaderBearerTokenExtractor("Authorization"),
-			auth.NewQueryParamBearerTokenExtractor("token"),
-		),
-		options.oidcSkipTLSVerify,
-		options.caBundle.CertPool(),
-	)
-}
-
 func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVerifier, auth.TokenExtractor, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcURL,

@@ -23,7 +23,6 @@ import (
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
@@ -119,7 +118,10 @@ type PrivilegedIPAMPoolProviderGetter = func(seed *kubermaticv1.Seed) (Privilege
 type PrivilegedOperatingSystemProfileProviderGetter = func(seed *kubermaticv1.Seed) (PrivilegedOperatingSystemProfileProvider, error)
 
 // OIDCIssuerVerifierGetter is used to get an OIDCIssuerVerifier.
-type OIDCIssuerVerifierGetter = func(seed *kubermaticv1.Seed) (auth.OIDCIssuerVerifier, error)
+type OIDCIssuerVerifierGetter = func(seed *kubermaticv1.Seed) (OIDCIssuerVerifierProvider, error)
+
+type OIDCIssuerVerifierProvider interface {
+}
 
 // CloudProvider declares a set of methods for interacting with a cloud provider.
 type CloudProvider interface {

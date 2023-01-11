@@ -996,7 +996,7 @@ func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIss
 	}
 }
 
-func getOIDCIssuerVerifier(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter, seedName, clusterID string) (auth.OIDCIssuerVerifier, error) {
+func getOIDCIssuerVerifier(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter, seedName, clusterID string) (provider.OIDCIssuerVerifierProvider, error) {
 	seeds, err := seedsGetter()
 	if err != nil {
 		return nil, err
@@ -1022,5 +1022,5 @@ func getOIDCIssuerVerifier(ctx context.Context, clusterProviderGetter provider.C
 
 	// TODO get the oidc issuer verifier for that
 
-	return constraintProviderGetter(seed)
+	return oidcIssuerVerifierGetter(seed)
 }

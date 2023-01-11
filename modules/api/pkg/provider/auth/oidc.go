@@ -8,7 +8,7 @@ import (
 )
 
 func OIDCIssuerVerifierProviderFactory(mapper meta.RESTMapper, seedKubeconfigGetter provider.SeedKubeconfigGetter) provider.OIDCIssuerVerifierGetter {
-	return func(seed *kubermaticv1.Seed) (auth.OIDCIssuerVerifier, error) {
+	return func(seed *kubermaticv1.Seed) (provider.OIDCIssuerVerifierProvider, error) {
 
 		// TODO map stuff
 		oidc := seed.Spec.OIDCProviderConfiguration
@@ -26,3 +26,5 @@ func OIDCIssuerVerifierProviderFactory(mapper meta.RESTMapper, seedKubeconfigGet
 		)
 	}
 }
+
+
