@@ -65,7 +65,7 @@ export namespace Endpoint {
   export const Seeds = '**/api/*/seed';
   export const SeedSettings = '**/api/*/seeds/*/settings';
   export const Datacenters = '**/api/*/dc';
-  export const Presets = '**/api/*/providers/*/presets*';
+  export const Presets = '**/api/*/projects/*/providers/*/presets*';
   export const CustomLinks = '**/api/*/admin/settings/customlinks';
   export const Addons = '**/api/*/addons';
   export const AddonConfigs = '**/api/*/addonconfigs';
