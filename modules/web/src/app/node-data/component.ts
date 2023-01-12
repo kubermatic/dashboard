@@ -32,7 +32,7 @@ import {OperatingSystemManagerService} from '@core/services/operating-system-man
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -88,7 +88,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-  readonly MinReplicasCount = 1;
+  readonly MinReplicasCount = 0;
   readonly MaxReplicasCount = 1000;
 
   @Input() provider: NodeProvider;
@@ -277,12 +277,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isOperatingSystemSupported(os: OperatingSystem): boolean {
     // Enable OS per-provider basis
     switch (os) {
-      case OperatingSystem.SLES:
-        // SLES only supports docker as container runtime
-        return (
-          this._clusterSpecService.cluster.spec.containerRuntime === ContainerRuntime.Docker &&
-          this.isProvider(NodeProvider.AWS)
-        );
       case OperatingSystem.RHEL:
         return this.isProvider(
           NodeProvider.AWS,
@@ -357,7 +351,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     switch (this._nodeDataService.operatingSystem) {
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
-      case OperatingSystem.SLES:
       case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RHEL:
       case OperatingSystem.RockyLinux:
@@ -410,7 +403,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     switch (this.form.get(Controls.OperatingSystem).value) {
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
-      case OperatingSystem.SLES:
       case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RockyLinux:
         return {

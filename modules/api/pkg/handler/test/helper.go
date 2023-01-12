@@ -42,6 +42,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
+	handlerv1common "k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/etcdbackupconfig"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
@@ -274,6 +275,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		NewClientBuilder().
 		WithScheme(scheme.Scheme).
 		WithObjects(allObjects...).
+		WithIndex(&corev1.Event{}, handlerv1common.EventFieldIndexerKey, handlerv1common.EventIndexer()).
 		Build()
 	kubernetesClient := fakerestclient.NewSimpleClientset(getRuntimeObjects(kubeObjects...)...)
 	fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -1244,7 +1246,7 @@ func GenDefaultExpiry() (apiv1.Time, error) {
 	return apiv1.NewTime(claim.Expiry.Time()), nil
 }
 
-func GenTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid string) *corev1.Event {
+func GenTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid, involvedObjectName string) *corev1.Event {
 	return &corev1.Event{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      eventName,
@@ -1252,7 +1254,7 @@ func GenTestEvent(eventName, eventType, eventReason, eventMessage, kind, uid str
 		},
 		InvolvedObject: corev1.ObjectReference{
 			UID:       types.UID(uid),
-			Name:      "testMachine",
+			Name:      involvedObjectName,
 			Namespace: metav1.NamespaceSystem,
 			Kind:      kind,
 		},

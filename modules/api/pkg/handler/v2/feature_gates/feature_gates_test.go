@@ -53,7 +53,7 @@ func TestFeatureGatesEndpoint(t *testing.T) {
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode:    http.StatusOK,
 			ExpectedResponse: apiv2.FeatureGates{
-				KonnectivityService: &valTrue,
+				OIDCKubeCfgEndpoint: &valTrue,
 			},
 		},
 	}
@@ -68,7 +68,7 @@ func TestFeatureGatesEndpoint(t *testing.T) {
 				Versions: test.GenDefaultVersions(),
 			},
 			FeatureGates: map[string]bool{
-				features.KonnectivityService: true,
+				features.OIDCKubeCfgEndpoint: true,
 			},
 		},
 	}

@@ -14,12 +14,14 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {MasterVersion} from '@app/shared/entity/cluster';
+import {View} from '@app/shared/entity/common';
+import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
+import {NotificationService} from '@core/services/notification';
 import {environment} from '@environments/environment';
-import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
-import {EKSCluster, EKSClusterRole, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
-import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {
   DeleteExternalClusterAction,
   ExternalCluster,
@@ -27,13 +29,11 @@ import {
   ExternalClusterProvider,
 } from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
+import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
+import {EKSCluster, EKSClusterRole, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
+import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {NotificationService} from '@core/services/notification';
-import {MasterVersion} from '@app/shared/entity/cluster';
-import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
-import {View} from '@app/shared/entity/common';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -359,7 +359,11 @@ export class ExternalClusterService {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .subscribe(_ => {
-        this._router.navigate([`/projects/${projectID}/${View.ExternalClusters}`]);
+        const view =
+          ExternalCluster.getProvider(cluster.cloud) === ExternalClusterProvider.KubeOne
+            ? View.KubeOneClusters
+            : View.ExternalClusters;
+        this._router.navigate([`/projects/${projectID}/${view}`]);
         this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
       });
   }

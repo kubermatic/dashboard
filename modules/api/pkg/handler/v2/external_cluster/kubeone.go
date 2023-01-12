@@ -28,6 +28,7 @@ import (
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -40,25 +41,40 @@ import (
 )
 
 func importKubeOneCluster(ctx context.Context, name string, preset *kubermaticv1.Preset, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
-	if err := validatKubeOneReq(cloud.KubeOne); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
-	}
 	isImported := resources.ExternalClusterIsImportedTrue
 
 	kubeOneClusterObj, err := DecodeManifestFromKubeOneReq(cloud.KubeOne.Manifest)
 	if err != nil {
 		return nil, err
 	}
-
 	newCluster := genExternalCluster(kubeOneClusterObj.Name, project.Name, isImported)
-	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
-		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
-	}
-	newCluster = setKubeOneProvider(kubeOneClusterObj, *newCluster)
 
-	kubeOneAPICloudSpec := cloud.KubeOne.CloudSpec
+	version, err := ksemver.NewSemver(kubeOneClusterObj.Versions.Kubernetes)
+	if err != nil {
+		return nil, err
+	}
+	newCluster.Spec.Version = *version
+
+	if kubeOneClusterObj.ContainerRuntime.Docker != nil {
+		newCluster.Spec.ContainerRuntime = resources.ContainerRuntimeDocker
+	} else if kubeOneClusterObj.ContainerRuntime.Containerd != nil {
+		newCluster.Spec.ContainerRuntime = resources.ContainerRuntimeContainerd
+	}
+
+	if newCluster.Spec.CloudSpec.KubeOne == nil {
+		newCluster.Spec.CloudSpec.KubeOne = &kubermaticv1.ExternalClusterKubeOneCloudSpec{}
+	}
+	newCluster.Spec.CloudSpec.KubeOne.ProviderName, err = getKubeOneProviderName(kubeOneClusterObj, *newCluster)
+	if err != nil {
+		return nil, err
+	}
+
+	// this API object carries cloud credentials.
+	if cloud.KubeOne.CloudSpec == nil {
+		cloud.KubeOne.CloudSpec = &apiv2.KubeOneCloudSpec{}
+	}
 	if preset != nil {
-		if kubeOneAPICloudSpec, err = setKubeOneCloudCredentials(preset, newCluster.Spec.CloudSpec.KubeOne.ProviderName, *kubeOneAPICloudSpec); err != nil {
+		if cloud.KubeOne.CloudSpec, err = setKubeOneCloudCredentials(preset, newCluster.Spec.CloudSpec.KubeOne.ProviderName, *cloud.KubeOne.CloudSpec); err != nil {
 			return nil, err
 		}
 	}
@@ -73,7 +89,7 @@ func importKubeOneCluster(ctx context.Context, name string, preset *kubermaticv1
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, kubermaticNamespace, *kubeOneAPICloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -97,11 +113,11 @@ func patchKubeOneCluster(ctx context.Context,
 	if oldCluster.Spec.Version != newCluster.Spec.Version {
 		return UpgradeKubeOneCluster(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
 	}
-	if oldCluster.Cloud.KubeOne.ContainerRuntime != newCluster.Cloud.KubeOne.ContainerRuntime {
-		if oldCluster.Cloud.KubeOne.ContainerRuntime == resources.ContainerRuntimeDocker {
+	if oldCluster.Spec.ContainerRuntime != newCluster.Spec.ContainerRuntime {
+		if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
 			return MigrateKubeOneToContainerd(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
 		} else {
-			return nil, fmt.Errorf("Operation not supported: only migration from docker to containerd is supported: %s", oldCluster.Cloud.KubeOne.ContainerRuntime)
+			return nil, fmt.Errorf("Operation not supported: only migration from docker to containerd is supported: %s", oldCluster.Spec.ContainerRuntime)
 		}
 	}
 
@@ -132,7 +148,7 @@ func UpgradeKubeOneCluster(ctx context.Context,
 		Kubernetes: upgradeVersion,
 	}
 
-	if oldCluster.Cloud.KubeOne.ContainerRuntime == resources.ContainerRuntimeDocker {
+	if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
 		cluster.ContainerRuntime.Containerd = nil
 		if upgradeVersion >= "1.24" {
 			return nil, utilerrors.NewBadRequest("container runtime is \"docker\". Support for docker will be removed with Kubernetes 1.24 release.")
@@ -168,14 +184,14 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 ) (*apiv2.ExternalCluster, error) {
 	kubeOneSpec := externalCluster.Spec.CloudSpec.KubeOne
 	manifest := kubeOneSpec.ManifestReference
-	wantedContainerRuntime := newCluster.Cloud.KubeOne.ContainerRuntime
+	wantedContainerRuntime := newCluster.Spec.ContainerRuntime
 
 	if externalCluster.Status.Condition.Phase == kubermaticv1.ExternalClusterPhaseReconciling {
 		return nil, utilerrors.NewBadRequest("Operation is not allowed: Another operation: (Upgrading) is in progress, please wait for it to finish before starting a new operation.")
 	}
 
 	// currently only migration to containerd is supported
-	if !sets.NewString("containerd").Has(wantedContainerRuntime) {
+	if !sets.New("containerd").Has(wantedContainerRuntime) {
 		return nil, fmt.Errorf("Operation not supported: Only migration from docker to containerd is supported: %s", wantedContainerRuntime)
 	}
 
@@ -305,13 +321,16 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 }
 
 func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
-	if providerName == resources.KubeOneAWS {
+	// TODO: Add support for the remaining KubeOne Supported Providers.
+	switch {
+	case providerName == resources.KubeOneAWS:
 		return setAWSCredentials(preset, kubeOneCloudSpec)
-	} else if providerName == resources.KubeOneGCP {
+	case providerName == resources.KubeOneGCP:
 		return setGCPCredentials(preset, kubeOneCloudSpec)
-	} else if providerName == resources.KubeOneAzure {
+	case providerName == resources.KubeOneAzure:
 		return setAzureCredentials(preset, kubeOneCloudSpec)
 	}
+
 	return nil, fmt.Errorf("Provider %s not supported", providerName)
 }
 
@@ -326,6 +345,9 @@ func setAWSCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeO
 
 	credentials := preset.Spec.AWS
 
+	if kubeOneCloudSpec.AWS == nil {
+		kubeOneCloudSpec.AWS = &apiv2.KubeOneAWSCloudSpec{}
+	}
 	kubeOneCloudSpec.AWS.AccessKeyID = credentials.AccessKeyID
 	kubeOneCloudSpec.AWS.SecretAccessKey = credentials.SecretAccessKey
 
@@ -339,6 +361,9 @@ func setGCPCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeO
 
 	credentials := preset.Spec.GCP
 
+	if kubeOneCloudSpec.GCP == nil {
+		kubeOneCloudSpec.GCP = &apiv2.KubeOneGCPCloudSpec{}
+	}
 	kubeOneCloudSpec.GCP.ServiceAccount = credentials.ServiceAccount
 
 	return &kubeOneCloudSpec, nil
@@ -351,6 +376,9 @@ func setAzureCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.Kub
 
 	credentials := preset.Spec.Azure
 
+	if kubeOneCloudSpec.Azure == nil {
+		kubeOneCloudSpec.Azure = &apiv2.KubeOneAzureCloudSpec{}
+	}
 	kubeOneCloudSpec.Azure.ClientID = credentials.ClientID
 	kubeOneCloudSpec.Azure.TenantID = credentials.TenantID
 	kubeOneCloudSpec.Azure.ClientSecret = credentials.ClientSecret
@@ -359,28 +387,29 @@ func setAzureCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.Kub
 	return &kubeOneCloudSpec, nil
 }
 
-func setKubeOneProvider(kubeOneCluster *kubeonev1beta2.KubeOneCluster, cluster kubermaticv1.ExternalCluster) *kubermaticv1.ExternalCluster {
+func getKubeOneProviderName(kubeOneCluster *kubeonev1beta2.KubeOneCluster, cluster kubermaticv1.ExternalCluster) (string, error) {
 	switch {
 	case kubeOneCluster.CloudProvider.AWS != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
+		return resources.KubeOneAWS, nil
 	case kubeOneCluster.CloudProvider.GCE != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
+		return resources.KubeOneGCP, nil
 	case kubeOneCluster.CloudProvider.Azure != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
+		return resources.KubeOneAzure, nil
 	case kubeOneCluster.CloudProvider.DigitalOcean != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
+		return resources.KubeOneDigitalOcean, nil
 	case kubeOneCluster.CloudProvider.Hetzner != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
+		return resources.KubeOneHetzner, nil
 	case kubeOneCluster.CloudProvider.Nutanix != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
+		return resources.KubeOneNutanix, nil
 	case kubeOneCluster.CloudProvider.Openstack != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
+		return resources.KubeOneOpenStack, nil
 	case kubeOneCluster.CloudProvider.EquinixMetal != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
+		return resources.KubeOneEquinix, nil
 	case kubeOneCluster.CloudProvider.Vsphere != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
+		return resources.KubeOneVSphere, nil
 	case kubeOneCluster.CloudProvider.VMwareCloudDirector != nil:
-		cluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
+		return resources.KubeOneVMwareCloudDirector, nil
 	}
-	return &cluster
+
+	return "", fmt.Errorf("\"CloudProviderSpec\" Not Found in provided kubeone manifest")
 }

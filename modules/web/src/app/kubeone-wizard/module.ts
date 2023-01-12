@@ -16,7 +16,9 @@ import {NgModule} from '@angular/core';
 import {KubeOneClusterStepComponent} from '@app/kubeone-wizard/steps/cluster/component';
 import {KubeOneCredentialsStepComponent} from '@app/kubeone-wizard/steps/credentials/component';
 import {KubeOneAWSCredentialsBasicComponent} from '@app/kubeone-wizard/steps/credentials/provider/basic/aws/component';
+import {KubeOneAzureCredentialsBasicComponent} from '@app/kubeone-wizard/steps/credentials/provider/basic/azure/component';
 import {KubeOneCredentialsBasicComponent} from '@app/kubeone-wizard/steps/credentials/provider/basic/component';
+import {KubeOneGCPCredentialsBasicComponent} from '@app/kubeone-wizard/steps/credentials/provider/basic/gcp/component';
 import {KubeOneProviderStepComponent} from '@app/kubeone-wizard/steps/provider/component';
 import {KubeOneSummaryStepComponent} from '@app/kubeone-wizard/steps/summary/component';
 import {KubeOneWizardService} from '@core/services/kubeone-wizard/wizard';
@@ -31,6 +33,8 @@ const components = [
   KubeOneCredentialsStepComponent,
   KubeOneCredentialsBasicComponent,
   KubeOneAWSCredentialsBasicComponent,
+  KubeOneGCPCredentialsBasicComponent,
+  KubeOneAzureCredentialsBasicComponent,
   KubeOneClusterStepComponent,
   KubeOneSummaryStepComponent,
 ];

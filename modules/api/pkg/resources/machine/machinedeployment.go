@@ -298,8 +298,6 @@ func getOperatingSystemProfile(nd *apiv1.NodeDeployment, dc *kubermaticv1.Datace
 		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemUbuntu]
 	case nd.Spec.Template.OperatingSystem.CentOS != nil:
 		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemCentOS]
-	case nd.Spec.Template.OperatingSystem.SLES != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemSLES]
 	case nd.Spec.Template.OperatingSystem.RHEL != nil:
 		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRHEL]
 	case nd.Spec.Template.OperatingSystem.Flatcar != nil:
@@ -330,12 +328,6 @@ func getProviderOS(config *providerconfig.Config, nd *apiv1.NodeDeployment) erro
 	case nd.Spec.Template.OperatingSystem.CentOS != nil:
 		config.OperatingSystem = providerconfig.OperatingSystemCentOS
 		osExt, err = getCentOSOperatingSystemSpec(nd.Spec.Template)
-		if err != nil {
-			return err
-		}
-	case nd.Spec.Template.OperatingSystem.SLES != nil:
-		config.OperatingSystem = providerconfig.OperatingSystemSLES
-		osExt, err = getSLESOperatingSystemSpec(nd.Spec.Template)
 		if err != nil {
 			return err
 		}
@@ -420,7 +412,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 	}
 
 	// The default
-	allowedTaintEffects := sets.NewString(
+	allowedTaintEffects := sets.New(
 		string(corev1.TaintEffectNoExecute),
 		string(corev1.TaintEffectNoSchedule),
 		string(corev1.TaintEffectPreferNoSchedule),
@@ -433,7 +425,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 			return nil, errors.New("taint value must be set")
 		}
 		if !allowedTaintEffects.Has(taint.Effect) {
-			return nil, fmt.Errorf("taint effect '%s' not allowed. Allowed: %s", taint.Effect, strings.Join(allowedTaintEffects.List(), ", "))
+			return nil, fmt.Errorf("taint effect '%s' not allowed. Allowed: %s", taint.Effect, strings.Join(sets.List(allowedTaintEffects), ", "))
 		}
 	}
 

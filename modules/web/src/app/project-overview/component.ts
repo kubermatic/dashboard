@@ -320,7 +320,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
           return this.currentUser.isAdmin
             ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === id)))
-            : this._quotaService.getProjectQuota(id);
+            : this._quotaService.getLiveProjectQuota(id);
         }),
         takeUntil(this._unsubscribe)
       )

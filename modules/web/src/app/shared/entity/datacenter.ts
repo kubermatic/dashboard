@@ -68,7 +68,6 @@ export class DatacenterOperatingSystemOptions {
   flatcar?: string;
   rhel?: string;
   rockylinux?: string;
-  sles?: string;
   ubuntu: string;
 }
 

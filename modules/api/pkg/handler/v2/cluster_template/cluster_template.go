@@ -720,7 +720,7 @@ func DecodeExportReq(c context.Context, r *http.Request) (interface{}, error) {
 
 	queryParam := r.URL.Query().Get("format")
 
-	supportedFormats := sets.NewString(yamlFormat, jsonFormat)
+	supportedFormats := sets.New(yamlFormat, jsonFormat)
 
 	if len(queryParam) > 0 && !supportedFormats.Has(queryParam) {
 		return nil, fmt.Errorf("not supported file format: %s", queryParam)

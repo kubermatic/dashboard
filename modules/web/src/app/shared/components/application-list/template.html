@@ -16,10 +16,10 @@ limitations under the License.
 
 <div *ngIf="view !== ApplicationListView.Summary"
      fxLayoutAlign=" center">
-  <km-search-field *ngIf="applications?.length"
+  <km-search-field *ngIf="applicationsDataSource.data?.length"
                    (queryChange)="onSearchQueryChanged($event)"></km-search-field>
   <div fxFlex>
-    <p *ngIf="!applications?.length">
+    <p *ngIf="!applicationsDataSource.data?.length">
       <ng-container *ngIf="view === ApplicationListView.Wizard; else defaultViewText">
         No application selected to install on cluster creation,
       </ng-container>
@@ -29,19 +29,27 @@ limitations under the License.
       <ng-container *ngTemplateOutlet="applicationDocsLink"></ng-container>
     </p>
   </div>
-  <mat-button-toggle-group *ngIf="view === ApplicationListView.Default && applications?.length"
-                           class="applications-view-switch"
-                           group="applicationsView"
-                           (change)="changeView()">
-    <mat-button-toggle value="applicationscard"
-                       [checked]="showCards">
-      <i class="km-icon-mask km-icon-projects-card"></i>
-    </mat-button-toggle>
-    <mat-button-toggle value="applicationstable"
-                       [checked]="!showCards">
-      <i class="km-icon-mask km-icon-projects-table"></i>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <ng-container *ngIf="view === ApplicationListView.Default && applications?.length">
+    <mat-slide-toggle class="system-applications-toggle"
+                      labelPosition="before"
+                      [matTooltip]="'System applications are managed by KKP.'"
+                      [ngModel]="showSystemApplications"
+                      (toggleChange)="toggleSystemApplications()">Show System Applications
+    </mat-slide-toggle>
+    <mat-button-toggle-group *ngIf="applicationsDataSource.data?.length"
+                             class="applications-view-switch"
+                             group="applicationsView"
+                             (change)="changeView()">
+      <mat-button-toggle value="applicationscard"
+                         [checked]="showCards">
+        <i class="km-icon-mask km-icon-projects-card"></i>
+      </mat-button-toggle>
+      <mat-button-toggle value="applicationstable"
+                         [checked]="!showCards">
+        <i class="km-icon-mask km-icon-projects-table"></i>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </ng-container>
   <button mat-flat-button
           color="quaternary"
           [matTooltip]="getAddBtnTooltip()"
@@ -55,7 +63,7 @@ limitations under the License.
 
 <div *ngIf="isClusterReady"
      class="applications-container">
-  <div *ngIf="showCards || !applications?.length; else applicationsTable">
+  <div *ngIf="showCards || !applicationsDataSource.data?.length; else applicationsTable">
     <div class="application-cards-view"
          fxFlex
          fxLayout="row wrap"
@@ -73,6 +81,8 @@ limitations under the License.
           <mat-card-title [matTooltip]="application.name"
                           [attr.id]="'km-application-name-' + application.name">
             {{application.name}}
+            <span *ngIf="isSystemApplication(application)"
+                  class="km-label-primary">System</span>
           </mat-card-title>
           <div *ngIf="view !== ApplicationListView.Summary"
                fxFlex
@@ -118,12 +128,12 @@ limitations under the License.
           </div>
         </mat-card-content>
       </div>
-      <div *ngIf="applications?.length === 0 && view === ApplicationListView.Default"
+      <div *ngIf="!applicationsDataSource.data?.length && view === ApplicationListView.Default"
            class="km-no-data-message"
            fxFlex>
         No applications added.
       </div>
-      <div *ngIf="applications?.length && !applicationsDataSource.filteredData?.length"
+      <div *ngIf="applicationsDataSource.filter && !applicationsDataSource.filteredData?.length"
            class="km-no-data-message"
            fxFlex>
         No results for "{{applicationsDataSource.filter}}" found.
@@ -159,7 +169,11 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element"
-            [attr.id]="'km-application-name-' + element.name">{{element.name}}</td>
+            [attr.id]="'km-application-name-' + element.name">
+          {{element.name}}
+          <span *ngIf="isSystemApplication(element)"
+                class="km-label-primary">System</span>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Application">
@@ -251,7 +265,7 @@ limitations under the License.
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="applications?.length && !applicationsDataSource.filteredData?.length">
+         *ngIf="applicationsDataSource.filter && !applicationsDataSource.filteredData?.length">
       No results for "{{applicationsDataSource.filter}}" found.
     </div>
   </ng-template>
@@ -273,7 +287,8 @@ limitations under the License.
                 [disabled]="!canEdit">
           <i class="km-icon-mask km-icon-edit"></i>
         </button>
-        <button mat-icon-button
+        <button *ngIf="!isSystemApplication(application)"
+                mat-icon-button
                 [attr.id]="'km-delete-application-' + application.name"
                 matTooltip="Delete Application"
                 (click)="onDeleteApplication(application)"

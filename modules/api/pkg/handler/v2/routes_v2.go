@@ -691,24 +691,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
-		/*
-			// Kubevirt endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/vmflavors").
-				Handler(r.listProjectKubeVirtVMIPresets())
+	// Kubevirt endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/instancetypes").
+		Handler(r.listProjectKubeVirtInstancetypes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/instancetypes").
-				Handler(r.listProjectKubeVirtInstancetypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/preferences").
+		Handler(r.listProjectKubeVirtPreferences())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/preferences").
-				Handler(r.listProjectKubeVirtPreferences())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
-				Handler(r.listProjectKubevirtStorageClasses())
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/storageclasses").
+		Handler(r.listProjectKubevirtStorageClasses())
 
 	// Azure endpoints
 	mux.Methods(http.MethodGet).
@@ -756,22 +750,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/aks/locations").
 		Handler(r.listProjectAKSLocations())
 
-		/*
+	// vSphere endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/networks").
+		Handler(r.listProjectVSphereNetworks())
 
-			// vSphere endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/networks").
-				Handler(r.listProjectVSphereNetworks())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/folders").
+		Handler(r.listProjectVSphereFolders())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/folders").
-				Handler(r.listProjectVSphereFolders())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vsphere/datastores").
-				Handler(r.listProjectVSphereDatastores())
-
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/datastores").
+		Handler(r.listProjectVSphereDatastores())
 
 	// Nutanix endpoints
 	mux.Methods(http.MethodGet).
@@ -794,74 +784,77 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
 		Handler(r.listProjectNutanixCategoryValues())
 
-		/*
+	// VMware Cloud Director endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
+		Handler(r.listProjectVMwareCloudDirectorNetworks())
 
-			// VMware Cloud Director endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
-				Handler(r.listProjectVMwareCloudDirectorNetworks())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
+		Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
-				Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
+		Handler(r.listProjectVMwareCloudDirectorCatalogs())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
-				Handler(r.listProjectVMwareCloudDirectorCatalogs())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
+		Handler(r.listProjectVMwareCloudDirectorTemplates())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
-				Handler(r.listProjectVMwareCloudDirectorTemplates())
+		// AWS endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/sizes").
+		Handler(r.listProjectAWSSizes())
 
-			// AWS endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/sizes").
-				Handler(r.listProjectAWSSizes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/subnets").
+		Handler(r.listProjectAWSSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/subnets").
-				Handler(r.listProjectAWSSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
+		Handler(r.listProjectAWSVPCs())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
-				Handler(r.listProjectAWSVPCS())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
+		Handler(r.listProjectAWSSecurityGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
-				Handler(r.listProjectAWSSecurityGroups())
+	// Digitalocean endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/digitalocean/sizes").
+		Handler(r.listProjectDigitaloceanSizes())
 
+	// Openstack endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/sizes").
+		Handler(r.listProjectOpenstackSizes())
 
-			// Digitalocean endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/digitalocean/sizes").
-				Handler(r.listProjectDigitaloceanSizes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/tenants").
+		Handler(r.listProjectOpenstackTenants())
 
-			// Openstack endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/sizes").
-				Handler(r.listProjectOpenstackSizes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/networks").
+		Handler(r.listProjectOpenstackNetworks())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/tenants").
-				Handler(r.listProjectOpenstackTenants())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/securitygroups").
+		Handler(r.listProjectOpenstackSecurityGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/networks").
-				Handler(r.listProjectOpenstackNetworks())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/subnets").
+		Handler(r.listProjectOpenstackSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/securitygroups").
-				Handler(r.listProjectOpenstackSecurityGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/availabilityzones").
+		Handler(r.listProjectOpenstackAvailabilityZones())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/subnets").
-				Handler(r.listProjectOpenstackSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/subnetpools").
+		Handler(r.listProjectOpenstackSubnetPools())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/openstack/availabilityzones").
-				Handler(r.listProjectOpenstackAvailabilityZones())
-
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/servergroups").
+		Handler(r.listProjectOpenstackServerGroups())
 
 	// Equinix Metal (Packet) endpoints
 	mux.Methods(http.MethodGet).
@@ -873,22 +866,18 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/hetzner/sizes").
 		Handler(r.listProjectHetznerSizes())
 
-		/*
+	// Alibaba endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/instancetypes").
+		Handler(r.listProjectAlibabaInstanceTypes())
 
-			// Alibaba endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/instancetypes").
-				Handler(r.listProjectAlibabaInstanceTypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/zones").
+		Handler(r.listProjectAlibabaZones())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/zones").
-				Handler(r.listProjectAlibabaZones())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/alibaba/vswitches").
-				Handler(r.listProjectAlibabaVSwitches())
-
-		*/
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/alibaba/vswitches").
+		Handler(r.listProjectAlibabaVSwitches())
 
 	// Anexia endpoints
 	mux.Methods(http.MethodGet).
@@ -1530,6 +1519,98 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/seeds/{seed_name}/overview").
 		Handler(r.getSeedOverview())
+
+	mux.Methods(http.MethodGet).
+		Path("/seeds/status").
+		Handler(r.listSeedStatus())
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
+//
+// Lists available AWS sizes
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSizeList
+func (r Routing) listProjectAWSSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSizes(r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
+		provider.DecodeProjectAWSSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/subnets project listProjectAWSSubnets
+//
+// Lists available AWS subnets
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSubnetList
+func (r Routing) listProjectAWSSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSubnets(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/vpcs project listProjectAWSVPCs
+//
+// Lists available AWS VPCs
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSVPCList
+func (r Routing) listProjectAWSVPCs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSVPCs(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups project listProjectAWSSecurityGroups
+//
+// Lists available AWS security groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AWSSecurityGroupList
+func (r Routing) listProjectAWSSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectAWSSecurityGroups(r.userInfoGetter, r.seedsGetter, r.presetProvider)),
+		provider.DecodeProjectAWSDCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/gcp/disktypes project listProjectGCPDiskTypes
@@ -4135,7 +4216,7 @@ func (r Routing) listOpenstackServerGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
 		provider.DecodeOpenstackReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4207,7 +4288,7 @@ func (r Routing) listOpenstackSubnetPools() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
 		provider.DecodeOpenstackSubnetPoolReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4821,8 +4902,8 @@ func (r Routing) listVSphereDatastores() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
-		provider.DecodeVSphereDatastoresReq,
+		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
+		provider.DecodeVSphereCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -4975,7 +5056,7 @@ func (r Routing) listVMwareCloudDirectorNetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4997,7 +5078,7 @@ func (r Routing) listVMwareCloudDirectorStorageProfiles() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5019,7 +5100,7 @@ func (r Routing) listVMwareCloudDirectorCatalogs() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeVMwareCloudDirectorCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5041,8 +5122,8 @@ func (r Routing) listVMwareCloudDirectorTemplates() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
-		provider.DecodeListTemplatesReq,
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
+		provider.DecodeVMwareCloudDirectorListTemplatesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -5800,6 +5881,72 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes kubevirt listProjectKubeVirtInstancetypes
+//
+// Lists available KubeVirt VirtualMachineInstancetype.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachineInstancetypeList
+func (r Routing) listProjectKubeVirtInstancetypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectListInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/preferences kubevirt listProjectKubeVirtPreferences
+//
+// Lists available KubeVirt VirtualMachinePreference.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VirtualMachinePreferenceList
+func (r Routing) listProjectKubeVirtPreferences() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses kubevirt listProjectKubeVirtStorageClasses
+//
+// Lists available K8s StorageClasses in the Kubevirt cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: StorageClassList
+func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/azure/sizes azure listProjectAzureSizes
 //
 // Lists available VM sizes in an Azure region
@@ -6042,6 +6189,72 @@ func (r Routing) listProjectAKSLocations() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/networks vsphere listProjectVSphereNetworks
+//
+// Lists networks from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereNetwork
+func (r Routing) listProjectVSphereNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereNetworksEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/folders vsphere listProjectVSphereFolders
+//
+// Lists folders from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereFolder
+func (r Routing) listProjectVSphereFolders() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereFoldersEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/datastores vsphere listProjectVSphereDatastores
+//
+// Lists datastores from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereDatastoreList
+func (r Routing) listProjectVSphereDatastores() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters nutanix listProjectNutanixClusters
 //
 // List clusters from Nutanix.
@@ -6152,6 +6365,94 @@ func (r Routing) listProjectNutanixCategoryValues() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks vmwareclouddirector listProjectVMwareCloudDirectorNetworks
+//
+// List VMware Cloud Director OVDC Networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorNetworkList
+func (r Routing) listProjectVMwareCloudDirectorNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorNetworksEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles vmwareclouddirector listProjectVMwareCloudDirectorStorageProfiles
+//
+// List VMware Cloud Director Storage Profiles
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorStorageProfileList
+func (r Routing) listProjectVMwareCloudDirectorStorageProfiles() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs vmwareclouddirector listProjectVMwareCloudDirectorCatalogs
+//
+// List VMware Cloud Director Catalogs
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorCatalogList
+func (r Routing) listProjectVMwareCloudDirectorCatalogs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorCatalogsEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name} vmwareclouddirector listProjectVMwareCloudDirectorTemplates
+//
+// List VMware Cloud Director Templates
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorTemplateList
+func (r Routing) listProjectVMwareCloudDirectorTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectListTemplatesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes equinixmetal listProjectEquinixMetalSizes
 //
 // Lists sizes from Equinix Metal.
@@ -6196,6 +6497,72 @@ func (r Routing) listProjectHetznerSizes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes alibaba listProjectAlibabaInstanceTypes
+//
+// Lists available Alibaba instance types.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaInstanceTypeList
+func (r Routing) listProjectAlibabaInstanceTypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaInstanceTypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeAlibabaProjectInstanceTypesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/zones alibaba listProjectAlibabaZones
+//
+// Lists available Alibaba zones.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaZoneList
+func (r Routing) listProjectAlibabaZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaZonesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAlibabaProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/alibaba/vswitches alibaba listProjectAlibabaVSwitches
+//
+// Lists available Alibaba vSwitches.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AlibabaVSwitchList
+func (r Routing) listProjectAlibabaVSwitches() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AlibabaVSwitchesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAlibabaProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/anexia/vlans anexia listProjectAnexiaVlans
 //
 // Lists VLANs from Anexia.
@@ -6235,6 +6602,204 @@ func (r Routing) listProjectAnexiaTemplates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
 		provider.DecodeAnexiaProjectTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/digitalocean/sizes digitalocean listProjectDigitaloceanSizes
+//
+// Lists sizes from digitalocean.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: DigitaloceanSizeList
+func (r Routing) listProjectDigitaloceanSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.DigitaloceanSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeDoProjectSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/sizes openstack listProjectOpenstackSizes
+//
+// Lists sizes from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSize
+func (r Routing) listProjectOpenstackSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSizeEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.settingsProvider, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones openstack listProjectOpenstackAvailabilityZones
+//
+// Lists availability zones from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackAvailabilityZone
+func (r Routing) listProjectOpenstackAvailabilityZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackAvailabilityZoneEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/networks openstack listProjectOpenstackNetworks
+//
+// Lists networks from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackNetwork
+func (r Routing) listProjectOpenstackNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackNetworkEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/subnets openstack listProjectOpenstackSubnets
+//
+// Lists subnets from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSubnet
+func (r Routing) listProjectOpenstackSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSubnetsEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectSubnetReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/securitygroups openstack listProjectOpenstackSecurityGroups
+//
+// Lists security groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSecurityGroup
+func (r Routing) listProjectOpenstackSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSecurityGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/tenants openstack listProjectOpenstackTenants
+//
+// Lists tenants from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackTenant
+func (r Routing) listProjectOpenstackTenants() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackTenantEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectTenantReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/subnetpools openstack listProjectOpenstackSubnetPools
+//
+// Lists subnet pools from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackSubnetPool
+func (r Routing) listProjectOpenstackSubnetPools() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackSubnetPoolEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeOpenstackProjectSubnetPoolReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/servergroups openstack listProjectOpenstackServerGroups
+//
+// Lists server groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackServerGroup
+func (r Routing) listProjectOpenstackServerGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeOpenstackProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -7936,7 +8501,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtListInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -7958,14 +8523,14 @@ func (r Routing) listKubeVirtPreferences() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider)),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubevirtStorageClasses
+// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubeVirtStorageClasses
 //
 // Lists available K8s StorageClasses in the Kubevirt cluster.
 //
@@ -7980,7 +8545,7 @@ func (r Routing) listKubevirtStorageClasses() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -8669,16 +9234,16 @@ func (r Routing) getResourceQuota() http.Handler {
 
 // swagger:route GET /api/v2/quotas resourceQuota admin listResourceQuotas
 //
-//	Gets a Resource Quota list.
+//	 Gets a Resource Quota list. If `accumulate` is set to `true` then all the quota's quotas and global usage are accumulated and a `totalquota` is returned.
 //
-//	Produces:
-//	- application/json
+//			Produces:
+//			- application/json
 //
-//	Responses:
-//	  default: errorResponse
-//	  200: []ResourceQuota
-//	  401: empty
-//	  403: empty
+//			Responses:
+//			  default: errorResponse
+//			  200: []ResourceQuota
+//			  401: empty
+//			  403: empty
 func (r Routing) listResourceQuotas() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -9498,6 +10063,30 @@ func (r Routing) getSeedOverview() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(seedoverview.GetSeedOverview(r.userInfoGetter, r.seedsGetter)),
 		seedoverview.DecodeGetSeedOverviewReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/seeds/status seed listSeedStatus
+//
+//	Lists Seeds and their status.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []SeedStatus
+//	  401: empty
+//	  403: empty
+func (r Routing) listSeedStatus() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(seedoverview.ListSeedStatus(r.seedsGetter)),
+		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

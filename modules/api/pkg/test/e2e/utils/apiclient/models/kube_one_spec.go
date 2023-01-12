@@ -18,11 +18,18 @@ import (
 // swagger:model KubeOneSpec
 type KubeOneSpec struct {
 
-	// container runtime
-	ContainerRuntime string `json:"containerRuntime,omitempty"`
-
 	// Manifest Base64 encoded manifest
 	Manifest string `json:"manifest,omitempty"`
+
+	// ProviderName is the name of the cloud provider used, one of
+	// "aws", "azure", "digitalocean", "gcp",
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers.
+	// + readOnly
+	ProviderName string `json:"providerName,omitempty"`
+
+	// Region is the kubernetes control plane region.
+	// + readOnly
+	Region string `json:"region,omitempty"`
 
 	// cloud spec
 	CloudSpec *KubeOneCloudSpec `json:"cloudSpec,omitempty"`

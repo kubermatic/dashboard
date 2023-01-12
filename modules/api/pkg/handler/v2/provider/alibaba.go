@@ -18,15 +18,20 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
+	"k8s.io/utils/pointer"
 )
 
 // alibabaNoCredentialReq represent a request for Alibaba instance types.
@@ -63,6 +68,61 @@ func DecodeAlibabaNoCredentialReq(c context.Context, r *http.Request) (interface
 	return req, nil
 }
 
+// AlibabaProjectReq represent a request for Alibaba instance types.
+// swagger:parameters listProjectAlibabaZones listProjectAlibabaVSwitches
+type AlibabaProjectReq struct {
+	common.ProjectReq
+
+	// in: header
+	// name: AccessKeyID
+	AccessKeyID string
+	// in: header
+	// name: AccessKeySecret
+	AccessKeySecret string
+	// in: header
+	// name: Credential
+	Credential string
+	// in: header
+	// name: Region
+	Region string
+}
+
+// AlibabaProjectInstanceTypesReq represent a request for Alibaba instance types.
+// swagger:parameters listProjectAlibabaInstanceTypes
+type AlibabaProjectInstanceTypesReq struct {
+	AlibabaProjectReq
+	// in: header
+	// DatacenterName datacenter name
+	DatacenterName string
+}
+
+func DecodeAlibabaProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return AlibabaProjectReq{
+		ProjectReq:      projectReq.(common.ProjectReq),
+		AccessKeyID:     r.Header.Get("AccessKeyID"),
+		AccessKeySecret: r.Header.Get("AccessKeySecret"),
+		Credential:      r.Header.Get("Credential"),
+		Region:          r.Header.Get("Region"),
+	}, nil
+}
+
+func DecodeAlibabaProjectInstanceTypesReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := DecodeAlibabaProjectReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return AlibabaProjectInstanceTypesReq{
+		AlibabaProjectReq: projectReq.(AlibabaProjectReq),
+		DatacenterName:    r.Header.Get("DatacenterName"),
+	}, nil
+}
+
 func AlibabaInstanceTypesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(alibabaNoCredentialReq)
@@ -81,5 +141,105 @@ func AlibabaVswitchesWithClusterCredentialsEndpoint(projectProvider provider.Pro
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(alibabaNoCredentialReq)
 		return providercommon.AlibabaVswitchesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, req.Region)
+	}
+}
+
+func AlibabaInstanceTypesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(AlibabaProjectInstanceTypesReq)
+
+		accessKeyID := req.AccessKeyID
+		accessKeySecret := req.AccessKeySecret
+
+		userInfo, err := userInfoGetter(ctx, req.GetProjectID())
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+
+			if credentials := preset.Spec.Alibaba; credentials != nil {
+				accessKeyID = credentials.AccessKeyID
+				accessKeySecret = credentials.AccessKeySecret
+			}
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		filter := *settings.Spec.MachineDeploymentVMResourceQuota
+		datacenterName := req.DatacenterName
+		if datacenterName != "" {
+			_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+			if err != nil {
+				return nil, fmt.Errorf("error getting dc: %w", err)
+			}
+
+			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
+		}
+
+		return providercommon.ListAlibabaInstanceTypes(accessKeyID, accessKeySecret, req.Region, filter)
+	}
+}
+
+func AlibabaZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(AlibabaProjectReq)
+
+		accessKeyID := req.AccessKeyID
+		accessKeySecret := req.AccessKeySecret
+
+		userInfo, err := userInfoGetter(ctx, req.GetProjectID())
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+
+			if credentials := preset.Spec.Alibaba; credentials != nil {
+				accessKeyID = credentials.AccessKeyID
+				accessKeySecret = credentials.AccessKeySecret
+			}
+		}
+
+		return providercommon.ListAlibabaZones(accessKeyID, accessKeySecret, req.Region)
+	}
+}
+
+func AlibabaVSwitchesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(AlibabaProjectReq)
+
+		accessKeyID := req.AccessKeyID
+		accessKeySecret := req.AccessKeySecret
+
+		userInfo, err := userInfoGetter(ctx, req.GetProjectID())
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+
+			if credentials := preset.Spec.Alibaba; credentials != nil {
+				accessKeyID = credentials.AccessKeyID
+				accessKeySecret = credentials.AccessKeySecret
+			}
+		}
+
+		return providercommon.ListAlibabaVSwitches(accessKeyID, accessKeySecret, req.Region)
 	}
 }

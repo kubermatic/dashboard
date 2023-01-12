@@ -25,6 +25,9 @@ type DatacenterSpecKubevirt struct {
 
 	// dns config
 	DNSConfig *PodDNSConfig `json:"dnsConfig,omitempty"`
+
+	// images
+	Images *ImageSources `json:"images,omitempty"`
 }
 
 // Validate validates this datacenter spec kubevirt
@@ -32,6 +35,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateDNSConfig(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateImages(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -60,11 +67,34 @@ func (m *DatacenterSpecKubevirt) validateDNSConfig(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *DatacenterSpecKubevirt) validateImages(formats strfmt.Registry) error {
+	if swag.IsZero(m.Images) { // not required
+		return nil
+	}
+
+	if m.Images != nil {
+		if err := m.Images.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("images")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("images")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this datacenter spec kubevirt based on the context it is used
 func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateDNSConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateImages(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,6 +112,22 @@ func (m *DatacenterSpecKubevirt) contextValidateDNSConfig(ctx context.Context, f
 				return ve.ValidateName("dnsConfig")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("dnsConfig")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Images != nil {
+		if err := m.Images.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("images")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("images")
 			}
 			return err
 		}

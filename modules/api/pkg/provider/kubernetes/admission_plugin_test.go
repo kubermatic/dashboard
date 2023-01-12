@@ -49,7 +49,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 		fromVersion    string
 		plugins        []ctrlruntimeclient.Object
 		expectedError  string
-		expectedResult sets.String
+		expectedResult sets.Set[string]
 	}{
 		{
 			name:        "test 1: get plugins for version 1.12",
@@ -90,7 +90,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 					},
 				},
 			},
-			expectedResult: sets.NewString("DefaultTolerationSeconds", "ImagePolicyWebhook"),
+			expectedResult: sets.New("DefaultTolerationSeconds", "ImagePolicyWebhook"),
 		},
 		{
 			name:        "test 1: get plugins for version 1.14.3",
@@ -131,7 +131,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 					},
 				},
 			},
-			expectedResult: sets.NewString("DefaultTolerationSeconds", "ImagePolicyWebhook", "EventRateLimit"),
+			expectedResult: sets.New("DefaultTolerationSeconds", "ImagePolicyWebhook", "EventRateLimit"),
 		},
 		{
 			name:        "test 1: get plugins for version 1.16.0",
@@ -172,7 +172,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 					},
 				},
 			},
-			expectedResult: sets.NewString("DefaultTolerationSeconds", "ImagePolicyWebhook", "RuntimeClass", "EventRateLimit"),
+			expectedResult: sets.New("DefaultTolerationSeconds", "ImagePolicyWebhook", "RuntimeClass", "EventRateLimit"),
 		},
 		{
 			name:        "test 1: get plugins for version 1.17.0",
@@ -213,7 +213,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 					},
 				},
 			},
-			expectedResult: sets.NewString("DefaultTolerationSeconds", "ImagePolicyWebhook", "RuntimeClass", "EventRateLimit"),
+			expectedResult: sets.New("DefaultTolerationSeconds", "ImagePolicyWebhook", "RuntimeClass", "EventRateLimit"),
 		},
 	}
 
@@ -228,7 +228,7 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 			provider := kubernetes.NewAdmissionPluginsProvider(fakeClient)
 
 			result, err := provider.ListPluginNamesFromVersion(context.Background(), tc.fromVersion)
-			resultSet := sets.NewString(result...)
+			resultSet := sets.New(result...)
 
 			if len(tc.expectedError) > 0 {
 				if err == nil {

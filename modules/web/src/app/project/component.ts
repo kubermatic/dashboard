@@ -236,7 +236,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     for (const project of projects) {
       const quota$ = this.currentUser.isAdmin
         ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === project.id)))
-        : this._quotaService.getProjectQuota(project.id);
+        : this._quotaService.getLiveProjectQuota(project.id);
 
       quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(_ => {
         this.hasQuota = true;
@@ -542,13 +542,19 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  onActivate(component: QuotaWidgetComponent, projectId: string, showEmptyPlaceholder = false): void {
+  onActivate(
+    component: QuotaWidgetComponent,
+    projectId: string,
+    showEmptyPlaceholder = false,
+    projectViewType?: string
+  ): void {
     component.projectId = projectId;
     component.showIcon = this.showCards;
     component.showAsCard = false;
-    component.showDetailsOnHover = false;
+    component.showDetailsOnHover = true;
     component.showBorderOutline = false;
     component.showEmptyPlaceholder = showEmptyPlaceholder;
+    component.projectViewType = projectViewType;
   }
 
   private _setDisplayedColumns(): void {

@@ -43,6 +43,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 	kubenetutil "k8s.io/apimachinery/pkg/util/net"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
@@ -425,7 +426,7 @@ func (p *ClusterProvider) GetTokenForUserCluster(ctx context.Context, userInfo *
 		return cluster.Status.Address.AdminToken, nil
 	}
 
-	return "", fmt.Errorf("user role %s not supported", userInfo.Roles.List())
+	return "", fmt.Errorf("user role %s not supported", sets.List(userInfo.Roles))
 }
 
 // GetSeedClusterAdminRuntimeClient returns a runtime client to interact with the seed cluster resources.
@@ -446,7 +447,7 @@ func (p *ClusterProvider) withImpersonation(userInfo *provider.UserInfo) k8cuser
 	return func(cfg *restclient.Config) *restclient.Config {
 		cfg.Impersonate = restclient.ImpersonationConfig{
 			UserName: userInfo.Email,
-			Groups:   append(userInfo.Roles.List(), "system:authenticated"),
+			Groups:   append(sets.List(userInfo.Roles), "system:authenticated"),
 		}
 		return cfg
 	}

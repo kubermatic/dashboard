@@ -246,7 +246,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 
 		var projects []*kubermaticv1.Project
-		projectIDSet := sets.NewString()
+		projectIDSet := sets.New[string]()
 
 		userMappings, err := memberMapper.MappingsFor(ctx, userInfo.Email)
 		if err != nil {

@@ -21,7 +21,8 @@ limitations under the License.
 </ng-container>
 
 
-<form *ngIf="!loadingClusterDefaults" [formGroup]="form">
+<form *ngIf="!loadingClusterDefaults"
+      [formGroup]="form">
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
@@ -255,8 +256,7 @@ limitations under the License.
             <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache">
               Node Local DNS Cache
             </mat-checkbox>
-            <mat-checkbox *ngIf="isKonnectivityEnabled"
-                          [formControlName]="Controls.Konnectivity"
+            <mat-checkbox [formControlName]="Controls.Konnectivity"
                           [class.km-text-muted]="control(Controls.Konnectivity).disabled">
               Konnectivity
             </mat-checkbox>

@@ -1428,13 +1428,6 @@ type FlatcarSpec struct {
 	flatcar.ProvisioningUtility `json:"provisioningUtility,omitempty"`
 }
 
-// SLESSpec contains SLES specific settings
-// swagger:model SLESSpec
-type SLESSpec struct {
-	// do a dist-upgrade on boot and reboot it required afterwards
-	DistUpgradeOnBoot bool `json:"distUpgradeOnBoot"`
-}
-
 // RHELSpec contains rhel specific settings
 // swagger:model RHELSpec
 type RHELSpec struct {
@@ -1465,7 +1458,6 @@ type OperatingSystemSpec struct {
 	Ubuntu      *UbuntuSpec      `json:"ubuntu,omitempty"`
 	AmazonLinux *AmazonLinuxSpec `json:"amzn2,omitempty"`
 	CentOS      *CentOSSpec      `json:"centos,omitempty"`
-	SLES        *SLESSpec        `json:"sles,omitempty"`
 	RHEL        *RHELSpec        `json:"rhel,omitempty"`
 	Flatcar     *FlatcarSpec     `json:"flatcar,omitempty"`
 	RockyLinux  *RockyLinuxSpec  `json:"rockylinux,omitempty"`
@@ -2017,6 +2009,21 @@ type KubevirtNodeSpec struct {
 	NodeAffinityPreset NodeAffinityPreset `json:"nodeAffinityPreset"`
 	// TopologySpreadConstraints describes topology spread constraints for VMs.
 	TopologySpreadConstraints []TopologySpreadConstraint `json:"topologySpreadConstraints"`
+}
+
+type KubevirtNodeSize struct {
+	// CPUs states how many cpus the kubevirt node will have.
+	// required: true
+	CPUs string `json:"cpus"`
+	// Memory states the memory that kubevirt node will have. The value should be in the
+	// format of https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/
+	// required: true
+	Memory string `json:"memory"`
+	// PrimaryDiskSize states the size of the provisioned pvc per node.
+	// required: true
+	PrimaryDiskSize string `json:"primaryDiskSize"`
+	// SecondaryDisks contains list of secondary-disks
+	SecondaryDisks []SecondaryDisks `json:"secondaryDisks"`
 }
 
 type SecondaryDisks struct {

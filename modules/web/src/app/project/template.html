@@ -150,7 +150,7 @@ limitations under the License.
                     *matCellDef="let element"
                     class="km-project-item-quota">
                   <router-outlet name="quota-widget"
-                                 (activate)="onActivate($event, element.id)"></router-outlet>
+                                 (activate)="onActivate($event, element.id, false, 'table')"></router-outlet>
                 </td>
               </ng-container>
 
@@ -287,8 +287,9 @@ limitations under the License.
               </div>
 
               <div fxLayout="row"
-                   fxLayoutGap="15px"
-                   fxFlex>
+                   fxLayoutGap="20px"
+                   fxFlex
+                   class="owners-card-view">
                 <div fxLayout="row"
                      fxLayoutAlign=" center"
                      fxLayoutGap="8px">
@@ -314,7 +315,7 @@ limitations under the License.
               <div *ngIf="hasQuota"
                    fxLayoutAlign="start start">
                 <router-outlet name="quota-widget"
-                               (activate)="onActivate($event, project.id, true)"></router-outlet>
+                               (activate)="onActivate($event, project.id, true, 'cards')"></router-outlet>
               </div>
             </mat-card-content>
           </mat-card>

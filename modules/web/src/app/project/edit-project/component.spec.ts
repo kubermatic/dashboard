@@ -24,6 +24,10 @@ import {ProjectModule} from '../module';
 import {EditProjectComponent} from './component';
 import {ProjectService} from '@core/services/project';
 import {asyncData} from '@test/services/cluster-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AppConfigService} from '@app/config.service';
+import {UserMockService} from '@test/services/user-mock';
+import {UserService} from '@app/core/services/user';
 
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
@@ -39,6 +43,8 @@ describe('EditProjectComponent', () => {
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ProjectService, useValue: projectServiceMock},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: UserService, useClass: UserMockService},
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();

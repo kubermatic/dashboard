@@ -659,7 +659,7 @@ func createOrUpdateKubeOneAWSSecret(ctx context.Context, cloud apiv2.KubeOneClou
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -687,7 +687,7 @@ func createOrUpdateKubeOneGCPSecret(ctx context.Context, cloud apiv2.KubeOneClou
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -728,7 +728,7 @@ func createOrUpdateKubeOneAzureSecret(ctx context.Context, cloud apiv2.KubeOneCl
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -753,7 +753,7 @@ func createOrUpdateKubeOneDigitaloceanSecret(ctx context.Context, cloud apiv2.Ku
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -786,7 +786,7 @@ func createOrUpdateKubeOneOpenstackSecret(ctx context.Context, cloud apiv2.KubeO
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -811,7 +811,7 @@ func createOrUpdateKubeOneVSphereSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -838,7 +838,7 @@ func createOrUpdateKubeOneEquinixSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -863,7 +863,7 @@ func createOrUpdateKubeOneHetznerSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -911,7 +911,7 @@ func createOrUpdateKubeOneNutanixSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil
 }
@@ -940,7 +940,7 @@ func createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx context.Context, cloud a
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 	return nil
 }
 

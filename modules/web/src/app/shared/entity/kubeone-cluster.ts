@@ -36,9 +36,22 @@ export class KubeOneSSHKeySpec {
 
 export class KubeOneCloudSpec {
   aws?: KubeOneAWSCloudSpec;
+  gcp?: KubeOneGCPCloudSpec;
+  azure?: KubeOneAzureCloudSpec;
 }
 
 export class KubeOneAWSCloudSpec {
   accessKeyID: string;
   secretAccessKey: string;
+}
+
+export class KubeOneGCPCloudSpec {
+  serviceAccount: string;
+}
+
+export class KubeOneAzureCloudSpec {
+  clientID: string;
+  clientSecret: string;
+  subscriptionID: string;
+  tenantID: string;
 }

@@ -122,6 +122,19 @@ export class Auth {
       .pipe(take(1));
   }
 
+  oidcProviderLogout(): void {
+    const config = this._appConfigService.getConfig();
+    if (config.oidc_logout_url) {
+      const logoutUrl = new URL(config.oidc_logout_url);
+      if (logoutUrl.searchParams.has('redirectUri')) {
+        logoutUrl.searchParams.set('redirectUri', this._redirectUri);
+      } else {
+        logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
+      }
+      window.location.href = logoutUrl.toString();
+    }
+  }
+
   setNonce(): void {
     const nonceRegExp = /[?&#]nonce=([^&]+)/;
     const nonceStr = nonceRegExp.exec(this.getOIDCProviderURL());
