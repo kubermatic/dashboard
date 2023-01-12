@@ -29,7 +29,7 @@ describe('openstack provider service', () => {
       providers: [
         Openstack,
         {provide: NodeProvider, useValue: NodeProvider.OPENSTACK},
-        {provide: 'projectID', useValue: fakeProject().id},
+        {provide: String, useValue: fakeProject().id},
       ],
       teardown: {destroyAfterEach: false},
     });
