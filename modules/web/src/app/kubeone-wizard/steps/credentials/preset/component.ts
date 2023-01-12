@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {ClusterSpecService} from '@core/services/cluster-spec';
-import {PresetsService} from '@core/services/wizard/presets';
-import {Cluster} from '@shared/entity/cluster';
+import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
@@ -34,23 +33,23 @@ export enum PresetsState {
 }
 
 @Component({
-  selector: 'km-wizard-presets',
+  selector: 'km-kubeone-wizard-presets',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PresetsComponent),
+      useExisting: forwardRef(() => KubeOnePresetsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PresetsComponent),
+      useExisting: forwardRef(() => KubeOnePresetsComponent),
       multi: true,
     },
   ],
 })
-export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();
   presetsLoaded = false;
 
@@ -59,12 +58,12 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   private _state = PresetsState.Loading;
 
   constructor(
-    private readonly _presets: PresetsService,
+    private readonly _presetsService: KubeOnePresetsService,
+    private readonly _clusterSpecService: KubeOneClusterSpecService,
     private readonly _builder: FormBuilder,
-    private readonly _projectService: ProjectService,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _projectService: ProjectService
   ) {
-    super('Preset');
+    super('KubeOne Preset');
   }
 
   get label(): string {
@@ -72,7 +71,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
   }
 
   get selectedPreset(): string {
-    return this._presets.preset;
+    return this._presetsService.preset;
   }
 
   set selectedPreset(preset: string) {
@@ -81,8 +80,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       this.form.get(Controls.Preset).reset();
     }
 
-    this._presets.preset = preset;
-    this._clusterSpecService.cluster = {credential: preset} as Cluster;
+    this._presetsService.preset = preset;
   }
 
   ngOnInit(): void {
@@ -90,18 +88,10 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       [Controls.Preset]: new FormControl('', Validators.required),
     });
 
-    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
-
-    this._clusterSpecService.datacenterChanges
+    this._clusterSpecService.providerChanges
       .pipe(
-        switchMap(dc =>
-          this._presets.presets(
-            false,
-            false,
-            this._clusterSpecService.provider,
-            dc,
-            this._projectService.selectedProjectID
-          )
+        switchMap(_ =>
+          this._presetsService.presets(this._projectService.selectedProjectID, this._clusterSpecService.provider)
         )
       )
       .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
@@ -118,24 +108,23 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       .get(Controls.Preset)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => {
-        this._presets.preset = preset;
-        this._clusterSpecService.cluster = {credential: preset} as Cluster;
+        this._presetsService.preset = preset;
       });
 
-    this._presets.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
+    this._presetsService.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
       if (this._state !== PresetsState.Empty) {
         this._enable(enable, Controls.Preset);
       }
     });
   }
 
-  reset(): void {
-    this.selectedPreset = '';
-  }
-
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  reset(): void {
+    this.selectedPreset = '';
   }
 
   private _enable(enable: boolean, name: Controls): void {

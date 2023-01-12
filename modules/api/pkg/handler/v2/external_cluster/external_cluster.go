@@ -77,7 +77,7 @@ type createClusterReq struct {
 
 type body struct {
 	// Name is human readable name for the external cluster
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 	// Kubeconfig Base64 encoded kubeconfig
 	Kubeconfig string                          `json:"kubeconfig,omitempty"`
 	Cloud      *apiv2.ExternalClusterCloudSpec `json:"cloud,omitempty"`
@@ -280,7 +280,8 @@ func CreateEndpoint(
 			if err := validatKubeOneReq(cloud.KubeOne, req.Credential); err != nil {
 				return nil, utilerrors.NewBadRequest(err.Error())
 			}
-			createdCluster, err := importKubeOneCluster(ctx, req.Body.Name, preset, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
+
+			createdCluster, err := importKubeOneCluster(ctx, preset, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -1137,7 +1138,7 @@ func convertClusterToAPIWithStatus(ctx context.Context, masterClient ctrlruntime
 	if err != nil && apiCluster.Status.State == apiv2.RunningExternalClusterState {
 		apiCluster.Status = apiv2.ExternalClusterStatus{
 			State:         apiv2.ErrorExternalClusterState,
-			StatusMessage: "Can't access cluster via kubeconfig. Please check the credentials privileges.",
+			StatusMessage: "Can't access cluster via kubeconfig," + "error: " + err.Error(),
 		}
 	}
 	if version != nil {

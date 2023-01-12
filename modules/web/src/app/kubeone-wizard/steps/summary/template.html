@@ -34,43 +34,51 @@ limitations under the License.
       <div class="header counter-2">{{StepRegistry.Credentials}}</div>
       <div class="properties"
            fxLayout="row wrap">
-        <!-- AWS -->
-        <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.aws">
-          <km-property>
-            <div key>Access Key ID</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-          <km-property>
-            <div key>Secret Access Key</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-        </ng-container>
-        <!-- GCP -->
-        <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.gcp">
-          <km-property>
-            <div key>Service Account</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-        </ng-container>
-        <!-- Azure -->
-        <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.azure">
-          <km-property>
-            <div key>Client ID</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-          <km-property>
-            <div key>Client Secret</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-          <km-property>
-            <div key>Subscription ID</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-          <km-property>
-            <div key>Tenant ID</div>
-            <div value>{{SECRET_MASK}}</div>
-          </km-property>
-        </ng-container>
+
+        <km-property *ngIf="preset; else credentials">
+          <div key>Preset</div>
+          <div value>{{preset}}</div>
+        </km-property>
+
+        <ng-template #credentials>
+          <!-- AWS -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.aws">
+            <km-property>
+              <div key>Access Key ID</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Secret Access Key</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+          </ng-container>
+          <!-- GCP -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.gcp">
+            <km-property>
+              <div key>Service Account</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+          </ng-container>
+          <!-- Azure -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.azure">
+            <km-property>
+              <div key>Client ID</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Client Secret</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Subscription ID</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Tenant ID</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+          </ng-container>
+        </ng-template>
       </div>
     </div>
   </div>

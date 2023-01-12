@@ -22,9 +22,13 @@ export abstract class Provider {
   protected _headers = new HttpHeaders();
   protected _restRoot = environment.restRoot;
   protected _newRestRoot = environment.newRestRoot;
-  protected readonly _url = `${this._restRoot}/providers/${this._provider}/sizes`;
+  protected readonly _url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/sizes`;
 
-  protected constructor(protected _http: HttpClient, protected readonly _provider: NodeProvider) {}
+  protected constructor(
+    protected _http: HttpClient,
+    protected readonly _projectID: string,
+    protected readonly _provider: NodeProvider
+  ) {}
 
   protected _setRequiredHeaders(...headers: any): void {
     this._requiredHeaders = headers;

@@ -18,6 +18,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil} from 'rxjs/operators';
 import {encode, isValid} from 'js-base64';
+import {ProjectService} from '@core/services/project';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -34,7 +35,8 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +73,7 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     }
 
     return this._externalClusterService
-      .validateGKECredentials(serviceAccount)
+      .validateGKECredentials(this._projectService.selectedProjectID, serviceAccount)
       .pipe(take(1))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }

@@ -21,8 +21,8 @@ import {Provider} from './provider';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 
 export class Equinix extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Equinix.Header.APIKey, Equinix.Header.ProjectID);
   }

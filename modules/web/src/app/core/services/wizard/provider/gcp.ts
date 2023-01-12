@@ -20,8 +20,8 @@ import {Provider} from './provider';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
 
 export class GCP extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(GCP.Header.ServiceAccount);
   }
@@ -68,7 +68,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/disktypes`;
     return this._http.get<GCPDiskType[]>(url, {headers: this._headers});
   }
 
@@ -95,7 +95,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${seed}/zones`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/zones`;
     return this._http.get<GCPZone[]>(url, {headers: this._headers});
   }
 
@@ -108,7 +108,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/networks`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/networks`;
     return this._http.get<GCPNetwork[]>(url, {headers: this._headers});
   }
 
@@ -122,7 +122,7 @@ export class GCP extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${seed}/subnetworks`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/subnetworks`;
     return this._http.get<GCPSubnetwork[]>(url, {headers: this._headers});
   }
 }

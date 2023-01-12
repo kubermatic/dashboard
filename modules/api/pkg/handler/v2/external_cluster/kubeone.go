@@ -40,9 +40,8 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-func importKubeOneCluster(ctx context.Context, name string, preset *kubermaticv1.Preset, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
+func importKubeOneCluster(ctx context.Context, preset *kubermaticv1.Preset, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
 	isImported := resources.ExternalClusterIsImportedTrue
-
 	kubeOneClusterObj, err := DecodeManifestFromKubeOneReq(cloud.KubeOne.Manifest)
 	if err != nil {
 		return nil, err

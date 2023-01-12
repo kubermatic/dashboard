@@ -21,8 +21,8 @@ import {Provider} from './provider';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 
 export class Anexia extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Anexia.Header.Token);
   }
@@ -55,7 +55,7 @@ export class Anexia extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/vlans`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/vlans`;
     return this._http.get<AnexiaVlan[]>(url, {headers: this._headers});
   }
 
@@ -69,7 +69,7 @@ export class Anexia extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/templates`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/templates`;
     return this._http.get<AnexiaTemplate[]>(url, {headers: this._headers});
   }
 }

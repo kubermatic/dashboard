@@ -56,6 +56,7 @@ import {NameGeneratorService} from '@app/core/services/name-generator';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {ProjectService} from '@core/services/project';
 
 enum Controls {
   Name = 'name',
@@ -180,7 +181,8 @@ export class GKEClusterSettingsComponent
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _projectService: ProjectService
   ) {
     super();
   }
@@ -303,7 +305,7 @@ export class GKEClusterSettingsComponent
   private _getGKEZones(): void {
     this.zoneLabel = Zones.Loading;
     this._externalClusterService
-      .getGKEZones()
+      .getGKEZones(this._projectService.selectedProjectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((zones: GKEZone[]) => {
         this.zones = zones;
@@ -319,7 +321,7 @@ export class GKEClusterSettingsComponent
   private _getGKEDiskTypes(zone: string): void {
     this.diskTypeLabel = DiskTypeState.Loading;
     this._externalClusterService
-      .getGKEDiskTypes(zone)
+      .getGKEDiskTypes(this._projectService.selectedProjectID, zone)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((diskTypes: GCPDiskType[]) => {
         diskTypes.map(diskType => {
@@ -335,7 +337,7 @@ export class GKEClusterSettingsComponent
   private _getGKEMachineTypes(zone: string): void {
     this.machineTypeLabel = MachineTypeState.Loading;
     this._externalClusterService
-      .getGKEMachineTypes(zone)
+      .getGKEMachineTypes(this._projectService.selectedProjectID, zone)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((machineTypes: GCPMachineSize[]) => {
         machineTypes.map(machineType => {
@@ -375,7 +377,7 @@ export class GKEClusterSettingsComponent
     if (zone && mode) {
       this.versionLabel = VersionState.Loading;
       this._externalClusterService
-        .getGKEKubernetesVersions(zone, mode, releaseChannel)
+        .getGKEKubernetesVersions(this._projectService.selectedProjectID, zone, mode, releaseChannel)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((versions: MasterVersion[]) => {
           this.kubernetesVersions = versions.map(version => {
