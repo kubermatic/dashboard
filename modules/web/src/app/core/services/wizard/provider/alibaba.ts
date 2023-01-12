@@ -21,8 +21,8 @@ import {Provider} from './provider';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 
 export class Alibaba extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Alibaba.Header.AccessKeyID, Alibaba.Header.AccessKeySecret);
   }
@@ -70,7 +70,7 @@ export class Alibaba extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/instancetypes`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/instancetypes`;
     return this._http.get<AlibabaInstanceType[]>(url, {headers: this._headers});
   }
 
@@ -84,7 +84,7 @@ export class Alibaba extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/zones`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/zones`;
     return this._http.get<AlibabaZone[]>(url, {headers: this._headers});
   }
 
@@ -98,7 +98,7 @@ export class Alibaba extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/vswitches`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/vswitches`;
     return this._http.get<AlibabaVSwitch[]>(url, {headers: this._headers});
   }
 }

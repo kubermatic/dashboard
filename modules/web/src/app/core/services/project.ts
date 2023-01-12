@@ -73,8 +73,8 @@ export class ProjectService {
   get selectedProject(): Observable<Project> {
     if (!this._project$) {
       this._project$ = this.projects
-        .pipe(map(projects => projects.find(project => project.id === this._selectedProjectID)))
-        .pipe(switchMap(project => (project ? of(project) : this._getProject(this._selectedProjectID))));
+        .pipe(map(projects => projects.find(project => project.id === this.selectedProjectID)))
+        .pipe(switchMap(project => (project ? of(project) : this._getProject(this.selectedProjectID))));
     }
 
     return this._project$;
@@ -119,7 +119,7 @@ export class ProjectService {
     }
   }
 
-  private get _selectedProjectID(): string {
+  get selectedProjectID(): string {
     return this._params.get(PathParam.ProjectID);
   }
 
