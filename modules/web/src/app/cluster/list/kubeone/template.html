@@ -82,13 +82,14 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container [matColumnDef]="Column.Region">
+      <ng-container [matColumnDef]="Column.Version">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20">Region
+            class="km-header-cell p-20">Version
         </th>
         <td mat-cell
             *matCellDef="let element">
+          {{element.spec.version}}
         </td>
       </ng-container>
 

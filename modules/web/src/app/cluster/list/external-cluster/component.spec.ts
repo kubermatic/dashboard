@@ -18,6 +18,8 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
@@ -51,6 +53,14 @@ describe('ExternalClusterListComponent', () => {
       defer(() => of([fakeCustomExternalCluster()], async))
     );
 
+    const kubeOnePresetsServiceMock = {
+      preset: jest.fn(),
+    };
+
+    const externalClusterServiceMock = {
+      showDisconnectClusterDialog: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [ExternalClusterListComponent],
@@ -63,6 +73,8 @@ describe('ExternalClusterListComponent', () => {
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: SettingsService, useClass: SettingsMockService},
+        {provide: ExternalClusterService, useValue: externalClusterServiceMock},
+        {provide: KubeOnePresetsService, useValue: kubeOnePresetsServiceMock},
         EndOfLifeService,
       ],
     }).compileComponents();

@@ -19,6 +19,7 @@ import {Router} from '@angular/router';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {View} from '@app/shared/entity/common';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {NotificationService} from '@core/services/notification';
 import {environment} from '@environments/environment';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
@@ -54,6 +55,7 @@ export class ExternalClusterService {
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(
+    private readonly _kubeOnePresetsService: KubeOnePresetsService,
     private readonly _http: HttpClient,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService,
@@ -338,6 +340,9 @@ export class ExternalClusterService {
         headers = this._getGKEHeaders();
         break;
       default:
+        if (ExternalCluster.getProvider(externalClusterModel.cloud) === ExternalClusterProvider.KubeOne) {
+          headers = this._getKubeOneHeaders();
+        }
         break;
     }
     return this._http.post<ExternalCluster>(url, externalClusterModel, {headers});
@@ -443,6 +448,16 @@ export class ExternalClusterService {
     if (releaseChannel) {
       headers = {...headers, ReleaseChannel: releaseChannel};
     }
+    return new HttpHeaders(headers);
+  }
+
+  private _getKubeOneHeaders(): HttpHeaders {
+    let headers = {};
+
+    if (this._kubeOnePresetsService.preset) {
+      headers = {Credential: this._kubeOnePresetsService.preset};
+    }
+
     return new HttpHeaders(headers);
   }
 }

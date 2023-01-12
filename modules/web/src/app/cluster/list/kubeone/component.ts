@@ -38,7 +38,7 @@ enum Column {
   Status = 'status',
   Name = 'name',
   Provider = 'provider',
-  Region = 'region',
+  Version = 'version',
   Imported = 'imported',
   Actions = 'actions',
 }
