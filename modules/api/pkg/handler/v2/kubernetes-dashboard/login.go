@@ -29,11 +29,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/apimachinery/pkg/util/rand"
@@ -135,7 +135,7 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		return nil, err
 	}
 
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	// get the redirect uri
 	redirectURI, err := oidcProvider.GetRedirectURI(loginRequest.Request.URL.Path)
@@ -226,7 +226,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", state.Nonce)
 	}
 
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	// get the redirect uri
 	redirectURI, err := oidcProvider.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
@@ -248,7 +248,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 }
 
 func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI string) (string, error) {
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	oidcTokens, err := oidcProvider.Exchange(ctx, code, overwriteRedirectURI)
 

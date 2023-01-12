@@ -22,10 +22,10 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 func GetAdminKubeconfigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
@@ -45,7 +45,7 @@ func GetOidcKubeconfigEndpoint(projectProvider provider.ProjectProvider, privile
 func CreateOIDCKubeconfigEndpoint(
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcIssuerVerifier auth.OIDCIssuerVerifier,
+	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
 	oidcCfg common.OIDCConfiguration,
 	seedsGetter provider.SeedsGetter,
 ) endpoint.Endpoint {

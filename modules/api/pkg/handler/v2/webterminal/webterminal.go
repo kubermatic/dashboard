@@ -22,13 +22,13 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
-func CreateOIDCKubeconfigSecretEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration) endpoint.Endpoint {
+func CreateOIDCKubeconfigSecretEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(handlercommon.CreateOIDCKubeconfigReq)
 		return handlercommon.CreateOIDCKubeconfigSecretEndpoint(ctx, projectProvider, privilegedProjectProvider, oidcIssuerVerifier, oidcCfg, req)

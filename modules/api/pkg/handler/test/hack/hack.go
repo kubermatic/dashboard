@@ -24,11 +24,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"k8c.io/dashboard/v2/pkg/handler"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
@@ -62,9 +62,9 @@ func NewTestRouting(
 	privilegedServiceAccountTokenProvider provider.PrivilegedServiceAccountTokenProvider,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	issuerVerifier auth.OIDCIssuerVerifier,
-	tokenVerifiers auth.TokenVerifier,
-	tokenExtractors auth.TokenExtractor,
+	issuerVerifier authtypes.OIDCIssuerVerifier,
+	tokenVerifiers authtypes.TokenVerifier,
+	tokenExtractors authtypes.TokenExtractor,
 	prometheusClient prometheusapi.Client,
 	projectMemberProvider *kubernetes.ProjectMemberProvider,
 	privilegedProjectMemberProvider provider.PrivilegedProjectMemberProvider,

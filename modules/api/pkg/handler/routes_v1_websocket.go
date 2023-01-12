@@ -29,12 +29,12 @@ import (
 	"github.com/gorilla/websocket"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	wsh "k8c.io/dashboard/v2/pkg/handler/websocket"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
@@ -319,7 +319,7 @@ func (req terminalReq) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-func verifyAuthorizationToken(req *http.Request, tokenVerifier auth.TokenVerifier, tokenExtractor auth.TokenExtractor) (*apiv1.User, error) {
+func verifyAuthorizationToken(req *http.Request, tokenVerifier authtypes.TokenVerifier, tokenExtractor authtypes.TokenExtractor) (*apiv1.User, error) {
 	token, err := tokenExtractor.Extract(req)
 	if err != nil {
 		return nil, err

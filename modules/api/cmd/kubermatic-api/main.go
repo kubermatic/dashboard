@@ -67,6 +67,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
@@ -452,7 +453,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	}, nil
 }
 
-func createOIDCClients(options serverRunOptions) (auth.OIDCIssuerVerifier, error) {
+func createOIDCClients(options serverRunOptions) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
 		options.oidcURL,
 		options.oidcIssuerClientID,
@@ -467,7 +468,7 @@ func createOIDCClients(options serverRunOptions) (auth.OIDCIssuerVerifier, error
 	)
 }
 
-func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVerifier, auth.TokenExtractor, error) {
+func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
 		options.oidcURL,
 		options.oidcAuthenticatorClientID,
@@ -492,14 +493,14 @@ func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVeri
 		prov.privilegedServiceAccountTokenProvider,
 	)
 
-	tokenVerifiers := auth.NewTokenVerifierPlugins([]auth.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
-	tokenExtractors := auth.NewTokenExtractorPlugins([]auth.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
+	tokenVerifiers := auth.NewTokenVerifierPlugins([]authtypes.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
+	tokenExtractors := auth.NewTokenExtractorPlugins([]authtypes.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
 	return tokenVerifiers, tokenExtractors, nil
 }
 
 func createAPIHandler(
-	options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier,
-	tokenVerifiers auth.TokenVerifier, tokenExtractors auth.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger,
+	options serverRunOptions, prov providers, oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
+	tokenVerifiers authtypes.TokenVerifier, tokenExtractors authtypes.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger,
 ) (http.HandlerFunc, error) {
 	var prometheusClient prometheusapi.Client
 	if options.featureGates.Enabled(features.PrometheusEndpoint) {

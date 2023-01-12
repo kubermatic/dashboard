@@ -27,9 +27,9 @@ import (
 	transporthttp "github.com/go-kit/kit/transport/http"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
@@ -262,7 +262,7 @@ func UserInfoUnauthorized(userProjectMapper provider.ProjectMemberMapper, userPr
 }
 
 // TokenVerifier knows how to verify a token from the incoming request.
-func TokenVerifier(tokenVerifier auth.TokenVerifier, userProvider provider.UserProvider) endpoint.Middleware {
+func TokenVerifier(tokenVerifier authtypes.TokenVerifier, userProvider provider.UserProvider) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			if rawTokenNotFoundErr := ctx.Value(noTokenFoundKey); rawTokenNotFoundErr != nil {
@@ -368,7 +368,7 @@ func getAddonProvider(ctx context.Context, clusterProviderGetter provider.Cluste
 }
 
 // TokenExtractor knows how to extract a token from the incoming request.
-func TokenExtractor(o auth.TokenExtractor) transporthttp.RequestFunc {
+func TokenExtractor(o authtypes.TokenExtractor) transporthttp.RequestFunc {
 	return func(ctx context.Context, r *http.Request) context.Context {
 		token, err := o.Extract(r)
 		if err != nil {
@@ -996,7 +996,13 @@ func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIss
 	}
 }
 
-func getOIDCIssuerVerifier(ctx context.Context, clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter, seedName, clusterID string) (provider.OIDCIssuerVerifierProvider, error) {
+func getOIDCIssuerVerifier(
+	ctx context.Context,
+	clusterProviderGetter provider.ClusterProviderGetter,
+	oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter,
+	seedsGetter provider.SeedsGetter,
+	seedName, clusterID string,
+) (authtypes.OIDCIssuerVerifier, error) {
 	seeds, err := seedsGetter()
 	if err != nil {
 		return nil, err

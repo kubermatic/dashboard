@@ -29,9 +29,9 @@ import (
 	prometheusapi "github.com/prometheus/client_golang/api"
 	"go.uber.org/zap"
 
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -60,9 +60,9 @@ type Routing struct {
 	privilegedServiceAccountTokenProvider provider.PrivilegedServiceAccountTokenProvider
 	projectProvider                       provider.ProjectProvider
 	privilegedProjectProvider             provider.PrivilegedProjectProvider
-	oidcIssuerVerifier                    auth.OIDCIssuerVerifier
-	tokenVerifiers                        auth.TokenVerifier
-	tokenExtractors                       auth.TokenExtractor
+	oidcIssuerVerifier                    authtypes.OIDCIssuerVerifier
+	tokenVerifiers                        authtypes.TokenVerifier
+	tokenExtractors                       authtypes.TokenExtractor
 	clusterProviderGetter                 provider.ClusterProviderGetter
 	addonProviderGetter                   provider.AddonProviderGetter
 	addonConfigProvider                   provider.AddonConfigProvider
@@ -191,9 +191,9 @@ type RoutingParams struct {
 	PrivilegedServiceAccountTokenProvider          provider.PrivilegedServiceAccountTokenProvider
 	ProjectProvider                                provider.ProjectProvider
 	PrivilegedProjectProvider                      provider.PrivilegedProjectProvider
-	OIDCIssuerVerifier                             auth.OIDCIssuerVerifier
-	TokenVerifiers                                 auth.TokenVerifier
-	TokenExtractors                                auth.TokenExtractor
+	OIDCIssuerVerifier                             authtypes.OIDCIssuerVerifier
+	TokenVerifiers                                 authtypes.TokenVerifier
+	TokenExtractors                                authtypes.TokenExtractor
 	ClusterProviderGetter                          provider.ClusterProviderGetter
 	AddonProviderGetter                            provider.AddonProviderGetter
 	AddonConfigProvider                            provider.AddonConfigProvider

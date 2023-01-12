@@ -31,10 +31,10 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -265,15 +265,13 @@ func CreateOIDCKubeconfigEndpoint(
 	ctx context.Context,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcIssuerVerifier auth.OIDCIssuerVerifier,
+	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
 	oidcCfg common.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
 	seedsGetter provider.SeedsGetter,
 ) (interface{}, error) {
-	// oidcIssuer := oidcIssuerVerifier.(auth.OIDCIssuer)
-	// oidcVerifier := oidcIssuerVerifier.(auth.TokenVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	if secureCookie == nil {
 		secureCookie = securecookie.New([]byte(oidcCfg.CookieHashKey), nil)
@@ -401,9 +399,16 @@ func CreateOIDCKubeconfigEndpoint(
 	return rsp, nil
 }
 
-func CreateOIDCKubeconfigSecretEndpoint(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration, req CreateOIDCKubeconfigReq) (interface{}, error) {
-	oidcIssuer := oidcIssuerVerifier.(auth.OIDCIssuer)
-	oidcVerifier := oidcIssuerVerifier.(auth.TokenVerifier)
+func CreateOIDCKubeconfigSecretEndpoint(
+	ctx context.Context,
+	projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider,
+	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
+	oidcCfg common.OIDCConfiguration,
+	req CreateOIDCKubeconfigReq,
+) (interface{}, error) {
+	oidcIssuer := oidcIssuerVerifier.(authtypes.OIDCIssuer)
+	oidcVerifier := oidcIssuerVerifier.(authtypes.TokenVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	if secureCookie == nil {

@@ -32,65 +32,14 @@ import (
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/provider/auth/types"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
-
-// OIDCToken represents the credentials used to authorize
-// the requests to access protected resources on the OAuth 2.0
-// provider's backend.
-type OIDCToken struct {
-	// AccessToken is the token that authorizes and authenticates
-	// the requests.
-	AccessToken string
-
-	// RefreshToken is a token that's used by the application
-	// (as opposed to the user) to refresh the access token
-	// if it expires.
-	RefreshToken string
-
-	// Expiry is the optional expiration time of the access token.
-	//
-	// If zero, TokenSource implementations will reuse the same
-	// token forever and RefreshToken or equivalent
-	// mechanisms for that TokenSource will not be used.
-	Expiry time.Time
-
-	// IDToken is the token that contains claims about authenticated user
-	//
-	// Users should use TokenVerifier.Verify method to verify and extract claim from the token
-	IDToken string
-}
-
-// OIDCIssuerVerifier combines OIDCIssuer and TokenVerifier.
-type OIDCIssuerVerifier interface {
-	OIDCIssuer
-	TokenVerifier
-	RedirectURIPathGetter
-}
-
-type RedirectURIPathGetter interface {
-	// GetRedirectURI gets redirect URI for a given path
-	GetRedirectURI(path string) (string, error)
-}
-
-// OIDCIssuer exposes methods for getting OIDC tokens.
-type OIDCIssuer interface {
-	// AuthCodeURL returns a URL to OpenID provider's consent page
-	// that asks for permissions for the required scopes explicitly.
-	//
-	// state is a token to protect the user from CSRF attacks. You must
-	// always provide a non-zero string and validate that it matches the
-	// the state query parameter on your redirect callback.
-	// See http://tools.ietf.org/html/rfc6749#section-10.12 for more info.
-	AuthCodeURL(state string, offlineAsScope bool, overwriteRedirectURI string, scopes ...string) string
-
-	// Exchange converts an authorization code into a token.
-	Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error)
-}
 
 // OpenIDClient implements OIDCIssuerVerifier and TokenExtractorVerifier.
 type OpenIDClient struct {
 	issuer         string
-	tokenExtractor TokenExtractor
+	tokenExtractor authtypes.TokenExtractor
 	clientID       string
 	clientSecret   string
 	redirectURI    string
@@ -101,7 +50,9 @@ type OpenIDClient struct {
 
 // NewOpenIDClient returns an authentication middleware which authenticates against an openID server.
 // If rootCertificates is nil, the host's root CAs will be used.
-func NewOpenIDClient(issuer, clientID, clientSecret, redirectURI string, extractor TokenExtractor, insecureSkipVerify bool, rootCertificates *x509.CertPool) (*OpenIDClient, error) {
+func NewOpenIDClient(
+	issuer, clientID, clientSecret, redirectURI string, extractor authtypes.TokenExtractor, insecureSkipVerify bool, rootCertificates *x509.CertPool,
+) (authtypes.OIDCIssuerVerifier, error) {
 	ctx := context.Background()
 	tr := &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
@@ -145,26 +96,26 @@ func (o *OpenIDClient) Extract(rq *http.Request) (string, error) {
 
 // Verify parses a raw ID Token, verifies it's been signed by the provider, performs
 // any additional checks depending on the Config, and returns the payload as TokenClaims.
-func (o *OpenIDClient) Verify(ctx context.Context, token string) (TokenClaims, error) {
+func (o *OpenIDClient) Verify(ctx context.Context, token string) (authtypes.TokenClaims, error) {
 	if token == "" {
-		return TokenClaims{}, errors.New("token cannot be empty")
+		return authtypes.TokenClaims{}, errors.New("token cannot be empty")
 	}
 
 	idToken, err := o.verifier.Verify(ctx, token)
 	if err != nil {
 		if strings.Contains(err.Error(), "oidc: token is expired") {
-			return TokenClaims{}, &TokenExpiredError{msg: err.Error()}
+			return authtypes.TokenClaims{}, &TokenExpiredError{msg: err.Error()}
 		}
-		return TokenClaims{}, err
+		return authtypes.TokenClaims{}, err
 	}
 
 	claims := map[string]interface{}{}
 	err = idToken.Claims(&claims)
 	if err != nil {
-		return TokenClaims{}, err
+		return authtypes.TokenClaims{}, err
 	}
 
-	oidcClaims := TokenClaims{}
+	oidcClaims := authtypes.TokenClaims{}
 	if rawName, found := claims["name"]; found {
 		oidcClaims.Name = rawName.(string)
 	}
@@ -208,16 +159,16 @@ func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteR
 }
 
 // Exchange converts an authorization code into a token.
-func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error) {
+func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (types.OIDCToken, error) {
 	clientCtx := oidc.ClientContext(ctx, o.httpClient)
 	oauth2Config := o.oauth2Config(overwriteRedirectURI)
 
 	tokens, err := oauth2Config.Exchange(clientCtx, code)
 	if err != nil {
-		return OIDCToken{}, err
+		return types.OIDCToken{}, err
 	}
 
-	oidcToken := OIDCToken{AccessToken: tokens.AccessToken, RefreshToken: tokens.RefreshToken, Expiry: tokens.Expiry}
+	oidcToken := types.OIDCToken{AccessToken: tokens.AccessToken, RefreshToken: tokens.RefreshToken, Expiry: tokens.Expiry}
 	if rawIDToken, ok := tokens.Extra("id_token").(string); ok {
 		oidcToken.IDToken = rawIDToken
 	}
@@ -249,7 +200,7 @@ func (o *OpenIDClient) oauth2Config(overwriteRedirectURI string, scopes ...strin
 }
 
 // NewHeaderBearerTokenExtractor returns a token extractor which extracts the token from the given header.
-func NewHeaderBearerTokenExtractor(header string) TokenExtractor {
+func NewHeaderBearerTokenExtractor(header string) authtypes.TokenExtractor {
 	return headerBearerTokenExtractor{name: header}
 }
 
@@ -268,7 +219,7 @@ func (e headerBearerTokenExtractor) Extract(r *http.Request) (string, error) {
 }
 
 // NewQueryParamBearerTokenExtractor returns a token extractor which extracts the token from the given query parameter.
-func NewQueryParamBearerTokenExtractor(header string) TokenExtractor {
+func NewQueryParamBearerTokenExtractor(header string) authtypes.TokenExtractor {
 	return queryParamBearerTokenExtractor{name: header}
 }
 
@@ -285,7 +236,7 @@ func (e queryParamBearerTokenExtractor) Extract(r *http.Request) (string, error)
 	return val, nil
 }
 
-func NewCookieHeaderBearerTokenExtractor(header string) TokenExtractor {
+func NewCookieHeaderBearerTokenExtractor(header string) authtypes.TokenExtractor {
 	return cookieHeaderBearerTokenExtractor{name: header}
 }
 
@@ -303,12 +254,12 @@ func (e cookieHeaderBearerTokenExtractor) Extract(r *http.Request) (string, erro
 }
 
 // NewCombinedExtractor returns an token extractor which tries a list of token extractors until it finds a token.
-func NewCombinedExtractor(extractors ...TokenExtractor) TokenExtractor {
+func NewCombinedExtractor(extractors ...authtypes.TokenExtractor) authtypes.TokenExtractor {
 	return combinedExtractor{extractors: extractors}
 }
 
 type combinedExtractor struct {
-	extractors []TokenExtractor
+	extractors []authtypes.TokenExtractor
 }
 
 // Extract extracts the token via the given token extractors. Returns as soon as it finds a token.

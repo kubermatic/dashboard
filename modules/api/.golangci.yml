@@ -101,6 +101,8 @@ linters-settings:
         alias: kubermaticv1
       - pkg: k8c.io/kubermatic/v2/pkg/util/errors
         alias: utilerrors
+      - pkg: k8c.io/dashboard/v2/pkg/provider/auth/types
+        alias: authtypes
       # Kubernetes
       - pkg: k8s.io/api/(\w+)/(v[\w\d]+)
         alias: $1$2

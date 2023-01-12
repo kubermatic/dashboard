@@ -45,6 +45,7 @@ import (
 	handlerv1common "k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/etcdbackupconfig"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
@@ -188,9 +189,9 @@ type newRoutingFunc func(
 	privilegedServiceAccountTokenProvider provider.PrivilegedServiceAccountTokenProvider,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcIssuerVerifier auth.OIDCIssuerVerifier,
-	tokenVerifiers auth.TokenVerifier,
-	tokenExtractors auth.TokenExtractor,
+	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
+	tokenVerifiers authtypes.TokenVerifier,
+	tokenExtractors authtypes.TokenExtractor,
 	prometheusClient prometheusapi.Client,
 	projectMemberProvider *kubernetes.ProjectMemberProvider,
 	privilegedProjectMemberProvider provider.PrivilegedProjectMemberProvider,
@@ -308,8 +309,8 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	if err != nil {
 		return nil, nil, err
 	}
-	var verifiers []auth.TokenVerifier
-	var extractors []auth.TokenExtractor
+	var verifiers []authtypes.TokenVerifier
+	var extractors []authtypes.TokenExtractor
 	{
 		// if the API users is actually a service account use JWTTokenAuthentication
 		// that knows how to extract and verify the token
@@ -647,7 +648,9 @@ func CreateTestEndpointAndGetClients(user apiv1.User, seedsGetter provider.Seeds
 }
 
 // CreateTestEndpoint does exactly the same as CreateTestEndpointAndGetClients except it omits ClientsSets when returning.
-func CreateTestEndpoint(user apiv1.User, kubeObjects, kubermaticObjects []ctrlruntimeclient.Object, config *kubermaticv1.KubermaticConfiguration, routingFunc newRoutingFunc) (http.Handler, error) {
+func CreateTestEndpoint(
+	user apiv1.User, kubeObjects, kubermaticObjects []ctrlruntimeclient.Object, config *kubermaticv1.KubermaticConfiguration, routingFunc newRoutingFunc,
+) (http.Handler, error) {
 	router, _, err := CreateTestEndpointAndGetClients(user, nil, kubeObjects, nil, kubermaticObjects, config, routingFunc)
 	return router, err
 }
