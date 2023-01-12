@@ -364,13 +364,6 @@ func CreateOIDCKubeconfigEndpoint(
 		return nil, utilerrors.NewBadRequest(fmt.Sprintf("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase))
 	}
 
-	// seeds, err := seedsGetter()
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// TODO: map cluster to seed
-	// seed := seeds["kubermatic"]
-
 	rsp := createOIDCKubeconfigRsp{}
 	scopes := []string{"openid", "email", "groups"}
 	if oidcCfg.OfflineAccessAsScope {
