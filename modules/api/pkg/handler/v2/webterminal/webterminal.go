@@ -25,13 +25,12 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
-func CreateOIDCKubeconfigSecretEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration) endpoint.Endpoint {
+func CreateOIDCKubeconfigSecretEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcCfg common.OIDCConfiguration) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(handlercommon.CreateOIDCKubeconfigReq)
-		return handlercommon.CreateOIDCKubeconfigSecretEndpoint(ctx, projectProvider, privilegedProjectProvider, oidcIssuerVerifier, oidcCfg, req)
+		return handlercommon.CreateOIDCKubeconfigSecretEndpoint(ctx, projectProvider, privilegedProjectProvider, oidcCfg, req)
 	}
 }
 
