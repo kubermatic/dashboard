@@ -17,16 +17,12 @@ limitations under the License.
 package kubernetesdashboard
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"net/http"
-	"net/url"
 
 	"github.com/gorilla/mux"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
-	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 type InitialRequest struct {
@@ -63,35 +59,26 @@ type OIDCCallbackRequest struct {
 	*http.Request
 
 	// in: query
-	Code      string `json:"code"`
-	State     string `json:"state"`
-	ClusterID string `json:"clusterID"`
+	Code  string              `json:"code"`
+	State *commonv2.OIDCState `json:"state"`
 }
 
 func (r *OIDCCallbackRequest) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		ClusterID: r.ClusterID,
+		ClusterID: r.State.ClusterID,
 	}
 }
 
 func (this *OIDCCallbackRequest) decode(r *http.Request) (*OIDCCallbackRequest, error) {
 	this.Code = r.URL.Query().Get("code")
-	this.State = r.URL.Query().Get("state")
+	state := r.URL.Query().Get("state")
 	this.Request = r
 
-	unescapedState, err := url.QueryUnescape(this.State)
+	var err error
+	this.State, err = decodeOIDCState(state)
 	if err != nil {
-		return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected url encoded value: %v", err)
+		return nil, err
 	}
-	rawState, err := base64.StdEncoding.DecodeString(unescapedState)
-	if err != nil {
-		return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected base64 encoded value: %v", err)
-	}
-	oidcState := commonv2.OIDCState{}
-	if err = json.Unmarshal(rawState, &oidcState); err != nil {
-		return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected json encoded value: %v", err)
-	}
-	this.ClusterID = oidcState.ClusterID
 
 	return this, nil
 }

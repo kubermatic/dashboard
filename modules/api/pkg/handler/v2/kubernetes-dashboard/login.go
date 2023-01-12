@@ -212,7 +212,7 @@ func (this *loginHandler) oidcCallbackHandler() http.Handler {
 func (this *loginHandler) oidcCallback(ctx context.Context, request interface{}) (response interface{}, err error) {
 	oidcCallbackRequest := request.(*OIDCCallbackRequest)
 
-	state, err := this.decodeOIDCState(oidcCallbackRequest.State)
+	state := oidcCallbackRequest.State
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +305,7 @@ func (this *loginHandler) encodeOIDCState(nonce string, projectID string, cluste
 	return urlSafeState, nil
 }
 
-func (this *loginHandler) decodeOIDCState(state string) (*commonv2.OIDCState, error) {
+func decodeOIDCState(state string) (*commonv2.OIDCState, error) {
 	unescapedState, err := url.QueryUnescape(state)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected url encoded value: %v", err)
