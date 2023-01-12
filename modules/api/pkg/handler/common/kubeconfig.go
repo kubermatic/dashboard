@@ -270,10 +270,10 @@ func CreateOIDCKubeconfigEndpoint(
 	req CreateOIDCKubeconfigReq,
 	seedsGetter provider.SeedsGetter,
 ) (interface{}, error) {
-	oidcIssuer := oidcIssuerVerifier.(auth.OIDCIssuer)
-	oidcVerifier := oidcIssuerVerifier.(auth.TokenVerifier)
+	// oidcIssuer := oidcIssuerVerifier.(auth.OIDCIssuer)
+	// oidcVerifier := oidcIssuerVerifier.(auth.TokenVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-	//oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
 
 	if secureCookie == nil {
 		secureCookie = securecookie.New([]byte(oidcCfg.CookieHashKey), nil)
@@ -291,7 +291,7 @@ func CreateOIDCKubeconfigEndpoint(
 		if req.decodedState.Nonce != req.cookieNonceValue {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
-		oidcTokens, err := oidcIssuer.Exchange(ctx, req.code, "")
+		oidcTokens, err := oidcProvider.Exchange(ctx, req.code, "")
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -299,7 +299,7 @@ func CreateOIDCKubeconfigEndpoint(
 			return nil, utilerrors.NewBadRequest("the refresh token is missing but required, try setting/unsetting \"oidc-offline-access-as-scope\" command line flag")
 		}
 
-		claims, err := oidcVerifier.Verify(ctx, oidcTokens.IDToken)
+		claims, err := oidcProvider.Verify(ctx, oidcTokens.IDToken)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusUnauthorized, err.Error())
 		}
@@ -396,7 +396,7 @@ func CreateOIDCKubeconfigEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuer.AuthCodeURL(urlSafeState, oidcCfg.OfflineAccessAsScope, "", scopes...)
+	rsp.authCodeURL = oidcProvider.AuthCodeURL(urlSafeState, oidcCfg.OfflineAccessAsScope, "", scopes...)
 
 	return rsp, nil
 }

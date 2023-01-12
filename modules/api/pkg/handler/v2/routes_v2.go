@@ -1047,7 +1047,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.listVMwareCloudDirectorTemplatesNoCredentials())
 
 	kubernetesdashboard.
-		NewLoginHandler(oidcCfg, r.oidcIssuerVerifier, r.oidcSeedIssuerVerifier, r.settingsProvider).
+		NewLoginHandler(oidcCfg, r.oidcIssuerVerifier, r.settingsProvider).
 		Middlewares(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 		).

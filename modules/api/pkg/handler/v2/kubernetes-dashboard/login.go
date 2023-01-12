@@ -31,6 +31,7 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -46,11 +47,10 @@ const (
 type loginHandler struct {
 	baseHandler
 
-	oidcConfig             common.OIDCConfiguration
-	oidcIssuerVerifier     auth.OIDCIssuerVerifier
-	oidcSeedIssuerVerifier auth.OIDCIssuerVerifier
-	settingsProvider       provider.SettingsProvider
-	secureCookie           *securecookie.SecureCookie
+	oidcConfig         common.OIDCConfiguration
+	oidcIssuerVerifier auth.OIDCIssuerVerifier
+	settingsProvider   provider.SettingsProvider
+	secureCookie       *securecookie.SecureCookie
 }
 
 func (this *loginHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
@@ -142,9 +142,11 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		return nil, err
 	}
 
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+
 	return &LoginResponse{
 		Request: loginRequest.Request,
-		authURL: this.oidcSeedIssuerVerifier.AuthCodeURL(state, this.oidcConfig.OfflineAccessAsScope, redirectURI, scopes...),
+		authURL: oidcProvider.AuthCodeURL(state, this.oidcConfig.OfflineAccessAsScope, redirectURI, scopes...),
 		nonce:   nonce,
 	}, nil
 }
@@ -245,8 +247,10 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 }
 
 func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI string) (string, error) {
-	oidcTokens, err := this.oidcSeedIssuerVerifier.Exchange(ctx, code, overwriteRedirectURI)
-	// oidcTokens, err := this.oidcIssuerVerifier.Exchange(ctx, code, overwriteRedirectURI)
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+
+	oidcTokens, err := oidcProvider.Exchange(ctx, code, overwriteRedirectURI)
+
 	if err != nil {
 		return "", utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 	}
@@ -256,7 +260,7 @@ func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectU
 	}
 
 	// claims, err := this.oidcIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
-	claims, err := this.oidcSeedIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
+	claims, err := oidcProvider.Verify(ctx, oidcTokens.IDToken)
 	if err != nil {
 		return "", utilerrors.New(http.StatusUnauthorized, err.Error())
 	}
@@ -317,12 +321,11 @@ func (this *loginHandler) decodeOIDCState(state string) (*commonv2.OIDCState, er
 	return &oidcState, nil
 }
 
-func NewLoginHandler(oidcConfig common.OIDCConfiguration, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcSeedIssuerVerifier auth.OIDCIssuerVerifier, settingsProvider provider.SettingsProvider) Handler {
+func NewLoginHandler(oidcConfig common.OIDCConfiguration, oidcIssuerVerifier auth.OIDCIssuerVerifier, settingsProvider provider.SettingsProvider) Handler {
 	return &loginHandler{
-		oidcConfig:             oidcConfig,
-		oidcIssuerVerifier:     oidcIssuerVerifier,
-		oidcSeedIssuerVerifier: oidcSeedIssuerVerifier,
-		settingsProvider:       settingsProvider,
-		secureCookie:           securecookie.New([]byte(oidcConfig.CookieHashKey), nil),
+		oidcConfig:         oidcConfig,
+		oidcIssuerVerifier: oidcIssuerVerifier,
+		settingsProvider:   settingsProvider,
+		secureCookie:       securecookie.New([]byte(oidcConfig.CookieHashKey), nil),
 	}
 }

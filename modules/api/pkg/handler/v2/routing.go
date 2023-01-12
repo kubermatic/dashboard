@@ -57,7 +57,6 @@ type Routing struct {
 	privilegedProjectProvider                      provider.PrivilegedProjectProvider
 	featureGatesProvider                           provider.FeatureGatesProvider
 	oidcIssuerVerifier                             auth.OIDCIssuerVerifier
-	oidcSeedIssuerVerifier                         auth.OIDCIssuerVerifier
 	tokenVerifiers                                 auth.TokenVerifier
 	tokenExtractors                                auth.TokenExtractor
 	clusterProviderGetter                          provider.ClusterProviderGetter
@@ -128,7 +127,6 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		projectProvider:                                routingParams.ProjectProvider,
 		privilegedProjectProvider:                      routingParams.PrivilegedProjectProvider,
 		oidcIssuerVerifier:                             routingParams.OIDCIssuerVerifier,
-		oidcSeedIssuerVerifier:                         routingParams.OIDCSeedIssuerVerifier,
 		tokenVerifiers:                                 routingParams.TokenVerifiers,
 		tokenExtractors:                                routingParams.TokenExtractors,
 		prometheusClient:                               routingParams.PrometheusClient,
