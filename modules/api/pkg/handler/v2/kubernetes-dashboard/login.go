@@ -47,10 +47,9 @@ const (
 type loginHandler struct {
 	baseHandler
 
-	oidcConfig         common.OIDCConfiguration
-	oidcIssuerVerifier auth.OIDCIssuerVerifier
-	settingsProvider   provider.SettingsProvider
-	secureCookie       *securecookie.SecureCookie
+	oidcConfig       common.OIDCConfiguration
+	settingsProvider provider.SettingsProvider
+	secureCookie     *securecookie.SecureCookie
 }
 
 func (this *loginHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
@@ -136,13 +135,13 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		return nil, err
 	}
 
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+
 	// get the redirect uri
-	redirectURI, err := this.oidcIssuerVerifier.GetRedirectURI(loginRequest.Request.URL.Path)
+	redirectURI, err := oidcProvider.GetRedirectURI(loginRequest.Request.URL.Path)
 	if err != nil {
 		return nil, err
 	}
-
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
 
 	return &LoginResponse{
 		Request: loginRequest.Request,
@@ -168,7 +167,7 @@ func (this *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, m
 }
 
 func (this *loginHandler) decodeOIDCCallbackRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	return NewOIDCCallbackRequest(r), nil
+	return NewOIDCCallbackRequest(r)
 }
 
 func (this *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
@@ -227,8 +226,10 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", state.Nonce)
 	}
 
+	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(auth.OIDCIssuerVerifier)
+
 	// get the redirect uri
-	redirectURI, err := this.oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
+	redirectURI, err := oidcProvider.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -321,11 +322,10 @@ func (this *loginHandler) decodeOIDCState(state string) (*commonv2.OIDCState, er
 	return &oidcState, nil
 }
 
-func NewLoginHandler(oidcConfig common.OIDCConfiguration, oidcIssuerVerifier auth.OIDCIssuerVerifier, settingsProvider provider.SettingsProvider) Handler {
+func NewLoginHandler(oidcConfig common.OIDCConfiguration, settingsProvider provider.SettingsProvider) Handler {
 	return &loginHandler{
-		oidcConfig:         oidcConfig,
-		oidcIssuerVerifier: oidcIssuerVerifier,
-		settingsProvider:   settingsProvider,
-		secureCookie:       securecookie.New([]byte(oidcConfig.CookieHashKey), nil),
+		oidcConfig:       oidcConfig,
+		settingsProvider: settingsProvider,
+		secureCookie:     securecookie.New([]byte(oidcConfig.CookieHashKey), nil),
 	}
 }
