@@ -42,8 +42,8 @@ export class KubeOnePresetsService {
     this.presetStatusChanges.next(enable);
   }
 
-  presets(provider: NodeProvider): Observable<PresetList> {
-    const url = `${environment.newRestRoot}/providers/${provider}/presets?disabled=false`;
+  presets(projectID: string, provider: NodeProvider): Observable<PresetList> {
+    const url = `${environment.newRestRoot}/projects/${projectID}/providers/${provider}/presets?disabled=false`;
     return this._http.get<PresetList>(url);
   }
 }

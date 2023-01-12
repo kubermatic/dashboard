@@ -17,6 +17,7 @@ import {TestBed} from '@angular/core/testing';
 import {Openstack} from '@core/services/wizard/provider/openstack';
 import {OpenstackAvailabilityZone, OpenstackNetwork, OpenstackSecurityGroup} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {fakeProject} from '@test/data/project';
 
 describe('openstack provider service', () => {
   let service: Openstack;
@@ -25,7 +26,11 @@ describe('openstack provider service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [Openstack, {provide: NodeProvider, useValue: NodeProvider.OPENSTACK}],
+      providers: [
+        Openstack,
+        {provide: NodeProvider, useValue: NodeProvider.OPENSTACK},
+        {provide: 'projectID', useValue: fakeProject().id},
+      ],
       teardown: {destroyAfterEach: false},
     });
     service = TestBed.inject(Openstack);

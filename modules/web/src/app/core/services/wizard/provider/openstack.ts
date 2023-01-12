@@ -270,7 +270,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
   }
 
@@ -293,7 +293,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/openstack/subnetpools?ip_version=${ipVersion}`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/subnetpools?ip_version=${ipVersion}`;
     return this._http.get<OpenstackSubnetPool[]>(url, {headers: this._headers});
   }
 

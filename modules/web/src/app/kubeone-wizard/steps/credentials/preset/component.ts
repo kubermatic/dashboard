@@ -20,6 +20,7 @@ import {SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
+import {ProjectService} from '@core/services/project';
 
 export enum Controls {
   Preset = 'name',
@@ -59,7 +60,8 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
   constructor(
     private readonly _presetsService: KubeOnePresetsService,
     private readonly _clusterSpecService: KubeOneClusterSpecService,
-    private readonly _builder: FormBuilder
+    private readonly _builder: FormBuilder,
+    private readonly _projectService: ProjectService
   ) {
     super('KubeOne Preset');
   }
@@ -87,7 +89,11 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
     });
 
     this._clusterSpecService.providerChanges
-      .pipe(switchMap(_ => this._presetsService.presets(this._clusterSpecService.provider)))
+      .pipe(
+        switchMap(_ =>
+          this._presetsService.presets(this._projectService.selectedProjectID, this._clusterSpecService.provider)
+        )
+      )
       .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
