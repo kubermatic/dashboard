@@ -19,8 +19,8 @@ import {Provider} from './provider';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 
 export class Hetzner extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Hetzner.Header.Token);
   }

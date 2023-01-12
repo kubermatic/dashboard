@@ -19,8 +19,8 @@ import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
 
 export class Digitalocean extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Digitalocean.Header.Token);
   }

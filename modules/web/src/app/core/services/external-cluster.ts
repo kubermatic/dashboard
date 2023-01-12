@@ -155,8 +155,8 @@ export class ExternalClusterService {
     return this._http.post<ExternalCluster>(url, model, {headers: headers});
   }
 
-  getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
-    const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
+  getPresets(projectID: string, provider: ExternalClusterProvider): Observable<PresetList> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${provider}/presets?disabled=false`;
     return this._http.get<PresetList>(url);
   }
 
@@ -182,12 +182,13 @@ export class ExternalClusterService {
   }
 
   validateAKSCredentials(
+    projectID: string,
     tenantID: string,
     subscriptionID: string,
     clientID: string,
     clientSecret: string
   ): Observable<any> {
-    const url = `${this._newRestRoot}/providers/aks/validatecredentials`;
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/validatecredentials`;
     const headers = new HttpHeaders({
       TenantID: tenantID,
       SubscriptionID: subscriptionID,
@@ -197,20 +198,21 @@ export class ExternalClusterService {
     return this._http.get(url, {headers: headers});
   }
 
-  validateGKECredentials(serviceAccount: string): Observable<any> {
-    const url = `${this._newRestRoot}/providers/gke/validatecredentials`;
+  validateGKECredentials(projectID: string, serviceAccount: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/validatecredentials`;
     const headers = new HttpHeaders({ServiceAccount: serviceAccount});
     return this._http.get(url, {headers: headers});
   }
 
   validateEKSCredentials(
+    projectID: string,
     accessKeyID: string,
     secretAccessKey: string,
     assumeRoleARN: string,
     assumeRoleExternalID: string,
     region: string
   ): Observable<any> {
-    const url = `${this._newRestRoot}/providers/eks/validatecredentials`;
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/validatecredentials`;
     const headers = new HttpHeaders({
       AccessKeyID: accessKeyID,
       SecretAccessKey: secretAccessKey,
@@ -234,33 +236,38 @@ export class ExternalClusterService {
     this.isClusterDetailsStepValid = false;
   }
 
-  getAKSResourceGroups(): Observable<AzureResourceGroup[]> {
-    const url = `${this._newRestRoot}/providers/aks/resourcegroups`;
+  getAKSResourceGroups(projectID: string): Observable<AzureResourceGroup[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/resourcegroups`;
     return this._http.get<AzureResourceGroup[]>(url, {headers: this._getAKSHeaders()}).pipe(catchError(() => of([])));
   }
 
-  getAKSVmSizes(location?: string): Observable<AKSVMSize[]> {
-    const url = `${this._newRestRoot}/providers/aks/vmsizes`;
+  getAKSVmSizes(projectID: string, location: string): Observable<AKSVMSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/vmsizes`;
     return this._http.get<AKSVMSize[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of([])));
   }
 
-  getAKSKubernetesVersions(): Observable<MasterVersion[]> {
-    const url = `${this._newRestRoot}/providers/aks/versions`;
+  getAKSKubernetesVersions(projectID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/versions`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getAKSLocations(): Observable<AKSLocation[]> {
-    const url = `${this._newRestRoot}/providers/aks/locations`;
+  getAKSLocations(projectID: string): Observable<AKSLocation[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/locations`;
     return this._http.get<AKSLocation[]>(url, {headers: this._getAKSHeaders()}).pipe(catchError(() => of([])));
   }
 
-  getGKEZones(): Observable<GKEZone[]> {
-    const url = `${this._newRestRoot}/providers/gke/zones`;
+  getGKEZones(projectID: string): Observable<GKEZone[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
   }
 
-  getGKEKubernetesVersions(zone: string, mode: string, releaseChannel?: string): Observable<MasterVersion[]> {
-    const url = `${this._newRestRoot}/providers/gke/versions`;
+  getGKEKubernetesVersions(
+    projectID: string,
+    zone: string,
+    mode: string,
+    releaseChannel?: string
+  ): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/versions`;
     let headers: {};
     if (releaseChannel) {
       headers = {headers: this._getGKEHeaders(zone, mode, releaseChannel)};
@@ -270,46 +277,51 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url, headers).pipe(catchError(() => of([])));
   }
 
-  getGKEDiskTypes(zone: string): Observable<GCPDiskType[]> {
-    const url = `${this._newRestRoot}/providers/gke/disktypes`;
+  getGKEDiskTypes(projectID: string, zone: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/disktypes`;
     return this._http.get<GCPDiskType[]>(url, {headers: this._getGKEHeaders(zone)}).pipe(catchError(() => of([])));
   }
 
-  getGKEMachineTypes(zone: string): Observable<GCPMachineSize[]> {
-    const url = `${this._newRestRoot}/providers/gke/vmsizes`;
+  getGKEMachineTypes(projectID: string, zone: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/vmsizes`;
     return this._http.get<GCPMachineSize[]>(url, {headers: this._getGKEHeaders(zone)}).pipe(catchError(() => of([])));
   }
 
-  getEKSVpcs(): Observable<EKSVpc[]> {
-    const url = `${this._newRestRoot}/providers/eks/vpcs`;
+  getEKSVpcs(projectID: string): Observable<EKSVpc[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/vpcs`;
     return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of([])));
   }
 
-  getEKSSubnets(vpcId: string): Observable<EKSSubnet[]> {
-    const url = `${this._newRestRoot}/providers/eks/subnets`;
+  getEKSSubnets(projectID: string, vpcId: string): Observable<EKSSubnet[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/subnets`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<EKSSubnet[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
-  getEKSSecurityGroups(vpcId: string): Observable<EKSSecurityGroup[]> {
-    const url = `${this._newRestRoot}/providers/eks/securitygroups`;
+  getEKSSecurityGroups(projectID: string, vpcId: string): Observable<EKSSecurityGroup[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/securitygroups`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<EKSSecurityGroup[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
-  getEKSKubernetesVersions(): Observable<MasterVersion[]> {
-    const url = `${this._newRestRoot}/providers/eks/versions`;
+  getEKSKubernetesVersions(projectID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/versions`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSClusterRoles(): Observable<EKSClusterRole[]> {
-    const url = `${this._newRestRoot}/providers/eks/clusterroles`;
+  getEKSClusterRoles(projectID: string): Observable<EKSClusterRole[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/clusterroles`;
     const headers = this._getEKSHeaders();
     return this._http.get<EKSClusterRole[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
-  getEKSRegions(preset?: string, accessKeyID?: string, secretAccessKey?: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/providers/eks/regions`;
+  getEKSRegions(
+    projectID: string,
+    preset?: string,
+    accessKeyID?: string,
+    secretAccessKey?: string
+  ): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/regions`;
     let credentials = {};
     if (preset) {
       credentials = {

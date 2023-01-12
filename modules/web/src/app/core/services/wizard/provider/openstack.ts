@@ -30,15 +30,15 @@ import {Provider} from './provider';
 
 @Injectable()
 export class Openstack extends Provider {
-  private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
-  readonly securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
-  readonly networksUrl = `${this._restRoot}/providers/openstack/networks`;
-  readonly availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
-  readonly serverGroupsURL = `${this._newRestRoot}/providers/openstack/servergroups`;
+  private readonly _tenantsUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/tenants`;
+  readonly securityGroupsUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/securitygroups`;
+  readonly networksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/networks`;
+  readonly availabilityZonesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/availabilityzones`;
+  readonly serverGroupsURL = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/servergroups`;
   private _usingApplicationCredentials = false;
 
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(
       Openstack.Header.Username,
@@ -270,7 +270,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
   }
 
@@ -293,7 +293,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/openstack/subnetpools?ip_version=${ipVersion}`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/subnetpools?ip_version=${ipVersion}`;
     return this._http.get<OpenstackSubnetPool[]>(url, {headers: this._headers});
   }
 
@@ -335,7 +335,7 @@ export namespace Openstack {
     ApplicationCredentialSecret = 'ApplicationCredentialSecret',
     Domain = 'Domain',
     Datacenter = 'DatacenterName',
-    Project = 'Project',
-    ProjectID = 'ProjectID',
+    Project = 'OpenstackProject',
+    ProjectID = 'OpenstackProjectID',
   }
 }

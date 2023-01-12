@@ -20,11 +20,11 @@ import {VSphereDatastores, VSphereFolder, VSphereNetwork} from '@shared/entity/p
 import {map} from 'rxjs/operators';
 
 export class VSphere extends Provider {
-  private readonly _networksUrl = `${this._restRoot}/providers/vsphere/networks`;
-  private readonly _foldersUrl = `${this._restRoot}/providers/vsphere/folders`;
+  private readonly _networksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/networks`;
+  private readonly _foldersUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/folders`;
 
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(VSphere.Header.Username, VSphere.Header.Password, VSphere.Header.Datacenter);
   }
@@ -92,7 +92,7 @@ export class VSphere extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/datastores`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/datastores`;
     return this._http
       .get<VSphereDatastores>(url, {headers: this._headers})
       .pipe(map(datastores => datastores.datastores));

@@ -25,8 +25,8 @@ import {catchError} from 'rxjs/operators';
 import {Provider} from './provider';
 
 export class VMwareCloudDirector extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(
       VMwareCloudDirector.Header.Username,
@@ -78,7 +78,7 @@ export class VMwareCloudDirector extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/networks`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/networks`;
     return this._http
       .get<VMwareCloudDirectorNetwork[]>(url, {headers: this._headers})
       .pipe(catchError(_ => of<VMwareCloudDirectorNetwork[]>([])));
@@ -93,7 +93,7 @@ export class VMwareCloudDirector extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/storageprofiles`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/storageprofiles`;
     return this._http.get<VMwareCloudDirectorStorageProfile[]>(url, {headers: this._headers});
   }
 
@@ -106,7 +106,7 @@ export class VMwareCloudDirector extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/catalogs`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/catalogs`;
     return this._http.get<VMwareCloudDirectorCatalog[]>(url, {headers: this._headers});
   }
 
@@ -123,7 +123,7 @@ export class VMwareCloudDirector extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/templates/${catalogName}`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/templates/${catalogName}`;
     return this._http.get<VMwareCloudDirectorTemplate[]>(url, {headers: this._headers});
   }
 }

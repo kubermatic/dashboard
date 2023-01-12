@@ -28,8 +28,8 @@ import {
 import {map} from 'rxjs/operators';
 
 export class Azure extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(
       Azure.Header.ClientID,
@@ -136,7 +136,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/resourcegroups`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/resourcegroups`;
     return this._http
       .get<AzureResourceGroups>(url, {headers: this._headers})
       .pipe(map(resourceGroups => resourceGroups.resourceGroups));
@@ -160,7 +160,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/securitygroups`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/securitygroups`;
     return this._http
       .get<AzureSecurityGroups>(url, {headers: this._headers})
       .pipe(map(securityGroups => securityGroups.securityGroups));
@@ -184,7 +184,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/routetables`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/routetables`;
     return this._http
       .get<AzureRouteTables>(url, {headers: this._headers})
       .pipe(map(routeTables => routeTables.routeTables));
@@ -208,7 +208,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/vnets`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/vnets`;
     return this._http.get<AzureVNets>(url, {headers: this._headers}).pipe(map(vnets => vnets.virtualNetworks));
   }
 
@@ -230,7 +230,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/subnets`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/subnets`;
     return this._http.get<AzureSubnets>(url, {headers: this._headers}).pipe(map(subnets => subnets.subnets));
   }
 
@@ -252,7 +252,7 @@ export class Azure extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/availabilityzones`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/availabilityzones`;
     return this._http.get<AzureZones>(url, {headers: this._headers});
   }
 }
