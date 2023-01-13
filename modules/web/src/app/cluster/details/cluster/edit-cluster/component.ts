@@ -42,7 +42,6 @@ import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
-import {FeatureGateService} from '@core/services/feature-gate';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
@@ -87,7 +86,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
   admissionPlugins: string[] = [];
-  isKonnectivityEnabled = false;
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
     cloudSpecPatch: {},
@@ -112,15 +110,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService,
-    private readonly _featureGatesService: FeatureGateService
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
-    this._featureGatesService.featureGates
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
-
     this.labels = _.cloneDeep(this.cluster.labels) as Record<string, string>;
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(
       this.cluster.spec.podNodeSelectorAdmissionPluginConfig

@@ -77,7 +77,7 @@ export class QuotaService {
     return this._http.delete<Record<string, never>>(this._baseUrl + '/' + quotaName);
   }
 
-  getProjectQuota(projectId: string): Observable<QuotaDetails> {
+  getLiveProjectQuota(projectId: string): Observable<QuotaDetails> {
     if (!this._quotaMap.has(projectId)) {
       const quota$ = this._refreshTimer$.pipe(
         switchMap(_ =>
@@ -98,6 +98,12 @@ export class QuotaService {
       return this._quotaMap.get(projectId).pipe(startWith(this._previousQuotaMap.get(projectId)));
     }
     return this._quotaMap.get(projectId);
+  }
+
+  getProjectQuota(projectId: string): Observable<QuotaDetails> {
+    return this._http
+      .get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`)
+      .pipe(catchError(_ => of(null)));
   }
 
   private _getQuotas(): Observable<QuotaDetails[]> {

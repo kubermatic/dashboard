@@ -16,13 +16,14 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification';
-import {RBACService} from '@core/services/rbac';
-import {Cluster} from '@shared/entity/cluster';
-import {Binding, ClusterBinding, ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil, tap} from 'rxjs/operators';
+import {Cluster} from '@shared/entity/cluster';
+import {NotificationService} from '@core/services/notification';
+import {RBACService} from '@core/services/rbac';
+import {ClusterBinding, ClusterRoleName, CreateBinding, Kind, NamespaceBinding, RoleName} from '@shared/entity/rbac';
+import {ErrorType} from '@app/shared/types/error-type';
 
 export enum Controls {
   Email = 'email',
@@ -31,21 +32,44 @@ export enum Controls {
   Namespace = 'namespace',
 }
 
+export enum BindingType {
+  Cluster = 'cluster',
+  Namespace = 'namespace',
+}
+
+enum RoleState {
+  Ready = 'Role',
+  Loading = 'Loading...',
+  Empty = 'No Roles available',
+}
+
+enum NamespaceState {
+  Ready = 'Namespace',
+  Loading = 'Loading...',
+  Empty = 'No Namespaces Available',
+}
+
 @Component({
-  selector: 'km-add-binding',
+  selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AddBindingComponent implements OnInit, OnDestroy {
-  @Input() cluster: Cluster;
-  @Input() projectID: string;
+export class AddBindingDialogComponent implements OnInit, OnDestroy {
+  readonly Kind = Kind;
+  readonly Controls = Controls;
+  readonly ErrorType = ErrorType;
+  readonly BindingType = BindingType;
 
-  readonly controls = Controls;
-  form: FormGroup;
-  bindingType = 'cluster';
-  subjectType = 'user';
+  bindingType: BindingType = BindingType.Cluster;
   clusterRoles: ClusterRoleName[] = [];
   roles: RoleName[] = [];
+  roleLabel = RoleState.Ready;
+  form: FormGroup;
+  namespaceLabel = NamespaceState.Ready;
+
+  @Input() cluster: Cluster;
+  @Input() projectID: string;
+  @Input() subjectType = Kind.User;
 
   private readonly _debounceTime = 1000;
   private _unsubscribe = new Subject<void>();
@@ -53,7 +77,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _rbacService: RBACService,
-    private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
+    private readonly _matDialogRef: MatDialogRef<AddBindingDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -65,27 +89,38 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       [Controls.Namespace]: new FormControl(''),
     });
 
+    this.roleLabel = RoleState.Loading;
     this._rbacService
       .getClusterRoleNames(this.cluster.id, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusterRoles => (this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase())));
+      .subscribe(clusterRoles => {
+        this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase());
+        this.roleLabel = this.roles ? RoleState.Ready : RoleState.Empty;
+      });
 
+    this.roleLabel = RoleState.Loading;
     this._rbacService
-      .getRoleNames(this.cluster.id, this.projectID)
+      .getNamespaceRoleNames(this.cluster.id, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(roles => (this.roles = _.sortBy(roles, r => r.name.toLowerCase())));
+      .subscribe(roles => {
+        this.roles = _.sortBy(roles, r => r.name.toLowerCase());
+        this.roleLabel = this.roles ? RoleState.Ready : RoleState.Empty;
+      });
 
     this.form.controls.role.valueChanges
+      .pipe(tap(_ => (this.namespaceLabel = NamespaceState.Loading)))
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        if (this.bindingType === 'namespace') {
+        if (this.bindingType === BindingType.Namespace) {
           this.checkNamespaceState();
         }
+        this.namespaceLabel = this.roles?.length ? NamespaceState.Ready : NamespaceState.Empty;
       });
 
-    this.setValidators();
+    this.setNamespaceValidators();
     this.checkNamespaceState();
+    this.setSubjectTypeValidators();
   }
 
   ngOnDestroy(): void {
@@ -95,17 +130,14 @@ export class AddBindingComponent implements OnInit, OnDestroy {
 
   changeView(event: MatButtonToggleChange): void {
     this.bindingType = event.value;
-    this.setValidators();
+    this.setNamespaceValidators();
     this.checkNamespaceState();
   }
 
-  changeSubjectType(event: MatButtonToggleChange): void {
-    this.form.get(Controls.Email).setValue('');
-    this.form.get(Controls.Group).setValue('');
-    this.subjectType = event.value;
+  setSubjectTypeValidators(): void {
     this.form.get(Controls.Email).clearValidators();
     this.form.get(Controls.Group).clearValidators();
-    if (this.subjectType === 'user') {
+    if (this.subjectType === Kind.User) {
       this.form.get(Controls.Email).setValidators([Validators.required]);
     } else {
       this.form.get(Controls.Group).setValidators([Validators.required]);
@@ -114,40 +146,13 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.form.get(Controls.Group).updateValueAndValidity();
   }
 
-  setValidators(): void {
-    if (this.bindingType === 'cluster') {
+  setNamespaceValidators(): void {
+    if (this.bindingType === BindingType.Cluster) {
       this.form.get(Controls.Namespace).clearValidators();
     } else {
       this.form.get(Controls.Namespace).setValidators([Validators.required]);
     }
     this.form.get(Controls.Namespace).updateValueAndValidity();
-  }
-
-  getRoleFormState(): string {
-    let roleLength = 0;
-    if (!!this.clusterRoles || !!this.roles) {
-      roleLength = this.bindingType === 'cluster' ? this.clusterRoles.length : this.roles.length;
-    }
-
-    if (roleLength) {
-      return 'Role';
-    } else if (!roleLength) {
-      return 'No Roles available';
-    }
-    return 'Role';
-  }
-
-  getNamespaceFormState(): string {
-    const roleLength = this.roles ? this.roles.length : 0;
-
-    if (this.form.get(Controls.Role).value !== '') {
-      return 'Namespace';
-    } else if (this.form.get(Controls.Role).value === '' && !!roleLength) {
-      return 'Please select a Role first';
-    } else if (!roleLength) {
-      return 'No Namespaces available';
-    }
-    return 'Namespace';
   }
 
   checkNamespaceState(): void {
@@ -168,13 +173,13 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     return [];
   }
 
-  getObservable(): Observable<ClusterBinding | Binding> {
-    return this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
+  getObservable(): Observable<ClusterBinding | NamespaceBinding> {
+    return this.bindingType === BindingType.Cluster ? this.addClusterBinding() : this.addNamespaceBinding();
   }
 
-  onNext(binding: ClusterBinding | Binding): void {
+  onNext(binding: ClusterBinding | NamespaceBinding): void {
     this._matDialogRef.close(binding);
-    this.bindingType === 'cluster'
+    this.bindingType === BindingType.Cluster
       ? this._notificationService.success(
           `Added the ${binding.subjects[binding.subjects.length - 1].name} cluster binding`
         )
@@ -195,7 +200,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe));
   }
 
-  addNamespaceBinding(): Observable<Binding> {
+  addNamespaceBinding(): Observable<NamespaceBinding> {
     const namespaceBinding: CreateBinding = {};
     if (this.form.controls.email.value) {
       namespaceBinding.userEmail = this.form.controls.email.value;
@@ -205,7 +210,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     return this._rbacService
-      .createBinding(
+      .createNamespaceBinding(
         this.cluster.id,
         this.projectID,
         this.form.controls.role.value,

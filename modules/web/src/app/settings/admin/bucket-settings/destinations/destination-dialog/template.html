@@ -59,8 +59,9 @@ limitations under the License.
          *ngIf="shouldDisplayWarning()"
          fxLayoutAlign=" start">
       <i class="km-icon-warning"></i>
-      <div>Upon saving this setting, every new default backup will be created with this destination instead of
-        "{{currentDefault}}", over time existing backups will be replaced by backups that use the new destination
+      <div>
+        Upon saving this setting, every new default backup will be created with this destination<ng-container *ngIf="currentDefault"> instead of "{{currentDefault}}"</ng-container>,
+        over time existing backups will be replaced by backups that use the new destination.
       </div>
     </div>
   </form>

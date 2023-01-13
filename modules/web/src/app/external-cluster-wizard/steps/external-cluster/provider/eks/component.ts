@@ -64,6 +64,7 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {EKSArchitecture} from '@app/shared/entity/provider/eks';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {ProjectService} from '@core/services/project';
 
 enum Controls {
   Vpc = 'vpc',
@@ -182,7 +183,8 @@ export class EKSClusterSettingsComponent
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _projectService: ProjectService
   ) {
     super();
   }
@@ -336,7 +338,7 @@ export class EKSClusterSettingsComponent
 
   private _getEKSVpcs(): void {
     this._externalClusterService
-      .getEKSVpcs()
+      .getEKSVpcs(this._projectService.selectedProjectID)
       .pipe(tap(_ => this._clearVpcs()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((vpcs: EKSVpc[]) => {
@@ -354,8 +356,8 @@ export class EKSClusterSettingsComponent
     this.subnetLabel = SubnetState.Loading;
     this.securityGroupLabel = SecurityGroupState.Loading;
     forkJoin([
-      this._externalClusterService.getEKSSubnets(vpc),
-      this._externalClusterService.getEKSSecurityGroups(vpc),
+      this._externalClusterService.getEKSSubnets(this._projectService.selectedProjectID, vpc),
+      this._externalClusterService.getEKSSecurityGroups(this._projectService.selectedProjectID, vpc),
     ]).subscribe(([subnets, securityGroups]) => {
       this.subnets = subnets;
       if (subnets.length) {
@@ -370,7 +372,7 @@ export class EKSClusterSettingsComponent
   }
 
   private _getEKSKubernetesVersions(): void {
-    this._externalClusterService.getEKSKubernetesVersions().subscribe(
+    this._externalClusterService.getEKSKubernetesVersions(this._projectService.selectedProjectID).subscribe(
       (versions: MasterVersion[]) =>
         (this.kubernetesVersions = versions.map(version => {
           return version.version;
@@ -381,7 +383,7 @@ export class EKSClusterSettingsComponent
   private _getEKSClusterRoles(): void {
     this.clusterRoleLabel = ClusterServiceRoleState.Loading;
     this._externalClusterService
-      .getEKSClusterRoles()
+      .getEKSClusterRoles(this._projectService.selectedProjectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((roleArn: EKSClusterRole[]) => {
         this.clusterRoles = roleArn;

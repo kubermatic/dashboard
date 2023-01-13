@@ -80,7 +80,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 
 		// collect constraint types
-		cKinds := sets.String{}
+		cKinds := sets.Set[string]{}
 		// create apiConstraint map
 		apiConstraintMap := make(map[string]*apiv2.Constraint, len(constraintList.Items))
 		for _, ct := range constraintList.Items {

@@ -187,7 +187,7 @@ func ListGCPDiskTypes(ctx context.Context, sa string, zone string) (apiv1.GCPDis
 	// Currently accepted values: 'pd-standard', 'pd-ssd' or 'pd-balanced'
 	// Reference: https://pkg.go.dev/google.golang.org/api/container/v1#NodeConfig
 
-	excludedDiskTypes := sets.NewString("local-ssd", "pd-balanced")
+	excludedDiskTypes := sets.New("local-ssd", "pd-balanced")
 	computeService, project, err := gcp.ConnectToComputeService(ctx, sa)
 	if err != nil {
 		return diskTypes, err

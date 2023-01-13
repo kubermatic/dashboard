@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -17,6 +18,19 @@ import (
 //
 // swagger:model ResourceRequirements
 type ResourceRequirements struct {
+
+	// Claims lists the names of resources, defined in spec.resourceClaims,
+	// that are used by this container.
+	//
+	// This is an alpha field and requires enabling the
+	// DynamicResourceAllocation feature gate.
+	//
+	// This field is immutable.
+	//
+	// +listType=set
+	// +featureGate=DynamicResourceAllocation
+	// +optional
+	Claims []*ResourceClaim `json:"claims"`
 
 	// limits
 	Limits ResourceList `json:"limits,omitempty"`
@@ -29,6 +43,10 @@ type ResourceRequirements struct {
 func (m *ResourceRequirements) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateClaims(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateLimits(formats); err != nil {
 		res = append(res, err)
 	}
@@ -40,6 +58,32 @@ func (m *ResourceRequirements) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ResourceRequirements) validateClaims(formats strfmt.Registry) error {
+	if swag.IsZero(m.Claims) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Claims); i++ {
+		if swag.IsZero(m.Claims[i]) { // not required
+			continue
+		}
+
+		if m.Claims[i] != nil {
+			if err := m.Claims[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("claims" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("claims" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -85,6 +129,10 @@ func (m *ResourceRequirements) validateRequests(formats strfmt.Registry) error {
 func (m *ResourceRequirements) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateClaims(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateLimits(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -96,6 +144,26 @@ func (m *ResourceRequirements) ContextValidate(ctx context.Context, formats strf
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ResourceRequirements) contextValidateClaims(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Claims); i++ {
+
+		if m.Claims[i] != nil {
+			if err := m.Claims[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("claims" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("claims" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

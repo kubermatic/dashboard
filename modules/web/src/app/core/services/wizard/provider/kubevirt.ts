@@ -19,8 +19,8 @@ import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
 
 export class KubeVirt extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(KubeVirt.Header.Kubeconfig);
   }
@@ -53,7 +53,7 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/instancetypes`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/instancetypes`;
     return this._http.get<KubeVirtInstanceTypeList>(url, {headers: this._headers});
   }
 
@@ -66,7 +66,7 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/preferences`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/preferences`;
     return this._http.get<KubeVirtPreferenceList>(url, {headers: this._headers});
   }
 
@@ -79,7 +79,7 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/storageclasses`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/storageclasses`;
     return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
   }
 }

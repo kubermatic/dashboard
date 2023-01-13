@@ -79,10 +79,7 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this._builder.control(this.data.mode === Mode.Edit ? this.data.destination.endpoint : '', [
         Validators.required,
       ]),
-      [Controls.Default]: this._builder.control({
-        value: this._isDefault(),
-        disabled: this._shouldDisableDefaultDestination(),
-      }),
+      [Controls.Default]: this._builder.control(this._isDefault()),
     });
   }
 
@@ -156,9 +153,5 @@ export class DestinationDialog implements OnInit, OnDestroy {
 
   private _hasDefaultDestination(): boolean {
     return !!this.currentDefault;
-  }
-
-  private _shouldDisableDefaultDestination(): boolean {
-    return !this._hasDefaultDestination() || (this._isDefault() && !this.form?.get(Controls.Default).value);
   }
 }

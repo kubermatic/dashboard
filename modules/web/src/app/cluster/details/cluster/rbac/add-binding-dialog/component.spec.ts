@@ -18,34 +18,40 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
-import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@test/data/rbac';
+import {
+  fakeNamespaceBinding,
+  fakeClusterBinding,
+  fakeClusterRoleNames,
+  fakeNamespaceRoleNames,
+  fakeRoleNames,
+} from '@test/data/rbac';
 import {asyncData} from '@test/services/cluster-mock';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';
-import {AddBindingComponent} from './component';
+import {AddBindingDialogComponent, BindingType} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
 
-describe('AddBindingComponent', () => {
-  let fixture: ComponentFixture<AddBindingComponent>;
-  let component: AddBindingComponent;
+describe('AddBindingDialogComponent', () => {
+  let fixture: ComponentFixture<AddBindingDialogComponent>;
+  let component: AddBindingDialogComponent;
 
   beforeEach(waitForAsync(() => {
     const rbacMock = {
       getClusterRoleNames: jest.fn(),
-      getRoleNames: jest.fn(),
+      getNamespaceRoleNames: jest.fn(),
       createClusterBinding: jest.fn(),
-      createBinding: jest.fn(),
+      createNamespaceBinding: jest.fn(),
     };
 
     rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
-    rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
+    rbacMock.getNamespaceRoleNames.mockReturnValue(asyncData(fakeNamespaceRoleNames()));
     rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
-    rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
+    rbacMock.createNamespaceBinding.mockReturnValue(asyncData(fakeNamespaceBinding()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
-      declarations: [AddBindingComponent],
+      declarations: [AddBindingDialogComponent],
       providers: [
         {provide: RBACService, useValue: rbacMock},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -55,7 +61,7 @@ describe('AddBindingComponent', () => {
   }));
 
   beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AddBindingComponent);
+    fixture = TestBed.createComponent(AddBindingDialogComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
     component.projectID = fakeProject().id;
@@ -67,8 +73,8 @@ describe('AddBindingComponent', () => {
   }));
 
   it('cluster form should be validated correctly', fakeAsync(() => {
-    component.bindingType = 'cluster';
-    component.setValidators();
+    component.bindingType = BindingType.Cluster;
+    component.setNamespaceValidators();
     component.form.controls.email.setValue('');
     component.form.controls.role.setValue('');
     fixture.detectChanges();
@@ -82,8 +88,8 @@ describe('AddBindingComponent', () => {
   }));
 
   it('namespace form should be validated correctly', fakeAsync(() => {
-    component.bindingType = 'namespace';
-    component.setValidators();
+    component.bindingType = BindingType.Namespace;
+    component.setNamespaceValidators();
     component.form.controls.email.setValue('');
     component.form.controls.role.setValue('');
     fixture.detectChanges();

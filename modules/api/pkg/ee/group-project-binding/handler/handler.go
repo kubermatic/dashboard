@@ -390,9 +390,9 @@ func decodeBindingName(_ context.Context, r *http.Request) (string, error) {
 }
 
 func validateRole(role string) error {
-	allowedRoles := sets.NewString(ViewersRole, EditorsRole, OwnersRole)
+	allowedRoles := sets.New(ViewersRole, EditorsRole, OwnersRole)
 	if !allowedRoles.Has(role) {
-		return utilerrors.NewBadRequest("allowed roles are: %v", strings.Join(allowedRoles.List(), ", "))
+		return utilerrors.NewBadRequest("allowed roles are: %v", strings.Join(sets.List(allowedRoles), ", "))
 	}
 	return nil
 }

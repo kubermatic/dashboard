@@ -64,6 +64,7 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 import {EKSSecurityGroup} from '@shared/entity/provider/eks';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {ProjectService} from '@core/services/project';
 
 enum Controls {
   Name = 'name',
@@ -166,7 +167,8 @@ export class AKSClusterSettingsComponent
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _projectService: ProjectService
   ) {
     super();
   }
@@ -331,11 +333,13 @@ export class AKSClusterSettingsComponent
   }
 
   private _getAKSVmSizes(location: string): Observable<AKSVMSize[]> {
-    return this._externalClusterService.getAKSVmSizes(location).pipe(takeUntil(this._unsubscribe));
+    return this._externalClusterService
+      .getAKSVmSizes(this._projectService.selectedProjectID, location)
+      .pipe(takeUntil(this._unsubscribe));
   }
 
   private _getAKSKubernetesVersions(): void {
-    this._externalClusterService.getAKSKubernetesVersions().subscribe(
+    this._externalClusterService.getAKSKubernetesVersions(this._projectService.selectedProjectID).subscribe(
       (versions: MasterVersion[]) =>
         (this.kubernetesVersions = versions.map(version => {
           return version.version;
@@ -346,7 +350,7 @@ export class AKSClusterSettingsComponent
   private _getAKSLocations(): void {
     this.locationLabel = LocationState.Loading;
     this._externalClusterService
-      .getAKSLocations()
+      .getAKSLocations(this._projectService.selectedProjectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((locations: AKSLocation[]) => {
         this.locations = locations;
@@ -362,7 +366,7 @@ export class AKSClusterSettingsComponent
   private _getAKSResourceGroups(): void {
     this.resourceGroupLabel = ResourceGroupState.Loading;
     this._externalClusterService
-      .getAKSResourceGroups()
+      .getAKSResourceGroups(this._projectService.selectedProjectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((resourceGroups: AzureResourceGroup[]) => {
         this.resourceGroups = resourceGroups;

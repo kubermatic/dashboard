@@ -21,17 +21,19 @@ import {ApplicationService} from '@core/services/application';
 import {
   Application,
   ApplicationDefinition,
+  ApplicationLabel,
+  ApplicationLabelValue,
   ApplicationNamespace,
   ApplicationRef,
   ApplicationSpec,
   ApplicationVersion,
 } from '@shared/entity/application';
+import {getEditionVersion} from '@shared/utils/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject, Subscription} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {getEditionVersion} from '@shared/utils/common';
 
 enum Controls {
   Version = 'version',
@@ -81,13 +83,13 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   ) {}
 
   ngOnInit(): void {
-    this.applicationDefsDataSource.data = this.applicationDefinitions;
+    this.applicationDefsDataSource.data = this._allowedApplicationDefinitions;
     this.applicationDefsDataSource.filterPredicate = this._filter.bind(this);
     this.applicationDefsDataSource.filter = '';
   }
 
   ngOnChanges(): void {
-    this.applicationDefsDataSource.data = this.applicationDefinitions;
+    this.applicationDefsDataSource.data = this._allowedApplicationDefinitions;
   }
 
   ngOnDestroy(): void {
@@ -133,6 +135,12 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
 
   add(): void {
     this.dialogRef.close([this._getApplicationEntity(), this.selectedApplication]);
+  }
+
+  private get _allowedApplicationDefinitions() {
+    return this.applicationDefinitions?.filter(
+      appDef => !appDef.spec.labels || appDef.spec.labels[ApplicationLabel.ManagedBy] !== ApplicationLabelValue.KKP
+    );
   }
 
   private _loadApplicationDefinitionDetails() {

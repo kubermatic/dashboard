@@ -35,6 +35,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	resourcequota "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -53,8 +54,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name: fmt.Sprintf("project-%s", projectName),
 			Labels: map[string]string{
-				kubermaticv1.ResourceQuotaSubjectKindLabelKey: kubermaticv1.ProjectSubjectKind,
-				kubermaticv1.ResourceQuotaSubjectNameLabelKey: projectName,
+				kubermaticv1.ResourceQuotaSubjectKindLabelKey:  kubermaticv1.ProjectSubjectKind,
+				kubermaticv1.ResourceQuotaSubjectNameLabelKey:  projectName,
+				resourcequota.DefaultProjectResourceQuotaLabel: "true",
 			},
 		},
 		Spec: kubermaticv1.ResourceQuotaSpec{
@@ -63,6 +65,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
 			Quota: genQuota(resource.MustParse("5"), resource.MustParse("1235M"), resource.MustParse("125Gi")),
+		},
+		Status: kubermaticv1.ResourceQuotaStatus{
+			GlobalUsage: genQuota(resource.MustParse("2"), resource.MustParse("35M"), resource.MustParse("100Gi")),
 		},
 	}
 	rq2 := &kubermaticv1.ResourceQuota{
@@ -79,6 +84,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 				Kind: kubermaticv1.ProjectSubjectKind,
 			},
 			Quota: genQuota(resource.MustParse("0"), resource.MustParse("1234M"), resource.MustParse("0")),
+		},
+		Status: kubermaticv1.ResourceQuotaStatus{
+			GlobalUsage: genQuota(resource.MustParse("0"), resource.MustParse("300M"), resource.MustParse("0")),
 		},
 	}
 
@@ -157,7 +165,38 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 3: get a single resource quota",
+			name:            "scenario 3: list accumulated resource quotas",
+			method:          http.MethodGet,
+			url:             "/api/v2/quotas?accumulate=true",
+			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
+			existingObjects: existingObjects,
+			httpStatus:      http.StatusOK,
+			validateResp: func(resp *httptest.ResponseRecorder) error {
+				resourceQuotaList := []apiv2.ResourceQuota{}
+				err := json.Unmarshal(resp.Body.Bytes(), &resourceQuotaList)
+				if err != nil {
+					return err
+				}
+				listLen := len(resourceQuotaList)
+				if listLen != 1 {
+					return fmt.Errorf("expected list length %d, got %d", 1, listLen)
+				}
+				quota := resourceQuotaList[0]
+				expectedQuota := genAPIQuota(5, 2.47, 134.22)
+				if !diff.DeepEqual(expectedQuota, quota.Quota) {
+					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Quota))
+				}
+
+				expectedUsage := genAPIQuota(2, 0.34, 107.37)
+				if !diff.DeepEqual(expectedUsage, quota.Status.GlobalUsage) {
+					return fmt.Errorf("Objects differ:\n%v", diff.ObjectDiff(expectedQuota, quota.Status.GlobalUsage))
+				}
+
+				return nil
+			},
+		},
+		{
+			name:            "scenario 4: get a single resource quota",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -181,11 +220,14 @@ func TestHandlerResourceQuotas(t *testing.T) {
 						resourceQuota.SubjectHumanReadableName,
 					)
 				}
+				if !resourceQuota.IsDefault {
+					return fmt.Errorf("expected the quota to be a default quota")
+				}
 				return nil
 			},
 		},
 		{
-			name:            "scenario 4: get a non-existing single resource quota",
+			name:            "scenario 5: get a non-existing single resource quota",
 			method:          http.MethodGet,
 			url:             "/api/v2/quotas/project-non-existing",
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -196,7 +238,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 5: create an existing resource quota",
+			name:   "scenario 6: create an existing resource quota",
 			method: http.MethodPost,
 			url:    "/api/v2/quotas",
 			body: `{
@@ -211,7 +253,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 6: create a new resource quota",
+			name:   "scenario 7: create a new resource quota",
 			method: http.MethodPost,
 			url:    "/api/v2/quotas",
 			body: `{
@@ -231,7 +273,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:   "scenario 7: update an existing resource quota",
+			name:   "scenario 8: update an existing resource quota",
 			method: http.MethodPut,
 			url:    fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			body: `{
@@ -243,11 +285,21 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			existingObjects: existingObjects,
 			httpStatus:      http.StatusOK,
 			validateResp: func(resp *httptest.ResponseRecorder) error {
+				resourceQuota := &apiv2.ResourceQuota{}
+				err := json.Unmarshal(resp.Body.Bytes(), resourceQuota)
+				if err != nil {
+					return err
+				}
+
+				if resourceQuota.IsDefault {
+					return fmt.Errorf("expected the quota not to be a default quota")
+				}
+
 				return nil
 			},
 		},
 		{
-			name:   "scenario 8: update a non-existing resource quota",
+			name:   "scenario 9: update a non-existing resource quota",
 			method: http.MethodPut,
 			url:    "/api/v2/quotas/project-non-existing",
 			body: `{
@@ -263,7 +315,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 9: delete an existing resource quota",
+			name:            "scenario 10: delete an existing resource quota",
 			method:          http.MethodDelete,
 			url:             fmt.Sprintf("/api/v2/quotas/project-%s", projectName),
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -274,7 +326,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 10: delete a non-existing resource quota",
+			name:            "scenario 11: delete a non-existing resource quota",
 			method:          http.MethodDelete,
 			url:             "/api/v2/quotas/project-non-existing",
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -285,7 +337,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 11: get a project resource quota",
+			name:            "scenario 12: get a project resource quota",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/projects/%s/quota", projectName),
 			existingAPIUser: test.GenDefaultAPIUser(),
@@ -309,7 +361,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			},
 		},
 		{
-			name:            "scenario 12: user bob can't get a project resource quota from a project he doesn't belong to",
+			name:            "scenario 13: user bob can't get a project resource quota from a project he doesn't belong to",
 			method:          http.MethodGet,
 			url:             fmt.Sprintf("/api/v2/projects/%s-2/quota", projectName),
 			existingAPIUser: test.GenDefaultAPIUser(),
@@ -563,6 +615,26 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				build(),
 		},
 		{
+			Name:      "should process kubevirt request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withKubevirt("2", "3G", "7G", "3G").
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
 			Name:      "should process nutanix request successfully",
 			ProjectID: test.GenDefaultProject().Name,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
@@ -694,20 +766,20 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 type calcReq struct {
 	Replicas int `json:"replicas"`
 	// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
-	DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
-	AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
-	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
-	AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
-	AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
-	DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
-	EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
-	GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
-	HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
-	// TODO Kubevirt
-	NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
-	OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
-	VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
-	VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+	DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
+	AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
+	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec              `json:"anexiaNodeSpec,omitempty"`
+	AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
+	AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
+	DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
+	EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
+	GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
+	HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
+	KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
+	NutanixNodeSpec     *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+	OpenstackSize       *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+	VMDirectorNodeSpec  *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+	VSphereNodeSpec     *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
 }
 
 func newCalcReq() *calcReq {
@@ -801,6 +873,18 @@ func (c *calcReq) withHetzner(cpu, memory, storage int) *calcReq {
 		Cores:  cpu,
 		Memory: float32(memory),
 		Disk:   storage,
+	}
+	return c
+}
+
+func (c *calcReq) withKubevirt(cpu, memory, primaryStorage, secondaryStorage string) *calcReq {
+	c.KubevirtNodeSize = &apiv1.KubevirtNodeSize{
+		CPUs:            cpu,
+		Memory:          memory,
+		PrimaryDiskSize: primaryStorage,
+		SecondaryDisks: []apiv1.SecondaryDisks{
+			{Size: secondaryStorage},
+		},
 	}
 	return c
 }

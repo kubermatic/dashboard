@@ -174,7 +174,7 @@ func TestRoleMapper(t *testing.T) {
 		existingUserProjectBindings  []*kubermaticv1.UserProjectBinding
 		existingGroupProjectBindings []*kubermaticv1.GroupProjectBinding
 		projectID                    string
-		expectedRoles                sets.String
+		expectedRoles                sets.Set[string]
 	}{
 		{
 			name:              "scenario 1: map user to roles from user binding and group bindings",
@@ -255,8 +255,8 @@ func TestRoleMapper(t *testing.T) {
 	}
 }
 
-func genRoles(roles ...string) sets.String {
-	roleSet := sets.String{}
+func genRoles(roles ...string) sets.Set[string] {
+	roleSet := sets.Set[string]{}
 	roleSet.Insert(roles...)
 	return roleSet
 }

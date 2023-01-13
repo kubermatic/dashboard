@@ -63,6 +63,12 @@ type VMwareCloudDirectorCommonReq struct {
 	Credential string
 }
 
+// swagger:parameters listProjectVMwareCloudDirectorNetworks listProjectVMwareCloudDirectorStorageProfiles listProjectVMwareCloudDirectorCatalogs listProjectVMwareCloudDirectorTemplates
+type VMwareCloudDirectorProjectCommonReq struct {
+	common.ProjectReq
+	VMwareCloudDirectorCommonReq
+}
+
 func DecodeVMwareCloudDirectorCommonReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req VMwareCloudDirectorCommonReq
 
@@ -79,6 +85,23 @@ func DecodeVMwareCloudDirectorCommonReq(c context.Context, r *http.Request) (int
 	req.DC = dc
 
 	return req, nil
+}
+
+func DecodeVMwareCloudDirectorProjectCommonReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	cdReq, err := DecodeVMwareCloudDirectorCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return VMwareCloudDirectorProjectCommonReq{
+		ProjectReq:                   projectReq.(common.ProjectReq),
+		VMwareCloudDirectorCommonReq: cdReq.(VMwareCloudDirectorCommonReq),
+	}, nil
 }
 
 // VMwareCloudDirectorCatalogReq represents a request for listing catalogs.
@@ -134,6 +157,12 @@ type VMwareCloudDirectorTemplateReq struct {
 	CatalogName string `json:"catalog_name"`
 }
 
+// swagger:parameters listProjectVMwareCloudDirectorTemplates
+type VMwareCloudDirectorProjectTemplateReq struct {
+	common.ProjectReq
+	VMwareCloudDirectorTemplateReq
+}
+
 // Validate validates listTemplatesReq request.
 func (r VMwareCloudDirectorTemplateReq) Validate() error {
 	if len(r.CatalogName) == 0 {
@@ -142,7 +171,7 @@ func (r VMwareCloudDirectorTemplateReq) Validate() error {
 	return nil
 }
 
-func DecodeListTemplatesReq(c context.Context, r *http.Request) (interface{}, error) {
+func DecodeVMwareCloudDirectorListTemplatesReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req VMwareCloudDirectorTemplateReq
 
 	commonReq, err := DecodeVMwareCloudDirectorCommonReq(c, r)
@@ -160,6 +189,23 @@ func DecodeListTemplatesReq(c context.Context, r *http.Request) (interface{}, er
 	req.CatalogName = CatalogName
 
 	return req, nil
+}
+
+func DecodeVMwareCloudDirectorProjectListTemplatesReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	templateReq, err := DecodeVMwareCloudDirectorListTemplatesReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return VMwareCloudDirectorProjectTemplateReq{
+		ProjectReq:                     projectReq.(common.ProjectReq),
+		VMwareCloudDirectorTemplateReq: templateReq.(VMwareCloudDirectorTemplateReq),
+	}, nil
 }
 
 // VMwareCloudDirectorTemplateNoCredentialsReq represents a request for VMware Cloud Director templates values with cluster-provided credentials
@@ -191,19 +237,19 @@ func DecodeVMwareCloudDirectorTemplateNoCredentialsReq(c context.Context, r *htt
 	return req, nil
 }
 
-func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareCloudDirectorCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter) (*vcd.Auth, error) {
+func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareCloudDirectorCommonReq, projectID string, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter) (*vcd.Auth, error) {
 	username := req.Username
 	password := req.Password
 	organization := req.Organization
 	vdc := req.VDC
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}
@@ -263,14 +309,30 @@ func getVMwareCloudDirectorCredentialsFromCluster(ctx context.Context, userInfoG
 	return vcd.GetAuthInfo(cluster.Spec.Cloud, secretKeySelector, datacenter.Spec.VMwareCloudDirector)
 }
 
-func VMwareCloudDirectorNetworksEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func VMwareCloudDirectorNetworksEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(VMwareCloudDirectorCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       VMwareCloudDirectorCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorCommonReq
+			projectID = projectReq.GetProjectID()
 		}
 
-		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, seedsGetter)
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, projectID, userInfoGetter, presetProvider, seedsGetter)
 		if err != nil {
 			return nil, err
 		}
@@ -279,14 +341,30 @@ func VMwareCloudDirectorNetworksEndpoint(presetProvider provider.PresetProvider,
 	}
 }
 
-func VMwareCloudDirectorStorageProfilesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func VMwareCloudDirectorStorageProfilesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(VMwareCloudDirectorCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       VMwareCloudDirectorCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorCommonReq
+			projectID = projectReq.GetProjectID()
 		}
 
-		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, seedsGetter)
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, projectID, userInfoGetter, presetProvider, seedsGetter)
 		if err != nil {
 			return nil, err
 		}
@@ -295,14 +373,30 @@ func VMwareCloudDirectorStorageProfilesEndpoint(presetProvider provider.PresetPr
 	}
 }
 
-func VMwareCloudDirectorCatalogsEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func VMwareCloudDirectorCatalogsEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(VMwareCloudDirectorCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       VMwareCloudDirectorCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorCommonReq
+			projectID = projectReq.GetProjectID()
 		}
 
-		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, seedsGetter)
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, projectID, userInfoGetter, presetProvider, seedsGetter)
 		if err != nil {
 			return nil, err
 		}
@@ -311,14 +405,30 @@ func VMwareCloudDirectorCatalogsEndpoint(presetProvider provider.PresetProvider,
 	}
 }
 
-func VMwareCloudDirectorTemplatesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func VMwareCloudDirectorTemplatesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(VMwareCloudDirectorTemplateReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       VMwareCloudDirectorTemplateReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorTemplateReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectTemplateReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorTemplateReq
+			projectID = projectReq.GetProjectID()
 		}
 
-		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req.VMwareCloudDirectorCommonReq, userInfoGetter, presetProvider, seedsGetter)
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req.VMwareCloudDirectorCommonReq, projectID, userInfoGetter, presetProvider, seedsGetter)
 		if err != nil {
 			return nil, err
 		}

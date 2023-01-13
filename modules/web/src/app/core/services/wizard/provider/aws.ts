@@ -22,8 +22,8 @@ import {Provider} from './provider';
 import {AWSSecurityGroups, AWSSize, AWSSubnet, AWSVPC} from '@shared/entity/provider/aws';
 
 export class AWS extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey);
   }
@@ -100,7 +100,7 @@ export class AWS extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${seed}/vpcs`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/vpcs`;
     return this._http
       .get<AWSVPC[]>(url, {headers: this._headers})
       .pipe(map(vpcs => vpcs.map(vpc => Object.assign(new AWSVPC(), vpc))));
@@ -124,7 +124,7 @@ export class AWS extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${dc}/securitygroups`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${dc}/securitygroups`;
     return this._http
       .get<AWSSecurityGroups>(url, {headers: this._headers})
       .pipe(map(securityGroups => securityGroups.ids));
@@ -149,7 +149,7 @@ export class AWS extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/${seed}/subnets`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/subnets`;
     return this._http.get<AWSSubnet[]>(url, {headers: this._headers});
   }
 

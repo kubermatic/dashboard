@@ -119,7 +119,7 @@ func TestGCPDiskTypes(t *testing.T) {
 				t.Fatalf("failed to get disk types: %v", err)
 			}
 
-			expectedDiskTypeList := sets.NewString(diskTypeList...)
+			expectedDiskTypeList := sets.New(diskTypeList...)
 
 			if !expectedDiskTypeList.HasAll(tc.resultList...) {
 				t.Fatalf("expected: %v, but got %v", tc.resultList, diskTypeList)

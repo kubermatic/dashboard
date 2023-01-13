@@ -75,7 +75,6 @@ export class OperatingSystemSpec {
   flatcar?: FlatcarSpec;
   rhel?: RHELSpec;
   rockylinux?: RockyLinuxSpec;
-  sles?: SLESSpec;
   ubuntu?: UbuntuSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
@@ -97,10 +96,6 @@ export class Amzn2Spec {
 
 export class FlatcarSpec {
   disableAutoUpdate: boolean;
-}
-
-export class SLESSpec {
-  distUpgradeOnBoot: boolean;
 }
 
 export class RHELSpec {
@@ -420,8 +415,6 @@ export function getOperatingSystem(spec: NodeSpec): string {
     return 'Ubuntu';
   } else if (spec.operatingSystem.centos) {
     return 'CentOS';
-  } else if (spec.operatingSystem.sles) {
-    return 'SLES';
   } else if (spec.operatingSystem.rhel) {
     return 'RHEL';
   } else if (spec.operatingSystem.flatcar) {
@@ -439,8 +432,6 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
     return 'ubuntu';
   } else if (spec.operatingSystem.centos) {
     return 'centos';
-  } else if (spec.operatingSystem.sles) {
-    return 'sles';
   } else if (spec.operatingSystem.rhel) {
     return 'rhel';
   } else if (spec.operatingSystem.flatcar) {

@@ -20,6 +20,7 @@ import _ from 'lodash';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ProjectService} from '@core/services/project';
 
 export enum Controls {
   Preset = 'name',
@@ -56,7 +57,8 @@ export class CredentialsPresetsComponent extends BaseFormValidator implements On
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _projectService: ProjectService
   ) {
     super('Preset');
   }
@@ -92,7 +94,9 @@ export class CredentialsPresetsComponent extends BaseFormValidator implements On
             this.reset();
           }
         }),
-        switchMap(provider => this._externalClusterService.getPresets(provider)),
+        switchMap(provider =>
+          this._externalClusterService.getPresets(this._projectService.selectedProjectID, provider)
+        ),
         map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))),
         takeUntil(this._unsubscribe)
       )

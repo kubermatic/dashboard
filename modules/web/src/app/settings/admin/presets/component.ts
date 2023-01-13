@@ -79,14 +79,14 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
   get _presets$(): Observable<PresetList> {
     if (this.datacenterFilter) {
-      return this._presetService.presets(true, this.providerFilter, this.datacenterFilter);
+      return this._presetService.presets(true, true, this.providerFilter, this.datacenterFilter);
     }
 
     if (this.providerFilter) {
-      return this._presetService.presets(true, this.providerFilter);
+      return this._presetService.presets(true, true, this.providerFilter);
     }
 
-    return this._presetService.presets(true);
+    return this._presetService.presets(true, true);
   }
 
   ngOnInit() {

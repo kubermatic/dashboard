@@ -20,13 +20,13 @@ import {ApplicationService} from '@core/services/application';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {Application, ApplicationDefinition} from '@shared/entity/application';
+import {Application, ApplicationDefinition, ApplicationLabel, ApplicationLabelValue} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
+import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {getEditionVersion} from '@shared/utils/common';
 
 export enum ApplicationsListView {
   Default,
@@ -99,6 +99,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   applicationsSourceMap: ApplicationSourceMap = {};
   applicationsStatusMap: ApplicationStatusMap = {};
   editionVersion: string = getEditionVersion();
+  showSystemApplications = false;
 
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
 
@@ -113,7 +114,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._initSubscriptions();
 
-    this.applicationsDataSource.data = this.applications;
+    this.applicationsDataSource.data = this._visibleApplications;
     this.applicationsDataSource.filterPredicate = this._filter.bind(this);
     this.applicationsDataSource.filter = '';
     this.applicationsDataSource.sortingDataAccessor = (item: Application, property) => {
@@ -135,7 +136,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       if (!changes.applications.currentValue) {
         this.applications = [];
       }
-      this.applicationsDataSource.data = this.applications;
+      this.applicationsDataSource.data = this._visibleApplications;
       this._updateApplicationMaps();
     }
   }
@@ -153,6 +154,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.showCards = !this.showCards;
   }
 
+  toggleSystemApplications() {
+    this.showSystemApplications = !this.showSystemApplications;
+    this.applicationsDataSource.data = this._visibleApplications;
+  }
+
   getAddBtnTooltip(): string {
     if (!this.canEdit) {
       return 'You have no permissions to edit applications in this cluster.';
@@ -160,6 +166,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       return 'There are no application available.';
     }
     return '';
+  }
+
+  isSystemApplication(application: Application): boolean {
+    return application.spec.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
 
   onAddApplication(): void {
@@ -214,25 +224,35 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteApplication(application: Application): void {
-    const config: MatDialogConfig = {
-      data: {
-        title: 'Delete Application',
-        message: `Delete <b>${application.name}</b> application${
-          this.cluster ? ` of <b>${this.cluster.name}</b> cluster permanently` : ''
-        }?`,
-        confirmLabel: 'Delete',
-      },
-    };
+    if (!this.isSystemApplication(application)) {
+      const config: MatDialogConfig = {
+        data: {
+          title: 'Delete Application',
+          message: `Delete <b>${application.name}</b> application${
+            this.cluster ? ` of <b>${this.cluster.name}</b> cluster permanently` : ''
+          }?`,
+          confirmLabel: 'Delete',
+        },
+      };
 
-    this._matDialog
-      .open(ConfirmationDialogComponent, config)
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(isConfirmed => {
-        if (isConfirmed) {
-          this.deleteApplication.emit(application);
-        }
-      });
+      this._matDialog
+        .open(ConfirmationDialogComponent, config)
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe(isConfirmed => {
+          if (isConfirmed) {
+            this.deleteApplication.emit(application);
+          }
+        });
+    }
+  }
+
+  private get _visibleApplications(): Application[] {
+    let filteredApplications = this.applications || [];
+    if (!this.showSystemApplications) {
+      filteredApplications = filteredApplications.filter(application => !this.isSystemApplication(application));
+    }
+    return filteredApplications;
   }
 
   private _initSubscriptions(): void {

@@ -48,6 +48,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
+const (
+	DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+	totalQuotaName                   = "totalquota"
+)
+
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
 	// in: path
@@ -62,20 +67,20 @@ type calculateProjectResourceQuotaUpdate struct {
 	Body struct {
 		Replicas int `json:"replicas"`
 		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
-		DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
-		AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
-		AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
-		AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
-		AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
-		DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
-		EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
-		GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
-		HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
-		// TODO Kubevirt
-		NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
-		OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
-		VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
-		VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+		DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
+		AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
+		AnexiaNodeSpec      *apiv1.AnexiaNodeSpec              `json:"anexiaNodeSpec,omitempty"`
+		AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
+		AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
+		DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
+		EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
+		GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
+		HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
+		KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
+		NutanixNodeSpec     *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+		OpenstackSize       *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+		VMDirectorNodeSpec  *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+		VSphereNodeSpec     *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
 	}
 }
 
@@ -88,6 +93,10 @@ type listResourceQuotas struct {
 	// in: query
 	// required: false
 	SubjectKind string `json:"subject_kind,omitempty"`
+
+	// in: query
+	// required: false
+	Accumulate bool `json:"accumulate,omitempty"`
 }
 
 // swagger:parameters createResourceQuota
@@ -138,9 +147,20 @@ func DecodeResourceQuotaReq(r *http.Request) (interface{}, error) {
 
 func DecodeListResourceQuotaReq(r *http.Request) (interface{}, error) {
 	var req listResourceQuotas
+	var accumulate bool
+	var err error
 
 	req.SubjectName = r.URL.Query().Get("subjectName")
 	req.SubjectKind = r.URL.Query().Get("subjectKind")
+
+	queryParam := r.URL.Query().Get("accumulate")
+	if queryParam != "" {
+		accumulate, err = strconv.ParseBool(queryParam)
+		if err != nil {
+			return nil, fmt.Errorf("wrong query parameter `accumulate`: %w", err)
+		}
+	}
+	req.Accumulate = accumulate
 
 	return req, nil
 }
@@ -228,6 +248,42 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 	return convertToAPIStruct(projectResourceQuota, projectName), nil
 }
 
+func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuota {
+	rdAvailable := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+	rdUsed := kubermaticv1.NewResourceDetails(resource.Quantity{}, resource.Quantity{}, resource.Quantity{})
+
+	for _, quota := range rqList.Items {
+		if quota.Spec.Quota.CPU != nil {
+			rdAvailable.CPU.Add(*quota.Spec.Quota.CPU)
+		}
+		if quota.Spec.Quota.Memory != nil {
+			rdAvailable.Memory.Add(*quota.Spec.Quota.Memory)
+		}
+		if quota.Spec.Quota.Storage != nil {
+			rdAvailable.Storage.Add(*quota.Spec.Quota.Storage)
+		}
+
+		if quota.Status.GlobalUsage.CPU != nil {
+			rdUsed.CPU.Add(*quota.Status.GlobalUsage.CPU)
+		}
+		if quota.Status.GlobalUsage.Memory != nil {
+			rdUsed.Memory.Add(*quota.Status.GlobalUsage.Memory)
+		}
+		if quota.Status.GlobalUsage.Storage != nil {
+			rdUsed.Storage.Add(*quota.Status.GlobalUsage.Storage)
+		}
+	}
+
+	return &apiv2.ResourceQuota{
+		Name:  totalQuotaName,
+		Quota: convertToAPIQuota(*rdAvailable),
+		Status: apiv2.ResourceQuotaStatus{
+			GlobalUsage: convertToAPIQuota(*rdUsed),
+		},
+		SubjectHumanReadableName: totalQuotaName,
+	}
+}
+
 func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
 	quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuotaUpdateCalculation, error) {
@@ -286,6 +342,9 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 
 func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*kubermaticv1.ResourceDetails, error) {
 	nc := kubermaticprovider.NewNodeCapacity()
+	nc.CPUCores = &resource.Quantity{}
+	nc.Memory = &resource.Quantity{}
+	nc.Storage = &resource.Quantity{}
 
 	var err error
 
@@ -322,6 +381,10 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = getHetznerResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
+	case req.Body.KubevirtNodeSize != nil:
+		if err = getKubevirtResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
 	case req.Body.NutanixNodeSpec != nil:
 		if err = getNutanixResourceDetails(req, nc); err != nil {
 			return nil, err
@@ -340,17 +403,6 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		}
 	default:
 		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
-	}
-
-	// if some resource is not set, default it
-	if nc.CPUCores == nil {
-		nc.CPUCores = &resource.Quantity{}
-	}
-	if nc.Memory == nil {
-		nc.Memory = &resource.Quantity{}
-	}
-	if nc.Storage == nil {
-		nc.Storage = &resource.Quantity{}
 	}
 
 	// Multiply by replicas count
@@ -493,6 +545,37 @@ func getHetznerResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kube
 	return nil
 }
 
+func getKubevirtResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	cpus, err := strconv.Atoi(req.Body.KubevirtNodeSize.CPUs)
+	if err != nil {
+		return fmt.Errorf("error converting kubevirt node size cpus %q to int: %w", req.Body.KubevirtNodeSize.CPUs, err)
+	}
+	nc.WithCPUCount(cpus)
+
+	memory, err := resource.ParseQuantity(req.Body.KubevirtNodeSize.Memory)
+	if err != nil {
+		return fmt.Errorf("error parsing kubevirt node memory %q to resource quantity: %w", req.Body.KubevirtNodeSize.Memory, err)
+	}
+	nc.Memory = &memory
+
+	storage, err := resource.ParseQuantity(req.Body.KubevirtNodeSize.PrimaryDiskSize)
+	if err != nil {
+		return fmt.Errorf("failed to parse kubevirt node storage %q to resource quantity: %w", req.Body.KubevirtNodeSize.PrimaryDiskSize, err)
+	}
+
+	// Add all secondary disks
+	for _, d := range req.Body.KubevirtNodeSize.SecondaryDisks {
+		secondaryStorage, err := resource.ParseQuantity(d.Size)
+		if err != nil {
+			return fmt.Errorf("failed to parse kubevirt secondary node storage %q to resource quantity: %w", d.Size, err)
+		}
+		storage.Add(secondaryStorage)
+	}
+	nc.Storage = &storage
+
+	return nil
+}
+
 func getNutanixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(int(req.Body.NutanixNodeSpec.CPUs))
 
@@ -603,6 +686,11 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 		return nil, err
 	}
 
+	// if accumulate is true, accumulate all resource quota's quotas and global usage and return
+	if req.Accumulate {
+		return []*apiv2.ResourceQuota{accumulateQuotas(resourceQuotaList)}, nil
+	}
+
 	// Fetching projects to get their human-readable names.
 	projectMap := make(map[string]*kubermaticv1.Project)
 	projects, err := projectProvider.List(ctx, nil)
@@ -612,7 +700,7 @@ func ListResourceQuotas(ctx context.Context, request interface{}, provider provi
 	for _, project := range projects {
 		projectMap[project.Name] = project
 	}
-	projectSet := sets.StringKeySet(projectMap)
+	projectSet := sets.KeySet(projectMap)
 
 	resp := make([]*apiv2.ResourceQuota, len(resourceQuotaList.Items))
 	for idx, rq := range resourceQuotaList.Items {
@@ -668,6 +756,9 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	}
 	newResourceQuota := originalResourceQuota.DeepCopy()
 
+	// if a resource quota is updated, it's not a default quota anymore. Remove default label if it exists
+	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
+
 	crdQuota, err := convertToCRDQuota(req.Body)
 	if err != nil {
 		return utilerrors.NewBadRequest(err.Error())
@@ -684,7 +775,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 }
 
 func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
-	return &apiv2.ResourceQuota{
+	rq := &apiv2.ResourceQuota{
 		Name:        resourceQuota.Name,
 		SubjectName: resourceQuota.Spec.Subject.Name,
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
@@ -695,6 +786,12 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}
+
+	if resourceQuota.Labels != nil && resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true" {
+		rq.IsDefault = true
+	}
+
+	return rq
 }
 
 func DeleteResourceQuota(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider) error {

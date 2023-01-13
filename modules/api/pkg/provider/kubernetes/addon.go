@@ -60,13 +60,13 @@ func NewAddonProvider(
 	}
 }
 
-func (p *AddonProvider) getAccessibleAddons(ctx context.Context) (sets.String, error) {
+func (p *AddonProvider) getAccessibleAddons(ctx context.Context) (sets.Set[string], error) {
 	config, err := p.configGetter(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return sets.NewString(config.Spec.API.AccessibleAddons...), nil
+	return sets.New(config.Spec.API.AccessibleAddons...), nil
 }
 
 func (p *AddonProvider) checkAddonAccessible(ctx context.Context, addonName string) error {

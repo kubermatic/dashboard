@@ -17,6 +17,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} f
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil} from 'rxjs/operators';
+import {ProjectService} from '@core/services/project';
 
 export enum Controls {
   TenantID = 'tenantID',
@@ -36,7 +37,8 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
@@ -83,7 +85,7 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
     }
 
     return this._externalClusterService
-      .validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret)
+      .validateAKSCredentials(this._projectService.selectedProjectID, tenantID, subscriptionID, clientID, clientSecret)
       .pipe(take(1))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }

@@ -495,7 +495,7 @@ type ExternalClusterStatus struct {
 // ExternalClusterSpec defines the external cluster specification.
 type ExternalClusterSpec struct {
 	// Version desired version of the kubernetes master components
-	Version          ksemver.Semver `json:"version,omitempty"`
+	Version          ksemver.Semver `json:"version"`
 	ContainerRuntime string         `json:"containerRuntime,omitempty"`
 
 	GKEClusterSpec *GKEClusterSpec `json:"gkeclusterSpec,omitempty"`
@@ -516,6 +516,12 @@ type ExternalClusterCloudSpec struct {
 type BringYourOwnSpec struct{}
 
 type KubeOneSpec struct {
+	// ProviderName is the name of the cloud provider used, one of
+	// "aws", "azure", "digitalocean", "gcp",
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
+	ProviderName string `json:"providerName"`
+	// Region is the kubernetes control plane region.
+	Region string `json:"region,omitempty"`
 	// Manifest Base64 encoded manifest
 	Manifest  string            `json:"manifest,omitempty"`
 	SSHKey    KubeOneSSHKey     `json:"sshKey,omitempty"`
@@ -1042,7 +1048,6 @@ type AKSNodePoolModes []string
 // FeatureGates represents an object holding feature gate settings
 // swagger:model FeatureGates
 type FeatureGates struct {
-	KonnectivityService    *bool `json:"konnectivityService,omitempty"`
 	OIDCKubeCfgEndpoint    *bool `json:"oidcKubeCfgEndpoint,omitempty"`
 	OperatingSystemManager *bool `json:"operatingSystemManager,omitempty"`
 	OpenIDAuthPlugin       *bool `json:"openIDAuthPlugin,omitempty"`
@@ -1713,6 +1718,7 @@ type ResourceQuota struct {
 	SubjectKind string `json:"subjectKind"`
 	// SubjectHumanReadableName contains the human-readable name for the subject(if applicable). Just filled as information in get/list.
 	SubjectHumanReadableName string              `json:"subjectHumanReadableName,omitempty"`
+	IsDefault                bool                `json:"isDefault"`
 	Quota                    Quota               `json:"quota"`
 	Status                   ResourceQuotaStatus `json:"status"`
 }
@@ -1760,6 +1766,8 @@ type ApplicationInstallation struct {
 
 	Namespace string `json:"namespace,omitempty"`
 
+	Labels map[string]string `json:"labels,omitempty"`
+
 	Spec *ApplicationInstallationSpec `json:"spec"`
 
 	Status *ApplicationInstallationStatus `json:"status"`
@@ -1783,6 +1791,9 @@ type ApplicationInstallationListItemSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
 	Namespace apiv1.NamespaceSpec `json:"namespace"`
 
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// ApplicationRef is a reference to identify which Application should be deployed
 	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
 }
@@ -1804,6 +1815,8 @@ type ApplicationInstallationBody struct {
 	apiv1.ObjectMeta
 
 	Namespace string `json:"namespace,omitempty"`
+
+	Labels map[string]string `json:"labels,omitempty"`
 
 	Spec *ApplicationInstallationSpec `json:"spec"`
 }
@@ -1916,6 +1929,8 @@ type ApplicationDefinitionListItem struct {
 
 // ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.
 type ApplicationDefinitionListItemSpec struct {
+	// Labels can contain metadata about the application, such as the owner who manages it.
+	Labels map[string]string `json:"labels,omitempty"`
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
 }
@@ -1940,4 +1955,11 @@ type SeedOverview struct {
 	Phase                 kubermaticv1.SeedPhase `json:"phase"`
 	Created               metav1.Time            `json:"created"`
 	DatacentersByProvider DatacentersByProvider  `json:"providers"`
+}
+
+// SeedStatus stores the current status of a Seed.
+// swagger:model SeedStatus
+type SeedStatus struct {
+	Name  string                 `json:"name"`
+	Phase kubermaticv1.SeedPhase `json:"phase"`
 }

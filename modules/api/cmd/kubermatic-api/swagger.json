@@ -19582,6 +19582,176 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/alibaba/instancetypes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "alibaba"
+        ],
+        "summary": "Lists available Alibaba instance types.",
+        "operationId": "listProjectAlibabaInstanceTypes",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AccessKeySecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AlibabaInstanceTypeList",
+            "schema": {
+              "$ref": "#/definitions/AlibabaInstanceTypeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/alibaba/vswitches": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "alibaba"
+        ],
+        "summary": "Lists available Alibaba vSwitches.",
+        "operationId": "listProjectAlibabaVSwitches",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AccessKeySecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AlibabaVSwitchList",
+            "schema": {
+              "$ref": "#/definitions/AlibabaVSwitchList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/alibaba/zones": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "alibaba"
+        ],
+        "summary": "Lists available Alibaba zones.",
+        "operationId": "listProjectAlibabaZones",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AccessKeySecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AlibabaZoneList",
+            "schema": {
+              "$ref": "#/definitions/AlibabaZoneList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/anexia/templates": {
       "get": {
         "produces": [
@@ -19666,6 +19836,304 @@
             "description": "AnexiaVlanList",
             "schema": {
               "$ref": "#/definitions/AnexiaVlanList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/sizes": {
+      "get": {
+        "description": "Lists available AWS sizes",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSizeList",
+            "schema": {
+              "$ref": "#/definitions/AWSSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups": {
+      "get": {
+        "description": "Lists available AWS security groups",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSecurityGroupList",
+            "schema": {
+              "$ref": "#/definitions/AWSSecurityGroupList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/subnets": {
+      "get": {
+        "description": "Lists available AWS subnets",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSubnetList",
+            "schema": {
+              "$ref": "#/definitions/AWSSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/vpcs": {
+      "get": {
+        "description": "Lists available AWS VPCs",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSVPCs",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSVPCList",
+            "schema": {
+              "$ref": "#/definitions/AWSVPCList"
             }
           },
           "default": {
@@ -20151,6 +20619,56 @@
             "description": "AzureVirtualNetworksList",
             "schema": {
               "$ref": "#/definitions/AzureVirtualNetworksList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/digitalocean/sizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "digitalocean"
+        ],
+        "summary": "Lists sizes from digitalocean.",
+        "operationId": "listProjectDigitaloceanSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "DoToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DigitaloceanSizeList",
+            "schema": {
+              "$ref": "#/definitions/DigitaloceanSizeList"
             }
           },
           "default": {
@@ -21489,6 +22007,146 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/kubevirt/instancetypes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available KubeVirt VirtualMachineInstancetype.",
+        "operationId": "listProjectKubeVirtInstancetypes",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VirtualMachineInstancetypeList",
+            "schema": {
+              "$ref": "#/definitions/VirtualMachineInstancetypeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/kubevirt/preferences": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available KubeVirt VirtualMachinePreference.",
+        "operationId": "listProjectKubeVirtPreferences",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VirtualMachinePreferenceList",
+            "schema": {
+              "$ref": "#/definitions/VirtualMachinePreferenceList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/kubevirt/storageclasses": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available K8s StorageClasses in the Kubevirt cluster.",
+        "operationId": "listProjectKubeVirtStorageClasses",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "StorageClassList",
+            "schema": {
+              "$ref": "#/definitions/StorageClassList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/nutanix/{dc}/categories": {
       "get": {
         "produces": [
@@ -21824,6 +22482,1237 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/openstack/availabilityzones": {
+      "get": {
+        "description": "Lists availability zones from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackAvailabilityZones",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackAvailabilityZone",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackAvailabilityZone"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/networks": {
+      "get": {
+        "description": "Lists networks from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackNetwork",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/securitygroups": {
+      "get": {
+        "description": "Lists security groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSecurityGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSecurityGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/servergroups": {
+      "get": {
+        "description": "Lists server groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackServerGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackServerGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackServerGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/sizes": {
+      "get": {
+        "description": "Lists sizes from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSize",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSize"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/subnetpools": {
+      "get": {
+        "description": "Lists subnet pools from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSubnetPools",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "IPVersion",
+            "name": "ip_version",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSubnetPool",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSubnetPool"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/subnets": {
+      "get": {
+        "description": "Lists subnets from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "NetworkID",
+            "name": "network_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackSubnet",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackSubnet"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/tenants": {
+      "get": {
+        "description": "Lists tenants from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackTenants",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackTenant",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackTenant"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs": {
+      "get": {
+        "description": "List VMware Cloud Director Catalogs",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorCatalogs",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorCatalogList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorCatalogList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks": {
+      "get": {
+        "description": "List VMware Cloud Director OVDC Networks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorNetworkList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorNetworkList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles": {
+      "get": {
+        "description": "List VMware Cloud Director Storage Profiles",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorStorageProfiles",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorStorageProfileList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorStorageProfileList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}": {
+      "get": {
+        "description": "List VMware Cloud Director Templates",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorTemplates",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "CatalogName",
+            "description": "Catalog name to fetch the templates from",
+            "name": "catalog_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorTemplateList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorTemplateList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/datastores": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists datastores from vSphere datacenter.",
+        "operationId": "listProjectVSphereDatastores",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereDatastoreList",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereDatastoreList"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/folders": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists folders from vSphere datacenter.",
+        "operationId": "listProjectVSphereFolders",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereFolder",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereFolder"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/networks": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists networks from vSphere datacenter.",
+        "operationId": "listProjectVSphereNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereNetwork",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/{provider_name}/presets": {
       "get": {
         "description": "Lists presets for the provider in a specific project",
@@ -21981,6 +23870,9 @@
                 },
                 "hetznerSize": {
                   "$ref": "#/definitions/HetznerSize"
+                },
+                "kubevirtNodeSize": {
+                  "$ref": "#/definitions/KubevirtNodeSize"
                 },
                 "nutanixNodeSpec": {
                   "$ref": "#/definitions/NutanixNodeSpec"
@@ -23358,7 +25250,7 @@
           "kubevirt"
         ],
         "summary": "Lists available K8s StorageClasses in the Kubevirt cluster.",
-        "operationId": "listKubevirtStorageClasses",
+        "operationId": "listKubeVirtStorageClasses",
         "parameters": [
           {
             "type": "string",
@@ -23715,22 +25607,22 @@
           },
           {
             "type": "string",
-            "name": "Tenant",
+            "name": "OpenstackTenant",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "TenantID",
+            "name": "OpenstackTenantID",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "Project",
+            "name": "OpenstackProject",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "ProjectID",
+            "name": "OpenstackProjectID",
             "in": "header"
           },
           {
@@ -23806,22 +25698,22 @@
           },
           {
             "type": "string",
-            "name": "Tenant",
+            "name": "OpenstackTenant",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "TenantID",
+            "name": "OpenstackTenantID",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "Project",
+            "name": "OpenstackProject",
             "in": "header"
           },
           {
             "type": "string",
-            "name": "ProjectID",
+            "name": "OpenstackProjectID",
             "in": "header"
           },
           {
@@ -24538,7 +26430,7 @@
           "resourceQuota",
           "admin"
         ],
-        "summary": "Gets a Resource Quota list.",
+        "summary": "Gets a Resource Quota list. If `accumulate` is set to `true` then all the quota's quotas and global usage are accumulated and a `totalquota` is returned.",
         "operationId": "listResourceQuotas",
         "parameters": [
           {
@@ -24551,6 +26443,12 @@
             "type": "string",
             "x-go-name": "SubjectKind",
             "name": "subject_kind",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "x-go-name": "Accumulate",
+            "name": "accumulate",
             "in": "query"
           }
         ],
@@ -24738,6 +26636,41 @@
         "responses": {
           "200": {
             "$ref": "#/responses/empty"
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/seeds/status": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "seed"
+        ],
+        "summary": "Lists Seeds and their status.",
+        "operationId": "listSeedStatus",
+        "responses": {
+          "200": {
+            "description": "SeedStatus",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SeedStatus"
+              }
+            }
           },
           "401": {
             "$ref": "#/responses/empty"
@@ -27132,6 +29065,14 @@
           "description": "Description of the application. what is its purpose",
           "type": "string",
           "x-go-name": "Description"
+        },
+        "labels": {
+          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -27140,6 +29081,9 @@
       "type": "object",
       "title": "ApplicationDefinitionSpec defines the desired state of ApplicationDefinition.",
       "properties": {
+        "defaultDeployOptions": {
+          "$ref": "#/definitions/DeployOptions"
+        },
         "defaultValues": {
           "$ref": "#/definitions/RawExtension"
         },
@@ -27191,6 +29135,13 @@
           "type": "string",
           "x-go-name": "ID"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "description": "Name represents human readable name for the resource",
           "type": "string",
@@ -27237,6 +29188,13 @@
           "description": "ID unique value that identifies the resource generated by the server. Read-Only.",
           "type": "string",
           "x-go-name": "ID"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         },
         "name": {
           "description": "Name represents human readable name for the resource",
@@ -27321,6 +29279,14 @@
       "properties": {
         "applicationRef": {
           "$ref": "#/definitions/ApplicationRef"
+        },
+        "labels": {
+          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         },
         "namespace": {
           "$ref": "#/definitions/NamespaceSpec"
@@ -29182,6 +31148,21 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "CustomNetworkPolicy": {
+      "type": "object",
+      "title": "CustomNetworkPolicy contains a name and the Spec of a NetworkPolicy.",
+      "properties": {
+        "name": {
+          "description": "Name is the name of the Custom Network Policy.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/NetworkPolicySpec"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "Datacenter": {
       "type": "object",
       "title": "Datacenter is the object representing a Kubernetes infra datacenter.",
@@ -29447,6 +31428,14 @@
       "type": "object",
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
+        "customNetworkPolicies": {
+          "description": "CustomNetworkPolicies (optional) allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomNetworkPolicy"
+          },
+          "x-go-name": "CustomNetworkPolicies"
+        },
         "dnsConfig": {
           "$ref": "#/definitions/PodDNSConfig"
         },
@@ -29454,6 +31443,9 @@
           "description": "DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
           "type": "string",
           "x-go-name": "DNSPolicy"
+        },
+        "images": {
+          "$ref": "#/definitions/ImageSources"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -29662,11 +31654,31 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "DefaultProjectResourceQuota": {
+      "description": "DefaultProjectResourceQuota contains the default resource quota which will be set for all\nprojects that do not have a custom quota already set.",
+      "type": "object",
+      "properties": {
+        "quota": {
+          "$ref": "#/definitions/ResourceDetails"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "DependencyCredentials": {
       "type": "object",
       "properties": {
         "helmCredentials": {
           "$ref": "#/definitions/HelmCredentials"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
+    "DeployOptions": {
+      "type": "object",
+      "title": "DeployOptions holds the settings specific to the templating method used to deploy the application.",
+      "properties": {
+        "helm": {
+          "$ref": "#/definitions/HelmDeployOptions"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
@@ -29816,6 +31828,11 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Duration": {
+      "description": "Duration is a wrapper around time.Duration which supports correct\nmarshaling to YAML and JSON. In particular, it marshals into strings, which\ncan be used as map keys in json.",
+      "type": "object",
+      "x-go-package": "k8s.io/apimachinery/pkg/apis/meta/v1"
     },
     "EKS": {
       "type": "object",
@@ -30864,6 +32881,10 @@
         "aksclusterSpec": {
           "$ref": "#/definitions/AKSClusterSpec"
         },
+        "containerRuntime": {
+          "type": "string",
+          "x-go-name": "ContainerRuntime"
+        },
         "eksclusterSpec": {
           "$ref": "#/definitions/EKSClusterSpec"
         },
@@ -30947,10 +32968,6 @@
       "description": "FeatureGates represents an object holding feature gate settings",
       "type": "object",
       "properties": {
-        "konnectivityService": {
-          "type": "boolean",
-          "x-go-name": "KonnectivityService"
-        },
         "oidcKubeCfgEndpoint": {
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"
@@ -31956,6 +33973,24 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "HTTPSource": {
+      "type": "object",
+      "title": "HTTPSource represents list of standard VM images with http-source.",
+      "properties": {
+        "imageCloning": {
+          "$ref": "#/definitions/ImageCloning"
+        },
+        "operatingSystems": {
+          "description": "OperatingSystems represents list of supported operating-systems with their URLs.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/OSVersions"
+          },
+          "x-go-name": "OperatingSystems"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "HealthStatus": {
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -31971,6 +34006,26 @@
         },
         "username": {
           "$ref": "#/definitions/SecretKeySelector"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
+    "HelmDeployOptions": {
+      "type": "object",
+      "title": "HelmDeployOptions holds the deployment settings when templating method is Helm.",
+      "properties": {
+        "atomic": {
+          "description": "Atomic corresponds to the --atomic flag on Helm cli.\nif set, the installation process deletes the installation on failure; the upgrade process rolls back changes made in case of failed upgrade.",
+          "type": "boolean",
+          "x-go-name": "Atomic"
+        },
+        "timeout": {
+          "$ref": "#/definitions/Duration"
+        },
+        "wait": {
+          "description": "Wait corresponds to the --wait flag on Helm cli.\nif set, will wait until all Pods, PVCs, Services, and minimum number of Pods of a Deployment, StatefulSet, or ReplicaSet are in a ready state before marking the release as successful. It will wait for as long as timeout",
+          "type": "boolean",
+          "x-go-name": "Wait"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
@@ -32169,6 +34224,26 @@
       "type": "string",
       "x-go-package": "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
     },
+    "IPBlock": {
+      "description": "IPBlock describes a particular CIDR (Ex. \"192.168.1.0/24\",\"2001:db8::/64\") that is allowed\nto the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs\nthat should not be included within this rule.",
+      "type": "object",
+      "properties": {
+        "cidr": {
+          "description": "CIDR is a string representing the IP Block\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"",
+          "type": "string",
+          "x-go-name": "CIDR"
+        },
+        "except": {
+          "description": "Except is a slice of CIDRs that should not be included within an IP Block\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"\nExcept values will be rejected if they are outside the CIDR range\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Except"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
     "IPFamily": {
       "description": "+kubebuilder:validation:Enum=\"\";IPv4;IPv4+IPv6",
       "type": "string",
@@ -32186,11 +34261,48 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "ImageCloning": {
+      "type": "object",
+      "title": "ImageCloning represents options for kubevirt disk-image cloning.",
+      "properties": {
+        "dataVolumeSize": {
+          "description": "DataVolumeSize is the size of the DataVolume used for caching the image. Default value is 11Gi.",
+          "type": "string",
+          "x-go-name": "DataVolumeSize"
+        },
+        "enabled": {
+          "description": "Enabled allows you to enable/disable cloning of standard images. When this option is enabled,\ndownloading images from the http source destination will happen only once. Later,\nMachine Controller will clone the disks using DataVolumes with the cloning source.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "storageClass": {
+          "description": "StorageClass represents storage-class for DataVolumes of standard images.",
+          "type": "string",
+          "x-go-name": "StorageClass"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ImageList": {
       "type": "object",
       "title": "ImageList defines a map of operating system and the image to use.",
       "additionalProperties": {
         "type": "string"
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "ImageSources": {
+      "type": "object",
+      "title": "ImageSources represents standard VM Image sources.",
+      "properties": {
+        "enableCustomImages": {
+          "description": "EnableCustomImages allows to enable/disable the usage of custom-disks (defaults to false).",
+          "type": "boolean",
+          "x-go-name": "EnableCustomImages"
+        },
+        "http": {
+          "$ref": "#/definitions/HTTPSource"
+        }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
@@ -32215,6 +34327,24 @@
         }
       },
       "x-go-package": "kubevirt.io/api/core/v1"
+    },
+    "IntOrString": {
+      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+      "type": "object",
+      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+      "properties": {
+        "IntVal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "StrVal": {
+          "type": "string"
+        },
+        "Type": {
+          "$ref": "#/definitions/Type"
+        }
+      },
+      "x-go-package": "k8s.io/apimachinery/pkg/util/intstr"
     },
     "JSON": {
       "description": "These types are supported: bool, int64, float64, string, []interface{}, map[string]interface{} and nil.",
@@ -32769,14 +34899,20 @@
         "cloudSpec": {
           "$ref": "#/definitions/KubeOneCloudSpec"
         },
-        "containerRuntime": {
-          "type": "string",
-          "x-go-name": "ContainerRuntime"
-        },
         "manifest": {
           "description": "Manifest Base64 encoded manifest",
           "type": "string",
           "x-go-name": "Manifest"
+        },
+        "providerName": {
+          "description": "ProviderName is the name of the cloud provider used, one of\n\"aws\", \"azure\", \"digitalocean\", \"gcp\",\n\"hetzner\", \"nutanix\", \"openstack\", \"packet\", \"vsphere\" KubeOne natively-supported providers",
+          "type": "string",
+          "x-go-name": "ProviderName"
+        },
+        "region": {
+          "description": "Region is the kubernetes control plane region.",
+          "type": "string",
+          "x-go-name": "Region"
         },
         "sshKey": {
           "$ref": "#/definitions/KubeOneSSHKey"
@@ -32885,6 +35021,11 @@
           "type": "string",
           "x-go-name": "CSIKubeconfig"
         },
+        "imageCloningEnabled": {
+          "description": "ImageCloningEnabled flag enable/disable cloning for a cluster.",
+          "type": "boolean",
+          "x-go-name": "ImageCloningEnabled"
+        },
         "infraStorageClasses": {
           "description": "InfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
           "type": "array",
@@ -32899,7 +35040,7 @@
           "x-go-name": "Kubeconfig"
         },
         "preAllocatedDataVolumes": {
-          "description": "PreAllocatedDataVolumes holds list of preallocated DataVolumes which can be used as reference for DataVolume cloning.",
+          "description": "PreAllocatedDataVolumes represents a list of DataVolumes that are tied to cluster lifecycle and can be referenced by machines.\nCustom Images are a good example of this use case.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PreAllocatedDataVolume"
@@ -32908,6 +35049,40 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubevirtNodeSize": {
+      "type": "object",
+      "required": [
+        "cpus",
+        "memory",
+        "primaryDiskSize"
+      ],
+      "properties": {
+        "cpus": {
+          "description": "CPUs states how many cpus the kubevirt node will have.",
+          "type": "string",
+          "x-go-name": "CPUs"
+        },
+        "memory": {
+          "description": "Memory states the memory that kubevirt node will have. The value should be in the\nformat of https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/quantity/",
+          "type": "string",
+          "x-go-name": "Memory"
+        },
+        "primaryDiskSize": {
+          "description": "PrimaryDiskSize states the size of the provisioned pvc per node.",
+          "type": "string",
+          "x-go-name": "PrimaryDiskSize"
+        },
+        "secondaryDisks": {
+          "description": "SecondaryDisks contains list of secondary-disks",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SecondaryDisks"
+          },
+          "x-go-name": "SecondaryDisks"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "KubevirtNodeSpec": {
       "description": "KubevirtNodeSpec kubevirt specific node settings",
@@ -33620,6 +35795,121 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "NetworkPolicyEgressRule": {
+      "description": "NetworkPolicyEgressRule describes a particular set of traffic that is allowed out of pods\nmatched by a NetworkPolicySpec's podSelector. The traffic must match both ports and to.\nThis type is beta-level in 1.8",
+      "type": "object",
+      "properties": {
+        "ports": {
+          "description": "List of destination ports for outgoing traffic.\nEach item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPort"
+          },
+          "x-go-name": "Ports"
+        },
+        "to": {
+          "description": "List of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPeer"
+          },
+          "x-go-name": "To"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyIngressRule": {
+      "description": "NetworkPolicyIngressRule describes a particular set of traffic that is allowed to the pods\nmatched by a NetworkPolicySpec's podSelector. The traffic must match both ports and from.",
+      "type": "object",
+      "properties": {
+        "from": {
+          "description": "List of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPeer"
+          },
+          "x-go-name": "From"
+        },
+        "ports": {
+          "description": "List of ports which should be made accessible on the pods selected for this\nrule. Each item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPort"
+          },
+          "x-go-name": "Ports"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyPeer": {
+      "description": "NetworkPolicyPeer describes a peer to allow traffic to/from. Only certain combinations of\nfields are allowed",
+      "type": "object",
+      "properties": {
+        "ipBlock": {
+          "$ref": "#/definitions/IPBlock"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "podSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyPort": {
+      "description": "NetworkPolicyPort describes a port to allow traffic on",
+      "type": "object",
+      "properties": {
+        "endPort": {
+          "description": "If set, indicates that the range of ports from port to endPort, inclusive,\nshould be allowed by the policy. This field cannot be defined if the port field\nis not defined or if the port field is defined as a named (string) port.\nThe endPort must be equal or greater than port.\n+optional",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "EndPort"
+        },
+        "port": {
+          "$ref": "#/definitions/IntOrString"
+        },
+        "protocol": {
+          "$ref": "#/definitions/Protocol"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicySpec": {
+      "description": "NetworkPolicySpec provides the specification of a NetworkPolicy",
+      "type": "object",
+      "properties": {
+        "egress": {
+          "description": "List of egress rules to be applied to the selected pods. Outgoing traffic is\nallowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyEgressRule"
+          },
+          "x-go-name": "Egress"
+        },
+        "ingress": {
+          "description": "List of ingress rules to be applied to the selected pods. Traffic is allowed to\na pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyIngressRule"
+          },
+          "x-go-name": "Ingress"
+        },
+        "podSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "policyTypes": {
+          "description": "List of rule types that the NetworkPolicy relates to.\nValid options are [\"Ingress\"], [\"Egress\"], or [\"Ingress\", \"Egress\"].\nIf this field is not specified, it will default based on the existence of Ingress or Egress rules;\npolicies that contain an Egress section are assumed to affect Egress, and all policies\n(whether or not they contain an Ingress section) are assumed to affect Ingress.\nIf you want to write an egress-only policy, you must explicitly specify policyTypes [ \"Egress\" ].\nLikewise, if you want to write a policy that specifies that no egress is allowed,\nyou must specify a policyTypes value that include \"Egress\" (since such a policy would not include\nan Egress section and would otherwise default to just [ \"Ingress\" ]).\nThis field is beta-level in 1.8\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyType"
+          },
+          "x-go-name": "PolicyTypes"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
     },
     "NetworkRanges": {
       "type": "object",
@@ -34498,6 +36788,14 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "OSVersions": {
+      "type": "object",
+      "title": "OSVersions defines a map of OS version and the URL to download the image.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ObjectMeta": {
       "description": "ObjectMeta defines the set of fields that objects returned from the API have",
       "type": "object",
@@ -35111,9 +37409,6 @@
         "rockylinux": {
           "$ref": "#/definitions/RockyLinuxSpec"
         },
-        "sles": {
-          "$ref": "#/definitions/SLESSpec"
-        },
         "ubuntu": {
           "$ref": "#/definitions/UbuntuSpec"
         }
@@ -35390,9 +37685,21 @@
       },
       "x-go-package": "k8s.io/api/rbac/v1"
     },
+    "PolicyType": {
+      "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",
+      "type": "string",
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
     "PreAllocatedDataVolume": {
       "type": "object",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -35680,6 +37987,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Protocol": {
+      "description": "+enum",
+      "type": "string",
+      "title": "Protocol defines network protocols supported for things like container ports.",
+      "x-go-package": "k8s.io/api/core/v1"
     },
     "ProviderConfiguration": {
       "type": "object",
@@ -36042,6 +38355,34 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ResourceClaim": {
+      "type": "object",
+      "title": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
+      "properties": {
+        "name": {
+          "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ResourceDetails": {
+      "type": "object",
+      "title": "ResourceDetails holds the CPU, Memory and Storage quantities.",
+      "properties": {
+        "cpu": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "memory": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "storage": {
+          "$ref": "#/definitions/Quantity"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ResourceLabelMap": {
       "type": "object",
       "title": "ResourceLabelMap defines list of labels grouped by specific resource types.",
@@ -36061,6 +38402,10 @@
     "ResourceQuota": {
       "type": "object",
       "properties": {
+        "isDefault": {
+          "type": "boolean",
+          "x-go-name": "IsDefault"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -36120,6 +38465,14 @@
       "type": "object",
       "title": "ResourceRequirements describes the compute resource requirements.",
       "properties": {
+        "claims": {
+          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable.\n\n+listType=set\n+featureGate=DynamicResourceAllocation\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResourceClaim"
+          },
+          "x-go-name": "Claims"
+        },
         "limits": {
           "$ref": "#/definitions/ResourceList"
         },
@@ -36308,18 +38661,6 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "SLESSpec": {
-      "description": "SLESSpec contains SLES specific settings",
-      "type": "object",
-      "properties": {
-        "distUpgradeOnBoot": {
-          "description": "do a dist-upgrade on boot and reboot it required afterwards",
-          "type": "boolean",
-          "x-go-name": "DistUpgradeOnBoot"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "SSHKey": {
       "description": "SSHKey represents a ssh key",
@@ -36599,6 +38940,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "SeedStatus": {
+      "type": "object",
+      "title": "SeedStatus stores the current status of a Seed.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "phase": {
+          "$ref": "#/definitions/SeedPhase"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Semver": {
       "type": "string",
       "title": "Semver is a type that encapsulates github.com/Masterminds/semver/v3.Version struct so it can be used in our API.",
@@ -36741,6 +39096,9 @@
           "type": "integer",
           "format": "int8",
           "x-go-name": "DefaultNodeCount"
+        },
+        "defaultQuota": {
+          "$ref": "#/definitions/DefaultProjectResourceQuota"
         },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
@@ -36963,6 +39321,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "Type": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Type represents the stored type of IntOrString.",
+      "x-go-package": "k8s.io/apimachinery/pkg/util/intstr"
     },
     "UID": {
       "description": "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated.",

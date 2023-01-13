@@ -49,7 +49,6 @@ export enum OperatingSystem {
   Flatcar = 'flatcar',
   RHEL = 'rhel',
   RockyLinux = 'rockylinux',
-  SLES = 'sles',
   Ubuntu = 'ubuntu',
 }
 
@@ -85,8 +84,6 @@ export namespace NodeProviderConstants {
       return OperatingSystem.Ubuntu;
     } else if (spec.operatingSystem.centos) {
       return OperatingSystem.CentOS;
-    } else if (spec.operatingSystem.sles) {
-      return OperatingSystem.SLES;
     } else if (spec.operatingSystem.rhel) {
       return OperatingSystem.RHEL;
     } else if (spec.operatingSystem.flatcar) {

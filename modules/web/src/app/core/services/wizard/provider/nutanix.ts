@@ -25,8 +25,8 @@ import {
 } from '@shared/entity/provider/nutanix';
 
 export class Nutanix extends Provider {
-  constructor(http: HttpClient, provider: NodeProvider) {
-    super(http, provider);
+  constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
+    super(http, projectID, provider);
 
     this._setRequiredHeaders(Nutanix.Header.NutanixUsername, Nutanix.Header.NutanixPassword);
   }
@@ -71,7 +71,7 @@ export class Nutanix extends Provider {
     return this;
   }
 
-  clusters(seed: string, onLoadingCb: () => void = null): Observable<NutanixCluster[]> {
+  clusters(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixCluster[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -80,11 +80,11 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/clusters`;
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/clusters`;
     return this._http.get<NutanixCluster[]>(url, {headers: this._headers});
   }
 
-  projects(seed: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
+  projects(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -93,11 +93,11 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/projects`;
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/projects`;
     return this._http.get<NutanixProject[]>(url, {headers: this._headers});
   }
 
-  subnets(seed: string, onLoadingCb: () => void = null): Observable<NutanixSubnet[]> {
+  subnets(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixSubnet[]> {
     this._setRequiredHeaders(
       Nutanix.Header.NutanixUsername,
       Nutanix.Header.NutanixPassword,
@@ -111,7 +111,7 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/subnets`;
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/subnets`;
     return this._http.get<NutanixSubnet[]>(url, {headers: this._headers});
   }
 

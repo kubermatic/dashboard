@@ -349,7 +349,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		return err
 	}
 
-	err = exec.Stream(remotecommand.StreamOptions{
+	err = exec.StreamWithContext(ctx, remotecommand.StreamOptions{
 		Stdin:             ptyHandler,
 		Stdout:            ptyHandler,
 		Stderr:            ptyHandler,

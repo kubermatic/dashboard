@@ -46,6 +46,8 @@ const (
 	ExistingFakeProject        = "ExistingFakeProject"
 	ExistingFakeProjectID      = "ExistingFakeProject-ID"
 	ImpersonatedClientErrorMsg = "forbidden"
+	DefaultContainerRuntime    = "docker"
+	DefaultRegion              = "east-us"
 )
 
 type FakePrivilegedProjectProvider struct {

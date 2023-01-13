@@ -15,6 +15,7 @@
 import {Component} from '@angular/core';
 import {StepRegistry} from '@app/kubeone-wizard/config';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {KubeOneClusterSpec} from '@shared/entity/kubeone-cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -28,7 +29,10 @@ export class KubeOneSummaryStepComponent {
   readonly StepRegistry = StepRegistry;
   readonly SECRET_MASK = 'xxxx';
 
-  constructor(private readonly _clusterSpecService: KubeOneClusterSpecService) {}
+  constructor(
+    private readonly _clusterSpecService: KubeOneClusterSpecService,
+    private readonly _presetsService: KubeOnePresetsService
+  ) {}
 
   get provider(): NodeProvider {
     return this._clusterSpecService.provider;
@@ -40,5 +44,9 @@ export class KubeOneSummaryStepComponent {
 
   get kubeOneClusterSpec(): KubeOneClusterSpec {
     return this._clusterSpecService.cluster?.cloud?.kubeOne;
+  }
+
+  get preset(): string {
+    return this._presetsService.preset;
   }
 }

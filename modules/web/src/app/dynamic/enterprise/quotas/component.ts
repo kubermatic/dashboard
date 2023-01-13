@@ -32,6 +32,7 @@ import _ from 'lodash';
 import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
+import {getProgressBarAccent} from './utils/common';
 
 enum Column {
   ProjectId = 'ProjectId',
@@ -39,6 +40,18 @@ enum Column {
   Memory = 'Memory',
   Storage = 'Storage',
   Actions = 'Actions',
+}
+
+enum ResourceType {
+  CPU = 'cpu',
+  Memory = 'memory',
+  Storage = 'storage',
+}
+
+interface progressBarData {
+  color: string;
+  value: number;
+  usageQuota: string;
 }
 
 @Component({
@@ -55,6 +68,7 @@ export class QuotasComponent implements OnInit {
 
   isLoading: boolean;
   readonly Column = Column;
+  readonly resourceType = ResourceType;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -114,6 +128,47 @@ export class QuotasComponent implements OnInit {
       panelClass: 'km-quota-dialog',
       data: quota,
     });
+  }
+
+  getProgressBarData(projectId: string, resourceType: string): progressBarData {
+    const quota = this.quotas.find(quota => quota.subjectName === projectId);
+    const progressBar: progressBarData = {
+      color: '',
+      value: 0,
+      usageQuota: '',
+    };
+    if (quota) {
+      const percentage = 100;
+      switch (resourceType) {
+        case ResourceType.CPU:
+          progressBar.value =
+            ((quota.status.globalUsage.cpu ? quota.status.globalUsage.cpu : 0) / quota.quota.cpu) * percentage;
+          progressBar.color = getProgressBarAccent(progressBar.value);
+          progressBar.usageQuota = `${quota.status.globalUsage.cpu ? quota.status.globalUsage.cpu : 0}/${
+            quota.quota.cpu
+          }`;
+          return progressBar;
+        case ResourceType.Memory:
+          progressBar.value =
+            ((quota.status.globalUsage.memory ? quota.status.globalUsage.memory : 0) / quota.quota.memory) * percentage;
+          progressBar.color = getProgressBarAccent(progressBar.value);
+          progressBar.usageQuota = `${quota.status.globalUsage.memory ? quota.status.globalUsage.memory : 0}/${
+            quota.quota.memory
+          }`;
+          return progressBar;
+        case ResourceType.Storage:
+          progressBar.value =
+            ((quota.status.globalUsage.storage ? quota.status.globalUsage.storage : 0) / quota.quota.storage) *
+            percentage;
+          progressBar.color = getProgressBarAccent(progressBar.value);
+          progressBar.usageQuota = `${quota.status.globalUsage.storage ? quota.status.globalUsage.storage : 0}/${
+            quota.quota.storage
+          }`;
+
+          return progressBar;
+      }
+    }
+    return progressBar;
   }
 
   deleteQuota(quota: QuotaDetails): void {
