@@ -141,3 +141,23 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 		}, nil
 	}
 }
+
+func ListSeedStatus(seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		seeds, err := seedsGetter()
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		seedStatusList := make([]apiv2.SeedStatus, 0, len(seeds))
+
+		for _, seed := range seeds {
+			seedStatusList = append(seedStatusList, apiv2.SeedStatus{
+				Name:  seed.Name,
+				Phase: seed.Status.Phase,
+			})
+		}
+
+		return seedStatusList, nil
+	}
+}

@@ -21,9 +21,15 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -32,23 +38,58 @@ const (
 	NodeControlPlaneLabel = "node-role.kubernetes.io/control-plane"
 )
 
-func CheckContainerRuntime(ctx context.Context,
+func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.Client, limit *int64) (*corev1.NodeList, error) {
+	nodeReq, err := labels.NewRequirement(NodeControlPlaneLabel, selection.Exists, []string{})
+	if err != nil {
+		return nil, errors.Wrap(err, "error creating selector requirement")
+	}
+
+	selector := labels.NewSelector().Add(*nodeReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "error converting node label requirement to selector")
+	}
+
+	var listOpts ctrlruntimeclient.ListOption
+	nodes := &corev1.NodeList{}
+	if limit != nil {
+		listOpts = &ctrlruntimeclient.ListOptions{
+			Limit:         *limit,
+			LabelSelector: selector,
+		}
+	} else {
+		listOpts = &ctrlruntimeclient.ListOptions{
+			LabelSelector: selector,
+		}
+	}
+
+	err = clusterClient.List(ctx, nodes, listOpts)
+	if err != nil {
+		return nil, err
+	}
+	return nodes, nil
+}
+
+func GetContainerRuntime(ctx context.Context,
 	masterClient ctrlruntimeclient.Client,
 	externalCluster *kubermaticv1.ExternalCluster,
 	externalClusterProvider provider.ExternalClusterProvider,
 ) (string, error) {
-	nodes, err := externalClusterProvider.ListNodes(ctx, masterClient, externalCluster)
+	clusterClient, err := externalClusterProvider.GetClient(ctx, masterClient, externalCluster)
 	if err != nil {
-		return "", fmt.Errorf("failed to fetch container runtime: not able to list nodes %w", err)
+		return "", err
 	}
-	for _, node := range nodes.Items {
-		if _, ok := node.Labels[NodeControlPlaneLabel]; ok {
-			containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
-			strSlice := strings.Split(containerRuntimeVersion, ":")
-			for _, containerRuntime := range strSlice {
-				return containerRuntime, nil
-			}
+
+	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
+	if err != nil {
+		return "", fmt.Errorf("failed to list control plane nodes %w", err)
+	}
+
+	for len(controlPlaneNode.Items) > 0 {
+		containerRuntimeVersion := controlPlaneNode.Items[0].Status.NodeInfo.ContainerRuntimeVersion
+		containerRuntime, _, found := strings.Cut(containerRuntimeVersion, ":")
+		if found {
+			return containerRuntime, nil
 		}
 	}
-	return "", fmt.Errorf("failed to fetch container runtime: no control plane nodes found with label %s", NodeControlPlaneLabel)
+	return "", fmt.Errorf("failed to get container runtime from node")
 }

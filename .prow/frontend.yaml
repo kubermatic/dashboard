@@ -231,7 +231,7 @@ presubmits:
       preset-goproxy: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-4
+        - image: quay.io/kubermatic/build:go-1.19-node-18-5
           command:
             - make
             - web-lint

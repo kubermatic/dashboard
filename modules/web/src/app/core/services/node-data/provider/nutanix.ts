@@ -51,7 +51,7 @@ export class NodeDataNutanixProvider {
                 .clusterName(cluster.spec.cloud.nutanix.clusterName)
                 .projectName(cluster.spec.cloud.nutanix.projectName)
                 .credential(this._presetService.preset)
-                .subnets(cluster.spec.cloud.dc, onLoadingCb)
+                .subnets(cluster.spec.cloud.dc, this._projectService.selectedProjectID, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {

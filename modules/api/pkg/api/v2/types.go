@@ -495,7 +495,8 @@ type ExternalClusterStatus struct {
 // ExternalClusterSpec defines the external cluster specification.
 type ExternalClusterSpec struct {
 	// Version desired version of the kubernetes master components
-	Version ksemver.Semver `json:"version,omitempty"`
+	Version          ksemver.Semver `json:"version"`
+	ContainerRuntime string         `json:"containerRuntime,omitempty"`
 
 	GKEClusterSpec *GKEClusterSpec `json:"gkeclusterSpec,omitempty"`
 	EKSClusterSpec *EKSClusterSpec `json:"eksclusterSpec,omitempty"`
@@ -515,11 +516,16 @@ type ExternalClusterCloudSpec struct {
 type BringYourOwnSpec struct{}
 
 type KubeOneSpec struct {
+	// ProviderName is the name of the cloud provider used, one of
+	// "aws", "azure", "digitalocean", "gcp",
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
+	ProviderName string `json:"providerName"`
+	// Region is the kubernetes control plane region.
+	Region string `json:"region,omitempty"`
 	// Manifest Base64 encoded manifest
-	Manifest         string            `json:"manifest,omitempty"`
-	SSHKey           KubeOneSSHKey     `json:"sshKey,omitempty"`
-	ContainerRuntime string            `json:"containerRuntime,omitempty"`
-	CloudSpec        *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
+	Manifest  string            `json:"manifest,omitempty"`
+	SSHKey    KubeOneSSHKey     `json:"sshKey,omitempty"`
+	CloudSpec *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
 }
 
 // SSHKeySpec represents the details of a ssh key.
@@ -1949,4 +1955,11 @@ type SeedOverview struct {
 	Phase                 kubermaticv1.SeedPhase `json:"phase"`
 	Created               metav1.Time            `json:"created"`
 	DatacentersByProvider DatacentersByProvider  `json:"providers"`
+}
+
+// SeedStatus stores the current status of a Seed.
+// swagger:model SeedStatus
+type SeedStatus struct {
+	Name  string                 `json:"name"`
+	Phase kubermaticv1.SeedPhase `json:"phase"`
 }

@@ -17,6 +17,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} f
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil, debounceTime, tap} from 'rxjs/operators';
+import {ProjectService} from '@core/services/project';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -49,7 +50,8 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _projectService: ProjectService
   ) {}
 
   get selectedPreset(): string {
@@ -145,12 +147,17 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     let obs$;
     if (this.selectedPreset) {
       const presetValue = this.selectedPreset;
-      obs$ = this._externalClusterService.getEKSRegions(presetValue);
+      obs$ = this._externalClusterService.getEKSRegions(this._projectService.selectedProjectID, presetValue);
     } else {
       const accessKeyID = this.form.get(Controls.AccessKeyID).value;
       const secretAccessKey = this.form.get(Controls.SecretAccessKey).value;
       if (accessKeyID && secretAccessKey) {
-        obs$ = this._externalClusterService.getEKSRegions(null, accessKeyID, secretAccessKey);
+        obs$ = this._externalClusterService.getEKSRegions(
+          this._projectService.selectedProjectID,
+          null,
+          accessKeyID,
+          secretAccessKey
+        );
       } else {
         obs$ = of([]);
       }
@@ -187,7 +194,14 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     }
 
     return this._externalClusterService
-      .validateEKSCredentials(accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region)
+      .validateEKSCredentials(
+        this._projectService.selectedProjectID,
+        accessKeyID,
+        secretAccessKey,
+        assumeRoleARN,
+        assumeRoleExternalID,
+        region
+      )
       .pipe(take(1))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }

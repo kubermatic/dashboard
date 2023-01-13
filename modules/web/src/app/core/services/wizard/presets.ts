@@ -32,6 +32,7 @@ import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
 import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
 import {Nutanix} from '@core/services/wizard/provider/nutanix';
+import {ProjectService} from '@core/services/project';
 
 @Injectable()
 export class PresetsService {
@@ -39,7 +40,7 @@ export class PresetsService {
   readonly presetStatusChanges = new EventEmitter<boolean>();
   readonly presetChanges = new EventEmitter<string>();
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient, private readonly _projectService: ProjectService) {}
 
   private _preset: string;
 
@@ -72,43 +73,58 @@ export class PresetsService {
   provider(provider: NodeProvider): Provider {
     switch (provider) {
       case NodeProvider.AWS:
-        return new AWS(this._http, NodeProvider.AWS);
+        return new AWS(this._http, this._projectService.selectedProjectID, NodeProvider.AWS);
       case NodeProvider.AZURE:
-        return new Azure(this._http, NodeProvider.AZURE);
+        return new Azure(this._http, this._projectService.selectedProjectID, NodeProvider.AZURE);
       case NodeProvider.DIGITALOCEAN:
-        return new Digitalocean(this._http, NodeProvider.DIGITALOCEAN);
+        return new Digitalocean(this._http, this._projectService.selectedProjectID, NodeProvider.DIGITALOCEAN);
       case NodeProvider.GCP:
-        return new GCP(this._http, NodeProvider.GCP);
+        return new GCP(this._http, this._projectService.selectedProjectID, NodeProvider.GCP);
       case NodeProvider.HETZNER:
-        return new Hetzner(this._http, NodeProvider.HETZNER);
+        return new Hetzner(this._http, this._projectService.selectedProjectID, NodeProvider.HETZNER);
       case NodeProvider.KUBEVIRT:
-        return new KubeVirt(this._http, NodeProvider.KUBEVIRT);
+        return new KubeVirt(this._http, this._projectService.selectedProjectID, NodeProvider.KUBEVIRT);
       case NodeProvider.OPENSTACK:
-        return new Openstack(this._http, NodeProvider.OPENSTACK);
+        return new Openstack(this._http, this._projectService.selectedProjectID, NodeProvider.OPENSTACK);
       case NodeProvider.EQUINIX:
-        return new Equinix(this._http, NodeProvider.EQUINIX);
+        return new Equinix(this._http, this._projectService.selectedProjectID, NodeProvider.EQUINIX);
       case NodeProvider.VSPHERE:
-        return new VSphere(this._http, NodeProvider.VSPHERE);
+        return new VSphere(this._http, this._projectService.selectedProjectID, NodeProvider.VSPHERE);
       case NodeProvider.ALIBABA:
-        return new Alibaba(this._http, NodeProvider.ALIBABA);
+        return new Alibaba(this._http, this._projectService.selectedProjectID, NodeProvider.ALIBABA);
       case NodeProvider.ANEXIA:
-        return new Anexia(this._http, NodeProvider.ANEXIA);
+        return new Anexia(this._http, this._projectService.selectedProjectID, NodeProvider.ANEXIA);
       case NodeProvider.NUTANIX:
-        return new Nutanix(this._http, NodeProvider.NUTANIX);
+        return new Nutanix(this._http, this._projectService.selectedProjectID, NodeProvider.NUTANIX);
       case NodeProvider.VMWARECLOUDDIRECTOR:
-        return new VMwareCloudDirector(this._http, NodeProvider.VMWARECLOUDDIRECTOR);
+        return new VMwareCloudDirector(
+          this._http,
+          this._projectService.selectedProjectID,
+          NodeProvider.VMWARECLOUDDIRECTOR
+        );
       default:
         throw new Error(`Provider ${provider} not supported`);
     }
   }
 
-  presets(disabled?: boolean, provider: NodeProvider = NodeProvider.NONE, datacenter = ''): Observable<PresetList> {
+  presets(
+    disabled?: boolean,
+    admin?: boolean,
+    provider: NodeProvider = NodeProvider.NONE,
+    datacenter = '',
+    projectID = ''
+  ): Observable<PresetList> {
+    let root = `${environment.newRestRoot}`;
+    if (!admin) {
+      root = `${environment.newRestRoot}/projects/${projectID}`;
+    }
+
     if (!provider) {
-      const url = `${environment.newRestRoot}/presets?disabled=${disabled}`;
+      const url = `${root}/presets?disabled=${disabled}`;
       return this._http.get<PresetList>(url);
     }
 
-    const url = `${environment.newRestRoot}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
+    const url = `${root}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
     return this._http.get<PresetList>(url);
   }
 

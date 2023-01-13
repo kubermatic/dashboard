@@ -19847,6 +19847,304 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/aws/sizes": {
+      "get": {
+        "description": "Lists available AWS sizes",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSizeList",
+            "schema": {
+              "$ref": "#/definitions/AWSSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups": {
+      "get": {
+        "description": "Lists available AWS security groups",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSecurityGroupList",
+            "schema": {
+              "$ref": "#/definitions/AWSSecurityGroupList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/subnets": {
+      "get": {
+        "description": "Lists available AWS subnets",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSSubnetList",
+            "schema": {
+              "$ref": "#/definitions/AWSSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/vpcs": {
+      "get": {
+        "description": "Lists available AWS VPCs",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSVPCs",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AWSVPCList",
+            "schema": {
+              "$ref": "#/definitions/AWSVPCList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/azure/availabilityzones": {
       "get": {
         "description": "Lists VM availability zones in an Azure region",
@@ -26354,6 +26652,41 @@
         }
       }
     },
+    "/api/v2/seeds/status": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "seed"
+        ],
+        "summary": "Lists Seeds and their status.",
+        "operationId": "listSeedStatus",
+        "responses": {
+          "200": {
+            "description": "SeedStatus",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SeedStatus"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/seeds/{seed_name}/backupcredentials": {
       "put": {
         "description": "Creates or updates backup credentials for a given seed",
@@ -28748,6 +29081,9 @@
       "type": "object",
       "title": "ApplicationDefinitionSpec defines the desired state of ApplicationDefinition.",
       "properties": {
+        "defaultDeployOptions": {
+          "$ref": "#/definitions/DeployOptions"
+        },
         "defaultValues": {
           "$ref": "#/definitions/RawExtension"
         },
@@ -30812,6 +31148,21 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "CustomNetworkPolicy": {
+      "type": "object",
+      "title": "CustomNetworkPolicy contains a name and the Spec of a NetworkPolicy.",
+      "properties": {
+        "name": {
+          "description": "Name is the name of the Custom Network Policy.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/NetworkPolicySpec"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "Datacenter": {
       "type": "object",
       "title": "Datacenter is the object representing a Kubernetes infra datacenter.",
@@ -31077,6 +31428,14 @@
       "type": "object",
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
+        "customNetworkPolicies": {
+          "description": "CustomNetworkPolicies (optional) allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomNetworkPolicy"
+          },
+          "x-go-name": "CustomNetworkPolicies"
+        },
         "dnsConfig": {
           "$ref": "#/definitions/PodDNSConfig"
         },
@@ -31314,6 +31673,16 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
+    "DeployOptions": {
+      "type": "object",
+      "title": "DeployOptions holds the settings specific to the templating method used to deploy the application.",
+      "properties": {
+        "helm": {
+          "$ref": "#/definitions/HelmDeployOptions"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
     "Digitalocean": {
       "type": "object",
       "properties": {
@@ -31459,6 +31828,11 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Duration": {
+      "description": "Duration is a wrapper around time.Duration which supports correct\nmarshaling to YAML and JSON. In particular, it marshals into strings, which\ncan be used as map keys in json.",
+      "type": "object",
+      "x-go-package": "k8s.io/apimachinery/pkg/apis/meta/v1"
     },
     "EKS": {
       "type": "object",
@@ -32506,6 +32880,10 @@
       "properties": {
         "aksclusterSpec": {
           "$ref": "#/definitions/AKSClusterSpec"
+        },
+        "containerRuntime": {
+          "type": "string",
+          "x-go-name": "ContainerRuntime"
         },
         "eksclusterSpec": {
           "$ref": "#/definitions/EKSClusterSpec"
@@ -33632,6 +34010,26 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
+    "HelmDeployOptions": {
+      "type": "object",
+      "title": "HelmDeployOptions holds the deployment settings when templating method is Helm.",
+      "properties": {
+        "atomic": {
+          "description": "Atomic corresponds to the --atomic flag on Helm cli.\nif set, the installation process deletes the installation on failure; the upgrade process rolls back changes made in case of failed upgrade.",
+          "type": "boolean",
+          "x-go-name": "Atomic"
+        },
+        "timeout": {
+          "$ref": "#/definitions/Duration"
+        },
+        "wait": {
+          "description": "Wait corresponds to the --wait flag on Helm cli.\nif set, will wait until all Pods, PVCs, Services, and minimum number of Pods of a Deployment, StatefulSet, or ReplicaSet are in a ready state before marking the release as successful. It will wait for as long as timeout",
+          "type": "boolean",
+          "x-go-name": "Wait"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
     "HelmSource": {
       "type": "object",
       "properties": {
@@ -33826,6 +34224,26 @@
       "type": "string",
       "x-go-package": "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
     },
+    "IPBlock": {
+      "description": "IPBlock describes a particular CIDR (Ex. \"192.168.1.0/24\",\"2001:db8::/64\") that is allowed\nto the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs\nthat should not be included within this rule.",
+      "type": "object",
+      "properties": {
+        "cidr": {
+          "description": "CIDR is a string representing the IP Block\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"",
+          "type": "string",
+          "x-go-name": "CIDR"
+        },
+        "except": {
+          "description": "Except is a slice of CIDRs that should not be included within an IP Block\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"\nExcept values will be rejected if they are outside the CIDR range\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Except"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
     "IPFamily": {
       "description": "+kubebuilder:validation:Enum=\"\";IPv4;IPv4+IPv6",
       "type": "string",
@@ -33847,10 +34265,15 @@
       "type": "object",
       "title": "ImageCloning represents options for kubevirt disk-image cloning.",
       "properties": {
-        "enable": {
-          "description": "Enable allows you to enable/disable cloning of standard images. When this option is enabled,\ndownloading images from the http source destination will happen only once. Later,\nMachine Controller will clone the disks using DataVolumes with the cloning source.",
+        "dataVolumeSize": {
+          "description": "DataVolumeSize is the size of the DataVolume used for caching the image. Default value is 11Gi.",
+          "type": "string",
+          "x-go-name": "DataVolumeSize"
+        },
+        "enabled": {
+          "description": "Enabled allows you to enable/disable cloning of standard images. When this option is enabled,\ndownloading images from the http source destination will happen only once. Later,\nMachine Controller will clone the disks using DataVolumes with the cloning source.",
           "type": "boolean",
-          "x-go-name": "Enable"
+          "x-go-name": "Enabled"
         },
         "storageClass": {
           "description": "StorageClass represents storage-class for DataVolumes of standard images.",
@@ -33904,6 +34327,24 @@
         }
       },
       "x-go-package": "kubevirt.io/api/core/v1"
+    },
+    "IntOrString": {
+      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+      "type": "object",
+      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+      "properties": {
+        "IntVal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "StrVal": {
+          "type": "string"
+        },
+        "Type": {
+          "$ref": "#/definitions/Type"
+        }
+      },
+      "x-go-package": "k8s.io/apimachinery/pkg/util/intstr"
     },
     "JSON": {
       "description": "These types are supported: bool, int64, float64, string, []interface{}, map[string]interface{} and nil.",
@@ -34458,14 +34899,20 @@
         "cloudSpec": {
           "$ref": "#/definitions/KubeOneCloudSpec"
         },
-        "containerRuntime": {
-          "type": "string",
-          "x-go-name": "ContainerRuntime"
-        },
         "manifest": {
           "description": "Manifest Base64 encoded manifest",
           "type": "string",
           "x-go-name": "Manifest"
+        },
+        "providerName": {
+          "description": "ProviderName is the name of the cloud provider used, one of\n\"aws\", \"azure\", \"digitalocean\", \"gcp\",\n\"hetzner\", \"nutanix\", \"openstack\", \"packet\", \"vsphere\" KubeOne natively-supported providers",
+          "type": "string",
+          "x-go-name": "ProviderName"
+        },
+        "region": {
+          "description": "Region is the kubernetes control plane region.",
+          "type": "string",
+          "x-go-name": "Region"
         },
         "sshKey": {
           "$ref": "#/definitions/KubeOneSSHKey"
@@ -34573,6 +35020,11 @@
         "csiKubeconfig": {
           "type": "string",
           "x-go-name": "CSIKubeconfig"
+        },
+        "imageCloningEnabled": {
+          "description": "ImageCloningEnabled flag enable/disable cloning for a cluster.",
+          "type": "boolean",
+          "x-go-name": "ImageCloningEnabled"
         },
         "infraStorageClasses": {
           "description": "InfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
@@ -35343,6 +35795,121 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "NetworkPolicyEgressRule": {
+      "description": "NetworkPolicyEgressRule describes a particular set of traffic that is allowed out of pods\nmatched by a NetworkPolicySpec's podSelector. The traffic must match both ports and to.\nThis type is beta-level in 1.8",
+      "type": "object",
+      "properties": {
+        "ports": {
+          "description": "List of destination ports for outgoing traffic.\nEach item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPort"
+          },
+          "x-go-name": "Ports"
+        },
+        "to": {
+          "description": "List of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPeer"
+          },
+          "x-go-name": "To"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyIngressRule": {
+      "description": "NetworkPolicyIngressRule describes a particular set of traffic that is allowed to the pods\nmatched by a NetworkPolicySpec's podSelector. The traffic must match both ports and from.",
+      "type": "object",
+      "properties": {
+        "from": {
+          "description": "List of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPeer"
+          },
+          "x-go-name": "From"
+        },
+        "ports": {
+          "description": "List of ports which should be made accessible on the pods selected for this\nrule. Each item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyPort"
+          },
+          "x-go-name": "Ports"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyPeer": {
+      "description": "NetworkPolicyPeer describes a peer to allow traffic to/from. Only certain combinations of\nfields are allowed",
+      "type": "object",
+      "properties": {
+        "ipBlock": {
+          "$ref": "#/definitions/IPBlock"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "podSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyPort": {
+      "description": "NetworkPolicyPort describes a port to allow traffic on",
+      "type": "object",
+      "properties": {
+        "endPort": {
+          "description": "If set, indicates that the range of ports from port to endPort, inclusive,\nshould be allowed by the policy. This field cannot be defined if the port field\nis not defined or if the port field is defined as a named (string) port.\nThe endPort must be equal or greater than port.\n+optional",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "EndPort"
+        },
+        "port": {
+          "$ref": "#/definitions/IntOrString"
+        },
+        "protocol": {
+          "$ref": "#/definitions/Protocol"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicySpec": {
+      "description": "NetworkPolicySpec provides the specification of a NetworkPolicy",
+      "type": "object",
+      "properties": {
+        "egress": {
+          "description": "List of egress rules to be applied to the selected pods. Outgoing traffic is\nallowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyEgressRule"
+          },
+          "x-go-name": "Egress"
+        },
+        "ingress": {
+          "description": "List of ingress rules to be applied to the selected pods. Traffic is allowed to\na pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkPolicyIngressRule"
+          },
+          "x-go-name": "Ingress"
+        },
+        "podSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "policyTypes": {
+          "description": "List of rule types that the NetworkPolicy relates to.\nValid options are [\"Ingress\"], [\"Egress\"], or [\"Ingress\", \"Egress\"].\nIf this field is not specified, it will default based on the existence of Ingress or Egress rules;\npolicies that contain an Egress section are assumed to affect Egress, and all policies\n(whether or not they contain an Ingress section) are assumed to affect Ingress.\nIf you want to write an egress-only policy, you must explicitly specify policyTypes [ \"Egress\" ].\nLikewise, if you want to write a policy that specifies that no egress is allowed,\nyou must specify a policyTypes value that include \"Egress\" (since such a policy would not include\nan Egress section and would otherwise default to just [ \"Ingress\" ]).\nThis field is beta-level in 1.8\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyType"
+          },
+          "x-go-name": "PolicyTypes"
+        }
+      },
+      "x-go-package": "k8s.io/api/networking/v1"
     },
     "NetworkRanges": {
       "type": "object",
@@ -37118,6 +37685,11 @@
       },
       "x-go-package": "k8s.io/api/rbac/v1"
     },
+    "PolicyType": {
+      "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",
+      "type": "string",
+      "x-go-package": "k8s.io/api/networking/v1"
+    },
     "PreAllocatedDataVolume": {
       "type": "object",
       "properties": {
@@ -37415,6 +37987,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Protocol": {
+      "description": "+enum",
+      "type": "string",
+      "title": "Protocol defines network protocols supported for things like container ports.",
+      "x-go-package": "k8s.io/api/core/v1"
     },
     "ProviderConfiguration": {
       "type": "object",
@@ -38362,6 +38940,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "SeedStatus": {
+      "type": "object",
+      "title": "SeedStatus stores the current status of a Seed.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "phase": {
+          "$ref": "#/definitions/SeedPhase"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Semver": {
       "type": "string",
       "title": "Semver is a type that encapsulates github.com/Masterminds/semver/v3.Version struct so it can be used in our API.",
@@ -38729,6 +39321,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "Type": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Type represents the stored type of IntOrString.",
+      "x-go-package": "k8s.io/apimachinery/pkg/util/intstr"
     },
     "UID": {
       "description": "UID is a type that holds unique ID values, including UUIDs.  Because we\ndon't ONLY use UUIDs, this is an alias to string.  Being a type captures\nintent and helps make sure that UIDs and names do not get conflated.",

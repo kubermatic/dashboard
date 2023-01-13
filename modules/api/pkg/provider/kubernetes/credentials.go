@@ -48,6 +48,10 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const (
+	ExternalClusterIDLabelKey = "external-cluster-id"
+)
+
 type ValidateCredentials struct {
 	Datacenter *kubermaticv1.Datacenter
 	CABundle   *x509.CertPool
@@ -623,7 +627,7 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 }
 
 func ensureKubeOneSecret(ctx context.Context, masterClient ctrlruntimeclient.Client, externalcluster *kubermaticv1.ExternalCluster, secretName, secretNamespace string, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
-	reconciler, err := credentialSecretReconcilerFactory(secretName, externalcluster.Labels, secretData)
+	reconciler, err := kubeOneSecretsReconcilerFactory(secretName, secretData, externalcluster)
 	if err != nil {
 		return nil, err
 	}
@@ -957,6 +961,28 @@ func credentialSecretReconcilerFactory(secretName string, clusterLabels map[stri
 			}
 
 			existing.Labels[kubermaticv1.ProjectIDLabelKey] = projectID
+			existing.Data = secretData
+
+			return existing, nil
+		}
+	}, nil
+}
+
+func kubeOneSecretsReconcilerFactory(secretName string, secretData map[string][]byte, cluster *kubermaticv1.ExternalCluster) (reconciling.NamedSecretReconcilerFactory, error) {
+	projectID := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
+	if len(projectID) == 0 {
+		return nil, fmt.Errorf("cluster is missing '%s' label", kubermaticv1.ProjectIDLabelKey)
+	}
+
+	return func() (name string, reconciler reconciling.SecretReconciler) {
+		return secretName, func(existing *corev1.Secret) (*corev1.Secret, error) {
+			if existing.Labels == nil {
+				existing.Labels = map[string]string{}
+			}
+
+			existing.Labels[kubermaticv1.ProjectIDLabelKey] = projectID
+			existing.Labels[ExternalClusterIDLabelKey] = cluster.Name
+
 			existing.Data = secretData
 
 			return existing, nil

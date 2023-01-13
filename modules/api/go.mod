@@ -100,9 +100,10 @@ replace (
 
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
-replace k8c.io/kubermatic/v2 => /Users/patrykprzekwas/code/go/src/k8c.io/kubermatic
-
-require k8c.io/kubermatic/v2 v2.21.1-0.20230103082025-acf75bc4d20a
+require (
+	github.com/pkg/errors v0.9.1
+	k8c.io/kubermatic/v2 v2.21.1-0.20230113021717-af75218399cd
+)
 
 require (
 	cloud.google.com/go/compute v1.14.0 // indirect
@@ -213,7 +214,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	github.com/peterhellberg/link v1.2.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
