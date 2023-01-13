@@ -17,10 +17,13 @@ import (
 // swagger:model ImageCloning
 type ImageCloning struct {
 
-	// Enable allows you to enable/disable cloning of standard images. When this option is enabled,
+	// DataVolumeSize is the size of the DataVolume used for caching the image. Default value is 11Gi.
+	DataVolumeSize string `json:"dataVolumeSize,omitempty"`
+
+	// Enabled allows you to enable/disable cloning of standard images. When this option is enabled,
 	// downloading images from the http source destination will happen only once. Later,
 	// Machine Controller will clone the disks using DataVolumes with the cloning source.
-	Enable bool `json:"enable,omitempty"`
+	Enabled bool `json:"enabled,omitempty"`
 
 	// StorageClass represents storage-class for DataVolumes of standard images.
 	StorageClass string `json:"storageClass,omitempty"`

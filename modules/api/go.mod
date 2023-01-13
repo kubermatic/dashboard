@@ -102,7 +102,7 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.21.1-0.20230110122939-173ac4f0845c
+	k8c.io/kubermatic/v2 v2.21.1-0.20230113021717-af75218399cd
 )
 
 require (
