@@ -227,6 +227,7 @@ type newRoutingFunc func(
 	applicationDefinitionProvider provider.ApplicationDefinitionProvider,
 	privilegedIPAMPoolProviderGetter provider.PrivilegedIPAMPoolProviderGetter,
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter,
+	oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter,
 	features features.FeatureGate,
 ) http.Handler
 
@@ -335,6 +336,9 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	tokenVerifiers := auth.NewTokenVerifierPlugins(verifiers)
 	tokenExtractors := auth.NewTokenExtractorPlugins(extractors)
 	fakeOIDCClient := NewFakeOIDCClient(user)
+	fakeOIDCVerifierIssuerGetter := func(seed *kubermaticv1.Seed) (authtypes.OIDCIssuerVerifier, error) {
+		return fakeOIDCClient, nil
+	}
 
 	projectProvider, err := kubernetes.NewProjectProvider(fakeImpersonationClient, fakeClient)
 	if err != nil {
@@ -636,6 +640,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		applicationDefinitionProvider,
 		privilegedIPAMPoolProviderGetter,
 		privilegedOperatingSystemProfileProviderGetter,
+		fakeOIDCVerifierIssuerGetter,
 		featureGates,
 	)
 

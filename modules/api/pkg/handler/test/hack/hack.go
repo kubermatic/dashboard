@@ -100,6 +100,7 @@ func NewTestRouting(
 	applicationDefinitionProvider provider.ApplicationDefinitionProvider,
 	privilegedIPAMPoolProviderGetter provider.PrivilegedIPAMPoolProviderGetter,
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter,
+	fakeOIDCVerifierIssuerGetter provider.OIDCIssuerVerifierGetter,
 	features features.FeatureGate) http.Handler {
 	routingParams := handler.RoutingParams{
 		Log:                                            kubermaticlog.Logger,
@@ -162,6 +163,7 @@ func NewTestRouting(
 		Features:                                       features,
 		PrivilegedIPAMPoolProviderGetter:               privilegedIPAMPoolProviderGetter,
 		PrivilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
+		OIDCIssuerVerifierProviderGetter:               fakeOIDCVerifierIssuerGetter,
 	}
 
 	r := handler.NewRouting(routingParams, masterClient)
