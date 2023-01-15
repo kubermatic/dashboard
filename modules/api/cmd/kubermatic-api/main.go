@@ -157,15 +157,12 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
-	oidcIssuerVerifier, err := createOIDCClients(options)
-	if err != nil {
-		log.Fatalw("failed to create an openid authenticator", "issuer", options.oidcURL, "oidcClientID", options.oidcAuthenticatorClientID, zap.Error(err))
-	}
+
 	tokenVerifiers, tokenExtractors, err := createAuthClients(options, providers)
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -359,9 +356,13 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
+	oidcIssuerVerifier, err := createOIDCClients(options)
+	if err != nil {
+		log.Fatalw("failed to create an openid authenticator - issuer: %q, oidcClientID: %q: %v", options.oidcURL, options.oidcAuthenticatorClientID, err)
+	}
+
 	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
-		mgr.GetRESTMapper(),
-		seedKubeconfigGetter,
+		oidcIssuerVerifier,
 		options.oidcIssuerRedirectURI,
 		options.oidcSkipTLSVerify,
 		options.caBundle,
@@ -450,6 +451,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		applicationDefinitionProvider:                  applicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
 		oidcIssuerVerifierProviderGetter:               oidcIssuerVerifierProviderGetter,
+		oidcIssuerVerifier:                             oidcIssuerVerifier,
 	}, nil
 }
 
@@ -499,8 +501,11 @@ func createAuthClients(options serverRunOptions, prov providers) (authtypes.Toke
 }
 
 func createAPIHandler(
-	options serverRunOptions, prov providers, oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
-	tokenVerifiers authtypes.TokenVerifier, tokenExtractors authtypes.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger,
+	options serverRunOptions, prov providers,
+	tokenVerifiers authtypes.TokenVerifier,
+	tokenExtractors authtypes.TokenExtractor,
+	mgr manager.Manager,
+	log *zap.SugaredLogger,
 ) (http.HandlerFunc, error) {
 	var prometheusClient prometheusapi.Client
 	if options.featureGates.Enabled(features.PrometheusEndpoint) {
@@ -519,41 +524,41 @@ func createAPIHandler(
 	serviceAccountTokenAuth := serviceaccount.JWTTokenAuthenticator([]byte(options.serviceAccountSigningKey))
 
 	routingParams := handler.RoutingParams{
-		Log:                                            kubermaticlog.New(options.log.Debug, options.log.Format).Sugar(),
-		PresetProvider:                                 prov.presetProvider,
-		SeedsGetter:                                    prov.seedsGetter,
-		SeedsClientGetter:                              prov.seedClientGetter,
-		KubermaticConfigurationGetter:                  prov.configGetter,
-		SSHKeyProvider:                                 prov.sshKey,
-		PrivilegedSSHKeyProvider:                       prov.privilegedSSHKeyProvider,
-		UserProvider:                                   prov.user,
-		ServiceAccountProvider:                         prov.serviceAccountProvider,
-		PrivilegedServiceAccountProvider:               prov.privilegedServiceAccountProvider,
-		ServiceAccountTokenProvider:                    prov.serviceAccountTokenProvider,
-		PrivilegedServiceAccountTokenProvider:          prov.privilegedServiceAccountTokenProvider,
-		ProjectProvider:                                prov.project,
-		PrivilegedProjectProvider:                      prov.privilegedProject,
-		OIDCIssuerVerifier:                             oidcIssuerVerifier,
-		TokenVerifiers:                                 tokenVerifiers,
-		TokenExtractors:                                tokenExtractors,
-		ClusterProviderGetter:                          prov.clusterProviderGetter,
-		AddonProviderGetter:                            prov.addons,
-		AddonConfigProvider:                            prov.addonConfigProvider,
-		PrometheusClient:                               prometheusClient,
-		ProjectMemberProvider:                          prov.projectMember,
-		PrivilegedProjectMemberProvider:                prov.privilegedProjectMemberProvider,
-		UserProjectMapper:                              prov.memberMapper,
-		SATokenAuthenticator:                           serviceAccountTokenAuth,
-		SATokenGenerator:                               serviceAccountTokenGenerator,
-		EventRecorderProvider:                          prov.eventRecorderProvider,
-		ExposeStrategy:                                 options.exposeStrategy,
-		UserInfoGetter:                                 prov.userInfoGetter,
-		SettingsProvider:                               prov.settingsProvider,
-		AdminProvider:                                  prov.adminProvider,
-		AdmissionPluginProvider:                        prov.admissionPluginProvider,
-		SettingsWatcher:                                prov.settingsWatcher,
-		UserWatcher:                                    prov.userWatcher,
-		ExternalClusterProvider:                        prov.externalClusterProvider,
+		Log:                                   kubermaticlog.New(options.log.Debug, options.log.Format).Sugar(),
+		PresetProvider:                        prov.presetProvider,
+		SeedsGetter:                           prov.seedsGetter,
+		SeedsClientGetter:                     prov.seedClientGetter,
+		KubermaticConfigurationGetter:         prov.configGetter,
+		SSHKeyProvider:                        prov.sshKey,
+		PrivilegedSSHKeyProvider:              prov.privilegedSSHKeyProvider,
+		UserProvider:                          prov.user,
+		ServiceAccountProvider:                prov.serviceAccountProvider,
+		PrivilegedServiceAccountProvider:      prov.privilegedServiceAccountProvider,
+		ServiceAccountTokenProvider:           prov.serviceAccountTokenProvider,
+		PrivilegedServiceAccountTokenProvider: prov.privilegedServiceAccountTokenProvider,
+		ProjectProvider:                       prov.project,
+		PrivilegedProjectProvider:             prov.privilegedProject,
+		OIDCIssuerVerifier:                    prov.oidcIssuerVerifier,
+		TokenVerifiers:                        tokenVerifiers,
+		TokenExtractors:                       tokenExtractors,
+		ClusterProviderGetter:                 prov.clusterProviderGetter,
+		AddonProviderGetter:                   prov.addons,
+		AddonConfigProvider:                   prov.addonConfigProvider,
+		PrometheusClient:                      prometheusClient,
+		ProjectMemberProvider:                 prov.projectMember,
+		PrivilegedProjectMemberProvider:       prov.privilegedProjectMemberProvider,
+		UserProjectMapper:                     prov.memberMapper,
+		SATokenAuthenticator:                  serviceAccountTokenAuth,
+		SATokenGenerator:                      serviceAccountTokenGenerator,
+		EventRecorderProvider:                 prov.eventRecorderProvider,
+		ExposeStrategy:                        options.exposeStrategy,
+		UserInfoGetter:                        prov.userInfoGetter,
+		SettingsProvider:                      prov.settingsProvider,
+		AdminProvider:                         prov.adminProvider,
+		AdmissionPluginProvider:               prov.admissionPluginProvider,
+		SettingsWatcher:                       prov.settingsWatcher,
+		UserWatcher:                           prov.userWatcher,
+		ExternalClusterProvider:               prov.externalClusterProvider,
 		PrivilegedExternalClusterProvider:              prov.privilegedExternalClusterProvider,
 		FeatureGatesProvider:                           prov.featureGatesProvider,
 		DefaultConstraintProvider:                      prov.defaultConstraintProvider,

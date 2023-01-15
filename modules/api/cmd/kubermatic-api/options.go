@@ -26,6 +26,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -192,6 +193,7 @@ type providers struct {
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
+	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
 }
 
 func loadKubermaticConfiguration(filename string) (*kubermaticv1.KubermaticConfiguration, error) {
