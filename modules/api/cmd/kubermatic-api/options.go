@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
@@ -137,7 +138,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 		URL:                  s.oidcURL,
 		ClientID:             s.oidcIssuerClientID,
 		ClientSecret:         s.oidcIssuerClientSecret,
-		CookieHashKey:        s.oidcIssuerCookieHashKey,
+		SecureCookie:         securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
 		CookieSecureMode:     s.oidcIssuerCookieSecureMode,
 		OfflineAccessAsScope: s.oidcIssuerOfflineAccessAsScope,
 		SkipTLSVerify:        s.oidcSkipTLSVerify,

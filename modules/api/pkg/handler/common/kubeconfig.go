@@ -65,9 +65,6 @@ const (
 	defaultCtx = "default"
 )
 
-// TODO handle dynamic cookie
-var secureCookie *securecookie.SecureCookie
-
 func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
@@ -271,10 +268,6 @@ func CreateOIDCKubeconfigEndpoint(
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
-	if secureCookie == nil {
-		secureCookie = securecookie.New([]byte(oidcIssuerVerifier.OIDCConfig().CookieHashKey), nil)
-	}
-
 	cluster, err := getClusterForOIDCEndpoint(ctx, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -284,7 +277,11 @@ func CreateOIDCKubeconfigEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		if req.decodedState.Nonce != req.cookieNonceValue {
+		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		if err != nil {
+			return nil, err
+		}
+		if req.decodedState.Nonce != cookieNonceValue {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
 		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "")
@@ -353,6 +350,7 @@ func CreateOIDCKubeconfigEndpoint(
 		rsp.phase = kubeconfigGenerated
 		rsp.oidcKubeConfig = oidcKubeCfg
 		rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
+		rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 		return rsp, nil
 	}
 
@@ -372,6 +370,7 @@ func CreateOIDCKubeconfigEndpoint(
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
+	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
 	oidcState := OIDCState{
 		Nonce:     nonce,
@@ -399,10 +398,6 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
-	if secureCookie == nil {
-		secureCookie = securecookie.New([]byte(oidcIssuerVerifier.OIDCConfig().CookieHashKey), nil)
-	}
-
 	cluster, err := getClusterForOIDCEndpoint(ctx, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -418,7 +413,11 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	// and generates kubeconfig
 	if req.phase == exchangeCodePhase {
 		// validate the state
-		if req.decodedState.Nonce != req.cookieNonceValue {
+		cookieNonceValue, err := getCookieNonce(req.csrfCookie, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+		if err != nil {
+			return nil, err
+		}
+		if req.decodedState.Nonce != cookieNonceValue {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
 		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, redirectURI)
@@ -486,6 +485,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		rsp := createOIDCKubeconfigRsp{}
 		rsp.phase = kubeconfigGenerated
 		rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
+		rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 		client, err := clusterProvider.GetAdminClientForUserCluster(ctx, cluster)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -512,6 +512,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
 	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
+	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
 	oidcState := OIDCState{
 		Nonce:     nonce,
@@ -586,12 +587,12 @@ type CreateOIDCKubeconfigReq struct {
 
 	// not exported so that they don't leak to swagger spec.
 	// Embed the original request
-	request          *http.Request
-	code             string
-	encodedState     string
-	decodedState     OIDCState
-	phase            int
-	cookieNonceValue string
+	request      *http.Request
+	code         string
+	encodedState string
+	decodedState OIDCState
+	phase        int
+	csrfCookie   *http.Cookie
 }
 
 // OIDCState holds data that are send and retrieved from OIDC provider.
@@ -616,6 +617,8 @@ type createOIDCKubeconfigRsp struct {
 	nonce string
 	// cookie received only with HTTPS, never with HTTP.
 	secureCookieMode bool
+	// secure cookie
+	secureCookie *securecookie.SecureCookie
 }
 
 func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response interface{}) (err error) {
@@ -625,7 +628,7 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
 		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1)
+		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
@@ -635,7 +638,7 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
 	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge)
+	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -652,7 +655,7 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 	// it means that kubeconfig was generated and we need to properly encode it.
 	if rsp.phase == kubeconfigGenerated {
 		// clear cookie by setting MaxAge<0
-		err = setCookie(w, "", rsp.secureCookieMode, -1)
+		err = setCookie(w, "", rsp.secureCookieMode, -1, rsp.secureCookie)
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
@@ -662,7 +665,7 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 	// handles initialPhase
 	// redirects request to OpenID provider's consent page
 	// and set cookie with nonce
-	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge)
+	err = setCookie(w, rsp.nonce, rsp.secureCookieMode, cookieMaxAge, rsp.secureCookie)
 	if err != nil {
 		return fmt.Errorf("the cookie can't be created: %w", err)
 	}
@@ -672,7 +675,7 @@ func EncodeOIDCKubeconfigSecret(c context.Context, w http.ResponseWriter, respon
 	return nil
 }
 
-func DecodeCreateOIDCKubeconfig(_ context.Context, r *http.Request) (interface{}, error) {
+func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface{}, error) {
 	req := CreateOIDCKubeconfigReq{}
 	req.request = r
 
@@ -703,17 +706,9 @@ func DecodeCreateOIDCKubeconfig(_ context.Context, r *http.Request) (interface{}
 		if err := json.Unmarshal(rawState, &oidcState); err != nil {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter, expected json encoded value: %v", err)
 		}
-		// handle cookie when new endpoint is created and secureCookie was initialized
-		if secureCookie != nil {
-			// cookie should be set in initial code phase
-			if cookie, err := r.Cookie(csrfCookieName); err == nil {
-				var value string
-				if err = secureCookie.Decode(csrfCookieName, cookie.Value, &value); err == nil {
-					req.cookieNonceValue = value
-				}
-			} else {
-				return nil, utilerrors.NewBadRequest("incorrect value of cookie or cookie not set: %v", err)
-			}
+		// cookie should be set in initial code phase
+		if req.csrfCookie, err = r.Cookie(csrfCookieName); err != nil {
+			return nil, utilerrors.NewBadRequest("cookie %q not set: %v", csrfCookieName, err)
 		}
 		req.phase = exchangeCodePhase
 		req.ProjectID = oidcState.ProjectID
@@ -734,6 +729,14 @@ func DecodeCreateOIDCKubeconfig(_ context.Context, r *http.Request) (interface{}
 	return req, nil
 }
 
+func getCookieNonce(cookie *http.Cookie, secCookie *securecookie.SecureCookie) (string, error) {
+	var value string
+	if err := secCookie.Decode(csrfCookieName, cookie.Value, &value); err != nil {
+		return "", utilerrors.NewBadRequest("incorrect value of %q cookie: %v", csrfCookieName, err)
+	}
+	return value, nil
+}
+
 // GetUserID implements UserGetter interface.
 func (r CreateOIDCKubeconfigReq) GetUserID() string {
 	return r.UserID
@@ -752,8 +755,8 @@ func (r CreateOIDCKubeconfigReq) GetProjectID() string {
 }
 
 // setCookie add cookie with random string value.
-func setCookie(w http.ResponseWriter, nonce string, secureMode bool, maxAge int) error {
-	encoded, err := secureCookie.Encode(csrfCookieName, nonce)
+func setCookie(w http.ResponseWriter, nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) error {
+	encoded, err := secCookie.Encode(csrfCookieName, nonce)
 	if err != nil {
 		return fmt.Errorf("the encode cookie failed: %w", err)
 	}

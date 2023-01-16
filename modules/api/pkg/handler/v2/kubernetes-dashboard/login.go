@@ -149,8 +149,7 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		authURL:          oidcIssuerVerifier.AuthCodeURL(state, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...),
 		nonce:            nonce,
 		cookieSecureMode: oidcIssuerVerifier.OIDCConfig().CookieSecureMode,
-		// TODO take cookie from issuerverifier
-		secureCookie: nil,
+		secureCookie:     oidcIssuerVerifier.OIDCConfig().SecureCookie,
 	}, nil
 }
 
@@ -223,8 +222,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
-	// TODO take from oidc issuerVerifier
-	nonce, err := this.getDecodedNonce(oidcCallbackRequest.Request, nil)
+	nonce, err := this.getDecodedNonce(oidcCallbackRequest.Request, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 	if err != nil {
 		return nil, err
 	}
@@ -250,8 +248,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		clusterID:        state.ClusterID,
 		token:            token,
 		cookieSecureMode: oidcIssuerVerifier.OIDCConfig().CookieSecureMode,
-		// TODO take from oidc issuerVerifier
-		secureCookie: nil,
+		secureCookie:     oidcIssuerVerifier.OIDCConfig().SecureCookie,
 	}, nil
 }
 

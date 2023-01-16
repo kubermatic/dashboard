@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gorilla/securecookie"
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -163,5 +164,6 @@ func (p *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 		URL:          p.issuer,
 		ClientID:     p.clientID,
 		ClientSecret: p.clientSecret,
+		SecureCookie: securecookie.New([]byte(""), nil),
 	}
 }
