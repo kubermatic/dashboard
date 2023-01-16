@@ -9153,7 +9153,7 @@ func (r Routing) createOIDCKubeconfigSecret(oidcCfg authtypes.OIDCConfiguration)
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.UserInfoUnauthorized(r.userProjectMapper, r.userProvider),
 			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
-		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider, oidcCfg)),
+		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider)),
 		webterminal.DecodeCreateOIDCKubeconfig,
 		webterminal.EncodeOIDCKubeconfig,
 		r.defaultServerOptions()...,

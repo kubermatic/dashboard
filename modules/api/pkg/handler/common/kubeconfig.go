@@ -265,15 +265,13 @@ func CreateOIDCKubeconfigEndpoint(
 	ctx context.Context,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
-	oidcCfg authtypes.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
 ) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
+	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	if secureCookie == nil {
-		secureCookie = securecookie.New([]byte(oidcCfg.CookieHashKey), nil)
+		secureCookie = securecookie.New([]byte(oidcIssuerVerifier.OIDCConfig().CookieHashKey), nil)
 	}
 
 	cluster, err := getClusterForOIDCEndpoint(ctx, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -288,7 +286,7 @@ func CreateOIDCKubeconfigEndpoint(
 		if req.decodedState.Nonce != req.cookieNonceValue {
 			return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", req.decodedState.Nonce)
 		}
-		oidcTokens, err := oidcProvider.Exchange(ctx, req.code, "")
+		oidcTokens, err := oidcIssuerVerifier.Exchange(ctx, req.code, "")
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("error while exchanging oidc code for token: %v", err)
 		}
@@ -296,7 +294,7 @@ func CreateOIDCKubeconfigEndpoint(
 			return nil, utilerrors.NewBadRequest("the refresh token is missing but required, try setting/unsetting \"oidc-offline-access-as-scope\" command line flag")
 		}
 
-		claims, err := oidcProvider.Verify(ctx, oidcTokens.IDToken)
+		claims, err := oidcIssuerVerifier.Verify(ctx, oidcTokens.IDToken)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusUnauthorized, err.Error())
 		}
@@ -353,7 +351,7 @@ func CreateOIDCKubeconfigEndpoint(
 		rsp := createOIDCKubeconfigRsp{}
 		rsp.phase = kubeconfigGenerated
 		rsp.oidcKubeConfig = oidcKubeCfg
-		rsp.secureCookieMode = oidcCfg.CookieSecureMode
+		rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 		return rsp, nil
 	}
 
@@ -365,14 +363,14 @@ func CreateOIDCKubeconfigEndpoint(
 
 	rsp := createOIDCKubeconfigRsp{}
 	scopes := []string{"openid", "email", "groups"}
-	if oidcCfg.OfflineAccessAsScope {
+	if oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope {
 		scopes = append(scopes, "offline_access")
 	}
 
 	// pass nonce
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
-	rsp.secureCookieMode = oidcCfg.CookieSecureMode
+	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 
 	oidcState := OIDCState{
 		Nonce:     nonce,
@@ -386,7 +384,7 @@ func CreateOIDCKubeconfigEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcProvider.AuthCodeURL(urlSafeState, oidcCfg.OfflineAccessAsScope, "", scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, "", scopes...)
 
 	return rsp, nil
 }
@@ -395,14 +393,13 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	ctx context.Context,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcCfg authtypes.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
 ) (interface{}, error) {
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	if secureCookie == nil {
-		secureCookie = securecookie.New([]byte(oidcCfg.CookieHashKey), nil)
+		secureCookie = securecookie.New([]byte(oidcIssuerVerifier.OIDCConfig().CookieHashKey), nil)
 	}
 
 	cluster, err := getClusterForOIDCEndpoint(ctx, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -487,7 +484,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		// prepare final rsp that holds kubeconfig
 		rsp := createOIDCKubeconfigRsp{}
 		rsp.phase = kubeconfigGenerated
-		rsp.secureCookieMode = oidcCfg.CookieSecureMode
+		rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 		client, err := clusterProvider.GetAdminClientForUserCluster(ctx, cluster)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -506,14 +503,14 @@ func CreateOIDCKubeconfigSecretEndpoint(
 
 	rsp := createOIDCKubeconfigRsp{}
 	scopes := []string{"openid", "email", "groups"}
-	if oidcCfg.OfflineAccessAsScope {
+	if oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope {
 		scopes = append(scopes, "offline_access")
 	}
 
 	// pass nonce
 	nonce := rand.String(rand.IntnRange(10, 15))
 	rsp.nonce = nonce
-	rsp.secureCookieMode = oidcCfg.CookieSecureMode
+	rsp.secureCookieMode = oidcIssuerVerifier.OIDCConfig().CookieSecureMode
 
 	oidcState := OIDCState{
 		Nonce:     nonce,
@@ -527,7 +524,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	}
 	encodedState := base64.StdEncoding.EncodeToString(rawState)
 	urlSafeState := url.QueryEscape(encodedState)
-	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcCfg.OfflineAccessAsScope, redirectURI, scopes...)
+	rsp.authCodeURL = oidcIssuerVerifier.AuthCodeURL(urlSafeState, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...)
 
 	return rsp, nil
 }

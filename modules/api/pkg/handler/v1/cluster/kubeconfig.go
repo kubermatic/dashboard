@@ -25,7 +25,6 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 func GetAdminKubeconfigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
@@ -45,13 +44,11 @@ func GetOidcKubeconfigEndpoint(projectProvider provider.ProjectProvider, privile
 func CreateOIDCKubeconfigEndpoint(
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
-	oidcCfg authtypes.OIDCConfiguration,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(handlercommon.CreateOIDCKubeconfigReq)
 		return handlercommon.CreateOIDCKubeconfigEndpoint(
-			ctx, projectProvider, privilegedProjectProvider, oidcIssuerVerifier, oidcCfg, req)
+			ctx, projectProvider, privilegedProjectProvider, req)
 	}
 }
 
