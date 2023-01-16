@@ -16,6 +16,6 @@
     {
         "category": "fixed",
         "description": "Fixed an API error in extended disk configuration for the Anexia provider."
-    },
+    } 
   ]
 }
