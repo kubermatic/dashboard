@@ -7,7 +7,7 @@
     },
     {
         "category": "fixed",
-        "description": "Fixed an issue with a wrong mounted Corefile in NodeLocal DNSCache. Added support for kube-dns configmap for NodeLocal DNSCache to allow customization of dns."
+        "description": "Fixed an issue with wrong Corefile in NodeLocal DNSCache mounts. Added support for kube-dns configmap for NodeLocal DNSCache to allow customization of dns."
     }
   ]
 }
