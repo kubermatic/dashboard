@@ -268,7 +268,6 @@ func CreateOIDCKubeconfigEndpoint(
 	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
 	oidcCfg authtypes.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
-	seedsGetter provider.SeedsGetter,
 ) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)

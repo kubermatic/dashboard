@@ -57,7 +57,7 @@ func (r Routing) createOIDCKubeconfig(oidcCfg authtypes.OIDCConfiguration) http.
 			middleware.UserInfoUnauthorized(r.userProjectMapper, r.userProvider),
 			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierGetter, r.seedsGetter),
 		)(cluster.CreateOIDCKubeconfigEndpoint(
-			r.projectProvider, r.privilegedProjectProvider, r.oidcIssuerVerifier, oidcCfg, r.seedsGetter,
+			r.projectProvider, r.privilegedProjectProvider, r.oidcIssuerVerifier, oidcCfg,
 		)),
 		cluster.DecodeCreateOIDCKubeconfig,
 		cluster.EncodeOIDCKubeconfig,
