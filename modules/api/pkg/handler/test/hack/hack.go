@@ -174,11 +174,7 @@ func NewTestRouting(
 	v2Router := mainRouter.PathPrefix("/api/v2").Subrouter()
 	r.RegisterV1(v1Router, generateDefaultMetrics())
 	r.RegisterV1Legacy(v1Router)
-	r.RegisterV1Optional(v1Router,
-		true,
-		*generateDefaultOicdCfg(),
-		mainRouter,
-	)
+	r.RegisterV1Optional(v1Router, true)
 	r.RegisterV1Admin(v1Router)
 	r.RegisterV1Websocket(v1Router)
 	rv2.RegisterV2(v2Router, true, *generateDefaultOicdCfg())

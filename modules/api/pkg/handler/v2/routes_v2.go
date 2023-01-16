@@ -70,7 +70,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	if oidcKubeConfEndpoint {
 		mux.Methods(http.MethodGet).
 			Path("/kubeconfig/secret").
-			Handler(r.createOIDCKubeconfigSecret(oidcCfg))
+			Handler(r.createOIDCKubeconfigSecret())
 	}
 
 	// Defines a set of HTTP endpoint for interacting with
@@ -9146,7 +9146,7 @@ func (r Routing) getDefaultCluster() http.Handler {
 //	  201: empty
 //	  401: empty
 //	  403: empty
-func (r Routing) createOIDCKubeconfigSecret(oidcCfg authtypes.OIDCConfiguration) http.Handler {
+func (r Routing) createOIDCKubeconfigSecret() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),

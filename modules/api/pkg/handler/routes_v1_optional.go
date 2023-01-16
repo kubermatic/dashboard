@@ -25,16 +25,15 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/cluster"
-	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 // RegisterV1Optional declares all router paths for v1.
-func (r Routing) RegisterV1Optional(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg authtypes.OIDCConfiguration, mainMux *mux.Router) {
+func (r Routing) RegisterV1Optional(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	// if enabled exposes defines an endpoint for generating kubeconfig for a cluster that will contain OIDC tokens
 	if oidcKubeConfEndpoint {
 		mux.Methods(http.MethodGet).
 			Path("/kubeconfig").
-			Handler(r.createOIDCKubeconfig(oidcCfg))
+			Handler(r.createOIDCKubeconfig())
 	}
 }
 
@@ -49,7 +48,7 @@ func (r Routing) RegisterV1Optional(mux *mux.Router, oidcKubeConfEndpoint bool, 
 //	Responses:
 //	  default: errorResponse
 //	  200: Kubeconfig
-func (r Routing) createOIDCKubeconfig(oidcCfg authtypes.OIDCConfiguration) http.Handler {
+func (r Routing) createOIDCKubeconfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),

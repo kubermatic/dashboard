@@ -610,10 +610,7 @@ func createAPIHandler(
 	v2Router := mainRouter.PathPrefix("/api/v2").Subrouter()
 	r.RegisterV1(v1Router, metrics)
 	r.RegisterV1Legacy(v1Router)
-	r.RegisterV1Optional(v1Router,
-		options.featureGates.Enabled(features.OIDCKubeCfgEndpoint),
-		oidcConfiguration,
-		mainRouter)
+	r.RegisterV1Optional(v1Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 	r.RegisterV1Admin(v1Router)
 	r.RegisterV1Websocket(v1Router)
 	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint), oidcConfiguration)
