@@ -1,57 +1,37 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2214",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2215",
   "entries": [
     {
-      "category": "action-required",
-      "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
-    },
-    {
-        "category": "added",
-        "description": "Added UI and API support for configuring autoscaling on cluster nodes"
-    },
-    {
-        "category": "added",
-        "description": "Added support for defaulting vSphere tag category from seed when it is not specified in user cluster"
-    },
-    {
-        "category": "added",
-        "description": "Added support for Kubernetes v1.24.9, v1.23.15 and v1.22.17"
+        "category": "changed",
+        "description": "Stopped overriding upstream chart tolerations for logging/promtail by default. Added `node-role.kubernetes.io/control-plane` toleration."
     },
     {
         "category": "changed",
-        "description": "Updated KubeVirt CSI driver operator version to v0.1.3"
+        "description": "Seed spec no longer requires `defaultDestination` for `etcdBackupRestore`. Omitting it allows to disable default etcd backups."
     },
     {
         "category": "changed",
-        "description": "Updated to etcd 3.5.6 for Kubernetes 1.22+ to prevent potential data inconsistency issues during online defragmentation"
-    },
-    {
-        "category": "changed",
-        "description": "Updated OpenStack Cinder CSI to v1.24.5, v1.23.4, and v1.22.2"
-    },
-    {
-        "category": "changed",
-        "description": "Updated Anexia CCM (cloud-controller-manager) to version 1.5.0"
-    },
-    {
-        "category": "changed",
-        "description": "Updated machine-controller to v1.54.3"
+        "description": "Updated Anexia CCM (cloud-controller-manager) to version 1.5.1."
     },
     {
         "category": "fixed",
-        "description": "Fixed duplicate SourceRange entries for front-loadbalancer Service"
+        "description": "Fixed an issue with wrong Corefile in NodeLocal DNSCache mounts. Added support for a kube-dns configmap for NodeLocal DNSCache to allow customization of dns."
     },
     {
         "category": "fixed",
-        "description": "Fixed an issue where AllowedRegistry ConstraintTemplate was not being reconiciled by Gatekeeper"
+        "description": "Fixed an issue where creating Clusters through ClusterTemplates was failing without leaving any trace."
     },
     {
         "category": "fixed",
-        "description": "Fixed missing etcd metrics in Grafana etcd dashboards"
+        "description": "Fixed an API error in extended disk configuration for the Anexia provider."
     },
     {
         "category": "fixed",
-        "description": "Added priority for public IP over private IP in front LoadBalancer service"
+        "description": "Fixed k8s dashboard resource clean up in the user cluster."
+    },
+    {
+        "category": "fixed",
+        "description": "Fixed KubeVirt infra CSI token creation issue caused by disabling auto-creation in k8s 1.24 "
     }
   ]
 }
