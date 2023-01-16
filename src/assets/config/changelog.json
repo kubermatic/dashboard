@@ -1,33 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.19.md#v21913",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.19.md#v21914",
   "entries": [
     {
-      "category": "action-required",
-      "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
-    },
-    {
-        "category": "added",
-        "description": "Added support for Kubernetes v1.22.17"
-    },
-    {
         "category": "changed",
-        "description": "Updated to etcd 3.5.6 for Kubernetes 1.22 to prevent potential data inconsistency issues during online defragmentation"
-    },
-    {
-        "category": "changed",
-        "description": "Updated OpenStack Cinder CSI to v1.22.2"
-    },
-    {
-        "category": "changed",
-        "description": "Updated machine-controller to v1.42.8"
+        "description": "Stopped overriding upstream chart tolerations for logging/promtail by default. Added `node-role.kubernetes.io/control-plane` toleration."
     },
     {
         "category": "fixed",
-        "description": "Fixed missing etcd metrics in Grafana etcd dashboards"
-    },
-    {
-        "category": "fixed",
-        "description": "Added priority for public IP over private IP in front LoadBalancer service"
+        "description": "Fixed an issue with a wrong mounted Corefile in NodeLocal DNSCache. Add support for kube-dns configmap for NodeLocal DNSCache to allow customization of dns."
     }
   ]
 }
