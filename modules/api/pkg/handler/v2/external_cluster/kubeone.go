@@ -18,7 +18,10 @@ package externalcluster
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+
+	jsonpatch "github.com/evanphx/json-patch"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -31,14 +34,13 @@ import (
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/sets"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/yaml"
 )
+
+const ContainerdContainerRuntime = "containerd"
 
 func importKubeOneCluster(ctx context.Context, preset *kubermaticv1.Preset, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
 	isImported := resources.ExternalClusterIsImportedTrue
@@ -98,131 +100,74 @@ func importKubeOneCluster(ctx context.Context, preset *kubermaticv1.Preset, user
 }
 
 func patchKubeOneCluster(ctx context.Context,
-	cluster *kubermaticv1.ExternalCluster,
-	oldCluster *apiv2.ExternalCluster,
-	newCluster *apiv2.ExternalCluster,
+	existingCluster *kubermaticv1.ExternalCluster,
+	patchData json.RawMessage,
 	secretKeySelector provider.SecretKeySelectorValueFunc,
 	clusterProvider provider.ExternalClusterProvider,
 	masterClient ctrlruntimeclient.Client) (*apiv2.ExternalCluster, error) {
-	operation := cluster.Status.Condition.Phase
+	operation := existingCluster.Status.Condition.Phase
 	if operation == kubermaticv1.ExternalClusterPhaseReconciling {
 		return nil, utilerrors.NewBadRequest("Operation is not allowed: Another operation: (%s) is in progress, please wait for it to finish before starting a new operation.", operation)
 	}
 
-	if oldCluster.Spec.Version != newCluster.Spec.Version {
-		return UpgradeKubeOneCluster(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
+	version, err := clusterProvider.GetVersion(ctx, masterClient, existingCluster)
+	if err != nil {
+		return nil, err
 	}
-	if oldCluster.Spec.ContainerRuntime != newCluster.Spec.ContainerRuntime {
-		if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
-			return MigrateKubeOneToContainerd(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
-		} else {
-			return nil, fmt.Errorf("Operation not supported: only migration from docker to containerd is supported: %s", oldCluster.Spec.ContainerRuntime)
+	currentVersion := *version
+	currentContainerRuntime := existingCluster.Spec.ContainerRuntime
+
+	existingClusterJSON, err := json.Marshal(existingCluster)
+	if err != nil {
+		return nil, utilerrors.NewBadRequest("cannot decode existing kubeone cluster: %v", err)
+	}
+
+	patchedClusterJSON, err := jsonpatch.MergePatch(existingClusterJSON, patchData)
+	if err != nil {
+		return nil, utilerrors.NewBadRequest("cannot patch kubeone cluster: %v", err)
+	}
+
+	var patchedCluster *kubermaticv1.ExternalCluster
+	err = json.Unmarshal(patchedClusterJSON, &patchedCluster)
+	if err != nil {
+		return nil, utilerrors.NewBadRequest("cannot decode patched settings: %v", err)
+	}
+
+	desiredVersion := patchedCluster.Spec.Version
+	desiredContainerRuntime := patchedCluster.Spec.ContainerRuntime
+	switch {
+	case !currentVersion.Equal(&desiredVersion) && currentContainerRuntime != desiredContainerRuntime:
+		return nil, utilerrors.NewBadRequest("Operation not supported: cannot change version and containerRuntime at the same time")
+	case !currentVersion.Equal(&desiredVersion):
+		mdList, err := getKubeOneMachineDeployments(ctx, masterClient, existingCluster, clusterProvider)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+		mdsVersion := make(map[string]string)
+		for _, md := range mdList.Items {
+			mdsVersion[md.Name] = md.Spec.Template.Spec.Versions.Kubelet
+		}
+		for mdName, mdVersion := range mdsVersion {
+			mdVersion, err := ksemver.NewSemver(mdVersion)
+			if err != nil {
+				return nil, err
+			}
+			if currentVersion.Semver().Minor()-mdVersion.Semver().Minor() >= 1 {
+				return nil, fmt.Errorf("MachineDeployment %s must be updated to match cluster version %v before updating cluster version", mdName, currentVersion)
+			}
+		}
+	case currentContainerRuntime != desiredContainerRuntime:
+		// currently only migration to containerd is supported
+		if desiredContainerRuntime != ContainerdContainerRuntime {
+			return nil, fmt.Errorf("Operation not supported: Only migration from docker to containerd is supported, desiredContainerRuntime: %s", desiredContainerRuntime)
 		}
 	}
 
-	return newCluster, nil
-}
-
-func UpgradeKubeOneCluster(ctx context.Context,
-	externalCluster *kubermaticv1.ExternalCluster,
-	oldCluster *apiv2.ExternalCluster,
-	newCluster *apiv2.ExternalCluster,
-	externalClusterProvider provider.ExternalClusterProvider,
-	masterClient ctrlruntimeclient.Client,
-) (*apiv2.ExternalCluster, error) {
-	manifest := externalCluster.Spec.CloudSpec.KubeOne.ManifestReference
-
-	manifestSecret := &corev1.Secret{}
-	if err := masterClient.Get(ctx, types.NamespacedName{Namespace: manifest.Namespace, Name: manifest.Name}, manifestSecret); err != nil {
-		return nil, utilerrors.NewBadRequest(fmt.Sprintf("can not retrieve kubeone manifest secret: %v", err))
-	}
-	currentManifest := manifestSecret.Data[resources.KubeOneManifest]
-
-	cluster := &kubeonev1beta2.KubeOneCluster{}
-	if err := yaml.UnmarshalStrict(currentManifest, cluster); err != nil {
-		return nil, fmt.Errorf("failed to decode manifest secret data: %w", err)
-	}
-	upgradeVersion := newCluster.Spec.Version.Semver().String()
-	cluster.Versions = kubeonev1beta2.VersionConfig{
-		Kubernetes: upgradeVersion,
+	if err := masterClient.Update(ctx, patchedCluster); err != nil {
+		return nil, fmt.Errorf("failed to update kubeone external cluster %s: %w", existingCluster.Name, err)
 	}
 
-	if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
-		cluster.ContainerRuntime.Containerd = nil
-		if upgradeVersion >= "1.24" {
-			return nil, utilerrors.NewBadRequest("container runtime is \"docker\". Support for docker will be removed with Kubernetes 1.24 release.")
-		} else if cluster.ContainerRuntime.Docker == nil {
-			cluster.ContainerRuntime.Docker = &kubeonev1beta2.ContainerRuntimeDocker{}
-		}
-	}
-
-	patchManifest, err := yaml.Marshal(cluster)
-	if err != nil {
-		return nil, fmt.Errorf("failed to encode kubeone cluster manifest config as YAML: %w", err)
-	}
-
-	oldManifestSecret := manifestSecret.DeepCopy()
-	manifestSecret.Data = map[string][]byte{
-		resources.KubeOneManifest: patchManifest,
-	}
-	if err := masterClient.Patch(ctx, manifestSecret, ctrlruntimeclient.MergeFrom(oldManifestSecret)); err != nil {
-		return nil, fmt.Errorf("failed to update kubeone manifest secret for upgrade version %s/%s: %w", manifest.Name, manifest.Namespace, err)
-	}
-
-	// update api externalcluster status.
-	newCluster.Status.State = apiv2.ReconcilingExternalClusterState
-	return newCluster, nil
-}
-
-func MigrateKubeOneToContainerd(ctx context.Context,
-	externalCluster *kubermaticv1.ExternalCluster,
-	oldCluster *apiv2.ExternalCluster,
-	newCluster *apiv2.ExternalCluster,
-	externalClusterProvider provider.ExternalClusterProvider,
-	masterClient ctrlruntimeclient.Client,
-) (*apiv2.ExternalCluster, error) {
-	kubeOneSpec := externalCluster.Spec.CloudSpec.KubeOne
-	manifest := kubeOneSpec.ManifestReference
-	wantedContainerRuntime := newCluster.Spec.ContainerRuntime
-
-	if externalCluster.Status.Condition.Phase == kubermaticv1.ExternalClusterPhaseReconciling {
-		return nil, utilerrors.NewBadRequest("Operation is not allowed: Another operation: (Upgrading) is in progress, please wait for it to finish before starting a new operation.")
-	}
-
-	// currently only migration to containerd is supported
-	if !sets.New("containerd").Has(wantedContainerRuntime) {
-		return nil, fmt.Errorf("Operation not supported: Only migration from docker to containerd is supported: %s", wantedContainerRuntime)
-	}
-
-	manifestSecret := &corev1.Secret{}
-	if err := masterClient.Get(ctx, types.NamespacedName{Namespace: manifest.Namespace, Name: manifest.Name}, manifestSecret); err != nil {
-		return nil, utilerrors.NewBadRequest(fmt.Sprintf("can not retrieve kubeone manifest secret: %v", err))
-	}
-	currentManifest := manifestSecret.Data[resources.KubeOneManifest]
-	cluster := &kubeonev1beta2.KubeOneCluster{}
-	if err := yaml.UnmarshalStrict(currentManifest, cluster); err != nil {
-		return nil, fmt.Errorf("failed to decode manifest secret data: %w", err)
-	}
-	cluster.ContainerRuntime.Docker = nil
-	cluster.ContainerRuntime.Containerd = &kubeonev1beta2.ContainerRuntimeContainerd{}
-
-	patchManifest, err := yaml.Marshal(cluster)
-	if err != nil {
-		return nil, fmt.Errorf("failed to encode kubeone cluster manifest config as YAML: %w", err)
-	}
-
-	oldManifestSecret := manifestSecret.DeepCopy()
-	manifestSecret.Data = map[string][]byte{
-		resources.KubeOneManifest: patchManifest,
-	}
-	if err := masterClient.Patch(ctx, manifestSecret, ctrlruntimeclient.MergeFrom(oldManifestSecret)); err != nil {
-		return nil, fmt.Errorf("failed to update kubeone manifest secret for container-runtime containerd %s/%s: %w", manifest.Name, manifest.Namespace, err)
-	}
-
-	// update api externalcluster status.
-	newCluster.Status = apiv2.ExternalClusterStatus{State: apiv2.ReconcilingExternalClusterState}
-
-	return newCluster, nil
+	return convertClusterToAPI(patchedCluster), nil
 }
 
 func getKubeOneMachineDeployment(ctx context.Context, masterClient ctrlruntimeclient.Client, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
@@ -296,27 +241,6 @@ func getKubeOneAPIMachineDeployment(ctx context.Context,
 	}
 
 	return &apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd}, nil
-}
-
-func getKubeOneAPIMachineDeployments(ctx context.Context,
-	masterClient ctrlruntimeclient.Client,
-	cluster *kubermaticv1.ExternalCluster,
-	clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
-	mdList, err := getKubeOneMachineDeployments(ctx, masterClient, cluster, clusterProvider)
-	nodeDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
-	if err != nil {
-		return nil, err
-	}
-
-	for _, md := range mdList.Items {
-		nd, err := handlercommon.OutputMachineDeployment(&md)
-		if err != nil {
-			return nil, fmt.Errorf("failed to output machine deployment %s: %w", md.Name, err)
-		}
-		nodeDeployments = append(nodeDeployments, apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd})
-	}
-
-	return nodeDeployments, nil
 }
 
 func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
@@ -411,4 +335,25 @@ func getKubeOneProviderName(kubeOneCluster *kubeonev1beta2.KubeOneCluster, clust
 	}
 
 	return "", fmt.Errorf("\"CloudProviderSpec\" Not Found in provided kubeone manifest")
+}
+
+func getKubeOneAPIMachineDeployments(ctx context.Context,
+	masterClient ctrlruntimeclient.Client,
+	cluster *kubermaticv1.ExternalCluster,
+	clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+	mdList, err := getKubeOneMachineDeployments(ctx, masterClient, cluster, clusterProvider)
+	nodeDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, md := range mdList.Items {
+		nd, err := handlercommon.OutputMachineDeployment(&md)
+		if err != nil {
+			return nil, fmt.Errorf("failed to output machine deployment %s: %w", md.Name, err)
+		}
+		nodeDeployments = append(nodeDeployments, apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd})
+	}
+
+	return nodeDeployments, nil
 }
