@@ -65,6 +65,7 @@ const (
 	defaultCtx = "default"
 )
 
+// TODO handle dynamic cookie
 var secureCookie *securecookie.SecureCookie
 
 func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {

@@ -18,23 +18,29 @@ package kubernetesdashboard
 
 import (
 	"net/http"
+
+	"github.com/gorilla/securecookie"
 )
 
 type LoginResponse struct {
 	// Embed the original request
 	*http.Request
 
-	authURL string
-	nonce   string
+	authURL          string
+	nonce            string
+	cookieSecureMode bool
+	secureCookie     *securecookie.SecureCookie
 }
 
 type OIDCCallbackResponse struct {
 	// Embed the original request
 	*http.Request
 
-	projectID string
-	clusterID string
-	token     string
+	projectID        string
+	clusterID        string
+	token            string
+	cookieSecureMode bool
+	secureCookie     *securecookie.SecureCookie
 }
 
 type ProxyResponse struct {

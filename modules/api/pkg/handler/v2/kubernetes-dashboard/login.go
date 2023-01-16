@@ -46,9 +46,7 @@ const (
 type loginHandler struct {
 	baseHandler
 
-	oidcConfig       authtypes.OIDCConfiguration
 	settingsProvider provider.SettingsProvider
-	secureCookie     *securecookie.SecureCookie
 }
 
 func (this *loginHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
@@ -80,7 +78,11 @@ func (this *loginHandler) decodeInitialRequest(_ context.Context, r *http.Reques
 func (this *loginHandler) encodeInitialResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	loginResponse := response.(*LoginResponse)
 
-	encodedNonceCookie, err := this.getEncodedNonceCookie(loginResponse.nonce, this.oidcConfig.CookieSecureMode, nonceCookieMaxAge)
+	encodedNonceCookie, err := this.getEncodedNonceCookie(
+		loginResponse.nonce,
+		loginResponse.cookieSecureMode,
+		nonceCookieMaxAge,
+		loginResponse.secureCookie)
 	if err != nil {
 		return err
 	}
@@ -125,7 +127,9 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		return nil, err
 	}
 
-	if this.oidcConfig.OfflineAccessAsScope {
+	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
+
+	if oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope {
 		scopes = append(scopes, "offline_access")
 	}
 
@@ -134,23 +138,24 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		return nil, err
 	}
 
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
-
 	// get the redirect uri
-	redirectURI, err := oidcProvider.GetRedirectURI(loginRequest.Request.URL.Path)
+	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(loginRequest.Request.URL.Path)
 	if err != nil {
 		return nil, err
 	}
 
 	return &LoginResponse{
-		Request: loginRequest.Request,
-		authURL: oidcProvider.AuthCodeURL(state, this.oidcConfig.OfflineAccessAsScope, redirectURI, scopes...),
-		nonce:   nonce,
+		Request:          loginRequest.Request,
+		authURL:          oidcIssuerVerifier.AuthCodeURL(state, oidcIssuerVerifier.OIDCConfig().OfflineAccessAsScope, redirectURI, scopes...),
+		nonce:            nonce,
+		cookieSecureMode: oidcIssuerVerifier.OIDCConfig().CookieSecureMode,
+		// TODO take cookie from issuerverifier
+		secureCookie: nil,
 	}, nil
 }
 
-func (this *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, maxAge int) (*http.Cookie, error) {
-	encoded, err := this.secureCookie.Encode(nonceCookieName, nonce)
+func (this *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) (*http.Cookie, error) {
+	encoded, err := secCookie.Encode(nonceCookieName, nonce)
 	if err != nil {
 		return nil, fmt.Errorf("the encode cookie failed: %w", err)
 	}
@@ -172,7 +177,7 @@ func (this *loginHandler) decodeOIDCCallbackRequest(_ context.Context, r *http.R
 func (this *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	callbackResponse := response.(*OIDCCallbackResponse)
 
-	cookie, err := this.getEncodedNonceCookie("", this.oidcConfig.CookieSecureMode, -1)
+	cookie, err := this.getEncodedNonceCookie("", callbackResponse.cookieSecureMode, -1, callbackResponse.secureCookie)
 	if err != nil {
 		return err
 	}
@@ -216,7 +221,10 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		return nil, err
 	}
 
-	nonce, err := this.getDecodedNonce(oidcCallbackRequest.Request)
+	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
+
+	// TODO take from oidc issuerVerifier
+	nonce, err := this.getDecodedNonce(oidcCallbackRequest.Request, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -225,10 +233,8 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		return nil, utilerrors.NewBadRequest("incorrect value of state parameter: %s", state.Nonce)
 	}
 
-	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
-
 	// get the redirect uri
-	redirectURI, err := oidcProvider.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
+	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -239,10 +245,13 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 	}
 
 	return &OIDCCallbackResponse{
-		Request:   oidcCallbackRequest.Request,
-		projectID: state.ProjectID,
-		clusterID: state.ClusterID,
-		token:     token,
+		Request:          oidcCallbackRequest.Request,
+		projectID:        state.ProjectID,
+		clusterID:        state.ClusterID,
+		token:            token,
+		cookieSecureMode: oidcIssuerVerifier.OIDCConfig().CookieSecureMode,
+		// TODO take from oidc issuerVerifier
+		secureCookie: nil,
 	}, nil
 }
 
@@ -272,13 +281,13 @@ func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectU
 	return oidcTokens.IDToken, nil
 }
 
-func (this *loginHandler) getDecodedNonce(r *http.Request) (nonce string, err error) {
+func (this *loginHandler) getDecodedNonce(r *http.Request, secCookie *securecookie.SecureCookie) (nonce string, err error) {
 	cookie, err := r.Cookie(nonceCookieName)
 	if err != nil {
 		return
 	}
 
-	err = this.secureCookie.Decode(nonceCookieName, cookie.Value, &nonce)
+	err = secCookie.Decode(nonceCookieName, cookie.Value, &nonce)
 	return
 }
 
@@ -321,10 +330,8 @@ func decodeOIDCState(state string) (*commonv2.OIDCState, error) {
 	return &oidcState, nil
 }
 
-func NewLoginHandler(oidcConfig authtypes.OIDCConfiguration, settingsProvider provider.SettingsProvider) Handler {
+func NewLoginHandler(settingsProvider provider.SettingsProvider) Handler {
 	return &loginHandler{
-		oidcConfig:       oidcConfig,
 		settingsProvider: settingsProvider,
-		secureCookie:     securecookie.New([]byte(oidcConfig.CookieHashKey), nil),
 	}
 }

@@ -598,14 +598,6 @@ func createAPIHandler(
 			})
 		})
 	}
-	oidcConfiguration := authtypes.OIDCConfiguration{
-		URL:                  options.oidcURL,
-		ClientID:             options.oidcIssuerClientID,
-		ClientSecret:         options.oidcIssuerClientSecret,
-		CookieHashKey:        options.oidcIssuerCookieHashKey,
-		CookieSecureMode:     options.oidcIssuerCookieSecureMode,
-		OfflineAccessAsScope: options.oidcIssuerOfflineAccessAsScope,
-	}
 	v1Router := mainRouter.PathPrefix("/api/v1").Subrouter()
 	v2Router := mainRouter.PathPrefix("/api/v2").Subrouter()
 	r.RegisterV1(v1Router, metrics)
@@ -613,7 +605,7 @@ func createAPIHandler(
 	r.RegisterV1Optional(v1Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 	r.RegisterV1Admin(v1Router)
 	r.RegisterV1Websocket(v1Router)
-	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint), oidcConfiguration)
+	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 
 	mainRouter.Methods(http.MethodGet).
 		Path("/api/swagger.json").

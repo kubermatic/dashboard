@@ -61,11 +61,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/user"
 	"k8c.io/dashboard/v2/pkg/handler/v2/version"
 	"k8c.io/dashboard/v2/pkg/handler/v2/webterminal"
-	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 // RegisterV2 declares all router paths for v2.
-func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg authtypes.OIDCConfiguration) {
+func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	// Defines a set of HTTP endpoint for generating kubeconfig secret for a cluster that will contain OIDC tokens
 	if oidcKubeConfEndpoint {
 		mux.Methods(http.MethodGet).
@@ -1046,7 +1045,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.listVMwareCloudDirectorTemplatesNoCredentials())
 
 	kubernetesdashboard.
-		NewLoginHandler(oidcCfg, r.settingsProvider).
+		NewLoginHandler(r.settingsProvider).
 		Middlewares(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
