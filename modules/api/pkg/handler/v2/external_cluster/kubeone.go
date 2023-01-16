@@ -97,13 +97,19 @@ func patchKubeOneCluster(ctx context.Context,
 		return nil, utilerrors.NewBadRequest("Operation is not allowed: Another operation: (%s) is in progress, please wait for it to finish before starting a new operation.", operation)
 	}
 
-	cluster := existingCluster.DeepCopy()
-	clusterToPatchJSON, err := json.Marshal(cluster)
+	version, err := clusterProvider.GetVersion(ctx, masterClient, existingCluster)
+	if err != nil {
+		return nil, err
+	}
+	currentVersion := *version
+	currentContainerRuntime := existingCluster.Spec.ContainerRuntime
+
+	existingClusterJSON, err := json.Marshal(existingCluster)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("cannot decode existing kubeone cluster: %v", err)
 	}
 
-	patchedClusterJSON, err := jsonpatch.MergePatch(clusterToPatchJSON, patchData)
+	patchedClusterJSON, err := jsonpatch.MergePatch(existingClusterJSON, patchData)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("cannot patch kubeone cluster: %v", err)
 	}
@@ -114,20 +120,13 @@ func patchKubeOneCluster(ctx context.Context,
 		return nil, utilerrors.NewBadRequest("cannot decode patched settings: %v", err)
 	}
 
-	version, err := clusterProvider.GetVersion(ctx, masterClient, existingCluster)
-	if err != nil {
-		return nil, err
-	}
-	currentVersion := *version
-	currentContainerRuntime := existingCluster.Spec.ContainerRuntime
 	desiredVersion := patchedCluster.Spec.Version
 	desiredContainerRuntime := patchedCluster.Spec.ContainerRuntime
-
 	switch {
 	case currentVersion != desiredVersion && currentContainerRuntime != desiredContainerRuntime:
 		return nil, utilerrors.NewBadRequest("Operation not supported: cannot change version and containerRuntime at the same time")
 	case currentVersion != desiredVersion:
-		mdList, err := getKubeOneMachineDeployments(ctx, masterClient, cluster, clusterProvider)
+		mdList, err := getKubeOneMachineDeployments(ctx, masterClient, existingCluster, clusterProvider)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -152,7 +151,7 @@ func patchKubeOneCluster(ctx context.Context,
 	}
 
 	if err := masterClient.Update(ctx, patchedCluster); err != nil {
-		return nil, fmt.Errorf("failed to update kubeone external cluster %s: %w", cluster.Name, err)
+		return nil, fmt.Errorf("failed to update kubeone external cluster %s: %w", existingCluster.Name, err)
 	}
 
 	return convertClusterToAPI(patchedCluster), nil
