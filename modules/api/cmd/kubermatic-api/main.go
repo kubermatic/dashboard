@@ -52,8 +52,6 @@ import (
 	"os"
 	"time"
 
-	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
-
 	"github.com/go-logr/zapr"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -67,6 +65,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
+	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
@@ -457,31 +456,25 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 func createOIDCClients(options serverRunOptions) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
-		options.oidcURL,
-		options.oidcIssuerClientID,
-		options.oidcIssuerClientSecret,
+		options.oidcIssuerConfiguration,
 		options.oidcIssuerRedirectURI,
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewQueryParamBearerTokenExtractor("token"),
 		),
-		options.oidcSkipTLSVerify,
 		options.caBundle.CertPool(),
 	)
 }
 
 func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
-		options.oidcURL,
-		options.oidcAuthenticatorClientID,
-		"",
+		options.oidcAuthenticatorConfiguration,
 		"",
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewCookieHeaderBearerTokenExtractor("token"),
 			auth.NewQueryParamBearerTokenExtractor("token"),
 		),
-		options.oidcSkipTLSVerify,
 		options.caBundle.CertPool(),
 	)
 
@@ -524,41 +517,41 @@ func createAPIHandler(
 	serviceAccountTokenAuth := serviceaccount.JWTTokenAuthenticator([]byte(options.serviceAccountSigningKey))
 
 	routingParams := handler.RoutingParams{
-		Log:                                   kubermaticlog.New(options.log.Debug, options.log.Format).Sugar(),
-		PresetProvider:                        prov.presetProvider,
-		SeedsGetter:                           prov.seedsGetter,
-		SeedsClientGetter:                     prov.seedClientGetter,
-		KubermaticConfigurationGetter:         prov.configGetter,
-		SSHKeyProvider:                        prov.sshKey,
-		PrivilegedSSHKeyProvider:              prov.privilegedSSHKeyProvider,
-		UserProvider:                          prov.user,
-		ServiceAccountProvider:                prov.serviceAccountProvider,
-		PrivilegedServiceAccountProvider:      prov.privilegedServiceAccountProvider,
-		ServiceAccountTokenProvider:           prov.serviceAccountTokenProvider,
-		PrivilegedServiceAccountTokenProvider: prov.privilegedServiceAccountTokenProvider,
-		ProjectProvider:                       prov.project,
-		PrivilegedProjectProvider:             prov.privilegedProject,
-		OIDCIssuerVerifier:                    prov.oidcIssuerVerifier,
-		TokenVerifiers:                        tokenVerifiers,
-		TokenExtractors:                       tokenExtractors,
-		ClusterProviderGetter:                 prov.clusterProviderGetter,
-		AddonProviderGetter:                   prov.addons,
-		AddonConfigProvider:                   prov.addonConfigProvider,
-		PrometheusClient:                      prometheusClient,
-		ProjectMemberProvider:                 prov.projectMember,
-		PrivilegedProjectMemberProvider:       prov.privilegedProjectMemberProvider,
-		UserProjectMapper:                     prov.memberMapper,
-		SATokenAuthenticator:                  serviceAccountTokenAuth,
-		SATokenGenerator:                      serviceAccountTokenGenerator,
-		EventRecorderProvider:                 prov.eventRecorderProvider,
-		ExposeStrategy:                        options.exposeStrategy,
-		UserInfoGetter:                        prov.userInfoGetter,
-		SettingsProvider:                      prov.settingsProvider,
-		AdminProvider:                         prov.adminProvider,
-		AdmissionPluginProvider:               prov.admissionPluginProvider,
-		SettingsWatcher:                       prov.settingsWatcher,
-		UserWatcher:                           prov.userWatcher,
-		ExternalClusterProvider:               prov.externalClusterProvider,
+		Log:                                            kubermaticlog.New(options.log.Debug, options.log.Format).Sugar(),
+		PresetProvider:                                 prov.presetProvider,
+		SeedsGetter:                                    prov.seedsGetter,
+		SeedsClientGetter:                              prov.seedClientGetter,
+		KubermaticConfigurationGetter:                  prov.configGetter,
+		SSHKeyProvider:                                 prov.sshKey,
+		PrivilegedSSHKeyProvider:                       prov.privilegedSSHKeyProvider,
+		UserProvider:                                   prov.user,
+		ServiceAccountProvider:                         prov.serviceAccountProvider,
+		PrivilegedServiceAccountProvider:               prov.privilegedServiceAccountProvider,
+		ServiceAccountTokenProvider:                    prov.serviceAccountTokenProvider,
+		PrivilegedServiceAccountTokenProvider:          prov.privilegedServiceAccountTokenProvider,
+		ProjectProvider:                                prov.project,
+		PrivilegedProjectProvider:                      prov.privilegedProject,
+		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
+		TokenVerifiers:                                 tokenVerifiers,
+		TokenExtractors:                                tokenExtractors,
+		ClusterProviderGetter:                          prov.clusterProviderGetter,
+		AddonProviderGetter:                            prov.addons,
+		AddonConfigProvider:                            prov.addonConfigProvider,
+		PrometheusClient:                               prometheusClient,
+		ProjectMemberProvider:                          prov.projectMember,
+		PrivilegedProjectMemberProvider:                prov.privilegedProjectMemberProvider,
+		UserProjectMapper:                              prov.memberMapper,
+		SATokenAuthenticator:                           serviceAccountTokenAuth,
+		SATokenGenerator:                               serviceAccountTokenGenerator,
+		EventRecorderProvider:                          prov.eventRecorderProvider,
+		ExposeStrategy:                                 options.exposeStrategy,
+		UserInfoGetter:                                 prov.userInfoGetter,
+		SettingsProvider:                               prov.settingsProvider,
+		AdminProvider:                                  prov.adminProvider,
+		AdmissionPluginProvider:                        prov.admissionPluginProvider,
+		SettingsWatcher:                                prov.settingsWatcher,
+		UserWatcher:                                    prov.userWatcher,
+		ExternalClusterProvider:                        prov.externalClusterProvider,
 		PrivilegedExternalClusterProvider:              prov.privilegedExternalClusterProvider,
 		FeatureGatesProvider:                           prov.featureGatesProvider,
 		DefaultConstraintProvider:                      prov.defaultConstraintProvider,
@@ -605,7 +598,7 @@ func createAPIHandler(
 			})
 		})
 	}
-	oidcConfiguration := common.OIDCConfiguration{
+	oidcConfiguration := authtypes.OIDCConfiguration{
 		URL:                  options.oidcURL,
 		ClientID:             options.oidcIssuerClientID,
 		ClientSecret:         options.oidcIssuerClientSecret,

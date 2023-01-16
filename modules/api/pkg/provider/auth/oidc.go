@@ -21,15 +21,18 @@ func OIDCIssuerVerifierProviderFactory(
 
 		oidc := seed.Spec.OIDCProviderConfiguration
 		return auth.NewOpenIDClient(
-			oidc.IssuerURL,
-			oidc.IssuerClientID,
-			oidc.IssuerClientSecret,
+			&authtypes.OIDCConfiguration{
+				URL:          oidc.IssuerURL,
+				ClientID:     oidc.IssuerClientID,
+				ClientSecret: oidc.IssuerClientSecret,
+				// TODO add it to the Seed fields and take from there
+				SkipTLSVerify: oidcSkipTLSVerify,
+			},
 			oidcIssuerRedirectURI,
 			auth.NewCombinedExtractor(
 				auth.NewHeaderBearerTokenExtractor("Authorization"),
 				auth.NewQueryParamBearerTokenExtractor("token"),
 			),
-			oidcSkipTLSVerify,
 			caBundle.CertPool(),
 		)
 	}

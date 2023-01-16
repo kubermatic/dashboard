@@ -266,7 +266,7 @@ func CreateOIDCKubeconfigEndpoint(
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
 	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
-	oidcCfg common.OIDCConfiguration,
+	oidcCfg authtypes.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
 	seedsGetter provider.SeedsGetter,
 ) (interface{}, error) {
@@ -336,9 +336,9 @@ func CreateOIDCKubeconfigEndpoint(
 			clientCmdAuthProvider.Name = oidc
 			clientCmdAuthProvider.Config["id-token"] = oidcTokens.IDToken
 			clientCmdAuthProvider.Config["refresh-token"] = oidcTokens.RefreshToken
-			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcCfg.URL
-			clientCmdAuthProvider.Config["client-id"] = oidcCfg.ClientID
-			clientCmdAuthProvider.Config["client-secret"] = oidcCfg.ClientSecret
+			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcIssuerVerifier.OIDCConfig().URL
+			clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
+			clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
 			clientCmdAuth.AuthProvider = clientCmdAuthProvider
 			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
 
@@ -396,7 +396,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	ctx context.Context,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	oidcCfg common.OIDCConfiguration,
+	oidcCfg authtypes.OIDCConfiguration,
 	req CreateOIDCKubeconfigReq,
 ) (interface{}, error) {
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
@@ -471,9 +471,9 @@ func CreateOIDCKubeconfigSecretEndpoint(
 			clientCmdAuthProvider.Name = oidc
 			clientCmdAuthProvider.Config["id-token"] = oidcTokens.IDToken
 			clientCmdAuthProvider.Config["refresh-token"] = oidcTokens.RefreshToken
-			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcCfg.URL
-			clientCmdAuthProvider.Config["client-id"] = oidcCfg.ClientID
-			clientCmdAuthProvider.Config["client-secret"] = oidcCfg.ClientSecret
+			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcIssuerVerifier.OIDCConfig().URL
+			clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
+			clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
 			clientCmdAuth.AuthProvider = clientCmdAuthProvider
 			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
 

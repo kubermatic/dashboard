@@ -25,6 +25,7 @@ import (
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
@@ -38,16 +39,18 @@ import (
 )
 
 type serverRunOptions struct {
-	listenAddress  string
-	internalAddr   string
-	prometheusURL  string
-	workerName     string
-	swaggerFile    string
-	domain         string
-	exposeStrategy kubermaticv1.ExposeStrategy
-	namespace      string
-	log            kubermaticlog.Options
-	caBundle       *certificates.CABundle
+	listenAddress                  string
+	internalAddr                   string
+	prometheusURL                  string
+	workerName                     string
+	swaggerFile                    string
+	domain                         string
+	exposeStrategy                 kubermaticv1.ExposeStrategy
+	namespace                      string
+	log                            kubermaticlog.Options
+	caBundle                       *certificates.CABundle
+	oidcIssuerConfiguration        *common.OIDCConfiguration
+	oidcAuthenticatorConfiguration *common.OIDCConfiguration
 
 	// for development purposes, a local configuration file
 	// can be used to provide the KubermaticConfiguration
@@ -130,6 +133,22 @@ func newServerRunOptions() (serverRunOptions, error) {
 
 	s.caBundle = cabundle
 	s.versions = kubermatic.NewDefaultVersions()
+
+	s.oidcIssuerConfiguration = &common.OIDCConfiguration{
+		URL:                  s.oidcURL,
+		ClientID:             s.oidcIssuerClientID,
+		ClientSecret:         s.oidcIssuerClientSecret,
+		CookieHashKey:        s.oidcIssuerCookieHashKey,
+		CookieSecureMode:     s.oidcIssuerCookieSecureMode,
+		OfflineAccessAsScope: s.oidcIssuerOfflineAccessAsScope,
+		SkipTLSVerify:        s.oidcSkipTLSVerify,
+	}
+
+	s.oidcAuthenticatorConfiguration = &common.OIDCConfiguration{
+		URL:           s.oidcURL,
+		ClientID:      s.oidcAuthenticatorClientID,
+		SkipTLSVerify: s.oidcSkipTLSVerify,
+	}
 
 	return s, nil
 }

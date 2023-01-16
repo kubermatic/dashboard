@@ -31,7 +31,6 @@ import (
 
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -47,7 +46,7 @@ const (
 type loginHandler struct {
 	baseHandler
 
-	oidcConfig       common.OIDCConfiguration
+	oidcConfig       authtypes.OIDCConfiguration
 	settingsProvider provider.SettingsProvider
 	secureCookie     *securecookie.SecureCookie
 }
@@ -322,7 +321,7 @@ func decodeOIDCState(state string) (*commonv2.OIDCState, error) {
 	return &oidcState, nil
 }
 
-func NewLoginHandler(oidcConfig common.OIDCConfiguration, settingsProvider provider.SettingsProvider) Handler {
+func NewLoginHandler(oidcConfig authtypes.OIDCConfiguration, settingsProvider provider.SettingsProvider) Handler {
 	return &loginHandler{
 		oidcConfig:       oidcConfig,
 		settingsProvider: settingsProvider,

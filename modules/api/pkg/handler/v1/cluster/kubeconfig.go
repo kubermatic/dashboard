@@ -46,7 +46,7 @@ func CreateOIDCKubeconfigEndpoint(
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
 	oidcIssuerVerifier authtypes.OIDCIssuerVerifier,
-	oidcCfg common.OIDCConfiguration,
+	oidcCfg authtypes.OIDCConfiguration,
 	seedsGetter provider.SeedsGetter,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {

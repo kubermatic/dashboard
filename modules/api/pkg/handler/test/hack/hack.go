@@ -186,8 +186,8 @@ func NewTestRouting(
 }
 
 // generateDefaultOicdCfg creates test configuration for OpenID clients.
-func generateDefaultOicdCfg() *common.OIDCConfiguration {
-	return &common.OIDCConfiguration{
+func generateDefaultOicdCfg() *authtypes.OIDCConfiguration {
+	return &authtypes.OIDCConfiguration{
 		URL:                  test.IssuerURL,
 		ClientID:             test.IssuerClientID,
 		ClientSecret:         test.IssuerClientSecret,

@@ -38,10 +38,8 @@ import (
 
 // OpenIDClient implements OIDCIssuerVerifier and TokenExtractorVerifier.
 type OpenIDClient struct {
-	issuer         string
+	oidcConfig     *authtypes.OIDCConfiguration
 	tokenExtractor authtypes.TokenExtractor
-	clientID       string
-	clientSecret   string
 	redirectURI    string
 	verifier       *oidc.IDTokenVerifier
 	provider       *oidc.Provider
@@ -50,8 +48,8 @@ type OpenIDClient struct {
 
 // NewOpenIDClient returns an authentication middleware which authenticates against an openID server.
 // If rootCertificates is nil, the host's root CAs will be used.
-func NewOpenIDClient(
-	issuer, clientID, clientSecret, redirectURI string, extractor authtypes.TokenExtractor, insecureSkipVerify bool, rootCertificates *x509.CertPool,
+func NewOpenIDClient(oidcConfig *authtypes.OIDCConfiguration, redirectURI string,
+	extractor authtypes.TokenExtractor, rootCertificates *x509.CertPool,
 ) (authtypes.OIDCIssuerVerifier, error) {
 	ctx := context.Background()
 	tr := &http.Transport{
@@ -67,23 +65,20 @@ func NewOpenIDClient(
 		ExpectContinueTimeout: 1 * time.Second,
 		TLSClientConfig: &tls.Config{
 			RootCAs:            rootCertificates,
-			InsecureSkipVerify: insecureSkipVerify,
+			InsecureSkipVerify: oidcConfig.SkipTLSVerify,
 		},
 	}
 	client := &http.Client{Transport: tr}
 
-	p, err := oidc.NewProvider(context.WithValue(ctx, oauth2.HTTPClient, client), issuer)
+	p, err := oidc.NewProvider(context.WithValue(ctx, oauth2.HTTPClient, client), oidcConfig.URL)
 	if err != nil {
 		return nil, err
 	}
 
 	return &OpenIDClient{
-		issuer:         issuer,
 		tokenExtractor: extractor,
-		clientID:       clientID,
-		clientSecret:   clientSecret,
 		redirectURI:    redirectURI,
-		verifier:       p.Verifier(&oidc.Config{ClientID: clientID}),
+		verifier:       p.Verifier(&oidc.Config{ClientID: oidcConfig.ClientID}),
 		provider:       p,
 		httpClient:     client,
 	}, nil
@@ -184,6 +179,10 @@ func (o *OpenIDClient) GetRedirectURI(path string) (string, error) {
 	return fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, path), nil
 }
 
+func (c OpenIDClient) OIDCConfig() *authtypes.OIDCConfiguration {
+	return c.oidcConfig
+}
+
 func (o *OpenIDClient) oauth2Config(overwriteRedirectURI string, scopes ...string) *oauth2.Config {
 	redirectURI := o.redirectURI
 	if overwriteRedirectURI != "" {
@@ -191,8 +190,8 @@ func (o *OpenIDClient) oauth2Config(overwriteRedirectURI string, scopes ...strin
 	}
 
 	return &oauth2.Config{
-		ClientID:     o.clientID,
-		ClientSecret: o.clientSecret,
+		ClientID:     o.oidcConfig.ClientID,
+		ClientSecret: o.oidcConfig.ClientSecret,
 		Endpoint:     o.provider.Endpoint(),
 		Scopes:       scopes,
 		RedirectURL:  redirectURI,
