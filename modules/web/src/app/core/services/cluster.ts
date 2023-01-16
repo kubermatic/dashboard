@@ -54,7 +54,6 @@ export class ClusterService {
   private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
   private _externalCluster$ = new Map<string, Observable<ExternalCluster>>();
-  private _clusterHealth$ = new Map<string, Observable<Health>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
   private _onExternalClustersUpdate = new Subject<void>();
@@ -285,16 +284,8 @@ export class ClusterService {
   }
 
   health(projectID: string, clusterID: string): Observable<Health> {
-    const mapKey = projectID + '-' + clusterID;
-    if (!this._clusterHealth$.has(mapKey)) {
-      const request$ = this._http
-        .get<Health>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`)
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-
-      this._clusterHealth$.set(mapKey, request$);
-    }
-
-    return this._clusterHealth$.get(mapKey);
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`;
+    return this._http.get<Health>(url).pipe(catchError(() => of<Health>({} as Health)));
   }
 
   upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<void> {
