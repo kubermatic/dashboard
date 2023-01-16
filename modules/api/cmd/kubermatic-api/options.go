@@ -25,7 +25,6 @@ import (
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
@@ -49,8 +48,8 @@ type serverRunOptions struct {
 	namespace                      string
 	log                            kubermaticlog.Options
 	caBundle                       *certificates.CABundle
-	oidcIssuerConfiguration        *common.OIDCConfiguration
-	oidcAuthenticatorConfiguration *common.OIDCConfiguration
+	oidcIssuerConfiguration        *authtypes.OIDCConfiguration
+	oidcAuthenticatorConfiguration *authtypes.OIDCConfiguration
 
 	// for development purposes, a local configuration file
 	// can be used to provide the KubermaticConfiguration
@@ -134,7 +133,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	s.caBundle = cabundle
 	s.versions = kubermatic.NewDefaultVersions()
 
-	s.oidcIssuerConfiguration = &common.OIDCConfiguration{
+	s.oidcIssuerConfiguration = &authtypes.OIDCConfiguration{
 		URL:                  s.oidcURL,
 		ClientID:             s.oidcIssuerClientID,
 		ClientSecret:         s.oidcIssuerClientSecret,
@@ -144,7 +143,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 		SkipTLSVerify:        s.oidcSkipTLSVerify,
 	}
 
-	s.oidcAuthenticatorConfiguration = &common.OIDCConfiguration{
+	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
 		URL:           s.oidcURL,
 		ClientID:      s.oidcAuthenticatorClientID,
 		SkipTLSVerify: s.oidcSkipTLSVerify,
