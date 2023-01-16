@@ -518,13 +518,17 @@ type BringYourOwnSpec struct{}
 type KubeOneSpec struct {
 	// ProviderName is the name of the cloud provider used, one of
 	// "aws", "azure", "digitalocean", "gcp",
-	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers.
+	// + readOnly
 	ProviderName string `json:"providerName"`
 	// Region is the kubernetes control plane region.
+	// + readOnly
 	Region string `json:"region,omitempty"`
 	// Manifest Base64 encoded manifest
-	Manifest  string            `json:"manifest,omitempty"`
-	SSHKey    KubeOneSSHKey     `json:"sshKey,omitempty"`
+	Manifest string `json:"manifest,omitempty"`
+	// SSHKey is the SSH Private Key used to access KubeOne cluster nodes.
+	SSHKey KubeOneSSHKey `json:"sshKey,omitempty"`
+	// CloudSpec is KubeOne supported cloud Providers Spec.
 	CloudSpec *KubeOneCloudSpec `json:"cloudSpec,omitempty"`
 }
 

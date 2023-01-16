@@ -23,10 +23,12 @@ type KubeOneSpec struct {
 
 	// ProviderName is the name of the cloud provider used, one of
 	// "aws", "azure", "digitalocean", "gcp",
-	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers.
+	// + readOnly
 	ProviderName string `json:"providerName,omitempty"`
 
 	// Region is the kubernetes control plane region.
+	// + readOnly
 	Region string `json:"region,omitempty"`
 
 	// cloud spec

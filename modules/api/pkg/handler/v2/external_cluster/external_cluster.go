@@ -128,7 +128,7 @@ func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeO
 	return kubeOneCluster, nil
 }
 
-func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec) error {
+func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec, presetName string) error {
 	// validate manifest
 	if len(kubeOne.Manifest) == 0 {
 		return fmt.Errorf("the KubeOne Cluster manifest cannot be empty")
@@ -146,7 +146,9 @@ func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec) error {
 	if len(kubeOne.SSHKey.PrivateKey) == 0 {
 		return fmt.Errorf("the KubeOne SSH Key cannot be empty")
 	}
-	if kubeOne.CloudSpec == nil {
+
+	kubeOneCloudSpec := kubeOne.CloudSpec
+	if kubeOneCloudSpec == nil && presetName == "" {
 		return fmt.Errorf("the KubeOne Cluster Provider Credentials cannot be empty")
 	}
 
@@ -274,10 +276,11 @@ func CreateEndpoint(
 		}
 		// import KubeOne cluster
 		if cloud.KubeOne != nil {
-			if err := validatKubeOneReq(cloud.KubeOne); err != nil {
+			if err := validatKubeOneReq(cloud.KubeOne, req.Credential); err != nil {
 				return nil, utilerrors.NewBadRequest(err.Error())
 			}
-			createdCluster, err := importKubeOneCluster(ctx, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
+
+			createdCluster, err := importKubeOneCluster(ctx, preset, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
