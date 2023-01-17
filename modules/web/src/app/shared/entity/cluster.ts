@@ -587,6 +587,7 @@ export class VSphereInfraManagementUserPatch {
 
 export class KubevirtCloudSpecPatch {
   kubeconfig?: string;
+  preAllocatedDataVolumes?: KubeVirtPreAllocatedDataVolume[];
 }
 
 export class AlibabaCloudSpecPatch {

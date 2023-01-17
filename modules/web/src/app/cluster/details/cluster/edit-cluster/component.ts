@@ -29,27 +29,29 @@ import {
   END_OF_DOCKER_SUPPORT_VERSION,
   EventRateLimitConfig,
   ExposeStrategy,
+  KubevirtCloudSpecPatch,
   NetworkRanges,
+  Provider,
   ProviderSettingsPatch,
   ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
+import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {AsyncValidators} from '@shared/validators/async.validators';
-import _ from 'lodash';
-import {Observable, Subject} from 'rxjs';
-import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import * as semver from 'semver';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   handleClusterDefaultNodeSelector,
 } from '@shared/utils/cluster';
-import {KeyValueEntry} from '@shared/types/common';
+import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
+import _ from 'lodash';
+import {Observable, Subject} from 'rxjs';
+import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import * as semver from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -103,6 +105,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
+  private _kubeVirtCloudSpecPatch: KubevirtCloudSpecPatch;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -244,6 +247,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.apiServerAllowedIPRanges = ips;
   }
 
+  onKubeVirtCloudSpecChange(specPatch: KubevirtCloudSpecPatch): void {
+    this._kubeVirtCloudSpecPatch = specPatch;
+  }
+
   isExposeStrategyLoadBalancer(): boolean {
     return this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer;
   }
@@ -368,6 +375,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     if (this.isExposeStrategyLoadBalancer()) {
       patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
+    }
+
+    if (Cluster.getProvider(this.cluster) === Provider.KubeVirt && this._kubeVirtCloudSpecPatch) {
+      patch.spec.cloud.kubevirt = this._kubeVirtCloudSpecPatch;
     }
 
     return this._clusterService.patch(this.projectID, this.cluster.id, patch).pipe(take(1));

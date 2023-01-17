@@ -14,6 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/details/cluster/add-machine-network/component';
+import {KubeVirtEditClusterComponent} from '@app/cluster/details/cluster/edit-cluster/provider/kubevirt/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/anexia-provider-settings/component';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
@@ -153,6 +154,7 @@ const components: any[] = [
   RBACServiceAccountComponent,
   RBACServiceAccountDetailsComponent,
   RBACUsersOrGroupsComponent,
+  KubeVirtEditClusterComponent,
 ];
 
 @NgModule({
