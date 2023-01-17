@@ -171,6 +171,9 @@ func GetMachineDeploymentUpgradesEndpoint(userInfoGetter provider.UserInfoGetter
 				cloud.EKS.Name,
 				req.MachineDeploymentID)
 		}
+		if cloud.KubeOne != nil {
+			return ListMachineDeploymentUpgrades(ctx, masterClient, req.MachineDeploymentID, cluster, clusterProvider)
+		}
 
 		return nil, nil
 	}
