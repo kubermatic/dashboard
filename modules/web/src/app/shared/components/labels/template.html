@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div fxLayout="row"
-     fxLayoutAlign=" center"
      fxLayoutGap="8px">
-
   <mat-chip-list [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
                  *ngIf="labelKeys.length > 0">
     <div #chipListLabels
@@ -29,11 +27,14 @@ limitations under the License.
     </div>
   </mat-chip-list>
 
-  <div *ngIf="checkLabelsHeight()"
-       class="show-all-button"
-       (click)="toggleHiddenLabels()">{{showHiddenLabels ? 'SHOW LESS' : 'SHOW MORE'}}
+  <span *ngIf="checkLabelsHeight()"
+        fxLayoutAlign=" start"
+        fxLayoutGap="8px"
+        class="show-all-button km-text-muted"
+        (click)="toggleHiddenLabels()">{{showHiddenLabels ? 'SHOW LESS' : 'SHOW MORE'}}
     <i class="km-icon-mask km-icon-arrow-{{showHiddenLabels ? 'up' : 'down'}}"></i>
-  </div>
+  </span>
+
   <span *ngIf="limit && labelKeys.length > limit"
         [matTooltip]="getHiddenLabels()"
         class="km-text">

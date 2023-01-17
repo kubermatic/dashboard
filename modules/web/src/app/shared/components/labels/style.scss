@@ -18,7 +18,12 @@
 }
 
 .show-all-button {
-  min-width: 120px;
+  min-width: 135px;
+  padding-right: 10px;
+
+  i {
+    margin: 6px 0 0 10px;
+  }
 
   &:hover {
     cursor: pointer;
