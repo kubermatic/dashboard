@@ -105,7 +105,13 @@ export class HetznerDatacenterSpec {
   network: string;
 }
 
-export class KubeVirtDatacenterSpec {}
+export class KubeVirtDatacenterSpec {
+  images: KubeVirtDatacenterImageOptions;
+}
+
+export class KubeVirtDatacenterImageOptions {
+  enableCustomImages: boolean;
+}
 
 export class NutanixDatacenterSpec {
   endpoint: string;

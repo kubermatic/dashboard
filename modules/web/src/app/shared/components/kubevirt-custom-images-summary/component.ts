@@ -24,10 +24,10 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-kubevirt-pre-allocated-data-volumes',
+  selector: 'km-kubevirt-custom-images-summary',
   templateUrl: './template.html',
 })
-export class KubeVirtPreAllocatedDataVolumesComponent implements OnInit, OnChanges {
+export class KubeVirtCustomImagesSummaryComponent implements OnInit, OnChanges {
   readonly Column = Column;
   readonly displayedColumns: string[] = [Column.Name, Column.Size, Column.StorageClass, Column.URL];
 

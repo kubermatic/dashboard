@@ -25,8 +25,11 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {KubeVirtPreAllocatedDataVolume} from '@shared/entity/cluster';
 import {KubeVirtNodeAffinityPreset, KubeVirtNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {
   KubeVirtAffinityPreset,
@@ -47,7 +50,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
+import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instancetype',
@@ -129,10 +132,13 @@ export class KubeVirtBasicNodeDataComponent
   nodeAffinityPresetValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
   nodeAffinityPresetValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
+  showCustomImages: boolean;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _matDialog: MatDialog
   ) {
@@ -140,6 +146,8 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   ngOnInit(): void {
+    this.showCustomImages = this._nodeDataService.isInWizardMode();
+
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control(''),
       [Controls.Preference]: this._builder.control(''),
@@ -191,6 +199,15 @@ export class KubeVirtBasicNodeDataComponent
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
+    this._clusterSpecService.datacenterChanges
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe({
+        next: datacenter => {
+          this.showCustomImages = this.showCustomImages && !!datacenter.spec.kubevirt.images?.enableCustomImages;
+        },
+      });
+
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -225,6 +242,10 @@ export class KubeVirtBasicNodeDataComponent
 
   get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
     return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
+  }
+
+  get customImages(): KubeVirtPreAllocatedDataVolume[] {
+    return this._clusterSpecService.cluster.spec.cloud.kubevirt?.preAllocatedDataVolumes || [];
   }
 
   getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
@@ -340,6 +361,12 @@ export class KubeVirtBasicNodeDataComponent
     this._matDialog.open(InstanceDetailsDialogComponent, {
       data: {instanceType: this.selectedInstanceType, preference: this.selectedPreference},
     });
+  }
+
+  onCustomImagesChange(customImages: KubeVirtPreAllocatedDataVolume[]) {
+    this._clusterSpecService.cluster.spec.cloud.kubevirt.preAllocatedDataVolumes = customImages.length
+      ? customImages
+      : null;
   }
 
   resetNodeAffinityPresetControl(): void {

@@ -1,5 +1,5 @@
 <!--
-Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,19 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <mat-card-header class="km-no-padding"
                  fxLayoutAlign=" center">
-  <mat-card-title>Custom Local Disks</mat-card-title>
+  <mat-card-title class="km-no-margin">Custom Images</mat-card-title>
+  <div fxFlex></div>
+  <button fxLayoutAlign="center center"
+          mat-flat-button
+          type="button"
+          color="quaternary"
+          (click)="addCustomImage()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add Custom Image</span>
+  </button>
+
 </mat-card-header>
 
-<table class="km-table"
+<table *ngIf="customImages?.length; else noCustomImages"
+       class="km-table"
        mat-table
        [dataSource]="dataSource">
 
   <ng-container [matColumnDef]="Column.Name">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell p-15">Name
+        class="km-header-cell p-20">Name
     </th>
     <td mat-cell
         *matCellDef="let element">
@@ -47,7 +59,7 @@ limitations under the License.
   <ng-container [matColumnDef]="Column.StorageClass">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell p-15">Storage Class
+        class="km-header-cell p-20">Storage Class
     </th>
     <td mat-cell
         *matCellDef="let element">
@@ -55,14 +67,36 @@ limitations under the License.
     </td>
   </ng-container>
 
-  <ng-container [matColumnDef]="Column.URL">
+  <ng-container [matColumnDef]="Column.OS">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell p-20">Operating System URL
+        class="km-header-cell p-5">OS
     </th>
     <td mat-cell
         *matCellDef="let element">
-      {{element.url}}
+      {{getOS(element)}}
+    </td>
+  </ng-container>
+
+  <ng-container [matColumnDef]="Column.Actions">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell p-5"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <div fxLayoutAlign="end"
+           class="km-table-actions">
+        <button mat-icon-button
+                matTooltip="Edit Custom Image"
+                (click)="editCustomImage(element)">
+          <i class="km-icon-mask km-icon-edit"></i>
+        </button>
+        <button mat-icon-button
+                matTooltip="Delete Custom Image"
+                (click)="deleteCustomImage(element)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
     </td>
   </ng-container>
 
@@ -73,3 +107,7 @@ limitations under the License.
       *matRowDef="let row; columns: displayedColumns"
       class="km-mat-row"></tr>
 </table>
+
+<ng-template #noCustomImages>
+  <p>No custom image added yet.</p>
+</ng-template>

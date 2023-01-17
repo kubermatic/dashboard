@@ -108,6 +108,11 @@ limitations under the License.
     </mat-form-field>
   </ng-template>
 
+  <km-kubevirt-custom-images *ngIf="showCustomImages"
+                             [customImages]="customImages"
+                             [storageClasses]="storageClasses"
+                             (customImagesChange)="onCustomImagesChange($event)"></km-kubevirt-custom-images>
+
   <mat-card-header class="km-no-padding">
     <mat-card-title>Primary Disk</mat-card-title>
   </mat-card-header>

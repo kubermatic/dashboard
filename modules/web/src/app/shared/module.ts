@@ -68,7 +68,9 @@ import {CustomCredentialsComponent} from '@shared/components/external-cluster-cr
 import {EKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/eks/component';
 import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
-import {KubeVirtPreAllocatedDataVolumesComponent} from '@shared/components/kubevirt-pre-allocated-data-volumes/component';
+import {KubeVirtCustomImagesSummaryComponent} from '@shared/components/kubevirt-custom-images-summary/component';
+import {KubeVirtCustomImagesComponent} from '@shared/components/kubevirt-custom-images/component';
+import {KubeVirtCustomImageDialogComponent} from '@shared/components/kubevirt-custom-images/custom-image-dialog/component';
 import {MachineFlavorFilterComponent} from '@shared/components/machine-flavor-filter/component';
 import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
@@ -253,7 +255,9 @@ const components = [
   AddApplicationDialogComponent,
   EditApplicationDialogComponent,
   ApplicationMethodIconComponent,
-  KubeVirtPreAllocatedDataVolumesComponent,
+  KubeVirtCustomImagesComponent,
+  KubeVirtCustomImageDialogComponent,
+  KubeVirtCustomImagesSummaryComponent,
   SelectComponent,
   TerminalComponent,
   TerminalToolBarComponent,

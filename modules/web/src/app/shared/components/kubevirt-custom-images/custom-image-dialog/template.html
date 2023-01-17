@@ -1,0 +1,118 @@
+<!--
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<km-dialog-title>
+  <div>{{isEditMode ? 'Update' : 'Add'}} Custom Image</div>
+</km-dialog-title>
+
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+
+    <mat-form-field [ngClass]="{'km-long-subscript': form.get(Controls.Name).hasError('pattern')}">
+      <mat-label>Name</mat-label>
+      <input matInput
+             [formControlName]="Controls.Name"
+             [name]="Controls.Name"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+        Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.
+      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('duplicate')">
+        A custom image with this name already exists.
+      </mat-error>
+    </mat-form-field>
+
+    <km-number-stepper [formControlName]="Controls.Size"
+                       mode="errors"
+                       label="Size (GB)"
+                       min="1"
+                       required>
+    </km-number-stepper>
+
+    <km-combobox fxFlex
+                 [options]="storageClasses"
+                 [formControlName]="Controls.StorageClass"
+                 [label]="storageClassLabel"
+                 [selected]="selectedStorageClass"
+                 inputLabel="Select storage class..."
+                 filterBy="name"
+                 required
+                 (changed)="onStorageClassChange($event)">
+      <div *option="let storageClass">{{storageClass.name}}</div>
+    </km-combobox>
+
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix">
+      <mat-label>Operating System</mat-label>
+      <mat-select class="km-select-ellipsis"
+                  [formControlName]="Controls.OS"
+                  disableOptionCentering>
+        <mat-option *ngFor="let os of supportedOS"
+                    [value]="os">{{os}}</mat-option>
+        <mat-select-trigger fxFlex
+                            fxLayout="row">
+          <div fxFlex
+               fxLayoutAlign="start">
+            {{form.get(Controls.OS).value}}
+          </div>
+
+          <div fxFlex
+               fxLayoutAlign="end"
+               class="km-select-trigger-button-wrapper">
+            <button matSuffix
+                    mat-icon-button
+                    aria-label="Clear"
+                    (click)="resetOS(); $event.stopPropagation()">
+              <i class="km-icon-mask km-icon-remove"></i>
+            </button>
+          </div>
+        </mat-select-trigger>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Operating System URL</mat-label>
+      <input matInput
+             [formControlName]="Controls.Url"
+             [name]="Controls.Url"
+             type="url"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.Url).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Url).hasError('pattern')">
+        Please enter a valid <strong>URL</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button
+          type="button"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          [disabled]="form.invalid"
+          (click)="onSaveChanges()">
+    <i class="km-icon-mask"
+       [ngClass]="isEditMode ? 'km-icon-save' : 'km-icon-add'"></i>
+    <span>{{isEditMode ? 'Save Changes' : 'Add Custom Image'}}</span>
+  </button>
+</mat-dialog-actions>

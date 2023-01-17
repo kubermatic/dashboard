@@ -214,6 +214,11 @@ export class KubeVirtPreAllocatedDataVolume {
   size: string;
   storageClass: string;
   url: string;
+  annotations: Record<KubeVirtPreAllocatedDataVolumeAnnotation | string, string>;
+}
+
+export enum KubeVirtPreAllocatedDataVolumeAnnotation {
+  OSType = 'kubevirt-images.k8c.io/os-type',
 }
 
 export class NutanixCloudSpec {

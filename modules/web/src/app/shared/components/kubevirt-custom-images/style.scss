@@ -1,4 +1,4 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.data-volume-container {
-  mat-divider {
-    margin: 20px 0;
-  }
+.mat-card-header {
+  margin-bottom: 10px;
+}
 
-  .data-volume-header {
-    margin-bottom: 10px;
-  }
+.mat-table {
+  background-color: unset;
 }
