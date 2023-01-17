@@ -81,6 +81,7 @@ func NewOpenIDClient(oidcConfig *authtypes.OIDCConfiguration, redirectURI string
 		verifier:       p.Verifier(&oidc.Config{ClientID: oidcConfig.ClientID}),
 		provider:       p,
 		httpClient:     client,
+		oidcConfig:     oidcConfig,
 	}, nil
 }
 
