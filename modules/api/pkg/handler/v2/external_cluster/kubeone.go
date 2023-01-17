@@ -21,9 +21,11 @@ import (
 	"encoding/json"
 	"fmt"
 
+	semverlib "github.com/Masterminds/semver/v3"
 	jsonpatch "github.com/evanphx/json-patch"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -356,4 +358,33 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	}
 
 	return nodeDeployments, nil
+}
+
+func ListMachineDeploymentUpgrades(ctx context.Context,
+	masterClient ctrlruntimeclient.Client,
+	mdName string,
+	cluster *kubermaticv1.ExternalCluster,
+	clusterProvider provider.ExternalClusterProvider) ([]*apiv1.MasterVersion, error) {
+	upgrades := make([]*apiv1.MasterVersion, 0)
+
+	currentClusterVer, err := semverlib.NewVersion(cluster.Spec.Version.Semver().String())
+	if err != nil {
+		return nil, err
+	}
+
+	md, err := getKubeOneMachineDeployment(ctx, masterClient, mdName, cluster, clusterProvider)
+	if err != nil {
+		return nil, err
+	}
+
+	currentMachineDeploymentVer, err := semverlib.NewVersion(md.Spec.Template.Spec.Versions.Kubelet)
+	if err != nil {
+		return nil, err
+	}
+
+	if currentClusterVer.GreaterThan(currentMachineDeploymentVer) {
+		upgrades = append(upgrades, &apiv1.MasterVersion{Version: currentClusterVer})
+	}
+
+	return upgrades, nil
 }
