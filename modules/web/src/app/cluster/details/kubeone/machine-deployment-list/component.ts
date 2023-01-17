@@ -33,6 +33,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {minor, major} from 'semver';
 
 enum Column {
   Status = 'status',
@@ -102,6 +103,14 @@ export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges,
 
   getOperatingSystem(md: ExternalMachineDeployment): string {
     return getOperatingSystem(md.spec.template);
+  }
+
+  showVersionWarning(md: ExternalMachineDeployment): boolean {
+    const version = md.spec.template.versions?.kubelet;
+    if (version) {
+      return major(this.cluster.spec.version) > major(version) || minor(this.cluster.spec.version) > minor(version);
+    }
+    return false;
   }
 
   goToDetails(md: ExternalMachineDeployment): void {
