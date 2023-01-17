@@ -363,7 +363,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
 		oidcIssuerVerifier,
 		options.oidcIssuerRedirectURI,
-		options.oidcSkipTLSVerify,
 		options.caBundle,
 	)
 

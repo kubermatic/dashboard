@@ -13,7 +13,6 @@ import (
 func OIDCIssuerVerifierProviderFactory(
 	defaultOIDCIssuerVerifier authtypes.OIDCIssuerVerifier,
 	oidcIssuerRedirectURI string,
-	oidcSkipTLSVerify bool,
 	caBundle *certificates.CABundle,
 ) provider.OIDCIssuerVerifierGetter {
 	return func(seed *kubermaticv1.Seed) (authtypes.OIDCIssuerVerifier, error) {
