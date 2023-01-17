@@ -13,7 +13,12 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {
+  KubeOneMachineDeploymentDialogComponent,
+  KubeOneMachineDeploymentDialogData,
+} from '@app/cluster/details/kubeone/machine-deployment-dialog/component';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
@@ -59,7 +64,8 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -129,8 +135,17 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
+  updateMachineDeployment(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectID: this.projectID,
+        clusterID: this.cluster.id,
+        machineDeployment: this.machineDeployment,
+        replicas: this.machineDeployment.spec?.replicas,
+        kubeletVersion: this.machineDeployment.spec?.template?.versions?.kubelet,
+      } as KubeOneMachineDeploymentDialogData,
+    };
+    this._matDialog.open(KubeOneMachineDeploymentDialogComponent, dialogConfig);
   }
 
   private _storeNodeMetrics(metrics: NodeMetrics[]): void {

@@ -21,6 +21,7 @@ import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/exter
 import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
 import {KubeOneEditClusterDialogComponent} from '@app/cluster/details/kubeone/edit-cluster-dialog/component';
 import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
+import {KubeOneMachineDeploymentDialogComponent} from '@app/cluster/details/kubeone/machine-deployment-dialog/component';
 import {KubeOneMachineDeploymentListComponent} from '@app/cluster/details/kubeone/machine-deployment-list/component';
 import {ClusterMetricsComponent} from '@app/cluster/details/shared/cluster-metrics/component';
 import {KubeOneClusterListComponent} from '@app/cluster/list/kubeone/component';
@@ -147,6 +148,7 @@ const components: any[] = [
   KubeOneMachineDeploymentListComponent,
   KubeOneMachineDeploymentDetailsComponent,
   KubeOneEditClusterDialogComponent,
+  KubeOneMachineDeploymentDialogComponent,
   ClusterMetricsComponent,
   AddServiceAccountDialogComponent,
   AddServiceAccountBindingDialogComponent,
