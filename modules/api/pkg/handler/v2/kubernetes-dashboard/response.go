@@ -17,8 +17,9 @@ limitations under the License.
 package kubernetesdashboard
 
 import (
-	"github.com/gorilla/securecookie"
 	"net/http"
+
+	"github.com/gorilla/securecookie"
 )
 
 type LoginResponse struct {
