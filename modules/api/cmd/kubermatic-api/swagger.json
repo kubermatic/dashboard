@@ -25160,6 +25160,41 @@
         }
       }
     },
+    "/api/v2/providers/kubevirt/dc/{dc}/images": {
+      "get": {
+        "description": "List KubeVirt images",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "operationId": "listKubevirtImages",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtImagesList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtImagesList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/providers/kubevirt/instancetypes": {
       "get": {
         "produces": [
@@ -31445,7 +31480,7 @@
           "x-go-name": "DNSPolicy"
         },
         "images": {
-          "$ref": "#/definitions/ImageSources"
+          "$ref": "#/definitions/KubeVirtImageSources"
         },
         "infraStorageClasses": {
           "description": "InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names\nthat will be used to initialise StorageClasses in the tenant cluster.\nIn the tenant cluster, the created StorageClass name will have as name:\nkubevirt-\u003cinfra-storageClass-name\u003e",
@@ -33981,24 +34016,6 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
-    "HTTPSource": {
-      "type": "object",
-      "title": "HTTPSource represents list of standard VM images with http-source.",
-      "properties": {
-        "imageCloning": {
-          "$ref": "#/definitions/ImageCloning"
-        },
-        "operatingSystems": {
-          "description": "OperatingSystems represents list of supported operating-systems with their URLs.",
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/OSVersions"
-          },
-          "x-go-name": "OperatingSystems"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-    },
     "HealthStatus": {
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34269,28 +34286,6 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
-    "ImageCloning": {
-      "type": "object",
-      "title": "ImageCloning represents options for kubevirt disk-image cloning.",
-      "properties": {
-        "dataVolumeSize": {
-          "description": "DataVolumeSize is the size of the DataVolume used for caching the image. Default value is 11Gi.",
-          "type": "string",
-          "x-go-name": "DataVolumeSize"
-        },
-        "enabled": {
-          "description": "Enabled allows you to enable/disable cloning of standard images. When this option is enabled,\ndownloading images from the http source destination will happen only once. Later,\nMachine Controller will clone the disks using DataVolumes with the cloning source.",
-          "type": "boolean",
-          "x-go-name": "Enabled"
-        },
-        "storageClass": {
-          "description": "StorageClass represents storage-class for DataVolumes of standard images.",
-          "type": "string",
-          "x-go-name": "StorageClass"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-    },
     "ImageList": {
       "type": "object",
       "title": "ImageList defines a map of operating system and the image to use.",
@@ -34299,18 +34294,11 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
-    "ImageSources": {
+    "ImageListWithVersions": {
       "type": "object",
-      "title": "ImageSources represents standard VM Image sources.",
-      "properties": {
-        "enableCustomImages": {
-          "description": "EnableCustomImages allows to enable/disable the usage of custom-disks (defaults to false).",
-          "type": "boolean",
-          "x-go-name": "EnableCustomImages"
-        },
-        "http": {
-          "$ref": "#/definitions/HTTPSource"
-        }
+      "title": "ImageListWithVersions defines a map of operating system with their versions to use.",
+      "additionalProperties": {
+        "$ref": "#/definitions/OSVersions"
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
@@ -34970,6 +34958,59 @@
         "username": {
           "type": "string",
           "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtHTTPSource": {
+      "type": "object",
+      "title": "KubeVirtHTTPSource represents list of images and their versions that can be downloaded over HTTP.",
+      "properties": {
+        "operatingSystems": {
+          "description": "OperatingSystems represents list of supported operating-systems with their URLs.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/OSVersions"
+          },
+          "x-go-name": "OperatingSystems"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubeVirtImageSourceType": {
+      "type": "string",
+      "title": "KubeVirtImageSourceType represents a KubeVirt image source type.",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtImageSources": {
+      "type": "object",
+      "title": "KubeVirtImageSources represents KubeVirt image sources.",
+      "properties": {
+        "http": {
+          "$ref": "#/definitions/KubeVirtHTTPSource"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubeVirtImages": {
+      "type": "object",
+      "title": "KubeVirtImages represents images with versions and their source.",
+      "properties": {
+        "operatingSystems": {
+          "$ref": "#/definitions/ImageListWithVersions"
+        },
+        "source": {
+          "$ref": "#/definitions/KubeVirtImageSourceType"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtImagesList": {
+      "type": "object",
+      "title": "KubeVirtImagesList represents list of available KubeVirt images with their categories.",
+      "properties": {
+        "standard": {
+          "$ref": "#/definitions/KubeVirtImages"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -36821,7 +36862,7 @@
     },
     "OSVersions": {
       "type": "object",
-      "title": "OSVersions defines a map of OS version and the URL to download the image.",
+      "title": "OSVersions defines a map of OS version and the source to download the image.",
       "additionalProperties": {
         "type": "string"
       },

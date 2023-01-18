@@ -448,3 +448,42 @@ func (l *preferenceListWrapper) toApi() (*apiv2.VirtualMachinePreferenceList, er
 	}
 	return res, nil
 }
+
+// KubeVirtImages returns supported KubeVirt images.
+func KubeVirtImages(ctx context.Context, datacenterName string, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.KubeVirtImagesList, error) {
+	res := &apiv2.KubeVirtImagesList{
+		Standard: apiv2.KubeVirtImages{
+			Source:           apiv2.KubeVirtImageHTTPSourceType,
+			OperatingSystems: kubermaticv1.ImageListWithVersions{},
+		},
+	}
+
+	for os := range kubermaticv1.SupportedKubeVirtOS {
+		res.Standard.OperatingSystems[os] = map[string]string{}
+	}
+
+	userInfo, err := userInfoGetter(ctx, "")
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	if datacenter.Spec.Kubevirt == nil {
+		return nil, fmt.Errorf("KubeVirt datacenter spec is empty")
+	}
+
+	httpSource := datacenter.Spec.Kubevirt.Images.HTTP
+	if httpSource != nil {
+		for os, versions := range httpSource.OperatingSystems {
+			for version, link := range versions {
+				res.Standard.OperatingSystems[os][version] = link
+			}
+		}
+	}
+
+	return res, nil
+}

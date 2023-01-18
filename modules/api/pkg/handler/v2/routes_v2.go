@@ -175,6 +175,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/providers/kubevirt/storageclasses").
 		Handler(r.listKubevirtStorageClasses())
 
+	mux.Methods(http.MethodGet).
+		Path("/providers/kubevirt/dc/{dc}/images").
+		Handler(r.listKubevirtImages())
+
 	// Defines a set of HTTP endpoints for cluster that belong to a project.
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/gke/clusters").
@@ -689,7 +693,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/eks/capacitytypes").
 		Handler(r.listProjectEKSCapacityTypes())
 
-		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
+	// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
 	// Kubevirt endpoints
 	mux.Methods(http.MethodGet).
@@ -801,7 +805,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
 		Handler(r.listProjectVMwareCloudDirectorTemplates())
 
-		// AWS endpoints
+	// AWS endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/aws/sizes").
 		Handler(r.listProjectAWSSizes())
@@ -5942,6 +5946,28 @@ func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/providers/kubevirt/dc/{dc}/images kubevirt listKubevirtImages
+//
+// List KubeVirt images
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtImagesList
+func (r Routing) listKubevirtImages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtImagesEndpoint(r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeKubeVirtListImageReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

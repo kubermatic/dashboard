@@ -38,7 +38,7 @@ type DatacenterSpecKubevirt struct {
 	DNSConfig *PodDNSConfig `json:"dnsConfig,omitempty"`
 
 	// images
-	Images *ImageSources `json:"images,omitempty"`
+	Images *KubeVirtImageSources `json:"images,omitempty"`
 }
 
 // Validate validates this datacenter spec kubevirt
