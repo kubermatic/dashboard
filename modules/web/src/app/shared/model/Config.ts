@@ -51,6 +51,7 @@ export interface Viewable {
 export class GroupConfig {
   projects?: Projects;
   members?: Members;
+  groups?: Groups;
   sshkeys?: SSHKeys;
   clusters?: Clusters;
   nodes?: Nodes;
@@ -75,6 +76,12 @@ export class Members implements Viewable {
   create?: boolean;
 }
 
+export class Groups implements Viewable {
+  view?: boolean;
+  edit?: boolean;
+  delete?: boolean;
+  create?: boolean;
+}
 export class SSHKeys implements Viewable {
   view?: boolean;
   edit?: boolean;
