@@ -24,7 +24,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"k8c.io/dashboard/v2/pkg/handler"
-	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -178,16 +177,6 @@ func NewTestRouting(
 	r.RegisterV1Websocket(v1Router)
 	rv2.RegisterV2(v2Router, true)
 	return mainRouter
-}
-
-// generateDefaultOicdCfg creates test configuration for OpenID clients.
-func generateDefaultOicdCfg() *authtypes.OIDCConfiguration {
-	return &authtypes.OIDCConfiguration{
-		URL:                  test.IssuerURL,
-		ClientID:             test.IssuerClientID,
-		ClientSecret:         test.IssuerClientSecret,
-		OfflineAccessAsScope: true,
-	}
 }
 
 func generateDefaultMetrics() common.ServerMetrics {

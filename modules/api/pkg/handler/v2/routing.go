@@ -56,7 +56,6 @@ type Routing struct {
 	projectProvider                                provider.ProjectProvider
 	privilegedProjectProvider                      provider.PrivilegedProjectProvider
 	featureGatesProvider                           provider.FeatureGatesProvider
-	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
 	tokenVerifiers                                 authtypes.TokenVerifier
 	tokenExtractors                                authtypes.TokenExtractor
 	clusterProviderGetter                          provider.ClusterProviderGetter

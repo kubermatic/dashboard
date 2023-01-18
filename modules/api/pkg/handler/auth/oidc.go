@@ -32,7 +32,6 @@ import (
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/provider/auth/types"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
@@ -158,16 +157,16 @@ func (o *OpenIDClient) AuthCodeURL(state string, offlineAsScope bool, overwriteR
 }
 
 // Exchange converts an authorization code into a token.
-func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (types.OIDCToken, error) {
+func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI string) (authtypes.OIDCToken, error) {
 	clientCtx := oidc.ClientContext(ctx, o.httpClient)
 	oauth2Config := o.oauth2Config(overwriteRedirectURI)
 
 	tokens, err := oauth2Config.Exchange(clientCtx, code)
 	if err != nil {
-		return types.OIDCToken{}, err
+		return authtypes.OIDCToken{}, err
 	}
 
-	oidcToken := types.OIDCToken{AccessToken: tokens.AccessToken, RefreshToken: tokens.RefreshToken, Expiry: tokens.Expiry}
+	oidcToken := authtypes.OIDCToken{AccessToken: tokens.AccessToken, RefreshToken: tokens.RefreshToken, Expiry: tokens.Expiry}
 	if rawIDToken, ok := tokens.Extra("id_token").(string); ok {
 		oidcToken.IDToken = rawIDToken
 	}
