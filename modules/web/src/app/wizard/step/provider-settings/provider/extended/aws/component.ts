@@ -110,7 +110,12 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(sg => (this._clusterSpecService.cluster.spec.cloud.aws.securityGroupID = sg));
+      .subscribe(sg => {
+        const awsCloudSpec = this._clusterSpecService.cluster.spec.cloud?.aws;
+        if (awsCloudSpec) {
+          awsCloudSpec.securityGroupID = sg;
+        }
+      });
   }
 
   ngOnDestroy(): void {
