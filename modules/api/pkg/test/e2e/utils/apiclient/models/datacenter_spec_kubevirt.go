@@ -28,6 +28,12 @@ type DatacenterSpecKubevirt struct {
 	// policy selected with DNSPolicy.
 	DNSPolicy string `json:"dnsPolicy,omitempty"`
 
+	// InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names
+	// that will be used to initialise StorageClasses in the tenant cluster.
+	// In the tenant cluster, the created StorageClass name will have as name:
+	// kubevirt-<infra-storageClass-name>
+	InfraStorageClasses []*KubeVirtInfraStorageClass `json:"infraStorageClasses"`
+
 	// dns config
 	DNSConfig *PodDNSConfig `json:"dnsConfig,omitempty"`
 
@@ -40,6 +46,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCustomNetworkPolicies(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateInfraStorageClasses(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -73,6 +83,32 @@ func (m *DatacenterSpecKubevirt) validateCustomNetworkPolicies(formats strfmt.Re
 					return ve.ValidateName("customNetworkPolicies" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("customNetworkPolicies" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) validateInfraStorageClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.InfraStorageClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.InfraStorageClasses); i++ {
+		if swag.IsZero(m.InfraStorageClasses[i]) { // not required
+			continue
+		}
+
+		if m.InfraStorageClasses[i] != nil {
+			if err := m.InfraStorageClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
@@ -129,6 +165,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateInfraStorageClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDNSConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -153,6 +193,26 @@ func (m *DatacenterSpecKubevirt) contextValidateCustomNetworkPolicies(ctx contex
 					return ve.ValidateName("customNetworkPolicies" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("customNetworkPolicies" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateInfraStorageClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.InfraStorageClasses); i++ {
+
+		if m.InfraStorageClasses[i] != nil {
+			if err := m.InfraStorageClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("infraStorageClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}

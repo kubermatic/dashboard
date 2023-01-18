@@ -31446,6 +31446,14 @@
         },
         "images": {
           "$ref": "#/definitions/ImageSources"
+        },
+        "infraStorageClasses": {
+          "description": "InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names\nthat will be used to initialise StorageClasses in the tenant cluster.\nIn the tenant cluster, the created StorageClass name will have as name:\nkubevirt-\u003cinfra-storageClass-name\u003e",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubeVirtInfraStorageClass"
+          },
+          "x-go-name": "InfraStorageClasses"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34966,6 +34974,21 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "KubeVirtInfraStorageClass": {
+      "type": "object",
+      "properties": {
+        "isDefautClass": {
+          "description": "Optional: IsDefaultClass. If true, the created StorageClass in the tenant cluster will be annotated with:\nstorageclass.kubernetes.io/is-default-class : true\nIf missing or false, annotation will be:\nstorageclass.kubernetes.io/is-default-class : false",
+          "type": "boolean",
+          "x-go-name": "IsDefaultClass"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "KubermaticVersions": {
       "type": "object",
       "title": "KubermaticVersions describes the versions of running Kubermatic components.",
@@ -35046,6 +35069,14 @@
             "$ref": "#/definitions/PreAllocatedDataVolume"
           },
           "x-go-name": "PreAllocatedDataVolumes"
+        },
+        "storageClasses": {
+          "description": "StorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks.\nIt contains also some flag specifying which one is the default one.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubeVirtInfraStorageClass"
+          },
+          "x-go-name": "StorageClasses"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"

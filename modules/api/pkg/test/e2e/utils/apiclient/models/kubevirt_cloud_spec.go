@@ -36,6 +36,11 @@ type KubevirtCloudSpec struct {
 	// Custom Images are a good example of this use case.
 	PreAllocatedDataVolumes []*PreAllocatedDataVolume `json:"preAllocatedDataVolumes"`
 
+	// StorageClasses is a list of storage classes from KubeVirt infra cluster that are used for
+	// initialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks.
+	// It contains also some flag specifying which one is the default one.
+	StorageClasses []*KubeVirtInfraStorageClass `json:"storageClasses"`
+
 	// credentials reference
 	CredentialsReference *GlobalSecretKeySelector `json:"credentialsReference,omitempty"`
 }
@@ -45,6 +50,10 @@ func (m *KubevirtCloudSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePreAllocatedDataVolumes(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateStorageClasses(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -84,6 +93,32 @@ func (m *KubevirtCloudSpec) validatePreAllocatedDataVolumes(formats strfmt.Regis
 	return nil
 }
 
+func (m *KubevirtCloudSpec) validateStorageClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.StorageClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.StorageClasses); i++ {
+		if swag.IsZero(m.StorageClasses[i]) { // not required
+			continue
+		}
+
+		if m.StorageClasses[i] != nil {
+			if err := m.StorageClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("storageClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("storageClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
 func (m *KubevirtCloudSpec) validateCredentialsReference(formats strfmt.Registry) error {
 	if swag.IsZero(m.CredentialsReference) { // not required
 		return nil
@@ -111,6 +146,10 @@ func (m *KubevirtCloudSpec) ContextValidate(ctx context.Context, formats strfmt.
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateStorageClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCredentialsReference(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -131,6 +170,26 @@ func (m *KubevirtCloudSpec) contextValidatePreAllocatedDataVolumes(ctx context.C
 					return ve.ValidateName("preAllocatedDataVolumes" + "." + strconv.Itoa(i))
 				} else if ce, ok := err.(*errors.CompositeError); ok {
 					return ce.ValidateName("preAllocatedDataVolumes" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *KubevirtCloudSpec) contextValidateStorageClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.StorageClasses); i++ {
+
+		if m.StorageClasses[i] != nil {
+			if err := m.StorageClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("storageClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("storageClasses" + "." + strconv.Itoa(i))
 				}
 				return err
 			}
