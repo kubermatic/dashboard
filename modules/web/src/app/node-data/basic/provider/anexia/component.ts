@@ -22,15 +22,17 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import _ from 'lodash';
+import {merge, Observable} from 'rxjs';
+import {distinctUntilChanged, map, skipWhile, filter, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '@core/services/node-data/service';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AnexiaNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {merge, Observable} from 'rxjs';
-import {filter, map, takeUntil} from 'rxjs/operators';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
 
 enum Controls {
   VlanID = 'vlanID',
@@ -78,7 +80,8 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -123,6 +126,46 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         takeUntil(this._unsubscribe)
       )
       .subscribe(t => (this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t));
+
+    const cpu$ = this.form
+      .get(Controls.Cpus)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const memory$ = this.form
+      .get(Controls.Memory)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const diskSize$ = this.form
+      .get(Controls.DiskSize)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const template$ = this.form
+      .get(Controls.TemplateID)
+      .valueChanges.pipe(skipWhile(value => !value?.[AutocompleteControls.Main]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[AutocompleteControls.Main] === curr?.[AutocompleteControls.Main]
+        )
+      );
+
+    const vlanID$ = this.form
+      .get(Controls.VlanID)
+      .valueChanges.pipe(skipWhile(value => !value?.[AutocompleteControls.Main]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[AutocompleteControls.Main] === curr?.[AutocompleteControls.Main]
+        )
+      );
+
+    merge(cpu$, memory$, diskSize$, template$, vlanID$)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations();
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -205,5 +248,18 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      anexiaNodeSpec: {
+        cpus: this.form.get(Controls.Cpus).value,
+        memory: this.form.get(Controls.Memory).value,
+        diskSize: this.form.get(Controls.DiskSize).value,
+        templateID: this.form.get(Controls.TemplateID).value?.[AutocompleteControls.Main],
+        vlanID: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
+      } as AnexiaNodeSpec,
+    };
   }
 }

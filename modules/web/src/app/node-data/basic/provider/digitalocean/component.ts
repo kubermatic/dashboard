@@ -16,9 +16,12 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDes
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '@shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ComboboxControls} from '@shared/components/combobox/component';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
   Size = 'size',
@@ -71,7 +74,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -82,6 +86,20 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     });
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+
+    const size$ = this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
+        )
+      );
+
+    size$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+      this._quotaCalculationService.refreshQuotaCalculations();
+    });
   }
 
   ngOnDestroy(): void {
@@ -132,5 +150,27 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
     this._cdr.detectChanges();
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    const slug = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
+    const optimizedSize = this._sizes.optimized.find(size => size.slug === slug);
+    const standardSize = this._sizes.standard.find(size => size.slug === slug);
+
+    const payload = {
+      replicas: this._nodeDataService.nodeData.count,
+      doSize: {} as Standard | Optimized,
+    };
+
+    if (optimizedSize) {
+      payload.doSize = {
+        ...optimizedSize,
+      };
+    } else if (standardSize) {
+      payload.doSize = {
+        ...standardSize,
+      };
+    }
+    return payload;
   }
 }

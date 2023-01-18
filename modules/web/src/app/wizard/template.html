@@ -107,7 +107,7 @@ limitations under the License.
                   mat-flat-button
                   type="button"
                   matStepperNext
-                  [disabled]="invalid"
+                  [disabled]="invalid || isQuotaExceeded"
                   *ngIf="!last">
             <i class="km-icon-mask km-icon-next"></i>
             <span>Next</span>

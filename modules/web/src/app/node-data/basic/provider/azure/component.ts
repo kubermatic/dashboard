@@ -22,6 +22,9 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import _ from 'lodash';
+import {merge, Observable} from 'rxjs';
+import {distinctUntilChanged, filter, skipWhile, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -31,9 +34,9 @@ import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {merge, Observable} from 'rxjs';
-import {distinctUntilChanged, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ComboboxControls} from '@shared/components/combobox/component';
 
 enum Controls {
   Size = 'size',
@@ -98,7 +101,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -139,6 +143,20 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    const size$ = this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
+        )
+      );
+
+    size$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+      this._quotaCalculationService.refreshQuotaCalculations();
+    });
   }
 
   ngOnDestroy(): void {
@@ -283,5 +301,17 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    const size = this._nodeDataService.nodeData.spec.cloud.azure.size;
+    const selectedSize = this.sizes.find(s => s.name === size);
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],
+      azureSize: {
+        ...selectedSize,
+      } as AzureSizes,
+    };
   }
 }

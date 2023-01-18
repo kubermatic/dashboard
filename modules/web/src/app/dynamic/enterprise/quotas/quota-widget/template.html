@@ -208,7 +208,8 @@ END OF TERMS AND CONDITIONS
       label: 'CPU',
       total: quotaDetails.quota.cpu,
       used: quotaDetails.status.globalUsage.cpu,
-      percentage: quotaPercentage.cpu
+      percentage: quotaPercentage.cpu,
+      buffer: estimatedQuota?.calculatedQuota?.cpu
       }"></ng-container>
 
       <ng-container *ngIf="quotaDetails.quota.memory"
@@ -218,7 +219,8 @@ END OF TERMS AND CONDITIONS
       unit: 'GB',
       total: quotaDetails.quota.memory,
       used: quotaDetails.status.globalUsage.memory,
-      percentage: quotaPercentage.memory
+      percentage: quotaPercentage.memory,
+      buffer: estimatedQuota?.calculatedQuota?.memory
       }"></ng-container>
 
       <ng-container *ngIf="quotaDetails.quota.storage"
@@ -228,27 +230,33 @@ END OF TERMS AND CONDITIONS
       unit: 'GB',
       total: quotaDetails.quota.storage,
       used: quotaDetails.status.globalUsage.storage,
-      percentage: quotaPercentage.storage
+      percentage: quotaPercentage.storage,
+      buffer: estimatedQuota?.calculatedQuota?.storage
       }"></ng-container>
     </div>
   </div>
 
+  <mat-hint *ngIf="estimatedQuota?.message"
+            class="quota-exceeded">{{estimatedQuota?.message}}</mat-hint>
+
   <ng-template #extendedProgress
                let-label="label"
                let-percentage="percentage"
+               let-buffer="buffer"
                let-total="total"
                let-used="used"
                let-unit="unit">
-    <km-property>
+    <km-property class="extended">
       <div key>
         <span fxFlex>{{label}}</span>
         <span>{{used ?? 0}}/{{total}} {{unit}}</span>
       </div>
       <div value>
         <mat-progress-bar class="property-usage-bar"
-                          mode="determinate"
-                          [color]="getProgressBarAccent(percentage)"
+                          mode="buffer"
+                          [color]="getProgressBarAccent(buffer)"
                           [value]="percentage ?? 1"
+                          [bufferValue]="buffer"
                           [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
       </div>
     </km-property>

@@ -22,6 +22,9 @@ import {
   OnInit,
 } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import _ from 'lodash';
+import {merge, Observable, of, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, map, skipWhile, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -32,9 +35,8 @@ import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/enti
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {merge, Observable, of, Subscription} from 'rxjs';
-import {distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
   ImageName = 'imageName',
@@ -106,7 +108,8 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -172,6 +175,38 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData.spec.cloud.nutanix.categories = this._getCategories();
+      });
+
+    const cpus$ = this.form
+      .get(Controls.CPUs)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const cpusCores$ = this.form
+      .get(Controls.CPUCores)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const cpuPassThrough$ = this.form
+      .get(Controls.CPUPassthrough)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const memory$ = this.form
+      .get(Controls.MemoryMB)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const diskSize$ = this.form
+      .get(Controls.DiskSize)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    merge(cpus$, cpusCores$, cpuPassThrough$, memory$, diskSize$)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations();
       });
   }
 
@@ -424,5 +459,21 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       }
     });
     return categories;
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      nutanixNodeSpec: {
+        [Controls.SubnetName]: this.form.get(Controls.SubnetName).value,
+        [Controls.ImageName]: this.form.get(Controls.ImageName).value,
+        [Controls.Categories]: this._getCategories(),
+        [Controls.CPUs]: this.form.get(Controls.CPUs).value,
+        [Controls.CPUCores]: this.form.get(Controls.CPUCores).value,
+        [Controls.CPUPassthrough]: this.form.get(Controls.CPUPassthrough).value,
+        [Controls.MemoryMB]: this.form.get(Controls.MemoryMB).value,
+        [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
+      } as NutanixNodeSpec,
+    };
   }
 }

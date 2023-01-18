@@ -23,7 +23,6 @@ import {
   TemplateRef,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
@@ -32,20 +31,23 @@ import {OperatingSystemManagerService} from '@core/services/operating-system-man
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, of} from 'rxjs';
-import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, finalize, skipWhile, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ParamsService, PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 import {DynamicModule} from '@dynamic/module-registry';
 import {AsyncValidators} from '@app/shared/validators/async.validators';
 import {ResourceType} from '@app/shared/entity/common';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ProjectResourceQuotaPayload, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
+import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -108,6 +110,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
+  private _quotaWidgetComponentRef: QuotaWidgetComponent;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -130,6 +133,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _settingsService: SettingsService,
     private readonly _osmService: OperatingSystemManagerService,
     private readonly _projectService: ProjectService,
+    private readonly _quotaCalculationService: QuotaCalculationService,
     private readonly _params: ParamsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
@@ -262,6 +266,39 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           : settings.defaultNodeCount;
       this.form.get(Controls.Count).setValue(replicas);
     });
+
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(c => !!this._clusterSpecService.provider && !!c?.spec?.cloud?.dc))
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap(_ => {
+          return this._quotaCalculationService.getQuotaCalculations(this.projectId, this.provider);
+        })
+      )
+      .subscribe((calculatedQuota: ResourceQuotaUpdateCalculation) => {
+        this._quotaWidgetComponentRef.estimatedQuota = calculatedQuota;
+      });
+
+    this._clusterSpecService.providerChanges
+      .pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const mapKey = `${this.projectId}-${this.provider}`;
+        this._quotaCalculationService.reset(mapKey);
+        this._quotaCalculationService.onQuotaExceeded(false)
+      });
+
+    merge(this.form.get(Controls.Count).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        // Don't calculate quota based on replicas count
+        if (Object.keys(payload).length > 1) {
+          this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+          this._quotaCalculationService.refreshQuotaCalculations();
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -342,6 +379,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     component.projectId = this.projectId;
     component.showQuotaWidgetDetails = true;
     component.showIcon = true;
+    this._quotaWidgetComponentRef = component;
   }
 
   private _init(): void {
@@ -508,5 +546,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
 
     this.form.get(Controls.OperatingSystemProfile).setValue({main: ospValue});
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    return {
+      ...this._quotaCalculationService.quotaPayload,
+      replicas: this._nodeDataService.nodeData.count,
+    };
   }
 }

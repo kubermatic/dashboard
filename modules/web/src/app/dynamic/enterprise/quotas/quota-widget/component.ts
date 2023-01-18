@@ -27,10 +27,11 @@ import {
   ChangeDetectorRef,
   OnChanges,
   SimpleChanges,
+  ViewEncapsulation,
 } from '@angular/core';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {QuotaDetails, QuotaVariables} from '@shared/entity/quota';
+import {QuotaDetails, QuotaVariables, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
 import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
@@ -42,6 +43,7 @@ import {getProgressBarAccent} from '../utils/common';
   selector: 'km-quota-widget',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
@@ -62,6 +64,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showBorderOutline = true;
   @Input() collapsible = false;
   @Input() projectViewType = '';
+  @Input() estimatedQuota: ResourceQuotaUpdateCalculation;
 
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
@@ -119,6 +122,10 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
     if (changes.isExternalCluster || changes.isImportedCluster) {
       this._setShowNotApplicableText();
+    }
+
+    if (changes.estimatedQuota) {
+      this.estimatedQuota = changes.estimatedQuota.currentValue;
     }
   }
 

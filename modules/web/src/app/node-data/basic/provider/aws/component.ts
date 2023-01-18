@@ -25,7 +25,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
-import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {Architecture, AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -33,7 +33,9 @@ import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, map, skipWhile, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
 
 enum Controls {
   Size = 'size',
@@ -88,16 +90,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes = this._diskTypes.map(type => ({name: type}));
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
-  @ViewChild('sizeCombobox')
-  private readonly _sizeCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetCombobox')
-  private readonly _subnetCombobox: FilteredComboboxComponent;
+  @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -140,6 +141,27 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     merge(this.form.get(Controls.AMI).valueChanges, this.form.get(Controls.DiskSize).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    const diskSize$ = this.form
+      .get(Controls.DiskSize)
+      .valueChanges.pipe(skipWhile(value => !value))
+      .pipe(distinctUntilChanged());
+
+    const size$ = this.form
+      .get(Controls.Size)
+      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
+        )
+      );
+
+    merge(diskSize$, size$)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations();
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -341,5 +363,17 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    const size = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
+    const awsSelectedSize = this._sizes.find(s => s.name === size);
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.DiskSize).value,
+      awsSize: {
+        ...awsSelectedSize,
+      } as AWSSize,
+    };
   }
 }

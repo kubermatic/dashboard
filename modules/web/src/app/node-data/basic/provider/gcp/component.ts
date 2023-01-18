@@ -27,13 +27,15 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@core/services/node-data/service';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {distinctUntilChanged, filter, map, skipWhile, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
 
 enum Controls {
   DiskSize = 'diskSize',
@@ -123,7 +125,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -157,6 +160,20 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Preemptible).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    const machineType$ = this.form
+      .get(Controls.MachineType)
+      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
+      .pipe(
+        distinctUntilChanged(
+          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
+        )
+      );
+
+    machineType$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
+      this._quotaCalculationService.refreshQuotaCalculations();
+    });
   }
 
   ngOnDestroy(): void {
@@ -296,5 +313,17 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+    const size = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
+    const selectedMachineType = this.machineTypes.find(s => s.name === size);
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.DiskSize).value,
+      gcpSize: {
+        ...selectedMachineType,
+      } as GCPMachineSize,
+    };
   }
 }
