@@ -191,10 +191,10 @@ END OF TERMS AND CONDITIONS
 <ng-template #quotaWidgetDetails>
   <div class="km-quota-widget km-extended-widget"
        fxLayout="row">
+
     <div *ngIf="showIcon"
          class="km-quota-heading"
-         fxLayout="row"
-         fxLayoutAlign="space-between center">
+         fxLayoutAlign=" center">
       <i class="km-icon-mask km-icon-quota"></i>
     </div>
 
@@ -236,8 +236,9 @@ END OF TERMS AND CONDITIONS
     </div>
   </div>
 
-  <mat-hint *ngIf="estimatedQuota?.message"
-            class="quota-exceeded">{{estimatedQuota?.message}}</mat-hint>
+  <div *ngIf="estimatedQuota?.message">
+    <mat-hint class="quota-exceeded">{{estimatedQuota?.message}}</mat-hint>
+  </div>
 
   <ng-template #extendedProgress
                let-label="label"
