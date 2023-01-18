@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, Subject} from 'rxjs';
-import {debounceTime, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, filter, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {ProjectResourceQuotaPayload, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
 
@@ -51,7 +51,8 @@ export class QuotaCalculationService {
     if (!this._resourceQuotaUpdateCalculationMap.has(mapKey)) {
       const request$ = merge(this._refreshQuotaCalculation$)
         .pipe(debounceTime(this._debounceTime))
-        .pipe(switchMap(_ => this.quotaCalculation(projectID, this._quotaPayload)))
+        .pipe(filter(() => this.quotaPayload !== null))
+        .pipe(switchMap(_ => this.quotaCalculation(projectID, this.quotaPayload)))
         .pipe(tap((quota: ResourceQuotaUpdateCalculation) => this.onQuotaExceeded(!!quota.message ?? false)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._resourceQuotaUpdateCalculationMap.set(mapKey, request$);

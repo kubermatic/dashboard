@@ -182,7 +182,6 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     const selectedType = types.find(s => s.name === type);
     return {
       replicas: this._nodeDataService.nodeData.count,
-      diskSizeGB: this.form.get(Controls.Type)?.[ComboboxControls.Select],
       hetznerSize: {
         ...selectedType,
       } as Type,
