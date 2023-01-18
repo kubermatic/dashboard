@@ -322,11 +322,11 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 	var msg string
 	if projectResourceQuota.Spec.Quota.CPU != nil && calculatedResources.CPU != nil &&
 		calculatedResources.CPU.Cmp(*projectResourceQuota.Spec.Quota.CPU) > 0 {
-		msg += fmt.Sprintf("Calculated cpu (%s) exceeds resource quota (%s)", calculatedResources.CPU, projectResourceQuota.Spec.Quota.CPU)
+		msg += fmt.Sprintf("Calculated cpu (%s) exceeds resource quota (%s)\n", calculatedResources.CPU, projectResourceQuota.Spec.Quota.CPU)
 	}
 	if projectResourceQuota.Spec.Quota.Memory != nil && calculatedResources.Memory != nil &&
 		calculatedResources.Memory.Cmp(*projectResourceQuota.Spec.Quota.Memory) > 0 {
-		msg += fmt.Sprintf("Calculated memory (%s) exceeds resource quota (%s)", calculatedResources.Memory, projectResourceQuota.Spec.Quota.Memory)
+		msg += fmt.Sprintf("Calculated memory (%s) exceeds resource quota (%s)\n", calculatedResources.Memory, projectResourceQuota.Spec.Quota.Memory)
 	}
 	if projectResourceQuota.Spec.Quota.Storage != nil && calculatedResources.Storage != nil &&
 		calculatedResources.Storage.Cmp(*projectResourceQuota.Spec.Quota.Storage) > 0 {
@@ -438,9 +438,14 @@ func getAnexiaResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kuber
 	}
 
 	var diskSize int64
-	for _, disk := range req.Body.AnexiaNodeSpec.Disks {
-		diskSize += disk.Size
+	if req.Body.AnexiaNodeSpec.DiskSize != nil {
+		diskSize = *req.Body.AnexiaNodeSpec.DiskSize
+	} else {
+		for _, disk := range req.Body.AnexiaNodeSpec.Disks {
+			diskSize += disk.Size
+		}
 	}
+
 	if err := nc.WithStorage(int(diskSize), "G"); err != nil {
 		return err
 	}
@@ -596,7 +601,7 @@ func getNutanixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kube
 func getOpenstackResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(req.Body.OpenstackSize.VCPUs)
 
-	if err := nc.WithMemory(req.Body.OpenstackSize.Memory, "G"); err != nil {
+	if err := nc.WithMemory(req.Body.OpenstackSize.Memory, "M"); err != nil {
 		return err
 	}
 	if err := nc.WithStorage(req.Body.OpenstackSize.Disk, "G"); err != nil {
