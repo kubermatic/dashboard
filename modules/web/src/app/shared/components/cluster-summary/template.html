@@ -1023,7 +1023,7 @@ limitations under the License.
                 </km-property-boolean>
                 <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
                                      label="Spot Instance Persistent Request"
-                                     [value]="machineDeployment.spec.template.cloud.aws.spotInstancePersistentRequest">
+                                     [value]="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest">
                 </km-property-boolean>
                 <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP !== undefined"
                                      label="Assign Public IP"
