@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {QuotaVariables} from '@shared/entity/quota';
 import _ from 'lodash';
 
 export interface UserSettings {
@@ -45,6 +46,7 @@ export interface AdminSettings {
   mlaGrafanaPrefix: string;
   notifications?: NotificationOptions;
   providerConfiguration?: ProviderConfiguration;
+  defaultQuota?: DefaultProjectQuota;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -83,6 +85,11 @@ export interface ProviderConfiguration {
 
 export interface OpenStack {
   enforceCustomDisk: boolean;
+}
+
+export interface DefaultProjectQuota {
+  description?: string;
+  quota: QuotaVariables;
 }
 
 export class CustomLink {
@@ -182,5 +189,8 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     openStack: {
       enforceCustomDisk: false,
     },
+  },
+  defaultQuota: {
+    quota: {},
   },
 };

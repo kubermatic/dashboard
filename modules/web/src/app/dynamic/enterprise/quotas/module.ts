@@ -19,6 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {NgModule} from '@angular/core';
+import {DefaultProjectQuotaComponent} from './default-project-quota/component';
 import {SharedModule} from '@shared/module';
 import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 import {QuotasRoutingModule} from './routing';
@@ -27,6 +28,6 @@ import {QuotaWidgetComponent} from './quota-widget/component';
 
 @NgModule({
   imports: [SharedModule, QuotasRoutingModule],
-  declarations: [QuotasComponent, ProjectQuotaDialogComponent, QuotaWidgetComponent],
+  declarations: [QuotasComponent, ProjectQuotaDialogComponent, QuotaWidgetComponent, DefaultProjectQuotaComponent],
 })
 export class QuotasModule {}
