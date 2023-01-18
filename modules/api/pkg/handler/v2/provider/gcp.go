@@ -285,9 +285,9 @@ func getSAFromPreset(ctx context.Context,
 	if err != nil {
 		return "", utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", presetName, userInfo.Email))
 	}
-	credentials := preset.Spec.GKE
+	credentials := preset.Spec.GCP
 	if credentials == nil {
-		return "", fmt.Errorf("gke credentials not present in the preset %s", presetName)
+		return "", fmt.Errorf("gcp credentials not present in the preset %s", presetName)
 	}
 	return credentials.ServiceAccount, nil
 }
