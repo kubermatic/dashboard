@@ -126,7 +126,6 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		privilegedServiceAccountTokenProvider:          routingParams.PrivilegedServiceAccountTokenProvider,
 		projectProvider:                                routingParams.ProjectProvider,
 		privilegedProjectProvider:                      routingParams.PrivilegedProjectProvider,
-		oidcIssuerVerifier:                             routingParams.OIDCIssuerVerifier,
 		tokenVerifiers:                                 routingParams.TokenVerifiers,
 		tokenExtractors:                                routingParams.TokenExtractors,
 		prometheusClient:                               routingParams.PrometheusClient,

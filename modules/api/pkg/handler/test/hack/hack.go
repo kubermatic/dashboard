@@ -117,7 +117,6 @@ func NewTestRouting(
 		PrivilegedServiceAccountTokenProvider:          privilegedServiceAccountTokenProvider,
 		ProjectProvider:                                projectProvider,
 		PrivilegedProjectProvider:                      privilegedProjectProvider,
-		OIDCIssuerVerifier:                             issuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          clusterProvidersGetter,

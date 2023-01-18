@@ -48,8 +48,11 @@ type OpenIDClient struct {
 
 // NewOpenIDClient returns an authentication middleware which authenticates against an openID server.
 // If rootCertificates is nil, the host's root CAs will be used.
-func NewOpenIDClient(oidcConfig *authtypes.OIDCConfiguration, redirectURI string,
-	extractor authtypes.TokenExtractor, rootCertificates *x509.CertPool,
+func NewOpenIDClient(
+	oidcConfig *authtypes.OIDCConfiguration,
+	redirectURI string,
+	extractor authtypes.TokenExtractor,
+	rootCertificates *x509.CertPool,
 ) (authtypes.OIDCIssuerVerifier, error) {
 	ctx := context.Background()
 	tr := &http.Transport{

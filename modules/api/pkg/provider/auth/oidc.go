@@ -26,25 +26,25 @@ func OIDCIssuerVerifierProviderFactory(
 		skipTLSVerify := defaultOIDCIssuerVerifier.OIDCConfig().SkipTLSVerify
 
 		// Overwriting default vaules from Seed configuration.
-		oidc := seed.Spec.OIDCProviderConfiguration
-		if oidc.CookieHashKey != nil {
-			secureCookie = securecookie.New([]byte(*oidc.CookieHashKey), nil)
+		seedOIDCProvConf := seed.Spec.OIDCProviderConfiguration
+		if seedOIDCProvConf.CookieHashKey != nil {
+			secureCookie = securecookie.New([]byte(*seedOIDCProvConf.CookieHashKey), nil)
 		}
-		if oidc.CookieSecureMode != nil {
-			cookieSecureMode = *oidc.CookieSecureMode
+		if seedOIDCProvConf.CookieSecureMode != nil {
+			cookieSecureMode = *seedOIDCProvConf.CookieSecureMode
 		}
-		if oidc.OfflineAccessAsScope != nil {
-			offlineAccessAsScope = *oidc.OfflineAccessAsScope
+		if seedOIDCProvConf.OfflineAccessAsScope != nil {
+			offlineAccessAsScope = *seedOIDCProvConf.OfflineAccessAsScope
 		}
-		if oidc.SkipTLSVerify != nil {
-			skipTLSVerify = *oidc.SkipTLSVerify
+		if seedOIDCProvConf.SkipTLSVerify != nil {
+			skipTLSVerify = *seedOIDCProvConf.SkipTLSVerify
 		}
 
 		return auth.NewOpenIDClient(
 			&authtypes.OIDCConfiguration{
-				URL:                  oidc.IssuerURL,
-				ClientID:             oidc.IssuerClientID,
-				ClientSecret:         oidc.IssuerClientSecret,
+				URL:                  seedOIDCProvConf.IssuerURL,
+				ClientID:             seedOIDCProvConf.IssuerClientID,
+				ClientSecret:         seedOIDCProvConf.IssuerClientSecret,
 				SecureCookie:         secureCookie,
 				CookieSecureMode:     cookieSecureMode,
 				OfflineAccessAsScope: offlineAccessAsScope,

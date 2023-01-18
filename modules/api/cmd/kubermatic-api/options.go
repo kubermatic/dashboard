@@ -212,7 +212,6 @@ type providers struct {
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
 	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
-	oidcIssuerVerifier                             authtypes.OIDCIssuerVerifier
 }
 
 func loadKubermaticConfiguration(filename string) (*kubermaticv1.KubermaticConfiguration, error) {

@@ -77,6 +77,7 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	metricspkg "k8c.io/kubermatic/v2/pkg/metrics"
 	"k8c.io/kubermatic/v2/pkg/pprof"
+	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/util/cli"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
@@ -355,7 +356,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
-	oidcIssuerVerifier, err := createOIDCClients(options)
+	oidcIssuerVerifier, err := createOIDCClients(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
 	if err != nil {
 		log.Fatalw("failed to create an openid authenticator - issuer: %q, oidcClientID: %q: %v", options.oidcURL, options.oidcAuthenticatorClientID, err)
 	}
@@ -449,19 +450,18 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		applicationDefinitionProvider:                  applicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
 		oidcIssuerVerifierProviderGetter:               oidcIssuerVerifierProviderGetter,
-		oidcIssuerVerifier:                             oidcIssuerVerifier,
 	}, nil
 }
 
-func createOIDCClients(options serverRunOptions) (authtypes.OIDCIssuerVerifier, error) {
+func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
-		options.oidcIssuerConfiguration,
-		options.oidcIssuerRedirectURI,
+		oidcIssuerConfiguration,
+		oidcIssuerRedirectURI,
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewQueryParamBearerTokenExtractor("token"),
 		),
-		options.caBundle.CertPool(),
+		caBundle.CertPool(),
 	)
 }
 
@@ -530,7 +530,6 @@ func createAPIHandler(
 		PrivilegedServiceAccountTokenProvider:          prov.privilegedServiceAccountTokenProvider,
 		ProjectProvider:                                prov.project,
 		PrivilegedProjectProvider:                      prov.privilegedProject,
-		OIDCIssuerVerifier:                             prov.oidcIssuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          prov.clusterProviderGetter,
