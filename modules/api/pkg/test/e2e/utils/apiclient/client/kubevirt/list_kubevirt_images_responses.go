@@ -52,7 +52,7 @@ ListKubevirtImagesOK describes a response with status code 200, with default hea
 KubeVirtImagesList
 */
 type ListKubevirtImagesOK struct {
-	Payload models.KubeVirtImageSource
+	Payload *models.KubeVirtImagesList
 }
 
 // IsSuccess returns true when this list kubevirt images o k response has a 2xx status code
@@ -88,14 +88,16 @@ func (o *ListKubevirtImagesOK) String() string {
 	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/dc/{dc}/images][%d] listKubevirtImagesOK  %+v", 200, o.Payload)
 }
 
-func (o *ListKubevirtImagesOK) GetPayload() models.KubeVirtImageSource {
+func (o *ListKubevirtImagesOK) GetPayload() *models.KubeVirtImagesList {
 	return o.Payload
 }
 
 func (o *ListKubevirtImagesOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.KubeVirtImagesList)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

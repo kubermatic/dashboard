@@ -449,16 +449,16 @@ func (l *preferenceListWrapper) toApi() (*apiv2.VirtualMachinePreferenceList, er
 	return res, nil
 }
 
-// KubeVirtImages returns supported KubeVirt images:
+// KubeVirtImages returns supported KubeVirt images.
 func KubeVirtImages(ctx context.Context, datacenterName string, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.KubeVirtImagesList, error) {
 	res := &apiv2.KubeVirtImagesList{
 		Standard: apiv2.KubeVirtImages{
-			Source:           apiv2.KubeVirtImageHTTPSource,
+			Source:           apiv2.KubeVirtImageHTTPSourceType,
 			OperatingSystems: kubermaticv1.ImageListWithVersions{},
 		},
 	}
 
-	for os, _ := range kubermaticv1.SupportedKubeVirtOS {
+	for os := range kubermaticv1.SupportedKubeVirtOS {
 		res.Standard.OperatingSystems[os] = map[string]string{}
 	}
 

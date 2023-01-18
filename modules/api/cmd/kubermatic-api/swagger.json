@@ -34977,6 +34977,11 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "KubeVirtImageSourceType": {
+      "type": "string",
+      "title": "KubeVirtImageSourceType represents a KubeVirt image source type.",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "KubeVirtImageSources": {
       "type": "object",
       "title": "KubeVirtImageSources represents KubeVirt image sources.",
@@ -34995,7 +35000,7 @@
           "$ref": "#/definitions/ImageListWithVersions"
         },
         "source": {
-          "$ref": "#/definitions/KubeVirtImagesList"
+          "$ref": "#/definitions/KubeVirtImageSourceType"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -35008,7 +35013,6 @@
           "$ref": "#/definitions/KubeVirtImages"
         }
       },
-      "x-go-name": "KubeVirtImageSource",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "KubeVirtInfraStorageClass": {

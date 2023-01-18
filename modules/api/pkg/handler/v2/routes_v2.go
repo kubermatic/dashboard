@@ -4635,30 +4635,6 @@ func (r Routing) listKubevirtStorageClassesNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/dc/{dc}/images kubevirt listKubevirtImages
-//
-// List KubeVirt images
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: KubeVirtImagesList
-func (r Routing) listKubevirtImages() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.KubeVirtImagesEndpoint(r.userInfoGetter, r.seedsGetter)),
-		provider.DecodeKubeVirtListImageReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/subnets nutanix listNutanixSubnetsNoCredentials
 //
 // Lists available Nutanix Subnets
@@ -5970,6 +5946,28 @@ func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/providers/kubevirt/dc/{dc}/images kubevirt listKubevirtImages
+//
+// List KubeVirt images
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtImagesList
+func (r Routing) listKubevirtImages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtImagesEndpoint(r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeKubeVirtListImageReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

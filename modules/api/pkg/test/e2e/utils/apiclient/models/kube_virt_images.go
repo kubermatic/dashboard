@@ -22,7 +22,7 @@ type KubeVirtImages struct {
 	OperatingSystems ImageListWithVersions `json:"operatingSystems,omitempty"`
 
 	// source
-	Source *KubeVirtImageSource `json:"source,omitempty"`
+	Source KubeVirtImageSourceType `json:"source,omitempty"`
 }
 
 // Validate validates this kube virt images
@@ -67,15 +67,13 @@ func (m *KubeVirtImages) validateSource(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if m.Source != nil {
-		if err := m.Source.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("source")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("source")
-			}
-			return err
+	if err := m.Source.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source")
 		}
+		return err
 	}
 
 	return nil
@@ -115,15 +113,13 @@ func (m *KubeVirtImages) contextValidateOperatingSystems(ctx context.Context, fo
 
 func (m *KubeVirtImages) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.Source != nil {
-		if err := m.Source.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("source")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("source")
-			}
-			return err
+	if err := m.Source.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("source")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("source")
 		}
+		return err
 	}
 
 	return nil

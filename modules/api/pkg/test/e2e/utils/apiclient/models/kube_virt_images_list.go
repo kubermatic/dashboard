@@ -13,13 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// KubeVirtImageSource KubeVirtImageSource represents a KubeVirt image source type.
+// KubeVirtImagesList KubeVirtImagesList represents list of available KubeVirt images with their categories.
 //
-// swagger:model KubeVirtImageSource
-type KubeVirtImageSource string
+// swagger:model KubeVirtImagesList
+type KubeVirtImagesList struct {
 
-// Validate validates this kube virt image source
-func (m KubeVirtImageSource) Validate(formats strfmt.Registry) error {
+	// standard
+	Standard *KubeVirtImages `json:"standard,omitempty"`
+}
+
+// Validate validates this kube virt images list
+func (m *KubeVirtImagesList) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateStandard(formats); err != nil {
@@ -32,7 +36,7 @@ func (m KubeVirtImageSource) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *KubeVirtImageSource) validateStandard(formats strfmt.Registry) error {
+func (m *KubeVirtImagesList) validateStandard(formats strfmt.Registry) error {
 	if swag.IsZero(m.Standard) { // not required
 		return nil
 	}
@@ -51,8 +55,8 @@ func (m *KubeVirtImageSource) validateStandard(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this kube virt image source based on the context it is used
-func (m KubeVirtImageSource) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this kube virt images list based on the context it is used
+func (m *KubeVirtImagesList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateStandard(ctx, formats); err != nil {
@@ -65,7 +69,7 @@ func (m KubeVirtImageSource) ContextValidate(ctx context.Context, formats strfmt
 	return nil
 }
 
-func (m *KubeVirtImageSource) contextValidateStandard(ctx context.Context, formats strfmt.Registry) error {
+func (m *KubeVirtImagesList) contextValidateStandard(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Standard != nil {
 		if err := m.Standard.ContextValidate(ctx, formats); err != nil {
@@ -78,5 +82,23 @@ func (m *KubeVirtImageSource) contextValidateStandard(ctx context.Context, forma
 		}
 	}
 
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *KubeVirtImagesList) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *KubeVirtImagesList) UnmarshalBinary(b []byte) error {
+	var res KubeVirtImagesList
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }
