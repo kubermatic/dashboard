@@ -13,7 +13,12 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {KubeVirtInstanceTypeList, KubeVirtPreferenceList, KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
+import {
+  KubeVirtInstanceTypeList,
+  KubeVirtOSImageList,
+  KubeVirtPreferenceList,
+  KubeVirtStorageClass,
+} from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
@@ -81,6 +86,18 @@ export class KubeVirt extends Provider {
 
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/storageclasses`;
     return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
+  }
+
+  osImages(dc: string, onLoadingCb: () => void = null): Observable<KubeVirtOSImageList> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+    const url = `${this._newRestRoot}/providers/${this._provider}/dc/${dc}/images`;
+    return this._http.get<KubeVirtOSImageList>(url, {headers: this._headers});
   }
 }
 

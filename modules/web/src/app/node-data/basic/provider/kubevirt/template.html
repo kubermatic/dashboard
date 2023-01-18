@@ -112,19 +112,19 @@ limitations under the License.
     <mat-card-title>Primary Disk</mat-card-title>
   </mat-card-header>
 
-  <mat-form-field fxFlex>
-    <mat-label>Operating System Image</mat-label>
-    <input matInput
-           required
-           [id]="Controls.PrimaryDiskOSImage"
-           [formControlName]="Controls.PrimaryDiskOSImage"
-           type="text"
-           autocomplete="off">
-    <mat-hint>Use URL or Custom Local Disk name.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.PrimaryDiskOSImage).hasError('required')">
-      <strong>Required</strong>
-    </mat-error>
-  </mat-form-field>
+  <km-combobox #osImageCombobox
+               [required]="true"
+               [grouped]="false"
+               [options]="osImageDropdownOptions"
+               [valueFormatter]="osImageDisplayName.bind(this)"
+               [formControlName]="Controls.PrimaryDiskOSImage"
+               (changed)="onOSImageChange($event)"
+               [label]="osImageLabel"
+               [inputLabel]="'Select ' + (selectedOS || 'operating') +' system image...'"
+               filterBy="link"
+               fxFlex>
+    <div *option="let option">{{option.version}} - {{option.link}}</div>
+  </km-combobox>
 
   <km-combobox #storageClassCombobox
                [selected]="selectedStorageClass"

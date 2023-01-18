@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+
 export class KubeVirtInstanceTypeList {
   instancetypes: Record<KubeVirtInstanceTypeCategory, KubeVirtInstanceType[]>;
 }
@@ -30,6 +32,15 @@ export class KubeVirtPreference {
   _id?: string; // unique identifier for dropdown options
   name: string;
   spec: string;
+}
+
+export class KubeVirtOSImageList {
+  standard?: KubeVirtOSImage;
+}
+
+export class KubeVirtOSImage {
+  source: string;
+  operatingSystems: Record<OperatingSystem, Record<string, string>>;
 }
 
 export class KubeVirtNodeInstanceType {

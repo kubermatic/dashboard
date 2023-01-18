@@ -17,7 +17,12 @@ import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {PresetsService} from '@core/services/wizard/presets';
-import {KubeVirtInstanceTypeList, KubeVirtPreferenceList, KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
+import {
+  KubeVirtInstanceTypeList,
+  KubeVirtOSImageList,
+  KubeVirtPreferenceList,
+  KubeVirtStorageClass,
+} from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
@@ -171,6 +176,49 @@ export class NodeDataKubeVirtProvider {
               }
 
               return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  osImages(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<KubeVirtOSImageList> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.KUBEVIRT))
+          .pipe(debounceTime(this._debounce))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.KUBEVIRT)
+                .kubeconfig(cluster.spec.cloud.kubevirt.kubeconfig)
+                .credential(this._presetService.preset)
+                .osImages(this._clusterSpecService.datacenter, onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of({} as KubeVirtOSImageList));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(switchMap(_ => this._kubeVirtService.getOSImages(this._clusterSpecService.datacenter)))
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of({} as KubeVirtOSImageList));
             })
           )
           .pipe(take(1));

@@ -79,6 +79,25 @@ export namespace NodeProviderConstants {
     return result ? result : NodeProvider.NONE;
   }
 
+  export function getOperatingSystemDisplayName(os: OperatingSystem) {
+    switch (os) {
+      case OperatingSystem.AmazonLinux2:
+        return 'Amazon Linux 2';
+      case OperatingSystem.CentOS:
+        return 'CentOS';
+      case OperatingSystem.Flatcar:
+        return 'Flatcar';
+      case OperatingSystem.RHEL:
+        return 'RHEL';
+      case OperatingSystem.RockyLinux:
+        return 'Rocky Linux';
+      case OperatingSystem.Ubuntu:
+        return 'Ubuntu';
+      default:
+        return os;
+    }
+  }
+
   export function getOperatingSystemSpecName(spec: NodeSpec) {
     if (spec.operatingSystem.ubuntu) {
       return OperatingSystem.Ubuntu;

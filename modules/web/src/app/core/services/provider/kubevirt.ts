@@ -15,7 +15,12 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {KubeVirtInstanceTypeList, KubeVirtPreferenceList, KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
+import {
+  KubeVirtInstanceTypeList,
+  KubeVirtOSImageList,
+  KubeVirtPreferenceList,
+  KubeVirtStorageClass,
+} from '@shared/entity/provider/kubevirt';
 import {Observable} from 'rxjs';
 
 @Injectable()
@@ -37,5 +42,10 @@ export class KubeVirtService {
   getStorageClasses(projectID: string, clusterID: string): Observable<KubeVirtStorageClass[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/storageclasses`;
     return this._httpClient.get<KubeVirtStorageClass[]>(url);
+  }
+
+  getOSImages(dc: string): Observable<KubeVirtOSImageList> {
+    const url = `${this._newRestRoot}/providers/kubevirt/dc/${dc}/images`;
+    return this._httpClient.get<KubeVirtOSImageList>(url);
   }
 }
