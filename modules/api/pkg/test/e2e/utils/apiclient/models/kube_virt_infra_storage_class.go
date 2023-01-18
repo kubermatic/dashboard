@@ -21,7 +21,7 @@ type KubeVirtInfraStorageClass struct {
 	// storageclass.kubernetes.io/is-default-class : true
 	// If missing or false, annotation will be:
 	// storageclass.kubernetes.io/is-default-class : false
-	IsDefaultClass bool `json:"isDefautClass,omitempty"`
+	IsDefaultClass bool `json:"isDefaultClass,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`

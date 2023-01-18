@@ -35,12 +35,17 @@ const (
 
 type kubevirt struct {
 	secretKeySelector provider.SecretKeySelectorValueFunc
+	dc                *kubermaticv1.DatacenterSpecKubevirt
 }
 
-func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provider.CloudProvider {
+func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.SecretKeySelectorValueFunc) (provider.CloudProvider, error) {
+	if dc.Spec.Kubevirt == nil {
+		return nil, errors.New("datacenter is not an KubeVirt datacenter")
+	}
 	return &kubevirt{
 		secretKeySelector: secretKeyGetter,
-	}
+		dc:                dc.Spec.Kubevirt,
+	}, nil
 }
 
 var _ provider.CloudProvider = &kubevirt{}
@@ -55,7 +60,7 @@ func (k *kubevirt) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.Clou
 		return err
 	}
 
-	return updateInfraStorageClassesInfo(ctx, client, spec)
+	return updateInfraStorageClassesInfo(ctx, client, spec.Kubevirt, k.dc)
 }
 
 func (k *kubevirt) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {

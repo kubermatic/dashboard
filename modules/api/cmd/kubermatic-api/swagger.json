@@ -35018,7 +35018,7 @@
     "KubeVirtInfraStorageClass": {
       "type": "object",
       "properties": {
-        "isDefautClass": {
+        "isDefaultClass": {
           "description": "Optional: IsDefaultClass. If true, the created StorageClass in the tenant cluster will be annotated with:\nstorageclass.kubernetes.io/is-default-class : true\nIf missing or false, annotation will be:\nstorageclass.kubernetes.io/is-default-class : false",
           "type": "boolean",
           "x-go-name": "IsDefaultClass"
@@ -35091,7 +35091,7 @@
           "x-go-name": "ImageCloningEnabled"
         },
         "infraStorageClasses": {
-          "description": "InfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
+          "description": "Deprecated: in favor of InfraStorageClasses.\nInfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
           "type": "array",
           "items": {
             "type": "string"
