@@ -99,6 +99,8 @@ export class ExternalCluster {
         return StatusIcon.Running;
       case ExternalClusterState.Provisioning:
       case ExternalClusterState.Reconciling:
+      case ExternalClusterState.ReconcilingUpgrade:
+      case ExternalClusterState.ReconcilingMigrate:
       case ExternalClusterState.Starting:
       case ExternalClusterState.Stopping:
         return StatusIcon.Pending;
@@ -136,6 +138,8 @@ export enum ExternalClusterState {
   Provisioning = 'Provisioning',
   Running = 'Running',
   Reconciling = 'Reconciling',
+  ReconcilingUpgrade = 'ReconcilingUpgrade',
+  ReconcilingMigrate = 'ReconcilingMigrate',
   Stopping = 'Stopping',
   Stopped = 'Stopped',
   Starting = 'Starting',
