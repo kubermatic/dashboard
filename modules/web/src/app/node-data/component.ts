@@ -48,6 +48,7 @@ import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota
 import {ProjectResourceQuotaPayload, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
 import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {AdminSettings} from '@shared/entity/settings';
 
 enum Controls {
   Name = 'name',
@@ -108,6 +109,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
+  private _settings: AdminSettings;
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
   private _quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -186,9 +188,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterSpecService.providerChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.form.get(Controls.Count).setValue(this._settings.defaultNodeCount);
+      this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
+    });
 
     this._clusterSpecService.providerChanges
       .pipe(filter(_ => !this.isCusterTemplateEditMode))
@@ -264,6 +267,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this.dialogEditMode || this.isCusterTemplateEditMode
           ? this._nodeDataService.nodeData.count
           : settings.defaultNodeCount;
+      this._settings = settings;
       this.form.get(Controls.Count).setValue(replicas);
     });
 
@@ -286,7 +290,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .subscribe(_ => {
         const mapKey = `${this.projectId}-${this.provider}`;
         this._quotaCalculationService.reset(mapKey);
-        this._quotaCalculationService.onQuotaExceeded(false)
       });
 
     merge(this.form.get(Controls.Count).valueChanges)
