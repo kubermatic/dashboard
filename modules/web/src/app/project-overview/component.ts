@@ -331,6 +331,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   private _loadServiceAccounts(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(filter(() => this.project && this.hasPermission(View.Members)))
       .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
