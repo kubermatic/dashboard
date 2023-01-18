@@ -103,7 +103,17 @@ limitations under the License.
         </km-property>
         <km-property *ngIf="cluster.spec.containerRuntime">
           <div key>Container Runtime</div>
-          <div value>{{cluster.spec.containerRuntime}}</div>
+          <div value>
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="10px">
+              <span>{{cluster.spec.containerRuntime}}</span>
+              <ng-container *ngIf="cluster.spec.containerRuntime === ContainerRuntime.Docker">
+                <i [matTooltip]="'Support for docker will be removed with Kubernetes 1.24 release. It is recommended to switch to containerd as container runtime.'"
+                   class="km-icon-warning"></i>
+              </ng-container>
+            </div>
+          </div>
         </km-property>
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
