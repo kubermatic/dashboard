@@ -38,9 +38,6 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {ApplicationService} from '@core/services/application';
 import {Application} from '@shared/entity/application';
 import {WizardMode} from './types/wizard-mode';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {GlobalModule} from '@core/services/global/module';
-import {DynamicModule} from '@dynamic/module-registry';
 
 @Component({
   selector: 'km-wizard',
@@ -56,9 +53,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   clusterTemplateID: string;
   wizardMode: WizardMode;
   loadingClusterTemplate = true;
-  isQuotaExceeded: boolean;
-  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
-  private _quotaCalculationService: QuotaCalculationService;
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
   readonly clusterTemplateType = WizardMode;
@@ -81,11 +75,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterTemplateService: ClusterTemplateService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly applicationService: ApplicationService
-  ) {
-    if (this.isEnterpriseEdition) {
-      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
-    }
-  }
+  ) {}
 
   @ViewChild('stepper')
   set matStepper(stepper: MatStepper) {
@@ -138,16 +128,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.loadClusterTemplate();
     } else {
       this.loadingClusterTemplate = false;
-    }
-
-    if (this.isEnterpriseEdition) {
-      this._quotaCalculationService
-        .getQuotaExceededObservable$()
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe(quotaExceeded => {
-          this.isQuotaExceeded = quotaExceeded;
-          this._cdr.detectChanges();
-        });
     }
   }
 

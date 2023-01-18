@@ -280,7 +280,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         })
       )
       .subscribe((calculatedQuota: ResourceQuotaUpdateCalculation) => {
-        this._quotaWidgetComponentRef.estimatedQuota = calculatedQuota;
+        this._quotaWidgetComponentRef.updateEstimatedQuota(calculatedQuota);
       });
 
     this._clusterSpecService.providerChanges
@@ -383,6 +383,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     component.showQuotaWidgetDetails = true;
     component.showIcon = true;
     this._quotaWidgetComponentRef = component;
+
+    this._quotaWidgetComponentRef.estimatedQuotaExceeded
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((quotaExceeded: boolean) => {
+        if (quotaExceeded) {
+          this.form.get(Controls.Count).setErrors({quotaExceeded: true});
+        } else {
+          this.form.get(Controls.Count).setErrors(null);
+        }
+      });
   }
 
   private _init(): void {

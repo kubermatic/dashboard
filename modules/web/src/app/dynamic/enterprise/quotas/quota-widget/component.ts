@@ -28,6 +28,8 @@ import {
   OnChanges,
   SimpleChanges,
   ViewEncapsulation,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
@@ -52,6 +54,8 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _getPercentage = getPercentage;
   private _user: Member;
 
+  estimatedQuota: ResourceQuotaUpdateCalculation;
+
   @Input() projectId = '';
   @Input() showQuotaWidgetDetails = false;
   @Input() showAsCard = true;
@@ -64,7 +68,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showBorderOutline = true;
   @Input() collapsible = false;
   @Input() projectViewType = '';
-  @Input() estimatedQuota: ResourceQuotaUpdateCalculation;
+  @Output() estimatedQuotaExceeded = new EventEmitter<boolean>();
 
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
@@ -89,8 +93,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     this._showDetails$.next(false);
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event): void {
+  @HostListener('window:resize', ['$event']) onResize(event): void {
     this.isCollapsed = event.target.innerWidth < maxScreenWidth && this.collapsible;
   }
 
@@ -123,10 +126,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.isExternalCluster || changes.isImportedCluster) {
       this._setShowNotApplicableText();
     }
-
-    if (changes.estimatedQuota) {
-      this.estimatedQuota = changes.estimatedQuota.currentValue;
-    }
   }
 
   ngOnDestroy(): void {
@@ -137,6 +136,27 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   hasQuota(): boolean {
     const quota = this.quotaDetails?.quota;
     return quota && !!(quota.cpu || quota.memory || quota.storage);
+  }
+
+  updateEstimatedQuota(quota: ResourceQuotaUpdateCalculation): void {
+    this.estimatedQuota = quota;
+    const calculatedQuota = this.estimatedQuota?.calculatedQuota;
+
+    if (calculatedQuota) {
+      const {cpu, memory, storage} = calculatedQuota;
+      let isExceeded = false;
+
+      if (cpu > this.quotaDetails.quota?.cpu) {
+        isExceeded = true;
+      }
+      if (memory > this.quotaDetails.quota?.memory) {
+        isExceeded = true;
+      }
+      if (storage > this.quotaDetails.quota?.storage) {
+        isExceeded = true;
+      }
+      this.estimatedQuotaExceeded.emit(isExceeded);
+    }
   }
 
   private _initSubscriptions(): void {
