@@ -38,6 +38,8 @@ type ClientService interface {
 
 	ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtStorageClassesOK, error)
 
+	ListKubevirtImages(params *ListKubevirtImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtImagesOK, error)
+
 	ListKubevirtStorageClassesNoCredentials(params *ListKubevirtStorageClassesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesNoCredentialsOK, error)
 
 	ListProjectKubeVirtInstancetypes(params *ListProjectKubeVirtInstancetypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtInstancetypesOK, error)
@@ -236,6 +238,44 @@ func (a *Client) ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListKubeVirtStorageClassesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListKubevirtImages List KubeVirt images
+*/
+func (a *Client) ListKubevirtImages(params *ListKubevirtImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtImagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListKubevirtImagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listKubevirtImages",
+		Method:             "GET",
+		PathPattern:        "/api/v2/providers/kubevirt/dc/{dc}/images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListKubevirtImagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListKubevirtImagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListKubevirtImagesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

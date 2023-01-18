@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// OSVersions OSVersions defines a map of OS version and the URL to download the image.
+// OSVersions OSVersions defines a map of OS version and the source to download the image.
 //
 // swagger:model OSVersions
 type OSVersions map[string]string

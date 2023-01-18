@@ -1642,6 +1642,31 @@ type VirtualMachinePreferenceList struct {
 	Preferences map[VirtualMachineInstancetypeCategory][]VirtualMachinePreference `json:"preferences,omitempty"`
 }
 
+// KubeVirtImageSource represents a KubeVirt image source type.
+// swagger:model KubeVirtImagesList
+type KubeVirtImageSource string
+
+const (
+	// KubeVirtImageHTTPSource represents http image source.
+	KubeVirtImageHTTPSource KubeVirtImageSource = "http"
+)
+
+// KubeVirtImagesList represents list of available KubeVirt images with their categories.
+// swagger:model KubeVirtImagesList
+type KubeVirtImagesList struct {
+	// Standard represents standard images for KubeVirt cloud provider.
+	Standard KubeVirtImages `json:"standard"`
+}
+
+// KubeVirtImages represents images with versions and their source.
+// swagger:model KubeVirtImages
+type KubeVirtImages struct {
+	// Source represents an image source.
+	Source KubeVirtImageSource `json:"source"`
+	// OperatingSystems represents list of operating systems with their versions.
+	OperatingSystems kubermaticv1.ImageListWithVersions `json:"operatingSystems"`
+}
+
 // StorageClassList represents a list of Kubernetes StorageClass.
 // swagger:model StorageClassList
 type StorageClassList []StorageClass

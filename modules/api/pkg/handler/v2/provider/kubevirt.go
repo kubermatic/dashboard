@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
 
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -63,6 +64,14 @@ type KubeVirtListInstanceReq struct {
 type KubeVirtProjectListInstanceReq struct {
 	common.ProjectReq
 	KubeVirtListInstanceReq
+}
+
+// KubeVirtListImagesReq represents a request to list KubeVirt images
+// swagger:parameters listKubevirtImages
+type KubeVirtListImagesReq struct {
+	// in: path
+	// required: true
+	DC string `json:"dc"`
 }
 
 // KubeVirtGenericNoCredentialReq represent a generic KubeVirt request with cluster credentials.
@@ -233,6 +242,16 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(projectProvider provid
 	}
 }
 
+func KubeVirtImagesEndpoint(userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(KubeVirtListImagesReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+		return providercommon.KubeVirtImages(ctx, req.DC, userInfoGetter, seedsGetter)
+	}
+}
+
 // Decoders
 
 func DecodeKubeVirtGenericReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -320,6 +339,18 @@ func DecodeKubeVirtListInstancesNoCredentialReq(c context.Context, r *http.Reque
 
 	req.ProjectReq = pr.(common.ProjectReq)
 	req.DatacenterName = r.Header.Get("DatacenterName")
+
+	return req, nil
+}
+
+func DecodeKubeVirtListImageReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req KubeVirtListImagesReq
+
+	dc, ok := mux.Vars(r)["dc"]
+	if !ok {
+		return req, fmt.Errorf("'dc' parameter is required")
+	}
+	req.DC = dc
 
 	return req, nil
 }
