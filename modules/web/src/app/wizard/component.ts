@@ -286,6 +286,9 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   private initializeWizard(): void {
     // Init steps for wizard
+    if (this.clusterTemplateID) {
+      this._wizard.forceHandleProviderChange(this._clusterSpecService.provider);
+    }
     this._wizard.steps = this.steps;
     this._wizard.stepper = this._stepper;
 

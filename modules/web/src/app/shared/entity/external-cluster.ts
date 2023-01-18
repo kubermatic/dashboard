@@ -15,7 +15,7 @@
 import {KubeOneClusterSpec} from '@shared/entity/kubeone-cluster';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
-import {BringYourOwnCloudSpec} from './cluster';
+import {BringYourOwnCloudSpec, ContainerRuntime} from './cluster';
 import {AKSCloudSpec, AKSClusterSpec} from './provider/aks';
 import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
 import {GKECloudSpec, GKEClusterSpec} from './provider/gke';
@@ -121,6 +121,7 @@ export class ExternalClusterSpec {
   eksclusterSpec?: EKSClusterSpec;
   gkeclusterSpec?: GKEClusterSpec;
   version?: string;
+  containerRuntime?: ContainerRuntime;
 }
 
 export class ExternalCloudSpec {
@@ -162,6 +163,7 @@ export class ExternalClusterPatch {
 
 export class ExternalClusterSpecPatch {
   version?: string;
+  containerRuntime?: ContainerRuntime;
 }
 
 export class ExternalClusterModel {

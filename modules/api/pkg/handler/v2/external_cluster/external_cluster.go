@@ -32,7 +32,6 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/eks"
@@ -129,7 +128,7 @@ func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeO
 	return kubeOneCluster, nil
 }
 
-func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec) error {
+func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec, presetName string) error {
 	// validate manifest
 	if len(kubeOne.Manifest) == 0 {
 		return fmt.Errorf("the KubeOne Cluster manifest cannot be empty")
@@ -147,7 +146,9 @@ func validatKubeOneReq(kubeOne *apiv2.KubeOneSpec) error {
 	if len(kubeOne.SSHKey.PrivateKey) == 0 {
 		return fmt.Errorf("the KubeOne SSH Key cannot be empty")
 	}
-	if kubeOne.CloudSpec == nil {
+
+	kubeOneCloudSpec := kubeOne.CloudSpec
+	if kubeOneCloudSpec == nil && presetName == "" {
 		return fmt.Errorf("the KubeOne Cluster Provider Credentials cannot be empty")
 	}
 
@@ -275,10 +276,11 @@ func CreateEndpoint(
 		}
 		// import KubeOne cluster
 		if cloud.KubeOne != nil {
-			if err := validatKubeOneReq(cloud.KubeOne); err != nil {
+			if err := validatKubeOneReq(cloud.KubeOne, req.Credential); err != nil {
 				return nil, utilerrors.NewBadRequest(err.Error())
 			}
-			createdCluster, err := importKubeOneCluster(ctx, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
+
+			createdCluster, err := importKubeOneCluster(ctx, preset, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -656,40 +658,32 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 		patchedCluster := &apiv2.ExternalCluster{}
 
 		if cloud.GKE != nil {
-			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
+			if err := patchAPICluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}
 			return patchGKECluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.GKE.CredentialsReference)
 		}
 		if cloud.EKS != nil {
-			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
+			if err := patchAPICluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}
 			return patchEKSCluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.EKS)
 		}
 		if cloud.AKS != nil {
-			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
+			if err := patchAPICluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}
 			return patchAKSCluster(ctx, clusterToPatch, patchedCluster, secretKeySelector, cloud.AKS)
 		}
 		if cloud.KubeOne != nil {
-			containerRuntime, err := kuberneteshelper.GetContainerRuntime(ctx, masterClient, cluster, clusterProvider)
-			if err != nil {
-				return "", err
-			}
-			clusterToPatch.Spec.ContainerRuntime = containerRuntime
-			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
-				return nil, err
-			}
-			return patchKubeOneCluster(ctx, cluster, clusterToPatch, patchedCluster, secretKeySelector, clusterProvider, masterClient)
+			return patchKubeOneCluster(ctx, cluster, req.Patch, secretKeySelector, clusterProvider, masterClient)
 		}
 
 		return convertClusterToAPI(cluster), nil
 	}
 }
 
-func patchCluster(clusterToPatch, patchedCluster *apiv2.ExternalCluster, patchJson json.RawMessage) error {
+func patchAPICluster(clusterToPatch, patchedCluster *apiv2.ExternalCluster, patchJson json.RawMessage) error {
 	existingClusterJSON, err := json.Marshal(clusterToPatch)
 	if err != nil {
 		return utilerrors.NewBadRequest("cannot decode existing cluster: %v", err)

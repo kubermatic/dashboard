@@ -14,7 +14,7 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {StepRegistry, WizardStep} from '@app/wizard/config';
+import {StepRegistry, WizardStep, steps} from '@app/wizard/config';
 import {NodeDataService} from '@core/services/node-data/service';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -33,22 +33,15 @@ export class WizardService {
     constructor(private _parent: WizardService) {}
 
     handleProviderChange(provider: NodeProvider): void {
+      this._parent.steps = steps;
       switch (provider) {
         case NodeProvider.BRINGYOUROWN:
           this._hideStep(StepRegistry.ProviderSettings);
           this._hideStep(StepRegistry.NodeSettings);
-          this._hideStep(StepRegistry.MachineNetwork);
-          break;
-        case NodeProvider.VSPHERE:
-          // Change to show the additional network step
-          this._showStep(StepRegistry.Summary);
-          this._showStep(StepRegistry.ProviderSettings);
-          this._showStep(StepRegistry.NodeSettings);
           break;
         default:
           this._showStep(StepRegistry.ProviderSettings);
           this._showStep(StepRegistry.NodeSettings);
-          this._hideStep(StepRegistry.MachineNetwork);
       }
     }
 
@@ -107,6 +100,10 @@ export class WizardService {
   set provider(provider: NodeProvider) {
     this._stepHandler.handleProviderChange(provider);
     this._clusterSpecService.provider = provider;
+  }
+
+  forceHandleProviderChange(provider: NodeProvider) {
+    this._stepHandler.handleProviderChange(provider);
   }
 
   reset(): void {

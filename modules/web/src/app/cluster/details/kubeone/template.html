@@ -47,8 +47,7 @@ limitations under the License.
               mat-flat-button
               type="button"
               kmThrottleClick
-              (throttleClick)="downloadKubeconfig()"
-              [disabled]="!isRunning()">
+              (throttleClick)="downloadKubeconfig()">
         <i class="km-icon-mask km-icon-download"></i>
         <span>Get Kubeconfig</span>
       </button>
@@ -61,6 +60,14 @@ limitations under the License.
         </button>
         <mat-menu #menu="matMenu"
                   class="km-provider-edit-settings">
+          <div
+            [matTooltip]="cluster?.spec?.containerRuntime !== ContainerRuntime.Docker ? 'KubeOne container runtime migration is only supported from docker to containerd.' : ''">
+            <button mat-menu-item
+                    (click)="editCluster()"
+                    [disabled]="!isRunning() || !canEdit() || cluster?.spec?.containerRuntime !== ContainerRuntime.Docker">
+              <span>Migrate Container Runtime</span>
+            </button>
+          </div>
           <button id="km-disconnect-external-cluster-btn"
                   mat-menu-item
                   (click)="disconnectCluster()"
@@ -94,6 +101,10 @@ limitations under the License.
           <div value>
             <span class="km-provider-logo km-provider-logo-{{cluster.cloud.kubeOne?.providerName}}"></span>
           </div>
+        </km-property>
+        <km-property *ngIf="cluster.spec.containerRuntime">
+          <div key>Container Runtime</div>
+          <div value>{{cluster.spec.containerRuntime}}</div>
         </km-property>
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
