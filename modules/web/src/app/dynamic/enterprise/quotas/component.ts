@@ -23,7 +23,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {takeUntil, filter, switchMap} from 'rxjs/operators';
+import {takeUntil, filter, switchMap, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
@@ -86,12 +86,12 @@ export class QuotasComponent implements OnInit {
     this.isLoading = true;
     this._quotaService.quotas
       .pipe(
+        tap(_ => (this.isLoading = false)),
         filter(quotas => !_.isEqual(quotas, this.quotas)),
         takeUntil(this._unsubscribe)
       )
       .subscribe({
         next: quotas => {
-          this.isLoading = false;
           this.quotas = quotas;
           this.dataSource.data = quotas;
         },

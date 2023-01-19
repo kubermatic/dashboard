@@ -77,7 +77,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @HostListener('mouseover') onMouseOver(): void {
     if (!this.showDetailsOnHover) return;
 
-    this._showDetails$.next(true);
+    this._showDetails$.next(this.hasQuota());
   }
 
   @HostListener('mouseleave') onMouseLeave(): void {
@@ -125,6 +125,11 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  hasQuota(): boolean {
+    const quota = this.quotaDetails?.quota;
+    return quota && !!(quota.cpu || quota.memory || quota.storage);
   }
 
   private _initSubscriptions(): void {
