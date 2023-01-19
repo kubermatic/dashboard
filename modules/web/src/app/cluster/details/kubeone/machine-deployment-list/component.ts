@@ -13,9 +13,14 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {
+  KubeOneMachineDeploymentDialogComponent,
+  KubeOneMachineDeploymentDialogData,
+} from '@app/cluster/details/kubeone/machine-deployment-dialog/component';
 import {View} from '@app/shared/entity/common';
 import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
@@ -28,6 +33,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {minor, major} from 'semver';
 
 enum Column {
   Status = 'status',
@@ -36,6 +42,7 @@ enum Column {
   Version = 'version',
   OS = 'os',
   Created = 'created',
+  Actions = 'actions',
 }
 
 @Component({
@@ -59,7 +66,11 @@ export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges,
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
-  constructor(private readonly _router: Router, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _router: Router,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
@@ -94,6 +105,14 @@ export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges,
     return getOperatingSystem(md.spec.template);
   }
 
+  showVersionWarning(md: ExternalMachineDeployment): boolean {
+    const version = md.spec.template.versions?.kubelet;
+    if (version) {
+      return major(this.cluster.spec.version) > major(version) || minor(this.cluster.spec.version) > minor(version);
+    }
+    return false;
+  }
+
   goToDetails(md: ExternalMachineDeployment): void {
     this._router.navigate([
       `/projects/${this.projectID}/${View.Clusters}/${View.KubeOneClusters}/${this.cluster.id}/md/${md.id}`,
@@ -118,7 +137,16 @@ export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges,
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
+  updateMachineDeployment(md: ExternalMachineDeployment, event: Event): void {
+    event.stopPropagation();
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectID: this.projectID,
+        clusterID: this.cluster.id,
+        machineDeployment: md,
+        kubeletVersion: md.spec?.template?.versions?.kubelet,
+      } as KubeOneMachineDeploymentDialogData,
+    };
+    this._matDialog.open(KubeOneMachineDeploymentDialogComponent, dialogConfig);
   }
 }

@@ -13,7 +13,12 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {
+  KubeOneMachineDeploymentDialogComponent,
+  KubeOneMachineDeploymentDialogData,
+} from '@app/cluster/details/kubeone/machine-deployment-dialog/component';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
@@ -29,6 +34,7 @@ import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/heal
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {major, minor} from 'semver';
 
 @Component({
   selector: 'km-kubeone-machine-deployment-details',
@@ -44,6 +50,7 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   cluster: ExternalCluster;
   projectID: string;
+  showVersionWarning: boolean;
 
   private readonly _refreshTime = 10;
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
@@ -59,7 +66,8 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +112,7 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
         this.nodes = nodes;
         this.areNodesInitialized = true;
         this.events = nodeEvents;
+        this._checkVersionWarning();
         this._storeNodeMetrics(nodeMetrics);
       });
 
@@ -112,6 +121,7 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
       .pipe(take(1))
       .subscribe(c => {
         this.cluster = c;
+        this._checkVersionWarning();
         this._isClusterLoaded = true;
       });
   }
@@ -129,8 +139,27 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
+  updateMachineDeployment(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectID: this.projectID,
+        clusterID: this.cluster.id,
+        machineDeployment: this.machineDeployment,
+        replicas: this.machineDeployment.spec?.replicas,
+        kubeletVersion: this.machineDeployment.spec?.template?.versions?.kubelet,
+      } as KubeOneMachineDeploymentDialogData,
+    };
+    this._matDialog.open(KubeOneMachineDeploymentDialogComponent, dialogConfig);
+  }
+
+  private _checkVersionWarning(): void {
+    const mdVersion = this.machineDeployment?.spec.template.versions?.kubelet;
+    const clusterVersion = this.cluster?.spec.version;
+    if (mdVersion && clusterVersion) {
+      this.showVersionWarning = major(clusterVersion) > major(mdVersion) || minor(clusterVersion) > minor(mdVersion);
+    } else {
+      this.showVersionWarning = false;
+    }
   }
 
   private _storeNodeMetrics(metrics: NodeMetrics[]): void {

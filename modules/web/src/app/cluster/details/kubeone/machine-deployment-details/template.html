@@ -28,13 +28,33 @@ limitations under the License.
               matTooltip="Click to copy"
               class="km-copy">{{machineDeployment.name}}</span>
       </mat-card-title>
+      <div fxFlex></div>
+      <div fxLayout="row">
+        <button mat-icon-button
+                color="tertiary"
+                matTooltip="Update Machine Deployment"
+                (click)="updateMachineDeployment()"
+                [disabled]="!isEditEnabled()">
+          <i class="km-icon-mask km-icon-edit"></i>
+        </button>
+      </div>
     </mat-card-header>
     <mat-card-content class="km-row">
 
       <div class="km-content-wrap">
         <km-property>
           <div key>kubelet Version</div>
-          <div value>{{machineDeployment.spec.template.versions.kubelet}}</div>
+          <div value>
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="10px">
+              <span>{{machineDeployment.spec.template.versions?.kubelet}}</span>
+              <ng-container *ngIf="showVersionWarning">
+                <i [matTooltip]="'Please update machine deployment version to match cluster version.'"
+                   class="km-icon-warning"></i>
+              </ng-container>
+            </div>
+          </div>
         </km-property>
         <km-property>
           <div key>Replicas</div>
