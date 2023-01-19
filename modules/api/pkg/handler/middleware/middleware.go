@@ -1025,7 +1025,7 @@ func getOIDCIssuerVerifier(
 	}
 
 	if seedName == "" {
-		return nil, fmt.Errorf("couldnt find seed for cluster %q", clusterID)
+		return nil, fmt.Errorf("couldn't find seed for cluster %q", clusterID)
 	}
 
 	seed, found := seeds[seedName]
