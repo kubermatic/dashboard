@@ -15,7 +15,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {GlobalModule} from '@core/services/global/module';
 import {NotificationService} from '@core/services/notification';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ResourceType} from '@shared/entity/common';
 import {Project, ProjectModel} from '@shared/entity/project';
 import _ from 'lodash';
@@ -41,6 +43,8 @@ enum Controls {
 })
 export class EditProjectComponent implements OnInit {
   @Input() project: Project;
+
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   labels: object;
   form: FormGroup;
   projectQouta: QuotaDetails;
@@ -49,13 +53,18 @@ export class EditProjectComponent implements OnInit {
   isMember: boolean;
   readonly Controls = Controls;
 
+  private _quotaService: QuotaService;
+
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _matDialogRef: MatDialogRef<EditProjectComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _quotaService: QuotaService,
     private readonly _userService: UserService
-  ) {}
+  ) {
+    if (this.isEnterpriseEdition) {
+      this._quotaService = GlobalModule.injector.get(QuotaService);
+    }
+  }
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.project.labels);
@@ -86,12 +95,14 @@ export class EditProjectComponent implements OnInit {
   onNext(project: Project): void {
     this._matDialogRef.close(project);
 
-    const quotaVariables = {
-      cpu: this.form?.controls?.cpuQuota?.value,
-      memory: this.form?.controls?.memoryQuota?.value,
-      storage: this.form?.controls?.storageQuota?.value,
-    };
-    this._quotaService.updateQuota(this.projectQouta?.name, quotaVariables).subscribe();
+    if (this.isEnterpriseEdition) {
+      const quotaVariables = {
+        cpu: this.form?.controls?.cpuQuota?.value,
+        memory: this.form?.controls?.memoryQuota?.value,
+        storage: this.form?.controls?.storageQuota?.value,
+      };
+      this._quotaService.updateQuota(this.projectQouta?.name, quotaVariables).subscribe();
+    }
     this._notificationService.success(`Updated the ${this.project.name} project`);
   }
 
@@ -106,7 +117,7 @@ export class EditProjectComponent implements OnInit {
 
     this.isMember = !!this.user.projects.find(project => project.id === this.project.id);
 
-    if (this.isMember) {
+    if (this.isMember && this.isEnterpriseEdition) {
       this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
         if (quota) {
           this.projectQouta = quota;
