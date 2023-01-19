@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -29,15 +30,15 @@ import (
 
 // ServiceAccountAuthClient implements TokenExtractorVerifier interface.
 type ServiceAccountAuthClient struct {
-	headerBearerTokenExtractor TokenExtractor
+	headerBearerTokenExtractor authtypes.TokenExtractor
 	jwtTokenAuthenticator      serviceaccount.TokenAuthenticator
 	saTokenProvider            provider.PrivilegedServiceAccountTokenProvider
 }
 
-var _ TokenExtractorVerifier = &ServiceAccountAuthClient{}
+var _ authtypes.TokenExtractorVerifier = &ServiceAccountAuthClient{}
 
 // NewServiceAccountAuthClient returns a client that knows how to read and verify service account's tokens.
-func NewServiceAccountAuthClient(headerBearerTokenExtractor TokenExtractor, jwtTokenAuthenticator serviceaccount.TokenAuthenticator, saTokenProvider provider.PrivilegedServiceAccountTokenProvider) *ServiceAccountAuthClient {
+func NewServiceAccountAuthClient(headerBearerTokenExtractor authtypes.TokenExtractor, jwtTokenAuthenticator serviceaccount.TokenAuthenticator, saTokenProvider provider.PrivilegedServiceAccountTokenProvider) *ServiceAccountAuthClient {
 	return &ServiceAccountAuthClient{headerBearerTokenExtractor: headerBearerTokenExtractor, jwtTokenAuthenticator: jwtTokenAuthenticator, saTokenProvider: saTokenProvider}
 }
 
@@ -48,30 +49,30 @@ func (s *ServiceAccountAuthClient) Extract(rq *http.Request) (string, error) {
 
 // Verify parses a raw ID Token, verifies it's been signed by the provider, performs
 // any additional checks depending on the Config, and returns the payload as TokenClaims.
-func (s *ServiceAccountAuthClient) Verify(ctx context.Context, token string) (TokenClaims, error) {
+func (s *ServiceAccountAuthClient) Verify(ctx context.Context, token string) (authtypes.TokenClaims, error) {
 	_, customClaims, err := s.jwtTokenAuthenticator.Authenticate(token)
 	if err != nil {
-		return TokenClaims{}, err
+		return authtypes.TokenClaims{}, err
 	}
 
 	tokenExpiredMsg := fmt.Sprintf("sa: the token %s has been revoked for %s", customClaims.TokenID, customClaims.Email)
 	tokenList, err := s.saTokenProvider.ListUnsecured(ctx, &provider.ServiceAccountTokenListOptions{TokenID: customClaims.TokenID})
 	if apierrors.IsNotFound(err) {
-		return TokenClaims{}, &TokenExpiredError{msg: tokenExpiredMsg}
+		return authtypes.TokenClaims{}, &TokenExpiredError{msg: tokenExpiredMsg}
 	}
 	if len(tokenList) != 1 {
-		return TokenClaims{}, fmt.Errorf("sa: found zero or more than one token with the given id %s", customClaims.TokenID)
+		return authtypes.TokenClaims{}, fmt.Errorf("sa: found zero or more than one token with the given id %s", customClaims.TokenID)
 	}
 	rawToken := tokenList[0]
 	tokenFromDB, ok := rawToken.Data["token"]
 	if !ok {
-		return TokenClaims{}, fmt.Errorf("sa: cannot verify the token (%s) because the corresponding token in the database is invalid", customClaims.TokenID)
+		return authtypes.TokenClaims{}, fmt.Errorf("sa: cannot verify the token (%s) because the corresponding token in the database is invalid", customClaims.TokenID)
 	}
 	if string(tokenFromDB) != token {
-		return TokenClaims{}, &TokenExpiredError{msg: tokenExpiredMsg}
+		return authtypes.TokenClaims{}, &TokenExpiredError{msg: tokenExpiredMsg}
 	}
 
-	return TokenClaims{
+	return authtypes.TokenClaims{
 		Name:    customClaims.TokenID,
 		Email:   customClaims.Email,
 		Subject: customClaims.Email,

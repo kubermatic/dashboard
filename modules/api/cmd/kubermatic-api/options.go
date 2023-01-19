@@ -22,10 +22,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gorilla/securecookie"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -37,16 +39,18 @@ import (
 )
 
 type serverRunOptions struct {
-	listenAddress  string
-	internalAddr   string
-	prometheusURL  string
-	workerName     string
-	swaggerFile    string
-	domain         string
-	exposeStrategy kubermaticv1.ExposeStrategy
-	namespace      string
-	log            kubermaticlog.Options
-	caBundle       *certificates.CABundle
+	listenAddress                  string
+	internalAddr                   string
+	prometheusURL                  string
+	workerName                     string
+	swaggerFile                    string
+	domain                         string
+	exposeStrategy                 kubermaticv1.ExposeStrategy
+	namespace                      string
+	log                            kubermaticlog.Options
+	caBundle                       *certificates.CABundle
+	oidcIssuerConfiguration        *authtypes.OIDCConfiguration
+	oidcAuthenticatorConfiguration *authtypes.OIDCConfiguration
 
 	// for development purposes, a local configuration file
 	// can be used to provide the KubermaticConfiguration
@@ -130,6 +134,22 @@ func newServerRunOptions() (serverRunOptions, error) {
 	s.caBundle = cabundle
 	s.versions = kubermatic.NewDefaultVersions()
 
+	s.oidcIssuerConfiguration = &authtypes.OIDCConfiguration{
+		URL:                  s.oidcURL,
+		ClientID:             s.oidcIssuerClientID,
+		ClientSecret:         s.oidcIssuerClientSecret,
+		SecureCookie:         securecookie.New([]byte(s.oidcIssuerCookieHashKey), nil),
+		CookieSecureMode:     s.oidcIssuerCookieSecureMode,
+		OfflineAccessAsScope: s.oidcIssuerOfflineAccessAsScope,
+		SkipTLSVerify:        s.oidcSkipTLSVerify,
+	}
+
+	s.oidcAuthenticatorConfiguration = &authtypes.OIDCConfiguration{
+		URL:           s.oidcURL,
+		ClientID:      s.oidcAuthenticatorClientID,
+		SkipTLSVerify: s.oidcSkipTLSVerify,
+	}
+
 	return s, nil
 }
 
@@ -191,6 +211,7 @@ type providers struct {
 	privilegedIPAMPoolProviderGetter               provider.PrivilegedIPAMPoolProviderGetter
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
+	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 }
 
 func loadKubermaticConfiguration(filename string) (*kubermaticv1.KubermaticConfiguration, error) {

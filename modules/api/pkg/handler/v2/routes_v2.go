@@ -64,12 +64,12 @@ import (
 )
 
 // RegisterV2 declares all router paths for v2.
-func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg common.OIDCConfiguration) {
+func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	// Defines a set of HTTP endpoint for generating kubeconfig secret for a cluster that will contain OIDC tokens
 	if oidcKubeConfEndpoint {
 		mux.Methods(http.MethodGet).
 			Path("/kubeconfig/secret").
-			Handler(r.createOIDCKubeconfigSecret(oidcCfg))
+			Handler(r.createOIDCKubeconfigSecret())
 	}
 
 	// Defines a set of HTTP endpoint for interacting with
@@ -1049,9 +1049,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.listVMwareCloudDirectorTemplatesNoCredentials())
 
 	kubernetesdashboard.
-		NewLoginHandler(oidcCfg, r.oidcIssuerVerifier, r.settingsProvider).
+		NewLoginHandler(r.settingsProvider).
 		Middlewares(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
 		).
 		Options(r.defaultServerOptions()...).
 		Install(mux)
@@ -9170,13 +9171,14 @@ func (r Routing) getDefaultCluster() http.Handler {
 //	  201: empty
 //	  401: empty
 //	  403: empty
-func (r Routing) createOIDCKubeconfigSecret(oidcCfg common.OIDCConfiguration) http.Handler {
+func (r Routing) createOIDCKubeconfigSecret() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.UserInfoUnauthorized(r.userProjectMapper, r.userProvider),
-		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider, r.oidcIssuerVerifier, oidcCfg)),
+			middleware.OIDCProviders(r.clusterProviderGetter, r.oidcIssuerVerifierProviderGetter, r.seedsGetter),
+		)(webterminal.CreateOIDCKubeconfigSecretEndpoint(r.projectProvider, r.privilegedProjectProvider)),
 		webterminal.DecodeCreateOIDCKubeconfig,
 		webterminal.EncodeOIDCKubeconfig,
 		r.defaultServerOptions()...,

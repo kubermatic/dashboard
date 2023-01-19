@@ -23,10 +23,11 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gorilla/securecookie"
 	"golang.org/x/oauth2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 )
 
 const (
@@ -48,8 +49,8 @@ const (
 	issuerRedirectURL  = "/api/v1/kubeconfig"
 )
 
-var _ auth.OIDCIssuerVerifier = &IssuerVerifier{}
-var _ auth.TokenExtractorVerifier = &IssuerVerifier{}
+var _ authtypes.OIDCIssuerVerifier = &IssuerVerifier{}
+var _ authtypes.TokenExtractorVerifier = &IssuerVerifier{}
 
 // OicdProvider is a test stub that mocks *oidc.Provider.
 type OicdProvider struct {
@@ -127,12 +128,12 @@ func (o *IssuerVerifier) oauth2Config(overwriteRedirectURI string, scopes ...str
 }
 
 // Exchange converts an authorization code into a token.
-func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string) (auth.OIDCToken, error) {
+func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectURI string) (authtypes.OIDCToken, error) {
 	if code != AuthorizationCode {
-		return auth.OIDCToken{}, errors.New("incorrect code")
+		return authtypes.OIDCToken{}, errors.New("incorrect code")
 	}
 
-	return auth.OIDCToken{
+	return authtypes.OIDCToken{
 		IDToken:      IDToken,
 		RefreshToken: refreshToken,
 	}, nil
@@ -140,20 +141,29 @@ func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectUR
 
 // Verify parses a raw ID Token, verifies it's been signed by the provider, performs
 // any additional checks depending on the Config, and returns the payload as TokenClaims.
-func (o *IssuerVerifier) Verify(ctx context.Context, token string) (auth.TokenClaims, error) {
+func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.TokenClaims, error) {
 	if o == nil {
-		return auth.TokenClaims{}, nil
+		return authtypes.TokenClaims{}, nil
 	}
 	if ctx == nil {
-		return auth.TokenClaims{}, nil
+		return authtypes.TokenClaims{}, nil
 	}
 	if token != IDToken {
-		return auth.TokenClaims{}, errors.New("incorrect code")
+		return authtypes.TokenClaims{}, errors.New("incorrect code")
 	}
-	return auth.TokenClaims{
+	return authtypes.TokenClaims{
 		Email:   o.user.Email,
 		Subject: o.user.Email,
 		Name:    o.user.Name,
 		Groups:  []string{},
 	}, nil
+}
+
+func (p *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
+	return &authtypes.OIDCConfiguration{
+		URL:          p.issuer,
+		ClientID:     p.clientID,
+		ClientSecret: p.clientSecret,
+		SecureCookie: securecookie.New([]byte(""), nil),
+	}
 }

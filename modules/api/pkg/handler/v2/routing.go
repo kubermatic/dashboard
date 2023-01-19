@@ -28,9 +28,9 @@ import (
 	"go.uber.org/zap"
 
 	"k8c.io/dashboard/v2/pkg/handler"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -56,9 +56,8 @@ type Routing struct {
 	projectProvider                                provider.ProjectProvider
 	privilegedProjectProvider                      provider.PrivilegedProjectProvider
 	featureGatesProvider                           provider.FeatureGatesProvider
-	oidcIssuerVerifier                             auth.OIDCIssuerVerifier
-	tokenVerifiers                                 auth.TokenVerifier
-	tokenExtractors                                auth.TokenExtractor
+	tokenVerifiers                                 authtypes.TokenVerifier
+	tokenExtractors                                authtypes.TokenExtractor
 	clusterProviderGetter                          provider.ClusterProviderGetter
 	addonProviderGetter                            provider.AddonProviderGetter
 	addonConfigProvider                            provider.AddonConfigProvider
@@ -98,6 +97,7 @@ type Routing struct {
 	privilegedIPAMPoolProviderGetter               provider.PrivilegedIPAMPoolProviderGetter
 	applicationDefinitionProvider                  provider.ApplicationDefinitionProvider
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter
+	oidcIssuerVerifierProviderGetter               provider.OIDCIssuerVerifierGetter
 	versions                                       kubermatic.Versions
 	caBundle                                       *x509.CertPool
 	features                                       features.FeatureGate
@@ -125,7 +125,6 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		privilegedServiceAccountTokenProvider:          routingParams.PrivilegedServiceAccountTokenProvider,
 		projectProvider:                                routingParams.ProjectProvider,
 		privilegedProjectProvider:                      routingParams.PrivilegedProjectProvider,
-		oidcIssuerVerifier:                             routingParams.OIDCIssuerVerifier,
 		tokenVerifiers:                                 routingParams.TokenVerifiers,
 		tokenExtractors:                                routingParams.TokenExtractors,
 		prometheusClient:                               routingParams.PrometheusClient,
@@ -164,9 +163,10 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		privilegedIPAMPoolProviderGetter:               routingParams.PrivilegedIPAMPoolProviderGetter,
 		applicationDefinitionProvider:                  routingParams.ApplicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: routingParams.PrivilegedOperatingSystemProfileProviderGetter,
-		versions: routingParams.Versions,
-		caBundle: routingParams.CABundle,
-		features: routingParams.Features,
+		oidcIssuerVerifierProviderGetter:               routingParams.OIDCIssuerVerifierProviderGetter,
+		versions:                                       routingParams.Versions,
+		caBundle:                                       routingParams.CABundle,
+		features:                                       routingParams.Features,
 	}
 }
 

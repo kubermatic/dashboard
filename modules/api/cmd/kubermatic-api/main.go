@@ -65,6 +65,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
+	auth2 "k8c.io/dashboard/v2/pkg/provider/auth"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
@@ -75,6 +77,7 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	metricspkg "k8c.io/kubermatic/v2/pkg/metrics"
 	"k8c.io/kubermatic/v2/pkg/pprof"
+	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/util/cli"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
@@ -154,15 +157,12 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create and initialize providers", zap.Error(err))
 	}
-	oidcIssuerVerifier, err := createOIDCClients(options)
-	if err != nil {
-		log.Fatalw("failed to create an openid authenticator", "issuer", options.oidcURL, "oidcClientID", options.oidcAuthenticatorClientID, zap.Error(err))
-	}
+
 	tokenVerifiers, tokenExtractors, err := createAuthClients(options, providers)
 	if err != nil {
 		log.Fatalw("failed to create auth clients", zap.Error(err))
 	}
-	apiHandler, err := createAPIHandler(options, providers, oidcIssuerVerifier, tokenVerifiers, tokenExtractors, mgr, log)
+	apiHandler, err := createAPIHandler(options, providers, tokenVerifiers, tokenExtractors, mgr, log)
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
@@ -356,6 +356,17 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	privilegedOperatingSystemProfileProviderGetter := kubernetesprovider.PrivilegedOperatingSystemProfileProviderFactory(mgr.GetRESTMapper(), seedKubeconfigGetter)
 
+	oidcIssuerVerifier, err := createOIDCClients(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
+	if err != nil {
+		log.Fatalw("failed to create an openid authenticator - issuer: %q, oidcClientID: %q: %v", options.oidcURL, options.oidcAuthenticatorClientID, err)
+	}
+
+	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
+		oidcIssuerVerifier,
+		options.oidcIssuerRedirectURI,
+		options.caBundle,
+	)
+
 	userWatcher, err := kuberneteswatcher.NewUserWatcher(ctx, log)
 	if err != nil {
 		return providers{}, fmt.Errorf("failed to setup user-watcher: %w", err)
@@ -438,36 +449,31 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		privilegedIPAMPoolProviderGetter:               privilegedIPAMPoolProviderGetter,
 		applicationDefinitionProvider:                  applicationDefinitionProvider,
 		privilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
+		oidcIssuerVerifierProviderGetter:               oidcIssuerVerifierProviderGetter,
 	}, nil
 }
 
-func createOIDCClients(options serverRunOptions) (auth.OIDCIssuerVerifier, error) {
+func createOIDCClients(oidcIssuerConfiguration *authtypes.OIDCConfiguration, oidcIssuerRedirectURI string, caBundle *certificates.CABundle) (authtypes.OIDCIssuerVerifier, error) {
 	return auth.NewOpenIDClient(
-		options.oidcURL,
-		options.oidcIssuerClientID,
-		options.oidcIssuerClientSecret,
-		options.oidcIssuerRedirectURI,
+		oidcIssuerConfiguration,
+		oidcIssuerRedirectURI,
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewQueryParamBearerTokenExtractor("token"),
 		),
-		options.oidcSkipTLSVerify,
-		options.caBundle.CertPool(),
+		caBundle.CertPool(),
 	)
 }
 
-func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVerifier, auth.TokenExtractor, error) {
+func createAuthClients(options serverRunOptions, prov providers) (authtypes.TokenVerifier, authtypes.TokenExtractor, error) {
 	oidcExtractorVerifier, err := auth.NewOpenIDClient(
-		options.oidcURL,
-		options.oidcAuthenticatorClientID,
-		"",
+		options.oidcAuthenticatorConfiguration,
 		"",
 		auth.NewCombinedExtractor(
 			auth.NewHeaderBearerTokenExtractor("Authorization"),
 			auth.NewCookieHeaderBearerTokenExtractor("token"),
 			auth.NewQueryParamBearerTokenExtractor("token"),
 		),
-		options.oidcSkipTLSVerify,
 		options.caBundle.CertPool(),
 	)
 
@@ -481,13 +487,18 @@ func createAuthClients(options serverRunOptions, prov providers) (auth.TokenVeri
 		prov.privilegedServiceAccountTokenProvider,
 	)
 
-	tokenVerifiers := auth.NewTokenVerifierPlugins([]auth.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
-	tokenExtractors := auth.NewTokenExtractorPlugins([]auth.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
+	tokenVerifiers := auth.NewTokenVerifierPlugins([]authtypes.TokenVerifier{oidcExtractorVerifier, jwtExtractorVerifier})
+	tokenExtractors := auth.NewTokenExtractorPlugins([]authtypes.TokenExtractor{oidcExtractorVerifier, jwtExtractorVerifier})
 	return tokenVerifiers, tokenExtractors, nil
 }
 
-func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifier auth.OIDCIssuerVerifier, tokenVerifiers auth.TokenVerifier,
-	tokenExtractors auth.TokenExtractor, mgr manager.Manager, log *zap.SugaredLogger) (http.HandlerFunc, error) {
+func createAPIHandler(
+	options serverRunOptions, prov providers,
+	tokenVerifiers authtypes.TokenVerifier,
+	tokenExtractors authtypes.TokenExtractor,
+	mgr manager.Manager,
+	log *zap.SugaredLogger,
+) (http.HandlerFunc, error) {
 	var prometheusClient prometheusapi.Client
 	if options.featureGates.Enabled(features.PrometheusEndpoint) {
 		var err error
@@ -519,7 +530,6 @@ func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifi
 		PrivilegedServiceAccountTokenProvider:          prov.privilegedServiceAccountTokenProvider,
 		ProjectProvider:                                prov.project,
 		PrivilegedProjectProvider:                      prov.privilegedProject,
-		OIDCIssuerVerifier:                             oidcIssuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          prov.clusterProviderGetter,
@@ -562,9 +572,10 @@ func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifi
 		PrivilegedIPAMPoolProviderGetter:               prov.privilegedIPAMPoolProviderGetter,
 		ApplicationDefinitionProvider:                  prov.applicationDefinitionProvider,
 		PrivilegedOperatingSystemProfileProviderGetter: prov.privilegedOperatingSystemProfileProviderGetter,
-		Versions: options.versions,
-		CABundle: options.caBundle.CertPool(),
-		Features: options.featureGates,
+		OIDCIssuerVerifierProviderGetter:               prov.oidcIssuerVerifierProviderGetter,
+		Versions:                                       options.versions,
+		CABundle:                                       options.caBundle.CertPool(),
+		Features:                                       options.featureGates,
 	}
 
 	r := handler.NewRouting(routingParams, mgr.GetClient())
@@ -585,25 +596,14 @@ func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifi
 			})
 		})
 	}
-	oidcConfiguration := common.OIDCConfiguration{
-		URL:                  options.oidcURL,
-		ClientID:             options.oidcIssuerClientID,
-		ClientSecret:         options.oidcIssuerClientSecret,
-		CookieHashKey:        options.oidcIssuerCookieHashKey,
-		CookieSecureMode:     options.oidcIssuerCookieSecureMode,
-		OfflineAccessAsScope: options.oidcIssuerOfflineAccessAsScope,
-	}
 	v1Router := mainRouter.PathPrefix("/api/v1").Subrouter()
 	v2Router := mainRouter.PathPrefix("/api/v2").Subrouter()
 	r.RegisterV1(v1Router, metrics)
 	r.RegisterV1Legacy(v1Router)
-	r.RegisterV1Optional(v1Router,
-		options.featureGates.Enabled(features.OIDCKubeCfgEndpoint),
-		oidcConfiguration,
-		mainRouter)
+	r.RegisterV1Optional(v1Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 	r.RegisterV1Admin(v1Router)
 	r.RegisterV1Websocket(v1Router)
-	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint), oidcConfiguration)
+	rv2.RegisterV2(v2Router, options.featureGates.Enabled(features.OIDCKubeCfgEndpoint))
 
 	mainRouter.Methods(http.MethodGet).
 		Path("/api/swagger.json").

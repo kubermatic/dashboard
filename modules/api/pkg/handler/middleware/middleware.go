@@ -27,9 +27,9 @@ import (
 	transporthttp "github.com/go-kit/kit/transport/http"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
@@ -72,6 +72,9 @@ const (
 
 	// ConstraintProviderContextKey key under which the current ConstraintProvider is kept in the ctx.
 	ConstraintProviderContextKey kubermaticcontext.Key = "constraint-provider"
+
+	// OIDCIssuerVerifierContextKey key under which the current OIDCIssuerVerifier is kept in the ctx.
+	OIDCIssuerVerifierContextKey kubermaticcontext.Key = "oidc-issuer-verifier"
 
 	// PrivilegedConstraintProviderContextKey key under which the current PrivilegedConstraintProvider is kept in the ctx.
 	PrivilegedConstraintProviderContextKey kubermaticcontext.Key = "privileged-constraint-provider"
@@ -259,7 +262,7 @@ func UserInfoUnauthorized(userProjectMapper provider.ProjectMemberMapper, userPr
 }
 
 // TokenVerifier knows how to verify a token from the incoming request.
-func TokenVerifier(tokenVerifier auth.TokenVerifier, userProvider provider.UserProvider) endpoint.Middleware {
+func TokenVerifier(tokenVerifier authtypes.TokenVerifier, userProvider provider.UserProvider) endpoint.Middleware {
 	return func(next endpoint.Endpoint) endpoint.Endpoint {
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			if rawTokenNotFoundErr := ctx.Value(noTokenFoundKey); rawTokenNotFoundErr != nil {
@@ -365,7 +368,7 @@ func getAddonProvider(ctx context.Context, clusterProviderGetter provider.Cluste
 }
 
 // TokenExtractor knows how to extract a token from the incoming request.
-func TokenExtractor(o auth.TokenExtractor) transporthttp.RequestFunc {
+func TokenExtractor(o authtypes.TokenExtractor) transporthttp.RequestFunc {
 	return func(ctx context.Context, r *http.Request) context.Context {
 		token, err := o.Extract(r)
 		if err != nil {
@@ -975,4 +978,60 @@ func getPrivilegedOperatingSystemProfileProvider(ctx context.Context, clusterPro
 	}
 
 	return providerGetter(seed)
+}
+
+// OIDCProviders is a middleware that injects the current OIDCProviders into the ctx.
+func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter, seedsGetter provider.SeedsGetter) endpoint.Middleware {
+	return func(next endpoint.Endpoint) endpoint.Endpoint {
+		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+			seedCluster := request.(seedClusterGetter).GetSeedCluster()
+
+			oidcIssuerVerifier, err := getOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.ClusterID)
+			if err != nil {
+				return nil, err
+			}
+			ctx = context.WithValue(ctx, OIDCIssuerVerifierContextKey, oidcIssuerVerifier)
+			return next(ctx, request)
+		}
+	}
+}
+
+func getOIDCIssuerVerifier(
+	ctx context.Context,
+	clusterProviderGetter provider.ClusterProviderGetter,
+	oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter,
+	seedsGetter provider.SeedsGetter,
+	clusterID string,
+) (authtypes.OIDCIssuerVerifier, error) {
+	if clusterID == "" {
+		return nil, fmt.Errorf("clusterID cannot be empty")
+	}
+
+	seeds, err := seedsGetter()
+	if err != nil {
+		return nil, err
+	}
+
+	var seedName string
+	for _, seed := range seeds {
+		clusterProvider, err := clusterProviderGetter(seed)
+		if err != nil {
+			return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
+		}
+		if clusterProvider.IsCluster(ctx, clusterID) {
+			seedName = seed.Name
+			break
+		}
+	}
+
+	if seedName == "" {
+		return nil, fmt.Errorf("couldn't find seed for cluster %q", clusterID)
+	}
+
+	seed, found := seeds[seedName]
+	if !found {
+		return nil, fmt.Errorf("couldn't find seed %q", seedName)
+	}
+
+	return oidcIssuerVerifierGetter(seed)
 }

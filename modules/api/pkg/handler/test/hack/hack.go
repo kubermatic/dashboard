@@ -24,11 +24,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 
 	"k8c.io/dashboard/v2/pkg/handler"
-	"k8c.io/dashboard/v2/pkg/handler/auth"
-	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
@@ -62,9 +61,9 @@ func NewTestRouting(
 	privilegedServiceAccountTokenProvider provider.PrivilegedServiceAccountTokenProvider,
 	projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider,
-	issuerVerifier auth.OIDCIssuerVerifier,
-	tokenVerifiers auth.TokenVerifier,
-	tokenExtractors auth.TokenExtractor,
+	issuerVerifier authtypes.OIDCIssuerVerifier,
+	tokenVerifiers authtypes.TokenVerifier,
+	tokenExtractors authtypes.TokenExtractor,
 	prometheusClient prometheusapi.Client,
 	projectMemberProvider *kubernetes.ProjectMemberProvider,
 	privilegedProjectMemberProvider provider.PrivilegedProjectMemberProvider,
@@ -100,6 +99,7 @@ func NewTestRouting(
 	applicationDefinitionProvider provider.ApplicationDefinitionProvider,
 	privilegedIPAMPoolProviderGetter provider.PrivilegedIPAMPoolProviderGetter,
 	privilegedOperatingSystemProfileProviderGetter provider.PrivilegedOperatingSystemProfileProviderGetter,
+	fakeOIDCVerifierIssuerGetter provider.OIDCIssuerVerifierGetter,
 	features features.FeatureGate) http.Handler {
 	routingParams := handler.RoutingParams{
 		Log:                                            kubermaticlog.Logger,
@@ -116,7 +116,6 @@ func NewTestRouting(
 		PrivilegedServiceAccountTokenProvider:          privilegedServiceAccountTokenProvider,
 		ProjectProvider:                                projectProvider,
 		PrivilegedProjectProvider:                      privilegedProjectProvider,
-		OIDCIssuerVerifier:                             issuerVerifier,
 		TokenVerifiers:                                 tokenVerifiers,
 		TokenExtractors:                                tokenExtractors,
 		ClusterProviderGetter:                          clusterProvidersGetter,
@@ -162,6 +161,7 @@ func NewTestRouting(
 		Features:                                       features,
 		PrivilegedIPAMPoolProviderGetter:               privilegedIPAMPoolProviderGetter,
 		PrivilegedOperatingSystemProfileProviderGetter: privilegedOperatingSystemProfileProviderGetter,
+		OIDCIssuerVerifierProviderGetter:               fakeOIDCVerifierIssuerGetter,
 	}
 
 	r := handler.NewRouting(routingParams, masterClient)
@@ -172,25 +172,11 @@ func NewTestRouting(
 	v2Router := mainRouter.PathPrefix("/api/v2").Subrouter()
 	r.RegisterV1(v1Router, generateDefaultMetrics())
 	r.RegisterV1Legacy(v1Router)
-	r.RegisterV1Optional(v1Router,
-		true,
-		*generateDefaultOicdCfg(),
-		mainRouter,
-	)
+	r.RegisterV1Optional(v1Router, true)
 	r.RegisterV1Admin(v1Router)
 	r.RegisterV1Websocket(v1Router)
-	rv2.RegisterV2(v2Router, true, *generateDefaultOicdCfg())
+	rv2.RegisterV2(v2Router, true)
 	return mainRouter
-}
-
-// generateDefaultOicdCfg creates test configuration for OpenID clients.
-func generateDefaultOicdCfg() *common.OIDCConfiguration {
-	return &common.OIDCConfiguration{
-		URL:                  test.IssuerURL,
-		ClientID:             test.IssuerClientID,
-		ClientSecret:         test.IssuerClientSecret,
-		OfflineAccessAsScope: true,
-	}
 }
 
 func generateDefaultMetrics() common.ServerMetrics {

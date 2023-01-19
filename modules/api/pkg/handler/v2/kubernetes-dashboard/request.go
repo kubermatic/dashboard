@@ -22,6 +22,7 @@ import (
 	"github.com/gorilla/mux"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
 )
 
 type InitialRequest struct {
@@ -31,6 +32,12 @@ type InitialRequest struct {
 	// in: query
 	ProjectID string `json:"projectID"`
 	ClusterID string `json:"clusterID"`
+}
+
+func (r *InitialRequest) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: r.ClusterID,
+	}
 }
 
 func (this *InitialRequest) decode(r *http.Request) *InitialRequest {
@@ -52,19 +59,31 @@ type OIDCCallbackRequest struct {
 	*http.Request
 
 	// in: query
-	Code  string `json:"code"`
-	State string `json:"state"`
+	Code  string              `json:"code"`
+	State *commonv2.OIDCState `json:"state"`
 }
 
-func (this *OIDCCallbackRequest) decode(r *http.Request) *OIDCCallbackRequest {
+func (r *OIDCCallbackRequest) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: r.State.ClusterID,
+	}
+}
+
+func (this *OIDCCallbackRequest) decode(r *http.Request) (*OIDCCallbackRequest, error) {
 	this.Code = r.URL.Query().Get("code")
-	this.State = r.URL.Query().Get("state")
+	state := r.URL.Query().Get("state")
 	this.Request = r
 
-	return this
+	var err error
+	this.State, err = decodeOIDCState(state)
+	if err != nil {
+		return nil, err
+	}
+
+	return this, nil
 }
 
-func NewOIDCCallbackRequest(r *http.Request) *OIDCCallbackRequest {
+func NewOIDCCallbackRequest(r *http.Request) (*OIDCCallbackRequest, error) {
 	result := new(OIDCCallbackRequest)
 	return result.decode(r)
 }
