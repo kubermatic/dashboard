@@ -705,7 +705,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withVsphere(2, 3, 10).
+				withVsphere(2, 3000, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
