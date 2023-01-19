@@ -35,7 +35,7 @@ import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/enti
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -165,7 +165,9 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.CPUCores).valueChanges,
       this.form.get(Controls.CPUPassthrough).valueChanges,
       this.form.get(Controls.MemoryMB).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges
+      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.SubnetName).valueChanges,
+      this.form.get(Controls.Categories).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -433,7 +435,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     return categories;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     return {
       replicas: this._nodeDataService.nodeData.count,
       nutanixNodeSpec: {

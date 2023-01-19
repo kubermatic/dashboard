@@ -34,7 +34,7 @@ import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ComboboxControls} from '@shared/components/combobox/component';
 
@@ -299,7 +299,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.azure.size;
     const selectedSize = this.sizes.find(s => s.name === size);
 

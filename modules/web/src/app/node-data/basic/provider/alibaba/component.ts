@@ -36,7 +36,7 @@ import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/p
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -325,7 +325,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
     const selectedInstanceType = this.instanceTypes.find(s => s.id === size);
 

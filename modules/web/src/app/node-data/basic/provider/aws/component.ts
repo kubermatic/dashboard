@@ -35,7 +35,7 @@ import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Size = 'size',
@@ -353,7 +353,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
     const awsSelectedSize = this._sizes.find(s => s.name === size);
 

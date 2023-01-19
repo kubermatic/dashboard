@@ -30,7 +30,7 @@ import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
 import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
@@ -39,7 +39,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {SettingsService} from '@core/services/settings';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Flavor = 'flavor',
@@ -427,7 +427,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const flavour = this._nodeDataService.nodeData.spec.cloud.openstack.flavor;
     const selectedFlavour = this.flavors.find(s => s.slug === flavour);
 
@@ -436,7 +436,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     }
     return {
       replicas: this._nodeDataService.nodeData.count,
-      diskSizeGB: this.form.get(Controls.Flavor)?.[ComboboxControls.Select],
+      diskSizeGB: this.form.get(Controls.CustomDiskSize).value,
       openstackSize: {
         ...selectedFlavour,
       } as OpenstackFlavor,

@@ -32,7 +32,7 @@ import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   VlanID = 'vlanID',
@@ -223,7 +223,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     return {
       replicas: this._nodeDataService.nodeData.count,
       anexiaNodeSpec: {

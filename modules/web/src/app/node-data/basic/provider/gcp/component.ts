@@ -35,7 +35,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   DiskSize = 'diskSize',
@@ -309,7 +309,7 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
     const selectedMachineType = this.machineTypes.find(s => s.name === size);
     return {

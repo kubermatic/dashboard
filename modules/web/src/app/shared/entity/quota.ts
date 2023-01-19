@@ -45,7 +45,7 @@ export class QuotaDetails extends Quota {
   status: QuotaStatus;
 }
 
-export class ResourceQuotaUpdateCalculation {
+export class ResourceQuotaCalculation {
   resourceQuota: ResourceQuota;
   calculatedQuota: QuotaVariables;
   message: string;
@@ -61,7 +61,7 @@ export class ResourceQuota {
   status: QuotaStatus;
 }
 
-export class ProjectResourceQuotaPayload {
+export class ResourceQuotaCalculationPayload {
   replicas: number;
   diskSizeGB?: number;
   alibabaInstanceType?: AlibabaInstanceType;

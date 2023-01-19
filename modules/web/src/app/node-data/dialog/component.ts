@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -29,7 +29,6 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
 import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
-import {QuotaWidgetComponent} from '@app/dynamic/enterprise/quotas/quota-widget/component';
 
 enum Mode {
   Edit = 'Edit',
@@ -44,7 +43,6 @@ export interface DialogDataInput {
   // If provided, data will be reused to pre-fill fields.
   initialClusterData?: Cluster;
   initialExternalClusterData?: ExternalCluster;
-  quotaWidget: TemplateRef<QuotaWidgetComponent>;
   initialNodeData?: NodeData;
 }
 
@@ -73,7 +71,6 @@ export interface DialogDataOutput {
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
   isRecreationWarningVisible = false;
   mode = Mode.Add;
-  quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
   readonly Control = Controls;
 
@@ -111,9 +108,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     });
 
     this._clusterSpecService.cluster = this._data.initialClusterData;
-
-    this.quotaWidget = this._data.quotaWidget;
-
     this._nodeDataService.nodeData = this._initNodeData();
     this.mode =
       this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name

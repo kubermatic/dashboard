@@ -12,17 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  TemplateRef,
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
@@ -69,7 +59,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() isClusterRunning: boolean;
   @Input() isInitialized = false;
   @Input() nodeDc: Datacenter;
-  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -149,7 +138,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showEditDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.quotaWidget)
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => {
@@ -186,7 +175,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   addNode(): void {
     this._node
-      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.quotaWidget)
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe({
         next: _ => this._clusterService.onClusterUpdate.next(),

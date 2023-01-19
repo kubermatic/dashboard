@@ -11,8 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-import {Component, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
@@ -42,8 +41,6 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
   styleUrls: ['./style.scss'],
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
-  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
-
   machineDeployment: MachineDeployment;
   machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];
@@ -196,7 +193,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.quotaWidget)
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
       .pipe(take(1))
       .subscribe(
         _ => {

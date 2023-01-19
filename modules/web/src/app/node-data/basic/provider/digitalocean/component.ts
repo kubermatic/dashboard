@@ -19,7 +19,7 @@ import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '@shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -147,7 +147,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     this._cdr.detectChanges();
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const slug = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
     const optimizedSize = this._sizes.optimized.find(size => size.slug === slug);
     const standardSize = this._sizes.standard.find(size => size.slug === slug);

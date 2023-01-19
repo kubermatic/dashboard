@@ -40,7 +40,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, Observable, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -149,6 +149,22 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
+    merge(
+      this.form.get(Controls.CPUs).valueChanges,
+      this.form.get(Controls.CPUCores).valueChanges,
+      this.form.get(Controls.MemoryMB).valueChanges,
+      this.form.get(Controls.DiskSizeGB).valueChanges,
+      this.form.get(Controls.IPAllocationMode).valueChanges,
+      this.form.get(Controls.StorageProfile).valueChanges,
+      this.form.get(Controls.Template).valueChanges,
+      this.form.get(Controls.Catalog).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
+
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter)))
       .pipe(takeUntil(this._unsubscribe))
@@ -223,22 +239,6 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Template]: this._builder.control(values ? values.template : defaults.template, [Validators.required]),
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
     });
-
-    merge(
-      this.form.get(Controls.CPUs).valueChanges,
-      this.form.get(Controls.CPUCores).valueChanges,
-      this.form.get(Controls.MemoryMB).valueChanges,
-      this.form.get(Controls.DiskSizeGB).valueChanges,
-      this.form.get(Controls.IPAllocationMode).valueChanges,
-      this.form.get(Controls.StorageProfile).valueChanges,
-      this.form.get(Controls.Template).valueChanges,
-      this.form.get(Controls.Catalog).valueChanges
-    )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        const payload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations(payload);
-      });
   }
 
   private get _storageProfilesObservable(): Observable<VMwareCloudDirectorStorageProfile[]> {
@@ -377,7 +377,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     return {
       replicas: this._nodeDataService.nodeData.count,
       vmDirectorNodeSpec: {

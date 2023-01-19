@@ -31,7 +31,7 @@ import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -189,7 +189,7 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
     return size.cpus ? size.cpus.map(s => s.count).reduce((a, b) => a + b) : -1;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const instanceType = this._nodeDataService.nodeData.spec.cloud?.packet?.instanceType;
     const selectedInstanceType = this.sizes.find(s => s.name === instanceType);
 

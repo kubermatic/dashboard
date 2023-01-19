@@ -24,7 +24,7 @@ import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -180,7 +180,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     return {
       replicas: this._nodeDataService.nodeData.count,
       vSphereNodeSpec: {

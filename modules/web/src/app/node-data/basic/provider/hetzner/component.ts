@@ -24,7 +24,7 @@ import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Type = 'type',
@@ -165,7 +165,7 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const type = this._nodeDataService.nodeData.spec.cloud.hetzner.type;
     const types = [...this._types.dedicated, ...this._types.standard];
     const selectedType = types.find(s => s.name === type);

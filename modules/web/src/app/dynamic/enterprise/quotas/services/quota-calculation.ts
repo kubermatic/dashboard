@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import _ from 'lodash';
 import {merge, Observable, Subject} from 'rxjs';
 import {debounceTime, filter, shareReplay, switchMap} from 'rxjs/operators';
-import {ProjectResourceQuotaPayload, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
+import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
 
 @Injectable({
@@ -12,57 +12,50 @@ import {environment} from '@environments/environment';
 export class QuotaCalculationService {
   private readonly _debounceTime = 500;
   private readonly _newRestRoot: string = environment.newRestRoot;
-  private _refreshQuotaCalculation$ = new Subject<void>();
-  private _resourceQuotaUpdateCalculationMap = new Map<string, Observable<ResourceQuotaUpdateCalculation>>();
-  private _quotaPayload: ProjectResourceQuotaPayload;
+  private _refresh$ = new Subject<void>();
+  private _requestMap = new Map<string, Observable<ResourceQuotaCalculation>>();
+  private _quotaPayload: ResourceQuotaCalculationPayload;
 
   constructor(private readonly _http: HttpClient) {}
 
-  get quotaPayload(): ProjectResourceQuotaPayload {
+  get quotaPayload(): ResourceQuotaCalculationPayload {
     return this._quotaPayload;
   }
 
-  set quotaPayload(value: ProjectResourceQuotaPayload) {
+  set quotaPayload(value: ResourceQuotaCalculationPayload) {
     this._quotaPayload = value;
   }
 
-  refreshQuotaCalculations(newQuotaPayload: ProjectResourceQuotaPayload) {
+  refreshQuotaCalculations(newQuotaPayload: ResourceQuotaCalculationPayload) {
     if (!_.isEqual(newQuotaPayload, this.quotaPayload)) {
-      this._applySettings(newQuotaPayload);
-      this._refreshQuotaCalculation$.next();
+      this._quotaPayload = newQuotaPayload;
+      this._refresh$.next();
     }
   }
 
   reset(key: string): void {
     this.quotaPayload = null;
-    if (this._resourceQuotaUpdateCalculationMap.has(key)) {
-      this._resourceQuotaUpdateCalculationMap.delete(key);
+    if (this._requestMap.has(key)) {
+      this._requestMap.delete(key);
     }
   }
 
-  getQuotaCalculations(projectID: string, provider: string): Observable<ResourceQuotaUpdateCalculation> {
+  getQuotaCalculations(projectID: string, provider: string): Observable<ResourceQuotaCalculation> {
     const mapKey = `${projectID}-${provider}`;
-    if (!this._resourceQuotaUpdateCalculationMap.has(mapKey)) {
-      const request$ = merge(this._refreshQuotaCalculation$)
+    if (!this._requestMap.has(mapKey)) {
+      const request$ = merge(this._refresh$)
         .pipe(debounceTime(this._debounceTime))
         .pipe(filter(() => this.quotaPayload !== null))
         .pipe(switchMap(_ => this.quotaCalculation(projectID, this.quotaPayload)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
-      this._resourceQuotaUpdateCalculationMap.set(mapKey, request$);
+      this._requestMap.set(mapKey, request$);
     }
 
-    return this._resourceQuotaUpdateCalculationMap.get(mapKey);
+    return this._requestMap.get(mapKey);
   }
 
-  quotaCalculation(
-    projectID: string,
-    payload: ProjectResourceQuotaPayload
-  ): Observable<ResourceQuotaUpdateCalculation> {
+  quotaCalculation(projectID: string, payload: ResourceQuotaCalculationPayload): Observable<ResourceQuotaCalculation> {
     const url = `${this._newRestRoot}/projects/${projectID}/quotacalculation`;
-    return this._http.post<ResourceQuotaUpdateCalculation>(url, payload);
-  }
-
-  private _applySettings(payload: ProjectResourceQuotaPayload): void {
-    this._quotaPayload = payload;
+    return this._http.post<ResourceQuotaCalculation>(url, payload);
   }
 }

@@ -10,7 +10,7 @@
     }
   }
 
-  .extended {
+  .extended-progress {
     .property-usage-bar:not(.mat-warn) {
       .mat-progress-bar-buffer {
         background-color: map.get($colors, estimate-quota-bar) !important;
