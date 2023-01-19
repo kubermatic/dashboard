@@ -608,7 +608,7 @@ func getOpenstackResourceDetails(req calculateProjectResourceQuotaUpdate, nc *ku
 func getVSphereResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
 	nc.WithCPUCount(req.Body.VSphereNodeSpec.CPUs)
 
-	if err := nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "G"); err != nil {
+	if err := nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "M"); err != nil {
 		return err
 	}
 
