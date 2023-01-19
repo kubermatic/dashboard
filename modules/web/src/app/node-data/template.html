@@ -52,7 +52,7 @@ limitations under the License.
 
     <div class="quota-widget"
          *ngIf="isEnterpriseEdition && isDialogView()">
-      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+      <ng-template #quotaWidgetContainer></ng-template>
     </div>
 
     <div fxLayout="row"
@@ -199,11 +199,9 @@ limitations under the License.
     </div>
 
 
-    <div *ngIf="!isDialogView()"
-         class="additional-margin"
-         fxLayoutAlign="start center">
-      <router-outlet name="quota-widget"
-                     (activate)="onActivate($event)"></router-outlet>
+    <div *ngIf="isEnterpriseEdition && !isDialogView()"
+         class="additional-margin">
+      <ng-template #quotaWidgetContainer></ng-template>
     </div>
 
 

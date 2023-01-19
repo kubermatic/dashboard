@@ -191,10 +191,10 @@ END OF TERMS AND CONDITIONS
 <ng-template #quotaWidgetDetails>
   <div class="km-quota-widget km-extended-widget"
        fxLayout="row">
+
     <div *ngIf="showIcon"
          class="km-quota-heading"
-         fxLayout="row"
-         fxLayoutAlign="space-between center">
+         fxLayoutAlign=" center">
       <i class="km-icon-mask km-icon-quota"></i>
     </div>
 
@@ -208,7 +208,8 @@ END OF TERMS AND CONDITIONS
       label: 'CPU',
       total: quotaDetails.quota.cpu,
       used: quotaDetails.status.globalUsage.cpu,
-      percentage: quotaPercentage.cpu
+      percentage: quotaPercentage.cpu,
+      buffer: estimatedQuotaPercentage?.cpu
       }"></ng-container>
 
       <ng-container *ngIf="quotaDetails.quota.memory"
@@ -218,7 +219,8 @@ END OF TERMS AND CONDITIONS
       unit: 'GB',
       total: quotaDetails.quota.memory,
       used: quotaDetails.status.globalUsage.memory,
-      percentage: quotaPercentage.memory
+      percentage: quotaPercentage.memory,
+      buffer: estimatedQuotaPercentage?.memory
       }"></ng-container>
 
       <ng-container *ngIf="quotaDetails.quota.storage"
@@ -228,27 +230,36 @@ END OF TERMS AND CONDITIONS
       unit: 'GB',
       total: quotaDetails.quota.storage,
       used: quotaDetails.status.globalUsage.storage,
-      percentage: quotaPercentage.storage
+      percentage: quotaPercentage.storage,
+      buffer: estimatedQuotaPercentage?.storage
       }"></ng-container>
     </div>
+  </div>
+
+  <div *ngIf="isEstimatedQuotaExceeded">
+    <mat-hint class="quota-exceeded km-error">
+      The estimated quota will exceed project quota.
+    </mat-hint>
   </div>
 
   <ng-template #extendedProgress
                let-label="label"
                let-percentage="percentage"
+               let-buffer="buffer"
                let-total="total"
                let-used="used"
                let-unit="unit">
-    <km-property>
+    <km-property class="extended-progress">
       <div key>
         <span fxFlex>{{label}}</span>
         <span>{{used ?? 0}}/{{total}} {{unit}}</span>
       </div>
       <div value>
         <mat-progress-bar class="property-usage-bar"
-                          mode="determinate"
+                          mode="buffer"
                           [color]="getProgressBarAccent(percentage)"
                           [value]="percentage ?? 1"
+                          [bufferValue]="buffer"
                           [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
       </div>
     </km-property>

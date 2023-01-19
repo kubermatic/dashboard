@@ -26,7 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, VMwareCloudDirectorNodeSpec} from '@shared/entity/node';
 import {
@@ -40,6 +40,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, Observable, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
   CPUs = 'cpus',
@@ -47,7 +49,7 @@ enum Controls {
   MemoryMB = 'memoryMB',
   DiskSizeGB = 'diskSizeGB',
   DiskIOPs = 'diskIOPs',
-  IPAllocationMode = 'IPAllocationMode',
+  IPAllocationMode = 'ipAllocationMode',
   StorageProfile = 'storageProfile',
   Catalog = 'catalog',
   Template = 'template',
@@ -120,7 +122,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -145,6 +148,22 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    merge(
+      this.form.get(Controls.CPUs).valueChanges,
+      this.form.get(Controls.CPUCores).valueChanges,
+      this.form.get(Controls.MemoryMB).valueChanges,
+      this.form.get(Controls.DiskSizeGB).valueChanges,
+      this.form.get(Controls.IPAllocationMode).valueChanges,
+      this.form.get(Controls.StorageProfile).valueChanges,
+      this.form.get(Controls.Template).valueChanges,
+      this.form.get(Controls.Catalog).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter)))
@@ -356,5 +375,22 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      vmDirectorNodeSpec: {
+        [Controls.CPUs]: this.form.get(Controls.CPUs).value,
+        [Controls.CPUCores]: this.form.get(Controls.CPUCores).value,
+        [Controls.MemoryMB]: this.form.get(Controls.MemoryMB).value,
+        [Controls.DiskSizeGB]: this.form.get(Controls.DiskSizeGB).value,
+        [Controls.DiskIOPs]: this.form.get(Controls.DiskIOPs).value,
+        [Controls.IPAllocationMode]: this.form.get(Controls.IPAllocationMode).value,
+        [Controls.StorageProfile]: this.form.get(Controls.StorageProfile).value?.[ComboboxControls.Select],
+        [Controls.Template]: this.form.get(Controls.Template).value?.[ComboboxControls.Select],
+        [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
+      } as VMwareCloudDirectorNodeSpec,
+    };
   }
 }

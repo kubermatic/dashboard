@@ -46,6 +46,7 @@
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
 @import 'src/app/shared/components/side-nav-field/theme';
+@import 'src/app/dynamic/enterprise/quotas/quota-widget/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -59,6 +60,7 @@
   @include theme-project-component($colors);
   @include theme-project-selector-component($colors);
   @include theme-property-usage-component($colors);
+  @include theme-quota-widget-component($colors);
   @include theme-install-addon-dialog-component($colors);
   @include theme-applications-list-component($colors);
   @include theme-add-application-dialog-component($colors);

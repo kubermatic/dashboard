@@ -20,10 +20,10 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
@@ -32,7 +32,6 @@ import {OperatingSystemManagerService} from '@core/services/operating-system-man
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -46,6 +45,10 @@ import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 import {DynamicModule} from '@dynamic/module-registry';
 import {AsyncValidators} from '@app/shared/validators/async.validators';
 import {ResourceType} from '@app/shared/entity/common';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
+import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -92,7 +95,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly MaxReplicasCount = 1000;
 
   @Input() provider: NodeProvider;
-  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
   taints: Taint[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
@@ -108,6 +110,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
+  private quotaWidgetComponentRef: QuotaWidgetComponent;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -130,10 +133,37 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _settingsService: SettingsService,
     private readonly _osmService: OperatingSystemManagerService,
     private readonly _projectService: ProjectService,
+    private readonly _quotaCalculationService: QuotaCalculationService,
     private readonly _params: ParamsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+  }
+
+  @ViewChild('quotaWidgetContainer', {read: ViewContainerRef})
+  set quotaWidgetContainer(ref: ViewContainerRef) {
+    if (ref && this.isEnterpriseEdition && !this.quotaWidgetComponentRef) {
+      this.quotaWidgetComponentRef = ref.createComponent(QuotaWidgetComponent).instance;
+      this.quotaWidgetComponentRef.projectId = this.projectId;
+      this.quotaWidgetComponentRef.showQuotaWidgetDetails = true;
+      this.quotaWidgetComponentRef.showIcon = true;
+      this.quotaWidgetComponentRef.estimatedQuotaExceeded
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((quotaExceeded: boolean) => {
+          if (quotaExceeded) {
+            this.form.get(Controls.Count).setErrors({quotaExceeded: true});
+          } else {
+            this.form.get(Controls.Count).setErrors(null);
+          }
+        });
+
+      this._quotaCalculationService
+        .getQuotaCalculations(this.projectId, this.provider)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((calculatedQuota: ResourceQuotaCalculation) => {
+          this.quotaWidgetComponentRef.updateEstimatedQuota(calculatedQuota);
+        });
+    }
   }
 
   ngOnInit(): void {
@@ -192,6 +222,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .subscribe(_ => {
         delete this._nodeDataService.nodeData.spec.cloud[this.provider];
         this.provider = this._clusterSpecService.provider;
+
+        const mapKey = `${this.projectId}-${this.provider}`;
+        this._quotaCalculationService.reset(mapKey);
       });
 
     this._clusterSpecService.clusterChanges
@@ -262,6 +295,15 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           : settings.defaultNodeCount;
       this.form.get(Controls.Count).setValue(replicas);
     });
+
+    merge(this.form.get(Controls.Count).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (Object.keys(payload).length > 1) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -336,12 +378,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   onTaintsChange(taints: Taint[]): void {
     this.taints = taints;
     this._nodeDataService.taints = this.taints;
-  }
-
-  onActivate(component: QuotaWidgetComponent): void {
-    component.projectId = this.projectId;
-    component.showQuotaWidgetDetails = true;
-    component.showIcon = true;
   }
 
   private _init(): void {
@@ -508,5 +544,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
 
     this.form.get(Controls.OperatingSystemProfile).setValue({main: ospValue});
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    return {
+      ...this._quotaCalculationService.quotaPayload,
+      replicas: this._nodeDataService.nodeData.count,
+    };
   }
 }

@@ -23,6 +23,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {duration} from 'moment';
+import _ from 'lodash';
+import {merge, Observable, of} from 'rxjs';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -33,11 +37,9 @@ import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {merge, Observable, of} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {duration} from 'moment';
 import {SettingsService} from '@core/services/settings';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Flavor = 'flavor',
@@ -94,14 +96,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
 
-  @ViewChild('flavorCombobox')
-  private readonly _flavorCombobox: FilteredComboboxComponent;
+  @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
 
-  @ViewChild('availabilityZoneCombobox')
-  private readonly _availabilityZoneCombobox: FilteredComboboxComponent;
+  @ViewChild('availabilityZoneCombobox') private readonly _availabilityZoneCombobox: FilteredComboboxComponent;
 
-  @ViewChild('serverGroupCombobox')
-  private readonly _serverGroupCombobox: FilteredComboboxComponent;
+  @ViewChild('serverGroupCombobox') private readonly _serverGroupCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
 
@@ -144,7 +143,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -212,6 +212,16 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._availabilityZonesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setAvailabilityZone.bind(this));
+
+    this.form
+      .get(Controls.Flavor)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -415,5 +425,21 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const flavour = this._nodeDataService.nodeData.spec.cloud.openstack.flavor;
+    const selectedFlavour = this.flavors.find(s => s.slug === flavour);
+
+    if (!selectedFlavour) {
+      return null;
+    }
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.CustomDiskSize).value,
+      openstackSize: {
+        ...selectedFlavour,
+      } as OpenstackFlavor,
+    };
   }
 }

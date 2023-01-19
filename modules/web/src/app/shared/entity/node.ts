@@ -278,13 +278,10 @@ export class VMwareCloudDirectorNodeSpec {
   cpus: number;
   cpuCores: number;
   memoryMB: number;
-
   diskSizeGB: number;
   diskIOPS?: number;
   storageProfile: string;
-
   ipAllocationMode: string;
-
   vapp?: string;
   catalog: string;
   template: string;

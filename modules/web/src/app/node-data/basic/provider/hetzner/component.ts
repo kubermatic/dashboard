@@ -14,15 +14,17 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import _ from 'lodash';
+import {Observable} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
-import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Type = 'type',
@@ -76,7 +78,8 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -95,6 +98,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
   }
 
@@ -156,5 +163,21 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const type = this._nodeDataService.nodeData.spec.cloud.hetzner.type;
+    const types = [...this._types.dedicated, ...this._types.standard];
+    const selectedType = types.find(s => s.name === type);
+
+    if (!selectedType) {
+      return null;
+    }
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      hetznerSize: {
+        ...selectedType,
+      } as Type,
+    };
   }
 }

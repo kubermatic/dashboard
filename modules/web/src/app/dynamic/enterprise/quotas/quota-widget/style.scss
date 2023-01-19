@@ -38,6 +38,12 @@
     padding: 0 10px;
   }
 
+  .quota-exceeded {
+    display: inline-block;
+    font-size: 75%;
+    padding: 10px;
+  }
+
   .km-quota-widget {
     height: 46px;
     white-space: nowrap;
@@ -107,10 +113,6 @@
 
     .km-quota-heading {
       margin-right: 10px;
-
-      span {
-        width: 100px;
-      }
     }
 
     .km-quota-percentages {
@@ -121,6 +123,10 @@
         height: 6px;
         margin: 8px 0;
         min-width: 100px;
+
+        & svg {
+          animation: none;
+        }
       }
     }
   }

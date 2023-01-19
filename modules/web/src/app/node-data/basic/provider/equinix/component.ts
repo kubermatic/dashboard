@@ -31,6 +31,8 @@ import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
   InstanceType = 'instanceType',
@@ -69,7 +71,8 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -86,6 +89,16 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
 
   ngAfterViewInit() {
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+
+    this.form
+      .get(Controls.InstanceType)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -174,5 +187,20 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _getCPUCount(size: EquinixSize): number {
     return size.cpus ? size.cpus.map(s => s.count).reduce((a, b) => a + b) : -1;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const instanceType = this._nodeDataService.nodeData.spec.cloud?.packet?.instanceType;
+    const selectedInstanceType = this.sizes.find(s => s.name === instanceType);
+
+    if (!selectedInstanceType) {
+      return null;
+    }
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      equinixSize: {
+        ...selectedInstanceType,
+      } as EquinixSize,
+    };
   }
 }

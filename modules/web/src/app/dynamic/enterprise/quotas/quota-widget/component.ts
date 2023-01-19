@@ -27,10 +27,12 @@ import {
   ChangeDetectorRef,
   OnChanges,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {QuotaDetails, QuotaVariables} from '@shared/entity/quota';
+import {QuotaDetails, QuotaVariables, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
@@ -50,6 +52,8 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _getPercentage = getPercentage;
   private _user: Member;
 
+  estimatedQuota: ResourceQuotaCalculation;
+
   @Input() projectId = '';
   @Input() showQuotaWidgetDetails = false;
   @Input() showAsCard = true;
@@ -62,8 +66,11 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showBorderOutline = true;
   @Input() collapsible = false;
   @Input() projectViewType = '';
+  @Output() estimatedQuotaExceeded = new EventEmitter<boolean>();
 
   quotaPercentage: QuotaVariables;
+  estimatedQuotaPercentage: QuotaVariables;
+  isEstimatedQuotaExceeded: boolean;
   quotaDetails: QuotaDetails;
   isLoading: boolean;
   showWarning: boolean;
@@ -86,8 +93,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     this._showDetails$.next(false);
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event): void {
+  @HostListener('window:resize', ['$event']) onResize(event): void {
     this.isCollapsed = event.target.innerWidth < maxScreenWidth && this.collapsible;
   }
 
@@ -132,6 +138,30 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     return quota && !!(quota.cpu || quota.memory || quota.storage);
   }
 
+  updateEstimatedQuota(quota: ResourceQuotaCalculation): void {
+    this.estimatedQuota = quota;
+    const calculatedQuota = this.estimatedQuota?.calculatedQuota;
+    this._setEstimatedQuotaPercentages(quota);
+
+    if (calculatedQuota) {
+      const {cpu, memory, storage} = calculatedQuota;
+      let isExceeded = false;
+
+      if (cpu > this.quotaDetails.quota?.cpu) {
+        isExceeded = true;
+      }
+      if (memory > this.quotaDetails.quota?.memory) {
+        isExceeded = true;
+      }
+      if (storage > this.quotaDetails.quota?.storage) {
+        isExceeded = true;
+      }
+
+      this.isEstimatedQuotaExceeded = isExceeded;
+      this.estimatedQuotaExceeded.emit(isExceeded);
+    }
+  }
+
   private _initSubscriptions(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => {
       this._user = user;
@@ -158,14 +188,22 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _setQuotaPercentages(quotaDetails: QuotaDetails): void {
-    const quota = quotaDetails.quota;
+    const totalQuota = quotaDetails.quota;
     const usage = quotaDetails.status.globalUsage;
+    this.quotaPercentage = this._getQuotaPercentage(totalQuota, usage);
+  }
 
-    const cpu = this._getPercentage(quota.cpu, usage.cpu) ?? 0;
-    const memory = this._getPercentage(quota.memory, usage.memory) ?? 0;
-    const storage = this._getPercentage(quota.storage, usage.storage) ?? 0;
+  private _setEstimatedQuotaPercentages(estimatedQuota: ResourceQuotaCalculation): void {
+    const totalQuota = estimatedQuota?.resourceQuota?.quota;
+    const estimatedUsage = estimatedQuota?.calculatedQuota;
+    this.estimatedQuotaPercentage = this._getQuotaPercentage(totalQuota, estimatedUsage);
+  }
 
-    this.quotaPercentage = {cpu, memory, storage};
+  private _getQuotaPercentage(total: QuotaVariables, usage: QuotaVariables): QuotaVariables {
+    const cpu = this._getPercentage(total.cpu, usage.cpu) ?? 0;
+    const memory = this._getPercentage(total.memory, usage.memory) ?? 0;
+    const storage = this._getPercentage(total.storage, usage.storage) ?? 0;
+    return {cpu, memory, storage};
   }
 
   private _setShowWarningIcon(): void {

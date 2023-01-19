@@ -34,6 +34,8 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   Size = 'size',
@@ -88,16 +90,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes = this._diskTypes.map(type => ({name: type}));
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
-  @ViewChild('sizeCombobox')
-  private readonly _sizeCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetCombobox')
-  private readonly _subnetCombobox: FilteredComboboxComponent;
+  @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -140,6 +141,15 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     merge(this.form.get(Controls.AMI).valueChanges, this.form.get(Controls.DiskSize).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Size).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -341,5 +351,21 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const size = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
+    const awsSelectedSize = this._sizes.find(s => s.name === size);
+
+    if (!awsSelectedSize) {
+      return null;
+    }
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.DiskSize).value,
+      awsSize: {
+        ...awsSelectedSize,
+      } as AWSSize,
+    };
   }
 }

@@ -34,6 +34,8 @@ import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp'
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   DiskSize = 'diskSize',
@@ -123,7 +125,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -157,6 +160,14 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Preemptible).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.MachineType)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
   }
 
   ngOnDestroy(): void {
@@ -296,5 +307,17 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const size = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
+    const selectedMachineType = this.machineTypes.find(s => s.name === size);
+    return {
+      replicas: this._nodeDataService.nodeData.count,
+      diskSizeGB: this.form.get(Controls.DiskSize).value,
+      gcpSize: {
+        ...selectedMachineType,
+      } as GCPMachineSize,
+    };
   }
 }
