@@ -36,12 +36,15 @@ import {
   KubeVirtInstanceTypeList,
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
+  KubeVirtOSImage,
+  KubeVirtOSImageList,
   KubeVirtPreference,
   KubeVirtPreferenceKind,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
   KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
+import {NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
@@ -81,6 +84,27 @@ enum StorageClassState {
   Empty = 'No Storage Classes Available',
 }
 
+class OSImageState {
+  static Loading = 'Loading...';
+
+  static Ready(os?: OperatingSystem) {
+    return `${this.getOSMessage(os)} System Image`;
+  }
+
+  static Empty(os?: OperatingSystem) {
+    return `No ${this.getOSMessage(os)} System Images Available`;
+  }
+
+  private static getOSMessage(os?: OperatingSystem): string {
+    return os ? NodeProviderConstants.getOperatingSystemDisplayName(os) : 'Operating';
+  }
+}
+
+class OSImageDropdownOption {
+  version: string;
+  link: string;
+}
+
 @Component({
   selector: 'km-kubevirt-basic-node-data',
   templateUrl: './template.html',
@@ -108,6 +132,8 @@ export class KubeVirtBasicNodeDataComponent
   private _preferenceCombobox: FilteredComboboxComponent;
   @ViewChild('storageClassCombobox')
   private _storageClassCombobox: FilteredComboboxComponent;
+  @ViewChild('osImageCombobox')
+  private _osImageCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _instanceTypeIDSeparator = ':';
@@ -116,10 +142,14 @@ export class KubeVirtBasicNodeDataComponent
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
   private _instanceTypes: KubeVirtInstanceTypeList;
   private _preferences: KubeVirtPreferenceList;
+  private _osImages: KubeVirtOSImageList;
   selectedInstanceType: KubeVirtInstanceType;
   instanceTypeLabel = InstanceTypeState.Empty;
   selectedPreference: KubeVirtPreference;
   preferenceLabel = PreferenceState.Empty;
+  osImageDropdownOptions: OSImageDropdownOption[];
+  selectedOSImage: KubeVirtOSImage;
+  osImageLabel: string = OSImageState.Empty();
   storageClasses: KubeVirtStorageClass[] = [];
   selectedStorageClass = '';
   storageClassLabel = StorageClassState.Empty;
@@ -129,6 +159,7 @@ export class KubeVirtBasicNodeDataComponent
   nodeAffinityPresetValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
   nodeAffinityPresetValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
+  selectedOS: OperatingSystem;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -157,6 +188,12 @@ export class KubeVirtBasicNodeDataComponent
     this.form.get(Controls.Preference).disable();
     this.form.get(Controls.NodeAffinityPresetKey).disable();
     this.form.get(Controls.NodeAffinityPresetValues).disable();
+
+    this._nodeDataService.operatingSystemChanges.pipe(takeUntil(this._unsubscribe)).subscribe(operatingSystem => {
+      this.selectedOS = operatingSystem;
+      this._setOSImageDropdownOptions();
+      this._setOSImageLabel();
+    });
 
     this.form
       .get(Controls.InstanceType)
@@ -204,10 +241,10 @@ export class KubeVirtBasicNodeDataComponent
   ngAfterViewInit(): void {
     this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setInstanceTypes.bind(this));
     this._preferencesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setPreferences.bind(this));
-
     this._storageClassesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultStorageClass.bind(this));
+    this._osImagesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setOSImages.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -249,6 +286,11 @@ export class KubeVirtBasicNodeDataComponent
       return preferenceId.substring(preferenceId.indexOf(this._instanceTypeIDSeparator) + 1);
     }
     return preferenceId;
+  }
+
+  osImageDisplayName(osImageLink: string): string {
+    const osImage = this.osImageDropdownOptions.find(image => image.link === osImageLink);
+    return osImage ? `${osImage.version} - ${osImage.link}` : osImageLink;
   }
 
   onInstanceTypeChange(instanceTypeId: string): void {
@@ -334,6 +376,11 @@ export class KubeVirtBasicNodeDataComponent
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
     }
+  }
+
+  onOSImageChange(osImageLink: string): void {
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskOSImage = osImageLink;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   viewInstanceDetails(): void {
@@ -450,6 +497,46 @@ export class KubeVirtBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
+  private get _osImagesObservable(): Observable<KubeVirtOSImageList> {
+    return this._nodeDataService.kubeVirt.osImages(this._clearOSImage.bind(this), this._onOSImagesLoading.bind(this));
+  }
+
+  private _clearOSImage(): void {
+    this._osImages = null;
+    this.selectedOSImage = null;
+    this.osImageLabel = OSImageState.Empty(this.selectedOS);
+    this._osImageCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onOSImagesLoading(): void {
+    this.osImageLabel = OSImageState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setOSImages(osImages: KubeVirtOSImageList): void {
+    this._osImages = osImages;
+    this._setOSImageDropdownOptions();
+    this._setOSImageLabel();
+    this._cdr.detectChanges();
+  }
+
+  private _setOSImageDropdownOptions(): void {
+    if (!this.selectedOS) {
+      this.osImageDropdownOptions = [];
+    }
+    const osVersions = this._osImages?.standard?.operatingSystems?.[this.selectedOS];
+    this.osImageDropdownOptions = osVersions
+      ? Object.keys(osVersions).map(version => ({version, link: osVersions[version]}))
+      : [];
+  }
+
+  private _setOSImageLabel(): void {
+    this.osImageLabel = this.osImageDropdownOptions?.length
+      ? OSImageState.Ready(this.selectedOS)
+      : OSImageState.Empty(this.selectedOS);
+  }
+
   onStorageClassChange(storageClass: string): void {
     this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskStorageClassName = storageClass;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
@@ -535,7 +622,6 @@ export class KubeVirtBasicNodeDataComponent
           kubevirt: {
             cpus: !instanceType && cpus ? `${cpus}` : null,
             memory: !instanceType && memory ? `${memory}Mi` : null,
-            primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,
             primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[
               ComboboxControls.Select
             ],
