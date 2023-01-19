@@ -44,7 +44,7 @@
 
     &.widget-border {
       border-radius: variables.$border-radius;
-      padding: 0 0 0 10px;
+      padding: 0 10px;
 
       km-property {
         padding-top: 6px;
@@ -70,8 +70,12 @@
     left: auto;
     position: absolute;
     top: 50px;
-    width: 270px;
+    width: 100%;
     z-index: 1;
+
+    &.collapsed {
+      width: 270px;
+    }
 
     mat-card-content {
       padding: 10px;
@@ -94,11 +98,7 @@
 
     &.quota-detail-project-cards-view {
       left: 30px;
-      width: 250px;
-    }
-
-    &.quota-detail-project-table-view {
-      width: 215px;
+      width: calc(100% - 30px);
     }
   }
 

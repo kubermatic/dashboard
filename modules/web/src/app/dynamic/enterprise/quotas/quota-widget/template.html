@@ -76,8 +76,8 @@ END OF TERMS AND CONDITIONS
       </ng-template>
     </div>
 
-    <mat-card class="km-quota-details"
-              [ngClass]="classForQuotaDetailInSelectProjectView"
+    <mat-card class="km-quota-details {{classForQuotaDetailInSelectProjectView}}"
+              [ngClass]="{'collapsed': isCollapsed}"
               *ngIf="showDetails$ | async">
 
       <mat-card-content *ngIf="!isCollapsed && quotaDetails"
