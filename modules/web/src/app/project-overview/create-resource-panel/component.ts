@@ -46,6 +46,7 @@ import {
 } from '@app/backup/list/automatic-backup/add-dialog/component';
 import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {SettingsService} from '@app/core/services/settings';
 
 @Component({
   selector: 'km-create-resource-panel',
@@ -63,6 +64,7 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @Output() refreshClusterTemplates = new EventEmitter<void>();
   @Output() refreshBackups = new EventEmitter<void>();
 
+  areExternalClustersEnabled = false;
   projectViewOnlyToolTip =
     'You do not have permission to perform this action. Contact the project owner to change your membership role';
 
@@ -75,7 +77,8 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     private readonly _elementRef: ElementRef,
     private readonly _router: Router,
     private readonly _matDialog: MatDialog,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +88,10 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
       .getCurrentUserGroup(this.project.id)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.areExternalClustersEnabled = settings.enableExternalClusterImport;
+    });
   }
 
   ngOnDestroy(): void {
