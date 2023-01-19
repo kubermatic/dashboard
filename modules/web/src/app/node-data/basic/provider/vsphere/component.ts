@@ -15,7 +15,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {merge, of} from 'rxjs';
-import {distinctUntilChanged, filter, skipWhile, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -28,7 +28,7 @@ import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
-  CPU = 'cpu',
+  CPUs = 'cpus',
   Memory = 'memory',
   Template = 'template',
   DiskSizeGB = 'diskSizeGB',
@@ -76,7 +76,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.CPU]: this._builder.control(this._defaultCPUCount, [Validators.required, Validators.min(1)]),
+      [Controls.CPUs]: this._builder.control(this._defaultCPUCount, [Validators.required, Validators.min(1)]),
       [Controls.Memory]: this._builder.control(this._defaultMemory, [
         Validators.required,
         Validators.min(this._minMemory),
@@ -90,12 +90,16 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
     merge(
       this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.CPU).valueChanges,
+      this.form.get(Controls.CPUs).valueChanges,
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.DiskSizeGB).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+      .subscribe(_ => {
+        this._nodeDataService.nodeData = this._getNodeData();
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
@@ -108,33 +112,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultTemplate.bind(this));
-
-    const cpu$ = this.form
-      .get(Controls.CPU)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const memory$ = this.form
-      .get(Controls.Memory)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const diskSizeGB$ = this.form
-      .get(Controls.DiskSizeGB)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const template$ = this.form
-      .get(Controls.Template)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    merge(cpu$, memory$, diskSizeGB$, template$)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations();
-      });
   }
 
   ngOnDestroy(): void {
@@ -144,7 +121,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.vsphere) {
-      this.form.get(Controls.CPU).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
+      this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.memory);
       this.form.get(Controls.DiskSizeGB).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB);
     }
@@ -194,7 +171,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         cloud: {
           vsphere: {
             template: this.template,
-            cpus: this.form.get(Controls.CPU).value,
+            cpus: this.form.get(Controls.CPUs).value,
             memory: this.form.get(Controls.Memory).value,
             diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
           } as VSphereNodeSpec,
@@ -207,10 +184,10 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     return {
       replicas: this._nodeDataService.nodeData.count,
       vSphereNodeSpec: {
-        template: this.template,
-        cpus: this.form.get(Controls.CPU).value,
-        memory: this.form.get(Controls.Memory).value,
-        diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
+        [Controls.Template]: this.template,
+        [Controls.CPUs]: this.form.get(Controls.CPUs).value,
+        [Controls.Memory]: this.form.get(Controls.Memory).value,
+        [Controls.DiskSizeGB]: this.form.get(Controls.DiskSizeGB).value,
       } as VSphereNodeSpec,
     };
   }

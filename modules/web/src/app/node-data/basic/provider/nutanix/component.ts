@@ -24,7 +24,7 @@ import {
 import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable, of, Subscription} from 'rxjs';
-import {distinctUntilChanged, filter, map, skipWhile, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -168,45 +168,17 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.DiskSize).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+      .subscribe(_ => {
+        this._nodeDataService.nodeData = this._getNodeData();
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
 
     this.form
       .get(Controls.Categories)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData.spec.cloud.nutanix.categories = this._getCategories();
-      });
-
-    const cpus$ = this.form
-      .get(Controls.CPUs)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const cpusCores$ = this.form
-      .get(Controls.CPUCores)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const cpuPassThrough$ = this.form
-      .get(Controls.CPUPassthrough)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const memory$ = this.form
-      .get(Controls.MemoryMB)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const diskSize$ = this.form
-      .get(Controls.DiskSize)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    merge(cpus$, cpusCores$, cpuPassThrough$, memory$, diskSize$)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations();
       });
   }
 
@@ -465,7 +437,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     return {
       replicas: this._nodeDataService.nodeData.count,
       nutanixNodeSpec: {
-        [Controls.SubnetName]: this.form.get(Controls.SubnetName).value,
+        [Controls.SubnetName]: this.form.get(Controls.SubnetName).value?.[ComboboxControls.Select],
         [Controls.ImageName]: this.form.get(Controls.ImageName).value,
         [Controls.Categories]: this._getCategories(),
         [Controls.CPUs]: this.form.get(Controls.CPUs).value,

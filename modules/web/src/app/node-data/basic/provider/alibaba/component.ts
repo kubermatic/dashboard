@@ -25,12 +25,12 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {distinctUntilChanged, filter, map, skipWhile, takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil} from 'rxjs/operators';
 import {compare} from '@shared/utils/common';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -161,25 +161,13 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
       )
       .subscribe(vs => (this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vs));
 
-    const diskSize$ = this.form
-      .get(Controls.DiskSize)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const instanceType$ = this.form
-      .get(Controls.InstanceType)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    merge(diskSize$, instanceType$)
+    merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.InstanceType).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations();
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
   }
 
@@ -340,6 +328,10 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.alibaba.instanceType;
     const selectedInstanceType = this.instanceTypes.find(s => s.id === size);
+
+    if (!selectedInstanceType) {
+      return null;
+    }
     return {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,

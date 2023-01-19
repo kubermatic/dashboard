@@ -26,7 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {duration} from 'moment';
 import _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
-import {distinctUntilChanged, skipWhile, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -213,19 +213,15 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setAvailabilityZone.bind(this));
 
-    const flavor$ = this.form
+    this.form
       .get(Controls.Flavor)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    flavor$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -434,6 +430,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
     const flavour = this._nodeDataService.nodeData.spec.cloud.openstack.flavor;
     const selectedFlavour = this.flavors.find(s => s.slug === flavour);
+
+    if (!selectedFlavour) {
+      return null;
+    }
     return {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.Flavor)?.[ComboboxControls.Select],

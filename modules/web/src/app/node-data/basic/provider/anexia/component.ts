@@ -24,7 +24,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {distinctUntilChanged, map, skipWhile, filter, takeUntil} from 'rxjs/operators';
+import {map, filter, takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '@core/services/node-data/service';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {AnexiaNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
@@ -127,44 +127,17 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       )
       .subscribe(t => (this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t));
 
-    const cpu$ = this.form
-      .get(Controls.Cpus)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const memory$ = this.form
-      .get(Controls.Memory)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const diskSize$ = this.form
-      .get(Controls.DiskSize)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const template$ = this.form
-      .get(Controls.TemplateID)
-      .valueChanges.pipe(skipWhile(value => !value?.[AutocompleteControls.Main]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[AutocompleteControls.Main] === curr?.[AutocompleteControls.Main]
-        )
-      );
-
-    const vlanID$ = this.form
-      .get(Controls.VlanID)
-      .valueChanges.pipe(skipWhile(value => !value?.[AutocompleteControls.Main]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[AutocompleteControls.Main] === curr?.[AutocompleteControls.Main]
-        )
-      );
-
-    merge(cpu$, memory$, diskSize$, template$, vlanID$)
+    merge(
+      this.form.get(Controls.Cpus).valueChanges,
+      this.form.get(Controls.Memory).valueChanges,
+      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.TemplateID).valueChanges,
+      this.form.get(Controls.VlanID).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations();
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
       });
   }
 
@@ -254,11 +227,11 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     return {
       replicas: this._nodeDataService.nodeData.count,
       anexiaNodeSpec: {
-        cpus: this.form.get(Controls.Cpus).value,
-        memory: this.form.get(Controls.Memory).value,
-        diskSize: this.form.get(Controls.DiskSize).value,
-        templateID: this.form.get(Controls.TemplateID).value?.[AutocompleteControls.Main],
-        vlanID: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
+        [Controls.Cpus]: this.form.get(Controls.Cpus).value,
+        [Controls.Memory]: this.form.get(Controls.Memory).value,
+        [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
+        [Controls.TemplateID]: this.form.get(Controls.TemplateID).value?.[AutocompleteControls.Main],
+        [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };
   }

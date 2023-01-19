@@ -25,14 +25,13 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@core/services/node-data/service';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
-import {takeUntil, skipWhile, distinctUntilChanged} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, EquinixNodeSpec} from '@shared/entity/node';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
-import {ComboboxControls} from '@shared/components/combobox/component';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -86,24 +85,20 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
     this.form = this._builder.group({
       [Controls.InstanceType]: this._builder.control('', Validators.required),
     });
-
-    const instanceType$ = this.form
-      .get(Controls.InstanceType)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    instanceType$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
   }
 
   ngAfterViewInit() {
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+
+    this.form
+      .get(Controls.InstanceType)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -195,11 +190,14 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
-    const instanceType = this._nodeDataService.nodeData.spec.cloud.packet.instanceType;
+    const instanceType = this._nodeDataService.nodeData.spec.cloud?.packet?.instanceType;
     const selectedInstanceType = this.sizes.find(s => s.name === instanceType);
+
+    if (!selectedInstanceType) {
+      return null;
+    }
     return {
       replicas: this._nodeDataService.nodeData.count,
-      diskSizeGB: this.form.get(Controls.InstanceType)?.[ComboboxControls.Select],
       equinixSize: {
         ...selectedInstanceType,
       } as EquinixSize,

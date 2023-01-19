@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import _ from 'lodash';
 import {merge, Observable, Subject} from 'rxjs';
 import {debounceTime, filter, shareReplay, switchMap} from 'rxjs/operators';
 import {ProjectResourceQuotaPayload, ResourceQuotaUpdateCalculation} from '@shared/entity/quota';
@@ -25,8 +26,11 @@ export class QuotaCalculationService {
     this._quotaPayload = value;
   }
 
-  refreshQuotaCalculations() {
-    this._refreshQuotaCalculation$.next();
+  refreshQuotaCalculations(newQuotaPayload: ProjectResourceQuotaPayload) {
+    if (!_.isEqual(newQuotaPayload, this.quotaPayload)) {
+      this._applySettings(newQuotaPayload);
+      this._refreshQuotaCalculation$.next();
+    }
   }
 
   reset(key: string): void {
@@ -56,5 +60,9 @@ export class QuotaCalculationService {
   ): Observable<ResourceQuotaUpdateCalculation> {
     const url = `${this._newRestRoot}/projects/${projectID}/quotacalculation`;
     return this._http.post<ResourceQuotaUpdateCalculation>(url, payload);
+  }
+
+  private _applySettings(payload: ProjectResourceQuotaPayload): void {
+    this._quotaPayload = payload;
   }
 }

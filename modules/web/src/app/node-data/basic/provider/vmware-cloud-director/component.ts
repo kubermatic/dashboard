@@ -39,7 +39,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, Observable, Subject} from 'rxjs';
-import {distinctUntilChanged, filter, skipWhile, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
@@ -49,7 +49,7 @@ enum Controls {
   MemoryMB = 'memoryMB',
   DiskSizeGB = 'diskSizeGB',
   DiskIOPs = 'diskIOPs',
-  IPAllocationMode = 'IPAllocationMode',
+  IPAllocationMode = 'ipAllocationMode',
   StorageProfile = 'storageProfile',
   Catalog = 'catalog',
   Template = 'template',
@@ -224,68 +224,20 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
     });
 
-    const cpus$ = this.form
-      .get(Controls.CPUs)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const cpusCores$ = this.form
-      .get(Controls.CPUCores)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const memory$ = this.form
-      .get(Controls.MemoryMB)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const diskSize$ = this.form
-      .get(Controls.DiskSizeGB)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const ipAllocationMode$ = this.form
-      .get(Controls.IPAllocationMode)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const diskSizeGB$ = this.form
-      .get(Controls.DiskSizeGB)
-      .valueChanges.pipe(skipWhile(value => !value))
-      .pipe(distinctUntilChanged());
-
-    const storageProfile$ = this.form
-      .get(Controls.StorageProfile)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    const template$ = this.form
-      .get(Controls.Template)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    const catalog$ = this.form
-      .get(Controls.Catalog)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    merge(cpus$, cpusCores$, memory$, diskSize$, ipAllocationMode$, diskSizeGB$, storageProfile$, template$, catalog$)
+    merge(
+      this.form.get(Controls.CPUs).valueChanges,
+      this.form.get(Controls.CPUCores).valueChanges,
+      this.form.get(Controls.MemoryMB).valueChanges,
+      this.form.get(Controls.DiskSizeGB).valueChanges,
+      this.form.get(Controls.IPAllocationMode).valueChanges,
+      this.form.get(Controls.StorageProfile).valueChanges,
+      this.form.get(Controls.Template).valueChanges,
+      this.form.get(Controls.Catalog).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations();
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
       });
   }
 
@@ -429,15 +381,15 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     return {
       replicas: this._nodeDataService.nodeData.count,
       vmDirectorNodeSpec: {
-        cpus: this.form.get(Controls.CPUs).value,
-        cpuCores: this.form.get(Controls.CPUCores).value,
-        memoryMB: this.form.get(Controls.MemoryMB).value,
-        diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
-        diskIOPS: this.form.get(Controls.DiskIOPs).value,
-        ipAllocationMode: this.form.get(Controls.IPAllocationMode).value,
-        storageProfile: this.form.get(Controls.StorageProfile).value?.[ComboboxControls.Select],
-        template: this.form.get(Controls.StorageProfile).value?.[ComboboxControls.Select],
-        catalog: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
+        [Controls.CPUs]: this.form.get(Controls.CPUs).value,
+        [Controls.CPUCores]: this.form.get(Controls.CPUCores).value,
+        [Controls.MemoryMB]: this.form.get(Controls.MemoryMB).value,
+        [Controls.DiskSizeGB]: this.form.get(Controls.DiskSizeGB).value,
+        [Controls.DiskIOPs]: this.form.get(Controls.DiskIOPs).value,
+        [Controls.IPAllocationMode]: this.form.get(Controls.IPAllocationMode).value,
+        [Controls.StorageProfile]: this.form.get(Controls.StorageProfile).value?.[ComboboxControls.Select],
+        [Controls.Template]: this.form.get(Controls.Template).value?.[ComboboxControls.Select],
+        [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
       } as VMwareCloudDirectorNodeSpec,
     };
   }

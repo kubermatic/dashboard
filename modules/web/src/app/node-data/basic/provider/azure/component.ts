@@ -24,7 +24,7 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {distinctUntilChanged, filter, skipWhile, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -144,19 +144,15 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
-    const size$ = this.form
+    this.form
       .get(Controls.Size)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    size$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -306,6 +302,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   private _getQuotaCalculationPayload(): ProjectResourceQuotaPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.azure.size;
     const selectedSize = this.sizes.find(s => s.name === size);
+
+    if (!selectedSize) {
+      return null;
+    }
     return {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],

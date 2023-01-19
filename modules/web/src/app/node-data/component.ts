@@ -296,10 +296,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
-        // Don't calculate quota based on replicas count
         if (Object.keys(payload).length > 1) {
-          this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-          this._quotaCalculationService.refreshQuotaCalculations();
+          const payload = this._getQuotaCalculationPayload();
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
         }
       });
   }

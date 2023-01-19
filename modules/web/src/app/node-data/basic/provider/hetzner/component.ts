@@ -16,7 +16,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDes
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
-import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
@@ -25,7 +25,6 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
-import {ComboboxControls} from '@shared/components/combobox/component';
 
 enum Controls {
   Type = 'type',
@@ -99,21 +98,11 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
-
-    const type$ = this.form
-      .get(Controls.Type)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    type$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
   }
 
   ngOnDestroy(): void {
@@ -180,6 +169,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     const type = this._nodeDataService.nodeData.spec.cloud.hetzner.type;
     const types = [...this._types.dedicated, ...this._types.standard];
     const selectedType = types.find(s => s.name === type);
+
+    if (!selectedType) {
+      return null;
+    }
     return {
       replicas: this._nodeDataService.nodeData.count,
       hetznerSize: {

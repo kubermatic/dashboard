@@ -16,11 +16,10 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDes
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {Observable} from 'rxjs';
-import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '@shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ProjectResourceQuotaPayload} from '@shared/entity/quota';
-import {ComboboxControls} from '@shared/components/combobox/component';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
@@ -87,19 +86,15 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
-    const size$ = this.form
+    this.form
       .get(Controls.Size)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    size$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -156,6 +151,10 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
     const slug = this._nodeDataService.nodeData.spec.cloud.digitalocean.size;
     const optimizedSize = this._sizes.optimized.find(size => size.slug === slug);
     const standardSize = this._sizes.standard.find(size => size.slug === slug);
+
+    if (!optimizedSize && !standardSize) {
+      return null;
+    }
 
     const payload = {
       replicas: this._nodeDataService.nodeData.count,

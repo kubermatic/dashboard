@@ -27,8 +27,8 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@core/services/node-data/service';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {distinctUntilChanged, filter, map, skipWhile, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -161,19 +161,13 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
-    const machineType$ = this.form
+    this.form
       .get(Controls.MachineType)
-      .valueChanges.pipe(skipWhile(value => !value?.[ComboboxControls.Select]))
-      .pipe(
-        distinctUntilChanged(
-          (prev: any, curr: any) => prev?.[ComboboxControls.Select] === curr?.[ComboboxControls.Select]
-        )
-      );
-
-    machineType$.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._quotaCalculationService.quotaPayload = this._getQuotaCalculationPayload();
-      this._quotaCalculationService.refreshQuotaCalculations();
-    });
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      });
   }
 
   ngOnDestroy(): void {
