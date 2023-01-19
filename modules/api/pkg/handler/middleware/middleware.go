@@ -986,7 +986,7 @@ func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIss
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			seedCluster := request.(seedClusterGetter).GetSeedCluster()
 
-			oidcIssuerVerifier, err := getOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.SeedName, seedCluster.ClusterID)
+			oidcIssuerVerifier, err := getOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.ClusterID)
 			if err != nil {
 				return nil, err
 			}
@@ -1001,32 +1001,37 @@ func getOIDCIssuerVerifier(
 	clusterProviderGetter provider.ClusterProviderGetter,
 	oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter,
 	seedsGetter provider.SeedsGetter,
-	seedName, clusterID string,
+	clusterID string,
 ) (authtypes.OIDCIssuerVerifier, error) {
+	if clusterID == "" {
+		return nil, fmt.Errorf("clusterID cannot be empty")
+	}
+
 	seeds, err := seedsGetter()
 	if err != nil {
 		return nil, err
 	}
 
-	if clusterID != "" {
-		for _, seed := range seeds {
-			clusterProvider, err := clusterProviderGetter(seed)
-			if err != nil {
-				return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
-			}
-			if clusterProvider.IsCluster(ctx, clusterID) {
-				seedName = seed.Name
-				break
-			}
+	var seedName string
+	for _, seed := range seeds {
+		clusterProvider, err := clusterProviderGetter(seed)
+		if err != nil {
+			return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
 		}
+		if clusterProvider.IsCluster(ctx, clusterID) {
+			seedName = seed.Name
+			break
+		}
+	}
+
+	if seedName == "" {
+		return nil, fmt.Errorf("couldnt find seed for cluster %q", clusterID)
 	}
 
 	seed, found := seeds[seedName]
 	if !found {
 		return nil, fmt.Errorf("couldn't find seed %q", seedName)
 	}
-
-	// TODO get the oidc issuer verifier for that
 
 	return oidcIssuerVerifierGetter(seed)
 }
