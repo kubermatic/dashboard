@@ -37,32 +37,36 @@ limitations under the License.
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators
                      [formControlName]="Controls.Labels"></km-label-form>
-      <mat-label *ngIf="projectQouta">Quota</mat-label>
-      <div class="km-quota-inputs"
-           *ngIf="projectQouta"
-           fxLayout="row"
-           fxLayoutGap="5px"
-           fxLayoutAlign="space-between center">
-        <km-number-stepper id="km-cpu-input"
-                           label="CPU"
-                           min="0"
-                           [formControlName]="Controls.CPUQuota">
-        </km-number-stepper>
 
-        <km-number-stepper id="km-memory-input"
-                           label="Memory (GB)"
-                           min="0"
-                           type="decimal"
-                           [formControlName]="Controls.MemoryQuota">
-        </km-number-stepper>
+      <ng-container  *ngIf="isEnterpriseEdition && projectQouta">
+        <mat-card-header>
+          <mat-card-title>Quota</mat-card-title>
+        </mat-card-header>
+        <div class="km-quota-inputs"
+             fxLayout="row"
+             fxLayoutGap="5px"
+             fxLayoutAlign="space-between center">
+          <km-number-stepper id="km-cpu-input"
+                             label="CPU"
+                             min="0"
+                             [formControlName]="Controls.CPUQuota">
+          </km-number-stepper>
 
-        <km-number-stepper id="km-storage-input"
-                           label="Disk (GB)"
-                           min="0"
-                           type="decimal"
-                           [formControlName]="Controls.StorageQuota">
-        </km-number-stepper>
-      </div>
+          <km-number-stepper id="km-memory-input"
+                             label="Memory (GB)"
+                             min="0"
+                             type="decimal"
+                             [formControlName]="Controls.MemoryQuota">
+          </km-number-stepper>
+
+          <km-number-stepper id="km-storage-input"
+                             label="Disk (GB)"
+                             min="0"
+                             type="decimal"
+                             [formControlName]="Controls.StorageQuota">
+          </km-number-stepper>
+        </div>
+      </ng-container>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

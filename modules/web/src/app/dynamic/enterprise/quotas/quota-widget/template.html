@@ -49,7 +49,7 @@ END OF TERMS AND CONDITIONS
                     [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText"></ng-container>
 
       <ng-template #quotaBars>
-        <ng-container *ngIf="quotaDetails else emptyPlaceholder">
+        <ng-container *ngIf="hasQuota() else emptyPlaceholder">
           <ng-container *ngIf="quotaDetails.quota.cpu"
                         [ngTemplateOutlet]="progressBar"
                         [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
@@ -76,8 +76,8 @@ END OF TERMS AND CONDITIONS
       </ng-template>
     </div>
 
-    <mat-card class="km-quota-details"
-              [ngClass]="classForQuotaDetailInSelectProjectView"
+    <mat-card class="km-quota-details {{classForQuotaDetailInSelectProjectView}}"
+              [ngClass]="{'collapsed': isCollapsed}"
               *ngIf="showDetails$ | async">
 
       <mat-card-content *ngIf="!isCollapsed && quotaDetails"
