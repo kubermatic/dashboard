@@ -809,14 +809,18 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 		Applications: apps,
 	}
 
-	// Add preset annotations
 	ct.Annotations = make(map[string]string)
 	if template.Annotations != nil {
+		// Add preset annotations
 		if value, ok := template.Annotations[kubermaticv1.PresetNameAnnotation]; ok {
 			ct.Annotations[kubermaticv1.PresetNameAnnotation] = value
 		}
 		if value, ok := template.Annotations[kubermaticv1.PresetInvalidatedAnnotation]; ok {
 			ct.Annotations[kubermaticv1.PresetInvalidatedAnnotation] = value
+		}
+		// Add initial CNI values request annotation
+		if value, ok := template.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation]; ok {
+			ct.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation] = value
 		}
 	}
 
