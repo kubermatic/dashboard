@@ -282,6 +282,11 @@ func GenerateCluster(
 		partialCluster.Annotations[kubermaticv1.InitialApplicationInstallationsRequestAnnotation] = string(data)
 	}
 
+	// Propagate initial CNI values request annotation
+	if value, ok := body.Cluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation]; ok {
+		partialCluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation] = value
+	}
+
 	// Owning project ID must be set early, because it will be inherited by some child objects,
 	// for example the credentials secret.
 	partialCluster.Labels[kubermaticv1.ProjectIDLabelKey] = projectID
@@ -1113,14 +1118,18 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 	if filterSystemLabels {
 		cluster.Labels = label.FilterLabels(label.ClusterResourceType, internalCluster.Labels)
 	}
-	// Add preset annotations
 	cluster.Annotations = make(map[string]string)
 	if internalCluster.Annotations != nil {
+		// Add preset annotations
 		if value, ok := internalCluster.Annotations[kubermaticv1.PresetNameAnnotation]; ok {
 			cluster.Annotations[kubermaticv1.PresetNameAnnotation] = value
 		}
 		if value, ok := internalCluster.Annotations[kubermaticv1.PresetInvalidatedAnnotation]; ok {
 			cluster.Annotations[kubermaticv1.PresetInvalidatedAnnotation] = value
+		}
+		// Add initial CNI values request annotation
+		if value, ok := internalCluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation]; ok {
+			cluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation] = value
 		}
 	}
 
