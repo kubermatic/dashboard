@@ -94,27 +94,10 @@ export class ExternalCluster {
   }
 
   static getStatusIcon(cluster: ExternalCluster): string {
-    switch (cluster?.status?.state) {
-      case ExternalClusterState.Running:
-        return StatusIcon.Running;
-      case ExternalClusterState.Provisioning:
-      case ExternalClusterState.Reconciling:
-      case ExternalClusterState.ReconcilingUpgrade:
-      case ExternalClusterState.ReconcilingMigrate:
-      case ExternalClusterState.Starting:
-      case ExternalClusterState.Stopping:
-        return StatusIcon.Pending;
-      case ExternalClusterState.Stopped:
-        return StatusIcon.Stopped;
-      case ExternalClusterState.Warning:
-        return StatusIcon.Warning;
-      case ExternalClusterState.Deleting:
-      case ExternalClusterState.Error:
-        return StatusIcon.Error;
-      case ExternalClusterState.Unknown:
-      default:
-        return StatusIcon.Unknown;
+    if (cluster?.status?.state) {
+      return ExternalClusterStateIcon[cluster.status.state] || StatusIcon.Unknown;
     }
+    return StatusIcon.Unknown;
   }
 }
 
@@ -135,19 +118,46 @@ export class ExternalCloudSpec {
 }
 
 export enum ExternalClusterState {
-  Provisioning = 'Provisioning',
-  Running = 'Running',
-  Reconciling = 'Reconciling',
-  ReconcilingUpgrade = 'ReconcilingUpgrade',
-  ReconcilingMigrate = 'ReconcilingMigrate',
-  Stopping = 'Stopping',
-  Stopped = 'Stopped',
-  Starting = 'Starting',
+  ConfigError = 'ConfigError',
+  ConnectionError = 'ConnectionError',
   Deleting = 'Deleting',
   Error = 'Error',
+  EtcdError = 'EtcdError',
+  KubeClientError = 'KubeClientError',
+  Provisioning = 'Provisioning',
+  Reconciling = 'Reconciling',
+  ReconcilingMigrate = 'ReconcilingMigrate',
+  ReconcilingUpgrade = 'ReconcilingUpgrade',
+  Running = 'Running',
+  RuntimeError = 'RuntimeError',
+  SSHError = 'SSHError',
+  Starting = 'Starting',
+  Stopped = 'Stopped',
+  Stopping = 'Stopping',
   Unknown = 'Unknown',
   Warning = 'Warning',
 }
+
+const ExternalClusterStateIcon: Record<ExternalClusterState, StatusIcon> = {
+  [ExternalClusterState.ConfigError]: StatusIcon.Error,
+  [ExternalClusterState.ConnectionError]: StatusIcon.Error,
+  [ExternalClusterState.Deleting]: StatusIcon.Error,
+  [ExternalClusterState.Error]: StatusIcon.Error,
+  [ExternalClusterState.EtcdError]: StatusIcon.Error,
+  [ExternalClusterState.KubeClientError]: StatusIcon.Error,
+  [ExternalClusterState.Provisioning]: StatusIcon.Pending,
+  [ExternalClusterState.Reconciling]: StatusIcon.Pending,
+  [ExternalClusterState.ReconcilingMigrate]: StatusIcon.Pending,
+  [ExternalClusterState.ReconcilingUpgrade]: StatusIcon.Pending,
+  [ExternalClusterState.Running]: StatusIcon.Running,
+  [ExternalClusterState.RuntimeError]: StatusIcon.Error,
+  [ExternalClusterState.SSHError]: StatusIcon.Error,
+  [ExternalClusterState.Starting]: StatusIcon.Pending,
+  [ExternalClusterState.Stopped]: StatusIcon.Stopped,
+  [ExternalClusterState.Stopping]: StatusIcon.Pending,
+  [ExternalClusterState.Unknown]: StatusIcon.Unknown,
+  [ExternalClusterState.Warning]: StatusIcon.Warning,
+};
 
 export class ExternalClusterStatus {
   state: ExternalClusterState;
