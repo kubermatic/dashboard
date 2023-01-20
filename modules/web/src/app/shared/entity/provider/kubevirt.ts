@@ -77,6 +77,12 @@ export class KubeVirtNodePreference {
   }
 }
 
+export class KubeVirtNodeSize {
+  cpus: string;
+  memory: string;
+  primaryDiskSize: string;
+}
+
 export class KubeVirtStorageClass {
   name: string;
 }
