@@ -214,7 +214,6 @@ export class HetznerNodeSpec {
 
 export class KubeVirtNodeSpec {
   name: string;
-
   instancetype?: KubeVirtNodeInstanceType;
   preference?: KubeVirtNodePreference;
   flavorProfile: string;

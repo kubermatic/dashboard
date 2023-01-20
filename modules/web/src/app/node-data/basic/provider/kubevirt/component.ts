@@ -26,6 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {MatDialog} from '@angular/material/dialog';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {NodeDataService} from '@core/services/node-data/service';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {KubeVirtNodeAffinityPreset, KubeVirtNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {
@@ -36,6 +37,7 @@ import {
   KubeVirtInstanceTypeList,
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
+  KubeVirtNodeSize,
   KubeVirtOSImage,
   KubeVirtOSImageList,
   KubeVirtPreference,
@@ -44,12 +46,13 @@ import {
   KubeVirtStorageClass,
   KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
-import {Observable} from 'rxjs';
+import {merge, Observable} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
@@ -126,14 +129,10 @@ export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator
   implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit
 {
-  @ViewChild('instanceTypeCombobox')
-  private _instanceTypeCombobox: FilteredComboboxComponent;
-  @ViewChild('preferenceCombobox')
-  private _preferenceCombobox: FilteredComboboxComponent;
-  @ViewChild('storageClassCombobox')
-  private _storageClassCombobox: FilteredComboboxComponent;
-  @ViewChild('osImageCombobox')
-  private _osImageCombobox: FilteredComboboxComponent;
+  @ViewChild('instanceTypeCombobox') private _instanceTypeCombobox: FilteredComboboxComponent;
+  @ViewChild('preferenceCombobox') private _preferenceCombobox: FilteredComboboxComponent;
+  @ViewChild('storageClassCombobox') private _storageClassCombobox: FilteredComboboxComponent;
+  @ViewChild('osImageCombobox') private _osImageCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _instanceTypeIDSeparator = ':';
@@ -165,7 +164,8 @@ export class KubeVirtBasicNodeDataComponent
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -207,6 +207,11 @@ export class KubeVirtBasicNodeDataComponent
           preferenceControl.reset();
           preferenceControl.disable();
         }
+
+        const payload = this._getQuotaCalculationPayload(value);
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
 
     this.form
@@ -231,6 +236,19 @@ export class KubeVirtBasicNodeDataComponent
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    merge(
+      this.form.get(Controls.CPUs).valueChanges,
+      this.form.get(Controls.Memory).valueChanges,
+      this.form.get(Controls.PrimaryDiskSize).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const payload = this._getQuotaCalculationPayload();
+        if (payload) {
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -527,7 +545,10 @@ export class KubeVirtBasicNodeDataComponent
     }
     const osVersions = this._osImages?.standard?.operatingSystems?.[this.selectedOS];
     this.osImageDropdownOptions = osVersions
-      ? Object.keys(osVersions).map(version => ({version, link: osVersions[version]}))
+      ? Object.keys(osVersions).map(version => ({
+          version,
+          link: osVersions[version],
+        }))
       : [];
   }
 
@@ -631,5 +652,35 @@ export class KubeVirtBasicNodeDataComponent
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getQuotaCalculationPayload(instanceTypeId?: string): ResourceQuotaCalculationPayload {
+    const payload = {
+      replicas: this._nodeDataService.nodeData.count,
+      kubevirtNodeSize: {
+        [Controls.PrimaryDiskSize]: this.form.get(Controls.PrimaryDiskSize).value + 'G',
+      } as KubeVirtNodeSize,
+    };
+
+    if (instanceTypeId) {
+      payload.kubevirtNodeSize = {
+        ...payload.kubevirtNodeSize,
+        [Controls.CPUs]: this.selectedInstanceTypeCpus + '',
+        [Controls.Memory]: this.selectedInstanceTypeMemory,
+      };
+    } else {
+      const cpus = this.form.get(Controls.CPUs).value;
+      const memory = this.form.get(Controls.Memory).value;
+
+      if (!cpus || !memory) {
+        return null;
+      }
+      payload.kubevirtNodeSize = {
+        ...payload.kubevirtNodeSize,
+        [Controls.CPUs]: this.form.get(Controls.CPUs).value + '',
+        [Controls.Memory]: this.form.get(Controls.Memory).value + 'M',
+      };
+    }
+    return payload;
   }
 }

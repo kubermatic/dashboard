@@ -21,6 +21,7 @@ import {EquinixSize} from '@shared/entity/provider/equinix';
 import {GCPMachineSize} from '@shared/entity/provider/gcp';
 import {Type} from '@shared/entity/provider/hetzner';
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {KubeVirtNodeSize} from '@shared/entity/provider/kubevirt';
 
 export class QuotaVariables {
   cpu?: number;
@@ -72,6 +73,7 @@ export class ResourceQuotaCalculationPayload {
   equinixSize?: EquinixSize;
   gcpSize?: GCPMachineSize;
   hetznerSize?: Type;
+  kubevirtNodeSize?: KubeVirtNodeSize;
   nutanixNodeSpec?: any;
   openstackSize?: OpenstackFlavor;
   vmDirectorNodeSpec?: any;
