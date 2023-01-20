@@ -80,6 +80,7 @@ export class Cluster {
   inheritedLabels?: object;
   credential?: string;
   machineDeploymentCount?: number;
+  annotations?: Record<ClusterAnnotation | string, string>;
 
   static isDualStackNetworkSelected(cluster: Cluster) {
     return cluster?.spec.clusterNetwork?.ipFamily === IPFamily.DualStack;
@@ -377,6 +378,10 @@ export class CNIPluginVersions {
   versions: string[];
 }
 
+export enum ClusterAnnotation {
+  InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
+}
+
 export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
@@ -617,4 +622,5 @@ class ClusterModel {
   spec: ClusterSpec;
   labels?: object;
   credential?: string;
+  annotations?: Record<ClusterAnnotation | string, string>;
 }

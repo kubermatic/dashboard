@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {CloudSpec, Cluster, EventRateLimitConfig} from '@shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterAnnotation, EventRateLimitConfig} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
@@ -147,6 +147,12 @@ export class ClusterSpecService {
   initializeClusterFromClusterTemplate(template: ClusterTemplate): void {
     this.cluster = template.cluster;
     this.sshKeys = this.sshKeysFromClusterTemplateUserSSHKeys(template.userSshKeys);
+    if (template.annotations?.[ClusterAnnotation.InitialCNIValuesRequest]) {
+      this.cluster.annotations = {
+        ...(this.cluster.annotations || {}),
+        [ClusterAnnotation.InitialCNIValuesRequest]: template.annotations[ClusterAnnotation.InitialCNIValuesRequest],
+      };
+    }
     this.isCusterTemplateEditMode = true;
   }
 

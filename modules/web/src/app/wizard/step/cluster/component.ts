@@ -22,11 +22,16 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
 import {
   IPV6_CIDR_PATTERN_VALIDATOR,
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
 } from '@app/shared/validators/others';
+import {
+  CiliumApplicationValuesDialogComponent,
+  CiliumApplicationValuesDialogData,
+} from './cilium-application-values-dialog/component';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -47,6 +52,7 @@ import {
   ProxyMode,
   ExposeStrategy,
   NetworkRanges,
+  ClusterAnnotation,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -140,6 +146,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   clusterTemplateEditMode = false;
   loadingClusterDefaults = false;
+  canEditCNIValues: boolean;
+  cniApplicationValues: string;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
@@ -155,10 +163,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _defaultAllowedIPRangeIPv4 = '0.0.0.0/0';
   private readonly _defaultAllowedIPRangeIPv6 = '::/0';
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
+  private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _cdr: ChangeDetectorRef,
+    private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -173,6 +183,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._initForm();
 
     this.clusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
+    this.cniApplicationValues =
+      this._clusterSpecService.cluster.annotations?.[ClusterAnnotation.InitialCNIValuesRequest];
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
@@ -320,6 +332,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         _ => (this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange())
       );
 
+    merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.CNIPluginVersion).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._handleCNIPluginChanges());
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
@@ -351,6 +367,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     this._handleClusterSpecChanges();
+    this._handleCNIPluginChanges();
   }
 
   generateName(): void {
@@ -430,6 +447,23 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isDualStackIPFamilySelected(): boolean {
     return this.form.get(Controls.IPFamily).value === IPFamily.DualStack;
+  }
+
+  editCNIValues() {
+    const dialogData = {
+      data: {
+        applicationValues: this.cniApplicationValues,
+      } as CiliumApplicationValuesDialogData,
+    };
+    const dialogRef = this._matDialog.open(CiliumApplicationValuesDialogComponent, dialogData);
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .pipe(filter(Boolean))
+      .subscribe(updatedValues => {
+        this.cniApplicationValues = updatedValues;
+        this._clusterSpecService.cluster = this._getClusterEntity();
+      });
   }
 
   // eslint-disable-next-line complexity
@@ -606,9 +640,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
 
         this._handleClusterSpecChanges();
+        this._handleCNIPluginChanges();
         this._updateAvailableProxyModes();
         this._fetchCNIPlugins();
         this._defaultProxyMode = clusterSpec?.clusterNetwork?.proxyMode;
+        this.cniApplicationValues = cluster.annotations?.[ClusterAnnotation.InitialCNIValuesRequest];
         this.loadingClusterDefaults = false;
         this._cdr.detectChanges();
       });
@@ -624,6 +660,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this.onPodNodeSelectorAdmissionPluginConfigChange(clusterSpec?.podNodeSelectorAdmissionPluginConfig);
       }
     }
+  }
+
+  private _handleCNIPluginChanges(): void {
+    const cniVersion = this.controlValue(Controls.CNIPluginVersion);
+    const cniPlugin = this.controlValue(Controls.CNIPlugin);
+    this.canEditCNIValues =
+      cniPlugin === CNIPlugin.Cilium &&
+      cniVersion &&
+      gte(coerce(cniVersion), this._cniInitialValuesMinimumSupportedVersion);
   }
 
   private _fetchCNIPlugins(): void {
@@ -766,6 +811,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       konnectivityEnabled: konnectivity,
     } as ClusterNetwork;
 
+    let annotations = this._clusterSpecService.cluster.annotations;
+    if (this.cniApplicationValues) {
+      annotations = {
+        ...(annotations || {}),
+        [ClusterAnnotation.InitialCNIValuesRequest]: this.canEditCNIValues ? this.cniApplicationValues : null,
+      };
+    }
+
     if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
       if (ipv4Pods && ipv6Pods) {
@@ -782,6 +835,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     return {
       name: this.controlValue(Controls.Name),
+      annotations,
       spec: {
         version: this.controlValue(Controls.Version),
         auditLogging: {
