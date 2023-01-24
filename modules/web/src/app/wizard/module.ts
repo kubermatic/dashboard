@@ -14,6 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {ApplicationsStepComponent} from '@app/wizard/step/applications/component';
+import {CiliumApplicationValuesDialogComponent} from '@app/wizard/step/cluster/cilium-application-values-dialog/component';
 import {OpenstackProviderExtendedAppCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/application/component';
 import {OpenstackProviderExtendedDefaultCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/default/component';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
@@ -91,6 +92,7 @@ const components = [
   NutanixProviderExtendedComponent,
   VMwareCloudDirectorProviderBasicComponent,
   VMwareCloudDirectorProviderExtendedComponent,
+  CiliumApplicationValuesDialogComponent,
 ];
 
 @NgModule({

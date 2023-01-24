@@ -253,6 +253,16 @@ limitations under the License.
           <div fxLayout="column"
                fxFlex="100"
                fxLayoutGap="10px">
+            <div fxLayoutAlign="flex-start">
+              <button *ngIf="canEditCNIValues"
+                      mat-flat-button
+                      color="quaternary"
+                      fxLayoutAlign="center center"
+                      (click)="editCNIValues()">
+                <i class="km-icon-mask km-icon-edit"></i>
+                <span>Edit CNI Values</span>
+              </button>
+            </div>
             <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache">
               Node Local DNS Cache
             </mat-checkbox>
