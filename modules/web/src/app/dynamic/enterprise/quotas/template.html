@@ -69,7 +69,10 @@ END OF TERMS AND CONDITIONS
                fxLayoutGap="10px">
             <span>{{element?.subjectHumanReadableName || element?.name}}</span>
             <span *ngIf="element.isDefault"
-                  class="km-label-primary">Default</span>
+                  class="km-label-primary km-pointer"
+                  matTooltip="Project has been assigned the default project quota. This can be overridden by updating the quota values for this project.">
+              Default
+            </span>
           </div>
         </td>
       </ng-container>
