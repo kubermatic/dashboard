@@ -139,6 +139,14 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateEstimatedQuota(quota: ResourceQuotaCalculation): void {
+    if (!quota) {
+      this.estimatedQuota = null;
+      this.estimatedQuotaPercentage = null;
+      this.isEstimatedQuotaExceeded = false;
+      this.estimatedQuotaExceeded.emit(false);
+      return;
+    }
+
     this.estimatedQuota = quota;
     const calculatedQuota = this.estimatedQuota?.calculatedQuota;
     this._setEstimatedQuotaPercentages(quota);
