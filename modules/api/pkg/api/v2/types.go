@@ -1962,6 +1962,8 @@ type ApplicationDefinitionListItemSpec struct {
 	Labels map[string]string `json:"labels,omitempty"`
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
+	// Method used to install the application
+	Method appskubermaticv1.TemplateMethod `json:"method"`
 }
 
 // ApplicationDefinitionBody is the object representing the POST/PUT payload of an ApplicationDefinition

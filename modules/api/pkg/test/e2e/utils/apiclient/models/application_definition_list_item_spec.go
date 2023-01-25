@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -22,15 +23,67 @@ type ApplicationDefinitionListItemSpec struct {
 
 	// Labels can contain metadata about the application, such as the owner who manages it.
 	Labels map[string]string `json:"labels,omitempty"`
+
+	// method
+	Method TemplateMethod `json:"method,omitempty"`
 }
 
 // Validate validates this application definition list item spec
 func (m *ApplicationDefinitionListItemSpec) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateMethod(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this application definition list item spec based on context it is used
+func (m *ApplicationDefinitionListItemSpec) validateMethod(formats strfmt.Registry) error {
+	if swag.IsZero(m.Method) { // not required
+		return nil
+	}
+
+	if err := m.Method.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("method")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("method")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this application definition list item spec based on the context it is used
 func (m *ApplicationDefinitionListItemSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateMethod(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ApplicationDefinitionListItemSpec) contextValidateMethod(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Method.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("method")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("method")
+		}
+		return err
+	}
+
 	return nil
 }
 
