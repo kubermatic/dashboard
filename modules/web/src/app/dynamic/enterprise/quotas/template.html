@@ -81,7 +81,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Memory (GB)</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota.memory"
+          <div *ngIf="element.quota && (element.quota.memory || element.quota.memory === 0)"
                fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
@@ -102,7 +102,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>CPU</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota.cpu"
+          <div *ngIf="element.quota && (element.quota.cpu || element.quota.cpu === 0)"
                fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
@@ -123,7 +123,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Disk (GB)</th>
         <td mat-cell
             *matCellDef="let element">
-          <div *ngIf="element.quota.storage"
+          <div *ngIf="element.quota && (element.quota.storage || element.quota.storage === 0)"
                fxLayout="row"
                fxLayoutAlign=" center"
                fxLayoutGap="10px">
