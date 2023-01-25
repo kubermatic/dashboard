@@ -97,6 +97,19 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     this.isCollapsed = event.target.innerWidth < maxScreenWidth && this.collapsible;
   }
 
+  get hasCpuQuota(): boolean {
+    const quota = this.quotaDetails?.quota;
+    return quota && !!(quota.cpu || quota.cpu === 0);
+  }
+  get hasMemoryQuota(): boolean {
+    const quota = this.quotaDetails?.quota;
+    return quota && !!(quota.memory || quota.memory === 0);
+  }
+  get hasStorageQuota(): boolean {
+    const quota = this.quotaDetails?.quota;
+    return quota && !!(quota.storage || quota.storage === 0);
+  }
+
   get classForQuotaDetailInSelectProjectView(): string {
     if (this.projectViewType) {
       return `quota-detail-project-${this.projectViewType}-view`;
@@ -200,10 +213,17 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _getQuotaPercentage(total: QuotaVariables, usage: QuotaVariables): QuotaVariables {
-    const cpu = this._getPercentage(total.cpu, usage.cpu) ?? 0;
-    const memory = this._getPercentage(total.memory, usage.memory) ?? 0;
-    const storage = this._getPercentage(total.storage, usage.storage) ?? 0;
+    const cpu = this.getValidNumber(this._getPercentage(total.cpu, usage.cpu)) ?? 0;
+    const memory = this.getValidNumber(this._getPercentage(total.memory, usage.memory)) ?? 0;
+    const storage = this.getValidNumber(this._getPercentage(total.storage, usage.storage)) ?? 0;
     return {cpu, memory, storage};
+  }
+
+  private getValidNumber(num: number): number {
+    if (isNaN(num)) {
+      return 0;
+    }
+    return num;
   }
 
   private _setShowWarningIcon(): void {
