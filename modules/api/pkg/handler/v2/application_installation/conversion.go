@@ -45,7 +45,9 @@ func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.Applicatio
 				Name:    in.Spec.ApplicationRef.Name,
 				Version: in.Spec.ApplicationRef.Version,
 			},
-			Values: in.Spec.Values,
+			ReconciliationInterval: in.Spec.ReconciliationInterval,
+			DeployOptions:          in.Spec.DeployOptions,
+			Values:                 in.Spec.Values,
 		},
 		Status: &apiv2.ApplicationInstallationStatus{
 			ApplicationVersion: in.Status.ApplicationVersion,
@@ -113,7 +115,9 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 				Name:    app.Spec.ApplicationRef.Name,
 				Version: app.Spec.ApplicationRef.Version,
 			},
-			Values: app.Spec.Values,
+			ReconciliationInterval: app.Spec.ReconciliationInterval,
+			DeployOptions:          app.Spec.DeployOptions,
+			Values:                 app.Spec.Values,
 		},
 	}
 }

@@ -29355,8 +29355,14 @@
         "applicationRef": {
           "$ref": "#/definitions/ApplicationRef"
         },
+        "deployOptions": {
+          "$ref": "#/definitions/DeployOptions"
+        },
         "namespace": {
           "$ref": "#/definitions/NamespaceSpec"
+        },
+        "reconciliationInterval": {
+          "$ref": "#/definitions/Duration"
         },
         "values": {
           "$ref": "#/definitions/RawExtension"
