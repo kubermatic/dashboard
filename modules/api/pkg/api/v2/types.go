@@ -1857,6 +1857,18 @@ type ApplicationInstallationSpec struct {
 	// ApplicationRef is a reference to identify which Application should be deployed
 	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
 
+	// ReconciliationInterval is the interval at which to force the reconciliation of the application. By default, Applications are only reconciled
+	// on changes on spec, annotations, or the parent application definition. Meaning that if the user manually deletes the workload
+	// deployed by the application, nothing will happen until the application CR change.
+	//
+	// Setting a value greater than zero force reconciliation even if no changes occurred on application CR.
+	// Setting a value equal to 0 disables the force reconciliation of the application (default behavior).
+	// Setting this too low can cause a heavy load and may disrupt your application workload depending on the template method.
+	ReconciliationInterval metav1.Duration `json:"reconciliationInterval,omitempty"`
+
+	// DeployOptions holds the settings specific to the templating method used to deploy the application.
+	DeployOptions *appskubermaticv1.DeployOptions `json:"deployOptions,omitempty"`
+
 	// Values describe overrides for manifest-rendering. It's a free yaml field.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	Values runtime.RawExtension `json:"values,omitempty"`
