@@ -28,7 +28,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -276,9 +275,9 @@ func accumulateQuotas(rqList *kubermaticv1.ResourceQuotaList) *apiv2.ResourceQuo
 
 	return &apiv2.ResourceQuota{
 		Name:  totalQuotaName,
-		Quota: convertToAPIQuota(*rdAvailable),
+		Quota: apiv2.ConvertToAPIQuota(*rdAvailable),
 		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: convertToAPIQuota(*rdUsed),
+			GlobalUsage: apiv2.ConvertToAPIQuota(*rdUsed),
 		},
 		SubjectHumanReadableName: totalQuotaName,
 	}
@@ -335,7 +334,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 
 	return &apiv2.ResourceQuotaUpdateCalculation{
 		ResourceQuota:   *convertToAPIStruct(projectResourceQuota, projectName),
-		CalculatedQuota: convertToAPIQuota(*calculatedResources),
+		CalculatedQuota: apiv2.ConvertToAPIQuota(*calculatedResources),
 		Message:         msg,
 	}, nil
 }
@@ -731,7 +730,7 @@ func CreateResourceQuota(ctx context.Context, request interface{}, provider prov
 		return utilerrors.NewBadRequest(err.Error())
 	}
 
-	crdQuota, err := convertToCRDQuota(req.Body.Quota)
+	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body.Quota)
 	if err != nil {
 		return utilerrors.NewBadRequest(err.Error())
 	}
@@ -764,7 +763,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	// if a resource quota is updated, it's not a default quota anymore. Remove default label if it exists
 	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
 
-	crdQuota, err := convertToCRDQuota(req.Body)
+	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body)
 	if err != nil {
 		return utilerrors.NewBadRequest(err.Error())
 	}
@@ -784,10 +783,10 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		Name:        resourceQuota.Name,
 		SubjectName: resourceQuota.Spec.Subject.Name,
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
-		Quota:       convertToAPIQuota(resourceQuota.Spec.Quota),
+		Quota:       apiv2.ConvertToAPIQuota(resourceQuota.Spec.Quota),
 		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: convertToAPIQuota(resourceQuota.Status.GlobalUsage),
-			LocalUsage:  convertToAPIQuota(resourceQuota.Status.LocalUsage),
+			GlobalUsage: apiv2.ConvertToAPIQuota(resourceQuota.Status.GlobalUsage),
+			LocalUsage:  apiv2.ConvertToAPIQuota(resourceQuota.Status.LocalUsage),
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}
@@ -812,62 +811,4 @@ func DeleteResourceQuota(ctx context.Context, request interface{}, provider prov
 		return err
 	}
 	return nil
-}
-
-func convertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) apiv2.Quota {
-	quota := apiv2.Quota{}
-
-	if resourceDetails.CPU != nil {
-		cpu := resourceDetails.CPU.Value()
-		quota.CPU = &cpu
-	}
-
-	// Get memory and storage denoted in GB
-	if resourceDetails.Memory != nil && !resourceDetails.Memory.IsZero() {
-		memory := float64(resourceDetails.Memory.Value()) / math.Pow10(int(resource.Giga))
-		// round to 2 decimal places
-		memory = math.Round(memory*100) / 100
-		quota.Memory = &memory
-	}
-
-	if resourceDetails.Storage != nil && !resourceDetails.Storage.IsZero() {
-		storage := float64(resourceDetails.Storage.Value()) / math.Pow10(int(resource.Giga))
-		// round to 2 decimal places
-		storage = math.Round(storage*100) / 100
-		quota.Storage = &storage
-	}
-
-	return quota
-}
-
-func convertToCRDQuota(quota apiv2.Quota) (kubermaticv1.ResourceDetails, error) {
-	resourceDetails := kubermaticv1.ResourceDetails{}
-	var cpu, mem, storage resource.Quantity
-	var err error
-
-	if quota.CPU != nil {
-		cpu, err = resource.ParseQuantity(fmt.Sprintf("%d", *quota.CPU))
-		if err != nil {
-			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota CPU %w", err)
-		}
-		resourceDetails.CPU = &cpu
-	}
-
-	if quota.Memory != nil {
-		mem, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Memory))
-		if err != nil {
-			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
-		}
-		resourceDetails.Memory = &mem
-	}
-
-	if quota.Storage != nil {
-		storage, err = resource.ParseQuantity(fmt.Sprintf("%fG", *quota.Storage))
-		if err != nil {
-			return kubermaticv1.ResourceDetails{}, fmt.Errorf("error parsing quota Memory %w", err)
-		}
-		resourceDetails.Storage = &storage
-	}
-
-	return resourceDetails, nil
 }

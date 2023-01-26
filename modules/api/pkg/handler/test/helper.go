@@ -1388,6 +1388,9 @@ func GenDefaultGlobalSettings() *kubermaticv1.KubermaticSetting {
 				MonitoringEnabled:  true,
 				MonitoringEnforced: true,
 			},
+			DefaultProjectResourceQuota: &kubermaticv1.DefaultProjectResourceQuota{
+				Quota: *kubermaticv1.NewResourceDetails(resource.MustParse("2"), resource.MustParse("5G"), resource.MustParse("10G")),
+			},
 		},
 	}
 }

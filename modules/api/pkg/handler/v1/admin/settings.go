@@ -26,6 +26,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -40,7 +41,7 @@ func KubermaticSettingsEndpoint(settingsProvider provider.SettingsProvider) endp
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		return apiv1.GlobalSettings(globalSettings.Spec), nil
+		return convertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
 	}
 }
 
@@ -69,7 +70,7 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		existingGlobalSettingsSpecJSON, err := json.Marshal(existingGlobalSettings.Spec)
+		existingGlobalSettingsSpecJSON, err := json.Marshal(convertCRDSettingsToAPISettingsSpec(&existingGlobalSettings.Spec))
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot decode existing settings: %v", err)
 		}
@@ -78,19 +79,22 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot patch global settings: %v", err)
 		}
-		var patchedGlobalSettingsSpec *kubermaticv1.SettingSpec
+		var patchedGlobalSettingsSpec *apiv2.GlobalSettings
 		err = json.Unmarshal(patchedGlobalSettingsSpecJSON, &patchedGlobalSettingsSpec)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot decode patched settings: %v", err)
 		}
 
-		existingGlobalSettings.Spec = *patchedGlobalSettingsSpec
+		existingGlobalSettings.Spec, err = convertAPISettingsToSettingsSpec(patchedGlobalSettingsSpec)
+		if err != nil {
+			return nil, utilerrors.NewBadRequest("cannot convert API settings to CRD settings: %v", err)
+		}
 		globalSettings, err := settingsProvider.UpdateGlobalSettings(ctx, userInfo, existingGlobalSettings)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		return apiv1.GlobalSettings(globalSettings.Spec), nil
+		return convertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
 	}
 }
 
@@ -110,4 +114,69 @@ func DecodePatchKubermaticSettingsReq(c context.Context, r *http.Request) (inter
 	}
 
 	return req, nil
+}
+
+func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermaticv1.SettingSpec, error) {
+	s := kubermaticv1.SettingSpec{
+		CustomLinks:                      settings.CustomLinks,
+		DefaultNodeCount:                 settings.DefaultNodeCount,
+		DisplayDemoInfo:                  settings.DisplayDemoInfo,
+		DisplayAPIDocs:                   settings.DisplayAPIDocs,
+		DisplayTermsOfService:            settings.DisplayTermsOfService,
+		EnableDashboard:                  settings.EnableDashboard,
+		EnableWebTerminal:                settings.EnableWebTerminal,
+		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
+		UserProjectsLimit:                settings.UserProjectsLimit,
+		RestrictProjectCreation:          settings.RestrictProjectCreation,
+		EnableExternalClusterImport:      settings.EnableExternalClusterImport,
+		CleanupOptions:                   settings.CleanupOptions,
+		OpaOptions:                       settings.OpaOptions,
+		MlaOptions:                       settings.MlaOptions,
+		MlaAlertmanagerPrefix:            settings.MlaAlertmanagerPrefix,
+		MlaGrafanaPrefix:                 settings.MlaGrafanaPrefix,
+		Notifications:                    settings.Notifications,
+		ProviderConfiguration:            settings.ProviderConfiguration,
+		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
+	}
+
+	if settings.DefaultProjectResourceQuota != nil {
+		crdQuota, err := apiv2.ConvertToCRDQuota(*settings.DefaultProjectResourceQuota)
+		if err != nil {
+			return kubermaticv1.SettingSpec{}, err
+		}
+		s.DefaultProjectResourceQuota = &kubermaticv1.DefaultProjectResourceQuota{Quota: crdQuota}
+	}
+
+	return s, nil
+}
+
+func convertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
+	s := apiv2.GlobalSettings{
+		CustomLinks:                      settings.CustomLinks,
+		DefaultNodeCount:                 settings.DefaultNodeCount,
+		DisplayDemoInfo:                  settings.DisplayDemoInfo,
+		DisplayAPIDocs:                   settings.DisplayAPIDocs,
+		DisplayTermsOfService:            settings.DisplayTermsOfService,
+		EnableDashboard:                  settings.EnableDashboard,
+		EnableWebTerminal:                settings.EnableWebTerminal,
+		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
+		UserProjectsLimit:                settings.UserProjectsLimit,
+		RestrictProjectCreation:          settings.RestrictProjectCreation,
+		EnableExternalClusterImport:      settings.EnableExternalClusterImport,
+		CleanupOptions:                   settings.CleanupOptions,
+		OpaOptions:                       settings.OpaOptions,
+		MlaOptions:                       settings.MlaOptions,
+		MlaAlertmanagerPrefix:            settings.MlaAlertmanagerPrefix,
+		MlaGrafanaPrefix:                 settings.MlaGrafanaPrefix,
+		Notifications:                    settings.Notifications,
+		ProviderConfiguration:            settings.ProviderConfiguration,
+		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
+	}
+
+	if settings.DefaultProjectResourceQuota != nil {
+		apiQuota := apiv2.ConvertToAPIQuota(settings.DefaultProjectResourceQuota.Quota)
+		s.DefaultProjectResourceQuota = &apiQuota
+	}
+
+	return s
 }
