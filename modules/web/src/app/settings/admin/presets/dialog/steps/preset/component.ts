@@ -16,14 +16,22 @@ import {Component, forwardRef, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {ProjectService} from '@app/core/services/project';
+import {Project} from '@app/shared/entity/project';
 
 enum Controls {
   Name = 'name',
   Domains = 'domains',
+  Projects = 'projects',
   Disable = 'disable',
+}
+
+enum ProjectState {
+  Ready = 'Projects',
+  Loading = 'Loading...',
+  Empty = 'No Projects Available',
 }
 
 @Component({
@@ -48,25 +56,22 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
 
   domains: string[] = [];
+  projects: string[] = [];
+  projectLabel = ProjectState.Ready;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService,
+    private readonly _projectService: ProjectService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
-      [Controls.Domains]: this._builder.control(''),
-      [Controls.Disable]: this._builder.control(''),
-    });
+    this.__initForm();
+    this._getProjects();
 
-    merge(
-      this.form.get(Controls.Name).valueChanges,
-      this.form.get(Controls.Domains).valueChanges,
-      this.form.get(Controls.Disable).valueChanges
-    )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._update());
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._update());
   }
 
   onDomainsChange(domains: string[]): void {
@@ -76,7 +81,26 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   }
 
   private _update(): void {
+    this._presetDialogService.preset.spec.projects = this.form.get(Controls.Projects).value;
     this._presetDialogService.preset.metadata.name = this.form.get(Controls.Name).value;
     this._presetDialogService.preset.spec.enabled = !this.form.get(Controls.Disable).value;
+  }
+
+  private _getProjects(): void {
+    this.projectLabel = ProjectState.Loading;
+
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      this.projects = projects.map(project => project.name);
+      this.projectLabel = this.projects.length ? ProjectState.Ready : ProjectState.Empty;
+    });
+  }
+
+  private __initForm(): void {
+    this.form = this._builder.group({
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
+      [Controls.Domains]: this._builder.control(''),
+      [Controls.Projects]: this._builder.control(''),
+      [Controls.Disable]: this._builder.control(''),
+    });
   }
 }

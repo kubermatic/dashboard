@@ -16,7 +16,9 @@ limitations under the License.
 <form [formGroup]="form">
   <mat-form-field>
     <mat-label *ngIf="label">{{label}}</mat-label>
-    <mat-select [formControlName]="Controls.Select">
+    <mat-select [formControlName]="Controls.Select"
+                [panelClass]="isMultiple ? 'km-multiple-values-dropdown' : ''"
+                [multiple]="isMultiple">
       <mat-option *ngFor="let option of options"
                   [value]="option">
         {{option}}

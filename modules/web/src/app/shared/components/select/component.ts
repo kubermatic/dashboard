@@ -45,6 +45,7 @@ export class SelectComponent extends BaseFormValidator implements OnInit, OnDest
   @Input() isLoading = false;
   @Input() hint: string;
   @Input() required: boolean;
+  @Input() isMultiple = false;
   @Input() validators: ValidatorFn[] = [];
 
   constructor(private readonly _builder: FormBuilder) {

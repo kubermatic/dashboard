@@ -48,6 +48,13 @@ limitations under the License.
                 fxFlex>
   </km-chip-list>
 
+  <km-select [label]="projectLabel"
+             [options]="projects"
+             hint="Restrict Preset to Projects"
+             isMultiple="true"
+             [formControlName]="controls.Projects">
+  </km-select>
+
   <mat-checkbox [formControlName]="controls.Disable"
                 class="km-disable-ripple">
     Hide upon creation

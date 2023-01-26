@@ -79,6 +79,7 @@ export class CreatePresetSpec {
   vmwareclouddirector?: VMwareCloudDirectorPresetSpec;
 
   requiredEmails?: string[];
+  projects?: string[];
   enabled?: boolean;
 
   provider(): NodeProvider {
