@@ -33998,6 +33998,90 @@
     },
     "GlobalSettings": {
       "description": "GlobalSettings defines global settings",
+      "type": "object",
+      "properties": {
+        "cleanupOptions": {
+          "$ref": "#/definitions/CleanupOptions"
+        },
+        "customLinks": {
+          "$ref": "#/definitions/CustomLinks"
+        },
+        "defaultNodeCount": {
+          "description": "DefaultNodeCount is the default number of replicas for the initial MachineDeployment.",
+          "type": "integer",
+          "format": "int8",
+          "x-go-name": "DefaultNodeCount"
+        },
+        "defaultQuota": {
+          "$ref": "#/definitions/Quota"
+        },
+        "displayAPIDocs": {
+          "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
+          "type": "boolean",
+          "x-go-name": "DisplayAPIDocs"
+        },
+        "displayDemoInfo": {
+          "description": "DisplayDemoInfo controls whether a \"Demo System\" hint is shown in the footer.",
+          "type": "boolean",
+          "x-go-name": "DisplayDemoInfo"
+        },
+        "displayTermsOfService": {
+          "description": "DisplayDemoInfo controls whether a a link to TOS is shown in the footer.",
+          "type": "boolean",
+          "x-go-name": "DisplayTermsOfService"
+        },
+        "enableDashboard": {
+          "description": "EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.",
+          "type": "boolean",
+          "x-go-name": "EnableDashboard"
+        },
+        "enableExternalClusterImport": {
+          "type": "boolean",
+          "x-go-name": "EnableExternalClusterImport"
+        },
+        "enableOIDCKubeconfig": {
+          "type": "boolean",
+          "x-go-name": "EnableOIDCKubeconfig"
+        },
+        "enableWebTerminal": {
+          "description": "EnableWebTerminal enables the Web Terminal feature for the user clusters.",
+          "type": "boolean",
+          "x-go-name": "EnableWebTerminal"
+        },
+        "machineDeploymentVMResourceQuota": {
+          "$ref": "#/definitions/MachineFlavorFilter"
+        },
+        "mlaAlertmanagerPrefix": {
+          "type": "string",
+          "x-go-name": "MlaAlertmanagerPrefix"
+        },
+        "mlaGrafanaPrefix": {
+          "type": "string",
+          "x-go-name": "MlaGrafanaPrefix"
+        },
+        "mlaOptions": {
+          "$ref": "#/definitions/MlaOptions"
+        },
+        "notifications": {
+          "$ref": "#/definitions/NotificationsOptions"
+        },
+        "opaOptions": {
+          "$ref": "#/definitions/OpaOptions"
+        },
+        "providerConfiguration": {
+          "$ref": "#/definitions/ProviderConfiguration"
+        },
+        "restrictProjectCreation": {
+          "type": "boolean",
+          "x-go-name": "RestrictProjectCreation"
+        },
+        "userProjectsLimit": {
+          "description": "UserProjectsLimit is the maximum number of projects a user can create.",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "UserProjectsLimit"
+        }
+      },
       "$ref": "#/definitions/SettingSpec"
     },
     "GroupProjectBinding": {
