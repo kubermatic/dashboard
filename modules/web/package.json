@@ -127,7 +127,7 @@
     "license-compliance": "1.2.5",
     "lint-staged": "13.1.0",
     "ng2-mock-component": "0.2.0",
-    "start-server-and-test": "1.14.0",
+    "start-server-and-test": "1.15.3",
     "stream": "0.0.2",
     "stylelint": "14.16.0",
     "stylelint-config-standard-scss": "6.1.0",
