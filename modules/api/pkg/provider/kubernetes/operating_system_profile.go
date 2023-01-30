@@ -18,12 +18,15 @@ package kubernetes
 
 import (
 	"context"
+	"fmt"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -45,19 +48,24 @@ func NewPrivilegedOperatingSystemProfileProvider(privilegedClient ctrlruntimecli
 
 // ListUnsecured lists available OSPs from seed namespace.
 func (p *PrivilegedOperatingSystemProfileProvider) ListUnsecured(ctx context.Context) (*osmv1alpha1.OperatingSystemProfileList, error) {
-	res := &osmv1alpha1.OperatingSystemProfileList{}
-	if err := p.privilegedClient.List(ctx, res, &ctrlruntimeclient.ListOptions{Namespace: p.namespace}); err != nil {
-		return nil, err
-	}
-	return res, nil
-}
+	ospList := &unstructured.UnstructuredList{}
+	ospList.SetAPIVersion("operatingsystemmanager.k8c.io/v1alpha1")
+	ospList.SetKind("CustomOperatingSystemProfileList")
 
-// ListUnsecuredForUserClusterNamespace lists available OSPs for the user cluster namespace.
-func (p *PrivilegedOperatingSystemProfileProvider) ListUnsecuredForUserClusterNamespace(ctx context.Context, namespace string) (*osmv1alpha1.OperatingSystemProfileList, error) {
-	res := &osmv1alpha1.OperatingSystemProfileList{}
-	if err := p.privilegedClient.List(ctx, res, &ctrlruntimeclient.ListOptions{Namespace: namespace}); err != nil {
+	if err := p.privilegedClient.List(ctx, ospList, &ctrlruntimeclient.ListOptions{Namespace: p.namespace}); err != nil {
 		return nil, err
 	}
+
+	res := &osmv1alpha1.OperatingSystemProfileList{}
+	for _, customOSP := range ospList.Items {
+		osp, err := customOSPToOSP(&customOSP)
+		if err != nil {
+			return nil, err
+		}
+
+		res.Items = append(res.Items, *osp)
+	}
+
 	return res, nil
 }
 
@@ -76,4 +84,15 @@ func PrivilegedOperatingSystemProfileProviderFactory(mapper meta.RESTMapper, see
 			seed.Namespace,
 		), nil
 	}
+}
+
+func customOSPToOSP(u *unstructured.Unstructured) (*osmv1alpha1.OperatingSystemProfile, error) {
+	osp := &osmv1alpha1.OperatingSystemProfile{}
+	// Required for converting CustomOperatingSystemProfile to OperatingSystemProfile.
+	obj := u.DeepCopy()
+	obj.SetKind("OperatingSystemProfile")
+	if err := runtime.DefaultUnstructuredConverter.FromUnstructured(obj.Object, osp); err != nil {
+		return osp, fmt.Errorf("failed to decode CustomOperatingSystemProfile: %w", err)
+	}
+	return osp, nil
 }

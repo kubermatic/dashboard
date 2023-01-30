@@ -30,6 +30,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 // TODO: Find a way to populate these dynamically.
@@ -131,18 +133,27 @@ func ListOperatingSystemProfilesEndpointForCluster(userInfoGetter provider.UserI
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(listOperatingSystemProfilesReq)
 
-		userClusterNamespace, err := clusterNamespaceFromContext(ctx, userInfoGetter, req.ProjectID, req.ClusterID)
+		clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+
+		userInfo, err := userInfoGetter(ctx, req.ProjectID)
 		if err != nil {
-			return nil, err
+			return "", common.KubernetesErrorToHTTPError(err)
 		}
 
-		privilegedOperatingSystemProfileProvider := ctx.Value(middleware.PrivilegedOperatingSystemProfileProviderContextKey).(provider.PrivilegedOperatingSystemProfileProvider)
+		cluster, err := clusterProvider.Get(ctx, userInfo, req.ClusterID, &provider.ClusterGetOptions{})
+		if err != nil {
+			return "", common.KubernetesErrorToHTTPError(err)
+		}
 
-		ospList, err := privilegedOperatingSystemProfileProvider.ListUnsecuredForUserClusterNamespace(ctx, userClusterNamespace)
+		client, err := clusterProvider.GetClientForUserCluster(ctx, userInfo, cluster)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		ospList := &osmv1alpha1.OperatingSystemProfileList{}
+		if err := client.List(ctx, ospList, ctrlruntimeclient.InNamespace(metav1.NamespaceSystem)); err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
 		return convertOperatingSystemProfileToAPIResponse(ospList), nil
 	}
 }
@@ -183,19 +194,4 @@ func convertOperatingSystemProfileToAPIResponse(ospList *osmv1alpha1.OperatingSy
 		resp = append(resp, ospModel)
 	}
 	return resp
-}
-
-func clusterNamespaceFromContext(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string) (string, error) {
-	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-
-	userInfo, err := userInfoGetter(ctx, projectID)
-	if err != nil {
-		return "", common.KubernetesErrorToHTTPError(err)
-	}
-
-	cluster, err := clusterProvider.Get(ctx, userInfo, clusterID, &provider.ClusterGetOptions{})
-	if err != nil {
-		return "", common.KubernetesErrorToHTTPError(err)
-	}
-	return cluster.Status.NamespaceName, nil
 }
