@@ -734,6 +734,28 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withCalculatedQuota(genAPIQuota(6, 9, 5)).
 				build(),
 		},
+		{
+			Name:      "should subtract quota of replaced resources",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("20", "20G", "50G").
+					withGlobalUsage("4", "8G", "20G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withAWS(2, 3).
+				withDiskSize(5).
+				withReplacedResources(1, genAPIQuota(2, 4, 10)).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(20, 20, 50)).
+				withGlobalUsage(genAPIQuota(4, 8, 20)).
+				withCalculatedQuota(genAPIQuota(6, 10, 20)).
+				build(),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -764,7 +786,8 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 }
 
 type calcReq struct {
-	Replicas int `json:"replicas"`
+	Replicas          int                              `json:"replicas"`
+	ReplacedResources *resourcequota.ReplacedResources `json:"ReplacedResources,omitempty"`
 	// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
 	DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
 	AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
@@ -797,6 +820,14 @@ func (c *calcReq) encode(t *testing.T) []byte {
 
 func (c *calcReq) withReplicas(replicas int) *calcReq {
 	c.Replicas = replicas
+	return c
+}
+
+func (c *calcReq) withReplacedResources(replicas int, quota apiv2.Quota) *calcReq {
+	c.ReplacedResources = &resourcequota.ReplacedResources{
+		Replicas: replicas,
+		Quota:    quota,
+	}
 	return c
 }
 

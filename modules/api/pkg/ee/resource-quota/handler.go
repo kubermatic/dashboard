@@ -60,12 +60,21 @@ type getResourceQuota struct {
 	Name string `json:"quota_name"`
 }
 
+// ReplacedResources is used to subtract replaced resources in the calculation. For instance,
+// when user is changing instance type of an existing Machine Deployment, resources of an old instance type need to be subtracted.
+type ReplacedResources struct {
+	Replicas int         `json:"replicas"`
+	Quota    apiv2.Quota `json:"quota"`
+}
+
 // swagger:parameters calculateProjectResourceQuotaUpdate
 type calculateProjectResourceQuotaUpdate struct {
 	common.GetProjectRq
 	// in: body
 	Body struct {
-		Replicas int `json:"replicas"`
+		Replicas          int                `json:"replicas"`
+		ReplacedResources *ReplacedResources `json:"replacedResources,omitempty"`
+
 		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
 		DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
 		AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
@@ -307,7 +316,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 		return nil, utilerrors.NewBadRequest("invalid request, failed getting resources from request body: %v", err)
 	}
 
-	// Add the current global usage
+	// Add the current global usage.
 	if projectResourceQuota.Status.GlobalUsage.CPU != nil && calculatedResources.CPU != nil {
 		calculatedResources.CPU.Add(*projectResourceQuota.Status.GlobalUsage.CPU)
 	}
@@ -318,7 +327,28 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 		calculatedResources.Storage.Add(*projectResourceQuota.Status.GlobalUsage.Storage)
 	}
 
-	// check if quota is exceeded
+	// Remove resources that have been replaced.
+	replacedResources := req.Body.ReplacedResources
+	if replacedResources != nil {
+		allocated, err := convertToCRDQuota(replacedResources.Quota)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < replacedResources.Replicas; i++ {
+			if allocated.CPU != nil {
+				calculatedResources.CPU.Sub(*allocated.CPU)
+			}
+			if allocated.Memory != nil {
+				calculatedResources.Memory.Sub(*allocated.Memory)
+			}
+			if allocated.Storage != nil {
+				calculatedResources.Storage.Sub(*allocated.Storage)
+			}
+		}
+	}
+
+	// Check if quota has been exceeded.
 	var msg string
 	if projectResourceQuota.Spec.Quota.CPU != nil && calculatedResources.CPU != nil &&
 		calculatedResources.CPU.Cmp(*projectResourceQuota.Spec.Quota.CPU) > 0 {
