@@ -1809,6 +1809,8 @@ type ApplicationInstallationListItem struct {
 
 	CreationTimestamp apiv1.Time `json:"creationTimestamp,omitempty"`
 
+	Labels map[string]string `json:"labels,omitempty"`
+
 	Spec *ApplicationInstallationListItemSpec `json:"spec"`
 
 	Status *ApplicationInstallationListItemStatus `json:"status"`
@@ -1819,9 +1821,6 @@ type ApplicationInstallationListItem struct {
 type ApplicationInstallationListItemSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
 	Namespace apiv1.NamespaceSpec `json:"namespace"`
-
-	// Labels can contain metadata about the application, such as the owner who manages it.
-	Labels map[string]string `json:"labels,omitempty"`
 
 	// ApplicationRef is a reference to identify which Application should be deployed
 	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
