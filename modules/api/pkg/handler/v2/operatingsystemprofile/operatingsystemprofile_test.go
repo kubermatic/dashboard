@@ -32,7 +32,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -48,41 +48,21 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 		{
 			name: "base case",
 			existingObjects: []ctrlruntimeclient.Object{
-				&osmv1alpha1.OperatingSystemProfile{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      "test-osp-1",
-						Namespace: "kubermatic",
-					},
-					Spec: osmv1alpha1.OperatingSystemProfileSpec{
-						OSName: osmv1alpha1.OperatingSystemUbuntu,
-						ProvisioningConfig: osmv1alpha1.OSPConfig{
-							Units: nil,
-						},
-					},
-				},
-				&osmv1alpha1.OperatingSystemProfile{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      "test-osp-2",
-						Namespace: "kubermatic",
-					},
-					Spec: osmv1alpha1.OperatingSystemProfileSpec{
-						OSName: osmv1alpha1.OperatingSystemUbuntu,
-						ProvisioningConfig: osmv1alpha1.OSPConfig{
-							Units: nil,
-						},
-					},
-				},
+				genOperatingSystemProfile("test-osp-1", "kubermatic", t),
+				genOperatingSystemProfile("test-osp-2", "kubermatic", t),
 			},
 			apiUser:            test.GenDefaultAPIUser(),
 			expectedHTTPStatus: http.StatusOK,
 			expectedResult: []*apiv2.OperatingSystemProfile{
 				{
-					Name:            "test-osp-1",
-					OperatingSystem: "ubuntu",
+					Name:                    "test-osp-1",
+					OperatingSystem:         "ubuntu",
+					SupportedCloudProviders: []string{"aws"},
 				},
 				{
-					Name:            "test-osp-2",
-					OperatingSystem: "ubuntu",
+					Name:                    "test-osp-2",
+					OperatingSystem:         "ubuntu",
+					SupportedCloudProviders: []string{"aws"},
 				},
 				{
 					Name:                    "osp-amzn2",
@@ -201,23 +181,12 @@ func TestListOperatingSystemProfilesEndpointForCluster(t *testing.T) {
 			existingObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				genOperatingSystemProfile("test-osp-1"),
-				genOperatingSystemProfile("test-osp-2"),
+				genOperatingSystemProfile("test-osp-1", "kube-system", t),
+				genOperatingSystemProfile("test-osp-2", "kube-system", t),
 			),
 			apiUser:            test.GenDefaultAPIUser(),
 			expectedHTTPStatus: http.StatusOK,
-			expectedResult: []*apiv2.OperatingSystemProfile{
-				{
-					Name:                    "test-osp-1",
-					OperatingSystem:         "ubuntu",
-					SupportedCloudProviders: []string{"aws"},
-				},
-				{
-					Name:                    "test-osp-2",
-					OperatingSystem:         "ubuntu",
-					SupportedCloudProviders: []string{"aws"},
-				},
-			},
+			expectedResult:     []*apiv2.OperatingSystemProfile{},
 		},
 		{
 			name:      "should return an empty response",
@@ -277,22 +246,48 @@ func TestListOperatingSystemProfilesEndpointForCluster(t *testing.T) {
 	}
 }
 
-func genOperatingSystemProfile(name string) *osmv1alpha1.OperatingSystemProfile {
-	return &osmv1alpha1.OperatingSystemProfile{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      name,
-			Namespace: test.GenDefaultCluster().Status.NamespaceName,
+func genOperatingSystemProfile(name string, namespace string, t *testing.T) *unstructured.Unstructured {
+	u := &unstructured.Unstructured{}
+	u.SetAPIVersion("operatingsystemmanager.k8c.io/v1alpha1")
+	u.SetKind("CustomOperatingSystemProfile")
+	u.SetName(name)
+	u.SetNamespace(namespace)
+
+	spec := &osmv1alpha1.OperatingSystemProfileSpec{
+		OSName: osmv1alpha1.OperatingSystemUbuntu,
+		SupportedCloudProviders: []osmv1alpha1.CloudProviderSpec{
+			{
+				Name: "aws",
+			},
 		},
-		Spec: osmv1alpha1.OperatingSystemProfileSpec{
-			OSName: osmv1alpha1.OperatingSystemUbuntu,
-			SupportedCloudProviders: []osmv1alpha1.CloudProviderSpec{
-				{
-					Name: "aws",
-				},
-			},
-			ProvisioningConfig: osmv1alpha1.OSPConfig{
-				Units: nil,
-			},
+		ProvisioningConfig: osmv1alpha1.OSPConfig{
+			Units: nil,
 		},
 	}
+
+	specMap, err := unmarshallToJSONMap(spec)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = unstructured.SetNestedField(u.Object, specMap, "spec")
+	if err != nil {
+		t.Fatalf("error setting constraint spec field: %v", err)
+	}
+
+	return u
+}
+
+func unmarshallToJSONMap(object interface{}) (map[string]interface{}, error) {
+	raw, err := json.Marshal(object)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling: %w", err)
+	}
+	result := make(map[string]interface{})
+	err = json.Unmarshal(raw, &result)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling: %w", err)
+	}
+
+	return result, nil
 }
