@@ -169,7 +169,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   isSystemApplication(application: Application): boolean {
-    return application.spec.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
+    return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
 
   onAddApplication(): void {
