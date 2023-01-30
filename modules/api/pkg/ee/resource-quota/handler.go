@@ -327,7 +327,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 		calculatedResources.Storage.Add(*projectResourceQuota.Status.GlobalUsage.Storage)
 	}
 
-	// Remove resources that have been replaced.
+	// Subtract resources that have been replaced.
 	replacedResources := req.Body.ReplacedResources
 	if replacedResources != nil {
 		allocated, err := convertToCRDQuota(replacedResources.Quota)

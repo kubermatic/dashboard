@@ -23880,6 +23880,9 @@
                 "openstackSize": {
                   "$ref": "#/definitions/OpenstackSize"
                 },
+                "replacedResources": {
+                  "$ref": "#/definitions/ReplacedResources"
+                },
                 "replicas": {
                   "type": "integer",
                   "format": "int64",
@@ -38432,6 +38435,22 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "ReplacedResources": {
+      "description": "when user is changing instance type of an existing Machine Deployment, resources of an old instance type need to be subtracted.",
+      "type": "object",
+      "title": "ReplacedResources is used to subtract replaced resources in the calculation. For instance,",
+      "properties": {
+        "quota": {
+          "$ref": "#/definitions/Quota"
+        },
+        "replicas": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Replicas"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/ee/resource-quota"
     },
     "ResourceClaim": {
       "type": "object",

@@ -338,6 +338,9 @@ type CalculateProjectResourceQuotaUpdateBody struct {
 	// openstack size
 	OpenstackSize *models.OpenstackSize `json:"openstackSize,omitempty"`
 
+	// replaced resources
+	ReplacedResources *models.ReplacedResources `json:"replacedResources,omitempty"`
+
 	// v sphere node spec
 	VSphereNodeSpec *models.VSphereNodeSpec `json:"vSphereNodeSpec,omitempty"`
 
@@ -390,6 +393,10 @@ func (o *CalculateProjectResourceQuotaUpdateBody) Validate(formats strfmt.Regist
 	}
 
 	if err := o.validateOpenstackSize(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.validateReplacedResources(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -616,6 +623,25 @@ func (o *CalculateProjectResourceQuotaUpdateBody) validateOpenstackSize(formats 
 	return nil
 }
 
+func (o *CalculateProjectResourceQuotaUpdateBody) validateReplacedResources(formats strfmt.Registry) error {
+	if swag.IsZero(o.ReplacedResources) { // not required
+		return nil
+	}
+
+	if o.ReplacedResources != nil {
+		if err := o.ReplacedResources.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "replacedResources")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "replacedResources")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (o *CalculateProjectResourceQuotaUpdateBody) validateVSphereNodeSpec(formats strfmt.Registry) error {
 	if swag.IsZero(o.VSphereNodeSpec) { // not required
 		return nil
@@ -699,6 +725,10 @@ func (o *CalculateProjectResourceQuotaUpdateBody) ContextValidate(ctx context.Co
 	}
 
 	if err := o.contextValidateOpenstackSize(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.contextValidateReplacedResources(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -884,6 +914,22 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateOpenstackSize(c
 				return ve.ValidateName("Body" + "." + "openstackSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("Body" + "." + "openstackSize")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateReplacedResources(ctx context.Context, formats strfmt.Registry) error {
+
+	if o.ReplacedResources != nil {
+		if err := o.ReplacedResources.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "replacedResources")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "replacedResources")
 			}
 			return err
 		}
