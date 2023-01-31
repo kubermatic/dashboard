@@ -244,7 +244,7 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		}
 		// Set default category if empty
 		if tag.CategoryID == "" {
-			vsphereTag.CategoryID = c.Spec.Cloud.VSphere.TagCategoryID
+			vsphereTag.CategoryID = c.Spec.Cloud.VSphere.TagCategory.ID
 		}
 		config.Tags = append(config.Tags, vsphereTag)
 	}
