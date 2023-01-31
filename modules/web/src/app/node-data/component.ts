@@ -49,6 +49,8 @@ import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
+import {ActivatedRoute} from '@angular/router';
 
 enum Controls {
   Name = 'name',
@@ -107,6 +109,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  wizardMode: WizardMode;
 
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
@@ -124,6 +127,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
+  get displayQuotaInWizard(): boolean {
+    return this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nameGenerator: NameGeneratorService,
@@ -135,7 +142,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _projectService: ProjectService,
     private readonly _quotaCalculationService: QuotaCalculationService,
     private readonly _params: ParamsService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _route: ActivatedRoute
   ) {
     super();
   }
@@ -149,11 +157,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.quotaWidgetComponentRef.estimatedQuotaExceeded
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((quotaExceeded: boolean) => {
-          if (quotaExceeded) {
-            this.form.get(Controls.Count).setErrors({quotaExceeded: true});
-          } else {
-            this.form.get(Controls.Count).setErrors(null);
-          }
+          this._quotaCalculationService.refreshQuotaExceed(quotaExceeded);
         });
 
       this._quotaCalculationService
@@ -166,6 +170,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   ngOnInit(): void {
+    this.wizardMode = this._route.snapshot.queryParams?.mode;
     this.projectId = this._params.get(PathParam.ProjectID);
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
