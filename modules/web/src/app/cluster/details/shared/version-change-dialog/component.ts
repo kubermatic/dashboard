@@ -20,7 +20,7 @@ import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
-import {Cluster, ClusterPatch} from '@shared/entity/cluster';
+import {Cluster, ClusterPatch, END_OF_POD_SECURITY_POLICY_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {ExternalCluster, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {Project} from '@shared/entity/project';
 import {Observable, Subject} from 'rxjs';
@@ -37,16 +37,28 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() versions: string[] = [];
   @Input() hasVersionOptions = true;
   @Input() isClusterExternal = false;
+
+  private readonly _PSPAdmissionPlugin = 'PodSecurityPolicy';
+
   selectedVersion: string;
   project: Project;
   isMachineDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
   protected nodesSupportDynamicKubeletConfig = '';
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
+  endOfPSPSupportVersion: string = END_OF_POD_SECURITY_POLICY_SUPPORT_VERSION;
 
   get isDynamicKubeletConfigSupportedInUpgrade(): boolean {
-    const endSliceParameter = 4;
-    return this.selectedVersion?.slice(0, endSliceParameter) < this.endOfDynamicKubeletConfigSupportVersion;
+    return this._getControlPlaneVersion() < this.endOfDynamicKubeletConfigSupportVersion;
+  }
+
+  get isPSPSupportedInUpgrade(): boolean {
+    return this._getControlPlaneVersion() < this.endOfPSPSupportVersion;
+  }
+
+  get isPSPAdmissionPluginEnabled(): boolean {
+    const plugins = (this.cluster as Cluster)?.spec?.admissionPlugins;
+    return plugins?.includes(this._PSPAdmissionPlugin);
   }
 
   constructor(
@@ -86,13 +98,35 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getPatch(): ClusterPatch | ExternalClusterPatch {
-    return {spec: {version: this.selectedVersion}};
+    let payload: ClusterPatch | ExternalClusterPatch = {
+      spec: {
+        version: this.selectedVersion,
+      },
+    };
+
+    if (this.isPSPAdmissionPluginEnabled && !this.isPSPSupportedInUpgrade) {
+      payload = {
+        spec: {
+          ...payload.spec,
+          admissionPlugins: (this.cluster as Cluster).spec.admissionPlugins.filter(
+            plugin => plugin !== this._PSPAdmissionPlugin
+          ),
+        },
+      };
+    }
+
+    return payload;
   }
 
   private _patch(): Observable<Cluster | ExternalCluster> {
     return this.isClusterExternal
       ? this._clusterService.patchExternalCluster(this.project.id, this.cluster.id, this._getPatch())
       : this._clusterService.patch(this.project.id, this.cluster.id, this._getPatch());
+  }
+
+  private _getControlPlaneVersion(): string {
+    const endSliceParameter = 4;
+    return this.selectedVersion?.slice(0, endSliceParameter);
   }
 
   getObservable(): Observable<Cluster | ExternalCluster> {
