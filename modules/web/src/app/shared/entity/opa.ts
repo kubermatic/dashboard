@@ -68,6 +68,7 @@ export class ConstraintSpec {
   match?: Match;
   parameters?: object;
   selector?: ConstraintSelector;
+  enforcementAction?: string;
 }
 
 export class Match {
