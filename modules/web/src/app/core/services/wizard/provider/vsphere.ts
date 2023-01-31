@@ -18,10 +18,12 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 import {VSphereDatastores, VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {map} from 'rxjs/operators';
+import {VSphereTagCategory} from '@shared/entity/provider/vsphere';
 
 export class VSphere extends Provider {
   private readonly _networksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/networks`;
   private readonly _foldersUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/folders`;
+  private readonly _tagCategoriesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/tagcategories`;
 
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
     super(http, projectID, provider);
@@ -79,6 +81,20 @@ export class VSphere extends Provider {
     }
 
     return this._http.get<VSphereFolder[]>(this._foldersUrl, {
+      headers: this._headers,
+    });
+  }
+
+  tagCategories(onLoadingCb: () => void = null): Observable<VSphereTagCategory[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<VSphereTagCategory[]>(this._tagCategoriesUrl, {
       headers: this._headers,
     });
   }

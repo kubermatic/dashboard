@@ -281,11 +281,17 @@ export class VSphereCloudSpec {
   datastore?: string;
   datastoreCluster?: string;
   resourcePool?: string;
+  tags?: VSphereTags;
 }
 
 export class VSphereInfraManagementUser {
   username: string;
   password: string;
+}
+
+export class VSphereTags {
+  tags: string[];
+  categoryID: string;
 }
 
 export class VMwareCloudDirectorCloudSpec {

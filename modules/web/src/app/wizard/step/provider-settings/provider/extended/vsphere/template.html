@@ -37,7 +37,7 @@ limitations under the License.
                [isDisabled]="isPresetSelected"
                [options]="folders"
                [formControlName]="Controls.Folder"
-               [hint]="getHint(Controls.VMNetName)"
+               [hint]="getHint(Controls.Folder)"
                (changed)="onFolderChange($event)"
                [label]="folderLabel"
                inputLabel="Select folder..."
@@ -75,4 +75,35 @@ limitations under the License.
            type="text"
            autocomplete="off">
   </mat-form-field>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Cluster Tags</mat-card-title>
+  </mat-card-header>
+
+  <km-combobox #tagCategoryComboBox
+               [grouped]="false"
+               [options]="tagCategories"
+               [formControlName]="Controls.TagCategory"
+               [hint]="getHint(Controls.TagCategory)"
+               (changed)="onTagCategoryChange($event)"
+               [selected]="selectedTagCategory"
+               [label]="tagCategoryLabel"
+               inputLabel="Select Tag Category..."
+               filterBy="name">
+    <div *option="let category">
+      {{category.name}}
+    </div>
+  </km-combobox>
+
+  <km-chip-list label="Tags"
+                [tags]="tags"
+                (onChange)="onTagValuesChange($event)"
+                [formControlName]="Controls.Tags"
+                [disabled]="form.get(Controls.Tags).disabled"
+                placeholder="Add tags..."
+                [kmPattern]="tagValuesPattern"
+                [kmPatternError]="tagValuesPatternError"
+                fxFlex>
+  </km-chip-list>
+
 </form>
