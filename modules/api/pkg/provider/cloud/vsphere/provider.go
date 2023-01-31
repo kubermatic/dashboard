@@ -29,6 +29,8 @@ import (
 	"github.com/vmware/govmomi/find"
 	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/session"
+	"github.com/vmware/govmomi/vapi/rest"
+	"github.com/vmware/govmomi/vapi/tags"
 	"github.com/vmware/govmomi/vim25"
 	"github.com/vmware/govmomi/vim25/soap"
 
@@ -79,17 +81,7 @@ func (s *Session) Logout(ctx context.Context) {
 }
 
 func newSession(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) (*Session, error) {
-	u, err := url.Parse(fmt.Sprintf("%s/sdk", dc.Endpoint))
-	if err != nil {
-		return nil, err
-	}
-
-	// creating the govmoni Client in roundabout way because we need to set the proper CA bundle: reference https://github.com/vmware/govmomi/issues/1200
-	soapClient := soap.NewClient(u, dc.AllowInsecure)
-	// set our CA bundle
-	soapClient.DefaultTransport().TLSClientConfig.RootCAs = caBundle
-
-	vim25Client, err := vim25.NewClient(ctx, soapClient)
+	vim25Client, err := createVim25Client(ctx, dc, caBundle)
 	if err != nil {
 		return nil, err
 	}
@@ -122,6 +114,47 @@ func newSession(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, use
 	}, nil
 }
 
+func newRESTSession(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) (*RESTSession, error) {
+	vim25Client, err := createVim25Client(ctx, dc, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	client := rest.NewClient(vim25Client)
+
+	user := url.UserPassword(username, password)
+	if dc.InfraManagementUser != nil {
+		user = url.UserPassword(dc.InfraManagementUser.Username, dc.InfraManagementUser.Password)
+	}
+
+	if err = client.Login(ctx, user); err != nil {
+		return nil, fmt.Errorf("failed to login: %w", err)
+	}
+
+	return &RESTSession{
+		Client: client,
+	}, nil
+}
+
+func createVim25Client(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, caBundle *x509.CertPool) (*vim25.Client, error) {
+	u, err := url.Parse(fmt.Sprintf("%s/sdk", dc.Endpoint))
+	if err != nil {
+		return nil, err
+	}
+
+	// creating the govmoni Client in roundabout way because we need to set the proper CA bundle: reference https://github.com/vmware/govmomi/issues/1200
+	soapClient := soap.NewClient(u, dc.AllowInsecure)
+	// set our CA bundle
+	soapClient.DefaultTransport().TLSClientConfig.RootCAs = caBundle
+
+	vim25Client, err := vim25.NewClient(ctx, soapClient)
+	if err != nil {
+		return nil, err
+	}
+
+	return vim25Client, err
+}
+
 // getVMRootPath is a helper func to get the root path for VM's
 // We extracted it because we use it in several places.
 func getVMRootPath(dc *kubermaticv1.DatacenterSpecVSphere) string {
@@ -147,6 +180,23 @@ func GetNetworks(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, us
 	defer session.Logout(ctx)
 
 	return getPossibleVMNetworks(ctx, session)
+}
+
+// GetTagCategories returns a slice of VSphereNetworks of the datacenter from the passed cloudspec.
+func GetTagCategories(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]tags.Category, error) {
+	session, err := newRESTSession(ctx, dc, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create REST API session: %w", err)
+	}
+	defer session.Logout(ctx)
+
+	tagManager := tags.NewManager(session.Client)
+	categories, err := tagManager.GetCategories(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch tag categories: %w", err)
+	}
+
+	return categories, err
 }
 
 // GetVMFolders returns a slice of VSphereFolders of the datacenter from the passed cloudspec.

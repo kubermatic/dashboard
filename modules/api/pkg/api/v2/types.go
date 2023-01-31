@@ -2058,3 +2058,16 @@ type GlobalSettings struct {
 	// +optional
 	DefaultProjectResourceQuota *Quota `json:"defaultQuota,omitempty"`
 }
+
+// VSphereTagCategory is the object representing a vsphere tag category.
+// swagger:model VSphereTagCategory
+type VSphereTagCategory struct {
+	// Name is the name of the tag category.
+	Name string `json:"name"`
+
+	// ID is the unique identifier of the tag category.
+	ID string `json:"id"`
+
+	// UsedBy is the list of actors that have resources attached to this tag category.
+	UsedBy []string `json:"usedBy"`
+}

@@ -15604,6 +15604,51 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tag categories from vSphere datacenter.",
+        "operationId": "listVSphereTagCategoriesNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTagCategory",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTagCategory"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/rolenames": {
       "get": {
         "description": "Lists all Role names with namespaces",
@@ -23701,6 +23746,64 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/VSphereNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/tagcategories": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tag categories from vSphere datacenter.",
+        "operationId": "listProjectVSphereTagCategories",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTagCategory",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTagCategory"
               }
             }
           },
@@ -40119,6 +40222,31 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "VSphereTagCategory": {
+      "type": "object",
+      "title": "VSphereTagCategory is the object representing a vsphere tag category.",
+      "properties": {
+        "id": {
+          "description": "ID is the unique identifier of the tag category.",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "description": "Name is the name of the tag category.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "usedBy": {
+          "description": "UsedBy is the list of actors that have resources attached to this tag category.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "UsedBy"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "Validation": {
       "type": "object",

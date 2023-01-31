@@ -767,6 +767,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/vsphere/datastores").
 		Handler(r.listProjectVSphereDatastores())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/tagcategories").
+		Handler(r.listProjectVSphereTagCategories())
+
 	// Nutanix endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/nutanix/{dc}/clusters").
@@ -978,6 +982,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/folders").
 		Handler(r.listVSphereFoldersNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories").
+		Handler(r.listVSphereTagCategoriesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/instancetypes").
@@ -4396,6 +4404,30 @@ func (r Routing) listVSphereFoldersNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories vsphere listVSphereTagCategoriesNoCredentials
+//
+// Lists tag categories from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereTagCategory
+func (r Routing) listVSphereTagCategoriesNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.VsphereTagCategoriesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/instancetypes alibaba listAlibabaInstanceTypesNoCredentialsV2
 //
 // Lists available Alibaba Instance Types
@@ -6276,6 +6308,28 @@ func (r Routing) listProjectVSphereDatastores() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories vsphere listProjectVSphereTagCategories
+//
+// Lists tag categories from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereTagCategory
+func (r Routing) listProjectVSphereTagCategories() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereTagCategoriesEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
 		provider.DecodeVSphereProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
