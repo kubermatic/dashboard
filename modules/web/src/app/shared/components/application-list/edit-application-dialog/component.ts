@@ -19,8 +19,9 @@ import {ApplicationService} from '@core/services/application';
 import {
   Application,
   ApplicationDefinition,
+  ApplicationLabel,
+  ApplicationLabelValue,
   ApplicationNamespace,
-  ApplicationRef,
   ApplicationSpec,
   ApplicationVersion,
 } from '@shared/entity/application';
@@ -121,7 +122,13 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       this.valuesConfig = y.dump(this.application.spec.values);
     }
     this.form = this._builder.group({
-      [Controls.Version]: this._builder.control(this.application.spec.applicationRef?.version, Validators.required),
+      [Controls.Version]: this._builder.control(
+        {
+          value: this.application.spec.applicationRef?.version,
+          disabled: this.application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP,
+        },
+        Validators.required
+      ),
       [Controls.Values]: this._builder.control(this.valuesConfig),
     });
 
@@ -171,13 +178,13 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       ...this.application,
       spec: {
         ...this.application.spec,
-        applicationRef: {
-          ...this.application.spec.applicationRef,
-          version: this.form.get(Controls.Version).value,
-        } as ApplicationRef,
         values: this._getValueConfig(),
       } as ApplicationSpec,
     } as Application;
+
+    if (!this.form.get(Controls.Version).disabled) {
+      patch.spec.applicationRef.version = this.form.get(Controls.Version).value;
+    }
 
     if (!this.application.creationTimestamp) {
       patch = {
