@@ -25,8 +25,8 @@ import {Cluster} from '@shared/entity/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {forkJoin, of, Subject} from 'rxjs';
+import {map, take, takeUntil} from 'rxjs/operators';
 
 export enum ApplicationsListView {
   Default,
@@ -137,7 +137,9 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.applications = [];
       }
       this.applicationsDataSource.data = this._visibleApplications;
-      this._updateApplicationMaps();
+      if (this.applicationDefinitions?.length) {
+        this._updateApplicationMaps();
+      }
     }
   }
 
@@ -186,13 +188,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
             const addedApplication = dialogData[0];
             const selectedAppDef = dialogData[1];
             if (selectedAppDef) {
-              const updatedAppDefs = this.applicationDefinitions.map(appDef => {
-                if (appDef.name === selectedAppDef.name) {
-                  return _.merge(selectedAppDef, appDef);
-                }
-                return appDef;
-              });
-              this._updateApplicationDefinitions(updatedAppDefs);
+              this._updateApplicationDefinition(selectedAppDef);
             }
             if (addedApplication) {
               this.addApplication.emit(addedApplication);
@@ -265,6 +261,16 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       });
   }
 
+  private _updateApplicationDefinition(updatedAppDef: ApplicationDefinition): void {
+    const updatedAppDefs = this.applicationDefinitions.map(appDef => {
+      if (appDef.name === updatedAppDef.name) {
+        return _.merge(appDef, updatedAppDef);
+      }
+      return appDef;
+    });
+    this._updateApplicationDefinitions(updatedAppDefs);
+  }
+
   private _updateApplicationDefinitions(applicationDefinitions: ApplicationDefinition[]): void {
     const updatedMap = new Map();
     this.applicationDefinitions = applicationDefinitions.map(appDef => {
@@ -278,64 +284,91 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   private _updateApplicationMaps(): void {
-    this.applicationsMethodMap = {};
-    this.applicationsSourceMap = {};
-    this.applicationsStatusMap = {};
-    this.applications.forEach(application => {
-      const applicationRef = application.spec.applicationRef;
-      const status = application.status;
-      const namespace = application.spec.namespace.name;
-
-      this.applicationsMethodMap = {
-        ...this.applicationsMethodMap,
-        [namespace]: {
-          ...(this.applicationsMethodMap[namespace] || {}),
-          [application.name]: status?.method || this.applicationDefinitionsMap.get(applicationRef?.name)?.spec.method,
-        },
-      };
-
-      const versionSources =
-        status?.applicationVersion?.template?.source ||
-        this.applicationDefinitionsMap
-          .get(applicationRef?.name)
-          ?.spec.versions?.find(version => version.version === applicationRef?.version)?.template?.source;
-
-      this.applicationsSourceMap = {
-        ...this.applicationsSourceMap,
-        [namespace]: {
-          ...(this.applicationsSourceMap[namespace] || {}),
-          [application.name]: versionSources ? Object.keys(versionSources).find(key => !!versionSources[key]) : '',
-        },
-      };
-      if (status) {
-        let icon = StatusIcon.Pending;
-        let message = '';
-        if (application.deletionTimestamp) {
-          icon = StatusIcon.Error;
-          message = 'Deleting';
+    const loadingAppDefDetails: Record<string, boolean> = {};
+    // load application definition details
+    forkJoin(
+      this.applications.map(application => {
+        const applicationRef = application.spec.applicationRef;
+        if (
+          !application.status &&
+          applicationRef &&
+          !this.applicationDefinitionsMap.get(applicationRef.name)?.spec?.versions &&
+          !loadingAppDefDetails[applicationRef.name]
+        ) {
+          loadingAppDefDetails[applicationRef.name] = true;
+          return this._applicationService.getApplicationDefinition(applicationRef.name).pipe(
+            map(appDef => {
+              this._updateApplicationDefinition(appDef);
+              return application;
+            })
+          );
         }
-        if (status.conditions?.length) {
-          const failingCondition = status.conditions.find(condition => condition.status === 'False');
-          if (failingCondition) {
-            icon = StatusIcon.Error;
-            const error = failingCondition.message;
-            message = `${error} ${
-              error || !error.endsWith('.') ? '.' : ''
-            } Please check your configuration or contact your KKP Administrator.`;
-          } else {
-            icon = StatusIcon.Running;
-            message = 'Ready';
+        return of(application);
+      })
+    )
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.applicationsMethodMap = {};
+        this.applicationsSourceMap = {};
+        this.applicationsStatusMap = {};
+        this.applications.forEach(application => {
+          const applicationRef = application.spec.applicationRef;
+          const status = application.status;
+          const namespace = application.spec.namespace.name;
+
+          this.applicationsMethodMap = {
+            ...this.applicationsMethodMap,
+            [namespace]: {
+              ...(this.applicationsMethodMap[namespace] || {}),
+              [application.name]:
+                status?.method || this.applicationDefinitionsMap.get(applicationRef?.name)?.spec.method,
+            },
+          };
+
+          const versionSources =
+            status?.applicationVersion?.template?.source ||
+            this.applicationDefinitionsMap
+              .get(applicationRef?.name)
+              ?.spec.versions?.find(version => version.version === applicationRef?.version)?.template?.source;
+
+          this.applicationsSourceMap = {
+            ...this.applicationsSourceMap,
+            [namespace]: {
+              ...(this.applicationsSourceMap[namespace] || {}),
+              [application.name]: versionSources ? Object.keys(versionSources).find(key => !!versionSources[key]) : '',
+            },
+          };
+          if (status) {
+            let icon = StatusIcon.Pending;
+            let message = '';
+            if (application.deletionTimestamp) {
+              icon = StatusIcon.Error;
+              message = 'Deleting';
+            }
+            if (status.conditions?.length) {
+              const failingCondition = status.conditions.find(condition => condition.status === 'False');
+              if (failingCondition) {
+                icon = StatusIcon.Error;
+                const error = failingCondition.message;
+                message = `${error} ${
+                  error || !error.endsWith('.') ? '.' : ''
+                } Please check your configuration or contact your KKP Administrator.`;
+              } else {
+                icon = StatusIcon.Running;
+                message = 'Ready';
+              }
+            }
+            this.applicationsStatusMap = {
+              ...this.applicationsStatusMap,
+              [namespace]: {
+                ...(this.applicationsStatusMap[namespace] || {}),
+                [application.name]: {icon, message},
+              },
+            };
           }
-        }
-        this.applicationsStatusMap = {
-          ...this.applicationsStatusMap,
-          [namespace]: {
-            ...(this.applicationsStatusMap[namespace] || {}),
-            [application.name]: {icon, message},
-          },
-        };
-      }
-    });
+        });
+      });
   }
 
   private _canAdd(): boolean {
