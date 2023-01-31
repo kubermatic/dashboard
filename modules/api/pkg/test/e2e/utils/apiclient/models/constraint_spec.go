@@ -24,6 +24,10 @@ type ConstraintSpec struct {
 	// Disabled  is the flag for disabling OPA constraints
 	Disabled bool `json:"disabled,omitempty"`
 
+	// EnforcementAction defines the action to take in response to a constraint being violated.
+	// By default, EnforcementAction is set to deny as the default behavior is to deny admission requests with any violation.
+	EnforcementAction string `json:"enforcementAction,omitempty"`
+
 	// match
 	Match *Match `json:"match,omitempty"`
 
