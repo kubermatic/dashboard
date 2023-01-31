@@ -21,6 +21,9 @@ type ApplicationInstallationListItem struct {
 	// creation timestamp
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 
+	// labels
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 

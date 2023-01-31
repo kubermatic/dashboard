@@ -29295,6 +29295,13 @@
           "type": "string",
           "x-go-name": "CreationTimestamp"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -29314,14 +29321,6 @@
       "properties": {
         "applicationRef": {
           "$ref": "#/definitions/ApplicationRef"
-        },
-        "labels": {
-          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Labels"
         },
         "namespace": {
           "$ref": "#/definitions/NamespaceSpec"
@@ -34082,6 +34081,7 @@
           "x-go-name": "UserProjectsLimit"
         }
       },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2",
       "$ref": "#/definitions/SettingSpec"
     },
     "GroupProjectBinding": {
