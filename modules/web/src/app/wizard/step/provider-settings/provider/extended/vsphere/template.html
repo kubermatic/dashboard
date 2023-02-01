@@ -77,7 +77,10 @@ limitations under the License.
   </mat-form-field>
 
   <mat-card-header class="km-no-padding">
-    <mat-card-title>Cluster Tags</mat-card-title>
+    <mat-card-title>Cluster Tags
+      <i class="km-icon-info km-pointer km-no-margin"
+         matTooltip="Cluster tags are used to create tags for a pre-existing tag category at the cluster level. These tags can then be propagated to the MachineDeployments."></i>
+    </mat-card-title>
   </mat-card-header>
 
   <km-combobox #tagCategoryComboBox
@@ -86,7 +89,6 @@ limitations under the License.
                [formControlName]="Controls.TagCategory"
                [hint]="getHint(Controls.TagCategory)"
                (changed)="onTagCategoryChange($event)"
-               [selected]="selectedTagCategory"
                [label]="tagCategoryLabel"
                inputLabel="Select Tag Category..."
                filterBy="name">
@@ -103,6 +105,7 @@ limitations under the License.
                 placeholder="Add tags..."
                 [kmPattern]="tagValuesPattern"
                 [kmPatternError]="tagValuesPatternError"
+                [kmRequired]="!!form.get(Controls.TagCategory).value"
                 fxFlex>
   </km-chip-list>
 

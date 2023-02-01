@@ -30,6 +30,7 @@ import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {Validators} from '@angular/forms';
 
 enum Controls {
   Tags = 'tags',
@@ -60,6 +61,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder: string;
   @Input() disabled: boolean;
+  @Input('kmRequired') required: boolean;
   @Input('kmPatternError') patternError = 'Invalid pattern';
   @Input('kmPattern') pattern: string;
   @Input() tags: string[] = [];
@@ -84,8 +86,11 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
     if (changes.disabled && this.form) {
       if (this.disabled) {
         this.form.get(Controls.Tags).disable();
+        this.form.get(Controls.Tags).clearValidators();
       } else if (this.form.get(Controls.Tags).disabled) {
         this.form.get(Controls.Tags).enable();
+        this.form.get(Controls.Tags).setValidators(this._validators());
+        this.form.get(Controls.Tags).updateValueAndValidity();
       }
     }
   }
@@ -135,6 +140,15 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   registerOnTouched(_: any): void {}
 
   private _validators(): ValidatorFn[] {
-    return this.pattern ? [KmValidators.unique(), KmValidators.chipPattern(this.pattern)] : [KmValidators.unique()];
+    const validators = [KmValidators.unique()];
+
+    if (this.required) {
+      validators.push(Validators.required);
+    }
+
+    if (this.pattern) {
+      validators.push(KmValidators.chipPattern(this.pattern));
+    }
+    return validators;
   }
 }

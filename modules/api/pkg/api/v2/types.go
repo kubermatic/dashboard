@@ -2071,3 +2071,22 @@ type VSphereTagCategory struct {
 	// UsedBy is the list of actors that have resources attached to this tag category.
 	UsedBy []string `json:"usedBy"`
 }
+
+// VSphereTag is the object representing a vsphere tag.
+// swagger:model VSphereTag
+type VSphereTag struct {
+	// Name is the name of the tag.
+	Name string `json:"name"`
+
+	// ID is the unique identifier of the tag.
+	ID string `json:"id"`
+
+	// CategoryID is the tag category associated with the tag.
+	CategoryID string `json:"categoryID"`
+
+	// Description is the description for the tag.
+	Description string `json:"description"`
+
+	// UsedBy is the list of actors that have resources attached to this tag.
+	UsedBy []string `json:"usedBy"`
+}

@@ -182,7 +182,7 @@ func GetNetworks(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, us
 	return getPossibleVMNetworks(ctx, session)
 }
 
-// GetTagCategories returns a slice of VSphereNetworks of the datacenter from the passed cloudspec.
+// GetTagCategories returns a slice of VSphereTagCategory of the datacenter from the passed cloudspec.
 func GetTagCategories(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]tags.Category, error) {
 	session, err := newRESTSession(ctx, dc, username, password, caBundle)
 	if err != nil {
@@ -197,6 +197,23 @@ func GetTagCategories(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSpher
 	}
 
 	return categories, err
+}
+
+// GetTagsForCategory returns a slice of VSphereTag of the datacenter from the passed cloudspec.
+func GetTagsForCategory(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password, tagCategory string, caBundle *x509.CertPool) ([]tags.Tag, error) {
+	session, err := newRESTSession(ctx, dc, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create REST API session: %w", err)
+	}
+	defer session.Logout(ctx)
+
+	tagManager := tags.NewManager(session.Client)
+	tags, err := tagManager.GetTagsForCategory(ctx, tagCategory)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch tags for tag category: %w", err)
+	}
+
+	return tags, err
 }
 
 // GetVMFolders returns a slice of VSphereFolders of the datacenter from the passed cloudspec.

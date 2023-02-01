@@ -211,7 +211,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
     merge(this._credentialsChanged, this._presets.presetChanges)
       .pipe(debounceTime(this._debounceTime))
-      .pipe(tap(_ => this._clearTagCategories()))
       .pipe(switchMap(_ => this._tagCategoryListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadTagCategories.bind(this));
@@ -235,7 +234,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     } else {
       this.form.get(Controls.Tags).reset();
       this.form.get(Controls.Tags).disable();
-      this.form.get(Controls.Tags).clearValidators();
       this.onTagValuesChange([]);
     }
     this.selectedTagCategory = tagCategory;
@@ -245,8 +243,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.tags = values;
 
     if (this.selectedTagCategory) {
+      const tagCategoryID = this.tagCategories.find(tagCategory => tagCategory.name === this.selectedTagCategory)?.[0];
       this._clusterSpecService.cluster.spec.cloud.vsphere.tags = {
-        categoryID: this.selectedTagCategory,
+        categoryID: tagCategoryID,
         tags: values,
       } as VSphereTags;
     } else {
