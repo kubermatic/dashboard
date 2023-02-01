@@ -42,6 +42,7 @@ import {OpenStackService} from '@core/services/provider/openstack';
 import {NutanixService} from '@app/core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {VSphereService} from '@app/core/services/provider/vsphere';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
@@ -69,6 +70,7 @@ describe('MachineNetworksComponent', () => {
         NutanixService,
         VMwareCloudDirectorService,
         KubeVirtService,
+        VSphereService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         {provide: DatacenterService, useClass: DatacenterMockService},

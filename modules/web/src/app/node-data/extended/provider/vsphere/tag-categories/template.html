@@ -14,12 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <mat-card-header class="km-no-padding tags-title">
-  <mat-card-title>Provider Tags</mat-card-title>
+  <mat-card-title>Provider Tags
+    <i class="km-icon-info km-pointer km-no-margin"
+       matTooltip="Provider tags are pre-existing tags against tag categories that will be attached to the machine deployments. Machine controller will only attach/detach these tags."></i>
+  </mat-card-title>
 </mat-card-header>
+
 <div fxLayout="column">
   <div *ngFor="let tag of disabledTags; let i = index"
        fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayoutGap="10px"
+       matTooltip="Tags specified at the cluster level will be created and managed by KKP. These tags will be attached to the machine deployments.">
     <mat-form-field fxFlex="45">
       <mat-label>{{CategoryState.Ready}}</mat-label>
       <input matInput
@@ -64,7 +69,7 @@ limitations under the License.
         <mat-select [formControlName]="Controls.Tag"
                     disableOptionCentering>
           <mat-option *ngFor="let tag of categoryTags[getSelectedCategory(tagControl)]"
-                      [value]="tag.id">
+                      [value]="tag.name">
             {{tag.name}}
           </mat-option>
         </mat-select>

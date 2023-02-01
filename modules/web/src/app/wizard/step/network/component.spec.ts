@@ -44,6 +44,7 @@ import {NutanixService} from '@app/core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {ApplicationService} from '@core/services/application';
+import {VSphereService} from '@app/core/services/provider/vsphere';
 
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;
@@ -74,6 +75,7 @@ describe('MachineNetworkStepComponent', () => {
         KubeVirtService,
         MachineDeploymentService,
         ApplicationService,
+        VSphereService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: Auth, useClass: AuthMockService},
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},

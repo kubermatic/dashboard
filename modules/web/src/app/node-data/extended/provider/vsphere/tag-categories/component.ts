@@ -149,7 +149,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
   }
 
   deleteDisabledTag(index: number): void {
-    this.disabledTags = this.disabledTags.splice(index, 1);
+    this.disabledTags.splice(index, 1);
     this._updateTags();
   }
 
@@ -205,7 +205,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
     this.form.updateValueAndValidity({emitEvent: false});
 
     const categoryControl = this._formBuilder.control(tag?.categoryID || '');
-    const tagControl = this._formBuilder.control(tag?.id || tag?.name || '');
+    const tagControl = this._formBuilder.control(tag?.name || '');
     const formGroupControl = this._formBuilder.group({
       [Controls.Category]: categoryControl,
       [Controls.Tag]: tagControl,
@@ -317,7 +317,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
         if (category && tag) {
           tags.push({
             categoryID: category,
-            id: tag,
+            name: tag,
           } as VSphereTag);
         }
       });
