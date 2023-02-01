@@ -19,6 +19,7 @@ import {Provider} from './provider';
 import {VSphereDatastores, VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {map} from 'rxjs/operators';
 import {VSphereTagCategory} from '@shared/entity/provider/vsphere';
+import {VSphereTag} from '@app/shared/entity/node';
 
 export class VSphere extends Provider {
   private readonly _networksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/vsphere/networks`;
@@ -95,6 +96,20 @@ export class VSphere extends Provider {
     }
 
     return this._http.get<VSphereTagCategory[]>(this._tagCategoriesUrl, {
+      headers: this._headers,
+    });
+  }
+
+  tags(tagCategory: string, onLoadingCb: () => void = null): Observable<VSphereTag[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<VSphereTag[]>(`${this._tagCategoriesUrl}/${tagCategory}/tags`, {
       headers: this._headers,
     });
   }

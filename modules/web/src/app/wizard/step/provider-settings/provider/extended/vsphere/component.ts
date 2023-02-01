@@ -223,21 +223,22 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   }
 
   onTagCategoryChange(tagCategory: string): void {
+    this.selectedTagCategory = tagCategory;
     if (tagCategory) {
       this.form.get(Controls.Tags).enable();
+      this.onTagValuesChange(this.tags);
     } else {
       this.form.get(Controls.Tags).reset();
       this.form.get(Controls.Tags).disable();
       this.onTagValuesChange([]);
     }
-    this.selectedTagCategory = tagCategory;
   }
 
   onTagValuesChange(values: string[]): void {
     this.tags = values;
 
     if (this.selectedTagCategory) {
-      const tagCategoryID = this.tagCategories.find(tagCategory => tagCategory.name === this.selectedTagCategory)?.[0];
+      const tagCategoryID = this.tagCategories.find(tagCategory => tagCategory.name === this.selectedTagCategory)?.id;
       this._clusterSpecService.cluster.spec.cloud.vsphere.tags = {
         categoryID: tagCategoryID,
         tags: values,
@@ -245,6 +246,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     } else {
       this._clusterSpecService.cluster.spec.cloud.vsphere.tags = null;
     }
+    this._clusterSpecService.providerSpecChanges.emit();
   }
 
   getHint(control: Controls): string {

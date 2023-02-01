@@ -41,6 +41,7 @@ import {OperatingSystemManagerService} from '@core/services/operating-system-man
 import {PageTitleService} from '@core/services/page-title';
 import {ParamsService} from '@core/services/params';
 import {PreviousRouteService} from '@core/services/previous-route';
+import {VSphereService} from '@core/services/provider/vsphere';
 import {RBACService} from '@core/services/rbac';
 import {SettingsService} from '@core/services/settings';
 import {ThemeInformerService} from '@core/services/theme-informer';
@@ -143,6 +144,7 @@ const services = [
   OperatingSystemManagerService,
   KubeOneClusterSpecService,
   KubeOnePresetsService,
+  VSphereService,
 ];
 
 const interceptors = [

@@ -269,8 +269,10 @@ export class VSphereNodeSpec {
 }
 
 export class VSphereTag {
-  name: string;
-  description: string;
+  categoryID: string;
+  id?: string;
+  name?: string;
+  description?: string;
 }
 
 export class VMwareCloudDirectorNodeSpec {
