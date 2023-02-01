@@ -93,6 +93,12 @@ limitations under the License.
                        [diameter]="30"
                        color="primary"
                        *ngIf="creating"></mat-spinner>
+
+          <div *ngIf="quotaExceededWarning && active?.name === stepRegistry.NodeSettings"
+               fxLayoutAlign="start center">
+            <i class="km-icon-warning"></i>
+            <div><strong>Quota exceeded.</strong> <br>In the last step cluster creation is disabled.</div>
+          </div>
           <button fxLayoutAlign="center center"
                   mat-flat-button
                   type="button"
@@ -139,7 +145,7 @@ limitations under the License.
                      *ngIf="showCreateClusterButton"
                      icon="km-icon-add"
                      [label]="getPrimaryButtonLabel()"
-                     [disabled]="creating"
+                     [disabled]="creating || quotaExceededWarning"
                      [observable]="getObservable()"
                      (next)="onNext($event)">
           </km-button>
