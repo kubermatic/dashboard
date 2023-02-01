@@ -56,7 +56,7 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
 
   domains: string[] = [];
-  projects: string[] = [];
+  projects: Project[] = [];
   projectLabel = ProjectState.Ready;
 
   constructor(
@@ -68,7 +68,7 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   }
 
   ngOnInit(): void {
-    this.__initForm();
+    this._initForm();
     this._getProjects();
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._update());
@@ -80,8 +80,19 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
     this._presetDialogService.preset.spec.requiredEmails = this.domains;
   }
 
+  projectDisplayFn(projectId: string[]): string {
+    if (projectId) {
+      return projectId
+        ?.map(id => {
+          return this.projects.find(project => project.id === id)?.name;
+        })
+        .join(', ');
+    }
+    return '';
+  }
+
   private _update(): void {
-    this._presetDialogService.preset.spec.projects = this.form.get(Controls.Projects).value;
+    this._presetDialogService.preset.spec.projects = this.form.get(Controls.Projects).value.select;
     this._presetDialogService.preset.metadata.name = this.form.get(Controls.Name).value;
     this._presetDialogService.preset.spec.enabled = !this.form.get(Controls.Disable).value;
   }
@@ -89,13 +100,13 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   private _getProjects(): void {
     this.projectLabel = ProjectState.Loading;
 
-    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
-      this.projects = projects.map(project => project.name);
+    this._projectService.allProjects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      this.projects = projects;
       this.projectLabel = this.projects.length ? ProjectState.Ready : ProjectState.Empty;
     });
   }
 
-  private __initForm(): void {
+  private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Domains]: this._builder.control(''),
