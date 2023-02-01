@@ -233,6 +233,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 				Name:        v.Name,
 				Description: v.Description,
 				CategoryID:  v.CategoryID,
+				ID:          v.ID,
 			})
 		}
 	case providerconfig.CloudProviderVMwareCloudDirector:

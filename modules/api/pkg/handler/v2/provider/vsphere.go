@@ -213,7 +213,7 @@ func VsphereTagForTagCategoryEndpoint(seedsGetter provider.SeedsGetter, presetPr
 			}
 		}
 
-		return providercommon.GetVsphereTagsForTagCategory(ctx, userInfo, seedsGetter, username, password, req.TagCategory, req.DatacenterName, caBundle)
+		return providercommon.GetVsphereTagsForTagCategory(ctx, userInfo, seedsGetter, username, password, req.DatacenterName, req.TagCategory, caBundle)
 	}
 }
 

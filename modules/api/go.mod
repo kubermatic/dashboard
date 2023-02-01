@@ -47,7 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.39.0
-	github.com/kubermatic/machine-controller v1.55.1-0.20230116112513-48a013651278
+	github.com/kubermatic/machine-controller v1.55.1-0.20230201122903-ab8cf636f599
 	github.com/minio/minio-go/v7 v7.0.45
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221214024800-b745745c4118 // v0.5.1
@@ -102,7 +102,7 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.21.1-0.20230131075521-62c8bfb14ae1
+	k8c.io/kubermatic/v2 v2.21.1-0.20230201120148-47a67bb80f4c
 )
 
 require (
