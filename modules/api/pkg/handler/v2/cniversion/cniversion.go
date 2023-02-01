@@ -31,6 +31,8 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/cni"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
+	"k8s.io/apimachinery/pkg/util/sets"
 )
 
 // ListVersions returns a list of available versions for the given CNI plugin type.
@@ -52,7 +54,7 @@ func ListVersions() endpoint.Endpoint {
 
 		return apiv2.CNIVersions{
 			CNIPluginType: req.CNIPluginType,
-			Versions:      versions.List(),
+			Versions:      sets.List(versions),
 		}, nil
 	}
 }
@@ -79,7 +81,7 @@ func DecodeListCNIPluginVersions(ctx context.Context, r *http.Request) (interfac
 // Validate validates listProviderVersionsReq request.
 func (l listCNIPluginVersionsReq) Validate() error {
 	if !cni.GetSupportedCNIPlugins().Has(l.CNIPluginType) {
-		return fmt.Errorf("CNI plugin type %q not supported. Supported types: %v", l.CNIPluginType, cni.GetSupportedCNIPlugins().List())
+		return fmt.Errorf("CNI plugin type %q not supported. Supported types: %v", l.CNIPluginType, sets.List(cni.GetSupportedCNIPlugins()))
 	}
 	return nil
 }
@@ -105,7 +107,7 @@ func ListVersionsForCluster(userInfoGetter provider.UserInfoGetter, projectProvi
 
 		return apiv2.CNIVersions{
 			CNIPluginType: c.Spec.CNIPlugin.Type.String(),
-			Versions:      versions.List(),
+			Versions:      sets.List(versions),
 		}, nil
 	}
 }

@@ -1060,6 +1060,7 @@ func GenCluster(id string, name string, projectID string, creationTime time.Time
 				Fake:           &kubermaticv1.FakeCloudSpec{Token: "SecretToken"},
 			},
 			Version:               version,
+			ContainerRuntime:      "containerd",
 			HumanReadableName:     name,
 			EnableUserSSHKeyAgent: pointer.Bool(false),
 			ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,

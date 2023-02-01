@@ -14186,13 +14186,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14204,6 +14197,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14720,11 +14720,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14736,6 +14731,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -30877,6 +30877,11 @@
           "type": "boolean",
           "x-go-name": "Disabled"
         },
+        "enforcementAction": {
+          "description": "EnforcementAction defines the action to take in response to a constraint being violated.\nBy default, EnforcementAction is set to deny as the default behavior is to deny admission requests with any violation.",
+          "type": "string",
+          "x-go-name": "EnforcementAction"
+        },
         "match": {
           "$ref": "#/definitions/Match"
         },
@@ -34081,7 +34086,6 @@
           "x-go-name": "UserProjectsLimit"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2",
       "$ref": "#/definitions/SettingSpec"
     },
     "GroupProjectBinding": {
@@ -39398,6 +39402,23 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "TagCategory": {
+      "description": "TagCategory is the tag category that is owned by KKP, where it is used to define KKP created tags, such as resources\nownership tag, where this tag is applied on any vSphere resource that is created by KKP.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "ID represents the category id for the machine deployment tags.",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "description": "Name represents the name of vSphere tag category that will be used to create and attach tags on VMS.",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "TaintSpec": {
       "type": "object",
       "title": "TaintSpec defines a node taint.",
@@ -39951,10 +39972,16 @@
           "type": "string",
           "x-go-name": "StoragePolicy"
         },
-        "tagCategoryID": {
-          "description": "This is category for the machine deployment tags",
-          "type": "string",
-          "x-go-name": "TagCategoryID"
+        "tagCategory": {
+          "$ref": "#/definitions/TagCategory"
+        },
+        "tags": {
+          "description": "Tags represent the tags that are attached or created on the cluster level and propagated to MachineDeployment\nlevel afterwards.\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/VSphereTag"
+          },
+          "x-go-name": "Tags"
         },
         "username": {
           "description": "Username is the vSphere user name.\n+optional",
@@ -40072,24 +40099,26 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "VSphereTag": {
+      "description": "VSphereTag represents the tags that are attached or created on the cluster level, that are then propagated down to the\nMachineDeployments. In order to attach tags on MachineDeployment, users must create the tag on a cluster level first\nthen attach that tag on the MachineDeployment.",
       "type": "object",
-      "title": "VSphereTag represents vsphere tag.",
       "properties": {
         "categoryID": {
-          "description": "CategoryID when empty the default category will be used.",
+          "description": "CategoryID is the id of the vsphere category that the tag belongs to. If the category id is left empty, the default\ncategory id for the cluster will be used.",
           "type": "string",
           "x-go-name": "CategoryID"
         },
-        "description": {
+        "id": {
+          "description": "ID represents the generated vsphere tag id.",
           "type": "string",
-          "x-go-name": "Description"
+          "x-go-name": "ID"
         },
         "name": {
+          "description": "Name represents the name of the created tag.",
           "type": "string",
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "Validation": {
       "type": "object",

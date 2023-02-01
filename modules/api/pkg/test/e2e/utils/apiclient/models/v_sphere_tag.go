@@ -12,18 +12,21 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// VSphereTag VSphereTag represents vsphere tag.
+// VSphereTag VSphereTag represents the tags that are attached or created on the cluster level, that are then propagated down to the
+// MachineDeployments. In order to attach tags on MachineDeployment, users must create the tag on a cluster level first
+// then attach that tag on the MachineDeployment.
 //
 // swagger:model VSphereTag
 type VSphereTag struct {
 
-	// CategoryID when empty the default category will be used.
+	// CategoryID is the id of the vsphere category that the tag belongs to. If the category id is left empty, the default
+	// category id for the cluster will be used.
 	CategoryID string `json:"categoryID,omitempty"`
 
-	// description
-	Description string `json:"description,omitempty"`
+	// ID represents the generated vsphere tag id.
+	ID string `json:"id,omitempty"`
 
-	// name
+	// Name represents the name of the created tag.
 	Name string `json:"name,omitempty"`
 }
 
