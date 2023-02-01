@@ -329,7 +329,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 	// Subtract resources that have been replaced.
 	replacedResources := req.Body.ReplacedResources
 	if replacedResources != nil {
-		allocated, err := convertToCRDQuota(replacedResources.Quota)
+		allocated, err := apiv2.ConvertToCRDQuota(replacedResources.Quota)
 		if err != nil {
 			return nil, err
 		}
