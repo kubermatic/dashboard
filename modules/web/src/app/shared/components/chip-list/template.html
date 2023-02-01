@@ -44,5 +44,8 @@ limitations under the License.
     <mat-error *ngIf="form.get(controls.Tags).hasError('pattern')">
       <span [innerHTML]="patternError"></span>
     </mat-error>
+    <mat-error *ngIf="form.get(controls.Tags).hasError('required')">
+      <strong>Required</strong>
+    </mat-error>
   </mat-form-field>
 </form>

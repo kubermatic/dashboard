@@ -26,3 +26,8 @@ export class VSphereFolder {
 export class VSphereDatastores {
   datastores: string[];
 }
+
+export class VSphereTagCategory {
+  name: string;
+  id: string;
+}

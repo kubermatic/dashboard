@@ -23,6 +23,7 @@ import (
 	"net/http"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -36,38 +37,48 @@ func VsphereNetworksWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
 	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
 ) (interface{}, error) {
-	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-
-	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	username, password, datacenterName, userInfo, err := getVsphereCredentialsAndDatacenterInfoFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, projectID, clusterID)
 	if err != nil {
 		return nil, err
 	}
-	if cluster.Spec.Cloud.VSphere == nil {
-		return nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
-	}
 
-	datacenterName := cluster.Spec.Cloud.DatacenterName
-
-	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
-	if !ok {
-		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
-	}
-	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
-
-	userInfo, err := userInfoGetter(ctx, "")
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
-	if err != nil {
-		return nil, fmt.Errorf("failed to find Datacenter %q: %w", datacenterName, err)
-	}
-
-	username, password, err := vsphere.GetCredentialsForCluster(cluster.Spec.Cloud, secretKeySelector, datacenter.Spec.VSphere)
-	if err != nil {
-		return nil, err
-	}
 	return GetVsphereNetworks(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
+}
+
+func VsphereFoldersWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
+) (interface{}, error) {
+	username, password, datacenterName, userInfo, err := getVsphereCredentialsAndDatacenterInfoFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetVsphereFolders(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
+}
+
+func VsphereTagCategoriesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
+) (interface{}, error) {
+	username, password, datacenterName, userInfo, err := getVsphereCredentialsAndDatacenterInfoFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetVsphereTagCategories(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
+}
+
+func VSphereTagsForTagCategoryWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID, tagCategory string, caBundle *x509.CertPool,
+) (interface{}, error) {
+	username, password, datacenterName, userInfo, err := getVsphereCredentialsAndDatacenterInfoFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetVsphereTagsForTagCategory(ctx, userInfo, seedsGetter, username, password, datacenterName, tagCategory, caBundle)
 }
 
 func GetVsphereNetworks(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, username, password, datacenterName string, caBundle *x509.CertPool) ([]apiv1.VSphereNetwork, error) {
@@ -94,41 +105,52 @@ func GetVsphereNetworks(ctx context.Context, userInfo *provider.UserInfo, seedsG
 	return apiNetworks, nil
 }
 
-func VsphereFoldersWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
-	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
-) (interface{}, error) {
-	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-
-	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
-	if err != nil {
-		return nil, err
-	}
-	if cluster.Spec.Cloud.VSphere == nil {
-		return nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
-	}
-
-	datacenterName := cluster.Spec.Cloud.DatacenterName
-	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
-	if !ok {
-		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
-	}
-	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
-
-	userInfo, err := userInfoGetter(ctx, "")
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
+func GetVsphereTagCategories(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, username, password, datacenterName string, caBundle *x509.CertPool) ([]apiv2.VSphereTagCategory, error) {
 	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find Datacenter %q: %w", datacenterName, err)
 	}
 
-	username, password, err := vsphere.GetCredentialsForCluster(cluster.Spec.Cloud, secretKeySelector, datacenter.Spec.VSphere)
+	apiTagCategories, err := vsphere.GetTagCategories(ctx, datacenter.Spec.VSphere, username, password, caBundle)
 	if err != nil {
 		return nil, err
 	}
-	return GetVsphereFolders(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
+
+	var tagCategories []apiv2.VSphereTagCategory
+	for _, category := range apiTagCategories {
+		tagCategories = append(tagCategories, apiv2.VSphereTagCategory{
+			Name:   category.Name,
+			ID:     category.ID,
+			UsedBy: category.UsedBy,
+		})
+	}
+
+	return tagCategories, nil
+}
+
+func GetVsphereTagsForTagCategory(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, username, password, datacenterName, tagCategory string, caBundle *x509.CertPool) ([]apiv2.VSphereTag, error) {
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find Datacenter %q: %w", datacenterName, err)
+	}
+
+	apiTags, err := vsphere.GetTagsForCategory(ctx, datacenter.Spec.VSphere, username, password, tagCategory, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	var tags []apiv2.VSphereTag
+	for _, tag := range apiTags {
+		tags = append(tags, apiv2.VSphereTag{
+			Name:        tag.Name,
+			ID:          tag.ID,
+			UsedBy:      tag.UsedBy,
+			Description: tag.Description,
+			CategoryID:  tag.CategoryID,
+		})
+	}
+
+	return tags, nil
 }
 
 func GetVsphereFolders(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, username, password, datacenterName string, caBundle *x509.CertPool) ([]apiv1.VSphereFolder, error) {
@@ -168,4 +190,42 @@ func GetVsphereDatastoreList(ctx context.Context, userInfo *provider.UserInfo, s
 	}
 
 	return apiDatastores, nil
+}
+
+func getVsphereCredentialsAndDatacenterInfoFromCluster(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string,
+) (string, string, string, *provider.UserInfo, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return "", "", "", nil, err
+	}
+	if cluster.Spec.Cloud.VSphere == nil {
+		return "", "", "", nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
+	}
+
+	datacenterName := cluster.Spec.Cloud.DatacenterName
+
+	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
+	if !ok {
+		return "", "", "", nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
+	}
+	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
+
+	userInfo, err := userInfoGetter(ctx, "")
+	if err != nil {
+		return "", "", "", nil, common.KubernetesErrorToHTTPError(err)
+	}
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return "", "", "", nil, fmt.Errorf("failed to find Datacenter %q: %w", datacenterName, err)
+	}
+
+	username, password, err := vsphere.GetCredentialsForCluster(cluster.Spec.Cloud, secretKeySelector, datacenter.Spec.VSphere)
+	if err != nil {
+		return "", "", "", nil, err
+	}
+
+	return username, password, datacenterName, userInfo, nil
 }
