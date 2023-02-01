@@ -16,7 +16,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/subscription/armsubscription v1.0.0
 	github.com/Azure/go-autorest/autorest/to v0.4.0
 	github.com/Masterminds/semver/v3 v3.2.0
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.111
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.112
 	github.com/aws/aws-sdk-go-v2 v1.17.3
 	github.com/aws/aws-sdk-go-v2/config v1.18.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.7
@@ -47,7 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.39.0
-	github.com/kubermatic/machine-controller v1.55.1-0.20230103083220-0eaa75744f83
+	github.com/kubermatic/machine-controller v1.55.1-0.20230116112513-48a013651278
 	github.com/minio/minio-go/v7 v7.0.45
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221214024800-b745745c4118 // v0.5.1
@@ -66,17 +66,17 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.5.4
-	k8c.io/operating-system-manager v1.1.2-0.20221201183812-4f7c5a687353
+	k8c.io/operating-system-manager v1.1.2-0.20230123173549-8688a1fde001
 	k8c.io/reconciler v0.3.1
-	k8s.io/api v0.26.0
-	k8s.io/apiextensions-apiserver v0.26.0
-	k8s.io/apimachinery v0.26.0
-	k8s.io/apiserver v0.26.0
+	k8s.io/api v0.26.1
+	k8s.io/apiextensions-apiserver v0.26.1
+	k8s.io/apimachinery v0.26.1
+	k8s.io/apiserver v0.26.1
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/code-generator v0.26.0
+	k8s.io/code-generator v0.26.1
 	k8s.io/klog/v2 v2.80.1
-	k8s.io/kubectl v0.26.0
-	k8s.io/metrics v0.26.0
+	k8s.io/kubectl v0.26.1
+	k8s.io/metrics v0.26.1
 	k8s.io/utils v0.0.0-20221128185143-99ec85e7a448
 	kubevirt.io/api v0.58.0
 	kubevirt.io/containerized-data-importer-api v1.55.2
@@ -102,7 +102,7 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.21.1-0.20230118134347-8b64fdaea27c
+	k8c.io/kubermatic/v2 v2.21.1-0.20230131075521-62c8bfb14ae1
 )
 
 require (
@@ -258,12 +258,12 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	helm.sh/helm/v3 v3.10.3 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v0.12.0 // indirect
-	k8s.io/component-base v0.26.0 // indirect
+	k8s.io/component-base v0.26.1 // indirect
 	k8s.io/gengo v0.0.0-20220902162205-c0856e24416d // indirect
 	k8s.io/klog v1.0.0 // indirect
-	k8s.io/kube-aggregator v0.26.0 // indirect
+	k8s.io/kube-aggregator v0.26.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20221207184640-f3cff1453715 // indirect
-	k8s.io/kubelet v0.26.0 // indirect
+	k8s.io/kubelet v0.26.1 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v0.6.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect

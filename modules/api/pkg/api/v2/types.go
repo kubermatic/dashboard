@@ -1809,6 +1809,8 @@ type ApplicationInstallationListItem struct {
 
 	CreationTimestamp apiv1.Time `json:"creationTimestamp,omitempty"`
 
+	Labels map[string]string `json:"labels,omitempty"`
+
 	Spec *ApplicationInstallationListItemSpec `json:"spec"`
 
 	Status *ApplicationInstallationListItemStatus `json:"status"`
@@ -1819,9 +1821,6 @@ type ApplicationInstallationListItem struct {
 type ApplicationInstallationListItemSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
 	Namespace apiv1.NamespaceSpec `json:"namespace"`
-
-	// Labels can contain metadata about the application, such as the owner who manages it.
-	Labels map[string]string `json:"labels,omitempty"`
 
 	// ApplicationRef is a reference to identify which Application should be deployed
 	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
@@ -2003,4 +2002,59 @@ type SeedOverview struct {
 type SeedStatus struct {
 	Name  string                 `json:"name"`
 	Phase kubermaticv1.SeedPhase `json:"phase"`
+}
+
+// GlobalSettings defines global settings
+// swagger:model GlobalSettings
+type GlobalSettings struct {
+	// CustomLinks are additional links that can be shown the dashboard's footer.
+	CustomLinks kubermaticv1.CustomLinks `json:"customLinks"`
+	// DefaultNodeCount is the default number of replicas for the initial MachineDeployment.
+	DefaultNodeCount int8 `json:"defaultNodeCount"`
+	// DisplayDemoInfo controls whether a "Demo System" hint is shown in the footer.
+	DisplayDemoInfo bool `json:"displayDemoInfo"`
+	// DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.
+	DisplayAPIDocs bool `json:"displayAPIDocs"`
+	// DisplayDemoInfo controls whether a a link to TOS is shown in the footer.
+	DisplayTermsOfService bool `json:"displayTermsOfService"`
+	// EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.
+	EnableDashboard bool `json:"enableDashboard"`
+
+	// +kubebuilder:default=false
+
+	// EnableWebTerminal enables the Web Terminal feature for the user clusters.
+	EnableWebTerminal bool `json:"enableWebTerminal,omitempty"`
+
+	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig"` //nolint:tagliatelle
+	// UserProjectsLimit is the maximum number of projects a user can create.
+	UserProjectsLimit           int64 `json:"userProjectsLimit"`
+	RestrictProjectCreation     bool  `json:"restrictProjectCreation"`
+	EnableExternalClusterImport bool  `json:"enableExternalClusterImport"`
+
+	// CleanupOptions control what happens when a cluster is deleted via the dashboard.
+	// +optional
+	CleanupOptions kubermaticv1.CleanupOptions `json:"cleanupOptions,omitempty"`
+	// +optional
+	OpaOptions kubermaticv1.OpaOptions `json:"opaOptions,omitempty"`
+	// +optional
+	MlaOptions kubermaticv1.MlaOptions `json:"mlaOptions,omitempty"`
+
+	MlaAlertmanagerPrefix string `json:"mlaAlertmanagerPrefix"`
+	MlaGrafanaPrefix      string `json:"mlaGrafanaPrefix"`
+
+	// Notifications are the configuration for notifications on dashboard.
+	// +optional
+	Notifications kubermaticv1.NotificationsOptions `json:"notifications,omitempty"`
+
+	// ProviderConfiguration are the cloud provider specific configurations on dashboard.
+	// +optional
+	ProviderConfiguration kubermaticv1.ProviderConfiguration `json:"providerConfiguration,omitempty"`
+
+	// MachineDeploymentVMResourceQuota is used to filter out allowed machine flavors based on the specified resource limits like CPU, Memory, and GPU etc.
+	MachineDeploymentVMResourceQuota *kubermaticv1.MachineFlavorFilter `json:"machineDeploymentVMResourceQuota,omitempty"`
+
+	// DefaultProjectResourceQuota allows to configure a default project resource quota which
+	// will be set for all projects that do not have a custom quota already set. EE-version only.
+	// +optional
+	DefaultProjectResourceQuota *Quota `json:"defaultQuota,omitempty"`
 }

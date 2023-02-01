@@ -1060,6 +1060,7 @@ func GenCluster(id string, name string, projectID string, creationTime time.Time
 				Fake:           &kubermaticv1.FakeCloudSpec{Token: "SecretToken"},
 			},
 			Version:               version,
+			ContainerRuntime:      "containerd",
 			HumanReadableName:     name,
 			EnableUserSSHKeyAgent: pointer.Bool(false),
 			ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
@@ -1387,6 +1388,9 @@ func GenDefaultGlobalSettings() *kubermaticv1.KubermaticSetting {
 				LoggingEnforced:    true,
 				MonitoringEnabled:  true,
 				MonitoringEnforced: true,
+			},
+			DefaultProjectResourceQuota: &kubermaticv1.DefaultProjectResourceQuota{
+				Quota: *kubermaticv1.NewResourceDetails(resource.MustParse("2"), resource.MustParse("5G"), resource.MustParse("10G")),
 			},
 		},
 	}

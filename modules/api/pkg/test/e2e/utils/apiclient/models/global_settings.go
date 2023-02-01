@@ -46,6 +46,173 @@ func (m GlobalSettings) MarshalJSON() ([]byte, error) {
 
 // Validate validates this global settings
 func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.SettingSpec.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *GlobalSettings) validateCleanupOptions(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CleanupOptions) { // not required
+		return nil
+	}
+
+	if m.CleanupOptions != nil {
+		if err := m.CleanupOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cleanupOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cleanupOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateCustomLinks(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CustomLinks) { // not required
+		return nil
+	}
+
+	if err := m.CustomLinks.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("customLinks")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("customLinks")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateDefaultQuota(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.DefaultQuota) { // not required
+		return nil
+	}
+
+	if m.DefaultQuota != nil {
+		if err := m.DefaultQuota.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateMachineDeploymentVMResourceQuota(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.MachineDeploymentVMResourceQuota) { // not required
+		return nil
+	}
+
+	if m.MachineDeploymentVMResourceQuota != nil {
+		if err := m.MachineDeploymentVMResourceQuota.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("machineDeploymentVMResourceQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("machineDeploymentVMResourceQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateMlaOptions(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.MlaOptions) { // not required
+		return nil
+	}
+
+	if m.MlaOptions != nil {
+		if err := m.MlaOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("mlaOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("mlaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateNotifications(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Notifications) { // not required
+		return nil
+	}
+
+	if m.Notifications != nil {
+		if err := m.Notifications.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notifications")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notifications")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateOpaOptions(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.OpaOptions) { // not required
+		return nil
+	}
+
+	if m.OpaOptions != nil {
+		if err := m.OpaOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("opaOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("opaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateProviderConfiguration(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ProviderConfiguration) { // not required
+		return nil
+	}
+
+	if m.ProviderConfiguration != nil {
+		if err := m.ProviderConfiguration.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerConfiguration")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -53,7 +220,6 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	// validation for a type composition with SettingSpec
 	if err := m.SettingSpec.ContextValidate(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -61,5 +227,131 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateCleanupOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CleanupOptions != nil {
+		if err := m.CleanupOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("cleanupOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("cleanupOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateCustomLinks(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.CustomLinks.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("customLinks")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("customLinks")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateDefaultQuota(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DefaultQuota != nil {
+		if err := m.DefaultQuota.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateMachineDeploymentVMResourceQuota(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MachineDeploymentVMResourceQuota != nil {
+		if err := m.MachineDeploymentVMResourceQuota.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("machineDeploymentVMResourceQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("machineDeploymentVMResourceQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateMlaOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MlaOptions != nil {
+		if err := m.MlaOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("mlaOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("mlaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateNotifications(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Notifications != nil {
+		if err := m.Notifications.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notifications")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notifications")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateOpaOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OpaOptions != nil {
+		if err := m.OpaOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("opaOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("opaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateProviderConfiguration(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProviderConfiguration != nil {
+		if err := m.ProviderConfiguration.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerConfiguration")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
