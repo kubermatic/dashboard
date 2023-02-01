@@ -30,7 +30,6 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec, VSphereTags} from '@shared/entity/cluster';
 import {VSphereFolder, VSphereNetwork, VSphereTagCategory} from '@shared/entity/provider/vsphere';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import _ from 'lodash';
@@ -137,11 +136,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     });
 
     this.form.get(Controls.Tags).disable();
-
-    this.form.valueChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.vsphere)));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this.isPresetSelected = !!preset;
@@ -266,9 +260,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   hasRequiredCredentials(): boolean {
     return (
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere &&
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere.password) ||
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere && !!this._presets.preset)
     );
   }
 

@@ -25,7 +25,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-sphere-extended-node-data',
+  selector: 'km-vsphere-extended-node-data',
   templateUrl: './template.html',
   providers: [
     {
