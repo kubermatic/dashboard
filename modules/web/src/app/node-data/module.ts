@@ -24,6 +24,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {AnexiaBasicNodeDataComponent} from '@app/node-data/basic/provider/anexia/component';
+import {VSphereTagsComponent} from '@app/node-data/extended/provider/vsphere/tag-categories/component';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SharedModule} from '@shared/module';
 import {AlibabaBasicNodeDataComponent} from './basic/provider/alibaba/component';
@@ -84,6 +85,7 @@ const components = [
   InstanceDetailsDialogComponent,
   VMwareCloudDirectorBasicNodeDataComponent,
   TopologySpreadConstraintFormComponent,
+  VSphereTagsComponent,
 ];
 
 // component NodeDataComponent is added to routing module so we can use our dynamic component here

@@ -1,0 +1,91 @@
+<!--
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<mat-card-header class="km-no-padding tags-title">
+  <mat-card-title>Provider Tags
+    <i class="km-icon-info km-pointer km-no-margin"
+       matTooltip="Provider tags are pre-existing tags against tag categories that will be attached to the machine deployments. Machine controller will only attach/detach these tags."></i>
+  </mat-card-title>
+</mat-card-header>
+
+<div fxLayout="column">
+  <div *ngFor="let tag of disabledTags; let i = index"
+       fxLayout="row"
+       fxLayoutGap="10px"
+       matTooltip="Tags specified at the cluster level will be created and managed by KKP. These tags will be attached to the machine deployments.">
+    <mat-form-field fxFlex="45">
+      <mat-label>{{CategoryState.Ready}}</mat-label>
+      <input matInput
+             [value]="clusterCategory.name"
+             disabled />
+    </mat-form-field>
+    <mat-form-field fxFlex="45">
+      <mat-label>{{TagState.Ready}}</mat-label>
+      <input matInput
+             [value]="tag"
+             disabled />
+    </mat-form-field>
+    <button mat-icon-button
+            class="delete-button"
+            (click)="deleteDisabledTag(i)">
+      <i class="km-icon-mask km-icon-delete"></i>
+    </button>
+  </div>
+</div>
+<form [formGroup]="form"
+      fxLayout="column">
+  <div [formArrayName]="Controls.Tags">
+    <div *ngFor="let tagControl of tagsFormArray.controls; let i = index"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="44">
+        <mat-label>{{categoryLabel}}</mat-label>
+        <mat-select [formControlName]="Controls.Category"
+                    disableOptionCentering>
+          <mat-option *ngFor="let category of categories"
+                      [value]="category.id">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tagControl.get(Controls.Category).errors?.required">
+          Required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="44">
+        <mat-label>{{categoryTagsLabel[getSelectedCategory(tagControl)] || TagState.Empty}}</mat-label>
+        <mat-select [formControlName]="Controls.Tag"
+                    disableOptionCentering>
+          <mat-option *ngFor="let tag of categoryTags[getSelectedCategory(tagControl)]"
+                      [value]="tag.name">
+            {{tag.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tagControl.get(Controls.Tag).errors?.required">
+          Required
+        </mat-error>
+        <mat-error *ngIf="tagControl.get(Controls.Tag).errors?.unique">
+          Tag is not unique.
+        </mat-error>
+      </mat-form-field>
+      <button mat-icon-button
+              class="delete-button"
+              *ngIf="isRemovable(i)"
+              (click)="deleteTag(i)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </div>
+</form>

@@ -1651,7 +1651,8 @@ type VSphereNodeSpec struct {
 
 // VSphereTag represents vsphere tag.
 type VSphereTag struct {
-	Name        string `json:"name"`
+	Name        string `json:"name,omitempty"`
+	ID          string `json:"id,omitempty"`
 	Description string `json:"description,omitempty"`
 	// CategoryID when empty the default category will be used.
 	CategoryID string `json:"categoryID,omitempty"`

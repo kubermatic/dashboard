@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // VSphereCloudSpec VSphereCloudSpec specifies access data to VSphere cloud.
@@ -47,11 +46,6 @@ type VSphereCloudSpec struct {
 	// StoragePolicy to be used for storage provisioning
 	StoragePolicy string `json:"storagePolicy,omitempty"`
 
-	// Tags represent the tags that are attached or created on the cluster level and propagated to MachineDeployment
-	// level afterwards.
-	// +optional
-	Tags map[string]VSphereTag `json:"tags,omitempty"`
-
 	// Username is the vSphere user name.
 	// +optional
 	Username string `json:"username,omitempty"`
@@ -65,17 +59,13 @@ type VSphereCloudSpec struct {
 	// infra management user
 	InfraManagementUser *VSphereCredentials `json:"infraManagementUser,omitempty"`
 
-	// tag category
-	TagCategory *TagCategory `json:"tagCategory,omitempty"`
+	// tags
+	Tags *VSphereTag `json:"tags,omitempty"`
 }
 
 // Validate validates this v sphere cloud spec
 func (m *VSphereCloudSpec) Validate(formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.validateTags(formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.validateCredentialsReference(formats); err != nil {
 		res = append(res, err)
@@ -85,39 +75,13 @@ func (m *VSphereCloudSpec) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateTagCategory(formats); err != nil {
+	if err := m.validateTags(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *VSphereCloudSpec) validateTags(formats strfmt.Registry) error {
-	if swag.IsZero(m.Tags) { // not required
-		return nil
-	}
-
-	for k := range m.Tags {
-
-		if err := validate.Required("tags"+"."+k, "body", m.Tags[k]); err != nil {
-			return err
-		}
-		if val, ok := m.Tags[k]; ok {
-			if err := val.Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("tags" + "." + k)
-				} else if ce, ok := err.(*errors.CompositeError); ok {
-					return ce.ValidateName("tags" + "." + k)
-				}
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -159,17 +123,17 @@ func (m *VSphereCloudSpec) validateInfraManagementUser(formats strfmt.Registry) 
 	return nil
 }
 
-func (m *VSphereCloudSpec) validateTagCategory(formats strfmt.Registry) error {
-	if swag.IsZero(m.TagCategory) { // not required
+func (m *VSphereCloudSpec) validateTags(formats strfmt.Registry) error {
+	if swag.IsZero(m.Tags) { // not required
 		return nil
 	}
 
-	if m.TagCategory != nil {
-		if err := m.TagCategory.Validate(formats); err != nil {
+	if m.Tags != nil {
+		if err := m.Tags.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("tagCategory")
+				return ve.ValidateName("tags")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("tagCategory")
+				return ce.ValidateName("tags")
 			}
 			return err
 		}
@@ -182,10 +146,6 @@ func (m *VSphereCloudSpec) validateTagCategory(formats strfmt.Registry) error {
 func (m *VSphereCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateTags(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateCredentialsReference(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -194,28 +154,13 @@ func (m *VSphereCloudSpec) ContextValidate(ctx context.Context, formats strfmt.R
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateTagCategory(ctx, formats); err != nil {
+	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *VSphereCloudSpec) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
-
-	for k := range m.Tags {
-
-		if val, ok := m.Tags[k]; ok {
-			if err := val.ContextValidate(ctx, formats); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -251,14 +196,14 @@ func (m *VSphereCloudSpec) contextValidateInfraManagementUser(ctx context.Contex
 	return nil
 }
 
-func (m *VSphereCloudSpec) contextValidateTagCategory(ctx context.Context, formats strfmt.Registry) error {
+func (m *VSphereCloudSpec) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.TagCategory != nil {
-		if err := m.TagCategory.ContextValidate(ctx, formats); err != nil {
+	if m.Tags != nil {
+		if err := m.Tags.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("tagCategory")
+				return ve.ValidateName("tags")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("tagCategory")
+				return ce.ValidateName("tags")
 			}
 			return err
 		}

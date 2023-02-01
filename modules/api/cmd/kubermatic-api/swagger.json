@@ -39622,23 +39622,6 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
-    "TagCategory": {
-      "description": "TagCategory is the tag category that is owned by KKP, where it is used to define KKP created tags, such as resources\nownership tag, where this tag is applied on any vSphere resource that is created by KKP.",
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "ID represents the category id for the machine deployment tags.",
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "name": {
-          "description": "Name represents the name of vSphere tag category that will be used to create and attach tags on VMS.",
-          "type": "string",
-          "x-go-name": "Name"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-    },
     "TaintSpec": {
       "type": "object",
       "title": "TaintSpec defines a node taint.",
@@ -40192,16 +40175,8 @@
           "type": "string",
           "x-go-name": "StoragePolicy"
         },
-        "tagCategory": {
-          "$ref": "#/definitions/TagCategory"
-        },
         "tags": {
-          "description": "Tags represent the tags that are attached or created on the cluster level and propagated to MachineDeployment\nlevel afterwards.\n+optional",
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/VSphereTag"
-          },
-          "x-go-name": "Tags"
+          "$ref": "#/definitions/VSphereTag"
         },
         "username": {
           "description": "Username is the vSphere user name.\n+optional",
@@ -40327,15 +40302,13 @@
           "type": "string",
           "x-go-name": "CategoryID"
         },
-        "id": {
-          "description": "ID represents the generated vsphere tag id.",
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "name": {
-          "description": "Name represents the name of the created tag.",
-          "type": "string",
-          "x-go-name": "Name"
+        "tags": {
+          "description": "Tags represents the name of the created tags.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Tags"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
