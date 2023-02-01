@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 KUBERMATIC_EDITION?=ee
+KUBERMATIC_VERSION?=v2.19.15
 REPO=quay.io/kubermatic/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && echo "\-${KUBERMATIC_EDITION}" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
@@ -24,9 +25,9 @@ ifeq (${HUMAN_VERSION},)
 	TARGET_BRANCH=$(or ${PULL_BASE_REF},${CURRENT_BRANCH})
 
 	ifeq (${TARGET_BRANCH},master)
-	HUMAN_VERSION=v2.19.14-dev-g$(shell git rev-parse --short HEAD)
+	HUMAN_VERSION=${KUBERMATIC_VERSION}-dev-g$(shell git rev-parse --short HEAD)
 	else
-	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.19.14-dev-g$(shell git rev-parse --short HEAD))
+	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),${KUBERMATIC_VERSION}-dev-g$(shell git rev-parse --short HEAD))
 	endif
 endif
 
