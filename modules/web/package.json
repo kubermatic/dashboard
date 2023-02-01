@@ -66,7 +66,7 @@
     "@angular/platform-browser": "14.2.10",
     "@angular/platform-browser-dynamic": "14.2.10",
     "@angular/router": "14.2.10",
-    "@fontsource/inconsolata": "4.5.9",
+    "@fontsource/inconsolata": "4.5.10",
     "@fontsource/roboto": "4.5.8",
     "@fontsource/roboto-mono": "4.5.8",
     "@fontsource/ubuntu": "4.5.11",
