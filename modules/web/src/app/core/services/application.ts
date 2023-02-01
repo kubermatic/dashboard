@@ -18,11 +18,13 @@ import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Application, ApplicationDefinition} from '@shared/entity/application';
 import {Observable, of, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, tap} from 'rxjs/operators';
+import _ from 'lodash';
 
 @Injectable()
 export class ApplicationService {
   private _applications: Application[] = [];
+  private _applicationDefinitions: ApplicationDefinition[] = [];
   private readonly _restRoot: string = environment.newRestRoot;
   private readonly _refreshTime = 30;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
@@ -48,6 +50,18 @@ export class ApplicationService {
             this._httpClient
               .get<ApplicationDefinition[]>(`${this._restRoot}/applicationdefinitions`)
               .pipe(catchError(() => of<ApplicationDefinition[]>([])))
+              .pipe(
+                map(appDefs => {
+                  this._applicationDefinitions = appDefs.map(appDef => {
+                    const oldAppDef = this._applicationDefinitions.find(item => item.name === appDef.name);
+                    if (oldAppDef) {
+                      return _.merge(oldAppDef, appDef);
+                    }
+                    return appDef;
+                  });
+                  return this._applicationDefinitions;
+                })
+              )
           )
         )
         .pipe(map(applications => applications.sort((a, b) => a.name.localeCompare(b.name))))
@@ -58,7 +72,16 @@ export class ApplicationService {
 
   getApplicationDefinition(name: string): Observable<ApplicationDefinition> {
     const url = `${this._restRoot}/applicationdefinitions/${name}`;
-    return this._httpClient.get<ApplicationDefinition>(url);
+    return this._httpClient.get<ApplicationDefinition>(url).pipe(
+      tap(appDef => {
+        this._applicationDefinitions = this._applicationDefinitions.map(item => {
+          if (item.name === name) {
+            return _.merge(item, appDef);
+          }
+          return item;
+        });
+      })
+    );
   }
 
   add(application: Application, projectID: string, clusterID: string): Observable<Application> {
