@@ -223,6 +223,10 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
         tagControl.setValue(null);
         this._loadCategoryTags(selectedCategory);
       });
+
+    if (tag?.categoryID) {
+      this._loadCategoryTags(tag.categoryID);
+    }
   }
 
   private _onControlValueChange(control: AbstractControl): void {
@@ -271,7 +275,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
     if (categoryTagControls.length) {
       categoryTagControls.forEach(control => {
         const tagControl = control.get(Controls.Tag);
-        if (!tags.find(tag => tag === tagControl.value)) {
+        if (!tags.find(tag => tag.name === tagControl.value)) {
           tagControl.setValue(null);
         }
       });
