@@ -48,12 +48,19 @@ limitations under the License.
                 fxFlex>
   </km-chip-list>
 
-  <km-select [label]="projectLabel"
-             [options]="projects"
-             hint="Restrict Preset to Projects"
-             isMultiple="true"
-             [formControlName]="controls.Projects">
-  </km-select>
+  <km-combobox filterBy="name"
+               selectBy="id"
+               hint="Restrict Preset to Projects"
+               inputLabel="Select project by name"
+               [multiple]="true"
+               [options]="projects"
+               [formControlName]="controls.Projects"
+               [label]="projectLabel"
+               [valueFormatter]="projectDisplayFn.bind(this)">
+    <div *option="let project">
+      {{project.name}}
+    </div>
+  </km-combobox>
 
   <mat-checkbox [formControlName]="controls.Disable"
                 class="km-disable-ripple">
