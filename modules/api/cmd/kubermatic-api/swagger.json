@@ -3991,6 +3991,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -4009,11 +4014,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "Region",
-            "in": "header"
           }
         ],
         "responses": {
@@ -38746,9 +38746,8 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "ReplacedResources": {
-      "description": "when user is changing instance type of an existing Machine Deployment, resources of an old instance type need to be subtracted.",
       "type": "object",
-      "title": "ReplacedResources is used to subtract replaced resources in the calculation. For instance,",
+      "title": "ReplacedResources is used to subtract replaced resources in the calculation. For instance, when user is changing instance type of an existing Machine Deployment, resources of an old instance type need to be subtracted.",
       "properties": {
         "alibabaInstanceType": {
           "$ref": "#/definitions/AlibabaInstanceType"

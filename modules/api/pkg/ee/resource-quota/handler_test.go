@@ -793,7 +793,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 type calcReq struct {
 	Replicas          int                              `json:"replicas"`
 	ReplacedResources *resourcequota.ReplacedResources `json:"ReplacedResources,omitempty"`
-	resourcequota.ProviderSpec
+	resourcequota.ProviderNodeTemplate
 }
 
 func newCalcReq() *calcReq {
@@ -816,8 +816,8 @@ func (c *calcReq) withReplicas(replicas int) *calcReq {
 
 func (c *calcReq) withReplacedResources(provider *calcReq) *calcReq {
 	c.ReplacedResources = &resourcequota.ReplacedResources{
-		Replicas:     provider.Replicas,
-		ProviderSpec: provider.ProviderSpec,
+		Replicas:             provider.Replicas,
+		ProviderNodeTemplate: provider.ProviderNodeTemplate,
 	}
 	return c
 }
