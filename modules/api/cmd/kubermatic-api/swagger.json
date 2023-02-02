@@ -15604,6 +15604,103 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tag categories from vSphere datacenter.",
+        "operationId": "listVSphereTagCategoriesNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTagCategory",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTagCategory"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories/{tag_category}/tags": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tags for a tag category from vSphere datacenter.",
+        "operationId": "listVSphereTagsForTagCategoryNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "TagCategory",
+            "name": "tag_category",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTag",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTag"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/rolenames": {
       "get": {
         "description": "Lists all Role names with namespaces",
@@ -23701,6 +23798,129 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/VSphereNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/tagcategories": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tag categories from vSphere datacenter.",
+        "operationId": "listProjectVSphereTagCategories",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTagCategory",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTagCategory"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists tags for a tag category from vSphere datacenter.",
+        "operationId": "listProjectVSphereTagsForTagCategories",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "TagCategory",
+            "name": "tag_category",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereTag",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereTag"
               }
             }
           },
@@ -39421,23 +39641,6 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
-    "TagCategory": {
-      "description": "TagCategory is the tag category that is owned by KKP, where it is used to define KKP created tags, such as resources\nownership tag, where this tag is applied on any vSphere resource that is created by KKP.",
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "ID represents the category id for the machine deployment tags.",
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "name": {
-          "description": "Name represents the name of vSphere tag category that will be used to create and attach tags on VMS.",
-          "type": "string",
-          "x-go-name": "Name"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-    },
     "TaintSpec": {
       "type": "object",
       "title": "TaintSpec defines a node taint.",
@@ -39991,16 +40194,8 @@
           "type": "string",
           "x-go-name": "StoragePolicy"
         },
-        "tagCategory": {
-          "$ref": "#/definitions/TagCategory"
-        },
         "tags": {
-          "description": "Tags represent the tags that are attached or created on the cluster level and propagated to MachineDeployment\nlevel afterwards.\n+optional",
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/VSphereTag"
-          },
-          "x-go-name": "Tags"
+          "$ref": "#/definitions/VSphereTag"
         },
         "username": {
           "description": "Username is the vSphere user name.\n+optional",
@@ -40126,18 +40321,41 @@
           "type": "string",
           "x-go-name": "CategoryID"
         },
+        "tags": {
+          "description": "Tags represents the name of the created tags.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Tags"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "VSphereTagCategory": {
+      "type": "object",
+      "title": "VSphereTagCategory is the object representing a vsphere tag category.",
+      "properties": {
         "id": {
-          "description": "ID represents the generated vsphere tag id.",
+          "description": "ID is the unique identifier of the tag category.",
           "type": "string",
           "x-go-name": "ID"
         },
         "name": {
-          "description": "Name represents the name of the created tag.",
+          "description": "Name is the name of the tag category.",
           "type": "string",
           "x-go-name": "Name"
+        },
+        "usedBy": {
+          "description": "UsedBy is the list of actors that have resources attached to this tag category.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "UsedBy"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "Validation": {
       "type": "object",

@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
+KUBERMATIC_VERSION?=v2.22.0-alpha.0
 DOCKER_REPO ?= quay.io/kubermatic
 REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
@@ -26,9 +27,9 @@ ifeq (${HUMAN_VERSION},)
 	TARGET_BRANCH=$(or ${PULL_BASE_REF},${CURRENT_BRANCH})
 
 	ifeq (${TARGET_BRANCH},main)
-	HUMAN_VERSION=v2.21.0-dev-g$(shell git rev-parse --short HEAD)
+	HUMAN_VERSION=${KUBERMATIC_VERSION}-dev-g$(shell git rev-parse --short HEAD)
 	else
-	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.21.0-dev-g$(shell git rev-parse --short HEAD))
+	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),${KUBERMATIC_VERSION}-dev-g$(shell git rev-parse --short HEAD))
 	endif
 endif
 

@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class VSphereNetwork {
-  name: string;
-  absolutePath: string;
-  relativePath: string;
-  type: string;
+.tags-title {
+  margin-top: 10px;
 }
 
-export class VSphereFolder {
-  path: string;
-}
-
-export class VSphereDatastores {
-  datastores: string[];
-}
-
-export class VSphereTagCategory {
-  name: string;
-  id: string;
+.delete-button {
+  margin-top: 4px;
 }

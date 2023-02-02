@@ -19,6 +19,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataVMwareCloudDirectorProvider} from '@core/services/node-data/provider/vmware-cloud-director';
 import {ProjectService} from '@core/services/project';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
+import {VSphereService} from '@core/services/provider/vsphere';
 import {PresetsService} from '@core/services/wizard/presets';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -75,6 +76,7 @@ export class NodeDataService {
     private readonly _nutanixService: NutanixService,
     private readonly _openStackService: OpenStackService,
     private readonly _vmwareCloudDirectorService: VMwareCloudDirectorService,
+    private readonly _vsphereService: VSphereService,
     private readonly _projectService: ProjectService
   ) {
     this._config = config;
@@ -223,7 +225,13 @@ export class NodeDataService {
     this._openStackService,
     this._projectService
   );
-  readonly vsphere = new NodeDataVSphereProvider(this);
+  readonly vsphere = new NodeDataVSphereProvider(
+    this,
+    this._clusterSpecService,
+    this._presetService,
+    this._projectService,
+    this._vsphereService
+  );
   readonly vmwareclouddirector = new NodeDataVMwareCloudDirectorProvider(
     this,
     this._clusterSpecService,

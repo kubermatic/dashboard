@@ -27,16 +27,16 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
-import {VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
+import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec, VSphereTags} from '@shared/entity/cluster';
+import {VSphereFolder, VSphereNetwork, VSphereTagCategory} from '@shared/entity/provider/vsphere';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import _ from 'lodash';
 import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@app/shared/validators/others';
 
 enum Controls {
   VMNetName = 'vmNetName',
@@ -44,6 +44,8 @@ enum Controls {
   Datastore = 'datastore',
   DatastoreCluster = 'datastoreCluster',
   ResourcePool = 'resourcePool',
+  TagCategory = 'tagCategory',
+  Tags = 'tags',
 }
 
 enum NetworkState {
@@ -56,6 +58,12 @@ enum FolderState {
   Empty = 'No Folders Available',
   Loading = 'Loading...',
   Ready = 'Folder',
+}
+
+enum TagCategoryState {
+  Empty = 'No Tag Category Available',
+  Loading = 'Loading...',
+  Ready = 'Tag Category',
 }
 
 @Component({
@@ -86,6 +94,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private readonly _folderCombobox: FilteredComboboxComponent;
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;
+  @ViewChild('tagCategoryComboBox')
+  private readonly _tagCategoryComboBox: FilteredComboboxComponent;
   readonly Controls = Controls;
   isPresetSelected = false;
   datastores: string[] = [];
@@ -93,6 +103,13 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   folders: VSphereFolder[] = [];
   folderLabel = FolderState.Empty;
   networkLabel = NetworkState.Empty;
+  tagCategories: VSphereTagCategory[] = [];
+  tagCategoryLabel = TagCategoryState.Empty;
+  selectedTagCategory = '';
+  tags: string[] = [];
+  tagValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
+  tagValuesPatternError =
+    'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
 
   get networkTypes(): string[] {
     return Object.keys(this._networkMap);
@@ -114,19 +131,20 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Datastore]: this._builder.control(''),
       [Controls.DatastoreCluster]: this._builder.control(''),
       [Controls.ResourcePool]: this._builder.control(''),
+      [Controls.TagCategory]: this._builder.control(''),
+      [Controls.Tags]: this._builder.control([]),
     });
 
-    this.form.valueChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.vsphere)));
+    this.form.get(Controls.Tags).disable();
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this.isPresetSelected = !!preset;
       Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
-        this._enable(!this.isPresetSelected, control);
-      })
-    );
+        if (control !== Controls.TagCategory && control !== Controls.Tags) {
+          this._enable(!this.isPresetSelected, control);
+        }
+      });
+    });
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
@@ -184,6 +202,12 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         this._loadFolders(folders);
         this._loadNetworks(networks);
       });
+
+    merge(this._credentialsChanged, this._presets.presetChanges)
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(switchMap(_ => this._tagCategoryListObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadTagCategories.bind(this));
   }
 
   getNetworks(type: string): VSphereNetwork[] {
@@ -198,14 +222,51 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._clusterSpecService.cluster.spec.cloud.vsphere.folder = folder;
   }
 
+  onTagCategoryChange(tagCategory: string): void {
+    this.selectedTagCategory = tagCategory;
+    if (tagCategory) {
+      this.form.get(Controls.Tags).enable();
+      this.onTagValuesChange(this.tags);
+    } else {
+      this.form.get(Controls.Tags).reset();
+      this.form.get(Controls.Tags).disable();
+      this.onTagValuesChange([]);
+    }
+  }
+
+  onTagValuesChange(values: string[]): void {
+    this.tags = values;
+
+    if (this.selectedTagCategory) {
+      const tagCategoryID = this.tagCategories.find(tagCategory => tagCategory.name === this.selectedTagCategory)?.id;
+      this._clusterSpecService.cluster.spec.cloud.vsphere.tags = {
+        categoryID: tagCategoryID,
+        tags: values,
+      } as VSphereTags;
+    } else {
+      this._clusterSpecService.cluster.spec.cloud.vsphere.tags = null;
+    }
+    this._clusterSpecService.providerSpecChanges.emit();
+  }
+
   getHint(control: Controls): string {
     switch (control) {
       case Controls.VMNetName:
       case Controls.Folder:
+      case Controls.TagCategory:
         return this.hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
 
     return '';
+  }
+
+  hasRequiredCredentials(): boolean {
+    return (
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere.password) ||
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere && !!this._presets.preset)
+    );
   }
 
   ngOnDestroy(): void {
@@ -217,6 +278,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     let markAsChanged = false;
     const username = cluster.spec.cloud.vsphere.username;
     const password = cluster.spec.cloud.vsphere.password;
+
     if (username !== this._username) {
       this._username = username;
       markAsChanged = true;
@@ -256,12 +318,13 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     }
   }
 
-  hasRequiredCredentials(): boolean {
-    return (
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere &&
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
-      !!this._clusterSpecService.cluster.spec.cloud.vsphere.password
-    );
+  private _loadTagCategories(tagCategories: VSphereTagCategory[]): void {
+    this.tagCategories = tagCategories;
+
+    if (!_.isEmpty(this.tagCategories)) {
+      this.tagCategoryLabel = TagCategoryState.Ready;
+      this._cdr.detectChanges();
+    }
   }
 
   private _networkListObservable(): Observable<VSphereNetwork[]> {
@@ -308,6 +371,22 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       );
   }
 
+  private _tagCategoryListObservable(): Observable<VSphereTagCategory[]> {
+    return this._presets
+      .provider(NodeProvider.VSPHERE)
+      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .credential(this._presets.preset)
+      .datacenter(this._clusterSpecService.datacenter)
+      .tagCategories(this._onTagCategoryLoading.bind(this))
+      .pipe(
+        catchError(_ => {
+          this._clearTagCategories();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
   private _onFoldersLoading(): void {
     this._clearNetworks();
     this.folderLabel = FolderState.Loading;
@@ -318,6 +397,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.folders = [];
     this.folderLabel = FolderState.Empty;
     this._folderCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onTagCategoryLoading(): void {
+    this.tagCategoryLabel = TagCategoryState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearTagCategories(): void {
+    this.tagCategories = [];
+    this.tagCategoryLabel = TagCategoryState.Empty;
+    this._tagCategoryComboBox.reset();
     this._cdr.detectChanges();
   }
 

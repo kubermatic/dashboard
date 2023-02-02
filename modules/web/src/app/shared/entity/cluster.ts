@@ -66,8 +66,8 @@ export enum ContainerRuntime {
 }
 
 export const END_OF_DOCKER_SUPPORT_VERSION = '1.24.0';
-
 export const END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION = '1.24';
+export const END_OF_POD_SECURITY_POLICY_SUPPORT_VERSION = '1.25';
 
 export class Cluster {
   creationTimestamp?: Date;
@@ -281,11 +281,17 @@ export class VSphereCloudSpec {
   datastore?: string;
   datastoreCluster?: string;
   resourcePool?: string;
+  tags?: VSphereTags;
 }
 
 export class VSphereInfraManagementUser {
   username: string;
   password: string;
+}
+
+export class VSphereTags {
+  tags: string[];
+  categoryID: string;
 }
 
 export class VMwareCloudDirectorCloudSpec {

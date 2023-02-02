@@ -34,6 +34,10 @@ type ClientService interface {
 
 	ListProjectVSphereNetworks(params *ListProjectVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereNetworksOK, error)
 
+	ListProjectVSphereTagCategories(params *ListProjectVSphereTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagCategoriesOK, error)
+
+	ListProjectVSphereTagsForTagCategories(params *ListProjectVSphereTagsForTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagsForTagCategoriesOK, error)
+
 	ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error)
 
 	ListVSphereFolders(params *ListVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersOK, error)
@@ -47,6 +51,10 @@ type ClientService interface {
 	ListVSphereNetworksNoCredentials(params *ListVSphereNetworksNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsOK, error)
 
 	ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsV2OK, error)
+
+	ListVSphereTagCategoriesNoCredentials(params *ListVSphereTagCategoriesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagCategoriesNoCredentialsOK, error)
+
+	ListVSphereTagsForTagCategoryNoCredentials(params *ListVSphereTagsForTagCategoryNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagsForTagCategoryNoCredentialsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -162,6 +170,82 @@ func (a *Client) ListProjectVSphereNetworks(params *ListProjectVSphereNetworksPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectVSphereNetworksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVSphereTagCategories lists tag categories from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereTagCategories(params *ListProjectVSphereTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagCategoriesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereTagCategoriesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereTagCategories",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/tagcategories",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereTagCategoriesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereTagCategoriesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereTagCategoriesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVSphereTagsForTagCategories lists tags for a tag category from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereTagsForTagCategories(params *ListProjectVSphereTagsForTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagsForTagCategoriesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereTagsForTagCategoriesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereTagsForTagCategories",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereTagsForTagCategoriesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereTagsForTagCategoriesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereTagsForTagCategoriesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -428,6 +512,82 @@ func (a *Client) ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksN
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVSphereNetworksNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereTagCategoriesNoCredentials lists tag categories from v sphere datacenter
+*/
+func (a *Client) ListVSphereTagCategoriesNoCredentials(params *ListVSphereTagCategoriesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagCategoriesNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereTagCategoriesNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereTagCategoriesNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereTagCategoriesNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereTagCategoriesNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereTagCategoriesNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereTagsForTagCategoryNoCredentials lists tags for a tag category from v sphere datacenter
+*/
+func (a *Client) ListVSphereTagsForTagCategoryNoCredentials(params *ListVSphereTagsForTagCategoryNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagsForTagCategoryNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereTagsForTagCategoryNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereTagsForTagCategoryNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories/{tag_category}/tags",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereTagsForTagCategoryNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereTagsForTagCategoryNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereTagsForTagCategoryNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

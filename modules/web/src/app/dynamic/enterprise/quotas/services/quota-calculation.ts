@@ -12,6 +12,7 @@ import {environment} from '@environments/environment';
 export class QuotaCalculationService {
   private readonly _debounceTime = 500;
   private readonly _newRestRoot: string = environment.newRestRoot;
+  private _quotaExceeded$ = new Subject<boolean>();
   private _refresh$ = new Subject<void>();
   private _requestMap = new Map<string, Observable<ResourceQuotaCalculation>>();
   private _quotaPayload: ResourceQuotaCalculationPayload;
@@ -24,6 +25,14 @@ export class QuotaCalculationService {
 
   set quotaPayload(value: ResourceQuotaCalculationPayload) {
     this._quotaPayload = value;
+  }
+
+  refreshQuotaExceed(isQuotaExceeded: boolean) {
+    this._quotaExceeded$.next(isQuotaExceeded);
+  }
+
+  getQuotaExceed(): Observable<boolean> {
+    return this._quotaExceeded$.asObservable();
   }
 
   refreshQuotaCalculations(newQuotaPayload: ResourceQuotaCalculationPayload) {

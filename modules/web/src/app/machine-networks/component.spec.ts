@@ -22,6 +22,7 @@ import {RouterTestingModule} from '@test/services/router-stubs';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksComponent} from './component';
+import {VSphereService} from '@app/core/services/provider/vsphere';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
@@ -31,7 +32,7 @@ describe('MachineNetworksComponent', () => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [MachineNetworksComponent],
-      providers: [WizardService],
+      providers: [WizardService, VSphereService],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));

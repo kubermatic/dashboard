@@ -23,11 +23,8 @@ type VSphereTag struct {
 	// category id for the cluster will be used.
 	CategoryID string `json:"categoryID,omitempty"`
 
-	// ID represents the generated vsphere tag id.
-	ID string `json:"id,omitempty"`
-
-	// Name represents the name of the created tag.
-	Name string `json:"name,omitempty"`
+	// Tags represents the name of the created tags.
+	Tags []string `json:"tags"`
 }
 
 // Validate validates this v sphere tag

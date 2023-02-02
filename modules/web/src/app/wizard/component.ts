@@ -38,6 +38,7 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {ApplicationService} from '@core/services/application';
 import {Application} from '@shared/entity/application';
 import {WizardMode} from './types/wizard-mode';
+import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 
 @Component({
   selector: 'km-wizard',
@@ -53,6 +54,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   clusterTemplateID: string;
   wizardMode: WizardMode;
   loadingClusterTemplate = true;
+  quotaExceededWarning: boolean;
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
   readonly clusterTemplateType = WizardMode;
@@ -74,7 +76,8 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute,
     private readonly _clusterTemplateService: ClusterTemplateService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly applicationService: ApplicationService
+    private readonly applicationService: ApplicationService,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {}
 
   @ViewChild('stepper')
@@ -128,6 +131,15 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.loadClusterTemplate();
     } else {
       this.loadingClusterTemplate = false;
+    }
+
+    if (this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode) {
+      this._quotaCalculationService
+        .getQuotaExceed()
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(isQuotaExceeded => {
+          this.quotaExceededWarning = isQuotaExceeded;
+        });
     }
   }
 
