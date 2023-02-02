@@ -34309,6 +34309,7 @@
           "x-go-name": "UserProjectsLimit"
         }
       },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2",
       "$ref": "#/definitions/SettingSpec"
     },
     "GroupProjectBinding": {
@@ -38749,13 +38750,55 @@
       "type": "object",
       "title": "ReplacedResources is used to subtract replaced resources in the calculation. For instance,",
       "properties": {
-        "quota": {
-          "$ref": "#/definitions/Quota"
+        "alibabaInstanceType": {
+          "$ref": "#/definitions/AlibabaInstanceType"
+        },
+        "anexiaNodeSpec": {
+          "$ref": "#/definitions/AnexiaNodeSpec"
+        },
+        "awsSize": {
+          "$ref": "#/definitions/AWSSize"
+        },
+        "azureSize": {
+          "$ref": "#/definitions/AzureSize"
+        },
+        "diskSizeGB": {
+          "description": "DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DiskSizeGB"
+        },
+        "doSize": {
+          "$ref": "#/definitions/DigitaloceanSize"
+        },
+        "equinixSize": {
+          "$ref": "#/definitions/PacketSize"
+        },
+        "gcpSize": {
+          "$ref": "#/definitions/GCPMachineSize"
+        },
+        "hetznerSize": {
+          "$ref": "#/definitions/HetznerSize"
+        },
+        "kubevirtNodeSize": {
+          "$ref": "#/definitions/KubevirtNodeSize"
+        },
+        "nutanixNodeSpec": {
+          "$ref": "#/definitions/NutanixNodeSpec"
+        },
+        "openstackSize": {
+          "$ref": "#/definitions/OpenstackSize"
         },
         "replicas": {
           "type": "integer",
           "format": "int64",
           "x-go-name": "Replicas"
+        },
+        "vSphereNodeSpec": {
+          "$ref": "#/definitions/VSphereNodeSpec"
+        },
+        "vmDirectorNodeSpec": {
+          "$ref": "#/definitions/VMwareCloudDirectorNodeSpec"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/resource-quota"
