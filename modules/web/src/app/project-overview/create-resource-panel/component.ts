@@ -24,6 +24,7 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {slideOut} from '@shared/animations/slide';
 import {Router} from '@angular/router';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
@@ -39,7 +40,6 @@ import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,
 } from '@shared/components/add-cluster-from-template-dialog/component';
-import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {
   AddAutomaticBackupDialogComponent,
   AddAutomaticBackupDialogConfig,
@@ -134,10 +134,6 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/external-cluster-wizard`]);
   }
 
-  openKubeOneClusterWizard(): void {
-    this._router.navigate(['/projects', this.project.id, View.KubeOneWizard]);
-  }
-
   createClusterFromTemplate(): void {
     this.close();
     const dialog = this._matDialog.open<AddClusterFromTemplateDialogComponent, AddClusterFromTemplateDialogData>(
@@ -153,19 +149,8 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
       .subscribe(_ => this.refreshClusters.next());
   }
 
-  importExternalCluster(): void {
-    this.close();
-    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
-    dialog.componentInstance.projectId = this.project.id;
-    dialog
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe(_ => this.refreshExternalClusters.next());
-  }
-
   createClusterTemplate(): void {
-    this._router.navigate([`/projects/${this.project.id}/wizard`]);
+    this._router.navigate([`/projects/${this.project.id}/wizard`], {state: {mode: WizardMode.CreateClusterTemplate}});
   }
 
   createAutomaticBackup(): void {

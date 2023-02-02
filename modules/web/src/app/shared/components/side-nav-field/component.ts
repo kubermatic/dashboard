@@ -68,7 +68,9 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   isProjectExpandedActive(): boolean {
     switch (this.label) {
       case ProjectSidenavSection.Resources:
-        return this.checkUrl(View.Clusters) || this.checkUrl(View.ExternalClusters);
+        return (
+          this.checkUrl(View.Clusters) || this.checkUrl(View.ExternalClusters) || this.checkUrl(View.KubeOneClusters)
+        );
       case ProjectSidenavSection.Backups:
         return this.checkUrl(View.Backups) || this.checkUrl(View.Snapshots) || this.checkUrl(View.Restores);
       case ProjectSidenavSection.Access:
@@ -112,16 +114,16 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   checkUrl(url: string): boolean {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const urlExists = !!urlArray.find(x => x === url);
+    const mode = window.history.state?.mode;
     if (url === View.Clusters) {
       return (
         (urlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOneClusters)) ||
-        !!urlArray.find(x => x === View.Wizard)
+        (!!urlArray.find(x => x === View.Wizard) && !mode)
       );
     } else if (url === View.ExternalClusters) {
-      return (
-        urlExists ||
-        !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOneClusters || x === View.KubeOneWizard)
-      );
+      return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
+    } else if (url === View.KubeOneClusters) {
+      return urlExists || !!urlArray.find(x => x === View.KubeOneWizard);
     }
     return urlExists;
   }

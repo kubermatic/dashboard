@@ -57,7 +57,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   quotaExceededWarning: boolean;
   private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
-  readonly clusterTemplateType = WizardMode;
 
   private _stepper: MatStepper;
   private _unsubscribe: Subject<void> = new Subject<void>();
@@ -123,7 +122,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     // Retrieve params
     this.clusterTemplateID = this._route.snapshot.queryParams?.clusterTemplateID;
-    this.wizardMode = this._route.snapshot.queryParams?.mode;
+    this.wizardMode = window.history.state?.mode;
 
     this.project.id = this._route.snapshot.paramMap.get(PathParam.ProjectID);
 

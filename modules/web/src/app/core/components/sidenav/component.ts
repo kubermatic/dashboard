@@ -14,7 +14,7 @@
 
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -61,7 +61,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService
@@ -114,8 +113,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
+    const mode = window.history.state?.mode;
     if (url === View.ClusterTemplates) {
-      const mode = this._activatedRoute.snapshot.queryParams?.mode;
       return (
         isProjectAndUrlExists ||
         mode === WizardMode.CreateClusterTemplate ||
@@ -126,7 +125,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (url === View.Clusters) {
       return (
         (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOneClusters)) ||
-        !!urlArray.find(x => x === View.Wizard)
+        (!!urlArray.find(x => x === View.Wizard) && !mode)
       );
     } else if (url === View.ExternalClusters) {
       return isProjectAndUrlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
