@@ -41,7 +41,6 @@ describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let linkDes: DebugElement[];
   let links: RouterLinkStubDirective[];
-  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -79,10 +78,6 @@ describe('SidenavComponent', () => {
     component = fixture.componentInstance;
     linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkStubDirective));
     links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
-    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {
-      clusterTemplateWizard: 'create',
-    };
   });
 
   it('should initialize', waitForAsync(() => {

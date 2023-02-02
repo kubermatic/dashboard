@@ -123,7 +123,8 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
 
     // We chose optional query params instead of creating new route or using state behind the curtain.
     this._router.navigate([`/projects/${this.data.projectId}/wizard`], {
-      queryParams: {clusterTemplateID: this.template.id, mode: WizardMode.CustomizeClusterTemplate},
+      queryParams: {clusterTemplateID: this.template.id},
+      state: {mode: WizardMode.CustomizeClusterTemplate},
     });
   }
 }

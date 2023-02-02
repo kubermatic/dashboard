@@ -141,12 +141,14 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   isEditEnabled(): boolean {
     return (
+      this.project &&
       MemberUtils.hasPermission(
         this.currentUser,
         this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, this.project.id)),
         View.Projects,
         Permission.Edit
-      ) && this.project.status !== ProjectStatus.Terminating
+      ) &&
+      this.project.status !== ProjectStatus.Terminating
     );
   }
 

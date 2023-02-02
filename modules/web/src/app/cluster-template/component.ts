@@ -205,7 +205,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   create(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
-      queryParams: {mode: WizardMode.CreateClusterTemplate},
+      state: {mode: WizardMode.CreateClusterTemplate},
     });
   }
 
@@ -267,7 +267,8 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   editClusterTemplate(template: ClusterTemplate): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
-      queryParams: {clusterTemplateID: template.id, mode: WizardMode.EditClusterTemplate},
+      queryParams: {clusterTemplateID: template.id},
+      state: {mode: WizardMode.EditClusterTemplate},
     });
   }
 

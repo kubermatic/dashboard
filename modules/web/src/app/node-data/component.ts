@@ -50,7 +50,6 @@ import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared
 import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
-import {ActivatedRoute} from '@angular/router';
 
 enum Controls {
   Name = 'name',
@@ -142,8 +141,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _projectService: ProjectService,
     private readonly _quotaCalculationService: QuotaCalculationService,
     private readonly _params: ParamsService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _route: ActivatedRoute
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -170,7 +168,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   ngOnInit(): void {
-    this.wizardMode = this._route.snapshot.queryParams?.mode;
+    this.wizardMode = window.history.state?.mode;
     this.projectId = this._params.get(PathParam.ProjectID);
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
