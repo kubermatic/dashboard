@@ -72,6 +72,7 @@ export interface DialogDataOutput {
 })
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
   isRecreationWarningVisible = false;
+  isQuotaExceeded: boolean;
   mode = Mode.Add;
 
   readonly Control = Controls;
@@ -130,6 +131,13 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
         // Add and initialize with default values all properties that are missing in initial node data
         _.defaultsDeep(this._data.initialNodeData, this._nodeDataService.nodeData);
         this.isRecreationWarningVisible = this._isRecreationWarningVisible();
+      });
+
+    this._quotaCalculationService
+      .getQuotaExceed()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(isQuotaExceeded => {
+        this.isQuotaExceeded = isQuotaExceeded;
       });
   }
 
