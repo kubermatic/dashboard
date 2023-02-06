@@ -103,7 +103,7 @@
     "@jest/globals": "29.3.1",
     "@types/jest": "29.2.3",
     "@types/js-yaml": "4.0.5",
-    "@types/lodash": "4.14.190",
+    "@types/lodash": "4.14.191",
     "@types/node": "18.11.18",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "5.43.0",
