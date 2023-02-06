@@ -90,6 +90,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes = this._diskTypes.map(type => ({name: type}));
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
+
   @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
   @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
 
@@ -360,12 +362,32 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     if (!awsSelectedSize) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,
       awsSize: {
         ...awsSelectedSize,
       } as AWSSize,
     };
+
+    if (
+      this.isDialogView() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

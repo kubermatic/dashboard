@@ -84,6 +84,7 @@ enum MachineTypeState {
 export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private readonly _defaultDiskSize = 25;
   private _zoneChanges = new EventEmitter<boolean>();
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   @ViewChild('zonesCombobox')
   private _zonesCombobox: FilteredComboboxComponent;
@@ -312,12 +313,32 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
     const selectedMachineType = this.machineTypes.find(s => s.name === size);
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,
       gcpSize: {
         ...selectedMachineType,
       } as GCPMachineSize,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

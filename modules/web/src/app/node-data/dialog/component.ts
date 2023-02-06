@@ -21,7 +21,7 @@ import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Cluster} from '@shared/entity/cluster';
-import {getDefaultNodeProviderSpec} from '@shared/entity/node';
+import {getDefaultNodeProviderSpec, NodeSpec} from '@shared/entity/node';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {getIconClassForButton, objectDiff} from '@shared/utils/common';
@@ -29,6 +29,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
 import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
+import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Mode {
   Edit = 'Edit',
@@ -44,6 +45,7 @@ export interface DialogDataInput {
   initialClusterData?: Cluster;
   initialExternalClusterData?: ExternalCluster;
   initialNodeData?: NodeData;
+  projectID?: string;
 }
 
 export interface DialogDataOutput {
@@ -94,7 +96,8 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     private _dialogRef: MatDialogRef<NodeDataDialogComponent>,
     private readonly _builder: FormBuilder,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -113,6 +116,9 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
         ? Mode.Edit
         : Mode.Add;
+
+    const key = `${this._data.projectID}-${this.provider}`;
+    this._quotaCalculationService.reset(key);
 
     merge(this._nodeDataService.nodeDataChanges, this._nodeDataService.operatingSystemChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -175,10 +181,10 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
         },
         operatingSystem: {},
         versions: {},
-      },
+      } as NodeSpec,
       count: 1,
       dynamicConfig: false,
-    };
+    } as NodeData;
   }
 
   private _isRecreationWarningVisible(): boolean {

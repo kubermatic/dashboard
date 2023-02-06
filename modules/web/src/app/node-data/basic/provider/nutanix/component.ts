@@ -94,6 +94,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   private _defaultImage = '';
   private _defaultOS: OperatingSystem;
   private _subnets: NutanixSubnet[] = [];
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   categories: NutanixCategory[] = [];
@@ -436,7 +437,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       nutanixNodeSpec: {
         [Controls.SubnetName]: this.form.get(Controls.SubnetName).value?.[ComboboxControls.Select],
@@ -449,5 +450,24 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
         [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
       } as NutanixNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

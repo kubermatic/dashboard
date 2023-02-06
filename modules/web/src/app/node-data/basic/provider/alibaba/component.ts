@@ -100,6 +100,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   selectedDiskType = '';
   vSwitches: string[] = [];
   isLoadingVSwitches = false;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
     return this._nodeDataService.alibaba.instanceTypes(
@@ -332,12 +333,32 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedInstanceType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,
       alibabaInstanceType: {
         ...selectedInstanceType,
       } as AlibabaInstanceType,
     };
+
+    if (
+      this.isDialogView() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

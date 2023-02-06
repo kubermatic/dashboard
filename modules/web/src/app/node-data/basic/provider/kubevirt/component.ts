@@ -139,6 +139,7 @@ export class KubeVirtBasicNodeDataComponent
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2048;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
   private _instanceTypes: KubeVirtInstanceTypeList;
   private _preferences: KubeVirtPreferenceList;
   private _osImages: KubeVirtOSImageList;
@@ -655,7 +656,7 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getQuotaCalculationPayload(instanceTypeId?: string): ResourceQuotaCalculationPayload {
-    const payload = {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
         [Controls.PrimaryDiskSize]: this.form.get(Controls.PrimaryDiskSize).value + 'G',
@@ -671,7 +672,6 @@ export class KubeVirtBasicNodeDataComponent
     } else {
       const cpus = this.form.get(Controls.CPUs).value;
       const memory = this.form.get(Controls.Memory).value;
-
       if (!cpus || !memory) {
         return null;
       }
@@ -681,6 +681,24 @@ export class KubeVirtBasicNodeDataComponent
         [Controls.Memory]: this.form.get(Controls.Memory).value + 'M',
       };
     }
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
     return payload;
   }
 }

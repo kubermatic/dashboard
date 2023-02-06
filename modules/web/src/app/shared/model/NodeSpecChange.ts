@@ -23,6 +23,7 @@ export class NodeData {
   dynamicConfig?: boolean;
   maxReplicas?: number;
   minReplicas?: number;
+  creationTimestamp?: Date;
 
   static NewEmptyNodeData(): NodeData {
     return {

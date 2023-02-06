@@ -68,6 +68,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   templates: string[] = [];
   isLoadingVlans = false;
   isLoadingTemplates = false;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _vlanIdsObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
@@ -224,7 +225,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       anexiaNodeSpec: {
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
@@ -234,5 +235,24 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

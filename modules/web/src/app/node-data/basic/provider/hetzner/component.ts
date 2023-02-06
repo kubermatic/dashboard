@@ -59,9 +59,9 @@ enum TypeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
-
   readonly Controls = Controls;
+  private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   selectedType = '';
   typeLabel = TypeState.Empty;
@@ -173,11 +173,31 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       hetznerSize: {
         ...selectedType,
       } as Type,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

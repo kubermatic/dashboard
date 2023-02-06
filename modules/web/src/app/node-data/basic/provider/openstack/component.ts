@@ -95,6 +95,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _images: DatacenterOperatingSystemOptions;
   private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
 
@@ -434,12 +435,32 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     if (!selectedFlavour) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.CustomDiskSize).value,
       openstackSize: {
         ...selectedFlavour,
       } as OpenstackFlavor,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

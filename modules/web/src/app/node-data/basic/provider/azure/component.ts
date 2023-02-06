@@ -87,6 +87,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
   selectedZone = '';
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
     return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
@@ -306,12 +307,32 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     if (!selectedSize) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],
       azureSize: {
         ...selectedSize,
       } as AzureSizes,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

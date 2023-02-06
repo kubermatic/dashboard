@@ -116,6 +116,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
 
   private _catalogChanges = new Subject<boolean>();
   private _datacenter: Datacenter;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -378,7 +379,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       vmDirectorNodeSpec: {
         [Controls.CPUs]: this.form.get(Controls.CPUs).value,
@@ -392,5 +393,24 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
       } as VMwareCloudDirectorNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

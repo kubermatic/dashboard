@@ -68,6 +68,8 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
   selectedSize = '';
   sizeLabel = SizeState.Empty;
 
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
@@ -196,11 +198,31 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedInstanceType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       equinixSize: {
         ...selectedInstanceType,
       } as EquinixSize,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

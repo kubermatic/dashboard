@@ -59,6 +59,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -181,7 +182,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       vSphereNodeSpec: {
         [Controls.Template]: this.template,
@@ -190,5 +191,24 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         [Controls.DiskSizeGB]: this.form.get(Controls.DiskSizeGB).value,
       } as VSphereNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

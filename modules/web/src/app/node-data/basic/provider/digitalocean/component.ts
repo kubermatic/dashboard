@@ -55,9 +55,9 @@ enum SizeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _sizes: DigitaloceanSizes = DigitaloceanSizes.newDigitalOceanSizes();
-
   readonly Controls = Controls;
+  private _sizes: DigitaloceanSizes = DigitaloceanSizes.newDigitalOceanSizes();
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   selectedSize = '';
   sizeLabel = SizeState.Empty;
@@ -156,7 +156,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
       return null;
     }
 
-    const payload = {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       doSize: {} as Standard | Optimized,
     };
@@ -170,6 +170,24 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
         ...standardSize,
       };
     }
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
     return payload;
   }
 }
