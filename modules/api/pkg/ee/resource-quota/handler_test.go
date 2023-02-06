@@ -734,6 +734,33 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withCalculatedQuota(genAPIQuota(6, 9, 5)).
 				build(),
 		},
+		{
+			Name:      "should subtract quota of replaced resources",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("20", "20G", "50G").
+					withGlobalUsage("4", "8G", "20G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withAWS(4, 4).
+				withDiskSize(5).
+				withReplacedResources(
+					newCalcReq().
+						withReplicas(1).
+						withAWS(2, 3).
+						withDiskSize(5),
+				).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(20, 20, 50)).
+				withGlobalUsage(genAPIQuota(4, 8, 20)).
+				withCalculatedQuota(genAPIQuota(10, 13, 25)).
+				build(),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -764,22 +791,9 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 }
 
 type calcReq struct {
-	Replicas int `json:"replicas"`
-	// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
-	DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
-	AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
-	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec              `json:"anexiaNodeSpec,omitempty"`
-	AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
-	AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
-	DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
-	EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
-	GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
-	HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
-	KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
-	NutanixNodeSpec     *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
-	OpenstackSize       *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
-	VMDirectorNodeSpec  *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
-	VSphereNodeSpec     *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+	Replicas          int                              `json:"replicas"`
+	ReplacedResources *resourcequota.ReplacedResources `json:"ReplacedResources,omitempty"`
+	resourcequota.ProviderNodeTemplate
 }
 
 func newCalcReq() *calcReq {
@@ -797,6 +811,14 @@ func (c *calcReq) encode(t *testing.T) []byte {
 
 func (c *calcReq) withReplicas(replicas int) *calcReq {
 	c.Replicas = replicas
+	return c
+}
+
+func (c *calcReq) withReplacedResources(provider *calcReq) *calcReq {
+	c.ReplacedResources = &resourcequota.ReplacedResources{
+		Replicas:             provider.Replicas,
+		ProviderNodeTemplate: provider.ProviderNodeTemplate,
+	}
 	return c
 }
 
