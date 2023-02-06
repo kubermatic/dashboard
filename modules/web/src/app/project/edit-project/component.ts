@@ -95,7 +95,7 @@ export class EditProjectComponent implements OnInit {
   onNext(project: Project): void {
     this._matDialogRef.close(project);
 
-    if (this.isEnterpriseEdition) {
+    if (this.isEnterpriseEdition && this.user.isAdmin && this.projectQouta) {
       const quotaVariables = {
         cpu: this.form?.controls?.cpuQuota?.value,
         memory: this.form?.controls?.memoryQuota?.value,
