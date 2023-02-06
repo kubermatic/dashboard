@@ -805,10 +805,6 @@ func GKEVersionsEndpoint(presetProvider provider.PresetProvider, userInfoGetter 
 			req = projectReq.GKEVersionsReq
 		}
 
-		req, ok := request.(GKEVersionsReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
-		}
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
@@ -935,20 +931,19 @@ func DecodeGKEProjectVersionsReq(c context.Context, r *http.Request) (interface{
 }
 
 func DecodeGKEProjectCommonReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req GKEProjectCommonReq
-
 	commonReq, err := DecodeGKECommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}
-	req.GKECommonReq = commonReq.(GKECommonReq)
-	pr, err := common.DecodeProjectRequest(c, r)
+	projectReq, err := common.DecodeProjectRequest(c, r)
 	if err != nil {
 		return nil, err
 	}
-	req.ProjectReq = pr.(common.ProjectReq)
 
-	return req, nil
+	return GKEProjectCommonReq{
+		GKECommonReq: commonReq.(GKECommonReq),
+		ProjectReq:   projectReq.(common.ProjectReq),
+	}, nil
 }
 
 func DecodeGKECommonReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -1049,10 +1044,6 @@ func GKEZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter pro
 			req = projectReq.GKECommonReq
 		}
 
-		req, ok := request.(GKECommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
-		}
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
@@ -1082,7 +1073,7 @@ type GKECommonReq struct {
 	Credential string
 }
 
-// GKEClusterListReq represent a request for GKE cluster list.
+// GKEProjectCommonReq represent a request with common parameters for GKE including Project request.
 // swagger:parameters listGKEClusters validateProjectGKECredentials listProjectGKEZones
 type GKEProjectCommonReq struct {
 	common.ProjectReq
