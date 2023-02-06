@@ -24,7 +24,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -104,6 +106,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes: GCPDiskType[] = [];
   selectedDiskType = '';
   diskTypeLabel = DiskTypeState.Empty;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
 
   private get _zonesObservable(): Observable<GCPZone[]> {
     return this._nodeDataService.gcp
@@ -126,10 +130,13 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -164,7 +171,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     this.form
       .get(Controls.MachineType)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         this._quotaCalculationService.refreshQuotaCalculations(payload);

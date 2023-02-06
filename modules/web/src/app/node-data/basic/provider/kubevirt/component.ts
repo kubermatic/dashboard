@@ -25,6 +25,8 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
+import {DynamicModule} from '@app/dynamic/module-registry';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
@@ -53,7 +55,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instancetype',
@@ -139,10 +141,12 @@ export class KubeVirtBasicNodeDataComponent
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2048;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
+  private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
   private _instanceTypes: KubeVirtInstanceTypeList;
   private _preferences: KubeVirtPreferenceList;
   private _osImages: KubeVirtOSImageList;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   selectedInstanceType: KubeVirtInstanceType;
   instanceTypeLabel = InstanceTypeState.Empty;
   selectedPreference: KubeVirtPreference;
@@ -165,10 +169,13 @@ export class KubeVirtBasicNodeDataComponent
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _matDialog: MatDialog,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _matDialog: MatDialog
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -243,6 +250,7 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.Memory).valueChanges,
       this.form.get(Controls.PrimaryDiskSize).valueChanges
     )
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();

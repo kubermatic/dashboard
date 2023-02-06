@@ -14,9 +14,11 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {DigitaloceanSizes, Optimized, Standard} from '@shared/entity/provider/digitalocean';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
@@ -56,6 +58,8 @@ enum SizeState {
 })
 export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
   private _sizes: DigitaloceanSizes = DigitaloceanSizes.newDigitalOceanSizes();
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
@@ -73,10 +77,13 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -88,7 +95,8 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
     this.form
       .get(Controls.Size)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         if (payload) {

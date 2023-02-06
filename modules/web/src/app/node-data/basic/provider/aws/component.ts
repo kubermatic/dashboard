@@ -23,8 +23,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {Architecture, AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
@@ -33,7 +35,7 @@ import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
@@ -85,11 +87,13 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   selectedDiskType = '';
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private readonly _defaultDiskSize = 25;
   private _diskTypes: string[] = ['standard', 'gp2', 'gp3', 'io1', 'io2', 'sc1', 'st1'];
   diskTypes = this._diskTypes.map(type => ({name: type}));
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
+  private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   @ViewChild('sizeCombobox') private readonly _sizeCombobox: FilteredComboboxComponent;
@@ -99,10 +103,13 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   get subnetAZ(): string[] {
@@ -145,6 +152,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.Size).valueChanges)
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
