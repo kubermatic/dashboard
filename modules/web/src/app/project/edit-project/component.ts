@@ -115,7 +115,7 @@ export class EditProjectComponent implements OnInit {
       [Controls.StorageQuota]: new FormControl(''),
     });
 
-    this.isMember = !!this.user.projects.find(project => project.id === this.project.id);
+    this.isMember = !!this.user.projects?.find(project => project.id === this.project.id);
 
     if (this.isMember && this.isEnterpriseEdition) {
       this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
