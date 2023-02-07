@@ -61,6 +61,8 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
   ngOnInit(): void {
     this._init();
 
+    this.provider = this._clusterSpecService.provider;
+
     this._clusterSpecService.providerChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(provider => (this.provider = provider));
