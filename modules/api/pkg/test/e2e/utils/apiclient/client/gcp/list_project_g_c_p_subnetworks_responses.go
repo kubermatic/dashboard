@@ -81,11 +81,11 @@ func (o *ListProjectGCPSubnetworksOK) IsCode(code int) bool {
 }
 
 func (o *ListProjectGCPSubnetworksOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/subnetworks][%d] listProjectGCPSubnetworksOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks][%d] listProjectGCPSubnetworksOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectGCPSubnetworksOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/subnetworks][%d] listProjectGCPSubnetworksOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks][%d] listProjectGCPSubnetworksOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectGCPSubnetworksOK) GetPayload() models.GCPSubnetworkList {
@@ -151,11 +151,11 @@ func (o *ListProjectGCPSubnetworksDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectGCPSubnetworksDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/subnetworks][%d] listProjectGCPSubnetworks default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks][%d] listProjectGCPSubnetworks default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectGCPSubnetworksDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/subnetworks][%d] listProjectGCPSubnetworks default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks][%d] listProjectGCPSubnetworks default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectGCPSubnetworksDefault) GetPayload() *models.ErrorResponse {

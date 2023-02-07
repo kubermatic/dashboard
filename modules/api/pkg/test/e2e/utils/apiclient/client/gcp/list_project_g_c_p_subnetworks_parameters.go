@@ -64,14 +64,17 @@ type ListProjectGCPSubnetworksParams struct {
 	// Credential.
 	Credential *string
 
-	// DC.
-	DC *string
-
 	// Network.
 	Network *string
 
 	// ServiceAccount.
 	ServiceAccount *string
+
+	/* Dc.
+
+	   KKP Datacenter to use for endpoint
+	*/
+	DC string
 
 	// ProjectID.
 	ProjectID string
@@ -140,17 +143,6 @@ func (o *ListProjectGCPSubnetworksParams) SetCredential(credential *string) {
 	o.Credential = credential
 }
 
-// WithDC adds the dC to the list project g c p subnetworks params
-func (o *ListProjectGCPSubnetworksParams) WithDC(dC *string) *ListProjectGCPSubnetworksParams {
-	o.SetDC(dC)
-	return o
-}
-
-// SetDC adds the dC to the list project g c p subnetworks params
-func (o *ListProjectGCPSubnetworksParams) SetDC(dC *string) {
-	o.DC = dC
-}
-
 // WithNetwork adds the network to the list project g c p subnetworks params
 func (o *ListProjectGCPSubnetworksParams) WithNetwork(network *string) *ListProjectGCPSubnetworksParams {
 	o.SetNetwork(network)
@@ -171,6 +163,17 @@ func (o *ListProjectGCPSubnetworksParams) WithServiceAccount(serviceAccount *str
 // SetServiceAccount adds the serviceAccount to the list project g c p subnetworks params
 func (o *ListProjectGCPSubnetworksParams) SetServiceAccount(serviceAccount *string) {
 	o.ServiceAccount = serviceAccount
+}
+
+// WithDC adds the dc to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithDC(dc string) *ListProjectGCPSubnetworksParams {
+	o.SetDC(dc)
+	return o
+}
+
+// SetDC adds the dc to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetDC(dc string) {
+	o.DC = dc
 }
 
 // WithProjectID adds the projectID to the list project g c p subnetworks params
@@ -200,23 +203,6 @@ func (o *ListProjectGCPSubnetworksParams) WriteToRequest(r runtime.ClientRequest
 		}
 	}
 
-	if o.DC != nil {
-
-		// query param DC
-		var qrDC string
-
-		if o.DC != nil {
-			qrDC = *o.DC
-		}
-		qDC := qrDC
-		if qDC != "" {
-
-			if err := r.SetQueryParam("DC", qDC); err != nil {
-				return err
-			}
-		}
-	}
-
 	if o.Network != nil {
 
 		// query param Network
@@ -240,6 +226,11 @@ func (o *ListProjectGCPSubnetworksParams) WriteToRequest(r runtime.ClientRequest
 		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
 			return err
 		}
+	}
+
+	// path param dc
+	if err := r.SetPathParam("dc", o.DC); err != nil {
+		return err
 	}
 
 	// path param project_id

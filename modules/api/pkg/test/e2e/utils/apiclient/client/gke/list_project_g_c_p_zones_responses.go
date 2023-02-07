@@ -81,11 +81,11 @@ func (o *ListProjectGCPZonesOK) IsCode(code int) bool {
 }
 
 func (o *ListProjectGCPZonesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/zones][%d] listProjectGCPZonesOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones][%d] listProjectGCPZonesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectGCPZonesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/zones][%d] listProjectGCPZonesOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones][%d] listProjectGCPZonesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectGCPZonesOK) GetPayload() models.GCPZoneList {
@@ -151,11 +151,11 @@ func (o *ListProjectGCPZonesDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectGCPZonesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/zones][%d] listProjectGCPZones default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones][%d] listProjectGCPZones default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectGCPZonesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/zones][%d] listProjectGCPZones default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones][%d] listProjectGCPZones default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectGCPZonesDefault) GetPayload() *models.ErrorResponse {
