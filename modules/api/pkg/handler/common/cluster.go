@@ -1067,6 +1067,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 		ObjectMeta: apiv1.ObjectMeta{
 			ID:                internalCluster.Name,
 			Name:              internalCluster.Spec.HumanReadableName,
+			Annotations:       internalCluster.Annotations,
 			CreationTimestamp: apiv1.NewTime(internalCluster.CreationTimestamp.Time),
 			DeletionTimestamp: func() *apiv1.Time {
 				if internalCluster.DeletionTimestamp != nil {
@@ -1114,19 +1115,8 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 	if filterSystemLabels {
 		cluster.Labels = label.FilterLabels(label.ClusterResourceType, internalCluster.Labels)
 	}
-	cluster.Annotations = make(map[string]string)
-	if internalCluster.Annotations != nil {
-		// Add preset annotations
-		if value, ok := internalCluster.Annotations[kubermaticv1.PresetNameAnnotation]; ok {
-			cluster.Annotations[kubermaticv1.PresetNameAnnotation] = value
-		}
-		if value, ok := internalCluster.Annotations[kubermaticv1.PresetInvalidatedAnnotation]; ok {
-			cluster.Annotations[kubermaticv1.PresetInvalidatedAnnotation] = value
-		}
-		// Add initial CNI values request annotation
-		if value, ok := internalCluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation]; ok {
-			cluster.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation] = value
-		}
+	if cluster.Annotations == nil {
+		cluster.Annotations = make(map[string]string)
 	}
 
 	return cluster
