@@ -2051,7 +2051,8 @@ type TopologySpreadConstraint struct {
 func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 	missing := make([]string, 0)
 
-	if spec.Instancetype == nil {
+	// keep FlavorName for backward compatibility
+	if spec.Instancetype == nil && spec.FlavorName == "" {
 		if len(spec.CPUs) == 0 {
 			missing = append(missing, "cpus")
 		}
