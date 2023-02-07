@@ -168,6 +168,7 @@ limitations under the License.
                   [tags]="nodeAffinityPresetValues"
                   (onChange)="onNodeAffinityPresetValuesChange($event)"
                   [formControlName]="Controls.NodeAffinityPresetValues"
+                  [kmRequired]="true"
                   [disabled]="form.get(Controls.NodeAffinityPresetValues).disabled"
                   placeholder="Add values..."
                   [kmPattern]="nodeAffinityPresetValuesPattern"

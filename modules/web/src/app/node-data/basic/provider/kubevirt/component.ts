@@ -188,8 +188,8 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
-      [Controls.NodeAffinityPresetKey]: this._builder.control(''),
-      [Controls.NodeAffinityPresetValues]: this._builder.control(''),
+      [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
+      [Controls.NodeAffinityPresetValues]: this._builder.control('', Validators.required),
       [Controls.TopologySpreadConstraints]: this._builder.control(''),
     });
 
