@@ -55,7 +55,7 @@ export class QuotaCalculationService {
       const request$ = merge(this._refresh$)
         .pipe(debounceTime(this._debounceTime))
         .pipe(startWith(this.quotaPayload))
-        .pipe(filter(() => this.quotaPayload !== null))
+        .pipe(filter(() => !!this.quotaPayload))
         .pipe(switchMap(_ => this.quotaCalculation(projectID, this.quotaPayload)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._requestMap.set(mapKey, request$);
