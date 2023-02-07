@@ -25,7 +25,9 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, filter, takeUntil} from 'rxjs/operators';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {AnexiaNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
@@ -68,6 +70,10 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   templates: string[] = [];
   isLoadingVlans = false;
   isLoadingTemplates = false;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _vlanIdsObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
@@ -80,10 +86,13 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -134,6 +143,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       this.form.get(Controls.TemplateID).valueChanges,
       this.form.get(Controls.VlanID).valueChanges
     )
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
@@ -224,7 +234,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       anexiaNodeSpec: {
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
@@ -234,5 +244,24 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

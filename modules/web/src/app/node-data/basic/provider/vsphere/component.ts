@@ -14,6 +14,8 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
+import {DynamicModule} from '@dynamic/module-registry';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -52,6 +54,7 @@ enum Controls {
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private readonly _minMemory = 512;
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
@@ -59,15 +62,20 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _datacenterService: DatacenterService,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _datacenterService: DatacenterService
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   get template(): string {
@@ -94,6 +102,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.DiskSizeGB).valueChanges
     )
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
@@ -181,7 +190,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       vSphereNodeSpec: {
         [Controls.Template]: this.template,
@@ -190,5 +199,24 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
         [Controls.DiskSizeGB]: this.form.get(Controls.DiskSizeGB).value,
       } as VSphereNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

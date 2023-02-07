@@ -65,6 +65,7 @@ export class ResourceQuota {
 export class ResourceQuotaCalculationPayload {
   replicas: number;
   diskSizeGB?: number;
+  replacedResources?: ResourceQuotaCalculationPayload;
   alibabaInstanceType?: AlibabaInstanceType;
   anexiaNodeSpec?: AnexiaNodeSpec;
   awsSize?: AWSSize;

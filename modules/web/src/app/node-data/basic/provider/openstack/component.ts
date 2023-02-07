@@ -23,6 +23,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
+import {DynamicModule} from '@dynamic/module-registry';
 import {duration} from 'moment';
 import _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
@@ -95,6 +97,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _images: DatacenterOperatingSystemOptions;
   private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   @ViewChild('flavorCombobox') private readonly _flavorCombobox: FilteredComboboxComponent;
 
@@ -103,7 +106,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   @ViewChild('serverGroupCombobox') private readonly _serverGroupCombobox: FilteredComboboxComponent;
 
   readonly Controls = Controls;
-
   flavors: OpenstackFlavor[] = [];
   selectedFlavor = '';
   flavorsLabel = FlavorState.Empty;
@@ -114,6 +116,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   selectedServerGroup = '';
   selectedServerGroupID = '';
   serverGroupLabel = ServerGroupState.Empty;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+
+  private _quotaCalculationService: QuotaCalculationService;
 
   private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
     return this._nodeDataService.openstack
@@ -143,10 +148,13 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -215,7 +223,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     this.form
       .get(Controls.Flavor)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         if (payload) {
@@ -434,12 +443,32 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     if (!selectedFlavour) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.CustomDiskSize).value,
       openstackSize: {
         ...selectedFlavour,
       } as OpenstackFlavor,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

@@ -14,9 +14,11 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
@@ -59,9 +61,11 @@ enum TypeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
-
   readonly Controls = Controls;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
+  private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   selectedType = '';
   typeLabel = TypeState.Empty;
@@ -78,10 +82,13 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -95,7 +102,8 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this.form
       .get(Controls.Type)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
         const payload = this._getQuotaCalculationPayload();
@@ -173,11 +181,31 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       hetznerSize: {
         ...selectedType,
       } as Type,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

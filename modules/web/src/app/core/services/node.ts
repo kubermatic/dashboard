@@ -90,7 +90,10 @@ export class NodeService {
   showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string): Observable<MachineDeployment> {
     return this._matDialog
       .open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(NodeDataDialogComponent, {
-        data: {initialClusterData: cluster} as DialogDataInput,
+        data: {
+          initialClusterData: cluster,
+          projectID: projectID,
+        } as DialogDataInput,
       })
       .afterClosed()
       .pipe(
@@ -115,8 +118,10 @@ export class NodeService {
           dynamicConfig: md.spec.dynamicConfig,
           minReplicas: md.spec.minReplicas,
           maxReplicas: md.spec.maxReplicas,
+          creationTimestamp: md.creationTimestamp,
         } as NodeData,
-      },
+        projectID: projectID,
+      } as DialogDataInput,
     });
 
     return dialogRef.afterClosed().pipe(

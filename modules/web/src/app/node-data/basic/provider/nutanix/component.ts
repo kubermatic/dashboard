@@ -25,6 +25,8 @@ import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSO
 import _ from 'lodash';
 import {merge, Observable, of, Subscription} from 'rxjs';
 import {distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {GlobalModule} from '@core/services/global/module';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -90,10 +92,13 @@ enum CategoryValueState {
 export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   readonly Controls = Controls;
   readonly CategoryValueState = CategoryValueState;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private _images: DatacenterOperatingSystemOptions;
   private _defaultImage = '';
   private _defaultOS: OperatingSystem;
   private _subnets: NutanixSubnet[] = [];
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   categories: NutanixCategory[] = [];
@@ -108,10 +113,13 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -169,6 +177,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.SubnetName).valueChanges,
       this.form.get(Controls.Categories).valueChanges
     )
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
@@ -436,7 +445,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       nutanixNodeSpec: {
         [Controls.SubnetName]: this.form.get(Controls.SubnetName).value?.[ComboboxControls.Select],
@@ -449,5 +458,24 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
         [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
       } as NutanixNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

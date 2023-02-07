@@ -299,6 +299,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     });
 
     merge(this.form.get(Controls.Count).valueChanges)
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();

@@ -24,7 +24,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -84,6 +86,7 @@ enum MachineTypeState {
 export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private readonly _defaultDiskSize = 25;
   private _zoneChanges = new EventEmitter<boolean>();
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   @ViewChild('zonesCombobox')
   private _zonesCombobox: FilteredComboboxComponent;
@@ -103,6 +106,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypes: GCPDiskType[] = [];
   selectedDiskType = '';
   diskTypeLabel = DiskTypeState.Empty;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
 
   private get _zonesObservable(): Observable<GCPZone[]> {
     return this._nodeDataService.gcp
@@ -125,10 +130,13 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -163,7 +171,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     this.form
       .get(Controls.MachineType)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         this._quotaCalculationService.refreshQuotaCalculations(payload);
@@ -312,12 +321,32 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const size = this._nodeDataService.nodeData.spec.cloud.gcp.machineType;
     const selectedMachineType = this.machineTypes.find(s => s.name === size);
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,
       gcpSize: {
         ...selectedMachineType,
       } as GCPMachineSize,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import _ from 'lodash';
 import {merge, Observable, Subject} from 'rxjs';
-import {debounceTime, filter, shareReplay, switchMap} from 'rxjs/operators';
+import {debounceTime, filter, shareReplay, startWith, switchMap} from 'rxjs/operators';
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
 
@@ -54,6 +54,7 @@ export class QuotaCalculationService {
     if (!this._requestMap.has(mapKey)) {
       const request$ = merge(this._refresh$)
         .pipe(debounceTime(this._debounceTime))
+        .pipe(startWith(this.quotaPayload))
         .pipe(filter(() => this.quotaPayload !== null))
         .pipe(switchMap(_ => this.quotaCalculation(projectID, this.quotaPayload)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));

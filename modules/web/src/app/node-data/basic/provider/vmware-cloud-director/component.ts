@@ -23,9 +23,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, VMwareCloudDirectorNodeSpec} from '@shared/entity/node';
@@ -113,19 +115,25 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   storageProfileLabel = StorageProfileState.Empty;
   templateLabel = TemplateState.Empty;
   catalogLabel = CatalogState.Empty;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _catalogChanges = new Subject<boolean>();
   private _datacenter: Datacenter;
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -159,6 +167,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.Catalog).valueChanges
     )
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
@@ -378,7 +387,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
-    return {
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       vmDirectorNodeSpec: {
         [Controls.CPUs]: this.form.get(Controls.CPUs).value,
@@ -392,5 +401,24 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
       } as VMwareCloudDirectorNodeSpec,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

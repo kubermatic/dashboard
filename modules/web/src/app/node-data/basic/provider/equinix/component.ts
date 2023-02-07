@@ -22,10 +22,12 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, EquinixNodeSpec} from '@shared/entity/node';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -67,14 +69,20 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
   sizes: EquinixSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   private get _sizesObservable(): Observable<EquinixSize[]> {
@@ -92,7 +100,8 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
 
     this.form
       .get(Controls.InstanceType)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         if (payload) {
@@ -196,11 +205,31 @@ export class EquinixBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedInstanceType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       equinixSize: {
         ...selectedInstanceType,
       } as EquinixSize,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

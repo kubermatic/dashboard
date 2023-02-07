@@ -27,8 +27,10 @@ import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, map, takeUntil} from 'rxjs/operators';
 import {compare} from '@shared/utils/common';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
@@ -100,6 +102,10 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   selectedDiskType = '';
   vSwitches: string[] = [];
   isLoadingVSwitches = false;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
     return this._nodeDataService.alibaba.instanceTypes(
@@ -120,10 +126,13 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -162,6 +171,7 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
       .subscribe(vs => (this._nodeDataService.nodeData.spec.cloud.alibaba.vSwitchID = vs));
 
     merge(this.form.get(Controls.DiskSize).valueChanges, this.form.get(Controls.InstanceType).valueChanges)
+      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
@@ -332,12 +342,32 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
     if (!selectedInstanceType) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.DiskSize).value,
       alibabaInstanceType: {
         ...selectedInstanceType,
       } as AlibabaInstanceType,
     };
+
+    if (
+      this.isDialogView() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

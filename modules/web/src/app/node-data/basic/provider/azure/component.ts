@@ -25,9 +25,11 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {GlobalModule} from '@core/services/global/module';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -87,6 +89,9 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
   selectedZone = '';
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaCalculationService: QuotaCalculationService;
+  private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
     return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
@@ -101,10 +106,12 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _quotaCalculationService: QuotaCalculationService
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
+    if (this.isEnterpriseEdition) {
+      this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
+    }
   }
 
   ngOnInit(): void {
@@ -146,7 +153,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
     this.form
       .get(Controls.Size)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         const payload = this._getQuotaCalculationPayload();
         if (payload) {
@@ -306,12 +314,32 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     if (!selectedSize) {
       return null;
     }
-    return {
+
+    let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],
       azureSize: {
         ...selectedSize,
       } as AzureSizes,
     };
+
+    if (
+      !this._nodeDataService.isInWizardMode() &&
+      !this._initialQuotaCalculationPayload &&
+      !!this._nodeDataService.nodeData.creationTimestamp
+    ) {
+      this._initialQuotaCalculationPayload = {
+        ...payload,
+      };
+    }
+
+    if (this._initialQuotaCalculationPayload) {
+      payload = {
+        ...payload,
+        replacedResources: this._initialQuotaCalculationPayload,
+      } as ResourceQuotaCalculationPayload;
+    }
+
+    return payload;
   }
 }

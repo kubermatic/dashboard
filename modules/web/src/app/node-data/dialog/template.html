@@ -34,7 +34,7 @@ limitations under the License.
     </div>
     <button mat-flat-button
             (click)="onConfirm()"
-            [disabled]="form.invalid"
+            [disabled]="form.invalid || isQuotaExceeded"
             class="btn btn-primary">
       <i [ngClass]="getIconClass()"></i>
       <span>{{getConfirmButtonText()}}</span>
