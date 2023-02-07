@@ -132,8 +132,8 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.PodAffinityPreset]: this._builder.control(''),
       [Controls.PodAntiAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
-      [Controls.NodeAffinityPresetKey]: this._builder.control(''),
-      [Controls.NodeAffinityPresetValues]: this._builder.control(''),
+      [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
+      [Controls.NodeAffinityPresetValues]: this._builder.control('', Validators.required),
     });
 
     this.form.get(Controls.NodeAffinityPresetKey).disable();
