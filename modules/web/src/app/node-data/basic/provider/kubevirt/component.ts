@@ -671,7 +671,7 @@ export class KubeVirtBasicNodeDataComponent
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
-        [Controls.PrimaryDiskSize]: this.form.get(Controls.PrimaryDiskSize).value + 'G',
+        [Controls.PrimaryDiskSize]: `${this.form.get(Controls.PrimaryDiskSize).value}`,
       } as KubeVirtNodeSize,
     };
 
