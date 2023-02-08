@@ -64,11 +64,14 @@ type ListProjectGCPZonesParams struct {
 	// Credential.
 	Credential *string
 
-	// DC.
-	DC *string
-
 	// ServiceAccount.
 	ServiceAccount *string
+
+	/* Dc.
+
+	   KKP Datacenter to use for endpoint
+	*/
+	DC string
 
 	// ProjectID.
 	ProjectID string
@@ -137,17 +140,6 @@ func (o *ListProjectGCPZonesParams) SetCredential(credential *string) {
 	o.Credential = credential
 }
 
-// WithDC adds the dC to the list project g c p zones params
-func (o *ListProjectGCPZonesParams) WithDC(dC *string) *ListProjectGCPZonesParams {
-	o.SetDC(dC)
-	return o
-}
-
-// SetDC adds the dC to the list project g c p zones params
-func (o *ListProjectGCPZonesParams) SetDC(dC *string) {
-	o.DC = dC
-}
-
 // WithServiceAccount adds the serviceAccount to the list project g c p zones params
 func (o *ListProjectGCPZonesParams) WithServiceAccount(serviceAccount *string) *ListProjectGCPZonesParams {
 	o.SetServiceAccount(serviceAccount)
@@ -157,6 +149,17 @@ func (o *ListProjectGCPZonesParams) WithServiceAccount(serviceAccount *string) *
 // SetServiceAccount adds the serviceAccount to the list project g c p zones params
 func (o *ListProjectGCPZonesParams) SetServiceAccount(serviceAccount *string) {
 	o.ServiceAccount = serviceAccount
+}
+
+// WithDC adds the dc to the list project g c p zones params
+func (o *ListProjectGCPZonesParams) WithDC(dc string) *ListProjectGCPZonesParams {
+	o.SetDC(dc)
+	return o
+}
+
+// SetDC adds the dc to the list project g c p zones params
+func (o *ListProjectGCPZonesParams) SetDC(dc string) {
+	o.DC = dc
 }
 
 // WithProjectID adds the projectID to the list project g c p zones params
@@ -186,29 +189,17 @@ func (o *ListProjectGCPZonesParams) WriteToRequest(r runtime.ClientRequest, reg 
 		}
 	}
 
-	if o.DC != nil {
-
-		// query param DC
-		var qrDC string
-
-		if o.DC != nil {
-			qrDC = *o.DC
-		}
-		qDC := qrDC
-		if qDC != "" {
-
-			if err := r.SetQueryParam("DC", qDC); err != nil {
-				return err
-			}
-		}
-	}
-
 	if o.ServiceAccount != nil {
 
 		// header param ServiceAccount
 		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
 			return err
 		}
+	}
+
+	// path param dc
+	if err := r.SetPathParam("dc", o.DC); err != nil {
+		return err
 	}
 
 	// path param project_id

@@ -462,7 +462,7 @@ func (a *Client) ListProjectGCPZones(params *ListProjectGCPZonesParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "listProjectGCPZones",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/zones",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/{dc}/zones",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

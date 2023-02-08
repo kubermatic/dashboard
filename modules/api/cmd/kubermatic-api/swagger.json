@@ -3991,11 +3991,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "Region",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -4014,6 +4009,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
           }
         ],
         "responses": {
@@ -21531,61 +21531,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/providers/gcp/subnetworks": {
-      "get": {
-        "description": "Lists available GCP subnetworks",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "gcp"
-        ],
-        "operationId": "listProjectGCPSubnetworks",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "ServiceAccount",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "Network",
-            "in": "query"
-          },
-          {
-            "type": "string",
-            "name": "DC",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GCPSubnetworkList",
-            "schema": {
-              "$ref": "#/definitions/GCPSubnetworkList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/providers/gcp/vmsizes": {
       "get": {
         "produces": [
@@ -21641,7 +21586,65 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/providers/gcp/zones": {
+    "/api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks": {
+      "get": {
+        "description": "Lists available GCP subnetworks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "gcp"
+        ],
+        "operationId": "listProjectGCPSubnetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ServiceAccount",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Network",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GCPSubnetworkList",
+            "schema": {
+              "$ref": "#/definitions/GCPSubnetworkList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/{dc}/zones": {
       "get": {
         "description": "Produces\napplication/json",
         "tags": [
@@ -21669,8 +21672,11 @@
           },
           {
             "type": "string",
-            "name": "DC",
-            "in": "query"
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {

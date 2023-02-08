@@ -299,7 +299,7 @@ func ListProjectAWSSubnets(userInfoGetter provider.UserInfoGetter, seedsGetter p
 		}
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -338,7 +338,7 @@ func ListProjectAWSVPCs(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		credentials, err := getAWSCredentialsFromRequest(ctx, req.AWSCommonReq, userInfoGetter, presetProvider)
+		credentials, err := getAWSCredentialsFromRequest(ctx, req.AWSCommonReq, userInfoGetter, presetProvider, req.GetProjectID())
 		if err != nil {
 			return nil, err
 		}
@@ -361,7 +361,7 @@ func ListProjectAWSSecurityGroups(userInfoGetter provider.UserInfoGetter, seedsG
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		credentials, err := getAWSCredentialsFromRequest(ctx, req.AWSCommonReq, userInfoGetter, presetProvider)
+		credentials, err := getAWSCredentialsFromRequest(ctx, req.AWSCommonReq, userInfoGetter, presetProvider, req.GetProjectID())
 		if err != nil {
 			return nil, err
 		}
@@ -390,20 +390,20 @@ func listSecurityGroup(ctx context.Context, accessKeyID, secretAccessKey, assume
 	return securityGroupList, nil
 }
 
-func getAWSCredentialsFromRequest(ctx context.Context, req AWSCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider) (*awsCredentials, error) {
+func getAWSCredentialsFromRequest(ctx context.Context, req AWSCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, projectID string) (*awsCredentials, error) {
 	accessKeyID := req.AccessKeyID
 	secretAccessKey := req.SecretAccessKey
 	assumeRoleARN := req.AssumeRoleARN
 	assumeRoleExternalID := req.AssumeRoleExternalID
 	vpcID := req.VPC
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}

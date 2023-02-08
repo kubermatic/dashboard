@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -91,7 +92,11 @@ type GCPProjectVMReq struct {
 // swagger:parameters listProjectGCPZones
 type GCPProjectDatacenterReq struct {
 	GCPProjectCommonReq
-	DC string
+
+	// KKP Datacenter to use for endpoint
+	// in: path
+	// required: true
+	DC string `json:"dc"`
 }
 
 // GCPProjectSubnetReq represents a request for GCP subnets within the context of a KKP project.
@@ -99,7 +104,11 @@ type GCPProjectDatacenterReq struct {
 type GCPProjectSubnetReq struct {
 	GCPProjectCommonReq
 	Network string
-	DC      string
+
+	// KKP Datacenter to use for endpoint
+	// in: path
+	// required: true
+	DC string `json:"dc"`
 }
 
 // GCPProjectMachineTypesReq represents a request for GCP machine types within the context of a KKP project.
@@ -219,6 +228,13 @@ func DecodeProjectGCPSubnetworks(c context.Context, r *http.Request) (interface{
 	req.GCPCommonReq = commonReq.(GCPCommonReq)
 
 	req.DC = r.Header.Get("DatacenterName")
+	if req.DC == "" {
+		req.DC = mux.Vars(r)["dc"]
+	}
+	if req.DC == "" {
+		return nil, fmt.Errorf("datacenter is required")
+	}
+
 	req.Network = r.Header.Get("Network")
 	return req, nil
 }
@@ -239,6 +255,13 @@ func DecodeProjectGCPZones(c context.Context, r *http.Request) (interface{}, err
 	req.GCPCommonReq = commonReq.(GCPCommonReq)
 
 	req.DC = r.Header.Get("DatacenterName")
+	if req.DC == "" {
+		req.DC = mux.Vars(r)["dc"]
+	}
+	if req.DC == "" {
+		return nil, fmt.Errorf("datacenter is required")
+	}
+
 	return req, nil
 }
 

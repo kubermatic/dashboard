@@ -684,7 +684,7 @@ func (a *Client) ListProjectGCPSubnetworks(params *ListProjectGCPSubnetworksPara
 	op := &runtime.ClientOperation{
 		ID:                 "listProjectGCPSubnetworks",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/subnetworks",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

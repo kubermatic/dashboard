@@ -1659,7 +1659,7 @@ func (r Routing) listProjectGCPDiskTypes() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/subnetworks gcp listProjectGCPSubnetworks
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/{dc}/subnetworks gcp listProjectGCPSubnetworks
 //
 // Lists available GCP subnetworks
 //
@@ -1703,7 +1703,7 @@ func (r Routing) listProjectGCPNetworks() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/zones gke listProjectGCPZones
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/{dc}/zones gke listProjectGCPZones
 //
 // Lists GCP zones.
 //

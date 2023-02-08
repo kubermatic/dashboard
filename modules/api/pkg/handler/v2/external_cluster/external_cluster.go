@@ -185,7 +185,7 @@ func CreateEndpoint(
 		}
 		var preset *kubermaticv1.Preset
 		if len(req.Credential) > 0 {
-			preset, err = presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+			preset, err = presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
