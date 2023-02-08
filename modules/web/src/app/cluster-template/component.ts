@@ -53,7 +53,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   templateDatacenterMap: Map<string, Datacenter> = new Map<string, Datacenter>();
   isInitializing = true;
   currentUser: Member;
-  displayedColumns: string[] = ['name', 'scope', 'provider', 'region', 'actions'];
+  displayedColumns: string[] = ['name', 'scope', 'provider', 'region', 'created', 'actions'];
   dataSource = new MatTableDataSource<any>();
   isGroupConfigLoading: boolean;
   projectViewOnlyToolTip =
