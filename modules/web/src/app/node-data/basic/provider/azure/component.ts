@@ -308,6 +308,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
+    const memoryBase = 1024;
     const size = this._nodeDataService.nodeData.spec.cloud.azure.size;
     const selectedSize = this.sizes.find(s => s.name === size);
 
@@ -315,6 +316,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       return null;
     }
 
+    selectedSize.osDiskSizeInMB = this.form.get(Controls.OSDiskSize).value * memoryBase;
+    selectedSize.resourceDiskSizeInMB = this.form.get(Controls.DataDiskSize).value * memoryBase;
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       diskSizeGB: this.form.get(Controls.Size)?.[ComboboxControls.Select],
