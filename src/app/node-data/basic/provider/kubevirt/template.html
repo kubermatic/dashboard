@@ -205,13 +205,15 @@ limitations under the License.
              [formControlName]="Controls.NodeAffinityPresetKey"
              type="text"
              autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.NodeAffinityPresetKey).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
     </mat-form-field>
 
     <km-chip-list label="Node Affinity Preset Values"
                   [tags]="nodeAffinityPresetValues"
                   (onChange)="onNodeAffinityPresetValuesChange($event)"
                   [formControlName]="Controls.NodeAffinityPresetValues"
-                  [kmRequired]="true"
                   [disabled]="form.get(Controls.NodeAffinityPresetValues).disabled"
                   placeholder="Add values..."
                   fxFlex></km-chip-list>
