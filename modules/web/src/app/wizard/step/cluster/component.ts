@@ -368,6 +368,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._handleClusterSpecChanges();
     this._handleCNIPluginChanges();
+    this._updateAvailableProxyModes();
   }
 
   generateName(): void {
