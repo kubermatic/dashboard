@@ -95,17 +95,17 @@ export class ApplicationService {
   }
 
   getApplication(application: Application, projectID: string, clusterID: string): Observable<Application> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.namespace}/${application.name}`;
     return this._httpClient.get<Application>(url);
   }
 
   put(application: Application, projectID: string, clusterID: string): Observable<Application> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.namespace}/${application.name}`;
     return this._httpClient.put<Application>(url, application);
   }
 
   delete(application: Application, projectID: string, clusterID: string): Observable<void> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.namespace}/${application.name}`;
     return this._httpClient.delete<void>(url);
   }
 

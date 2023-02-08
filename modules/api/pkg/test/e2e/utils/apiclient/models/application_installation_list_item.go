@@ -27,6 +27,9 @@ type ApplicationInstallationListItem struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// namespace
+	Namespace string `json:"namespace,omitempty"`
+
 	// spec
 	Spec *ApplicationInstallationListItemSpec `json:"spec,omitempty"`
 

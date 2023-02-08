@@ -60,14 +60,18 @@ func TestListApplicationInstallations(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
-				test.GenApplicationInstallation("app2", test.GenDefaultCluster().Name, app2TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
+				// test corner case where 2 app with same name in different namespace deploy app in same target namespace (it works because helm release ame is built with namespace-name)
+				test.GenApplicationInstallation("other-ns", "app1", app1TargetNamespace),
+				test.GenApplicationInstallation(app2TargetNamespace, "app2", app2TargetNamespace),
+				test.GenApplicationInstallation("different-cr-ns-than-target-ns", "app3", app2TargetNamespace),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: []apiv2.ApplicationInstallationListItem{
 				{
-					Name: "app1",
+					Name:      "app1",
+					Namespace: app1TargetNamespace,
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
 						Namespace: apiv1.NamespaceSpec{
 							Name:   app1TargetNamespace,
@@ -81,7 +85,38 @@ func TestListApplicationInstallations(t *testing.T) {
 					Status: &apiv2.ApplicationInstallationListItemStatus{},
 				},
 				{
-					Name: "app2",
+					Name:      "app1",
+					Namespace: "other-ns",
+					Spec: &apiv2.ApplicationInstallationListItemSpec{
+						Namespace: apiv1.NamespaceSpec{
+							Name:   app1TargetNamespace,
+							Create: true,
+						},
+						ApplicationRef: apiv1.ApplicationRef{
+							Name:    "sample-app",
+							Version: "1.0.0",
+						},
+					},
+					Status: &apiv2.ApplicationInstallationListItemStatus{},
+				},
+				{
+					Name:      "app2",
+					Namespace: app2TargetNamespace,
+					Spec: &apiv2.ApplicationInstallationListItemSpec{
+						Namespace: apiv1.NamespaceSpec{
+							Name:   app2TargetNamespace,
+							Create: true,
+						},
+						ApplicationRef: apiv1.ApplicationRef{
+							Name:    "sample-app",
+							Version: "1.0.0",
+						},
+					},
+					Status: &apiv2.ApplicationInstallationListItemStatus{},
+				},
+				{
+					Name:      "app3",
+					Namespace: "different-cr-ns-than-target-ns",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
 						Namespace: apiv1.NamespaceSpec{
 							Name:   app2TargetNamespace,
@@ -233,12 +268,27 @@ func TestDeleteApplication(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
-				test.GenApplicationInstallation("app2", test.GenDefaultCluster().Name, app2TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
+				test.GenApplicationInstallation(app2TargetNamespace, "app2", app2TargetNamespace),
 			),
 			ExistingAPIUser:                      test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode:               http.StatusOK,
 			ExpectedApplicationinstallationCount: 1,
+		},
+		{
+			Name:                        "delete an ApplicationInstallation where cr namespace is different that target namespace",
+			ProjectID:                   test.GenDefaultProject().Name,
+			ClusterID:                   test.GenDefaultCluster().Name,
+			ApplicationInstallationName: "app1",
+			ApplicationInstallationNS:   "cr-namespace",
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+				test.GenApplicationInstallation("cr-namespace", "app1", app1TargetNamespace),
+			),
+			ExistingAPIUser:                      test.GenDefaultAPIUser(),
+			ExpectedHTTPStatusCode:               http.StatusOK,
+			ExpectedApplicationinstallationCount: 0,
 		},
 		{
 			Name:                        "try to delete an ApplicationInstallation that does not exist",
@@ -249,7 +299,7 @@ func TestDeleteApplication(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
 			),
 			ExistingAPIUser:                      test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode:               http.StatusNotFound,
@@ -264,7 +314,7 @@ func TestDeleteApplication(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
 			),
 			ExistingAPIUser:                      test.GenAPIUser("John", "john@acme.com"),
 			ExpectedHTTPStatusCode:               http.StatusForbidden,
@@ -324,7 +374,7 @@ func TestGetApplication(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
@@ -333,6 +383,37 @@ func TestGetApplication(t *testing.T) {
 					Name: "app1",
 				},
 				Namespace: app1TargetNamespace,
+				Spec: &apiv2.ApplicationInstallationSpec{
+					Namespace: apiv1.NamespaceSpec{
+						Name:   app1TargetNamespace,
+						Create: true,
+					},
+					ApplicationRef: apiv1.ApplicationRef{
+						Name:    "sample-app",
+						Version: "1.0.0",
+					},
+				},
+				Status: &apiv2.ApplicationInstallationStatus{},
+			},
+		},
+		{
+			Name:                        "get ApplicationInstallation where cr namespace is different that target namespace",
+			ProjectID:                   test.GenDefaultProject().Name,
+			ClusterID:                   test.GenDefaultCluster().Name,
+			ApplicationInstallationName: "app1",
+			ApplicationInstallationNS:   "cr-namespace",
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+				test.GenApplicationInstallation("cr-namespace", "app1", app1TargetNamespace),
+			),
+			ExistingAPIUser:        test.GenDefaultAPIUser(),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: &apiv2.ApplicationInstallation{
+				ObjectMeta: apiv1.ObjectMeta{
+					Name: "app1",
+				},
+				Namespace: "cr-namespace",
 				Spec: &apiv2.ApplicationInstallationSpec{
 					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
@@ -400,7 +481,7 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				test.GenApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
+				test.GenApplicationInstallation(app1TargetNamespace, "app1", app1TargetNamespace),
 			),
 			ExistingAPIUser:         test.GenDefaultAPIUser(),
 			ApplicationInstallation: test.GenApiApplicationInstallation("app1", test.GenDefaultCluster().Name, app1TargetNamespace),

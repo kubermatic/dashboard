@@ -29535,6 +29535,10 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
         "spec": {
           "$ref": "#/definitions/ApplicationInstallationListItemSpec"
         },
