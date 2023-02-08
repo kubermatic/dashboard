@@ -27,6 +27,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@app/shared/entity/machine-deployment';
 
 class SaveClusterTemplateDialogData {
   cluster: Cluster;
@@ -53,6 +54,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
   control = Control;
   form: FormGroup;
   user: Member;
+  operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SaveClusterTemplateDialogData,
@@ -91,12 +93,20 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
   }
 
   private _getClusterTemplate(): ClusterTemplate {
+    let annotations = null;
+    if (this.data.nodeData.operatingSystemProfile && this.data.cluster.spec.enableOperatingSystemManager) {
+      annotations = {
+        [this.operatingSystemProfileAnnotation]: this.data.nodeData.operatingSystemProfile,
+      };
+    }
+
     return {
       name: this.form.get(Control.Name).value,
       scope: this.form.get(Control.Scope).value,
       cluster: this.data.cluster,
       nodeDeployment: {
         name: this.data.nodeData.name,
+        annotations: annotations,
         spec: {
           template: this.data.nodeData.spec,
           replicas: this.data.nodeData.count,
