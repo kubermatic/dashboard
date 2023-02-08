@@ -16,7 +16,22 @@ import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
 import {isValidCron} from 'cron-validator';
 
 export class CronExpressionValidator implements Validator {
+  private allowedCronExpressions: string[] = [
+    '@yearly',
+    '@annually',
+    '@monthly',
+    '@weekly',
+    '@daily',
+    '@midnight',
+    '@hourly',
+  ];
+  private everyExpressionPrefix = '@every ';
+
   validate(control: AbstractControl): ValidationErrors | null {
+    if (this.allowedCronExpressions.includes(control.value) || control.value.startsWith(this.everyExpressionPrefix)) {
+      return null;
+    }
+
     const isValid = isValidCron(control.value, {alias: true});
     return isValid ? null : this._error();
   }
