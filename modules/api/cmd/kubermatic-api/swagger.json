@@ -34315,7 +34315,6 @@
           "x-go-name": "UserProjectsLimit"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2",
       "$ref": "#/definitions/SettingSpec"
     },
     "GroupProjectBinding": {
