@@ -109,8 +109,8 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
-      [Controls.Domains]: this._builder.control(''),
-      [Controls.Projects]: this._builder.control(''),
+      [Controls.Domains]: this._builder.control([]),
+      [Controls.Projects]: this._builder.control([]),
       [Controls.Disable]: this._builder.control(''),
     });
   }
