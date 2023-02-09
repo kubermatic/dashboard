@@ -47,7 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.39.0
-	github.com/kubermatic/machine-controller v1.55.1-0.20230201122903-ab8cf636f599
+	github.com/kubermatic/machine-controller v1.55.1-0.20230208124131-c175998eebd4
 	github.com/minio/minio-go/v7 v7.0.45
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221214024800-b745745c4118 // v0.5.1
@@ -86,23 +86,23 @@ require (
 )
 
 replace (
-	k8s.io/api => k8s.io/api v0.26.0
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.26.0
-	k8s.io/apimachinery => k8s.io/apimachinery v0.26.0
-	k8s.io/client-go => k8s.io/client-go v0.26.0
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.26.0
-	k8s.io/code-generator => k8s.io/code-generator v0.26.0
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.26.0
-	k8s.io/kubectl => k8s.io/kubectl v0.26.0
-	k8s.io/kubelet => k8s.io/kubelet v0.26.0
-	k8s.io/metrics => k8s.io/metrics v0.26.0
+	k8s.io/api => k8s.io/api v0.26.1
+	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.26.1
+	k8s.io/apimachinery => k8s.io/apimachinery v0.26.1
+	k8s.io/client-go => k8s.io/client-go v0.26.1
+	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.26.1
+	k8s.io/code-generator => k8s.io/code-generator v0.26.1
+	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.26.1
+	k8s.io/kubectl => k8s.io/kubectl v0.26.1
+	k8s.io/kubelet => k8s.io/kubelet v0.26.1
+	k8s.io/metrics => k8s.io/metrics v0.26.1
 )
 
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.21.1-0.20230201120148-47a67bb80f4c
+	k8c.io/kubermatic/v2 v2.22.0-alpha.0.0.20230208172731-c146e14d49f3
 )
 
 require (
