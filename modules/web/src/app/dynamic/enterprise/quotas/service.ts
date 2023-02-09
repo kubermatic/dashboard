@@ -25,6 +25,7 @@ import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap, startWith, tap} from 'rxjs/operators';
 import {AppConfigService} from '@app/config.service';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root',
@@ -94,7 +95,7 @@ export class QuotaService {
       this._quotaMap.set(projectId, quota$);
     }
 
-    if (this._previousQuotaMap.has(projectId)) {
+    if (!_.isEmpty(this._previousQuotaMap.get(projectId))) {
       return this._quotaMap.get(projectId).pipe(startWith(this._previousQuotaMap.get(projectId)));
     }
     return this._quotaMap.get(projectId);

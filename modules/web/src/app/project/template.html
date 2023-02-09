@@ -149,7 +149,8 @@ limitations under the License.
                 <td mat-cell
                     *matCellDef="let element"
                     class="km-project-item-quota">
-                  <router-outlet name="quota-widget"
+                  <router-outlet *ngIf="element.status === ProjectStatus.Active"
+                                 name="quota-widget"
                                  (activate)="onActivate($event, element.id, false, 'table')"></router-outlet>
                 </td>
               </ng-container>
@@ -314,7 +315,8 @@ limitations under the License.
 
               <div *ngIf="hasQuota"
                    fxLayoutAlign="start start">
-                <router-outlet name="quota-widget"
+                <router-outlet *ngIf="project.status === ProjectStatus.Active"
+                               name="quota-widget"
                                (activate)="onActivate($event, project.id, true, 'cards')"></router-outlet>
               </div>
             </mat-card-content>
