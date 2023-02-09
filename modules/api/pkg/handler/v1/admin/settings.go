@@ -41,7 +41,7 @@ func KubermaticSettingsEndpoint(settingsProvider provider.SettingsProvider) endp
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		return convertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
+		return ConvertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
 	}
 }
 
@@ -70,7 +70,8 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		existingGlobalSettingsSpecJSON, err := json.Marshal(convertCRDSettingsToAPISettingsSpec(&existingGlobalSettings.Spec))
+
+		existingGlobalSettingsSpecJSON, err := json.Marshal(ConvertCRDSettingsToAPISettingsSpec(&existingGlobalSettings.Spec))
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot decode existing settings: %v", err)
 		}
@@ -79,6 +80,7 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot patch global settings: %v", err)
 		}
+
 		var patchedGlobalSettingsSpec *apiv2.GlobalSettings
 		err = json.Unmarshal(patchedGlobalSettingsSpecJSON, &patchedGlobalSettingsSpec)
 		if err != nil {
@@ -94,7 +96,7 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		return convertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
+		return ConvertCRDSettingsToAPISettingsSpec(&globalSettings.Spec), nil
 	}
 }
 
@@ -140,7 +142,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {
-		crdQuota, err := apiv2.ConvertToCRDQuota(*settings.DefaultProjectResourceQuota)
+		crdQuota, err := apiv2.ConvertToCRDQuota(settings.DefaultProjectResourceQuota.Quota)
 		if err != nil {
 			return kubermaticv1.SettingSpec{}, err
 		}
@@ -150,7 +152,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 	return s, nil
 }
 
-func convertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
+func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
 	s := apiv2.GlobalSettings{
 		CustomLinks:                      settings.CustomLinks,
 		DefaultNodeCount:                 settings.DefaultNodeCount,
@@ -175,7 +177,9 @@ func convertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 
 	if settings.DefaultProjectResourceQuota != nil {
 		apiQuota := apiv2.ConvertToAPIQuota(settings.DefaultProjectResourceQuota.Quota)
-		s.DefaultProjectResourceQuota = &apiQuota
+		s.DefaultProjectResourceQuota = &apiv2.ProjectResourceQuota{
+			Quota: apiQuota,
+		}
 	}
 
 	return s

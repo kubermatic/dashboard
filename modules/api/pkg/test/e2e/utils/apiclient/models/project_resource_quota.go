@@ -13,18 +13,17 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DefaultProjectResourceQuota DefaultProjectResourceQuota contains the default resource quota which will be set for all
-// projects that do not have a custom quota already set.
+// ProjectResourceQuota project resource quota
 //
-// swagger:model DefaultProjectResourceQuota
-type DefaultProjectResourceQuota struct {
+// swagger:model ProjectResourceQuota
+type ProjectResourceQuota struct {
 
 	// quota
-	Quota *ResourceDetails `json:"quota,omitempty"`
+	Quota *Quota `json:"quota,omitempty"`
 }
 
-// Validate validates this default project resource quota
-func (m *DefaultProjectResourceQuota) Validate(formats strfmt.Registry) error {
+// Validate validates this project resource quota
+func (m *ProjectResourceQuota) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateQuota(formats); err != nil {
@@ -37,7 +36,7 @@ func (m *DefaultProjectResourceQuota) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *DefaultProjectResourceQuota) validateQuota(formats strfmt.Registry) error {
+func (m *ProjectResourceQuota) validateQuota(formats strfmt.Registry) error {
 	if swag.IsZero(m.Quota) { // not required
 		return nil
 	}
@@ -56,8 +55,8 @@ func (m *DefaultProjectResourceQuota) validateQuota(formats strfmt.Registry) err
 	return nil
 }
 
-// ContextValidate validate this default project resource quota based on the context it is used
-func (m *DefaultProjectResourceQuota) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this project resource quota based on the context it is used
+func (m *ProjectResourceQuota) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateQuota(ctx, formats); err != nil {
@@ -70,7 +69,7 @@ func (m *DefaultProjectResourceQuota) ContextValidate(ctx context.Context, forma
 	return nil
 }
 
-func (m *DefaultProjectResourceQuota) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
+func (m *ProjectResourceQuota) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Quota != nil {
 		if err := m.Quota.ContextValidate(ctx, formats); err != nil {
@@ -87,7 +86,7 @@ func (m *DefaultProjectResourceQuota) contextValidateQuota(ctx context.Context, 
 }
 
 // MarshalBinary interface implementation
-func (m *DefaultProjectResourceQuota) MarshalBinary() ([]byte, error) {
+func (m *ProjectResourceQuota) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -95,8 +94,8 @@ func (m *DefaultProjectResourceQuota) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *DefaultProjectResourceQuota) UnmarshalBinary(b []byte) error {
-	var res DefaultProjectResourceQuota
+func (m *ProjectResourceQuota) UnmarshalBinary(b []byte) error {
+	var res ProjectResourceQuota
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

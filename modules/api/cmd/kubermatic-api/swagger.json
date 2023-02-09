@@ -31936,16 +31936,6 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
-    "DefaultProjectResourceQuota": {
-      "description": "DefaultProjectResourceQuota contains the default resource quota which will be set for all\nprojects that do not have a custom quota already set.",
-      "type": "object",
-      "properties": {
-        "quota": {
-          "$ref": "#/definitions/ResourceDetails"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-    },
     "DependencyCredentials": {
       "type": "object",
       "properties": {
@@ -34246,7 +34236,7 @@
           "x-go-name": "DefaultNodeCount"
         },
         "defaultQuota": {
-          "$ref": "#/definitions/Quota"
+          "$ref": "#/definitions/ProjectResourceQuota"
         },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
@@ -34315,8 +34305,7 @@
           "x-go-name": "UserProjectsLimit"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2",
-      "$ref": "#/definitions/SettingSpec"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "GroupProjectBinding": {
       "type": "object",
@@ -38384,6 +38373,15 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ProjectResourceQuota": {
+      "type": "object",
+      "properties": {
+        "quota": {
+          "$ref": "#/definitions/Quota"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Protocol": {
       "description": "+enum",
       "type": "string",
@@ -38819,22 +38817,6 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
-    },
-    "ResourceDetails": {
-      "type": "object",
-      "title": "ResourceDetails holds the CPU, Memory and Storage quantities.",
-      "properties": {
-        "cpu": {
-          "$ref": "#/definitions/Quantity"
-        },
-        "memory": {
-          "$ref": "#/definitions/Quantity"
-        },
-        "storage": {
-          "$ref": "#/definitions/Quantity"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "ResourceLabelMap": {
       "type": "object",
@@ -39534,93 +39516,6 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "SettingSpec": {
-      "type": "object",
-      "properties": {
-        "cleanupOptions": {
-          "$ref": "#/definitions/CleanupOptions"
-        },
-        "customLinks": {
-          "$ref": "#/definitions/CustomLinks"
-        },
-        "defaultNodeCount": {
-          "description": "DefaultNodeCount is the default number of replicas for the initial MachineDeployment.",
-          "type": "integer",
-          "format": "int8",
-          "x-go-name": "DefaultNodeCount"
-        },
-        "defaultQuota": {
-          "$ref": "#/definitions/DefaultProjectResourceQuota"
-        },
-        "displayAPIDocs": {
-          "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
-          "type": "boolean",
-          "x-go-name": "DisplayAPIDocs"
-        },
-        "displayDemoInfo": {
-          "description": "DisplayDemoInfo controls whether a \"Demo System\" hint is shown in the footer.",
-          "type": "boolean",
-          "x-go-name": "DisplayDemoInfo"
-        },
-        "displayTermsOfService": {
-          "description": "DisplayDemoInfo controls whether a a link to TOS is shown in the footer.",
-          "type": "boolean",
-          "x-go-name": "DisplayTermsOfService"
-        },
-        "enableDashboard": {
-          "description": "EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.",
-          "type": "boolean",
-          "x-go-name": "EnableDashboard"
-        },
-        "enableExternalClusterImport": {
-          "type": "boolean",
-          "x-go-name": "EnableExternalClusterImport"
-        },
-        "enableOIDCKubeconfig": {
-          "type": "boolean",
-          "x-go-name": "EnableOIDCKubeconfig"
-        },
-        "enableWebTerminal": {
-          "description": "EnableWebTerminal enables the Web Terminal feature for the user clusters.",
-          "type": "boolean",
-          "x-go-name": "EnableWebTerminal"
-        },
-        "machineDeploymentVMResourceQuota": {
-          "$ref": "#/definitions/MachineFlavorFilter"
-        },
-        "mlaAlertmanagerPrefix": {
-          "type": "string",
-          "x-go-name": "MlaAlertmanagerPrefix"
-        },
-        "mlaGrafanaPrefix": {
-          "type": "string",
-          "x-go-name": "MlaGrafanaPrefix"
-        },
-        "mlaOptions": {
-          "$ref": "#/definitions/MlaOptions"
-        },
-        "notifications": {
-          "$ref": "#/definitions/NotificationsOptions"
-        },
-        "opaOptions": {
-          "$ref": "#/definitions/OpaOptions"
-        },
-        "providerConfiguration": {
-          "$ref": "#/definitions/ProviderConfiguration"
-        },
-        "restrictProjectCreation": {
-          "type": "boolean",
-          "x-go-name": "RestrictProjectCreation"
-        },
-        "userProjectsLimit": {
-          "description": "UserProjectsLimit is the maximum number of projects a user can create.",
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "UserProjectsLimit"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "StorageClass": {
       "description": "StorageClass represents a Kubernetes StorageClass",
