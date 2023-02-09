@@ -61,6 +61,8 @@ const (
 	expirationCheckInterval           = 1 * time.Minute // should be lesser than "remainingExpirationTimeForWarning"
 	expirationTimestampKey            = "ExpirationTimestamp"
 	expirationRefreshesKey            = "ExpirationRefreshes"
+	pingInterval                      = 30 * time.Second
+	pingMessage                       = "PING"
 
 	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.5.0"
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
@@ -189,7 +191,7 @@ func (t TerminalSession) extendExpirationTime(ctx context.Context) error {
 	}
 
 	if currentNumberOfRefreshes >= maxNumberOfExpirationRefreshes {
-		SendMessage(t.websocketConn, string(RefreshesLimitExceeded))
+		_ = SendMessage(t.websocketConn, string(RefreshesLimitExceeded))
 		return nil
 	}
 
@@ -242,6 +244,17 @@ func getWebTerminalExpirationValues(ctx context.Context, clusterClient ctrlrunti
 	}
 
 	return expirationTime, expirationRefreshes, nil
+}
+
+func pingRoutine(websocketConn *websocket.Conn) {
+	for {
+		time.Sleep(pingInterval)
+		// Message to check if connection with client is active.
+		if err := SendMessage(websocketConn, pingMessage); err != nil {
+			// connection is already closed, so just return
+			return
+		}
+	}
 }
 
 func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn) {
@@ -322,11 +335,13 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		default:
 			status = fmt.Sprintf("pod in %s phase", pod.Status.Phase)
 		}
-		SendMessage(websocketConn, status)
+		_ = SendMessage(websocketConn, status)
 		return false
 	}) {
 		return fmt.Errorf("the WEB terminal Pod is not ready")
 	}
+
+	go pingRoutine(websocketConn)
 
 	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn)
 
@@ -726,8 +741,8 @@ func WaitFor(interval time.Duration, timeout time.Duration, callback func() bool
 
 // SendMessage sends TerminalMessage to the client. It usually contains a context related
 // to the status of background tasks responsible for setting up the terminal.
-func SendMessage(wsConn *websocket.Conn, message string) {
-	_ = wsConn.WriteJSON(TerminalMessage{
+func SendMessage(wsConn *websocket.Conn, message string) error {
+	return wsConn.WriteJSON(TerminalMessage{
 		Op:   "msg",
 		Data: message,
 	})
