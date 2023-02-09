@@ -2717,10 +2717,6 @@ type LabelKeyList []string
 // swagger:model ResourceLabelMap
 type ResourceLabelMap map[ResourceType]LabelKeyList
 
-// GlobalSettings defines global settings
-// swagger:model GlobalSettings
-type GlobalSettings kubermaticv1.SettingSpec
-
 // GlobalCustomLinks defines custom links for global settings
 // swagger:model GlobalCustomLinks
 type GlobalCustomLinks []kubermaticv1.CustomLink

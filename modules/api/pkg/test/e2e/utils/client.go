@@ -987,7 +987,7 @@ func (r *TestClient) AddProjectUser(projectID, email, name, group string) (*apiv
 	return user, nil
 }
 
-func (r *TestClient) GetGlobalSettings() (*apiv1.GlobalSettings, error) {
+func (r *TestClient) GetGlobalSettings() (*apiv2.GlobalSettings, error) {
 	params := &admin.GetKubermaticSettingsParams{}
 	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
 
@@ -999,7 +999,7 @@ func (r *TestClient) GetGlobalSettings() (*apiv1.GlobalSettings, error) {
 	return convertGlobalSettings(responseSettings.Payload), nil
 }
 
-func (r *TestClient) UpdateGlobalSettings(patch json.RawMessage) (*apiv1.GlobalSettings, error) {
+func (r *TestClient) UpdateGlobalSettings(patch json.RawMessage) (*apiv2.GlobalSettings, error) {
 	params := &admin.PatchKubermaticSettingsParams{
 		Patch: &patch,
 	}
@@ -1013,7 +1013,7 @@ func (r *TestClient) UpdateGlobalSettings(patch json.RawMessage) (*apiv1.GlobalS
 	return convertGlobalSettings(responseSettings.Payload), nil
 }
 
-func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv1.GlobalSettings {
+func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv2.GlobalSettings {
 	var customLinks kubermaticv1.CustomLinks
 	for _, customLink := range gSettings.CustomLinks {
 		customLinks = append(customLinks, kubermaticv1.CustomLink{
@@ -1024,7 +1024,7 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv1.GlobalSettin
 		})
 	}
 
-	return &apiv1.GlobalSettings{
+	return &apiv2.GlobalSettings{
 		CustomLinks: customLinks,
 		CleanupOptions: kubermaticv1.CleanupOptions{
 			Enabled:  gSettings.CleanupOptions.Enabled,

@@ -1760,6 +1760,11 @@ type ResourceQuotaStatus struct {
 	LocalUsage Quota `json:"localUsage,omitempty"`
 }
 
+// swagger:model ProjectResourceQuota
+type ProjectResourceQuota struct {
+	Quota Quota `json:"quota,omitempty"`
+}
+
 // swagger:model Quota
 type Quota struct {
 	// CPU holds the quantity of CPU.
@@ -2056,7 +2061,7 @@ type GlobalSettings struct {
 	// DefaultProjectResourceQuota allows to configure a default project resource quota which
 	// will be set for all projects that do not have a custom quota already set. EE-version only.
 	// +optional
-	DefaultProjectResourceQuota *Quota `json:"defaultQuota,omitempty"`
+	DefaultProjectResourceQuota *ProjectResourceQuota `json:"defaultQuota,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

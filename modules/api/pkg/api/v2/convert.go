@@ -47,7 +47,6 @@ func ConvertToAPIQuota(resourceDetails kubermaticv1.ResourceDetails) Quota {
 		storage = math.Round(storage*100) / 100
 		quota.Storage = &storage
 	}
-
 	return quota
 }
 
