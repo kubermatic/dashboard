@@ -26,11 +26,25 @@ limitations under the License.
     </km-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <div *ngIf="isRecreationWarningVisible"
-         fxFlex
-         fxLayoutAlign="start center">
-      <i class="km-icon-warning"></i>
-      <div>Changed node settings, Nodes will be recreated.</div>
+    <div fxFlex
+         fxLayout="column"
+         fxLayoutAlign="start"
+         fxLayoutGap="10px">
+      <div *ngIf="isRecreationWarningVisible"
+           fxFlex
+           fxLayoutAlign="start center">
+        <i class="km-icon-warning"></i>
+        <div>Changed node settings, Nodes will be recreated.</div>
+      </div>
+      <div *ngIf="isDynamicKubeletConfigWarningVisible"
+           fxFlex
+           fxLayoutAlign="start center">
+        <i class="km-icon-warning"></i>
+        <div>
+          Kubernetes v{{endOfDynamicKubeletConfigSupportVersion}} and higher do not support dynamic kubelet
+          configuration. This setting will be disabled.
+        </div>
+      </div>
     </div>
     <button mat-flat-button
             (click)="onConfirm()"

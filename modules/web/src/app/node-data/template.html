@@ -162,13 +162,6 @@ limitations under the License.
                         [formControlName]="Controls.DisableAutoUpdate">Disable auto-update
           </mat-checkbox>
         </div>
-
-        <div class="os-options">
-          <mat-checkbox [id]="Controls.DynamicConfig"
-                        [matTooltip]="isDynamicKubeletConfigSupported? '' : 'Kubernetes version '+endOfDynamicKubeletConfigSupportVersion+' and higher do not support dynamic kubelet configuration.'"
-                        [formControlName]="Controls.DynamicConfig">Dynamic kubelet config
-          </mat-checkbox>
-        </div>
       </div>
     </div>
 

@@ -47,14 +47,12 @@ import {AsyncValidators} from '@app/shared/validators/async.validators';
 import {ResourceType} from '@app/shared/entity/common';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
-import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 enum Controls {
   Name = 'name',
   Count = 'count',
-  DynamicConfig = 'dynamicConfig',
   OperatingSystem = 'operatingSystem',
   UpgradeOnBoot = 'upgradeOnBoot',
   DisableAutoUpdate = 'disableAutoUpdate',
@@ -105,7 +103,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   operatingSystemProfileValidators = [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR];
   dialogEditMode = false;
   projectId: string;
-  endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   wizardMode: WizardMode;
@@ -120,10 +117,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   get isOperatingSystemManagerEnabled(): boolean {
     return this._clusterSpecService.cluster.spec.enableOperatingSystemManager;
-  }
-
-  get isDynamicKubeletConfigSupported(): boolean {
-    return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
   get displayQuotaInWizard(): boolean {
@@ -178,7 +171,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
       [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count),
-      [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
       [Controls.DisableAutoUpdate]: this._builder.control(false),
@@ -229,26 +221,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this._quotaCalculationService.reset(mapKey);
       });
 
-    this._clusterSpecService.clusterChanges
-      .pipe(
-        filter(_ => {
-          if (this._enableOperatingSystemManager === this.isOperatingSystemManagerEnabled) {
-            return false;
-          }
-          this._enableOperatingSystemManager = this.isOperatingSystemManagerEnabled;
-          return this.isOperatingSystemManagerEnabled;
-        })
-      )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this._loadOperatingSystemProfiles();
-        this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
-        if (this.isDynamicKubeletConfigSupported) {
-          this.form.get(Controls.DynamicConfig).enable();
-        } else {
-          this.form.get(Controls.DynamicConfig).disable();
+    this._clusterSpecService.clusterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
+
+      if (this._enableOperatingSystemManager !== this.isOperatingSystemManagerEnabled) {
+        this._enableOperatingSystemManager = this.isOperatingSystemManagerEnabled;
+        if (this.isOperatingSystemManagerEnabled) {
+          this._loadOperatingSystemProfiles();
         }
-      });
+      }
+    });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
@@ -263,7 +245,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.get(Controls.Count).valueChanges,
       this.form.get(Controls.MaxReplicas).valueChanges,
       this.form.get(Controls.MinReplicas).valueChanges,
-      this.form.get(Controls.DynamicConfig).valueChanges,
       this.form.get(Controls.OperatingSystemProfile).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -511,7 +492,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
       minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       name: this.form.get(Controls.Name).value,
-      dynamicConfig: this.form.get(Controls.DynamicConfig).value,
+      dynamicConfig: false,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
   }
