@@ -105,8 +105,15 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     this._unsubscribe.complete();
   }
 
-  get isRunning(): boolean {
-    return this.cluster?.status?.state === ExternalClusterState.Running;
+  isAddMachineDeploymentDisabled(): boolean {
+    switch (this.cluster?.status?.state) {
+      case ExternalClusterState.Running:
+      case ExternalClusterState.Warning:
+        return false;
+
+      default:
+        return true;
+    }
   }
 
   getHealthStatus(md: ExternalMachineDeployment): HealthStatus {

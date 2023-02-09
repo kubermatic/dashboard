@@ -151,6 +151,18 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
+  isKubeConfigButtonDisabled(): boolean {
+    switch (this.cluster?.status?.state) {
+      case ExternalClusterState.Running:
+      case ExternalClusterState.Warning:
+      case ExternalClusterState.Reconciling:
+        return false;
+
+      default:
+        return true;
+    }
+  }
+
   isClusterDeleted(cluster: ExternalCluster): boolean {
     return ExternalCluster.isDeleted(cluster);
   }
