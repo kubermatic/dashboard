@@ -14,39 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div fxLayout="row"
-     fxLayoutAlign="space-between">
+     fxLayoutAlign=" center">
   <div fxFlex="16%"
        fxLayoutAlign=" center"
        class="entry-label">
     <span>Default Project Quota</span>
     <i class="km-icon-info km-pointer"
        matTooltip="Applies to every project. Specific Project Quotas override the Default Project Quota."></i>
-    <km-spinner-with-confirmation class="spinner-icon"
-                                  [isSaved]="isEqual(settings.defaultQuota.quota, apiSettings.defaultQuota?.quota)"></km-spinner-with-confirmation>
   </div>
 
   <form [formGroup]="form"
         fxLayout="row wrap"
-        fxLayoutAlign="flex-end"
         fxLayoutGap="16px">
     <km-number-stepper [formControlName]="Controls.CPU"
                        label="CPU"
-                       min="0"
-                       mode="errors">
+                       min="0">
     </km-number-stepper>
 
     <km-number-stepper [formControlName]="Controls.Memory"
                        label="Memory (GB)"
                        min="0"
-                       type="decimal"
-                       mode="errors">
+                       type="decimal">
     </km-number-stepper>
 
     <km-number-stepper [formControlName]="Controls.Storage"
                        label="Disk (GB)"
                        min="0"
-                       type="decimal"
-                       mode="errors">
+                       type="decimal">
     </km-number-stepper>
+    <km-spinner-with-confirmation class="spinner-icon"
+                                  [isSaved]="isEqual(settings.defaultQuota.quota, apiSettings.defaultQuota?.quota)"></km-spinner-with-confirmation>
   </form>
 </div>
