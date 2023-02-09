@@ -295,6 +295,10 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		}
 
 		cloudSpec.Kubevirt = &apiv1.KubevirtNodeSpec{
+			// Keep flavor for backward compatibility
+			FlavorName:    config.VirtualMachine.Flavor.Name.Value,    //nolint:staticcheck
+			FlavorProfile: config.VirtualMachine.Flavor.Profile.Value, //nolint:staticcheck
+
 			Instancetype:                config.VirtualMachine.Instancetype,
 			Preference:                  config.VirtualMachine.Preference,
 			CPUs:                        config.VirtualMachine.Template.CPUs.Value,
