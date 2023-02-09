@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {MatSort} from '@angular/material/sort';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
@@ -59,9 +60,27 @@ export class SeedConfigurationDetailsComponent implements OnInit {
     private readonly _router: Router
   ) {}
 
+  @ViewChild(MatSort, {static: false}) set matSort(ms: MatSort) {
+    if (!ms) {
+      return;
+    }
+    this.dataSource.sortingDataAccessor = (item: ProviderDetail, property: string) => {
+      switch (property) {
+        case Column.Provider:
+          return item.provider;
+        case Column.Datacenters:
+          return item.datacentersCount;
+        case Column.Clusters:
+          return item.clustersCount;
+        default:
+          return item[property];
+      }
+    };
+    this.dataSource.sort = ms;
+  }
+
   ngOnInit(): void {
     this.seedName = this._route.snapshot.params.seedName;
-
     this.isLoadingDetails = true;
     this._datacenterService
       .getSeedOverview(this.seedName)
