@@ -254,12 +254,19 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 		}
 		var errorList []string
 		for _, mapping := range userMappings {
-			userInfo := &provider.UserInfo{Email: mapping.Spec.UserEmail, Groups: append(userInfo.Groups, mapping.Spec.Group)}
+			userInfo := &provider.UserInfo{
+				Email:   mapping.Spec.UserEmail,
+				IsAdmin: userInfo.IsAdmin,
+				Roles:   userInfo.Roles,
+				Groups:  append(userInfo.Groups, mapping.Spec.Group),
+			}
+
 			projectInternal, err := projectProvider.Get(ctx, userInfo, mapping.Spec.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: true})
 			if err != nil {
 				if isStatus(err, http.StatusNotFound) {
 					continue
 				}
+
 				// Request came from the specified user. Instead `Not found` error status the `Forbidden` is returned.
 				// Next request with privileged user checks if the project doesn't exist or some other error occurred.
 				if !isStatus(err, http.StatusForbidden) {
@@ -267,7 +274,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 					continue
 				}
 				_, errGetUnsecured := privilegedProjectProvider.GetUnsecured(ctx, mapping.Spec.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: true})
-				if !isStatus(errGetUnsecured, http.StatusNotFound) {
+				if errGetUnsecured != nil && !isStatus(errGetUnsecured, http.StatusNotFound) {
 					// store original error
 					errorList = append(errorList, err.Error())
 				}
