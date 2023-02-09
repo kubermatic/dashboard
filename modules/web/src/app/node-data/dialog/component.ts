@@ -20,7 +20,7 @@ import _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {getDefaultNodeProviderSpec, NodeSpec} from '@shared/entity/node';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -30,6 +30,7 @@ import {NodeDataMode} from '../config';
 import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
+import {coerce, lt} from 'semver';
 
 enum Mode {
   Edit = 'Edit',
@@ -71,7 +72,10 @@ export interface DialogDataOutput {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
+
   isRecreationWarningVisible = false;
+  isDynamicKubeletConfigWarningVisible = false;
   isQuotaExceeded: boolean;
   mode = Mode.Add;
 
@@ -117,6 +121,15 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       this._nodeDataService.mode === NodeDataMode.Dialog && !!this._nodeDataService.nodeData.name
         ? Mode.Edit
         : Mode.Add;
+
+    if (this.mode === Mode.Edit) {
+      this.isDynamicKubeletConfigWarningVisible =
+        this._nodeDataService.nodeData.dynamicConfig &&
+        lt(
+          coerce(this._nodeDataService.nodeData.spec.versions.kubelet),
+          coerce(this.endOfDynamicKubeletConfigSupportVersion)
+        );
+    }
 
     const key = `${this._data.projectID}-${this.provider}`;
     this._quotaCalculationService.reset(key);
