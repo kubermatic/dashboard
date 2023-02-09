@@ -26,7 +26,7 @@ import (
 	"net/http"
 	"testing"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/project"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -38,11 +38,11 @@ import (
 func TestGetDefaultGlobalSettings(t *testing.T) {
 	tests := []struct {
 		name             string
-		expectedSettings *apiv1.GlobalSettings
+		expectedSettings *apiv2.GlobalSettings
 	}{
 		{
 			name: "get default settings",
-			expectedSettings: &apiv1.GlobalSettings{
+			expectedSettings: &apiv2.GlobalSettings{
 
 				CustomLinks: []kubermaticv1.CustomLink{},
 				CleanupOptions: kubermaticv1.CleanupOptions{
