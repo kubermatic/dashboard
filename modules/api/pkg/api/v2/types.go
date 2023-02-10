@@ -1810,7 +1810,8 @@ type ApplicationInstallation struct {
 // ApplicationInstallationListItem is the object representing an ApplicationInstallationListItem.
 // swagger:model ApplicationInstallationListItem
 type ApplicationInstallationListItem struct {
-	Name string `json:"name"`
+	Name      string `json:"name"`
+	Namespace string `json:"namespace"`
 
 	CreationTimestamp apiv1.Time `json:"creationTimestamp,omitempty"`
 

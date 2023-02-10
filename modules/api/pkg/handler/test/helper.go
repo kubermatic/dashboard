@@ -2203,11 +2203,11 @@ func GenAPIMLAAdminSetting(value int32) *apiv2.MLAAdminSetting {
 	}
 }
 
-func GenApplicationInstallation(name, clusterName, targetnamespace string) *appskubermaticv1.ApplicationInstallation {
+func GenApplicationInstallation(namespace string, name string, targetnamespace string) *appskubermaticv1.ApplicationInstallation {
 	return &appskubermaticv1.ApplicationInstallation{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
-			Namespace: targetnamespace,
+			Namespace: namespace,
 		},
 		TypeMeta: metav1.TypeMeta{
 			Kind:       appskubermaticv1.ApplicationInstallationKindName,
