@@ -45,7 +45,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DeleteProjectConfirmationComponent} from './delete-project/component';
 import {EditProjectComponent} from './edit-project/component';
 import {DynamicModule} from '@app/dynamic/module-registry';
@@ -60,6 +60,8 @@ import {GlobalModule} from '@core/services/global/module';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
+  readonly ProjectStatus = ProjectStatus;
+
   projects: Project[] = [];
   currentUser: Member;
   isInitializing = true;
@@ -232,16 +234,27 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.isEnterpriseEdition) {
       return;
     }
-
-    for (const project of projects) {
-      const quota$ = this.currentUser.isAdmin
-        ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === project.id)))
-        : this._quotaService.getLiveProjectQuota(project.id);
-
-      quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(_ => {
-        this.hasQuota = true;
-        this._cdr.detectChanges();
-      });
+    if (this.currentUser?.isAdmin) {
+      this._quotaService.quotas
+        .pipe(take(1))
+        .pipe(filter(quotas => !!quotas?.find(quotaDetails => !_.isEmpty(quotaDetails?.quota))))
+        .subscribe(_ => {
+          this.hasQuota = true;
+          this._cdr.detectChanges();
+        });
+    } else {
+      for (const project of projects) {
+        if (project.status === ProjectStatus.Active) {
+          this._quotaService
+            .getLiveProjectQuota(project.id)
+            .pipe(take(1))
+            .pipe(filter(quotaDetails => !_.isEmpty(quotaDetails?.quota)))
+            .subscribe(_ => {
+              this.hasQuota = true;
+              this._cdr.detectChanges();
+            });
+        }
+      }
     }
   }
 
