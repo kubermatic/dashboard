@@ -44,13 +44,11 @@ limitations under the License.
         <mat-select [formControlName]="Controls.ContainerRuntime"
                     class="km-select-ellipsis"
                     disableOptionCentering
+                    disabled
+                    matTooltip="Containerd is the only supported container runtime"
                     required>
           <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
-          <mat-option [value]="containerRuntime.Docker">docker</mat-option>
         </mat-select>
-        <mat-error *ngIf="form.get(Controls.ContainerRuntime).hasError('dockerVersionCompatibility')">
-          Docker is not supported since v1.24.
-        </mat-error>
       </mat-form-field>
 
       <div fxFlex="100"

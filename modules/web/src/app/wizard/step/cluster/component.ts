@@ -45,7 +45,6 @@ import {
   ClusterSpec,
   CNIPlugin,
   ContainerRuntime,
-  END_OF_DOCKER_SUPPORT_VERSION,
   ExtraCloudSpecOptions,
   IPFamily,
   MasterVersion,
@@ -61,8 +60,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
-import {filter, finalize, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import * as semver from 'semver';
+import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
 import {AsyncValidators} from '@shared/validators/async.validators';
@@ -241,25 +239,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._loadClusterDefaults();
         });
     }
-
-    combineLatest([
-      this.control(Controls.Version).valueChanges.pipe(startWith(this.control(Controls.Version).value)),
-      this.control(Controls.ContainerRuntime).valueChanges.pipe(
-        startWith(this.control(Controls.ContainerRuntime).value)
-      ),
-    ])
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([version, containerRuntime]) => {
-        if (
-          semver.valid(version) &&
-          semver.gte(version, END_OF_DOCKER_SUPPORT_VERSION) &&
-          containerRuntime === ContainerRuntime.Docker
-        ) {
-          this.control(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
-        } else {
-          this.control(Controls.ContainerRuntime).setErrors(null);
-        }
-      });
 
     this.control(Controls.Version)
       .valueChanges.pipe(filter(value => !!value))

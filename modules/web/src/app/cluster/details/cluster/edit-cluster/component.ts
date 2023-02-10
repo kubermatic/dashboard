@@ -26,7 +26,6 @@ import {
   ClusterSpecPatch,
   CNIPlugin,
   ContainerRuntime,
-  END_OF_DOCKER_SUPPORT_VERSION,
   EventRateLimitConfig,
   ExposeStrategy,
   NetworkRanges,
@@ -40,8 +39,7 @@ import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plu
 import {AsyncValidators} from '@shared/validators/async.validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
-import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import * as semver from 'semver';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
@@ -167,21 +165,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
     });
-
-    this.form
-      .get(Controls.ContainerRuntime)
-      .valueChanges.pipe(startWith(this.form.get(Controls.ContainerRuntime).value), takeUntil(this._unsubscribe))
-      .subscribe(containerRuntime => {
-        if (
-          semver.valid(this.cluster.spec.version) &&
-          semver.gte(this.cluster.spec.version, END_OF_DOCKER_SUPPORT_VERSION) &&
-          containerRuntime === ContainerRuntime.Docker
-        ) {
-          this.form.get(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
-        } else {
-          this.form.get(Controls.ContainerRuntime).setErrors(null);
-        }
-      });
 
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
