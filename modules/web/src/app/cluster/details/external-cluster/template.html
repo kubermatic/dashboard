@@ -50,7 +50,7 @@ limitations under the License.
               type="button"
               kmThrottleClick
               (throttleClick)="downloadKubeconfig()"
-              [disabled]="!isRunning()">
+              [disabled]="isKubeConfigButtonDisabled()">
         <i class="km-icon-mask km-icon-download"></i>
         <span>Get Kubeconfig</span>
       </button>
