@@ -312,6 +312,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         this.applicationsMethodMap = {};
         this.applicationsSourceMap = {};
         this.applicationsStatusMap = {};
+        // eslint-disable-next-line complexity
         this.applications.forEach(application => {
           const applicationRef = application.spec.applicationRef;
           const status = application.status;
@@ -348,12 +349,19 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
             }
             if (status.conditions?.length) {
               const failingCondition = status.conditions.find(condition => condition.status === 'False');
+              const unknownCondition = status.conditions.find(condition => condition.status === 'Unknown');
               if (failingCondition) {
                 icon = StatusIcon.Error;
                 const error = failingCondition.message;
                 message = `${error} ${
                   error || !error.endsWith('.') ? '.' : ''
                 } Please check your configuration or contact your KKP Administrator.`;
+              } else if (unknownCondition) {
+                icon = StatusIcon.Warning;
+                const warning = unknownCondition.message;
+                message = `${warning} ${
+                  warning || !warning.endsWith('.') ? '.' : ''
+                } Application is in an unknown state.`;
               } else {
                 icon = StatusIcon.Running;
                 message = 'Ready';
