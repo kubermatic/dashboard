@@ -32,14 +32,14 @@ END OF TERMS AND CONDITIONS
     <div fxLayout="column"
          fxLayoutGap="20px">
       <km-number-stepper [formControlName]="controls.Retention"
-                         mode="errors"
+                         mode="all"
                          label="Report is deleted after (days)"
                          hint="Defines how long reports should be kept. Leave empty to keep reports forever."
                          min="1">
       </km-number-stepper>
 
       <km-number-stepper [formControlName]="controls.Interval"
-                         mode="errors"
+                         mode="all"
                          label="Report Scope"
                          hint="Range of days captured in each report."
                          min="1"
