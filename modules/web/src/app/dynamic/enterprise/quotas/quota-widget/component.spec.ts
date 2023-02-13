@@ -21,6 +21,8 @@
 import {TestBed, ComponentFixture} from '@angular/core/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
+import {QuotaCalculationService} from '../services/quota-calculation';
+import {QuotaCalculationMockService} from '@test/services/quota-calculation-mock';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {SharedModule} from '@shared/module';
 import {QuotaService} from '../service';
@@ -38,6 +40,7 @@ describe('AddProjectQuotaDialogComponent', () => {
       imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       providers: [
         {provide: QuotaService, useClass: QuotaMockService},
+        {provide: QuotaCalculationService, useClass: QuotaCalculationMockService},
         {provide: UserService, useClass: UserMockService},
       ],
     }).compileComponents();

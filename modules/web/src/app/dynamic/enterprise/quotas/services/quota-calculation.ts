@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import _ from 'lodash';
 import {merge, Observable, Subject} from 'rxjs';
-import {debounceTime, filter, shareReplay, startWith, switchMap} from 'rxjs/operators';
+import {debounceTime, filter, shareReplay, startWith, switchMap, tap} from 'rxjs/operators';
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {environment} from '@environments/environment';
 
@@ -16,6 +16,7 @@ export class QuotaCalculationService {
   private _refresh$ = new Subject<void>();
   private _requestMap = new Map<string, Observable<ResourceQuotaCalculation>>();
   private _quotaPayload: ResourceQuotaCalculationPayload;
+  private _calculationInProgress = new Subject<boolean>();
 
   constructor(private readonly _http: HttpClient) {}
 
@@ -25,6 +26,10 @@ export class QuotaCalculationService {
 
   set quotaPayload(value: ResourceQuotaCalculationPayload) {
     this._quotaPayload = value;
+  }
+
+  get calculationInProgress(): Observable<boolean> {
+    return this._calculationInProgress.asObservable();
   }
 
   refreshQuotaExceed(isQuotaExceeded: boolean) {
@@ -53,10 +58,12 @@ export class QuotaCalculationService {
     const mapKey = `${projectID}-${provider}`;
     if (!this._requestMap.has(mapKey)) {
       const request$ = merge(this._refresh$)
+        .pipe(tap(_ => this._calculationInProgress.next(true)))
         .pipe(debounceTime(this._debounceTime))
         .pipe(startWith(this.quotaPayload))
         .pipe(filter(() => !!this.quotaPayload))
         .pipe(switchMap(_ => this.quotaCalculation(projectID, this.quotaPayload)))
+        .pipe(tap(_ => this._calculationInProgress.next(false)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._requestMap.set(mapKey, request$);
     }

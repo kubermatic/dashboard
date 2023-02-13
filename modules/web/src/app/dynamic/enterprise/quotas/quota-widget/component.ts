@@ -30,6 +30,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import {QuotaCalculationService} from '../services/quota-calculation';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {QuotaDetails, QuotaVariables, ResourceQuotaCalculation} from '@shared/entity/quota';
@@ -73,6 +74,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   isEstimatedQuotaExceeded: boolean;
   quotaDetails: QuotaDetails;
   isLoading: boolean;
+  isEstimationInProgress: boolean;
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
@@ -120,7 +122,8 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _cdr: ChangeDetectorRef,
     private readonly _userService: UserService,
-    private readonly _quotaService: QuotaService
+    private readonly _quotaService: QuotaService,
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {}
 
   ngOnInit(): void {
@@ -149,6 +152,17 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   hasQuota(): boolean {
     const quota = this.quotaDetails?.quota;
     return quota && !!(quota.cpu || quota.memory || quota.storage);
+  }
+
+  getExtendedProgressBarTooltip(currentUsage: number, estimatedUsage: number): string {
+    if (currentUsage || currentUsage === 0 || estimatedUsage) {
+      if (estimatedUsage) {
+        return `Current Usage: ${currentUsage || 0}%, Estimated Usage: ${estimatedUsage}%`;
+      } else if (currentUsage) {
+        return `${currentUsage}%`;
+      }
+    }
+    return '';
   }
 
   updateEstimatedQuota(quota: ResourceQuotaCalculation): void {
@@ -189,6 +203,10 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
       this._subscribeToQuotaDetails();
     });
+
+    this._quotaCalculationService.calculationInProgress
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(inProgress => (this.isEstimationInProgress = inProgress));
   }
 
   private _subscribeToQuotaDetails(): void {

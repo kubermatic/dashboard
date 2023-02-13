@@ -653,6 +653,10 @@ km-cni-version {
   }
 }
 
+.km-quota-extended-progress-bar-tooltip {
+  max-width: unset !important;
+}
+
 .km-external-cluster-delete-confirmation {
   .mat-form-field {
     .mat-form-field-wrapper {
