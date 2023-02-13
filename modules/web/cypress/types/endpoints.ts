@@ -37,7 +37,7 @@ enum Digitalocean {
 }
 
 enum Equinix {
-  Sizes = '**/api/**/packet/sizes',
+  Sizes = '**/api/**/equinixmetal/sizes',
 }
 
 enum GCP {

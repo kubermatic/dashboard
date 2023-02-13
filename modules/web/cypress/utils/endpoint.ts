@@ -48,7 +48,7 @@ export namespace Endpoint {
   }
 
   export enum Equinix {
-    Sizes = '**/api/**/packet/sizes',
+    Sizes = '**/api/**/equinixmetal/sizes',
   }
 
   export enum Hetzner {

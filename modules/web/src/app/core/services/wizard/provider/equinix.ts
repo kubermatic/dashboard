@@ -21,6 +21,8 @@ import {Provider} from './provider';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 
 export class Equinix extends Provider {
+  protected readonly _url = `${this._newRestRoot}/projects/${this._projectID}/providers/equinixmetal/sizes`;
+
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
     super(http, projectID, provider);
 
