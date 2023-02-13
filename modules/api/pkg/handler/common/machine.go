@@ -127,6 +127,9 @@ func OutputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		deletionTimestamp = &dt
 	}
 
+	fmt.Printf("\n\n -- md.Annoations - %s --\n\n", md.Annotations)
+	fmt.Printf("\n\n -- md.Labels - %s --\n\n", md.Labels)
+
 	operatingSystemSpec, err := machineconversions.GetAPIV1OperatingSystemSpec(md.Spec.Template.Spec)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get operating system spec from machine deployment: %w", err)
