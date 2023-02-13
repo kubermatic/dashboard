@@ -125,7 +125,17 @@ limitations under the License.
                   fxFlex>
     </km-chip-list>
 
-    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
+    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="4px">
+        <span>Enforce Pod Security Policy</span>
+        <i class="km-icon-info km-pointer"
+           matTooltip="Enabling Pod Security Policy is not recommended since this is a deprecated feature that will be removed with Kubernetes v1.25.">
+        </i>
+      </div>
+    </mat-checkbox>
+
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
 
     <km-machine-flavor-filter class="km-machine-flavor-filter"
