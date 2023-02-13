@@ -215,11 +215,6 @@ export class KubeVirtBasicNodeDataComponent
           preferenceControl.reset();
           preferenceControl.disable();
         }
-
-        const payload = this._getQuotaCalculationPayload(value);
-        if (payload) {
-          this._quotaCalculationService.refreshQuotaCalculations(payload);
-        }
       });
 
     this.form
@@ -372,6 +367,11 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.Memory).setValue(null);
       this.form.get(Controls.Memory).setValidators([]);
       this.form.get(Controls.Memory).disable();
+
+      const payload = this._getQuotaCalculationPayload();
+      if (payload) {
+        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      }
     }
     this.form.updateValueAndValidity();
   }
@@ -667,7 +667,7 @@ export class KubeVirtBasicNodeDataComponent
     } as NodeData;
   }
 
-  private _getQuotaCalculationPayload(instanceTypeId?: string): ResourceQuotaCalculationPayload {
+  private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
@@ -675,24 +675,18 @@ export class KubeVirtBasicNodeDataComponent
       } as KubeVirtNodeSize,
     };
 
-    if (instanceTypeId) {
-      payload.kubevirtNodeSize = {
-        ...payload.kubevirtNodeSize,
-        [Controls.CPUs]: this.selectedInstanceTypeCpus + '',
-        [Controls.Memory]: this.selectedInstanceTypeMemory,
-      };
-    } else {
-      const cpus = this.form.get(Controls.CPUs).value;
-      const memory = this.form.get(Controls.Memory).value;
-      if (!cpus || !memory) {
-        return null;
-      }
-      payload.kubevirtNodeSize = {
-        ...payload.kubevirtNodeSize,
-        [Controls.CPUs]: this.form.get(Controls.CPUs).value + '',
-        [Controls.Memory]: this.form.get(Controls.Memory).value + 'M',
-      };
+    const instanceTypeId = this.form.get(Controls.InstanceType).value[ComboboxControls.Select];
+    const cpus = instanceTypeId ? this.selectedInstanceTypeCpus : this.form.get(Controls.CPUs).value;
+    const memory = instanceTypeId ? this.selectedInstanceTypeMemory : this.form.get(Controls.Memory).value;
+
+    if (!cpus || !memory) {
+      return null;
     }
+    payload.kubevirtNodeSize = {
+      ...payload.kubevirtNodeSize,
+      [Controls.CPUs]: `${cpus}`,
+      [Controls.Memory]: instanceTypeId ? memory : `${memory}M`,
+    };
 
     if (
       !this._nodeDataService.isInWizardMode() &&
