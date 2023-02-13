@@ -76,7 +76,10 @@ limitations under the License.
              fxLayoutGap="16px">
           <i class="km-icon-warning km-warning km-pointer"></i>
           <p fxFlex="95">An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm
-            charts will not work out of the box.</p>
+            charts will not work out of the box. Enabling Pod Security Policy is not recommended since this is a deprecated
+            feature that will be removed with Kubernetes v1.25. <a href="https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/#pod-security-changes"
+               target="_blank"
+               rel="noreferrer noopener">Learn more ></a></p>
         </div>
         <div *ngIf="isPodSecurityPolicyEnforced()"
              class="km-admission-plugin-warning"
