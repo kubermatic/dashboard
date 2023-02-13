@@ -316,7 +316,7 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   osImageDisplayName(osImageLink: string): string {
-    const osImage = this.osImageDropdownOptions.find(image => image.link === osImageLink);
+    const osImage = this.osImageDropdownOptions?.find(image => image.link === osImageLink);
     return osImage ? `${osImage.version} - ${osImage.link}` : osImageLink;
   }
 

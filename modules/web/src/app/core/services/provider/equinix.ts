@@ -25,7 +25,7 @@ export class EquinixService {
   constructor(private readonly _httpClient: HttpClient) {}
 
   getSizes(projectID: string, clusterID: string): Observable<EquinixSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/packet/sizes`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/equinixmetal/sizes`;
     return this._httpClient.get<EquinixSize[]>(url);
   }
 }
