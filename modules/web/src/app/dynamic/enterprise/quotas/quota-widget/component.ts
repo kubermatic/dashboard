@@ -151,6 +151,17 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     return quota && !!(quota.cpu || quota.memory || quota.storage);
   }
 
+  getExtendedProgressBarTooltip(currentUsage: number, estimatedUsage: number): string {
+    if (currentUsage || currentUsage === 0 || estimatedUsage) {
+      if (estimatedUsage) {
+        return `Current Usage: ${currentUsage || 0}%, Estimated Usage: ${estimatedUsage}%`;
+      } else if (currentUsage) {
+        return `${currentUsage}%`;
+      }
+    }
+    return '';
+  }
+
   updateEstimatedQuota(quota: ResourceQuotaCalculation): void {
     if (!quota) {
       this.estimatedQuota = null;

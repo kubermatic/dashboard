@@ -225,7 +225,8 @@ END OF TERMS AND CONDITIONS
       total: quotaDetails.quota.cpu,
       used: quotaDetails.status.globalUsage.cpu,
       percentage: quotaPercentage.cpu,
-      buffer: estimatedQuotaPercentage?.cpu
+      buffer: estimatedQuotaPercentage?.cpu,
+      estimated: estimatedQuota?.calculatedQuota?.cpu
       }"></ng-container>
 
         <ng-container *ngIf="hasMemoryQuota"
@@ -236,7 +237,8 @@ END OF TERMS AND CONDITIONS
       total: quotaDetails.quota.memory,
       used: quotaDetails.status.globalUsage.memory,
       percentage: quotaPercentage.memory,
-      buffer: estimatedQuotaPercentage?.memory
+      buffer: estimatedQuotaPercentage?.memory,
+      estimated: estimatedQuota?.calculatedQuota?.memory
       }"></ng-container>
 
         <ng-container *ngIf="hasStorageQuota"
@@ -247,7 +249,8 @@ END OF TERMS AND CONDITIONS
       total: quotaDetails.quota.storage,
       used: quotaDetails.status.globalUsage.storage,
       percentage: quotaPercentage.storage,
-      buffer: estimatedQuotaPercentage?.storage
+      buffer: estimatedQuotaPercentage?.storage,
+      estimated: estimatedQuota?.calculatedQuota?.storage
       }"></ng-container>
       </div>
     </div>
@@ -264,11 +267,15 @@ END OF TERMS AND CONDITIONS
                let-buffer="buffer"
                let-total="total"
                let-used="used"
+               let-estimated="estimated"
                let-unit="unit">
     <km-property class="extended-progress">
       <div key>
         <span fxFlex>{{label}}</span>
-        <span>{{used ?? 0}}/{{total}} {{unit}}</span>
+        <span><ng-container *ngIf="!estimated; else estimatedValue">{{used ?? 0}}</ng-container>/{{total}} {{unit}}</span>
+        <ng-template #estimatedValue>
+          <span class="estimated-quota-value">{{estimated}}</span>
+        </ng-template>
       </div>
       <div value>
         <mat-progress-bar class="property-usage-bar"
@@ -276,7 +283,8 @@ END OF TERMS AND CONDITIONS
                           [color]="getProgressBarAccent(percentage)"
                           [value]="percentage ?? 1"
                           [bufferValue]="buffer"
-                          [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
+                          [matTooltip]="getExtendedProgressBarTooltip(percentage, buffer)"
+                          matTooltipClass="km-quota-extended-progress-bar-tooltip"></mat-progress-bar>
       </div>
     </km-property>
   </ng-template>

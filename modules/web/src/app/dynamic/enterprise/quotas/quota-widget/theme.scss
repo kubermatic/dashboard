@@ -17,4 +17,8 @@
       }
     }
   }
+
+  .estimated-quota-value {
+    color: map.get($colors, estimate-quota-bar);
+  }
 }
