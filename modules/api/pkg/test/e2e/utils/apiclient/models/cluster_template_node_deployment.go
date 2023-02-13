@@ -18,6 +18,9 @@ import (
 // swagger:model ClusterTemplateNodeDeployment
 type ClusterTemplateNodeDeployment struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// spec
 	Spec *NodeDeploymentSpec `json:"spec,omitempty"`
 }

@@ -220,7 +220,8 @@ type ClusterTemplateInfo struct {
 }
 
 type ClusterTemplateNodeDeployment struct {
-	Spec apiv1.NodeDeploymentSpec `json:"spec"`
+	Annotations map[string]string        `json:"annotations,omitempty"`
+	Spec        apiv1.NodeDeploymentSpec `json:"spec"`
 }
 
 // ClusterTemplateSSHKey represents SSH Key object for Cluster Template
