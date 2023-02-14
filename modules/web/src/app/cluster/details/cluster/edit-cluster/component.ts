@@ -353,7 +353,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
     }
 
-    return this._clusterService.patch(this.projectID, this.cluster.id, patch).pipe(take(1));
+    return this._clusterService.patch(this.projectID, this.cluster.id, patch, true).pipe(take(1));
   }
 
   onNext(cluster: Cluster): void {

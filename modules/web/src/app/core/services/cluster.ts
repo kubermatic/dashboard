@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 
@@ -50,6 +50,7 @@ export class ClusterService {
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
+  private _params: HttpParams = new HttpParams();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
   private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
@@ -137,9 +138,12 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  patch(projectID: string, clusterID: string, patch: ClusterPatch): Observable<Cluster> {
+  patch(projectID: string, clusterID: string, patch: ClusterPatch, skipKubeletValidation: boolean = false): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
-    return this._http.patch<Cluster>(url, patch);
+    if (skipKubeletValidation) {
+      this._params = this._params.set("skip_kubelet_version_validation", skipKubeletValidation);
+    }
+    return this._http.patch<Cluster>(url, patch, {params: this._params});
   }
 
   patchExternalCluster(projectID: string, clusterID: string, patch: ExternalClusterPatch): Observable<ExternalCluster> {
