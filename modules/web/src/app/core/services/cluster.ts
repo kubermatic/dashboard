@@ -138,7 +138,7 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  patch(projectID: string, clusterID: string, patch: ClusterPatch, skipKubeletValidation: boolean = false): Observable<Cluster> {
+  patch(projectID: string, clusterID: string, patch: ClusterPatch, skipKubeletValidation = false): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     if (skipKubeletValidation) {
       this._params = this._params.set('skip_kubelet_version_validation', skipKubeletValidation);
