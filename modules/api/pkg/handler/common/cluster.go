@@ -549,8 +549,8 @@ func PatchEndpoint(
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
-	// In case where the connction is blocked, we still want to be able to send a patch request. This can be achieved with an additional
-	// query param attached to the patch request - "?skip_cluster_version_skew_check=true"
+	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
+	// query param attached to the patch request: "skip_kubelet_version_validation=true"
 	if !skipKubeletVersionValidation {
 		incompatibleKubelets, err := common.CheckClusterVersionSkew(ctx, userInfoGetter, clusterProvider, newInternalCluster, projectID)
 		if err != nil {
