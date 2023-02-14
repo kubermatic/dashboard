@@ -5756,7 +5756,7 @@ func (r Routing) validateProjectEKSCredentials() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.EKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, true)),
-		externalcluster.DecodeEKSProjectCommonReq,
+		externalcluster.DecodeEKSProjectRegionReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
