@@ -1156,6 +1156,23 @@ func deleteAKSCluster(ctx context.Context, secretKeySelector provider.SecretKeyS
 	return nil
 }
 
+// AKSProjectReq represents a request with a project context.
+// swagger:parameters listProjectAKSVersions
+type AKSProjectReq struct {
+	common.ProjectReq
+}
+
+func DecodeAKSProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	req, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return AKSProjectReq{
+		ProjectReq: req.(common.ProjectReq),
+	}, nil
+}
+
 func AKSVersionsEndpoint(configGetter provider.KubermaticConfigurationGetter,
 	clusterProvider provider.ExternalClusterProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {

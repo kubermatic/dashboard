@@ -48,6 +48,8 @@ type ClientService interface {
 
 	ListProjectAKSVMSizes(params *ListProjectAKSVMSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSVMSizesOK, error)
 
+	ListProjectAKSVersions(params *ListProjectAKSVersionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSVersionsOK, error)
+
 	ValidateAKSCredentials(params *ValidateAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateAKSCredentialsOK, error)
 
 	ValidateProjectAKSCredentials(params *ValidateProjectAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateProjectAKSCredentialsOK, error)
@@ -432,6 +434,44 @@ func (a *Client) ListProjectAKSVMSizes(params *ListProjectAKSVMSizesParams, auth
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectAKSVMSizesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAKSVersions lists a k s versions
+*/
+func (a *Client) ListProjectAKSVersions(params *ListProjectAKSVersionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSVersionsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAKSVersionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAKSVersions",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aks/versions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAKSVersionsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAKSVersionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAKSVersionsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
