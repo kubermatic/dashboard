@@ -63,6 +63,7 @@ const (
 	expirationRefreshesKey            = "ExpirationRefreshes"
 	pingInterval                      = 30 * time.Second
 	pingMessage                       = "PING"
+	pongMessage                       = "PONG"
 
 	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.6.0"
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
@@ -102,6 +103,7 @@ type TerminalSession struct {
 // stdin       fe->be     Data           Keystrokes/paste buffer.
 // resize      fe->be     Rows, Cols     New terminal size.
 // refresh     fe->be                    Signal to extend expiration time.
+// msg         fe->be     Data           Any other necessary message from the frontend to the backend.
 // stdout      be->fe     Data           Output from the process.
 // toast       be->fe     Data           OOB message to be shown to the user.
 // msg         be->fe     Data           Any necessary message from the backend to the frontend.
@@ -122,7 +124,7 @@ func (t TerminalSession) Next() *remotecommand.TerminalSize {
 	}
 }
 
-// Read handles pty->process messages (stdin, resize, refresh).
+// Read handles pty->process messages (stdin, resize, refresh, msg).
 // Called in a loop from remotecommand as long as the process is running.
 func (t TerminalSession) Read(p []byte) (int, error) {
 	_, m, err := t.websocketConn.ReadMessage()
@@ -144,6 +146,14 @@ func (t TerminalSession) Read(p []byte) (int, error) {
 		return 0, nil
 	case "refresh":
 		return 0, t.extendExpirationTime(context.Background())
+	case "msg":
+		switch msg.Data {
+		case pongMessage:
+			// just ignore "pong" messages
+			return 0, nil
+		default:
+			return 0, fmt.Errorf("unexpected message '%s'", msg.Data)
+		}
 	default:
 		return copy(p, END_OF_TRANSMISSION), fmt.Errorf("unknown message type '%s'", msg.Op)
 	}
