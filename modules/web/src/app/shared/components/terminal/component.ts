@@ -65,6 +65,11 @@ enum ErrorOperations {
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
 }
 
+enum MessageTypes {
+  Ping = 'PING',
+  Pong = 'PONG',
+}
+
 @Component({
   selector: 'km-terminal',
   templateUrl: './template.html',
@@ -196,8 +201,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     this.terminal.open(containerElement);
 
     const clusterName = this.cluster && this.cluster.name;
-    this.terminal.write('\x1b[37mWelcome to Web Terminal! Type "help" to get started.\r\n');
-    this.terminal.write(`\x1b[37mYour KKP cluster in this session is set to \x1b[1;34m${clusterName}\x1B[0m\n\n\r`);
+    this._logToTerminal('\x1b[37mWelcome to Web Terminal! Type "help" to get started.\r\n');
+    this._logToTerminal(`\x1b[37mYour KKP cluster in this session is set to \x1b[1;34m${clusterName}\x1B[0m\n\n\r`);
 
     const delayFn = debounce(() => {
       fitAddon.fit();
@@ -262,7 +267,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       // Initialize terminal on WS connection success.
       this._initializeTerminalOnSuccess.next(true);
       this._initializeTerminalOnSuccess.complete();
-      this.terminal.write(frame.Data);
+      this._logToTerminal(frame.Data);
     } else if (frame.Op === Operations.Msg) {
       if (frame.Data === ErrorOperations.KubeConfigSecretMissing) {
         if (!this.isDexAuthenticationPageOpened) {
@@ -270,22 +275,35 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
           window.open(url, '_blank');
           this.isDexAuthenticationPageOpened = true;
         }
-
         this.message = 'Please wait, authenticate in order to access web terminal...';
       } else if (frame.Data === ErrorOperations.WebTerminalPodPending) {
         this.message = 'Please wait, provisioning your Web Terminal pod...';
       } else if (frame.Data === ErrorOperations.ConnectionPoolExceeded) {
-        this.terminal.write(
-          `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions.`
-        );
+        const message = `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions`;
+        if (this.terminal) {
+          this._logToTerminal(message);
+        } else {
+          this.message = message;
+        }
       } else if (frame.Data === ErrorOperations.RefreshesLimitExceeded) {
         const clusterName = this.cluster && this.cluster.name;
-        this.terminal.write(
+        this._logToTerminal(
           `Oops! Max limit of ${this.MAX_EXPIRATION_REFRESHES} refreshes is reached. You are not allowed to extend the session for \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
         );
+      } else if (frame.Data === MessageTypes.Ping) {
+        if (this.terminal) {
+          // Note: Periodic exchange of messages with server to keep the web Terminal connection alive
+          this._keepConnectionAlive(MessageTypes.Pong);
+        }
       }
     } else if (frame.Op === Operations.Expiration) {
       this.isSessionExpiring = true;
+    }
+  }
+
+  private _logToTerminal(message: string): void {
+    if (this.terminal) {
+      this.terminal.write(message);
     }
   }
 
@@ -301,6 +319,13 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       Data: `${str}`,
       Cols: this.terminal.cols,
       Rows: this.terminal.rows,
+    });
+  }
+
+  private _keepConnectionAlive(str: string): void {
+    this._webTerminalSocketService.sendMessage({
+      Op: 'msg',
+      Data: `${str}`,
     });
   }
 
