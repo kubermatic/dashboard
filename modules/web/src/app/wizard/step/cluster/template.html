@@ -138,12 +138,12 @@ limitations under the License.
           </mat-form-field>
           <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
                         class="tag-list"
-                        label="Allowed IP Range for API server"
-                        placeholder="IPs..."
+                        label="Allowed IP Ranges for API server"
+                        placeholder="IP CIDRs..."
                         description="Use commas, space or enter key as the separators."
                         [formControlName]="Controls.APIServerAllowedIPRanges"
                         [kmPattern]="ipv4AndIPv6CidrRegex"
-                        kmPatternError="Input has to be a valid IPv4 or IPv6 address">
+                        kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
           </km-chip-list>
           <div fxLayout="row"
                fxLayoutGap="50px"
