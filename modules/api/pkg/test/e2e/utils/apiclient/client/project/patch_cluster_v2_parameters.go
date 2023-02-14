@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewPatchClusterV2Params creates a new PatchClusterV2Params object,
@@ -69,6 +70,9 @@ type PatchClusterV2Params struct {
 
 	// ProjectID.
 	ProjectID string
+
+	// SkipKubeletVersionValidation.
+	SkipKubeletVersionValidation *bool
 
 	timeout    time.Duration
 	Context    context.Context
@@ -156,6 +160,17 @@ func (o *PatchClusterV2Params) SetProjectID(projectID string) {
 	o.ProjectID = projectID
 }
 
+// WithSkipKubeletVersionValidation adds the skipKubeletVersionValidation to the patch cluster v2 params
+func (o *PatchClusterV2Params) WithSkipKubeletVersionValidation(skipKubeletVersionValidation *bool) *PatchClusterV2Params {
+	o.SetSkipKubeletVersionValidation(skipKubeletVersionValidation)
+	return o
+}
+
+// SetSkipKubeletVersionValidation adds the skipKubeletVersionValidation to the patch cluster v2 params
+func (o *PatchClusterV2Params) SetSkipKubeletVersionValidation(skipKubeletVersionValidation *bool) {
+	o.SkipKubeletVersionValidation = skipKubeletVersionValidation
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *PatchClusterV2Params) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -177,6 +192,23 @@ func (o *PatchClusterV2Params) WriteToRequest(r runtime.ClientRequest, reg strfm
 	// path param project_id
 	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
 		return err
+	}
+
+	if o.SkipKubeletVersionValidation != nil {
+
+		// query param skip_kubelet_version_validation
+		var qrSkipKubeletVersionValidation bool
+
+		if o.SkipKubeletVersionValidation != nil {
+			qrSkipKubeletVersionValidation = *o.SkipKubeletVersionValidation
+		}
+		qSkipKubeletVersionValidation := swag.FormatBool(qrSkipKubeletVersionValidation)
+		if qSkipKubeletVersionValidation != "" {
+
+			if err := r.SetQueryParam("skip_kubelet_version_validation", qSkipKubeletVersionValidation); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

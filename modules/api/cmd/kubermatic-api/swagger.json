@@ -10449,6 +10449,12 @@
             "schema": {
               "type": "object"
             }
+          },
+          {
+            "type": "boolean",
+            "x-go-name": "SkipKubeletVersionValidation",
+            "name": "skip_kubelet_version_validation",
+            "in": "query"
           }
         ],
         "responses": {

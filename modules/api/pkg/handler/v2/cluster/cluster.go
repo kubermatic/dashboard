@@ -127,7 +127,7 @@ func PatchEndpoint(projectProvider provider.ProjectProvider, privilegedProjectPr
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PatchReq)
 		return handlercommon.PatchEndpoint(ctx, userInfoGetter, req.ProjectID, req.ClusterID, req.Patch, seedsGetter,
-			projectProvider, privilegedProjectProvider, caBundle, configGetter, features)
+			projectProvider, privilegedProjectProvider, caBundle, configGetter, features, req.SkipKubeletVersionValidation)
 	}
 }
 
@@ -371,10 +371,15 @@ type PatchReq struct {
 
 	// in: body
 	Patch json.RawMessage
+
+	// in: query
+	// required: false
+	SkipKubeletVersionValidation bool `json:"skip_kubelet_version_validation,omitempty"`
 }
 
 func DecodePatchReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req PatchReq
+	var skipKubeletVersionValidation bool
 
 	projectReq, err := common.DecodeProjectRequest(c, r)
 	if err != nil {
@@ -390,6 +395,15 @@ func DecodePatchReq(c context.Context, r *http.Request) (interface{}, error) {
 	if req.Patch, err = io.ReadAll(r.Body); err != nil {
 		return nil, err
 	}
+
+	queryParam := r.URL.Query().Get("skip_kubelet_version_validation")
+	if queryParam != "" {
+		skipKubeletVersionValidation, err = strconv.ParseBool(queryParam)
+		if err != nil {
+			return nil, fmt.Errorf("wrong query parameter `skip_kubelet_version_validation`: %w", err)
+		}
+	}
+	req.SkipKubeletVersionValidation = skipKubeletVersionValidation
 
 	return req, nil
 }

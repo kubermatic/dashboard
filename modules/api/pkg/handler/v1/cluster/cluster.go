@@ -84,7 +84,7 @@ func PatchEndpoint(projectProvider provider.ProjectProvider, privilegedProjectPr
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PatchReq)
 		return handlercommon.PatchEndpoint(ctx, userInfoGetter, req.ProjectID, req.ClusterID, req.Patch, seedsGetter,
-			projectProvider, privilegedProjectProvider, caBundle, configGetter, features)
+			projectProvider, privilegedProjectProvider, caBundle, configGetter, features, false)
 	}
 }
 
