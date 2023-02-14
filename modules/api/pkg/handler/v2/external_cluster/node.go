@@ -38,6 +38,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 )
 
@@ -256,7 +257,7 @@ func ListMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proje
 		}
 
 		apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
-		if apiCluster.Status.State != apiv2.RunningExternalClusterState {
+		if !sets.NewString(string(apiv2.RunningExternalClusterState), string(apiv2.WarningExternalClusterState)).Has(string(apiCluster.Status.State)) {
 			return machineDeployments, nil
 		}
 
