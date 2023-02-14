@@ -35,7 +35,8 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Create Cluster</span>
     </div>
-    <div class="entry"
+    <div *ngIf="areExternalClustersEnabled"
+         class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
@@ -48,7 +49,8 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Import External Cluster</span>
     </div>
-    <div class="entry"
+    <div *ngIf="areExternalClustersEnabled"
+         class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
