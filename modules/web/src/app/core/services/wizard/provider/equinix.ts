@@ -70,8 +70,8 @@ export class Equinix extends Provider {
 
 export namespace Equinix {
   export enum Header {
-    APIKey = 'apiKey',
-    ProjectID = 'projectID',
+    APIKey = 'APIKey',
+    ProjectID = 'EquinixProjectID',
     DatacenterName = 'DatacenterName',
   }
 }
