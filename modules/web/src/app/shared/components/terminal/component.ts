@@ -63,7 +63,11 @@ enum ErrorOperations {
   WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
+}
+
+enum MessageTypes {
   Ping = 'PING',
+  Pong = 'PONG',
 }
 
 @Component({
@@ -286,10 +290,10 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         this._logToTerminal(
           `Oops! Max limit of ${this.MAX_EXPIRATION_REFRESHES} refreshes is reached. You are not allowed to extend the session for \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
         );
-      } else if (frame.Data === ErrorOperations.Ping) {
+      } else if (frame.Data === MessageTypes.Ping) {
         if (this.terminal) {
           // Note: Periodic exchange of messages with server to keep the web Terminal connection alive
-          this._onTerminalSendString('PONG');
+          this._keepConnectionAlive(MessageTypes.Pong);
         }
       }
     } else if (frame.Op === Operations.Expiration) {
@@ -299,11 +303,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
   private _logToTerminal(message: string): void {
     if (this.terminal) {
-      const pongRegex = /pong/i;
-      const containsPong = pongRegex.test(message);
-      if (!containsPong) {
-        this.terminal.write(message);
-      }
+      this.terminal.write(message);
     }
   }
 
@@ -319,6 +319,13 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       Data: `${str}`,
       Cols: this.terminal.cols,
       Rows: this.terminal.rows,
+    });
+  }
+
+  private _keepConnectionAlive(str: string): void {
+    this._webTerminalSocketService.sendMessage({
+      Op: 'msg',
+      Data: `${str}`,
     });
   }
 
