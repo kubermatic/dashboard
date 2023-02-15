@@ -50,7 +50,6 @@ export class ClusterService {
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
-  private _params: HttpParams = new HttpParams();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
   private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
@@ -140,10 +139,11 @@ export class ClusterService {
 
   patch(projectID: string, clusterID: string, patch: ClusterPatch, skipKubeletValidation = false): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
+    let params = new HttpParams();
     if (skipKubeletValidation) {
-      this._params = this._params.set('skip_kubelet_version_validation', skipKubeletValidation);
+      params = params.set('skip_kubelet_version_validation', skipKubeletValidation);
     }
-    return this._http.patch<Cluster>(url, patch, {params: this._params});
+    return this._http.patch<Cluster>(url, patch, {params});
   }
 
   patchExternalCluster(projectID: string, clusterID: string, patch: ExternalClusterPatch): Observable<ExternalCluster> {
