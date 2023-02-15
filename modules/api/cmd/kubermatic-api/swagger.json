@@ -19613,6 +19613,44 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/aks/versions": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "aks"
+        ],
+        "summary": "Lists AKS versions.",
+        "operationId": "listProjectAKSVersions",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MasterVersion",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MasterVersion"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/aks/vmsizes": {
       "get": {
         "produces": [

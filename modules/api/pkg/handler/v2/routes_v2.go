@@ -754,6 +754,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/aks/locations").
 		Handler(r.listProjectAKSLocations())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aks/versions").
+		Handler(r.listProjectAKSVersions())
+
 	// vSphere endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/vsphere/networks").
@@ -6275,6 +6279,28 @@ func (r Routing) listProjectAKSLocations() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.ListAKSLocationsEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		externalcluster.DecodeAKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aks/versions aks listProjectAKSVersions
+//
+// Lists AKS versions.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []MasterVersion
+func (r Routing) listProjectAKSVersions() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.AKSVersionsEndpoint(r.kubermaticConfigGetter, r.externalClusterProvider)),
+		externalcluster.DecodeAKSProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
