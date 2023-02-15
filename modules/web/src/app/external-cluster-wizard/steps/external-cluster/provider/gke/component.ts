@@ -40,7 +40,7 @@ import {
 import {GKECloudSpec, GKEClusterSpec, GKEZone, GKENodeConfig} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge} from 'rxjs';
-import {debounceTime, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, filter, takeUntil, tap} from 'rxjs/operators';
 import {GKE_POOL_NAME_VALIDATOR} from '@app/shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
@@ -298,6 +298,15 @@ export class GKEClusterSettingsComponent
             this._getGKEDiskTypes(zoneValue);
             this._getGKEMachineTypes(zoneValue);
           }
+        });
+
+      this._externalClusterService.presetChanges
+        .pipe(
+          filter(preset => !!preset),
+          takeUntil(this._unsubscribe)
+        )
+        .subscribe(_ => {
+          this._getGKEZones();
         });
     }
   }
