@@ -28,6 +28,16 @@ export enum StatusIcon {
   Stopped = 'km-icon-stopped',
 }
 
+export enum StatusMassage {
+  Deleting = 'Deleting',
+  Running = 'Running',
+  Provisioning = 'Provisioning',
+  Failed = 'Failed',
+  Updating = 'Updating',
+  Disabled = 'Disabled',
+  Unknown = 'Unknown',
+}
+
 export class HealthStatus {
   message: string;
   icon: StatusIcon;
@@ -40,11 +50,11 @@ export class HealthStatus {
 
 export function getClusterHealthStatus(c: Cluster, h: Health): HealthStatus {
   if (c.deletionTimestamp) {
-    return new HealthStatus('Deleting', StatusIcon.Error);
+    return new HealthStatus(StatusMassage.Deleting, StatusIcon.Error);
   } else if (isClusterRunning(c, h)) {
-    return new HealthStatus('Running', StatusIcon.Running);
+    return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   }
-  return new HealthStatus('Provisioning', StatusIcon.Pending);
+  return new HealthStatus(StatusMassage.Provisioning, StatusIcon.Pending);
 }
 
 export function isClusterRunning(c: Cluster, h: Health): boolean {
@@ -61,37 +71,37 @@ export function isOPARunning(c: Cluster, h: Health): boolean {
 
 export function getNodeHealthStatus(n: Node): HealthStatus {
   if (n.deletionTimestamp) {
-    return new HealthStatus('Deleting', StatusIcon.Error);
+    return new HealthStatus(StatusMassage.Deleting, StatusIcon.Error);
   } else if (n.status.errorMessage) {
-    return new HealthStatus('Failed', StatusIcon.Error);
+    return new HealthStatus(StatusMassage.Failed, StatusIcon.Error);
   } else if (n.status.nodeInfo.kubeletVersion) {
-    return new HealthStatus('Running', StatusIcon.Running);
+    return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   }
-  return new HealthStatus('Provisioning', StatusIcon.Pending);
+  return new HealthStatus(StatusMassage.Provisioning, StatusIcon.Pending);
 }
 
 export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthStatus {
   if (md.deletionTimestamp) {
-    return new HealthStatus('Deleting', StatusIcon.Error);
+    return new HealthStatus(StatusMassage.Deleting, StatusIcon.Error);
   } else if (
     md.status &&
     md.status.availableReplicas === md.spec.replicas &&
     md.status.availableReplicas === md.status.updatedReplicas
   ) {
-    return new HealthStatus('Running', StatusIcon.Running);
+    return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
-    return new HealthStatus('Updating', StatusIcon.Pending);
+    return new HealthStatus(StatusMassage.Updating, StatusIcon.Pending);
   }
-  return new HealthStatus('Provisioning', StatusIcon.Pending);
+  return new HealthStatus(StatusMassage.Provisioning, StatusIcon.Pending);
 }
 
 export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdBackupConfigCondition): HealthStatus {
   if (backup.deletionTimestamp) {
-    return new HealthStatus('Deleting', StatusIcon.Error);
+    return new HealthStatus(StatusMassage.Deleting, StatusIcon.Error);
   } else if (condition.status === 'True') {
-    return new HealthStatus('Running', StatusIcon.Running);
+    return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   } else if (condition.status === 'False') {
-    return new HealthStatus('Disabled', StatusIcon.Disabled);
+    return new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
   }
-  return new HealthStatus('Unknown', StatusIcon.Unknown);
+  return new HealthStatus(StatusMassage.Unknown, StatusIcon.Unknown);
 }
