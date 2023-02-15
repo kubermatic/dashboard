@@ -136,6 +136,22 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
+  enableDownloadKubeconfigButton(): boolean {
+    const clusterState = this.cluster?.status.state;
+    if (!clusterState) {
+      return false;
+    }
+    switch (clusterState) {
+      case ExternalClusterState.Deleting:
+      case ExternalClusterState.Error:
+      case ExternalClusterState.Provisioning:
+      case ExternalClusterState.Unknown:
+        return false;
+      default:
+        return true;
+    }
+  }
+
   downloadKubeconfig(): void {
     window.open(this._clusterService.getExternalKubeconfigURL(this.projectID, this.cluster.id), '_blank');
   }

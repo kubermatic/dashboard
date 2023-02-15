@@ -46,6 +46,7 @@ limitations under the License.
               fxLayoutAlign="center center"
               mat-flat-button
               type="button"
+              [disabled]="!enableDownloadKubeconfigButton()"
               kmThrottleClick
               (throttleClick)="downloadKubeconfig()">
         <i class="km-icon-mask km-icon-download"></i>
