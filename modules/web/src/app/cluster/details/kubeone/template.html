@@ -61,13 +61,6 @@ limitations under the License.
         </button>
         <mat-menu #menu="matMenu"
                   class="km-provider-edit-settings">
-          <div [matTooltip]="cluster?.spec?.containerRuntime !== ContainerRuntime.Docker ? 'KubeOne container runtime migration is only supported from docker to containerd.' : ''">
-            <button mat-menu-item
-                    (click)="editCluster()"
-                    [disabled]="!isRunning() || !canEdit() || cluster?.spec?.containerRuntime !== ContainerRuntime.Docker">
-              <span>Migrate Container Runtime</span>
-            </button>
-          </div>
           <button id="km-disconnect-external-cluster-btn"
                   mat-menu-item
                   (click)="disconnectCluster()"
