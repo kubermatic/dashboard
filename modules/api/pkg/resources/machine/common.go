@@ -315,11 +315,15 @@ func GetOpenstackProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec
 		IdentityEndpoint:          providerconfig.ConfigVarString{Value: dc.Spec.Openstack.AuthURL},
 		Network:                   providerconfig.ConfigVarString{Value: c.Spec.Cloud.Openstack.Network},
 		Subnet:                    providerconfig.ConfigVarString{Value: c.Spec.Cloud.Openstack.SubnetID},
-		SecurityGroups:            []providerconfig.ConfigVarString{{Value: c.Spec.Cloud.Openstack.SecurityGroups}},
 		InstanceReadyCheckPeriod:  providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.InstanceReadyCheckPeriod},
 		InstanceReadyCheckTimeout: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.InstanceReadyCheckTimeout},
 		TrustDevicePath:           providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
 		ServerGroup:               providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.ServerGroup},
+	}
+
+	config.SecurityGroups = []providerconfig.ConfigVarString{}
+	if len(c.Spec.Cloud.Openstack.SecurityGroups) > 0 {
+		config.SecurityGroups = append(config.SecurityGroups, providerconfig.ConfigVarString{Value: c.Spec.Cloud.Openstack.SecurityGroups})
 	}
 
 	if nodeSpec.Cloud.Openstack.UseFloatingIP || dc.Spec.Openstack.EnforceFloatingIP {
