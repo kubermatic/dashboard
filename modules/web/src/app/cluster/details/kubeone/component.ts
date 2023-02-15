@@ -13,9 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {KubeOneEditClusterDialogComponent} from '@app/cluster/details/kubeone/edit-cluster-dialog/component';
 import {AppConfigService} from '@app/config.service';
 import {View} from '@app/shared/entity/common';
 import {ClusterService} from '@core/services/cluster';
@@ -63,7 +61,6 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router,
-    private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _userService: UserService,
@@ -174,12 +171,6 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
 
   canEdit(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
-  }
-
-  editCluster(): void {
-    const modal = this._matDialog.open(KubeOneEditClusterDialogComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.projectID = this.projectID;
   }
 
   canDisconnect(): boolean {

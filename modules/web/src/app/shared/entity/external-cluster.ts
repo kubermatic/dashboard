@@ -177,7 +177,6 @@ export class ExternalClusterPatch {
 
 export class ExternalClusterSpecPatch {
   version?: string;
-  containerRuntime?: ContainerRuntime;
 }
 
 export class ExternalClusterModel {
