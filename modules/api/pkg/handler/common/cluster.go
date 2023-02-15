@@ -462,6 +462,7 @@ func PatchEndpoint(
 	caBundle *x509.CertPool,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	skipKubeletVersionValidation bool,
 ) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
@@ -547,12 +548,17 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 
-	incompatibleKubelets, err := common.CheckClusterVersionSkew(ctx, userInfoGetter, clusterProvider, newInternalCluster, projectID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to check existing nodes' version skew: %w", err)
-	}
-	if len(incompatibleKubelets) > 0 {
-		return nil, utilerrors.NewBadRequest("Cluster contains nodes running the following incompatible kubelet versions: %v. Upgrade your nodes before you upgrade the cluster.", incompatibleKubelets)
+	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
+	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
+	// query param attached to the patch request: "skip_kubelet_version_validation=true"
+	if !skipKubeletVersionValidation {
+		incompatibleKubelets, err := common.CheckClusterVersionSkew(ctx, userInfoGetter, clusterProvider, newInternalCluster, projectID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to check existing nodes' version skew: %w", err)
+		}
+		if len(incompatibleKubelets) > 0 {
+			return nil, utilerrors.NewBadRequest("Cluster contains nodes running the following incompatible kubelet versions: %v. Upgrade your nodes before you upgrade the cluster.", incompatibleKubelets)
+		}
 	}
 
 	// find the defaulting template
