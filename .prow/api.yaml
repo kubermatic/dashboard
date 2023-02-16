@@ -14,7 +14,7 @@
 
 presubmits:
   - name: pre-dashboard-api-e2e
-    run_if_changed: 'modules/api/pkg'
+    always_run: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
@@ -51,64 +51,3 @@ presubmits:
               cpu: 2
             limits:
               memory: 6Gi
-
-  - name: pre-dashboard-api-unit
-    run_if_changed: 'modules/api'
-    decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-    labels:
-      preset-goproxy: "true"
-    spec:
-      containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-5
-          command:
-            - make
-          args:
-            - api-test
-          resources:
-            requests:
-              memory: 7Gi
-              cpu: 2
-          env:
-            - name: KUBERMATIC_EDITION
-              value: ee
-
-  - name: pre-dashboard-api-lint
-    run_if_changed: 'modules/api'
-    decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-    labels:
-      preset-goproxy: "true"
-    spec:
-      containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-5
-          command:
-            - make
-            - api-lint
-          resources:
-            requests:
-              memory: 10Gi
-              cpu: 3
-          env:
-            - name: KUBERMATIC_EDITION
-              value: ee
-
-  - name: pre-dashboard-api-verify
-    run_if_changed: 'modules/api'
-    decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-    labels:
-      preset-goproxy: "true"
-    spec:
-      containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-5
-          command:
-            - make
-            - api-verify
-          resources:
-            requests:
-              memory: 2Gi
-              cpu: 2
-          env:
-            - name: KUBERMATIC_EDITION
-              value: ee
