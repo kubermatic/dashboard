@@ -111,13 +111,13 @@ var (
 
 	instancetypeListResponse = "{\"instancetypes\":" +
 		"{\"custom\":[" +
-		"{\"name\":\"cpu-2-memory-4Gi\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":2},\\\"memory\\\":{\\\"guest\\\":\\\"4Gi\\\"}}\"}," +
-		"{\"name\":\"cpu-4-memory-8Gi\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":4},\\\"memory\\\":{\\\"guest\\\":\\\"8Gi\\\"}}\"}" +
+		"{\"name\":\"cpu-2-memory-4Gi\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":2},\\\"memory\\\":{\\\"guest\\\":\\\"4295M\\\"}}\"}," +
+		"{\"name\":\"cpu-4-memory-8Gi\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":4},\\\"memory\\\":{\\\"guest\\\":\\\"8590M\\\"}}\"}" +
 		"]," +
 		"\"kubermatic\":[" +
-		"{\"name\":\"standard-2\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":2},\\\"memory\\\":{\\\"guest\\\":\\\"8Gi\\\"}}\"}," +
-		"{\"name\":\"standard-4\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":4},\\\"memory\\\":{\\\"guest\\\":\\\"16Gi\\\"}}\"}," +
-		"{\"name\":\"standard-8\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":8},\\\"memory\\\":{\\\"guest\\\":\\\"32Gi\\\"}}\"}]}}"
+		"{\"name\":\"standard-2\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":2},\\\"memory\\\":{\\\"guest\\\":\\\"8590M\\\"}}\"}," +
+		"{\"name\":\"standard-4\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":4},\\\"memory\\\":{\\\"guest\\\":\\\"17180M\\\"}}\"}," +
+		"{\"name\":\"standard-8\",\"spec\":\"{\\\"cpu\\\":{\\\"guest\\\":8},\\\"memory\\\":{\\\"guest\\\":\\\"34360M\\\"}}\"}]}}"
 )
 
 func newClusterInstancetype(cpu uint32, memory string) *kvinstancetypev1alpha1.VirtualMachineClusterInstancetype {
