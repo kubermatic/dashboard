@@ -173,9 +173,11 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
       .get(Controls.MachineType)
       .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        const payload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations(payload);
+      .subscribe(machineType => {
+        if (machineType.select) {
+          const payload = this._getQuotaCalculationPayload();
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
   }
 
