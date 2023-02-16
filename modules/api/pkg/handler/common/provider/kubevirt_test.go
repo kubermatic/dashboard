@@ -56,10 +56,10 @@ func Test_filterInstancetypes(t *testing.T) {
 				MaxRAM: 5,
 			},
 			want: newInstancetypeList().
-				addInstanceType(apiv2.InstancetypeCustom, 2, "4Gi").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4Gi"). // ok
-				addInstanceType(apiv2.InstancetypeCustom, 4, "4Gi").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4Gi"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 2, "4295M").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4295M"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 4, "4295M").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4295M"). // ok
 				toApiWithoutError(),
 		},
 		{
@@ -109,10 +109,10 @@ func Test_filterInstancetypes(t *testing.T) {
 				MaxRAM: 5,
 			},
 			want: newInstancetypeList().
-				addInstanceType(apiv2.InstancetypeCustom, 2, "4Gi").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4Gi"). // ok
-				addInstanceType(apiv2.InstancetypeCustom, 4, "4Gi").     // ok
-				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4Gi"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 2, "4295M").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4295M"). // ok
+				addInstanceType(apiv2.InstancetypeCustom, 4, "4295M").     // ok
+				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4295M"). // ok
 				toApiWithoutError(),
 		},
 	}
@@ -173,7 +173,9 @@ func newInstancetype(category apiv2.VirtualMachineInstancetypeCategory, cpu uint
 }
 
 func instancetypeName(cpu uint32, memory string) string {
-	return fmt.Sprintf("cpu-%d-memory-%s", cpu, memory)
+	memoryAsQuantity, _ := resource.ParseQuantity(memory)
+	memoryAsScaledString := resource.NewScaledQuantity(memoryAsQuantity.ScaledValue(resource.Giga), resource.Giga).String()
+	return fmt.Sprintf("cpu-%d-memory-%s", cpu, memoryAsScaledString)
 }
 
 func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
