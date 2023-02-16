@@ -350,10 +350,6 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 
 				filtered.Instancetypes[category] = append(filtered.Instancetypes[category], instancetype)
 			}
-
-			// st := newQ.String()
-			spec2, _ := json.Marshal(spec)
-			log.Logger.Info(spec2)
 		}
 	}
 	return filtered
