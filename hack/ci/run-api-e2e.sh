@@ -73,6 +73,7 @@ cat << EOF >> hack/ci/testdata/oauth_values.yaml
         nameAttr: cn
 EOF
 
+sleep 7200
 retry 2 kubectl create ns ${LDAP_NAMESPACE}
 retry 2 kubectl apply -f hack/ci/testdata/openldap.yaml
 
