@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {UserService} from '@core/services/user';
-import {ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {getOperatingSystem} from '@shared/entity/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -103,17 +103,6 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  isAddMachineDeploymentDisabled(): boolean {
-    switch (this.cluster?.status?.state) {
-      case ExternalClusterState.Running:
-      case ExternalClusterState.Warning:
-        return false;
-
-      default:
-        return true;
-    }
   }
 
   getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
