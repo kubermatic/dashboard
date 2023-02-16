@@ -139,7 +139,7 @@ export class KubeVirtBasicNodeDataComponent
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
-  private readonly _defaultMemory = 2048;
+  private readonly _defaultMemory = 2000;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
   private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
@@ -186,7 +186,7 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
+      [Controls.PrimaryDiskSize]: this._builder.control('10G', Validators.required),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
@@ -655,11 +655,11 @@ export class KubeVirtBasicNodeDataComponent
         cloud: {
           kubevirt: {
             cpus: !instanceType && cpus ? `${cpus}` : null,
-            memory: !instanceType && memory ? `${memory}Mi` : null,
+            memory: !instanceType && memory ? `${memory}M` : null,
             primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[
               ComboboxControls.Select
             ],
-            primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
+            primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}G`,
             nodeAffinityPreset: nodeAffinityPresetData,
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,
@@ -671,7 +671,7 @@ export class KubeVirtBasicNodeDataComponent
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
       kubevirtNodeSize: {
-        [Controls.PrimaryDiskSize]: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
+        [Controls.PrimaryDiskSize]: `${this.form.get(Controls.PrimaryDiskSize).value}G`,
       } as KubeVirtNodeSize,
     };
 
