@@ -597,14 +597,24 @@ func getKubevirtResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpro
 	}
 	nc.Memory = &memory
 
-	storage, err := resource.ParseQuantity(provider.KubevirtNodeSize.PrimaryDiskSize)
+	primaryDiskSize := provider.KubevirtNodeSize.PrimaryDiskSize
+	// Default to giga if unit not provided.
+	if _, err := strconv.Atoi(primaryDiskSize); err == nil {
+		primaryDiskSize += "G"
+	}
+	storage, err := resource.ParseQuantity(primaryDiskSize)
 	if err != nil {
 		return fmt.Errorf("failed to parse kubevirt node storage %q to resource quantity: %w", provider.KubevirtNodeSize.PrimaryDiskSize, err)
 	}
 
 	// Add all secondary disks
 	for _, d := range provider.KubevirtNodeSize.SecondaryDisks {
-		secondaryStorage, err := resource.ParseQuantity(d.Size)
+		secondaryDiskSize := d.Size
+		// Default to giga if unit not provided.
+		if _, err := strconv.Atoi(secondaryDiskSize); err == nil {
+			secondaryDiskSize += "G"
+		}
+		secondaryStorage, err := resource.ParseQuantity(secondaryDiskSize)
 		if err != nil {
 			return fmt.Errorf("failed to parse kubevirt secondary node storage %q to resource quantity: %w", d.Size, err)
 		}
