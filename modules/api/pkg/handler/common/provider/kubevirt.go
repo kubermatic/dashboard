@@ -38,6 +38,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -330,7 +331,6 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 				log.Logger.Errorf("skipping VirtualMachineInstancetype:%s, parsing instancetype.Spec failed:%v", instancetype.Name, err)
 				continue
 			}
-
 			if handlercommon.FilterCPU(int(spec.CPU.Guest), machineFilter.MinCPU, machineFilter.MaxCPU) && handlercommon.FilterMemory(int(spec.Memory.Guest.Value()/(1<<30)), machineFilter.MinRAM, machineFilter.MaxRAM) {
 				if filtered.Instancetypes == nil {
 					filtered.Instancetypes = make(map[apiv2.VirtualMachineInstancetypeCategory][]apiv2.VirtualMachineInstancetype, 0)
@@ -338,6 +338,16 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 				if filtered.Instancetypes[category] == nil {
 					filtered.Instancetypes[category] = make([]apiv2.VirtualMachineInstancetype, 0)
 				}
+
+				// Convert memory from BinarySI to DeciamlSI.
+				spec.Memory.Guest = *resource.NewScaledQuantity(spec.Memory.Guest.ScaledValue(resource.Mega), resource.Mega)
+				specWithScaledMem, err := json.Marshal(spec)
+				if err != nil {
+					log.Logger.Errorf("skipping spec conversion, parsing failed:%v", spec)
+				} else {
+					instancetype.Spec = string(specWithScaledMem)
+				}
+
 				filtered.Instancetypes[category] = append(filtered.Instancetypes[category], instancetype)
 			}
 		}
