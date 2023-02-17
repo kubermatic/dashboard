@@ -68,7 +68,7 @@ limitations under the License.
               fxLayoutAlign="center center"
               mat-flat-button
               type="button"
-              [disabled]="!isClusterRunning"
+              [disabled]="!isWebTerminalEnabled()"
               (click)="toggleTerminal()">
         <i class="km-icon-mask km-icon-terminal"></i>
         <span>Web Terminal</span>

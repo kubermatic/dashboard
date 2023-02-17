@@ -61,6 +61,8 @@ import {
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
+  getMachineDeploymentHealthStatus,
+  StatusMassage,
 } from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
@@ -585,6 +587,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.showTerminal = !this.showTerminal;
+  }
+
+  isWebTerminalEnabled(): boolean {
+    if (this.machineDeployments?.length) {
+      return this.machineDeployments.some(
+        (md: MachineDeployment) => getMachineDeploymentHealthStatus(md)?.message === StatusMassage.Running
+      );
+    }
+    return false;
   }
 
   private _canReloadVersions(): boolean {

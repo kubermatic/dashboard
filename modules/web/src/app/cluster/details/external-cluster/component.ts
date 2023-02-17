@@ -104,7 +104,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
         }),
         switchMap(_ =>
           forkJoin([
-            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
+            this.isRunning() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
             this.isRunning() ? this._clusterService.externalClusterNodes(this.projectID, clusterID) : of([]),
             this.isRunning() ? this._clusterService.externalMachineDeployments(this.projectID, clusterID) : of([]),
           ])
@@ -148,7 +148,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isRunning(): boolean {
-    return this.cluster?.status?.state === ExternalClusterState.Running;
+    return (
+      this.cluster?.status?.state === ExternalClusterState.Running ||
+      this.cluster?.status?.state === ExternalClusterState.Warning
+    );
   }
 
   isKubeConfigButtonDisabled(): boolean {
@@ -169,10 +172,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   downloadKubeconfig(): void {
     window.open(this._clusterService.getExternalKubeconfigURL(this.projectID, this.cluster.id), '_blank');
-  }
-
-  hasUpgrades(): boolean {
-    return this.isRunning();
   }
 
   getStatus(): string {

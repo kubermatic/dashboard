@@ -85,7 +85,7 @@ limitations under the License.
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isRunning()"
                            [upgrades]="canEdit() ? upgrades : []"
-                           [hasUpgradeOptions]="hasUpgrades()"
+                           [hasUpgradeOptions]="isRunning()"
                            [isClusterExternal]="true"
                            *ngIf="cluster?.spec?.version"></km-version-picker>
         <km-property>

@@ -37,7 +37,12 @@ limitations under the License.
              [matChipInputAddOnBlur]="true"
              (matChipInputTokenEnd)="addTag($event)">
     </mat-chip-list>
-    <mat-hint>{{description}}</mat-hint>
+    <mat-hint *ngIf="!description; else defaultHint">
+      <ng-content select="[hint]"></ng-content>
+    </mat-hint>
+    <ng-template #defaultHint>
+      <mat-hint>{{description}}</mat-hint>
+    </ng-template>
     <mat-error *ngIf="form.get(controls.Tags).hasError('unique')">
       Value already exists.
     </mat-error>

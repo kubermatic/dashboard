@@ -295,6 +295,10 @@ export class AKSClusterSettingsComponent
           });
         });
     } else {
+      this._getAKSKubernetesVersions();
+      this._getAKSLocations();
+      this._getAKSResourceGroups();
+
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(tap(_ => this._clearVmSize()))
