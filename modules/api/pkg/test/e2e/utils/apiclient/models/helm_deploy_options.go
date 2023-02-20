@@ -21,6 +21,11 @@ type HelmDeployOptions struct {
 	// if set, the installation process deletes the installation on failure; the upgrade process rolls back changes made in case of failed upgrade.
 	Atomic bool `json:"atomic,omitempty"`
 
+	// EnableDNS  corresponds to the --enable-dns flag on Helm cli.
+	// enable DNS lookups when rendering templates.
+	// if you enable this flag, you have to verify that helm template function 'getHostByName' is not being used in a chart to disclose any information you do not want to be passed to DNS servers.(c.f. CVE-2023-25165)
+	EnableDNS bool `json:"enableDNS,omitempty"`
+
 	// Wait corresponds to the --wait flag on Helm cli.
 	// if set, will wait until all Pods, PVCs, Services, and minimum number of Pods of a Deployment, StatefulSet, or ReplicaSet are in a ready state before marking the release as successful. It will wait for as long as timeout
 	Wait bool `json:"wait,omitempty"`

@@ -14192,6 +14192,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14203,13 +14210,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -14726,6 +14726,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14737,11 +14742,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {
@@ -34412,6 +34412,11 @@
           "type": "boolean",
           "x-go-name": "Atomic"
         },
+        "enableDNS": {
+          "description": "EnableDNS  corresponds to the --enable-dns flag on Helm cli.\nenable DNS lookups when rendering templates.\nif you enable this flag, you have to verify that helm template function 'getHostByName' is not being used in a chart to disclose any information you do not want to be passed to DNS servers.(c.f. CVE-2023-25165)",
+          "type": "boolean",
+          "x-go-name": "EnableDNS"
+        },
         "timeout": {
           "$ref": "#/definitions/Duration"
         },
@@ -38469,6 +38474,7 @@
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "ProviderType": {
+      "description": "+kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;packet;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector",
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
