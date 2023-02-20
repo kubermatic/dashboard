@@ -16,7 +16,6 @@ import {Component, EventEmitter, OnDestroy, OnInit, ViewChild, TemplateRef} from
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
-import {AppConfigService} from '@app/config.service';
 import {AddonService} from '@core/services/addon';
 import {ApplicationService} from '@core/services/application';
 import {ClusterService} from '@core/services/cluster';
@@ -53,7 +52,7 @@ import {Node} from '@shared/entity/node';
 import {AdminSettings} from '@shared/entity/settings';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {Config, GroupConfig} from '@shared/model/Config';
+import {GroupConfig} from '@shared/model/Config';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
   getClusterHealthStatus,
@@ -106,7 +105,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isOPARunning = false;
   healthStatus: HealthStatus;
   health: Health;
-  config: Config = {share_kubeconfig: false};
   projectID: string;
   metrics: ClusterMetrics;
   events: Event[] = [];
@@ -138,7 +136,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
     private readonly _datacenterService: DatacenterService,
-    private readonly _appConfigService: AppConfigService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
     private readonly _opaService: OPAService,
@@ -148,7 +145,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.config = this._appConfigService.getConfig();
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
 

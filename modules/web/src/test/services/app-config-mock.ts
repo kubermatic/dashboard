@@ -24,7 +24,6 @@ export class AppConfigMockService {
 
   getConfig(): Config {
     return {
-      share_kubeconfig: false,
       openstack: {
         wizard_use_default_user: false,
       },

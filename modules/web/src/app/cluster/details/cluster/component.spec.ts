@@ -18,13 +18,11 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ApplicationService} from '@core/services/application';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {ApplicationServiceMock} from '@test/services/application-mock';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
@@ -104,7 +102,6 @@ describe('ClusterDetailsComponent', () => {
         {provide: Router, useClass: RouterStub},
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},
         {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: NodeService, useClass: NodeMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: SettingsService, useClass: SettingsMockService},
