@@ -59,13 +59,12 @@
     },
     {
         "category": "added",
-        "description": "EE only: Administrators can enforce default project quotas.",
+        "description": "EE only: Administrators can enforce default project quotas."
     },
     {
         "category": "added",
-        "description": "EE only: If project quotas are enabled, quota changes are live estimated while creating clusters and machine deployments.",
+        "description": "EE only: If project quotas are enabled, quota changes are live estimated while creating clusters and machine deployments."
     },
-
     {
         "category": "changed",
         "description": "Konnectivity (to connect cluster control plane and cluster nodes) is updated to v0.0.35, is now GA and enabled by default."
@@ -114,7 +113,6 @@
         "category": "changed",
         "description": "Update to etcd 3.5.6."
     },
-
     {
         "category": "fixed",
         "description": "Allow Kubernetes version upgrade for clusters with non-amd64 nodes & Canal CNI and IPVS for all k8s versions."
@@ -167,7 +165,6 @@
         "category": "fixed",
         "description": "Fix a bug in metering that lead to outdated Project and/or Cluster labels in reports."
     },
-
     {
         "category": "removed",
         "description": "Support for Kubernetes 1.22 and Kubernetes 1.23."
@@ -188,7 +185,6 @@
         "category": "removed",
         "description": "Support for Pod Security Policy Admission Plugin with Kubernetes 1.25."
     },
-
     {
         "category": "deprecated",
         "description": "machine-controller's built-in user data to provision new nodes is deprecated with this release and will be removed in a future release. OSM is the recommended way to generate user data."
