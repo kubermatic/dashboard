@@ -57,6 +57,14 @@
         "category": "added",
         "description": "Add Cilium CNI v1.13.0."
     },
+    {
+        "category": "added",
+        "description": "EE only: Administrators can enforce default project quotas.",
+    },
+    {
+        "category": "added",
+        "description": "EE only: If project quotas are enabled, quota changes are live estimated while creating clusters and machine deployments.",
+    },
 
     {
         "category": "changed",
@@ -69,6 +77,10 @@
     {
         "category": "changed",
         "description": "By default, external CCM is turned on for all providers that support it."
+    },
+    {
+        "category": "changed",
+        "description": "Cluster templates can be edited and customized during cluster creation."
     },
     {
         "category": "changed",
