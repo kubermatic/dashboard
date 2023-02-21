@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Kubermatic Kubernetes Platform API
+// Package docs Kubermatic Kubernetes Platform API
 //
-// This spec describes possible operations which can be made against the Kubermatic Kubernetes Platform API.
+// This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.
+//
+// KKP API is an **internal API** that is built primarily to complement the KKP dashboard. Our users are strongly advised to use Kubernetes APIs i.e. [KKP CRDs](https://docs.kubermatic.com/kubermatic/v2.22/references/crds/) to interact with and integrate KKP into their own platforms.
+//
+// Since KKP API is **not a public API**, users can expect breaking changes without any formal announcements.
 //
 //	Schemes: https
 //	Version: 2.22
