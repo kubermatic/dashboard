@@ -60,6 +60,7 @@ export class DynamicDatacenters extends PageOptions implements Page {
 
   delete(name: string): void {
     this.Buttons.deleteDatacenter(name)
+      .should(Condition.Exist)
       .click()
       .then(_ => this._strategy?.onDatacenterDelete());
     this.Buttons.deleteDatacenterConfirm.click();
