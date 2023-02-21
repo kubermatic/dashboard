@@ -17,6 +17,7 @@ limitations under the License.
 // Kubermatic Kubernetes Platform API
 //
 // This spec describes possible operations which can be made against the Kubermatic Kubernetes Platform API.
+// The API may introduce breaking changes and is not meant for external integrations.
 //
 //	Schemes: https
 //	Version: 2.22
