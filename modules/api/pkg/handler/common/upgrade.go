@@ -70,6 +70,8 @@ func GetUpgradesEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGe
 	externalCloudProvider := cluster.Spec.Features[kubermaticv1.ClusterFeatureExternalCloudProvider]
 	if externalCloudProvider {
 		updateConditions = append(updateConditions, kubermaticv1.ExternalCloudProviderCondition)
+	} else {
+		updateConditions = append(updateConditions, kubermaticv1.InTreeCloudProviderCondition)
 	}
 
 	config, err := configGetter(ctx)
