@@ -45,6 +45,8 @@ LDAP_NAMESPACE="ldap"
 export KUBERMATIC_LDAP_LOGIN="janedoe@example.com"
 export KUBERMATIC_LDAP_PASSWORD="foo"
 
+sleep 500000000000
+
 # Append Dex configuration with ldap connector
 cat << EOF >> hack/ci/testdata/oauth_values.yaml
   connectors:
