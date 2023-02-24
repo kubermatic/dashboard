@@ -66,6 +66,7 @@ export class Projects extends PageOptions implements Page {
   }
 
   delete(name: string): void {
+    this.Buttons.deleteDialog(name).should(Condition.Exist).should(Condition.BeEnabled);
     this.Buttons.deleteDialog(name).click({force: true});
     this.Buttons.deleteDialogInput.type(name);
     this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy?.onDelete());
