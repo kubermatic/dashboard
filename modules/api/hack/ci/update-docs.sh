@@ -42,6 +42,6 @@ cp ../modules/api/cmd/kubermatic-api/swagger.json content/kubermatic/main/data/s
 git add .
 
 if ! git diff --cached --stat --exit-code; then
-  git commit -m "Syncing with kubermatic/kubermatic@$REVISION"
+  git commit -m "Syncing with kubermatic/dashboard@$REVISION"
   git push
 fi
