@@ -646,7 +646,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 		{
-			"case 8: should marshal when cpu/memory is provided with vm-flavor",
+			"case 8-1: should fail when cpu/memory is provided with vm-flavor and NodeSpec",
 			&apiv1.KubevirtNodeSpec{
 				CPUs:                        "1",
 				Memory:                      "1",
@@ -655,7 +655,79 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"{\"flavorName\":\"test-flavor\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus, memory",
+		},
+		{
+			"case 8-2: should fail when cpu is provided with vm-flavor and NodeSpec",
+			&apiv1.KubevirtNodeSpec{
+				CPUs:                        "1",
+				FlavorName:                  "test-flavor",
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus",
+		},
+		{
+			"case 8-3: should fail when memory is provided with vm-flavor and NodeSpec",
+			&apiv1.KubevirtNodeSpec{
+				Memory:                      "1",
+				FlavorName:                  "test-flavor",
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): memory",
+		},
+		{
+			"case 8-4: should fail when memory is provided with vm-flavor and NodeSpec",
+			&apiv1.KubevirtNodeSpec{
+				CPUs:   "1",
+				Memory: "1",
+				Instancetype: &kubevirtv1.InstancetypeMatcher{
+					Name: "standard-2",
+					Kind: "VirtualMachineInstancetype",
+				}, PrimaryDiskOSImage: "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus, memory",
+		},
+		{
+			"case 8-5: should fail when memory is provided with vm-flavor and NodeSpec",
+			&apiv1.KubevirtNodeSpec{
+				CPUs: "1",
+				Instancetype: &kubevirtv1.InstancetypeMatcher{
+					Name: "standard-2",
+					Kind: "VirtualMachineInstancetype",
+				}, PrimaryDiskOSImage: "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus",
+		},
+		{
+			"case 8-6: should fail when memory is provided with vm-flavor and NodeSpec",
+			&apiv1.KubevirtNodeSpec{
+				Memory: "1",
+				Instancetype: &kubevirtv1.InstancetypeMatcher{
+					Name: "standard-2",
+					Kind: "VirtualMachineInstancetype",
+				}, PrimaryDiskOSImage: "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): memory",
+		},
+		{
+			"case 8-7: should marshal when cpu/memory is provided with vm-flavor",
+			&apiv1.KubevirtNodeSpec{
+				FlavorName:                  "test-flavor",
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"{\"flavorName\":\"test-flavor\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 		{
 			"case 9: should marshal when flavor is provided with affinity",
@@ -676,8 +748,6 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 		{
 			"case 10: should marshal when instance type is provided with topology constraint",
 			&apiv1.KubevirtNodeSpec{
-				CPUs:   "1",
-				Memory: "1",
 				Instancetype: &kubevirtv1.InstancetypeMatcher{
 					Name: "standard-2",
 					Kind: "VirtualMachineInstancetype",
@@ -692,7 +762,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				},
 				TopologySpreadConstraints: []apiv1.TopologySpreadConstraint{{MaxSkew: 1, TopologyKey: "zone", WhenUnsatisfiable: "ScheduleAnyway"}},
 			},
-			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":{\"name\":\"standard-2\",\"kind\":\"VirtualMachineInstancetype\"},\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":[{\"maxSkew\":1,\"topologyKey\":\"zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}",
+			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":{\"name\":\"standard-2\",\"kind\":\"VirtualMachineInstancetype\"},\"preference\":null,\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":[{\"maxSkew\":1,\"topologyKey\":\"zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}",
 		},
 		{
 			"case 11: should fail when no cpu is provided (neither directly nor instancetype)",
