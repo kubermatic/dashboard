@@ -105,9 +105,9 @@ limitations under the License.
                   [disabled]="!isRevokeTokenEnabled()">
             <span>Revoke Token</span>
           </button>
-          <button mat-menu-item
+          <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableShareCluster"
+                  mat-menu-item
                   id="km-share-kubeconfig-btn"
-                  *ngIf="config.share_kubeconfig"
                   (click)="shareConfigDialog()">
             <span>Share Cluster</span>
           </button>

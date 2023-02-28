@@ -21,7 +21,6 @@ export interface Theme {
 export type EndOfLife = {[version: string]: string};
 
 export interface Config {
-  share_kubeconfig?: boolean;
   openstack?: {
     wizard_use_default_user?: boolean;
     wizard_default_domain_name?: string;
