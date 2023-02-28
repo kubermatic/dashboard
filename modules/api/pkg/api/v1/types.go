@@ -2088,7 +2088,7 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		}
 	}
 	if len(doubleSpec) > 0 {
-		return []byte{}, fmt.Errorf("double definition  (instancetype/flavor and NodeSpec) of some parameter(s): %s", strings.Join(doubleSpec, ", "))
+		return []byte{}, fmt.Errorf("%s can not be set at the same time in template (instancetype/flavor) and node spec", strings.Join(doubleSpec, ", "))
 	}
 
 	res := struct {

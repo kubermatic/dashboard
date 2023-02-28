@@ -655,7 +655,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus, memory",
+			"cpus, memory can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-2: should fail when cpu is provided with vm-flavor and NodeSpec",
@@ -666,7 +666,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus",
+			"cpus can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-3: should fail when memory is provided with vm-flavor and NodeSpec",
@@ -677,7 +677,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): memory",
+			"memory can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-4: should fail when memory is provided with vm-flavor and NodeSpec",
@@ -691,7 +691,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus, memory",
+			"cpus, memory can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-5: should fail when memory is provided with vm-flavor and NodeSpec",
@@ -704,7 +704,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): cpus",
+			"cpus can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-6: should fail when memory is provided with vm-flavor and NodeSpec",
@@ -717,7 +717,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"double definition  (instancetype/flavor and NodeSpec) of some parameter(s): memory",
+			"memory can not be set at the same time in template (instancetype/flavor) and node spec",
 		},
 		{
 			"case 8-7: should marshal when cpu/memory is provided with vm-flavor",
