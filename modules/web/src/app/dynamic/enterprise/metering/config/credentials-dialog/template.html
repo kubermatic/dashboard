@@ -43,7 +43,7 @@ END OF TERMS AND CONDITIONS
       <input required
              matInput
              [formControlName]="controls.AccessSecret"
-             type="password"
+             kmInputPassword
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.AccessSecret).hasError('required')">
         <strong>Required</strong>

@@ -34,7 +34,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.AccessKeySecret"
            [name]="Controls.AccessKeySecret"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">

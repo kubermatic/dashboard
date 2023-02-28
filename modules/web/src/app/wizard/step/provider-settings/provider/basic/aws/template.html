@@ -21,7 +21,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.AccessKeyID"
            [name]="Controls.AccessKeyID"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-hint>AWS Access Key with write access is required. You can create one&nbsp;<a target="_blank"
@@ -38,7 +38,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.AccessKeySecret"
            [name]="Controls.AccessKeySecret"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-hint>
@@ -76,7 +76,7 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.AssumeRoleARN"
              [name]="Controls.AssumeRoleARN"
-             type="password"
+             kmInputPassword
              autocomplete="off"
              required>
       <mat-hint>
@@ -95,7 +95,7 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.AssumeRoleExternalID"
              [name]="Controls.AssumeRoleExternalID"
-             type="password"
+             kmInputPassword
              autocomplete="off"
              required>
       <mat-hint>
