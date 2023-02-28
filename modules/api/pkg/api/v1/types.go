@@ -2077,6 +2077,20 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		return []byte{}, fmt.Errorf("missing or invalid required parameter(s): %s", strings.Join(missing, ", "))
 	}
 
+	// Prevent to have double definition for cpu and memory.
+	doubleSpec := make([]string, 0)
+	if spec.Instancetype != nil || len(spec.FlavorName) > 0 {
+		if len(spec.CPUs) > 0 {
+			doubleSpec = append(doubleSpec, "cpus")
+		}
+		if len(spec.Memory) > 0 {
+			doubleSpec = append(doubleSpec, "memory")
+		}
+	}
+	if len(doubleSpec) > 0 {
+		return []byte{}, fmt.Errorf("%s can not be set at the same time in template (instancetype/flavor) and node spec", strings.Join(doubleSpec, ", "))
+	}
+
 	res := struct {
 		FlavorName                  string                          `json:"flavorName"`
 		FlavorProfile               string                          `json:"flavorProfile"`
