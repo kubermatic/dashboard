@@ -283,6 +283,11 @@ km-wizard {
 
   &.side-nav-sub-menu-item {
     min-width: 200px;
+
+    .mat-menu-content {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
   }
 }
 

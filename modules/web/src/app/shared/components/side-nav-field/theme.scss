@@ -98,7 +98,13 @@
       color: map.get($colors, text);
     }
 
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
     &:hover {
+      background-color: map.get($colors, collapsed-sidenav-background-hover);
+
       span {
         color: map.get($colors, primary-dark);
       }
