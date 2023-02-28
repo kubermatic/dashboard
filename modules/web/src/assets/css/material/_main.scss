@@ -283,6 +283,11 @@ km-wizard {
 
   &.side-nav-sub-menu-item {
     min-width: 200px;
+
+    .mat-menu-content {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
   }
 }
 
@@ -461,6 +466,10 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
   &.ng-animating {
     visibility: hidden;
+  }
+
+  &.project-selector-dropdown {
+    max-height: 370px;
   }
 }
 
