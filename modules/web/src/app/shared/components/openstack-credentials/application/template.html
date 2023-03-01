@@ -33,7 +33,7 @@ limitations under the License.
     <input [formControlName]="Controls.ApplicationCredentialSecret"
            [name]="Controls.ApplicationCredentialSecret"
            matInput
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.ApplicationCredentialSecret).hasError('required')">

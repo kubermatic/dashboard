@@ -20,7 +20,7 @@ limitations under the License.
     <mat-label>Access Key ID</mat-label>
     <input matInput
            [formControlName]="Controls.AccessKeyID"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-hint>
@@ -36,7 +36,7 @@ limitations under the License.
     <mat-label>Secret Access Key</mat-label>
     <input matInput
            [formControlName]="Controls.SecretAccessKey"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
 
@@ -64,7 +64,7 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.AssumeRoleARN"
              [name]="Controls.AssumeRoleARN"
-             type="password"
+             kmInputPassword
              autocomplete="off"
              required>
       <mat-hint>
@@ -83,7 +83,7 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.AssumeRoleExternalID"
              [name]="Controls.AssumeRoleExternalID"
-             type="password"
+             kmInputPassword
              autocomplete="off"
              required>
       <mat-hint>

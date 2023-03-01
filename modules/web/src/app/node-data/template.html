@@ -130,7 +130,7 @@ limitations under the License.
           <mat-label>RHEL Subscription Manager Password</mat-label>
           <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
                  matInput
-                 type="password"
+                 kmInputPassword
                  autocomplete="off">
           <mat-hint>RHEL Subscription Manager Password is required to register a machine.</mat-hint>
         </mat-form-field>
@@ -139,7 +139,7 @@ limitations under the License.
           <mat-label>RHEL Subscription Manager Offline Token</mat-label>
           <input [formControlName]="Controls.RhelOfflineToken"
                  matInput
-                 type="password"
+                 kmInputPassword
                  autocomplete="off">
           <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
         </mat-form-field>

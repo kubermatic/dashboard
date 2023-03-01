@@ -457,6 +457,16 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   }
 }
 
+.mat-icon-password-show-button {
+  background-color: transparent;
+  border: none;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .mat-select-panel {
   margin-left: 6px;
   margin-top: 28px;

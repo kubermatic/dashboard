@@ -21,7 +21,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Control.Token"
            [name]="Control.Token"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Control.Token).hasError('minlength') || form.get(Control.Token).hasError('maxlength')">

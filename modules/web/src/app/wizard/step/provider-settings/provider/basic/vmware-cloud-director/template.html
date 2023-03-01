@@ -32,7 +32,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.Password"
            [name]="Controls.Password"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">

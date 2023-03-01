@@ -20,7 +20,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Control.ApiKey"
            [name]="Control.ApiKey"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Control.ApiKey).hasError('required')">

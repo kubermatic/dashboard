@@ -22,7 +22,7 @@ limitations under the License.
            id="km-settings-preset-digitalocean-token"
            [formControlName]="Controls.Token"
            [name]="Controls.Token"
-           type="password"
+           kmInputPassword
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Token).hasError('required')">
