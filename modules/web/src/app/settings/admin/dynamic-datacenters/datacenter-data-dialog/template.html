@@ -84,7 +84,7 @@ limitations under the License.
                fxLayoutAlign="start"
                fxLayoutGap="6px">
             <ng-container *ngIf="form.get(controls.Country).value">
-              <span class="flag-icon flag-icon-{{form.get(controls.Country).value.toLowerCase()}}"></span>
+              <span class="fi fi-{{form.get(controls.Country).value.toLowerCase()}}"></span>
               <span>{{getCountryName(form.get(controls.Country).value)}}</span>
             </ng-container>
           </div>
@@ -92,7 +92,7 @@ limitations under the License.
         <mat-option *ngFor="let countryCode of countryCodes"
                     [value]="countryCode">
           <div fxLayoutGap="6px">
-            <span class="flag-icon flag-icon-{{countryCode.toLowerCase()}}"></span>
+            <span class="fi fi-{{countryCode.toLowerCase()}}"></span>
             <span>{{getCountryName(countryCode)}}</span>
           </div>
         </mat-option>
