@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Cluster, MachineNetwork} from '@shared/entity/cluster';
 import {AddMachineNetworkComponent} from '../add-machine-network/component';
 

@@ -20,9 +20,9 @@
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {filter, switchMap, take} from 'rxjs';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';

@@ -20,9 +20,9 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -30,7 +30,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {UserService} from '@core/services/user';
 import {Report} from '@shared/entity/metering';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {NotificationService} from '@app/core/services/notification';
 
 enum Column {

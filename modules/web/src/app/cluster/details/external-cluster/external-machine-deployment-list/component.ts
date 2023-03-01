@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Router} from '@angular/router';
 import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
@@ -26,7 +26,7 @@ import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MemberUtils, Permission} from '@shared/utils/member';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';

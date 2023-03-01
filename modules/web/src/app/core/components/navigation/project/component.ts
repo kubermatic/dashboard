@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {MatLegacySelect as MatSelect, MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';

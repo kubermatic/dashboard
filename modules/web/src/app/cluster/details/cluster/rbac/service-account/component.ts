@@ -17,7 +17,7 @@ import {combineLatest, Subject} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {RBACService} from '@core/services/rbac';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Cluster} from '@shared/entity/cluster';
 import {NamespaceBinding, ClusterBinding, ClusterServiceAccount, Kind, SimpleClusterBinding} from '@shared/entity/rbac';
 

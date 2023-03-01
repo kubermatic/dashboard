@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Input} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {
   MeteringConfigurationDialog,
   MeteringConfigurationDialogConfig,

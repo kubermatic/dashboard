@@ -14,7 +14,7 @@
 
 import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';

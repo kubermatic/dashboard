@@ -14,7 +14,10 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';

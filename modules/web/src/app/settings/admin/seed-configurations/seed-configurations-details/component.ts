@@ -19,7 +19,7 @@ import {finalize, takeUntil} from 'rxjs/operators';
 import {MatSort} from '@angular/material/sort';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
 import {
   DatacenterDetail,

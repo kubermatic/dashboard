@@ -20,13 +20,13 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Component, OnInit, ViewChild, Inject, Input, OnDestroy} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {Report} from '@shared/entity/metering';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
 import {Subject} from 'rxjs';

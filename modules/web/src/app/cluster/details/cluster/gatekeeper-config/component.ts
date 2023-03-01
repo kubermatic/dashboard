@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';

@@ -90,5 +90,5 @@ $foreground: map.merge($foreground, (divider: #e0e3e5));
 $foreground: map.merge($foreground, (disabled-divider: #eff1f2));
 $theme-light: map.merge($theme-light, (foreground: $foreground));
 
-@include mat.all-component-themes($theme-light);
+@include mat.all-legacy-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);

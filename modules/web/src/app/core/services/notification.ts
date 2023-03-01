@@ -13,7 +13,11 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss} from '@angular/material/snack-bar';
+import {
+  MatLegacySnackBar as MatSnackBar,
+  MatLegacySnackBarConfig as MatSnackBarConfig,
+  MatLegacySnackBarDismiss as MatSnackBarDismiss,
+} from '@angular/material/legacy-snack-bar';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {delay, filter, map, take, tap} from 'rxjs/operators';
 import {NotificationComponent, NotificationType} from '../components/notification/component';
