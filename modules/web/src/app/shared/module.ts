@@ -14,7 +14,7 @@
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CommonModule, DecimalPipe} from '@angular/common';
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule, Type} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -138,7 +138,9 @@ import {InputPasswordDirective} from './directives/input-password';
 const modules = [
   CommonModule,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule.withConfig({
+    callSetDisabledState: 'whenDisabledForLegacyCode',
+  }) as unknown as Type<ModuleWithProviders<ReactiveFormsModule>>,
   FlexLayoutModule,
   MatButtonModule,
   MatIconModule,
