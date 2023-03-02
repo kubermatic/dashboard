@@ -55,7 +55,7 @@ func FilterGPU(record int, enableGPU bool) bool {
 	return true
 }
 
-func DetermineMachineFlavorFilter(globalMachineFilter, seedMachineFilter *kubermaticv1.MachineFlavorFilter) kubermaticv1.MachineFlavorFilter {
+func DetermineMachineFlavorFilter(seedMachineFilter, globalMachineFilter *kubermaticv1.MachineFlavorFilter) kubermaticv1.MachineFlavorFilter {
 	var filter kubermaticv1.MachineFlavorFilter
 	if seedMachineFilter != nil {
 		filter = *seedMachineFilter
