@@ -34321,6 +34321,11 @@
           "type": "boolean",
           "x-go-name": "EnableOIDCKubeconfig"
         },
+        "enableShareCluster": {
+          "description": "EnableShareCluster enables the Share Cluster feature for the user clusters.",
+          "type": "boolean",
+          "x-go-name": "EnableShareCluster"
+        },
         "enableWebTerminal": {
           "description": "EnableWebTerminal enables the Web Terminal feature for the user clusters.",
           "type": "boolean",
