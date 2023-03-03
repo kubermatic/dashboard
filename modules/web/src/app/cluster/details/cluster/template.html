@@ -78,33 +78,46 @@ limitations under the License.
         <button mat-icon-button
                 color="tertiary"
                 class="provider-menu-btn"
+                [disabled]="!!cluster?.deletionTimestamp"
                 [matMenuTriggerFor]="menu">
           <i class="km-icon-mask km-icon-points-menu"></i>
         </button>
         <mat-menu #menu="matMenu"
                   class="km-provider-edit-settings">
-          <button mat-menu-item
-                  (click)="editCluster()"
-                  [disabled]="!isClusterRunning || !isEditEnabled()">
-            <span>Edit Cluster</span>
-          </button>
-          <button mat-menu-item
-                  (click)="editProviderSettings()"
-                  *ngIf="!cluster.spec.cloud.bringyourown"
-                  [disabled]="!isClusterRunning || !isEditEnabled()">
-            <span>Edit Provider</span>
-          </button>
-          <button mat-menu-item
-                  (click)="editSSHKeys()"
-                  *ngIf="cluster.spec.enableUserSSHKeyAgent"
-                  [disabled]="!isSSHKeysEditEnabled()">
-            <span>Manage SSH keys</span>
-          </button>
-          <button mat-menu-item
-                  (click)="revokeToken()"
-                  [disabled]="!isRevokeTokenEnabled()">
-            <span>Revoke Token</span>
-          </button>
+          <span [matTooltip]="!isEditEnabled() ? 'This action is not available for viewer role users.' : ''">
+            <button mat-menu-item
+            [ngClass]="{'remove-hover': !isClusterRunning || !isEditEnabled()}"
+                    (click)="editCluster()"
+                    [disabled]="!isClusterRunning || !isEditEnabled()">
+              <span>Edit Cluster</span>
+            </button>
+          </span>
+          <span [matTooltip]="!isEditEnabled() ? 'This action is not available for viewer role users.' : ''">
+            <button mat-menu-item
+                    [ngClass]="{'remove-hover': !isClusterRunning || !isEditEnabled()}"
+                    (click)="editProviderSettings()"
+                    *ngIf="!cluster.spec.cloud.bringyourown"
+                    [disabled]="!isClusterRunning || !isEditEnabled()">
+              <span>Edit Provider</span>
+            </button>
+          </span>
+          <span [matTooltip]="!isSSHKeysEditEnabled() ? 'This action is not available for viewer role users.' : ''">
+            <button mat-menu-item
+                    [ngClass]="{'remove-hover': !isClusterRunning || !isSSHKeysEditEnabled()}"
+                    (click)="editSSHKeys()"
+                    *ngIf="cluster.spec.enableUserSSHKeyAgent"
+                    [disabled]="!isSSHKeysEditEnabled()">
+              <span>Manage SSH keys</span>
+            </button>
+          </span>
+          <span [matTooltip]="!isRevokeTokenEnabled() ? 'This action is not available for viewer role users.' : ''">
+            <button mat-menu-item
+                    [ngClass]="{'remove-hover': !isClusterRunning || !isRevokeTokenEnabled()}"
+                    (click)="revokeToken()"
+                    [disabled]="!isRevokeTokenEnabled()">
+              <span>Revoke Token</span>
+            </button>
+          </span>
           <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableShareCluster"
                   mat-menu-item
                   id="km-share-kubeconfig-btn"
@@ -112,11 +125,12 @@ limitations under the License.
             <span>Share Cluster</span>
           </button>
           <mat-divider></mat-divider>
-          <span [matTooltip]="!!cluster?.deletionTimestamp ? 'Cluster is being deleted.' : ''">
+          <span [matTooltip]="!isDeleteEnabled() ? 'This action is not available for viewer role users.' : ''">
             <button mat-menu-item
+                    [ngClass]="{'remove-hover': !isClusterRunning || !isDeleteEnabled()}"
                     id="km-delete-cluster-btn"
                     (click)="deleteClusterDialog()"
-                    [disabled]="!isDeleteEnabled() || !!cluster?.deletionTimestamp">
+                    [disabled]="!isDeleteEnabled()">
               <span>Delete Cluster</span>
             </button>
           </span>
