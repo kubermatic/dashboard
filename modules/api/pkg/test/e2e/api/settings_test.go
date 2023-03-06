@@ -55,7 +55,7 @@ func TestGetDefaultGlobalSettings(t *testing.T) {
 				DisplayTermsOfService:       false,
 				EnableDashboard:             true,
 				EnableWebTerminal:           false,
-				EnableShareCluster:          false,
+				EnableShareCluster:          true,
 				EnableOIDCKubeconfig:        false,
 				UserProjectsLimit:           0,
 				RestrictProjectCreation:     false,
