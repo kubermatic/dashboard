@@ -2032,6 +2032,11 @@ type GlobalSettings struct {
 	// EnableWebTerminal enables the Web Terminal feature for the user clusters.
 	EnableWebTerminal bool `json:"enableWebTerminal,omitempty"`
 
+	// +kubebuilder:default=false
+
+	// EnableShareCluster enables the Share Cluster feature for the user clusters.
+	EnableShareCluster bool `json:"enableShareCluster,omitempty"`
+
 	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig"` //nolint:tagliatelle
 	// UserProjectsLimit is the maximum number of projects a user can create.
 	UserProjectsLimit           int64 `json:"userProjectsLimit"`
