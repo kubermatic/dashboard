@@ -48,7 +48,7 @@ limitations under the License.
         <mat-button-toggle *ngFor="let datacenter of datacenters; trackBy: trackByDatacenter"
                            value="{{datacenter.metadata.name}}"
                            (click)="next()">
-          <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
+          <span class="fi fi-{{ datacenter.spec.country.toLowerCase() }}">
           </span>
           <div class="location">
             <span [ngClass]="{'country-prefix': !!getZone(datacenter)}">{{getLocation(datacenter)}}</span>

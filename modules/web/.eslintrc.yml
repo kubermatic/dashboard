@@ -18,7 +18,7 @@ parserOptions:
   project:
     - src/tsconfig.ce.json
     - src/tsconfig.ee.json
-    - src/tsconfig.spec.json
+    - tsconfig.spec.json
     - cypress/tsconfig.json
   sourceType: module
 extends:

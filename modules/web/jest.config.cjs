@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export default {
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
   preset: 'jest-preset-angular',
   roots: ['src'],
   setupFilesAfterEnv: ['<rootDir>/src/test.base.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: 'src/tsconfig.spec.json',
-    },
-  },
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
     '^@core/(.*)$': '<rootDir>/src/app/core/$1',
@@ -29,4 +25,5 @@ export default {
     '^@environments/(.*)$': '<rootDir>/src/environments/$1',
     '^@test/(.*)$': '<rootDir>/src/test/$1',
   },
+  transformIgnorePatterns: ['node_modules/?!(@swimlane)/'],
 };

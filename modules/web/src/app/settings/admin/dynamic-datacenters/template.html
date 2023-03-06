@@ -68,7 +68,7 @@ limitations under the License.
                      fxLayoutAlign="start"
                      fxLayoutGap="6px">
                   <ng-container *ngIf="countryFilter">
-                    <span class="flag-icon flag-icon-{{countryFilter.toLowerCase()}}"></span>
+                    <span class="fi fi-{{countryFilter.toLowerCase()}}"></span>
                     <span>{{getCountryName(countryFilter)}}</span>
                   </ng-container>
                 </div>
@@ -87,7 +87,7 @@ limitations under the License.
               <mat-option *ngFor="let country of countries"
                           [value]="country">
                 <div fxLayoutGap="6px">
-                  <span class="flag-icon flag-icon-{{country.toLowerCase()}}"></span>
+                  <span class="fi fi-{{country.toLowerCase()}}"></span>
                   <span>{{getCountryName(country)}}</span>
                 </div>
               </mat-option>
@@ -173,7 +173,7 @@ limitations under the License.
             *matCellDef="let element"
             fxLayoutGap="6px">
           <ng-container *ngIf="element.spec && element.spec.country">
-            <span class="flag-icon flag-icon-{{element.spec.country.toLowerCase()}}"></span>
+            <span class="fi fi-{{element.spec.country.toLowerCase()}}"></span>
             <span>{{getCountryName(element.spec.country)}}</span>
           </ng-container>
         </td>
