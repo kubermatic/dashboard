@@ -12,7 +12,7 @@
   "info": {
     "description": "This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.\n\nKKP API is an **internal API** that is built primarily to complement the KKP dashboard. Our users are strongly advised to use Kubernetes APIs i.e. [KKP CRDs](https://docs.kubermatic.com/kubermatic/v2.22/references/crds/) to interact with and integrate KKP into their own platforms.\n\nSince KKP API is **not a public API**, users can expect breaking changes without any formal announcements.",
     "title": "Kubermatic Kubernetes Platform API",
-    "version": "2.22"
+    "version": "2.23"
   },
   "paths": {
     "/api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}": {
@@ -14192,6 +14192,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14203,13 +14210,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -14726,6 +14726,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14737,11 +14742,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {
