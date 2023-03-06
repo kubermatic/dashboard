@@ -1037,6 +1037,7 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv2.GlobalSettin
 		EnableOIDCKubeconfig:  gSettings.EnableOIDCKubeconfig,
 		EnableDashboard:       gSettings.EnableDashboard,
 		EnableWebTerminal:     gSettings.EnableWebTerminal,
+		EnableShareCluster:    gSettings.EnableShareCluster,
 		OpaOptions: kubermaticv1.OpaOptions{
 			Enabled:  gSettings.OpaOptions.Enabled,
 			Enforced: gSettings.OpaOptions.Enforced,

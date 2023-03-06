@@ -17,6 +17,13 @@ import (
 // swagger:model PreferenceMatcher
 type PreferenceMatcher struct {
 
+	// InferFromVolume lists the name of a volume that should be used to infer or discover the preference
+	// to be used through known annotations on the underlying resource. Once applied to the PreferenceMatcher
+	// this field is removed.
+	//
+	// +optional
+	InferFromVolume string `json:"inferFromVolume,omitempty"`
+
 	// Kind specifies which preference resource is referenced.
 	// Allowed values are: "VirtualMachinePreference" and "VirtualMachineClusterPreference".
 	// If not specified, "VirtualMachineClusterPreference" is used by default.
@@ -25,6 +32,8 @@ type PreferenceMatcher struct {
 	Kind string `json:"kind,omitempty"`
 
 	// Name is the name of the VirtualMachinePreference or VirtualMachineClusterPreference
+	//
+	// +optional
 	Name string `json:"name,omitempty"`
 
 	// RevisionName specifies a ControllerRevision containing a specific copy of the

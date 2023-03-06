@@ -82,6 +82,7 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 			DisplayTermsOfService:       false,
 			EnableDashboard:             true,
 			EnableWebTerminal:           false,
+			EnableShareCluster:          false,
 			EnableOIDCKubeconfig:        false,
 			UserProjectsLimit:           0,
 			RestrictProjectCreation:     false,

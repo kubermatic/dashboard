@@ -29217,6 +29217,11 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "Anything": {
+      "description": "Anything is a struct wrapper around a field of type `interface{}`\nthat plays nicely with controller-gen\n+kubebuilder:object:generate=false\n+kubebuilder:validation:Type=\"\"",
+      "type": "object",
+      "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/core/templates"
+    },
     "Application": {
       "description": "Application represents a set of applications that are to be installed for the cluster",
       "type": "object",
@@ -31100,6 +31105,20 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "Code": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string",
+          "x-go-name": "Engine",
+          "example": "\"Rego\". Required."
+        },
+        "source": {
+          "$ref": "#/definitions/Anything"
+        }
+      },
+      "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
     },
     "ConditionStatus": {
       "type": "string",
@@ -34321,6 +34340,11 @@
           "type": "boolean",
           "x-go-name": "EnableOIDCKubeconfig"
         },
+        "enableShareCluster": {
+          "description": "EnableShareCluster enables the Share Cluster feature for the user clusters.",
+          "type": "boolean",
+          "x-go-name": "EnableShareCluster"
+        },
         "enableWebTerminal": {
           "description": "EnableWebTerminal enables the Web Terminal feature for the user clusters.",
           "type": "boolean",
@@ -34679,13 +34703,18 @@
       "type": "object",
       "title": "InstancetypeMatcher references a instancetype that is used to fill fields in the VMI template.",
       "properties": {
+        "inferFromVolume": {
+          "description": "InferFromVolume lists the name of a volume that should be used to infer or discover the instancetype\nto be used through known annotations on the underlying resource. Once applied to the InstancetypeMatcher\nthis field is removed.\n\n+optional",
+          "type": "string",
+          "x-go-name": "InferFromVolume"
+        },
         "kind": {
           "description": "Kind specifies which instancetype resource is referenced.\nAllowed values are: \"VirtualMachineInstancetype\" and \"VirtualMachineClusterInstancetype\".\nIf not specified, \"VirtualMachineClusterInstancetype\" is used by default.\n\n+optional",
           "type": "string",
           "x-go-name": "Kind"
         },
         "name": {
-          "description": "Name is the name of the VirtualMachineInstancetype or VirtualMachineClusterInstancetype",
+          "description": "Name is the name of the VirtualMachineInstancetype or VirtualMachineClusterInstancetype\n\n+optional",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -38168,13 +38197,18 @@
       "type": "object",
       "title": "PreferenceMatcher references a set of preference that is used to fill fields in the VMI template.",
       "properties": {
+        "inferFromVolume": {
+          "description": "InferFromVolume lists the name of a volume that should be used to infer or discover the preference\nto be used through known annotations on the underlying resource. Once applied to the PreferenceMatcher\nthis field is removed.\n\n+optional",
+          "type": "string",
+          "x-go-name": "InferFromVolume"
+        },
         "kind": {
           "description": "Kind specifies which preference resource is referenced.\nAllowed values are: \"VirtualMachinePreference\" and \"VirtualMachineClusterPreference\".\nIf not specified, \"VirtualMachineClusterPreference\" is used by default.\n\n+optional",
           "type": "string",
           "x-go-name": "Kind"
         },
         "name": {
-          "description": "Name is the name of the VirtualMachinePreference or VirtualMachineClusterPreference",
+          "description": "Name is the name of the VirtualMachinePreference or VirtualMachineClusterPreference\n\n+optional",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -39667,6 +39701,14 @@
     "Target": {
       "type": "object",
       "properties": {
+        "code": {
+          "description": "The source code options for the constraint template. \"Rego\" can only\nbe specified in one place (either here or in the \"rego\" field)\n+listType=map\n+listMapKey=engine\n+kubebuilder:validation:Required",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Code"
+          },
+          "x-go-name": "Code"
+        },
         "libs": {
           "type": "array",
           "items": {
