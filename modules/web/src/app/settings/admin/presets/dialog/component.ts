@@ -48,6 +48,7 @@ enum StepRegistry {
 @Component({
   selector: 'km-preset-dialog',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class PresetDialogComponent implements OnInit, OnDestroy {
   readonly stepRegistry = StepRegistry;
@@ -166,6 +167,12 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       .pipe(filter(provider => !!provider))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._stepper.next());
+
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
   }
 
   ngOnDestroy(): void {
