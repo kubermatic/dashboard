@@ -86,7 +86,7 @@ limitations under the License.
                   class="km-provider-edit-settings">
           <span [matTooltip]="!isEditEnabled() ? 'This action is not available for viewer role users.' : ''">
             <button mat-menu-item
-            [ngClass]="{'remove-hover': !isClusterRunning || !isEditEnabled()}"
+                    [ngClass]="{'remove-hover': !isClusterRunning || !isEditEnabled()}"
                     (click)="editCluster()"
                     [disabled]="!isClusterRunning || !isEditEnabled()">
               <span>Edit Cluster</span>
