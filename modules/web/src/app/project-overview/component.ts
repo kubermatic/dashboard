@@ -36,7 +36,6 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {BackupService} from '@core/services/backup';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {Health} from '@shared/entity/health';
-import {CookieService} from 'ngx-cookie-service';
 import {View} from '@shared/entity/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {UserService} from '@core/services/user';
@@ -76,7 +75,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   externalClustersChange = new Subject<void>();
   clusterTemplatesChange = new Subject<void>();
   backupsChange = new Subject<void>();
-  firstVisitToOverviewPage: string;
   projectQuota: Quota;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   isLoadingClusters = true;
@@ -89,7 +87,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _unsubscribeLoadMembers = new Subject<void>();
   private _currentGroupConfig: GroupConfig;
   private readonly _refreshTime = 15;
-  private readonly _cookieName = 'firstVisit';
 
   constructor(
     private readonly _userService: UserService,
@@ -104,7 +101,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _appConfigService: AppConfigService,
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _params: ParamsService,
-    private readonly _cookieService: CookieService,
     private readonly _matDialog: MatDialog
   ) {
     if (this.isEnterpriseEdition) {
@@ -122,10 +118,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._unsubscribe.next();
     this._unsubscribe.complete();
     this._unsubscribeLoadMembers.complete();
-  }
-
-  hideFirstVisitToOverviewPageMessage(): void {
-    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
   }
 
   hasPermission(view: View): boolean {
@@ -198,7 +190,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
-    this._checkFirstVisitToOverviewPageMessage();
 
     if (this.isEnterpriseEdition) {
       this._loadGroups();
@@ -357,11 +348,5 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(quota => {
         this.projectQuota = quota;
       });
-  }
-
-  private _checkFirstVisitToOverviewPageMessage(): void {
-    this._cookieService.get(this._cookieName)
-      ? this.hideFirstVisitToOverviewPageMessage()
-      : this._cookieService.set(this._cookieName, 'visited', null, '/', window.location.hostname, false, 'Lax');
   }
 }
