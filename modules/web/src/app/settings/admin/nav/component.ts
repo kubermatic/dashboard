@@ -19,7 +19,7 @@ import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
-import {maxScreenWidth} from '@shared/constants/common';
+import {sidenavCollapsibleWidth} from '@shared/constants/common';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
@@ -47,7 +47,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
 
   get isSidenavCollapsed(): boolean {
-    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
+    return this._isSidenavCollapsed || this.screenWidth <= sidenavCollapsibleWidth;
   }
 
   constructor(

@@ -38,7 +38,7 @@ import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
 import {QuotaService} from '../service';
-import {maxScreenWidth} from '@shared/constants/common';
+import {quotaWidgetCollapsibleWidth} from '@shared/constants/common';
 import {getProgressBarAccent} from '../utils/common';
 
 @Component({
@@ -96,7 +96,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event']) onResize(event): void {
-    this.isCollapsed = event.target.innerWidth < maxScreenWidth && this.collapsible;
+    this.isCollapsed = event.target.innerWidth <= quotaWidgetCollapsibleWidth && this.collapsible;
   }
 
   get hasCpuQuota(): boolean {
@@ -128,7 +128,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.isCollapsed = window.innerWidth < maxScreenWidth && this.collapsible;
+    this.isCollapsed = window.innerWidth <= quotaWidgetCollapsibleWidth && this.collapsible;
     this._initSubscriptions();
     this._setShowNotApplicableText();
   }

@@ -29,7 +29,12 @@
   position: relative;
   width: 100%;
 
-  .km-icon-quota,
+  &:not(.collapsed) {
+    .km-icon-quota {
+      margin-right: 10px;
+    }
+  }
+
   .mat-progress-spinner {
     margin-right: 10px;
   }
