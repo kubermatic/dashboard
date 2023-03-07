@@ -12,4 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export const maxScreenWidth = 1200;
+export const sidenavCollapsibleWidth = 1500;
+export const quotaWidgetCollapsibleWidth = 1200;

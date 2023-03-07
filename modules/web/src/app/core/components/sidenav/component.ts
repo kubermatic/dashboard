@@ -24,7 +24,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
-import {maxScreenWidth} from '@shared/constants/common';
+import {sidenavCollapsibleWidth} from '@shared/constants/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
@@ -55,7 +55,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   get isSidenavCollapsed(): boolean {
-    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
+    return this._isSidenavCollapsed || this.screenWidth <= sidenavCollapsibleWidth;
   }
 
   constructor(

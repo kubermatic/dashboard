@@ -20,6 +20,7 @@
 END OF TERMS AND CONDITIONS
 -->
 <div class="km-quota-widget-container"
+     [ngClass]="{'collapsed': isCollapsed}"
      *ngIf="quotaDetails || (showEmptyPlaceholder && !isLoading)">
   <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
 </div>
