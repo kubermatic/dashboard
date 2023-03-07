@@ -713,6 +713,12 @@ km-cni-version {
   }
 }
 
+.km-disabled {
+  cursor: default;
+  opacity: 40%;
+  pointer-events: none;
+}
+
 // side-nav-field content styling
 
 .collapse-sidenav {

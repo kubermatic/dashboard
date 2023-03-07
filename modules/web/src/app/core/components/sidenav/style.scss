@@ -55,9 +55,3 @@
     margin: variables.$sidenav-item-margin 0 variables.$sidenav-item-margin variables.$sidenav-item-margin;
   }
 }
-
-.km-disabled {
-  cursor: default;
-  opacity: 40%;
-  pointer-events: none;
-}
