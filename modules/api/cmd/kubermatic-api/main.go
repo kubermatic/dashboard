@@ -23,7 +23,7 @@ limitations under the License.
 // Since KKP API is **not a public API**, users can expect breaking changes without any formal announcements.
 //
 //	Schemes: https
-//	Version: 2.22
+//	Version: 2.23
 //
 //	Consumes:
 //	- application/json
