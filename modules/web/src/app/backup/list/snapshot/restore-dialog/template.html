@@ -15,13 +15,17 @@ limitations under the License.
 -->
 <div id="km-restore-snapshot-dialog">
   <km-dialog-title>
-    <div>Restore cluster</div>
+    <div>Restore cluster etcd state</div>
   </km-dialog-title>
 
   <mat-dialog-content>
     <div fxLayoutAlign=" top">
       <i class="km-icon-warning"></i>
-      <div>It is only an etcd state restore. Restoring from a backup irreversibly overwrites your current cluster machines state. Keep in mind that restore might result in orphaned resources still running on the machines in the background.</div>
+      <div>
+        Restoring from a backup <strong>irreversibly overwrites your current cluster
+          machines state</strong>. This might result in orphaned resources still running on
+        the machines in the background.
+      </div>
     </div>
 
     <div class="snapshot-info-container"
