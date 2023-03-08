@@ -57,8 +57,8 @@ contexts:
 - context:
     cluster: AbcClusterID
     user: bob@acme.com
-  name: default
-current-context: default
+  name: AbcClusterID
+current-context: AbcClusterID
 kind: Config
 preferences: {}
 users:
@@ -82,8 +82,8 @@ contexts:
 - context:
     cluster: AbcClusterID
     user: john@acme.com
-  name: default
-current-context: default
+  name: AbcClusterID
+current-context: AbcClusterID
 kind: Config
 preferences: {}
 users:
@@ -338,7 +338,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("john", "john@acme.com"),
-			ExpectedResponseString: genToken(test.IDToken),
+			ExpectedResponseString: genToken("cluster-foo", test.IDToken),
 		},
 		{
 			Name:         "scenario 2: viewer gets viewer kubeconfig",
@@ -368,7 +368,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("john", "john@acme.com"),
-			ExpectedResponseString: genToken(test.IDViewerToken),
+			ExpectedResponseString: genToken("cluster-foo", test.IDViewerToken),
 		},
 		{
 			Name:         "scenario 3: the admin gets master kubeconfig for any cluster",
@@ -399,7 +399,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("bob", "bob@acme.com"),
-			ExpectedResponseString: genToken(test.IDToken),
+			ExpectedResponseString: genToken("cluster-foo", test.IDToken),
 		},
 		{
 			Name:         "scenario 4: the user Bob can not get John's kubeconfig",
@@ -492,7 +492,7 @@ func getSecureCookie() *securecookie.SecureCookie {
 	return securecookie.New([]byte(""), nil)
 }
 
-func genToken(tokenID string) string {
+func genToken(clusterID, tokenID string) string {
 	return fmt.Sprintf(`apiVersion: v1
 clusters:
 - cluster:
@@ -502,12 +502,12 @@ contexts:
 - context:
     cluster: cluster-foo
     user: default
-  name: default
-current-context: default
+  name: %s
+current-context: %s
 kind: Config
 preferences: {}
 users:
 - name: default
   user:
-    token: %s`, tokenID)
+    token: %s`, clusterID, clusterID, tokenID)
 }

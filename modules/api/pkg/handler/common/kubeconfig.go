@@ -60,9 +60,6 @@ const (
 	csrfCookieName = "csrf_token"
 	cookieMaxAge   = 180
 	oidc           = "oidc"
-
-	// defaultCtx is the name of the default context in kubeconfig.
-	defaultCtx = "default"
 )
 
 func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
