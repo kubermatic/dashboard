@@ -555,18 +555,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  onActivate(
-    component: QuotaWidgetComponent,
-    projectId: string,
-    showEmptyPlaceholder = false,
-    projectViewType?: string
-  ): void {
+  onActivate(component: QuotaWidgetComponent, projectId: string, projectViewType?: string): void {
     component.projectId = projectId;
     component.showIcon = this.showCards;
     component.showAsCard = false;
     component.showDetailsOnHover = true;
     component.showBorderOutline = false;
-    component.showEmptyPlaceholder = showEmptyPlaceholder;
     component.projectViewType = projectViewType;
   }
 

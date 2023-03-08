@@ -21,7 +21,7 @@ END OF TERMS AND CONDITIONS
 -->
 <div class="km-quota-widget-container"
      [ngClass]="{'collapsed': isCollapsed}"
-     *ngIf="quotaDetails || (showEmptyPlaceholder && !isLoading)">
+     *ngIf="hasQuota()">
   <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
 </div>
 
@@ -50,7 +50,7 @@ END OF TERMS AND CONDITIONS
                     [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText"></ng-container>
 
       <ng-template #quotaBars>
-        <ng-container *ngIf="hasQuota() else emptyPlaceholder">
+        <ng-container>
           <ng-container *ngIf="hasCpuQuota"
                         [ngTemplateOutlet]="progressBar"
                         [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
@@ -70,10 +70,6 @@ END OF TERMS AND CONDITIONS
 
       <ng-template #notApplicableText>
         <span class="no-quota">Does not apply to {{ isImportedCluster ? 'imported' : isKubeOneCluster ? 'KubeOne' : 'external' }} clusters</span>
-      </ng-template>
-
-      <ng-template #emptyPlaceholder>
-        <span class="no-quota">No quotas configured</span>
       </ng-template>
     </div>
 

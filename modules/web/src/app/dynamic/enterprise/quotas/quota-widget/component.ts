@@ -60,7 +60,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showAsCard = true;
   @Input() showIcon = true;
   @Input() showDetailsOnHover = true;
-  @Input() showEmptyPlaceholder = false;
   @Input() isExternalCluster = false;
   @Input() isImportedCluster = false;
   @Input() isKubeOneCluster = false;
@@ -73,7 +72,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   estimatedQuotaPercentage: QuotaVariables;
   isEstimatedQuotaExceeded: boolean;
   quotaDetails: QuotaDetails;
-  isLoading: boolean;
   isEstimationInProgress: boolean;
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
@@ -127,7 +125,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
     this.isCollapsed = window.innerWidth <= quotaWidgetCollapsibleWidth && this.collapsible;
     this._initSubscriptions();
     this._setShowNotApplicableText();
@@ -219,10 +216,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
       this._setQuotaPercentages(this.quotaDetails);
       this._setShowWarningIcon();
       this._cdr.detectChanges();
-    });
-
-    quota$.pipe(take(1)).subscribe(_ => {
-      this.isLoading = false;
     });
   }
 
