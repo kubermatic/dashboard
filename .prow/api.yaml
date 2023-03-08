@@ -88,7 +88,7 @@ presubmits:
           resources:
             requests:
               memory: 10Gi
-              cpu: 3
+              cpu: 4
           env:
             - name: KUBERMATIC_EDITION
               value: ee
