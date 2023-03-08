@@ -151,7 +151,7 @@ limitations under the License.
                     class="km-project-item-quota">
                   <router-outlet *ngIf="element.status === ProjectStatus.Active"
                                  name="quota-widget"
-                                 (activate)="onActivate($event, element.id, false, 'table')"></router-outlet>
+                                 (activate)="onActivate($event, element.id, 'table')"></router-outlet>
                 </td>
               </ng-container>
 
@@ -317,7 +317,7 @@ limitations under the License.
                    fxLayoutAlign="start start">
                 <router-outlet *ngIf="project.status === ProjectStatus.Active"
                                name="quota-widget"
-                               (activate)="onActivate($event, project.id, true, 'cards')"></router-outlet>
+                               (activate)="onActivate($event, project.id, 'cards')"></router-outlet>
               </div>
             </mat-card-content>
           </mat-card>
