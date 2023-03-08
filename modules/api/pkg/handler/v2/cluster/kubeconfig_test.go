@@ -73,7 +73,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("john", "john@acme.com"),
-			ExpectedResponseString: genToken("default", test.IDToken),
+			ExpectedResponseString: genToken("cluster-foo", "default", test.IDToken),
 		},
 		{
 			Name:         "scenario 2: viewer gets viewer kubeconfig",
@@ -103,7 +103,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("john", "john@acme.com"),
-			ExpectedResponseString: genToken("default", test.IDViewerToken),
+			ExpectedResponseString: genToken("cluster-foo", "default", test.IDViewerToken),
 		},
 		{
 			Name:         "scenario 3: the admin gets master kubeconfig for any cluster",
@@ -134,7 +134,7 @@ func TestGetMasterKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("bob", "bob@acme.com"),
-			ExpectedResponseString: genToken("default", test.IDToken),
+			ExpectedResponseString: genToken("cluster-foo", "default", test.IDToken),
 		},
 		{
 			Name:         "scenario 4: the user Bob can not get John's kubeconfig",
@@ -239,7 +239,7 @@ func TestGetClusterSAKubeconfig(t *testing.T) {
 				},
 			},
 			ExistingAPIUser:        *test.GenAPIUser("john", "john@acme.com"),
-			ExpectedResponseString: genToken("sa-test", "fake-sa-token"),
+			ExpectedResponseString: genToken("cluster-foo", "sa-test", "fake-sa-token"),
 		},
 		{
 			Name:                    "scenario 2: error is returned if service account has no secret (may happen in k8s >= 1.24 if secret is not annoated)",
@@ -372,7 +372,7 @@ func TestGetClusterSAKubeconfig(t *testing.T) {
 	}
 }
 
-func genToken(userName string, tokenID string) string {
+func genToken(clusterID string, userName string, tokenID string) string {
 	return fmt.Sprintf(`apiVersion: v1
 clusters:
 - cluster:
@@ -382,12 +382,12 @@ contexts:
 - context:
     cluster: cluster-foo
     user: %s
-  name: default
-current-context: default
+  name: %s
+current-context: %s
 kind: Config
 preferences: {}
 users:
 - name: %s
   user:
-    token: %s`, userName, userName, tokenID)
+    token: %s`, userName, clusterID, clusterID, userName, tokenID)
 }

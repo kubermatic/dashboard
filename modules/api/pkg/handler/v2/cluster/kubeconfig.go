@@ -51,9 +51,9 @@ func GetClusterOidcEndpoint(projectProvider provider.ProjectProvider, privileged
 	}
 }
 
-func GetClusterSAKubeconigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func GetClusterSAKubeconfigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ClusterSAReq)
-		return handlercommon.GetClusterSAKubeconigEndpoint(ctx, userInfoGetter, req.ProjectID, req.ClusterID, req.Namespace, req.ServiceAccountID, projectProvider, privilegedProjectProvider)
+		return handlercommon.GetClusterSAKubeconfigEndpoint(ctx, userInfoGetter, req.ProjectID, req.ClusterID, req.Namespace, req.ServiceAccountID, projectProvider, privilegedProjectProvider)
 	}
 }

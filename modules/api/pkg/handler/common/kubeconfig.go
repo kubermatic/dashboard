@@ -60,9 +60,6 @@ const (
 	csrfCookieName = "csrf_token"
 	cookieMaxAge   = 180
 	oidc           = "oidc"
-
-	// defaultCtx is the name of the default context in kubeconfig.
-	defaultCtx = "default"
 )
 
 func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
@@ -127,8 +124,8 @@ func GetKubeconfigEndpoint(ctx context.Context, cluster *kubermaticv1.ExternalCl
 	return &encodeKubeConifgResponse{clientCfg: cfg, filePrefix: filePrefix}, nil
 }
 
-// GetClusterSAKubeconigEndpoint returns the kubeconfig associated to a service account in the cluster.
-func GetClusterSAKubeconigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string, serviceAccountNamespace, serviceAccountName string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+// GetClusterSAKubeconfigEndpoint returns the kubeconfig associated to a service account in the cluster.
+func GetClusterSAKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string, serviceAccountNamespace, serviceAccountName string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
 	if err != nil {
@@ -180,8 +177,8 @@ func GetClusterSAKubeconigEndpoint(ctx context.Context, userInfoGetter provider.
 	clientCmdCtx := clientcmdapi.NewContext()
 	clientCmdCtx.Cluster = clusterID
 	clientCmdCtx.AuthInfo = userName
-	saKubeConfig.Contexts[defaultCtx] = clientCmdCtx
-	saKubeConfig.CurrentContext = defaultCtx
+	saKubeConfig.Contexts[clusterID] = clientCmdCtx
+	saKubeConfig.CurrentContext = clusterID
 
 	return &encodeKubeConifgResponse{clientCfg: saKubeConfig, filePrefix: userName}, nil
 }
@@ -341,8 +338,8 @@ func CreateOIDCKubeconfigEndpoint(
 			clientCmdCtx := clientcmdapi.NewContext()
 			clientCmdCtx.Cluster = req.ClusterID
 			clientCmdCtx.AuthInfo = claims.Email
-			oidcKubeCfg.Contexts[defaultCtx] = clientCmdCtx
-			oidcKubeCfg.CurrentContext = defaultCtx
+			oidcKubeCfg.Contexts[req.ClusterID] = clientCmdCtx
+			oidcKubeCfg.CurrentContext = req.ClusterID
 		}
 
 		// prepare final rsp that holds kubeconfig
@@ -477,8 +474,8 @@ func CreateOIDCKubeconfigSecretEndpoint(
 			clientCmdCtx := clientcmdapi.NewContext()
 			clientCmdCtx.Cluster = req.ClusterID
 			clientCmdCtx.AuthInfo = claims.Email
-			oidcKubeCfg.Contexts[defaultCtx] = clientCmdCtx
-			oidcKubeCfg.CurrentContext = defaultCtx
+			oidcKubeCfg.Contexts[req.ClusterID] = clientCmdCtx
+			oidcKubeCfg.CurrentContext = req.ClusterID
 		}
 
 		// prepare final rsp that holds kubeconfig

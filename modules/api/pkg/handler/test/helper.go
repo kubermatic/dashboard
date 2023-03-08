@@ -813,13 +813,13 @@ contexts:
 - context:
     cluster: %s
     user: default
-  name: default
-current-context: default
+  name: %s
+current-context: %s
 kind: Config
 users:
 - name: default
   user:
-    token: %s`, clusterID, clusterID, token)
+    token: %s`, clusterID, clusterID, clusterID, clusterID, token)
 }
 
 // APIUserToKubermaticUser simply converts apiv1.User to kubermaticv1.User type.
