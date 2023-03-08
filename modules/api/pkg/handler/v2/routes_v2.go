@@ -10151,7 +10151,7 @@ func (r Routing) getClusterServiceAccountKubeconfig() http.Handler {
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(cluster.GetClusterSAKubeconigEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
+		)(cluster.GetClusterSAKubeconfigEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
 		cluster.DecodeClusterSAReq,
 		cluster.EncodeKubeconfig,
 		r.defaultServerOptions()...,
