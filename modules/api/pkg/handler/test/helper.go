@@ -267,6 +267,20 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 						*semver.NewSemverOrDie("9.9.10"),
 						*semver.NewSemverOrDie("9.11.3"),
 					},
+					Updates: []kubermaticv1.Update{
+						{
+							From: "8.8.*",
+							To:   "9.9.*",
+						},
+						{
+							From: "9.9.*",
+							To:   "9.9.*",
+						},
+						{
+							From: "9.9.*",
+							To:   "9.11.*",
+						},
+					},
 				},
 			},
 		}
