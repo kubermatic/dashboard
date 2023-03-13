@@ -1,13 +1,17 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.20.md#v22013",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.20.md#v22014",
   "entries": [
     {
         "category": "fixed",
-        "description": "Update machine-controller to version v1.54.1 to fix container runtime setup for new nodes."
+        "description": "Fix partially deployed CSI validating webhook on CCM/CSI migrated clusters on vSphere."
     },
     {
         "category": "fixed",
-        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.1."
+        "description": "Set proper NodePort range in Cilium config if non-default range is used."
+    },
+    {
+        "category": "fixed",
+        "description": "Include tunneling agent IP in apiserver's TLS cert SANs."
     }
   ]
 }
