@@ -330,4 +330,17 @@
       }
     }
   }
+
+  .value-changed {
+    .mat-button-toggle-checked::after{
+      background-color: map.get($colors, primary);
+
+    }
+  }
+  
+  .value-changed {
+    &:not(.mat-button-toggle-group)::after {
+      background-color: map.get($colors, primary);
+    }
+  }
 }

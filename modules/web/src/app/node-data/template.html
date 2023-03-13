@@ -64,12 +64,14 @@ limitations under the License.
                          required
                          [min]="form.get(Controls.MinReplicas).value ?? MinReplicasCount"
                          [max]="form.get(Controls.MaxReplicas).value"
-                         [formControlName]="Controls.Count">
+                         [formControlName]="Controls.Count"
+                         >
       </km-number-stepper>
 
       <km-node-data-kubelet-version fxFlex="50"
                                     *ngIf="isDialogView()"
-                                    [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+                                    [formControl]="form.get(Controls.Kubelet)"
+                                    ></km-node-data-kubelet-version>
     </div>
 
     <ng-container *ngIf="isDialogView()">
@@ -80,7 +82,8 @@ limitations under the License.
 
     <div fxLayout="column">
       <mat-button-toggle-group group="operatingSystemGroup"
-                               [formControlName]="Controls.OperatingSystem">
+                               [formControlName]="Controls.OperatingSystem"
+                               >
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
                            *ngIf="isOperatingSystemSupported(OperatingSystem.Ubuntu)">
           <i class="km-os-image-ubuntu"></i>
@@ -151,7 +154,8 @@ limitations under the License.
         <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
              class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
-                        [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot
+                        [formControlName]="Controls.UpgradeOnBoot"
+                        vlaueChanged>Upgrade system on first boot
           </mat-checkbox>
         </div>
 
@@ -171,7 +175,8 @@ limitations under the License.
                      [formControlName]="Controls.OperatingSystemProfile"
                      [isLoading]="isLoadingOSProfiles"
                      [options]="supportedOperatingSystemProfiles"
-                     [validators]="operatingSystemProfileValidators">
+                     [validators]="operatingSystemProfileValidators"
+                     >
       <ng-container hint
                     *ngIf="!dialogEditMode">Leave this field blank to use default operating system profile.</ng-container>
       <span patternError>
@@ -214,7 +219,8 @@ limitations under the License.
                        hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
                        [min]="form.get(Controls.MinReplicas).value || MinReplicasCount"
                        [max]="MaxReplicasCount"
-                       [formControlName]="Controls.MaxReplicas">
+                       [formControlName]="Controls.MaxReplicas"
+                       >
     </km-number-stepper>
 
     <km-number-stepper label="Min Replicas"

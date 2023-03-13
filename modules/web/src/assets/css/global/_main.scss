@@ -719,6 +719,34 @@ km-cni-version {
   pointer-events: none;
 }
 
+.value-changed {
+  position: relative;
+  .mat-button-toggle-checked::after{
+    background-color: darkblue;
+    border-bottom-left-radius: variables.$border-radius;
+    border-top-left-radius: variables.$border-radius;
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 5px;
+  }
+}
+
+.value-changed {
+  &:not(.mat-button-toggle-group)::after {
+    background-color: darkblue;
+    border-bottom-left-radius: variables.$border-radius;
+    border-top-left-radius: variables.$border-radius;
+    content: '';
+    // height: var(--value-height);
+    height: 60%;
+    left: 0;
+    position: absolute;
+    top: 4px;
+    width: 5px;
+  }
+}
+
 // side-nav-field content styling
 
 .collapse-sidenav {

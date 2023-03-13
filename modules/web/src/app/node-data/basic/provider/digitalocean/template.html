@@ -27,7 +27,8 @@ limitations under the License.
                [label]="sizeLabel"
                customId="km-digitalocean-node-sizes"
                inputLabel="Select size..."
-               filterBy="slug">
+               filterBy="slug"
+               >
     <div *option="let size">
       {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus !== 1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
     </div>
