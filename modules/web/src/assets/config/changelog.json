@@ -10,6 +10,10 @@
         "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
     },
     {
+        "category": "changed",
+        "description": "Update Metering to v1.0.3."
+    },
+    {
         "category": "fixed",
         "description": "Fix uppercase labels in cluster/project metrics."
     },
