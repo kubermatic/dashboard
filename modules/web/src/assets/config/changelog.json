@@ -2,192 +2,32 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md",
   "entries": [
     {
-        "category": "action-required",
-        "description": "KubeVirt cloud provider support is GA now. Manual migration is required, check out the changelog for details."
-    },
-    {
-        "category": "action-required",
-        "description": "OperatingSystemProfiles and OperatingSystemConfigs have been moved to user clusters. CustomOperatingSystemProfiles have been introduced to maintain custom profiles at the Seed level."
-    },
-    {
-        "category": "action-required",
-        "description": "Helm support for Applications has been updated to 3.11. Due to possible CVEs, the template function getHostByName is disabled by default and needs to be enabled explicitly."
+        "category": "added",
+        "description": "Add support for ca-bundle to metering cronjobs."
     },
     {
         "category": "added",
-        "description": "Support for Kubernetes 1.25 and Kubernetes 1.26."
-    },
-    {
-        "category": "added",
-        "description": "Add a web terminal to directly interact with user cluster APIs."
-    },
-    {
-        "category": "added",
-        "description": "Support for importing KubeOne clusters."
-    },
-    {
-        "category": "added",
-        "description": "Add group information to OIDC kubeconfig."
-    },
-    {
-        "category": "added",
-        "description": "Preset availability can be limited to specific projects."
-    },
-    {
-        "category": "added",
-        "description": "Support for external CCM & CSI drivers in AWS. New clusters default to this, existing clusters need to be CCM migrated."
-    },
-    {
-        "category": "added",
-        "description": "Support for GCP CSI Driver in Kubernetes 1.25+ clusters."
-    },
-    {
-        "category": "added",
-        "description": "Support for using server groups with OpenStack."
-    },
-    {
-        "category": "added",
-        "description": "Support for DigitalOcean external CCM."
-    },
-    {
-        "category": "added",
-        "description": "Add Canal CNI v3.24."
-    },
-    {
-        "category": "added",
-        "description": "Add Cilium CNI v1.13.0."
-    },
-    {
-        "category": "added",
-        "description": "EE only: Administrators can enforce default project quotas."
-    },
-    {
-        "category": "added",
-        "description": "EE only: If project quotas are enabled, quota changes are live estimated while creating clusters and machine deployments."
+        "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
     },
     {
         "category": "changed",
-        "description": "Konnectivity (to connect cluster control plane and cluster nodes) is updated to v0.0.35, is now GA and enabled by default."
-    },
-    {
-        "category": "changed",
-        "description": "Upstream Kubernetes images are pulled from registry.k8s.io instead of k8s.gcr.io."
-    },
-    {
-        "category": "changed",
-        "description": "By default, external CCM is turned on for all providers that support it."
-    },
-    {
-        "category": "changed",
-        "description": "Cluster templates can be edited and customized during cluster creation."
-    },
-    {
-        "category": "changed",
-        "description": "Default to Ubuntu 22.04 if Ubuntu is used as operating system."
-    },
-    {
-        "category": "changed",
-        "description": "Update vSphere CSI driver to v2.7.0."
-    },
-    {
-        "category": "changed",
-        "description": "Update KubeVirt CCM to v0.4.0."
-    },
-    {
-        "category": "changed",
-        "description": "Update OpenStack Cinder CSI to v1.24.5 and v1.25.3."
-    },
-    {
-        "category": "changed",
-        "description": "Update Cilium to v1.12.2 and v1.11.9."
-    },
-    {
-        "category": "changed",
-        "description": "Update MetalLB to v0.13.7."
-    },
-    {
-        "category": "changed",
-        "description": "Update k8s-dns-node-cache to 1.22.13."
-    },
-    {
-        "category": "changed",
-        "description": "Update to etcd 3.5.6."
+        "description": "Update Metering to v1.0.3."
     },
     {
         "category": "fixed",
-        "description": "Allow Kubernetes version upgrade for clusters with non-amd64 nodes & Canal CNI and IPVS for all k8s versions."
+        "description": "Fix uppercase labels in cluster/project metrics."
     },
     {
         "category": "fixed",
-        "description": "Fix OpenStack cloud provider tenant to project fields migration."
+        "description": "Fix mla-monitoring-agent configuration being invalid when custom scraping configuration is provided."
     },
     {
         "category": "fixed",
-        "description": "Persist annotations when upgrading a cluster."
+        "description": "Set proper NodePort range in Cilium config if non-default range is used."
     },
     {
         "category": "fixed",
-        "description": "Fix KubeVirt LoadBalancers not accessible from outside the user cluster."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix a race condition for etcd-launcher preventing the last etcd node from joining."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix default tunnelingAgentIP for Tunneling expose strategy."
-    },
-    {
-        "category": "fixed",
-        "description": "Container runtime configuration is properly validated while creating or upgrading clusters."
-    },
-    {
-        "category": "fixed",
-        "description": "Disable promtail initContainer that was overriding system fs.inotify.max_user_instances configuration."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix an issue where creating Clusters through ClusterTemplates failed without leaving a trace."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix user-ssh-keys-agent Docker image for arm64 containing the amd64 binary."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix DNAT controller not installing NAT rules for big clusters."
-    },
-    {
-        "category": "fixed",
-        "description": "Properly clean up Kubernetes Dashboard resources in the user cluster if the Kubernetes Dashboard is disabled."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix a bug in metering that lead to outdated Project and/or Cluster labels in reports."
-    },
-    {
-        "category": "removed",
-        "description": "Support for Kubernetes 1.22 and Kubernetes 1.23."
-    },
-    {
-        "category": "removed",
-        "description": "Support for Docker as container runtime."
-    },
-    {
-        "category": "removed",
-        "description": "Support for SLES as operating system."
-    },
-    {
-        "category": "removed",
-        "description": "Support for dynamic kubelet configuration."
-    },
-    {
-        "category": "removed",
-        "description": "Support for Pod Security Policy Admission Plugin with Kubernetes 1.25."
-    },
-    {
-        "category": "deprecated",
-        "description": "machine-controller's built-in user data to provision new nodes is deprecated with this release and will be removed in a future release. OSM is the recommended way to generate user data."
+        "description": "Fix a bug where KKP managed vSphere folders are enforced but shouldn't."
     }
   ]
 }
