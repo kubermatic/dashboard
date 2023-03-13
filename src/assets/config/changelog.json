@@ -10,6 +10,10 @@
         "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
     },
     {
+        "category": "changed",
+        "description": "Update Metering to v1.0.3."
+    },
+    {
         "category": "fixed",
         "description": "Update machine-controller to v1.54.5. This fixes an issue with Flatcar nodes not joining the cluster for clusters that don't use OSM."
     },
