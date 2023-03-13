@@ -1,33 +1,45 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2216",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2217",
   "entries": [
     {
         "category": "added",
-        "description": "Add keepalive-time Konnectivity setting + set keepalive to 1m by default."
+        "description": "Add support for ca-bundle to metering cronjobs."
+    },
+    {
+        "category": "added",
+        "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
+    },
+    {
+        "category": "changed",
+        "description": "Update Metering to v1.0.3."
     },
     {
         "category": "fixed",
-        "description": "Allow k8s version upgrade for clusters with non-amd64 nodes & Canal CNI and IPVS for all k8s versions."
+        "description": "Update machine-controller to v1.54.5. This fixes an issue with Flatcar nodes not joining the cluster for clusters that don't use OSM."
     },
     {
         "category": "fixed",
-        "description": "Fix OpenStack cloud provider tenant to project fields migration."
+        "description": "Fix partially deployed CSI validating webhook on CCM/CSI migrated clusters on vSphere."
     },
     {
         "category": "fixed",
-        "description": "Prevent DataVolumes from being Garbage Collected with KubeVirt version >=1.55.0."
+        "description": "Fix setting a provider incompatibility rule for all providers."
     },
     {
         "category": "fixed",
-        "description": "Persist annotations when upgrading a cluster."
+        "description": "Fix uppercase labels in cluster/project metrics."
     },
     {
         "category": "fixed",
-        "description": "Fix a bug that was resulting in outdated Project and/or Cluster labels in metering reports."
+        "description": "Include tunneling agent IP in apiserver's TLS cert SANs."
     },
     {
         "category": "fixed",
-        "description": "Unblock etcd backup controller's reconciliation loop in case `defaultDestination` field was missing on Seed CR."
+        "description": "Remove promtail sidecar from user cluster MLA that sets `fs.inotify.max_user_instances`."
+    },
+    {
+        "category": "fixed",
+        "description": "Set proper NodePort range in Cilium config if non-default range is used."
     }
   ]
 }
