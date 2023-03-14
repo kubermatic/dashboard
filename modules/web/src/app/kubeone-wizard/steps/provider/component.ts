@@ -48,6 +48,7 @@ export class KubeOneProviderStepComponent extends StepBase implements OnInit {
     NodeProvider.GCP,
     NodeProvider.AZURE,
     NodeProvider.DIGITALOCEAN,
+    NodeProvider.HETZNER,
   ];
   readonly controls = Controls;
 
