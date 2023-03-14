@@ -34,7 +34,7 @@
   .frontpage-inner-text {
     color: #fff;
     font-family: variables.$font-secondary;
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 500;
     line-height: 42px;
     margin-bottom: 40px;
@@ -44,11 +44,14 @@
   .mat-raised-button {
     @include mixins.size(200px, 50px);
 
-    background-color: #fff;
-    color: #203f58;
+    background-color: transparent;
+    border-image: linear-gradient(to bottom right, #ff7399, #ffad05) 1;
+    border-style: solid;
+    border-width: 2px;
+    color: #fff;
     font-family: variables.$font-primary;
     font-size: 20px;
     font-weight: 500;
-    line-height: 50px;
+    line-height: 46px;
   }
 }
