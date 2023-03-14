@@ -37,7 +37,8 @@ limitations under the License.
     </km-combobox>
 
     <mat-checkbox [formControlName]="Controls.UseCustomDisk"
-                  class="custom-disk-size">
+                  class="custom-disk-size"
+                  valueChanged>
       Custom Disk
       <i class="km-pointer km-custom-disk-size-info-icon"
          matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
@@ -75,7 +76,8 @@ limitations under the License.
            matInput
            type="text"
            autocomplete="off"
-           required>
+           required
+           valueChanged>
   </mat-form-field>
 
   <km-combobox #serverGroupCombobox
@@ -96,7 +98,8 @@ limitations under the License.
 
   <mat-checkbox class="use-floating-ip-checkbox"
                 [formControlName]="Controls.UseFloatingIP"
-                fxFlex>
+                fxFlex
+                valueChanged>
     Allocate Floating IP
     <i *ngIf="isFloatingIPEnforced()"
        class="km-icon-info icon-info km-pointer"

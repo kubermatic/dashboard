@@ -19,11 +19,13 @@ limitations under the License.
   <div class="options"
        fxLayoutGap="30px">
     <mat-checkbox [disabled]="!isRevokeTokenEnabled"
-                  [(ngModel)]="revokeAdminToken">
+                  [(ngModel)]="revokeAdminToken"
+                  valueChanged>
       Revoke Admin Token
     </mat-checkbox>
     <mat-checkbox [disabled]="!isRevokeTokenEnabled"
-                  [(ngModel)]="revokeViewerToken">
+                  [(ngModel)]="revokeViewerToken"
+                  valueChanged>
       Revoke Viewer Token
     </mat-checkbox>
   </div>

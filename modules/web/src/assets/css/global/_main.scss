@@ -719,10 +719,45 @@ km-cni-version {
   pointer-events: none;
 }
 
+// style for valueChanged directive
+
 .value-changed {
   position: relative;
-  .mat-button-toggle-checked::after{
-    background-color: darkblue;
+
+  &:not(.mat-button-toggle-group)::after {
+    border-bottom-left-radius: variables.$border-radius;
+    border-top-left-radius: variables.$border-radius;
+    content: '';
+    height: 60%;
+    left: 0;
+    position: absolute;
+    top: 4px;
+    width: 5px;
+  }
+
+  &.mat-checkbox::after {
+    left: -12px;
+    top: 7px;
+  }
+
+  &.mat-radio-group::after {
+    height: 80%;
+    left: -12px;
+  }
+
+  &.mat-select::after {
+    height: 44px;
+    left: -11px;
+    top: -17px;
+  }
+
+  &.mat-chip-list::after {
+    height: 162%;
+    left: -11px;
+    top: -18px;
+  }
+
+  .mat-button-toggle-checked::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
     content: '';
@@ -732,17 +767,15 @@ km-cni-version {
   }
 }
 
-.value-changed {
-  &:not(.mat-button-toggle-group)::after {
-    background-color: darkblue;
+.mat-form-field-infix:has(> .value-changed) {
+  &::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
     content: '';
-    // height: var(--value-height);
-    height: 60%;
-    left: 0;
+    height: 44px;
+    left: -11px;
     position: absolute;
-    top: 4px;
+    top: -9px;
     width: 5px;
   }
 }

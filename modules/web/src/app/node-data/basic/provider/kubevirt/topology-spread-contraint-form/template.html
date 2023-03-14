@@ -37,7 +37,8 @@ limitations under the License.
         <input matInput
                [name]="Controls.TopologyKey"
                [formControlName]="Controls.TopologyKey"
-               (keyup)="onControlValueChange(constraint)">
+               (keyup)="onControlValueChange(constraint)"
+               valueChanged>
         <mat-error *ngIf="constraint.get(Controls.TopologyKey).errors?.validLabelKeyUniqueness">
           Key is not unique.
         </mat-error>
@@ -46,7 +47,8 @@ limitations under the License.
         <mat-label>When Unsatisfiable</mat-label>
         <mat-select [formControlName]="Controls.WhenUnsatisfiable"
                     disableOptionCentering
-                    (selectionChange)="onControlValueChange(constraint)">
+                    (selectionChange)="onControlValueChange(constraint)"
+                    valueChanged>
           <mat-option *ngFor="let option of whenUnsatisfiableOptions"
                       [value]="option">
             {{option}}

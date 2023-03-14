@@ -161,7 +161,8 @@ limitations under the License.
              [id]="Controls.NodeAffinityPresetKey"
              [formControlName]="Controls.NodeAffinityPresetKey"
              type="text"
-             autocomplete="off">
+             autocomplete="off"
+             valueChanged>
       <mat-error *ngIf="form.get(Controls.NodeAffinityPresetKey).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -187,7 +188,8 @@ limitations under the License.
         <mat-label>{{label}}</mat-label>
         <mat-select [formControlName]="controlName"
                     class="km-select-ellipsis"
-                    disableOptionCentering>
+                    disableOptionCentering
+                    valueChanged>
           <mat-option *ngFor="let preset of affinityPresetOptions"
                       [value]="preset">
             {{preset}}

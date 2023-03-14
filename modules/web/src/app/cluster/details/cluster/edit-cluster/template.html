@@ -29,7 +29,8 @@ limitations under the License.
                [formControlName]="Controls.Name"
                type="text"
                autocomplete="off"
-               cdkFocusInitial>
+               cdkFocusInitial
+               valueChanged>
         <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
           <strong>Required</strong>
         </mat-error>
@@ -46,7 +47,8 @@ limitations under the License.
                     disableOptionCentering
                     disabled
                     matTooltip="Containerd is the only supported container runtime"
-                    required>
+                    required
+                    valueChanged>
           <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
         </mat-select>
       </mat-form-field>
@@ -58,6 +60,7 @@ limitations under the License.
           <mat-select [formControlName]="Controls.AdmissionPlugins"
                       multiple
                       panelClass="km-multiple-values-dropdown"
+                      valueChanged
                       disableOptionCentering>
             <mat-option *ngFor="let admissionPlugin of admissionPlugins"
                         [value]="admissionPlugin"
@@ -124,15 +127,18 @@ limitations under the License.
       </km-chip-list>
 
       <mat-checkbox [formControlName]="Controls.Konnectivity"
-                    [class.km-text-muted]="form.get(Controls.Konnectivity).disabled">
+                    [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
+                    valueChanged>
         Konnectivity
       </mat-checkbox>
 
       <div fxLayoutAlign=" center">
-        <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+        <mat-checkbox [formControlName]="Controls.AuditLogging"
+        valueChanged>Audit Logging</mat-checkbox>
         <mat-button-toggle-group *ngIf="!!form.get(Controls.AuditLogging).value"
                                  [formControlName]="Controls.AuditPolicyPreset"
-                                 group="auditLogging">
+                                 group="auditLogging"
+                                 valueChanged>
           <mat-button-toggle [value]="AuditPolicyPreset.Custom"
                              matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
             custom
@@ -155,7 +161,8 @@ limitations under the License.
            matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
       </div>
 
-      <mat-checkbox [formControlName]="Controls.OPAIntegration">
+      <mat-checkbox [formControlName]="Controls.OPAIntegration"
+      valueChanged>
         OPA Integration
         <i *ngIf="isEnforced(Controls.OPAIntegration)"
            class="km-icon-info km-pointer"
@@ -163,7 +170,8 @@ limitations under the License.
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.MLALogging"
-                    *ngIf="isMLAEnabled()">
+                    *ngIf="isMLAEnabled()"
+                    valueChanged>
         User Cluster Logging
         <i *ngIf="isEnforced(Controls.MLALogging)"
            class="km-icon-info km-pointer"
@@ -172,18 +180,21 @@ limitations under the License.
 
       <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                     *ngIf="isMLAEnabled()">
+                    valueChanged
         User Cluster Monitoring
         <i *ngIf="isEnforced(Controls.MLAMonitoring)"
            class="km-icon-info km-pointer"
            matTooltip="User Cluster Monitoring is enforced by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled">
+      <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
+      valueChanged>
         Kubernetes Dashboard
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.OperatingSystemManager"
-                    [disabled]="!!cluster.spec.enableOperatingSystemManager">
+                    [disabled]="!!cluster.spec.enableOperatingSystemManager"
+                    valueChanged>
         Operating System Manager
         <i class="km-icon-info km-pointer"
            [matTooltip]="form.get(Controls.OperatingSystemManager).value ? 'Operating System Manager cannot be disabled once it has been enabled.' : 'Disabling this is not recommended in a production environment. Enabling/disabling this will not rotate the machines automatically. The users need to update the Machine Deployments manually.'"></i>

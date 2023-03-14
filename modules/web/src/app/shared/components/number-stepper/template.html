@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <mat-form-field class="km-number-stepper-input"
                 [ngClass]="{'message': mode === 'hint' || mode === 'errors' || mode === 'all', 'force-min-width': forceFormFieldMinWidth}">
   <mat-label *ngIf="!!label">{{label}}</mat-label>
@@ -30,7 +29,8 @@ limitations under the License.
          [max]="max"
          [id]="id"
          (blur)="onTouch()"
-         [attr.cdkFocusInitial]="focus ? focus : null">
+         [attr.cdkFocusInitial]="focus ? focus : null"
+         valueChanged>
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>

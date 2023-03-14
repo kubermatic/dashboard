@@ -74,6 +74,7 @@ import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-cluster-details',
@@ -141,6 +142,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
     private readonly _applicationService: ApplicationService,
+    private readonly _isEditDialog: DialogModeService,
     readonly settingsService: SettingsService
   ) {}
 
@@ -418,6 +420,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
+    this._isEditDialog.isEditDialog = true;
   }
 
   editProviderSettings(): void {
@@ -452,6 +455,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const dialogRef = this._matDialog.open(RevokeTokenComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.projectID = this.projectID;
+    this._isEditDialog.isEditDialog = true;
   }
 
   handleAddonCreation(addon: Addon): void {

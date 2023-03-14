@@ -18,7 +18,8 @@ limitations under the License.
   <mat-select [formControlName]="Controls.Kubelet"
               disableOptionCentering
               required
-              panelClass="km-add-dialog-dropdown">
+              panelClass="km-add-dialog-dropdown"
+              valueChanged>
     <mat-option *ngFor="let version of versions"
                 [value]="version">
       {{ version }}

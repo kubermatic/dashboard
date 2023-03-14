@@ -19,11 +19,13 @@ limitations under the License.
       fxLayoutAlign="start start">
   <mat-checkbox id="backups"
                 [formControlName]="Controls.Backups"
-                fxFlex>etcd Backups</mat-checkbox>
+                fxFlex
+                valueChanged>etcd Backups</mat-checkbox>
 
   <mat-checkbox id="monitoring"
                 [formControlName]="Controls.Monitoring"
-                fxFlex>Monitoring</mat-checkbox>
+                fxFlex
+                valueChanged>Monitoring</mat-checkbox>
 
   <km-chip-list class="tag-list"
                 title="Provider Tags"
