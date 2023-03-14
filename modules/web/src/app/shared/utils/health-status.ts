@@ -85,9 +85,9 @@ export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthS
     return new HealthStatus(StatusMassage.Deleting, StatusIcon.Error);
   } else if (
     md.status &&
-    md.status.availableReplicas === md.spec.replicas &&
-    md.status.availableReplicas === md.status.updatedReplicas
-  ) {
+    ((md.status.availableReplicas === md.spec.replicas &&
+    md.status.availableReplicas === md.status.updatedReplicas) ||
+    (md.spec.replicas === 0 && !md.status.availableReplicas && !md.status.updatedReplicas))) {
     return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
     return new HealthStatus(StatusMassage.Updating, StatusIcon.Pending);
