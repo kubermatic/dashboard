@@ -86,7 +86,8 @@ export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthS
   } else if (
     md.status &&
     (md.status.availableReplicas || 0) === md.spec.replicas &&
-    md.status.availableReplicas === md.status.updatedReplicas) {
+    md.status.availableReplicas === md.status.updatedReplicas
+  ) {
     return new HealthStatus(StatusMassage.Running, StatusIcon.Running);
   } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
     return new HealthStatus(StatusMassage.Updating, StatusIcon.Pending);
