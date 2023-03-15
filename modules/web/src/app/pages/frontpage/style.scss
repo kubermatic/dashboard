@@ -54,4 +54,14 @@
     font-weight: 500;
     line-height: 46px;
   }
+
+  .login-button {
+    transition: 0.25s;
+
+    &:hover,
+    &:focus {
+      box-shadow: 0 2px 0.4em 0.2px #ff7399;
+      transform: translateY(-0.25em);
+    }
+  }
 }
