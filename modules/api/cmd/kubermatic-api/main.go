@@ -154,7 +154,7 @@ func main() {
 		log.Fatalw("failed to construct manager", zap.Error(err))
 	}
 	if err := mgr.GetFieldIndexer().IndexField(ctx, &corev1.Event{}, common.EventFieldIndexerKey, common.EventIndexer()); err != nil {
-		log.Fatalw("failed to add index on Event involvedObject name: %w", err)
+		log.Fatalw("failed to add index on Event involvedObject name", zap.Error(err))
 	}
 
 	providers, err := createInitProviders(ctx, options, masterCfg, mgr, log)
@@ -362,7 +362,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	oidcIssuerVerifier, err := createOIDCClients(options.oidcIssuerConfiguration, options.oidcIssuerRedirectURI, options.caBundle)
 	if err != nil {
-		log.Fatalw("failed to create an openid authenticator - issuer: %q, oidcClientID: %q: %v", options.oidcURL, options.oidcAuthenticatorClientID, err)
+		log.Fatalw("failed to create an openid authenticator", zap.Any("issuer", options.oidcURL), zap.Any("oidcClientID", options.oidcAuthenticatorClientID), zap.Error(err))
 	}
 
 	oidcIssuerVerifierProviderGetter := auth2.OIDCIssuerVerifierProviderFactory(
