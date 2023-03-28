@@ -260,9 +260,18 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   subnetID: string;
   ipv6SubnetID: string;
   ipv6SubnetPool: string;
+  enableIngressHostname?: boolean;
+  ingressHostnameSuffix?: string;
 
   static isEmpty(spec: OpenstackCloudSpec): boolean {
-    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+    return _.difference(
+      OpenstackCloudSpec.getKeysToCompare(spec),
+      OpenstackCloudSpec.getKeysToCompare(ExtraCloudSpecOptions.new(spec))
+    ).every(key => !spec[key]);
+  }
+
+  private static getKeysToCompare(spec: ExtraCloudSpecOptions): string[] {
+    return Object.keys(spec).filter(key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix');
   }
 }
 
