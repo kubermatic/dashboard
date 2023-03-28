@@ -242,6 +242,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     return this.form.get(Controls.UseFloatingIP).disabled;
   }
 
+  isDiskSizeRequired(): boolean {
+    return this.form.get(Controls.CustomDiskSize).hasValidator(Validators.required);
+  }
+
   onFlavorChange(flavor: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.flavor = flavor;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
