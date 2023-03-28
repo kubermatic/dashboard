@@ -25,6 +25,7 @@ import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 import {AddonService} from '@core/services/addon';
 import {getEditionVersion} from '@shared/utils/common';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-addon-list',
@@ -54,7 +55,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
-    private readonly _domSanitizer: DomSanitizer
+    private readonly _domSanitizer: DomSanitizer,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -139,6 +141,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
 
   edit(addon: Addon): void {
     const dialog = this._matDialog.open(EditAddonDialogComponent);
+    this._dialogModeService.isEditDialog = true;
     dialog.componentInstance.addon = addon;
     dialog.componentInstance.cluster = this.cluster;
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);

@@ -59,7 +59,8 @@ limitations under the License.
   </form>
   <form [formGroup]="formBasic">
     <mat-checkbox [formControlName]="Controls.ContinuouslyReconcile"
-                  matTooltip="With this flag enabled the addon cannot be deleted or modified outside of the UI after installation.">
+                  matTooltip="With this flag enabled the addon cannot be deleted or modified outside of the UI after installation."
+                  valueChanged>
       Continuously reconcile addon
     </mat-checkbox>
   </form>

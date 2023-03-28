@@ -767,6 +767,19 @@ km-cni-version {
   }
 }
 
+.ngx-monaco-editor {
+  &.value-changed::after {
+    border-bottom-left-radius: variables.$border-radius;
+    border-top-left-radius: variables.$border-radius;
+    content: '';
+    height: 98%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 5px;
+  }
+}
+
 .mat-form-field-infix:has(> .value-changed) {
   &::after {
     border-bottom-left-radius: variables.$border-radius;

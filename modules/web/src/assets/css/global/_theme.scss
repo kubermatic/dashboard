@@ -343,6 +343,12 @@
     }
   }
 
+  .ngx-monaco-editor {
+    &.value-changed::after {
+      background-color: map.get($colors, primary);
+    }
+  }
+
   .mat-form-field-infix:has(> .value-changed) {
     &::after {
       background-color: map.get($colors, primary);

@@ -54,6 +54,7 @@ limitations under the License.
           <mat-label>{{keyName}}</mat-label>
           <input matInput
                  (keyup)="check(i)"
+                 [ngClass]="{'value-changed':isLabelsChange(i)}"
                  name="key"
                  formControlName="key" />
           <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"> {{keyName}} is not unique. </mat-error>

@@ -134,7 +134,7 @@ limitations under the License.
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
-        valueChanged>Audit Logging</mat-checkbox>
+                      valueChanged>Audit Logging</mat-checkbox>
         <mat-button-toggle-group *ngIf="!!form.get(Controls.AuditLogging).value"
                                  [formControlName]="Controls.AuditPolicyPreset"
                                  group="auditLogging"
@@ -162,7 +162,7 @@ limitations under the License.
       </div>
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration"
-      valueChanged>
+                    valueChanged>
         OPA Integration
         <i *ngIf="isEnforced(Controls.OPAIntegration)"
            class="km-icon-info km-pointer"
@@ -180,7 +180,7 @@ limitations under the License.
 
       <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                     *ngIf="isMLAEnabled()">
-                    valueChanged
+        valueChanged
         User Cluster Monitoring
         <i *ngIf="isEnforced(Controls.MLAMonitoring)"
            class="km-icon-info km-pointer"
@@ -188,7 +188,7 @@ limitations under the License.
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
-      valueChanged>
+                    valueChanged>
         Kubernetes Dashboard
       </mat-checkbox>
 

@@ -46,61 +46,36 @@ export class VlaueChangedDirective implements OnInit {
       case 'mat-checkbox':
         this._previousValue = this._control.control.value === null ? false : this._control.control.value;
         break;
+      case 'mat-chip-list':
+        this._previousValue = this._control.control.value;
+        break;
       default:
         this._previousValue = this._control.control.value;
         break;
     }
 
     this._control?.control?.valueChanges.subscribe(value => {
-      const classList = [...element.classList];
       switch (element.classList[0]) {
         case 'mat-select':
-          if (classList?.includes('mat-select-multiple')) {
-            if (this._previousValue && value) {
-              !this.isArraysEqual(this._previousValue, value)
-                ? element.classList.add('value-changed')
-                : element.classList.remove('value-changed');
-              // if (!this.isArraysEqual(this._previousValue, value)) {
-              //   element.classList.add('value-changed');
-              // } else {
-              //   this._el.nativeElement.classList.remove('value-changed');
-              // }
-            } else if (!this._previousValue && (!value || !value?.length)) {
-              this._el.nativeElement.classList.remove('value-changed');
-            } else {
-              element.classList.add('value-changed');
-            }
-          } else {
-            this._previousValue = !this._previousValue ? value : this._previousValue;
-            if (this._previousValue !== value) {
-              element.classList.add('value-changed');
-            } else {
-              this._el.nativeElement.classList.remove('value-changed');
-            }
-          }
+          this.addClassToMatSelect(element, value);
           break;
         case 'mat-input-element':
-          if (this._previousValue !== value) {
-            element.classList.add('value-changed');
-          } else {
-            element.classList.remove('value-changed');
-          }
+          element.classList.toggle('value-changed', this._previousValue !== value);
           break;
         case 'mat-radio-group':
           this._previousValue = !this._previousValue ? value : this._previousValue;
-          if (this._previousValue !== value) {
-            element.classList.add('value-changed');
-          } else {
-            element.classList.remove('value-changed');
-          }
+          element.classList.toggle('value-changed', this._previousValue !== value);
+          break;
+        case 'ngx-monaco-editor':
+          this._previousValue = this._previousValue === null ? value : this._previousValue;
+          element.classList.toggle('value-changed', this._previousValue !== value);
+          break;
+        case 'mat-chip-list':
+          element.classList.toggle('value-changed', !this.isArraysEqual(this._previousValue, value));
           break;
         default:
           this._previousValue = this.initialValuesArr.includes(this._previousValue) ? value : this._previousValue;
-          if (this._previousValue !== value) {
-            element.classList.add('value-changed');
-          } else {
-            this._el.nativeElement.classList.remove('value-changed');
-          }
+          element.classList.toggle('value-changed', this._previousValue !== value);
       }
     });
   }
@@ -115,5 +90,22 @@ export class VlaueChangedDirective implements OnInit {
       }
     }
     return true;
+  }
+
+  addClassToMatSelect(element: any, value: any): void {
+    const classList = [...element.classList];
+
+    if (classList?.includes('mat-select-multiple')) {
+      if (this._previousValue && value) {
+        element.classList.toggle('value-changed', !this.isArraysEqual(this._previousValue, value));
+      } else if (!this._previousValue && (!value || !value?.length)) {
+        element.classList.remove('value-changed');
+      } else {
+        element.classList.add('value-changed');
+      }
+    } else {
+      this._previousValue = !this._previousValue ? value : this._previousValue;
+      element.classList.toggle('value-changed', this._previousValue !== value);
+    }
   }
 }

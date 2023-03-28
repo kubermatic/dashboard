@@ -104,10 +104,11 @@ limitations under the License.
                 <mat-form-field>
                   <mat-label>Version</mat-label>
                   <mat-select [formControlName]="Controls.Version"
+                              (selectionChange)="onVersionChanged($event.value)"
                               disableOptionCentering
                               required
                               panelClass="km-add-dialog-dropdown"
-                              (selectionChange)="onVersionChanged($event.value)">
+                              valueChanged>
                     <mat-option *ngFor="let version of applicationDefinitionSpec?.versions"
                                 [value]="version.version">
                       {{ version.version }}

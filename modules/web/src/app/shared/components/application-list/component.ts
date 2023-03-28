@@ -16,6 +16,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges
 import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {ApplicationService} from '@core/services/application';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
@@ -109,7 +110,11 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     this.applicationsDataSource.sort = this.sort;
   }
 
-  constructor(private readonly _applicationService: ApplicationService, private readonly _matDialog: MatDialog) {}
+  constructor(
+    private readonly _applicationService: ApplicationService,
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
+  ) {}
 
   ngOnInit(): void {
     this._initSubscriptions();
@@ -200,6 +205,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   onEditApplication(application: Application): void {
     const dialog = this._matDialog.open(EditApplicationDialogComponent);
+    this._dialogModeService.isEditDialog = true;
     dialog.componentInstance.application = application;
     dialog.componentInstance.installedApplications = this.applications.filter(
       item => item.name !== application.name || item.spec.namespace.name !== application.spec.namespace.name

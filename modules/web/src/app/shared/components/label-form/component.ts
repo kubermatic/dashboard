@@ -74,6 +74,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() hideRestrictedLabels = false;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
+
   form: FormGroup;
   initialLabels: Record<string, string>;
   disabledLabelFormGroup: FormGroup<ControlsOf<{key: string; value: string}>>;
@@ -183,6 +184,13 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
   validate(_: AbstractControl): Observable<ValidationErrors | null> {
     return of(this.form.valid ? null : {invalid: true});
+  }
+
+  isLabelsChange(index: any): boolean {
+    return (
+      !(this.labels[Object.keys(this.labels)[index]] === this.initialLabels[Object.keys(this.labels)[index]]) ||
+      !(this.labels[Object.values(this.labels)[index]] === this.initialLabels[Object.values(this.labels)[index]])
+    );
   }
 
   private _initForm() {
