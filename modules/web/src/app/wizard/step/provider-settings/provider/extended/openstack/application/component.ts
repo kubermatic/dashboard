@@ -102,6 +102,9 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Empty;
   isDualStackNetworkSelected: boolean;
 
+  private _applicationCredentialID = '';
+  private _applicationCredentialSecret = '';
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
@@ -151,8 +154,21 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(debounceTime(this._debounceTime))
+      .pipe(
+        tap(_ => {
+          if (!this._hasApplicationCredentials()) {
+            this._clearCredentials();
+          }
+        })
+      )
+      .subscribe(null);
+
+    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(filter(_ => this._hasApplicationCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
@@ -162,6 +178,7 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearNetwork() : null)))
       .pipe(filter(_ => this._hasApplicationCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._networkListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadNetworks.bind(this));
@@ -182,6 +199,7 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       .pipe(filter(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)))
       .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSubnetPool() : null)))
       .pipe(filter(_ => this._hasApplicationCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._subnetPoolListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetPools.bind(this));
@@ -268,6 +286,33 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
     );
+  }
+
+  private _areCredentialsChanged(): boolean {
+    let credentialsChanged = false;
+
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialID !== this._applicationCredentialID
+    ) {
+      this._applicationCredentialID = this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID;
+      credentialsChanged = true;
+    }
+
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialSecret !==
+      this._applicationCredentialSecret
+    ) {
+      this._applicationCredentialSecret =
+        this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
+  }
+
+  private _clearCredentials(): void {
+    this._applicationCredentialID = '';
+    this._applicationCredentialSecret = '';
   }
 
   private _canLoadSubnet(): boolean {
