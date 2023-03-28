@@ -102,6 +102,12 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Empty;
   isDualStackNetworkSelected: boolean;
 
+  private _domain = '';
+  private _username = '';
+  private _password = '';
+  private _project = '';
+  private _projectID = '';
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
@@ -151,8 +157,21 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(debounceTime(this._debounceTime))
+      .pipe(
+        tap(_ => {
+          if (!this._hasRequiredCredentials()) {
+            this._clearCredentials();
+          }
+        })
+      )
+      .subscribe(null);
+
+    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
@@ -162,6 +181,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearNetwork() : null)))
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._networkListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadNetworks.bind(this));
@@ -182,6 +202,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .pipe(filter(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)))
       .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearNetwork() : null)))
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(switchMap(_ => this._subnetPoolListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetPools.bind(this));
@@ -280,6 +301,45 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
 
   private _hasRequiredCredentials(): boolean {
     return this._hasBasicCredentials() && this._hasProject();
+  }
+
+  private _areCredentialsChanged(): boolean {
+    let credentialsChanged = false;
+
+    if (this._clusterSpecService.cluster.spec.cloud.openstack?.domain !== this._domain) {
+      this._domain = this._clusterSpecService.cluster.spec.cloud.openstack.domain;
+      credentialsChanged = true;
+    }
+
+    if (this._clusterSpecService.cluster.spec.cloud.openstack?.username !== this._username) {
+      this._username = this._clusterSpecService.cluster.spec.cloud.openstack.username;
+      credentialsChanged = true;
+    }
+
+    if (this._clusterSpecService.cluster.spec.cloud.openstack?.password !== this._password) {
+      this._password = this._clusterSpecService.cluster.spec.cloud.openstack.password;
+      credentialsChanged = true;
+    }
+
+    if (this._clusterSpecService.cluster.spec.cloud.openstack?.project !== this._project) {
+      this._project = this._clusterSpecService.cluster.spec.cloud.openstack.project;
+      credentialsChanged = true;
+    }
+
+    if (this._clusterSpecService.cluster.spec.cloud.openstack?.projectID !== this._projectID) {
+      this._projectID = this._clusterSpecService.cluster.spec.cloud.openstack.projectID;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
+  }
+
+  private _clearCredentials(): void {
+    this._domain = '';
+    this._username = '';
+    this._password = '';
+    this._project = '';
+    this._projectID = '';
   }
 
   private _canLoadSubnet(): boolean {
