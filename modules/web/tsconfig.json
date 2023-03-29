@@ -29,7 +29,7 @@
     },
     "moduleResolution": "Node",
     "module": "ES2020",
-    "target": "ES2020",
+    "target": "ES2022",
     "strict": false,
     "sourceMap": true,
     "experimentalDecorators": true,
@@ -45,6 +45,7 @@
     "lib": [
       "ES2020",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   }
 }

@@ -16,7 +16,7 @@ import {Component, OnDestroy, OnInit, Input, Output, EventEmitter} from '@angula
 import {RBACService} from '@core/services/rbac';
 import {Subject, combineLatest} from 'rxjs';
 import {takeUntil, map} from 'rxjs/operators';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterBinding, NamespaceBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
 

@@ -14,7 +14,7 @@
 
 import {DOCUMENT} from '@angular/common';
 import {AfterViewInit, Component, Inject} from '@angular/core';
-import {MatSnackBarRef} from '@angular/material/snack-bar';
+import {MatLegacySnackBarRef as MatSnackBarRef} from '@angular/material/legacy-snack-bar';
 
 export enum NotificationType {
   success,

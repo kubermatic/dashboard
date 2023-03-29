@@ -16,7 +16,7 @@ import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {DatacenterService} from '@core/services/datacenter';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {MatSort} from '@angular/material/sort';

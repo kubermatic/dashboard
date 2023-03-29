@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -27,9 +27,9 @@ import {Project} from '@shared/entity/project';
 import _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {DynamicTab} from '@shared/model/dynamic-tab';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {GroupService} from '@app/dynamic/enterprise/group/service';

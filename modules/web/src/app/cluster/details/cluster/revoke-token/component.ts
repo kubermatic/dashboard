@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {Cluster, Token} from '@shared/entity/cluster';

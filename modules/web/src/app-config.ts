@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import {MatLegacyTooltipDefaultOptions as MatTooltipDefaultOptions} from '@angular/material/legacy-tooltip';
 export const kmTooltipDefaultOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
   hideDelay: 100,

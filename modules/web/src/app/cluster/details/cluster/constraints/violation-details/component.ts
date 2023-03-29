@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {OPAService} from '@core/services/opa';
 import {Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';

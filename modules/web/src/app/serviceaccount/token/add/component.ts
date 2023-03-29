@@ -14,7 +14,10 @@
 
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {SafeUrl} from '@angular/platform-browser';
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';

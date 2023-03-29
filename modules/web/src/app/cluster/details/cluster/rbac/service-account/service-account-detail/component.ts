@@ -14,7 +14,7 @@
 
 import {Component, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import {Subject} from 'rxjs';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {SimpleClusterBinding} from '@shared/entity/rbac';
 
 enum Column {

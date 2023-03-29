@@ -19,9 +19,9 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {MatSort} from '@angular/material/sort';
 import {takeUntil, filter, switchMap, tap} from 'rxjs/operators';
 import {Subject} from 'rxjs';

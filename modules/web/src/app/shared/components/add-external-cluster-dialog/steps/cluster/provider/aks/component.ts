@@ -16,8 +16,8 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {UserService} from '@core/services/user';
 import {AKSCluster} from '@app/shared/entity/provider/aks';
 

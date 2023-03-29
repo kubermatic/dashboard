@@ -14,7 +14,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {environment} from '@environments/environment';
 import {Changelog} from '@shared/model/changelog';

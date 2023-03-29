@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {ApplicationService} from '@core/services/application';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
