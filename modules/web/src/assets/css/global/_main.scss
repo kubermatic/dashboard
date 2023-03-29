@@ -724,7 +724,7 @@ km-cni-version {
 .value-changed {
   position: relative;
 
-  &:not(.mat-button-toggle-group)::after {
+  &:not(.mat-button-toggle-group):not(.radio-group-column)::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
     content: '';
@@ -736,25 +736,36 @@ km-cni-version {
   }
 
   &.mat-checkbox::after {
-    left: -12px;
-    top: 7px;
+    left: -12px !important;
+    top: 7px !important;
   }
 
-  &.mat-radio-group::after {
-    height: 80%;
-    left: -12px;
+  &.mat-radio-group:not(.radio-group-column)::after {
+    height: 80% !important;
+    left: -12px !important;
+  }
+
+  &.radio-group-column {
+    .mat-radio-checked {
+      position: relative;
+
+      &::after {
+        border-bottom-left-radius: variables.$border-radius;
+        border-top-left-radius: variables.$border-radius;
+        content: '';
+        height: 30%;
+        left: -12px;
+        position: absolute;
+        top: 4px;
+        width: 5px;
+      }
+    }
   }
 
   &.mat-select::after {
-    height: 44px;
-    left: -11px;
-    top: -17px;
-  }
-
-  &.mat-chip-list::after {
-    height: 162%;
-    left: -11px;
-    top: -18px;
+    height: 44px !important;
+    left: -11px !important;
+    top: -17px !important;
   }
 
   .mat-button-toggle-checked::after {

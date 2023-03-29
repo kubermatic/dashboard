@@ -24,6 +24,7 @@ export class VlaueChangedDirective implements OnInit {
   // this array is for the fields initial value that been set before updating the values in the edit dialog.
   initialValuesArr = [undefined, ''];
   private _previousValue: any;
+  test: any;
 
   constructor(private _el: ElementRef, private _control: NgControl, private _isEditDialog: DialogModeService) {}
 
@@ -33,7 +34,6 @@ export class VlaueChangedDirective implements OnInit {
     }
 
     const element = this._el.nativeElement;
-
     this._previousValue = this._control.control.value;
 
     switch (element.classList[0]) {
@@ -46,8 +46,8 @@ export class VlaueChangedDirective implements OnInit {
       case 'mat-checkbox':
         this._previousValue = this._control.control.value === null ? false : this._control.control.value;
         break;
-      case 'mat-chip-list':
-        this._previousValue = this._control.control.value;
+      case 'mat-radio-group':
+        element.classList.toggle('radio-group-column', element.style.flexDirection === 'column');
         break;
       default:
         this._previousValue = this._control.control.value;
@@ -70,9 +70,6 @@ export class VlaueChangedDirective implements OnInit {
           this._previousValue = this._previousValue === null ? value : this._previousValue;
           element.classList.toggle('value-changed', this._previousValue !== value);
           break;
-        case 'mat-chip-list':
-          element.classList.toggle('value-changed', !this.isArraysEqual(this._previousValue, value));
-          break;
         default:
           this._previousValue = this.initialValuesArr.includes(this._previousValue) ? value : this._previousValue;
           element.classList.toggle('value-changed', this._previousValue !== value);
@@ -81,10 +78,10 @@ export class VlaueChangedDirective implements OnInit {
   }
 
   isArraysEqual(arr1: string[], arr2: string[]): boolean {
-    if (arr1.length !== arr2.length) {
+    if (arr1?.length !== arr2?.length) {
       return false;
     }
-    for (let i = 0; i < arr1.length; i++) {
+    for (let i = 0; i < arr1?.length; i++) {
       if (arr1[i] !== arr2[i]) {
         return false;
       }

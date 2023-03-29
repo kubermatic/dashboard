@@ -37,6 +37,7 @@ import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {UserSettings} from '@app/shared/entity/settings';
 import {Router} from '@angular/router';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-member',
@@ -67,7 +68,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService,
-    private _router: Router
+    private _router: Router,
+    private _isEditDialog: DialogModeService
   ) {}
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -177,6 +179,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   }
 
   editMember(member: Member): void {
+    this._isEditDialog.isEditDialog = true;
     const modal = this._matDialog.open(EditMemberComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.member = member;

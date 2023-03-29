@@ -84,3 +84,10 @@ limitations under the License.
     </div>
   </div>
 </form>
+<div *ngIf="removedTaints.length"
+     class="removed-taint-form">
+  <p>Removed Node Taint</p>
+  <div *ngFor="let taint of removedTaints; let i = index;">
+    <p>Key: {{removedTaints[i]?.key}}, Value: {{removedTaints[i]?.value}}, Effect: {{removedTaints[i]?.effect}}</p>
+  </div>
+</div>

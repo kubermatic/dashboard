@@ -48,6 +48,7 @@ export class TaintFormComponent implements OnInit {
   @Input() taints: Taint[];
   @Output() taintsChange = new EventEmitter<Taint[]>();
   form: FormGroup;
+  removedTaints: Taint[] = [];
   availableEffects = Taint.getAvailableEffects();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
@@ -84,9 +85,16 @@ export class TaintFormComponent implements OnInit {
 
     // Add initial taint for the user.
     this._addTaint();
+
+    this.form.valueChanges.subscribe(value => {
+      this.removedTaints = this.removedTaints.filter(removedtaint => {
+        return !value.taints.some(taint => removedtaint?.key === taint?.key);
+      });
+    });
   }
 
   deleteTaint(index: number): void {
+    this.removedTaints?.push(this.taints[index]);
     this.taintArray.removeAt(index);
     this._updateTaints();
   }

@@ -343,6 +343,12 @@
     }
   }
 
+  .radio-group-column {
+    .mat-radio-checked::after {
+      background-color: map.get($colors, primary);
+    }
+  }
+
   .ngx-monaco-editor {
     &.value-changed::after {
       background-color: map.get($colors, primary);
