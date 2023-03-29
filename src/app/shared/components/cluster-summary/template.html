@@ -956,6 +956,13 @@ limitations under the License.
             <div key>IPv6 Subnet Pool</div>
             <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
           </km-property>
+          <km-property-boolean label="Enable Ingress Hostname"
+                               [value]="cluster.spec.cloud?.openstack.enableIngressHostname">
+          </km-property-boolean>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.ingressHostnameSuffix">
+            <div key>Ingress Hostname Suffix</div>
+            <div value>{{cluster.spec.cloud?.openstack.ingressHostnameSuffix}}</div>
+          </km-property>
         </ng-container>
 
         <!-- Equinix -->

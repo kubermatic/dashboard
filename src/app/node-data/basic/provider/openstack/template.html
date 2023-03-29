@@ -48,6 +48,7 @@ limitations under the License.
                      [formControlName]="Controls.DiskSize"
                      mode="errors"
                      label="Disk Size in GB"
+                     [required]="isDiskSizeRequired()"
                      hint="An additional network storage volume will be created and used as the disk for the VM."
                      min="10"
                      max="16000">
