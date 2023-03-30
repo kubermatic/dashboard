@@ -17,7 +17,6 @@ limitations under the License.
 package packet
 
 import (
-	"context"
 	"errors"
 
 	"github.com/packethost/packngo"
@@ -39,22 +38,6 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 }
 
 var _ provider.CloudProvider = &packet{}
-
-// DefaultCloudSpec adds defaults to the CloudSpec.
-func (p *packet) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpec validates the given CloudSpec.
-func (p *packet) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSpec) error {
-	_, _, err := GetCredentialsForCluster(spec, p.secretKeySelector)
-	return err
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (p *packet) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
-}
 
 func GetCredentialsForCluster(cloudSpec kubermaticv1.CloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (apiKey, projectID string, err error) {
 	apiKey = cloudSpec.Packet.APIKey

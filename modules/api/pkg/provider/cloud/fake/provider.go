@@ -17,11 +17,8 @@ limitations under the License.
 package fake
 
 import (
-	"context"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 )
 
 type fakeCloudProvider struct {
@@ -36,16 +33,3 @@ func NewCloudProvider() provider.CloudProvider {
 }
 
 var _ provider.CloudProvider = &fakeCloudProvider{}
-
-func (p *fakeCloudProvider) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-func (p *fakeCloudProvider) ValidateCloudSpec(_ context.Context, _ kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (p *fakeCloudProvider) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
-}

@@ -124,9 +124,6 @@ type OIDCIssuerVerifierGetter = func(seed *kubermaticv1.Seed) (authtypes.OIDCIss
 
 // CloudProvider declares a set of methods for interacting with a cloud provider.
 type CloudProvider interface {
-	DefaultCloudSpec(context.Context, *kubermaticv1.CloudSpec) error
-	ValidateCloudSpec(context.Context, kubermaticv1.CloudSpec) error
-	ValidateCloudSpecUpdate(ctx context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error
 }
 
 // ClusterUpdater defines a function to persist an update to a cluster.

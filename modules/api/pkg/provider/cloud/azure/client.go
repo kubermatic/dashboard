@@ -21,8 +21,6 @@ import (
 	"errors"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armresources"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/subscription/armsubscription"
 
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -95,49 +93,4 @@ func ValidateCredentials(ctx context.Context, credentials *azidentity.ClientSecr
 	_, err = subscriptionClient.Get(ctx, subscriptionID, nil)
 
 	return err
-}
-
-func getGroupsClient(credentials *azidentity.ClientSecretCredential, subscriptionID string) (*armresources.ResourceGroupsClient, error) {
-	groupsClient, err := armresources.NewResourceGroupsClient(subscriptionID, credentials, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return groupsClient, nil
-}
-
-func getNetworksClient(credentials *azidentity.ClientSecretCredential, subscriptionID string) (*armnetwork.VirtualNetworksClient, error) {
-	networksClient, err := armnetwork.NewVirtualNetworksClient(subscriptionID, credentials, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return networksClient, nil
-}
-
-func getSubnetsClient(credentials *azidentity.ClientSecretCredential, subscriptionID string) (*armnetwork.SubnetsClient, error) {
-	subnetsClient, err := armnetwork.NewSubnetsClient(subscriptionID, credentials, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return subnetsClient, nil
-}
-
-func getRouteTablesClient(credentials *azidentity.ClientSecretCredential, subscriptionID string) (*armnetwork.RouteTablesClient, error) {
-	routeTablesClient, err := armnetwork.NewRouteTablesClient(subscriptionID, credentials, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return routeTablesClient, nil
-}
-
-func getSecurityGroupsClient(credentials *azidentity.ClientSecretCredential, subscriptionID string) (*armnetwork.SecurityGroupsClient, error) {
-	securityGroupsClient, err := armnetwork.NewSecurityGroupsClient(subscriptionID, credentials, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return securityGroupsClient, nil
 }

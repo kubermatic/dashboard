@@ -29,7 +29,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
-	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticprovider "k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
@@ -91,7 +90,7 @@ func DecodeGetNetworkDefaultsReq(ctx context.Context, r *http.Request) (interfac
 func GetNetworkDefaultsEndpoint(
 	seedsGetter kubermaticprovider.SeedsGetter,
 	userInfoGetter kubermaticprovider.UserInfoGetter,
-	configGetter provider.KubermaticConfigurationGetter,
+	configGetter kubermaticprovider.KubermaticConfigurationGetter,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(getNetworkDefaultsReq)

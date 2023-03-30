@@ -17,7 +17,6 @@ limitations under the License.
 package anexia
 
 import (
-	"context"
 	"errors"
 
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -40,20 +39,6 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 		dc:                dc.Spec.Anexia,
 		secretKeySelector: secretKeyGetter,
 	}, nil
-}
-
-func (a *Anexia) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-func (a *Anexia) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSpec) error {
-	_, err := GetCredentialsForCluster(spec, a.secretKeySelector)
-
-	return err
-}
-
-func (a *Anexia) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
 }
 
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.

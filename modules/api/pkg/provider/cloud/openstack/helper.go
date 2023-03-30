@@ -35,10 +35,6 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 )
 
-const (
-	subnetCIDR = "192.168.1.0/24"
-)
-
 func getSecurityGroups(netClient *gophercloud.ServiceClient, opts ossecuritygroups.ListOpts) ([]ossecuritygroups.SecGroup, error) {
 	page, err := ossecuritygroups.List(netClient, opts).AllPages()
 	if err != nil {
@@ -69,57 +65,6 @@ func getAllNetworks(netClient *gophercloud.ServiceClient, opts osnetworks.ListOp
 	}
 
 	return allNetworks, nil
-}
-
-func getNetworkByName(netClient *gophercloud.ServiceClient, name string, isExternal bool) (*NetworkWithExternalExt, error) {
-	existingNetworks, err := getAllNetworks(netClient, osnetworks.ListOpts{Name: name})
-	if err != nil {
-		return nil, err
-	}
-
-	candidates := []*NetworkWithExternalExt{}
-	for i, n := range existingNetworks {
-		if n.External == isExternal {
-			candidates = append(candidates, &existingNetworks[i])
-		}
-	}
-
-	switch len(candidates) {
-	case 1:
-		return candidates[0], nil
-	case 0:
-		return nil, fmt.Errorf("network named '%s' with external=%v not found", name, isExternal)
-	default:
-		return nil, fmt.Errorf("found %d networks for name '%s' (external=%v), expected exactly one", len(candidates), name, isExternal)
-	}
-}
-
-func validateSecurityGroupsExist(netClient *gophercloud.ServiceClient, securityGroups []string) error {
-	for _, sg := range securityGroups {
-		results, err := getSecurityGroups(netClient, ossecuritygroups.ListOpts{Name: sg})
-		if err != nil {
-			return fmt.Errorf("failed to get security group: %w", err)
-		}
-		if len(results) == 0 {
-			return fmt.Errorf("specified security group %s not found", sg)
-		}
-	}
-	return nil
-}
-
-func getSubnetPoolByName(netClient *gophercloud.ServiceClient, name string) (*subnetpools.SubnetPool, error) {
-	pools, err := getAllSubnetPools(netClient, subnetpools.ListOpts{Name: name})
-	if err != nil {
-		return nil, err
-	}
-	switch len(pools) {
-	case 1:
-		return &pools[0], nil
-	case 0:
-		return nil, fmt.Errorf("subnet pool named '%s' not found", name)
-	default:
-		return nil, fmt.Errorf("found %d subnet pools for name '%s', expected exactly one", len(pools), name)
-	}
 }
 
 func getAllSubnetPools(netClient *gophercloud.ServiceClient, listOpts subnetpools.ListOpts) ([]subnetpools.SubnetPool, error) {

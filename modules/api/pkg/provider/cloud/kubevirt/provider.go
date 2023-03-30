@@ -17,15 +17,11 @@ limitations under the License.
 package kubevirt
 
 import (
-	"context"
-	"encoding/base64"
 	"errors"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
-
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 const (
@@ -49,48 +45,6 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 }
 
 var _ provider.CloudProvider = &kubevirt{}
-
-func (k *kubevirt) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
-	if spec.Kubevirt == nil {
-		return errors.New("KubeVirt cloud provider spec is empty")
-	}
-
-	client, err := k.GetClientForCluster(*spec)
-	if err != nil {
-		return err
-	}
-
-	return updateInfraStorageClassesInfo(ctx, client, spec.Kubevirt, k.dc)
-}
-
-func (k *kubevirt) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	kubeconfig, err := GetCredentialsForCluster(spec, k.secretKeySelector)
-	if err != nil {
-		return err
-	}
-
-	config, err := base64.StdEncoding.DecodeString(kubeconfig)
-	if err != nil {
-		// if the decoding failed, the kubeconfig is sent already decoded without the need of decoding it,
-		// for example the value has been read from Vault during the ci tests, which is saved as json format.
-		config = []byte(kubeconfig)
-	}
-
-	_, err = clientcmd.RESTConfigFromKubeConfig(config)
-	if err != nil {
-		return err
-	}
-
-	// TODO: (mfranczy) this has to be changed
-	// it is wrong to mutate the value of kubeconfig in the validation method
-	spec.Kubevirt.Kubeconfig = string(config)
-
-	return nil
-}
-
-func (k *kubevirt) ValidateCloudSpecUpdate(ctx context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error {
-	return nil
-}
 
 // GetClientForCluster returns the kubernetes client the KubeVirt underlying cluster.
 func (k *kubevirt) GetClientForCluster(spec kubermaticv1.CloudSpec) (*Client, error) {

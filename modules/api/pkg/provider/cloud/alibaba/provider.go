@@ -17,11 +17,7 @@ limitations under the License.
 package alibaba
 
 import (
-	"context"
 	"errors"
-	"fmt"
-
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -43,27 +39,6 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 		dc:                dc.Spec.Alibaba,
 		secretKeySelector: secretKeyGetter,
 	}, nil
-}
-
-func (a *Alibaba) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-func (a *Alibaba) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSpec) error {
-	accessKeyID, accessKeySecret, err := GetCredentialsForCluster(spec, a.secretKeySelector, a.dc)
-	if err != nil {
-		return err
-	}
-
-	_, err = ecs.NewClientWithAccessKey(a.dc.Region, accessKeyID, accessKeySecret)
-	if err != nil {
-		return fmt.Errorf("failed to get Alibaba cloud client: %w", err)
-	}
-	return nil
-}
-
-func (a *Alibaba) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
 }
 
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.

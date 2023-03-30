@@ -46,62 +46,6 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 
 var _ provider.CloudProvider = &Provider{}
 
-func (p *Provider) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-func (p *Provider) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSpec) error {
-	if spec.VMwareCloudDirector == nil {
-		return errors.New("not a VMware Cloud Director spec")
-	}
-
-	// vApp will be created and managed by the controller. We don't allow end-users to specify this field at the time
-	// of cluster creation.
-	if spec.VMwareCloudDirector.VApp != "" {
-		return fmt.Errorf("vApp should not be set on cluster creation: %s", spec.VMwareCloudDirector.VApp)
-	}
-
-	// Validate credentials.
-	client, err := NewClient(spec, p.secretKeySelector, p.dc)
-	if err != nil {
-		return fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
-	}
-
-	// Ensure that Organization exists.
-	org, err := client.GetOrganization()
-	if err != nil {
-		return fmt.Errorf("failed to get organization %s: %w", client.Auth.Organization, err)
-	}
-
-	// Ensure that VDC exists.
-	vdc, err := org.GetVDCByNameOrId(client.Auth.VDC, false)
-	if err != nil {
-		return fmt.Errorf("failed to get organization VDC '%s': %w", client.Auth.VDC, err)
-	}
-
-	// Ensure that the network exists
-	if spec.VMwareCloudDirector.OVDCNetwork != "" {
-		_, err := vdc.GetOrgVdcNetworkByNameOrId(spec.VMwareCloudDirector.OVDCNetwork, true)
-		if err != nil {
-			return fmt.Errorf("failed to get organization VDC network '%s': %w", client.Auth.VDC, err)
-		}
-	}
-
-	return nil
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (p *Provider) ValidateCloudSpecUpdate(_ context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error {
-	if oldSpec.VMwareCloudDirector == nil || newSpec.VMwareCloudDirector == nil {
-		return errors.New("'VMwareCloudDirector' spec is empty")
-	}
-
-	if oldSpec.VMwareCloudDirector.OVDCNetwork != newSpec.VMwareCloudDirector.OVDCNetwork {
-		return fmt.Errorf("updating VMware Cloud Director OVDCNetwork is not supported (was %s, updated to %s)", oldSpec.VMwareCloudDirector.OVDCNetwork, newSpec.VMwareCloudDirector.OVDCNetwork)
-	}
-	return nil
-}
-
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.
 func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (creds *resources.VMwareCloudDirectorCredentials, err error) {
 	username := cloud.VMwareCloudDirector.Username

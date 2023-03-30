@@ -41,30 +41,12 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 
 var _ provider.CloudProvider = &digitalocean{}
 
-func (do *digitalocean) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
 func ValidateCredentials(ctx context.Context, token string) error {
 	static := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	client := godo.NewClient(oauth2.NewClient(ctx, static))
 
 	_, _, err := client.Regions.List(ctx, nil)
 	return err
-}
-
-func (do *digitalocean) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	token, err := GetCredentialsForCluster(spec, do.secretKeySelector)
-	if err != nil {
-		return err
-	}
-
-	return ValidateCredentials(ctx, token)
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (do *digitalocean) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
 }
 
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.
