@@ -47,7 +47,11 @@ export class Auth {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this._removeFragment();
-        this._cookieService.set(this._cookie.token, token, 1, '/', null, true, 'Lax');
+        let secure = true;
+        if (location.protocol === 'http:') {
+          secure = false;
+        }
+        this._cookieService.set(this._cookie.token, token, 1, '/', null, secure, 'Lax');
         // localhost is only served via http, though secure cookie is not possible
         // following line will only work when domain is localhost
         this._cookieService.set(this._cookie.token, token, 1, '/', 'localhost', false, 'Lax');
@@ -140,7 +144,11 @@ export class Auth {
     const nonceStr = nonceRegExp.exec(this.getOIDCProviderURL());
     const minLen = 2;
     if (!!nonceStr && nonceStr.length >= minLen && !!nonceStr[1]) {
-      this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', null, true, 'Lax');
+      let secure = true;
+      if (location.protocol === 'http:') {
+        secure = false;
+      }
+      this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', null, secure, 'Lax');
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
       this._cookieService.set(this._cookie.nonce, nonceStr[1], null, '/', 'localhost', false, 'Lax');
