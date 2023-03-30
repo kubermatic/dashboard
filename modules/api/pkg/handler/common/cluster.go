@@ -227,7 +227,7 @@ func GenerateCluster(
 		return nil, utilerrors.NewBadRequest("cluster validation failed: %v", errs)
 	}
 
-	if err = validation.ValidateUpdateWindow(spec.UpdateWindow); err != nil {
+	if err = validation.ValidateUpdateWindow(partialCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
