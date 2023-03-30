@@ -52,23 +52,6 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 
 var _ provider.CloudProvider = &gcp{}
 
-// DefaultCloudSpec adds defaults to the cloud spec.
-func (g *gcp) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpec validates the given CloudSpec.
-func (g *gcp) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	sa, err := GetCredentialsForCluster(spec, g.secretKeySelector)
-	if err != nil {
-		return err
-	}
-	if sa == "" {
-		return fmt.Errorf("serviceAccount cannot be empty")
-	}
-	return nil
-}
-
 func ValidateCredentials(ctx context.Context, serviceAccount string) error {
 	svc, project, err := ConnectToComputeService(ctx, serviceAccount)
 	if err != nil {
@@ -117,11 +100,6 @@ func createClient(ctx context.Context, serviceAccount string, scope string) (*ht
 	client := conf.Client(ctx)
 
 	return client, projectID, nil
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (g *gcp) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
 }
 
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.

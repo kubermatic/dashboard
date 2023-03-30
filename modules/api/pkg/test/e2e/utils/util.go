@@ -39,7 +39,7 @@ func NewKubermaticClient(endpointURL string) (*client.KubermaticKubernetesPlatfo
 	}
 
 	if parsed.Host == "" || parsed.Scheme == "" {
-		return nil, errors.New("Kubermatic endpoint must be scheme://host[:port]")
+		return nil, errors.New("kubermatic endpoint must be scheme://host[:port]")
 	}
 
 	if parsed.Scheme != "http" && parsed.Scheme != "https" {

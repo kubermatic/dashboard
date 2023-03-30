@@ -20,10 +20,8 @@ import (
 	"context"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	storagev1 "k8s.io/api/storage/v1"
-	"k8s.io/apimachinery/pkg/util/sets"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -43,27 +41,4 @@ func ListStorageClasses(ctx context.Context, client ctrlruntimeclient.Client, an
 		}
 	}
 	return res, nil
-}
-
-func updateInfraStorageClassesInfo(ctx context.Context, client ctrlruntimeclient.Client, spec *kubermaticv1.KubevirtCloudSpec, dc *kubermaticv1.DatacenterSpecKubevirt) error {
-	infraStorageClassList, err := ListStorageClasses(ctx, client, nil)
-	if err != nil {
-		return err
-	}
-	existingInfraStorageClassSet := sets.New[string]()
-	for _, isc := range infraStorageClassList {
-		existingInfraStorageClassSet.Insert(isc.Name)
-	}
-
-	// Cluster will contain a list with only the StorageClasses
-	// that are in the DC configuration and also exist in the infra KubeVirt cluster.
-	storageClasses := make([]kubermaticv1.KubeVirtInfraStorageClass, 0)
-	for _, sc := range dc.InfraStorageClasses {
-		// if StorageClass exists in infra, keep it
-		if existingInfraStorageClassSet.Has(sc.Name) {
-			storageClasses = append(storageClasses, sc)
-		}
-	}
-	spec.StorageClasses = storageClasses
-	return nil
 }

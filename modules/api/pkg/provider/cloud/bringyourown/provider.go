@@ -17,10 +17,7 @@ limitations under the License.
 package bringyourown
 
 import (
-	"context"
-
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 )
 
 type bringyourown struct{}
@@ -31,16 +28,3 @@ func NewCloudProvider() provider.CloudProvider {
 }
 
 var _ provider.CloudProvider = &bringyourown{}
-
-func (b *bringyourown) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-func (b *bringyourown) ValidateCloudSpec(_ context.Context, _ kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (b *bringyourown) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
-}

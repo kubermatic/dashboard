@@ -49,36 +49,36 @@ type loginHandler struct {
 	settingsProvider provider.SettingsProvider
 }
 
-func (this *loginHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
-	this.middlewares = middlewares
-	return this
+func (l *loginHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
+	l.middlewares = middlewares
+	return l
 }
 
-func (this *loginHandler) Options(options ...httptransport.ServerOption) Handler {
-	this.options = options
-	return this
+func (l *loginHandler) Options(options ...httptransport.ServerOption) Handler {
+	l.options = options
+	return l
 }
 
-func (this *loginHandler) Install(router *mux.Router) {
+func (l *loginHandler) Install(router *mux.Router) {
 	router.Methods(http.MethodGet).
 		Path("/dashboard/login").
 		Queries("projectID", "{projectID}", "clusterID", "{clusterID}").
-		Handler(this.redirectHandler())
+		Handler(l.redirectHandler())
 
 	router.Methods(http.MethodGet).
 		Path("/dashboard/login").
 		Queries("state", "{state}", "code", "{code}").
-		Handler(this.oidcCallbackHandler())
+		Handler(l.oidcCallbackHandler())
 }
 
-func (this *loginHandler) decodeInitialRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func (l *loginHandler) decodeInitialRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	return NewInitialRequest(r), nil
 }
 
-func (this *loginHandler) encodeInitialResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+func (l *loginHandler) encodeInitialResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	loginResponse := response.(*LoginResponse)
 
-	encodedNonceCookie, err := this.getEncodedNonceCookie(
+	encodedNonceCookie, err := l.getEncodedNonceCookie(
 		loginResponse.nonce,
 		loginResponse.cookieSecureMode,
 		nonceCookieMaxAge,
@@ -108,22 +108,22 @@ func (this *loginHandler) encodeInitialResponse(_ context.Context, w http.Respon
 //
 //	Responses:
 //		default: empty
-func (this *loginHandler) redirectHandler() http.Handler {
+func (l *loginHandler) redirectHandler() http.Handler {
 	return httptransport.NewServer(
-		this.chain(this.redirect),
-		this.decodeInitialRequest,
-		this.encodeInitialResponse,
-		this.options...,
+		l.chain(l.redirect),
+		l.decodeInitialRequest,
+		l.encodeInitialResponse,
+		l.options...,
 	)
 }
 
-func (this *loginHandler) redirect(ctx context.Context, request interface{}) (response interface{}, err error) {
+func (l *loginHandler) redirect(ctx context.Context, request interface{}) (response interface{}, err error) {
 	loginRequest := request.(*InitialRequest)
 	nonce := rand.String(rand.IntnRange(10, 15))
 	scopes := []string{"openid", "email"}
 
 	// Make sure the global settings have the Dashboard integration enabled.
-	if err := isEnabled(ctx, this.settingsProvider); err != nil {
+	if err := isEnabled(ctx, l.settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -133,7 +133,7 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 		scopes = append(scopes, "offline_access")
 	}
 
-	state, err := this.encodeOIDCState(nonce, loginRequest.ProjectID, loginRequest.ClusterID)
+	state, err := l.encodeOIDCState(nonce, loginRequest.ProjectID, loginRequest.ClusterID)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (this *loginHandler) redirect(ctx context.Context, request interface{}) (re
 	}, nil
 }
 
-func (this *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) (*http.Cookie, error) {
+func (l *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, maxAge int, secCookie *securecookie.SecureCookie) (*http.Cookie, error) {
 	encoded, err := secCookie.Encode(nonceCookieName, nonce)
 	if err != nil {
 		return nil, fmt.Errorf("the encode cookie failed: %w", err)
@@ -169,20 +169,20 @@ func (this *loginHandler) getEncodedNonceCookie(nonce string, secureMode bool, m
 	}, nil
 }
 
-func (this *loginHandler) decodeOIDCCallbackRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func (l *loginHandler) decodeOIDCCallbackRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	return NewOIDCCallbackRequest(r)
 }
 
-func (this *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+func (l *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	callbackResponse := response.(*OIDCCallbackResponse)
 
-	cookie, err := this.getEncodedNonceCookie("", callbackResponse.cookieSecureMode, -1, callbackResponse.secureCookie)
+	cookie, err := l.getEncodedNonceCookie("", callbackResponse.cookieSecureMode, -1, callbackResponse.secureCookie)
 	if err != nil {
 		return err
 	}
 
 	http.SetCookie(w, cookie)
-	http.Redirect(w, callbackResponse.Request, this.getProxyURI(callbackResponse.projectID, callbackResponse.clusterID, callbackResponse.token), http.StatusSeeOther)
+	http.Redirect(w, callbackResponse.Request, l.getProxyURI(callbackResponse.projectID, callbackResponse.clusterID, callbackResponse.token), http.StatusSeeOther)
 	return nil
 }
 
@@ -203,16 +203,16 @@ func (this *loginHandler) encodeOIDCCallbackResponse(_ context.Context, w http.R
 //
 //	Responses:
 //		default: empty
-func (this *loginHandler) oidcCallbackHandler() http.Handler {
+func (l *loginHandler) oidcCallbackHandler() http.Handler {
 	return httptransport.NewServer(
-		this.chain(this.oidcCallback),
-		this.decodeOIDCCallbackRequest,
-		this.encodeOIDCCallbackResponse,
-		this.options...,
+		l.chain(l.oidcCallback),
+		l.decodeOIDCCallbackRequest,
+		l.encodeOIDCCallbackResponse,
+		l.options...,
 	)
 }
 
-func (this *loginHandler) oidcCallback(ctx context.Context, request interface{}) (response interface{}, err error) {
+func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (response interface{}, err error) {
 	oidcCallbackRequest := request.(*OIDCCallbackRequest)
 
 	state := oidcCallbackRequest.State
@@ -222,7 +222,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 
 	oidcIssuerVerifier := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
-	nonce, err := this.getDecodedNonce(oidcCallbackRequest.Request, oidcIssuerVerifier.OIDCConfig().SecureCookie)
+	nonce, err := l.getDecodedNonce(oidcCallbackRequest.Request, oidcIssuerVerifier.OIDCConfig().SecureCookie)
 	if err != nil {
 		return nil, err
 	}
@@ -237,7 +237,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 		return nil, err
 	}
 
-	token, err := this.exchange(ctx, oidcCallbackRequest.Code, redirectURI)
+	token, err := l.exchange(ctx, oidcCallbackRequest.Code, redirectURI)
 	if err != nil {
 		return nil, err
 	}
@@ -252,7 +252,7 @@ func (this *loginHandler) oidcCallback(ctx context.Context, request interface{})
 	}, nil
 }
 
-func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI string) (string, error) {
+func (l *loginHandler) exchange(ctx context.Context, code, overwriteRedirectURI string) (string, error) {
 	oidcProvider := ctx.Value(middleware.OIDCIssuerVerifierContextKey).(authtypes.OIDCIssuerVerifier)
 
 	oidcTokens, err := oidcProvider.Exchange(ctx, code, overwriteRedirectURI)
@@ -278,7 +278,7 @@ func (this *loginHandler) exchange(ctx context.Context, code, overwriteRedirectU
 	return oidcTokens.IDToken, nil
 }
 
-func (this *loginHandler) getDecodedNonce(r *http.Request, secCookie *securecookie.SecureCookie) (nonce string, err error) {
+func (l *loginHandler) getDecodedNonce(r *http.Request, secCookie *securecookie.SecureCookie) (nonce string, err error) {
 	cookie, err := r.Cookie(nonceCookieName)
 	if err != nil {
 		return
@@ -288,11 +288,11 @@ func (this *loginHandler) getDecodedNonce(r *http.Request, secCookie *securecook
 	return
 }
 
-func (this *loginHandler) getProxyURI(projectID string, clusterID string, token string) string {
+func (l *loginHandler) getProxyURI(projectID string, clusterID string, token string) string {
 	return fmt.Sprintf("/api/v2/projects/%s/clusters/%s/dashboard/proxy?token=%s", projectID, clusterID, token)
 }
 
-func (this *loginHandler) encodeOIDCState(nonce string, projectID string, clusterID string) (string, error) {
+func (l *loginHandler) encodeOIDCState(nonce string, projectID string, clusterID string) (string, error) {
 	oidcState := commonv2.OIDCState{
 		Nonce:     nonce,
 		ClusterID: clusterID,

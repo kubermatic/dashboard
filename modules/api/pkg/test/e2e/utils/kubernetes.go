@@ -337,7 +337,7 @@ func WaitForDeploymentReady(ctx context.Context, c ctrlruntimeclient.Client, log
 		}
 
 		if status != kubermaticv1.HealthStatusUp {
-			return fmt.Errorf("Deployment is %v", status), nil
+			return fmt.Errorf("deployment is %v", status), nil
 		}
 
 		return nil, nil

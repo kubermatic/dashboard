@@ -41,39 +41,6 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 
 var _ provider.CloudProvider = &hetzner{}
 
-// DefaultCloudSpec.
-func (h *hetzner) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpec.
-func (h *hetzner) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	hetznerToken, err := GetCredentialsForCluster(spec, h.secretKeySelector)
-	if err != nil {
-		return err
-	}
-
-	client := hcloud.NewClient(hcloud.WithToken(hetznerToken))
-
-	timeout, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
-
-	if spec.Hetzner.Network == "" {
-		// this validates the token
-		_, _, err = client.ServerType.List(timeout, hcloud.ServerTypeListOpts{})
-	} else {
-		// this validates network and implicitly the token
-		_, _, err = client.Network.GetByName(timeout, spec.Hetzner.Network)
-	}
-
-	return err
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (h *hetzner) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
-	return nil
-}
-
 // GetCredentialsForCluster returns the credentials for the passed in cloud spec or an error.
 func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (hetznerToken string, err error) {
 	hetznerToken = cloud.Hetzner.Token

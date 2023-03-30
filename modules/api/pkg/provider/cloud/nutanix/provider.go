@@ -17,17 +17,13 @@ limitations under the License.
 package nutanix
 
 import (
-	"context"
 	"errors"
-	"fmt"
 
 	"go.uber.org/zap"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
-
-	"k8s.io/utils/pointer"
 )
 
 const (
@@ -56,59 +52,6 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 		log:               log.Logger,
 		secretKeySelector: secretKeyGetter,
 	}, nil
-}
-
-func (n *Nutanix) DefaultCloudSpec(_ context.Context, spec *kubermaticv1.CloudSpec) error {
-	// default csi
-	if spec.Nutanix.CSI != nil {
-		if spec.Nutanix.CSI.Port == nil {
-			spec.Nutanix.CSI.Port = pointer.Int32(9440)
-		}
-	}
-
-	return nil
-}
-
-func (n *Nutanix) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	if spec.Nutanix == nil {
-		return errors.New("not a Nutanix spec")
-	}
-
-	client, err := GetClientSet(n.dc, spec.Nutanix, n.secretKeySelector)
-	if err != nil {
-		return err
-	}
-
-	if spec.Nutanix.ProjectName != "" {
-		// check for project existence
-		_, err = GetProjectByName(ctx, client, spec.Nutanix.ProjectName)
-		if err != nil {
-			return err
-		}
-	}
-
-	// validate csi is set - required for new clusters
-	if spec.Nutanix.CSI == nil {
-		return errors.New("CSI not configured")
-	}
-
-	return nil
-}
-
-func (n *Nutanix) ValidateCloudSpecUpdate(_ context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error {
-	if oldSpec.Nutanix == nil || newSpec.Nutanix == nil {
-		return errors.New("'nutanix' spec is empty")
-	}
-
-	if oldSpec.Nutanix.ClusterName != newSpec.Nutanix.ClusterName {
-		return fmt.Errorf("updating Nutanix cluster name is not supported (was %s, updated to %s)", oldSpec.Nutanix.ClusterName, newSpec.Nutanix.ClusterName)
-	}
-
-	if oldSpec.Nutanix.ProjectName != newSpec.Nutanix.ProjectName {
-		return fmt.Errorf("updating Nutanix project name is not supported (was %s, updated to %s)", oldSpec.Nutanix.ProjectName, newSpec.Nutanix.ProjectName)
-	}
-
-	return nil
 }
 
 func CategoryValue(clusterName string) string {

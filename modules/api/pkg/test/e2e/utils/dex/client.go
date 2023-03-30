@@ -213,7 +213,7 @@ func (c *Client) authenticate(ctx context.Context, loginURL *url.URL, login stri
 	// extract token from the location URL's fragment
 	query, err := url.ParseQuery(location.Fragment)
 	if err != nil {
-		return "", fmt.Errorf("Location header does not contain a valid query string in its fragment (%q): %w", location.Fragment, err)
+		return "", fmt.Errorf("location header does not contain a valid query string in its fragment (%q): %w", location.Fragment, err)
 	}
 
 	token := query.Get("id_token")

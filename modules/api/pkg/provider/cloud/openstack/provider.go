@@ -22,9 +22,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"net"
 	"net/http"
-	"strings"
 
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
@@ -37,7 +35,6 @@ import (
 	ossubnetpools "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/subnetpools"
 	osnetworks "github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
 	ossubnets "github.com/gophercloud/gophercloud/openstack/networking/v2/subnets"
-	"github.com/gophercloud/gophercloud/pagination"
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -91,89 +88,6 @@ func NewCloudProvider(
 }
 
 var _ provider.CloudProvider = &Provider{}
-
-// DefaultCloudSpec adds defaults to the cloud spec.
-func (os *Provider) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
-	return nil
-}
-
-// ValidateCloudSpec validates the given CloudSpec.
-func (os *Provider) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec) error {
-	netClient, err := os.getClientFunc(ctx, spec, os.dc, os.secretKeySelector, os.caBundle)
-	if err != nil {
-		return err
-	}
-
-	if spec.Openstack.SecurityGroups != "" {
-		if err := validateSecurityGroupsExist(netClient, strings.Split(spec.Openstack.SecurityGroups, ",")); err != nil {
-			return err
-		}
-	}
-
-	if spec.Openstack.Network != "" {
-		network, err := getNetworkByName(netClient, spec.Openstack.Network, false)
-		if err != nil {
-			return fmt.Errorf("failed to get network %q: %w", spec.Openstack.Network, err)
-		}
-
-		// If we're going to create a subnet in an existing network,
-		// let's check whether any existing subnets collide with our range.
-		if spec.Openstack.SubnetID == "" {
-			if err = validateExistingSubnetOverlap(network.ID, netClient); err != nil {
-				return err
-			}
-		}
-	}
-
-	if spec.Openstack.FloatingIPPool != "" {
-		_, err := getNetworkByName(netClient, spec.Openstack.FloatingIPPool, true)
-		if err != nil {
-			return fmt.Errorf("failed to get floating ip pool %q: %w", spec.Openstack.FloatingIPPool, err)
-		}
-	}
-
-	if spec.Openstack.IPv6SubnetPool != "" {
-		subnetPool, err := getSubnetPoolByName(netClient, spec.Openstack.IPv6SubnetPool)
-		if err != nil {
-			return fmt.Errorf("failed to get subnet pool %q: %w", spec.Openstack.IPv6SubnetPool, err)
-		}
-		if subnetPool.IPversion != 6 {
-			return fmt.Errorf("provided IPv6 subnet pool %q has incorrect IP version: %d", spec.Openstack.IPv6SubnetPool, subnetPool.IPversion)
-		}
-	}
-
-	return nil
-}
-
-// validateExistingSubnetOverlap checks whether any subnets in the given network overlap with the default subnet CIDR.
-func validateExistingSubnetOverlap(networkID string, netClient *gophercloud.ServiceClient) error {
-	_, defaultCIDR, err := net.ParseCIDR(subnetCIDR)
-	if err != nil {
-		return err
-	}
-
-	pager := ossubnets.List(netClient, ossubnets.ListOpts{NetworkID: networkID})
-	return pager.EachPage(func(page pagination.Page) (bool, error) {
-		subnets, extractErr := ossubnets.ExtractSubnets(page)
-		if extractErr != nil {
-			return false, extractErr
-		}
-
-		for _, sn := range subnets {
-			_, currentCIDR, parseErr := net.ParseCIDR(sn.CIDR)
-			if parseErr != nil {
-				return false, parseErr
-			}
-
-			// do the CIDRs overlap?
-			if currentCIDR.Contains(defaultCIDR.IP) || defaultCIDR.Contains(currentCIDR.IP) {
-				return false, fmt.Errorf("existing subnetwork %q holds a CIDR %q which overlaps with default CIDR %q", sn.Name, sn.CIDR, subnetCIDR)
-			}
-		}
-
-		return true, nil
-	})
-}
 
 // GetFlavors lists available flavors for the given CloudSpec.DatacenterName and OpenstackSpec.Region.
 func GetFlavors(authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]osflavors.Flavor, error) {
@@ -447,35 +361,6 @@ func addICMPRulesToSecurityGroupIfNecessary(cluster *kubermaticv1.Cluster, secGr
 		if _, err := res.Extract(); err != nil {
 			return fmt.Errorf("failed to extract result after security group creation: %w", err)
 		}
-	}
-
-	return nil
-}
-
-// ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
-func (os *Provider) ValidateCloudSpecUpdate(_ context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error {
-	if oldSpec.Openstack == nil || newSpec.Openstack == nil {
-		return errors.New("'openstack' spec is empty")
-	}
-
-	// we validate that a couple of resources are not changed.
-	// the exception being the provider itself updating it in case the field
-	// was left empty to dynamically generate resources.
-
-	if oldSpec.Openstack.Network != "" && oldSpec.Openstack.Network != newSpec.Openstack.Network {
-		return fmt.Errorf("updating OpenStack network is not supported (was %s, updated to %s)", oldSpec.Openstack.Network, newSpec.Openstack.Network)
-	}
-
-	if oldSpec.Openstack.SubnetID != "" && oldSpec.Openstack.SubnetID != newSpec.Openstack.SubnetID {
-		return fmt.Errorf("updating OpenStack subnet ID is not supported (was %s, updated to %s)", oldSpec.Openstack.SubnetID, newSpec.Openstack.SubnetID)
-	}
-
-	if oldSpec.Openstack.RouterID != "" && oldSpec.Openstack.RouterID != newSpec.Openstack.RouterID {
-		return fmt.Errorf("updating OpenStack router ID is not supported (was %s, updated to %s)", oldSpec.Openstack.RouterID, newSpec.Openstack.RouterID)
-	}
-
-	if oldSpec.Openstack.SecurityGroups != "" && oldSpec.Openstack.SecurityGroups != newSpec.Openstack.SecurityGroups {
-		return fmt.Errorf("updating OpenStack security groups is not supported (was %s, updated to %s)", oldSpec.Openstack.SecurityGroups, newSpec.Openstack.SecurityGroups)
 	}
 
 	return nil
