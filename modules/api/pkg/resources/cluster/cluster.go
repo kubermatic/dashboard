@@ -29,15 +29,13 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud"
-	"k8c.io/kubermatic/v2/pkg/validation"
-	"k8c.io/kubermatic/v2/pkg/version"
 
 	"k8s.io/utils/pointer"
 )
 
 // Spec builds ClusterSpec kubermatic Custom Resource from API Cluster.
 // The ClusterTemplate can be nil.
-func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.ClusterTemplate, seed *kubermaticv1.Seed, dc *kubermaticv1.Datacenter, config *kubermaticv1.KubermaticConfiguration, secretKeyGetter provider.SecretKeySelectorValueFunc, caBundle *x509.CertPool, features features.FeatureGate) (*kubermaticv1.ClusterSpec, error) {
+func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.ClusterTemplate, seed *kubermaticv1.Seed, dc *kubermaticv1.Datacenter, config *kubermaticv1.KubermaticConfiguration, secretKeyGetter provider.SecretKeySelectorValueFunc, caBundle *x509.CertPool, features features.FeatureGate) (*kubermaticv1.ClusterSpec, provider.CloudProvider, error) {
 	var userSSHKeysAgentEnabled = pointer.Bool(true)
 	if apiCluster.Spec.EnableUserSSHKeyAgent != nil {
 		userSSHKeysAgentEnabled = apiCluster.Spec.EnableUserSSHKeyAgent
@@ -94,20 +92,14 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 
 	cloudProvider, err := CloudProviderForCluster(spec, dc, secretKeyGetter, caBundle)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if err := defaulting.DefaultClusterSpec(ctx, spec, template, seed, config, cloudProvider); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	versionManager := version.NewFromConfiguration(config)
-
-	if errs := validation.ValidateNewClusterSpec(ctx, spec, dc, cloudProvider, versionManager, features, nil).ToAggregate(); errs != nil {
-		return spec, errs
-	}
-
-	return spec, nil
+	return spec, cloudProvider, nil
 }
 
 func CloudProviderForCluster(spec *kubermaticv1.ClusterSpec, dc *kubermaticv1.Datacenter, secretKeyGetter provider.SecretKeySelectorValueFunc, caBundle *x509.CertPool) (provider.CloudProvider, error) {
