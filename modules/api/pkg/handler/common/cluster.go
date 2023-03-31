@@ -44,6 +44,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
+	clustermutation "k8c.io/kubermatic/v2/pkg/mutation/cluster"
 	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
@@ -209,16 +210,24 @@ func GenerateCluster(
 
 	// Create the Cluster object.
 	secretKeyGetter := kubermaticprovider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
-	spec, err := cluster.Spec(ctx, body.Cluster, defaultingTemplate, seed, dc, config, secretKeyGetter, caBundle, features)
+	spec, cloudProvider, err := cluster.Spec(ctx, body.Cluster, defaultingTemplate, seed, dc, config, secretKeyGetter, caBundle, features)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
 	}
 
-	if err = validation.ValidateUpdateWindow(spec.UpdateWindow); err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
+	partialCluster.Spec = *spec
+
+	if err := clustermutation.MutateCreate(partialCluster, config, seed, cloudProvider); err != nil {
+		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
 	}
 
-	if err = validation.ValidateContainerRuntime(spec); err != nil {
+	versionManager := version.NewFromConfiguration(config)
+
+	if errs := validation.ValidateNewClusterSpec(ctx, &partialCluster.Spec, dc, cloudProvider, versionManager, features, nil).ToAggregate(); errs != nil {
+		return nil, utilerrors.NewBadRequest("cluster validation failed: %v", errs)
+	}
+
+	if err = validation.ValidateUpdateWindow(partialCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
@@ -286,7 +295,6 @@ func GenerateCluster(
 	// Owning project ID must be set early, because it will be inherited by some child objects,
 	// for example the credentials secret.
 	partialCluster.Labels[kubermaticv1.ProjectIDLabelKey] = projectID
-	partialCluster.Spec = *spec
 
 	if body.Cluster.Spec.EnableUserSSHKeyAgent == nil {
 		partialCluster.Spec.EnableUserSSHKeyAgent = pointer.Bool(true)
@@ -600,6 +608,10 @@ func PatchEndpoint(
 			delete(newInternalCluster.Annotations, kubermaticv1.PresetNameAnnotation)
 			delete(newInternalCluster.Annotations, kubermaticv1.PresetInvalidatedAnnotation)
 		}
+	}
+
+	if err := clustermutation.MutateUpdate(oldInternalCluster, newInternalCluster, config, seed, cloudProvider); err != nil {
+		return nil, utilerrors.NewBadRequest("failed to mutate cluster: %v", err)
 	}
 
 	// validate the new cluster
