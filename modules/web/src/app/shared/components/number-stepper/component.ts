@@ -77,6 +77,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   @Input() step = 1;
   @Input() type: 'integer' | 'decimal' = 'integer';
   @Input() forceFormFieldMinWidth = true;
+  @Input() enableKmValueChangedIndicator = true;
 
   @HostBinding('attr.id')
   protected _hostID = '';

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 import {
   AddonConfig,
@@ -38,7 +37,7 @@ export enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class EditAddonDialogComponent implements OnInit, OnDestroy {
+export class EditAddonDialogComponent implements OnInit {
   readonly Controls = Controls;
 
   @Input() addon: Addon;
@@ -58,8 +57,7 @@ export class EditAddonDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<EditAddonDialogComponent>,
     private readonly _domSanitizer: DomSanitizer,
-    private readonly _builder: FormBuilder,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _builder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -78,10 +76,6 @@ export class EditAddonDialogComponent implements OnInit, OnDestroy {
     this.formBasic = this._builder.group({
       [Controls.ContinuouslyReconcile]: this._builder.control(this.addon.spec.continuouslyReconcile),
     });
-  }
-
-  ngOnDestroy(): void {
-    this._dialogModeService.isEditDialog = false;
   }
 
   hasForm(): boolean {

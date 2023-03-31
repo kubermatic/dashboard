@@ -142,7 +142,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
     private readonly _applicationService: ApplicationService,
-    private readonly _isEditDialog: DialogModeService,
+    private readonly _dialogModeService: DialogModeService,
     readonly settingsService: SettingsService
   ) {}
 
@@ -417,16 +417,29 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   editCluster(): void {
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
-    this._isEditDialog.isEditDialog = true;
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   editProviderSettings(): void {
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditProviderSettingsComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   isSSHKeysEditEnabled(): boolean {
@@ -455,7 +468,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const dialogRef = this._matDialog.open(RevokeTokenComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.projectID = this.projectID;
-    this._isEditDialog.isEditDialog = true;
+    this._dialogModeService.isEditDialog = true;
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   handleAddonCreation(addon: Addon): void {

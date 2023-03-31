@@ -331,9 +331,9 @@
     }
   }
 
-  // style for valueChanged directive
+  // style for kmValueChangedIndicator directive
 
-  .value-changed {
+  .km-value-changed {
     &:not(.mat-button-toggle-group)::after {
       background-color: map.get($colors, primary);
     }
@@ -349,13 +349,7 @@
     }
   }
 
-  .ngx-monaco-editor {
-    &.value-changed::after {
-      background-color: map.get($colors, primary);
-    }
-  }
-
-  .mat-form-field-infix:has(> .value-changed) {
+  .mat-form-field-infix:has(> .km-value-changed) {
     &::after {
       background-color: map.get($colors, primary);
     }

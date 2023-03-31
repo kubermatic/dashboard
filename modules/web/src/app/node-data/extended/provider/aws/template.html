@@ -25,7 +25,7 @@ limitations under the License.
   <mat-checkbox [id]="Controls.IsSpotInstance"
                 [formControlName]="Controls.IsSpotInstance"
                 class="checkbox"
-                valueChanged>
+                kmValueChangedIndicator>
     Spot Instance
     <i class="km-icon-info km-pointer"
        matTooltip="Indicates whether the created machine is an AWS EC2 Spot Instance or on-demand EC2 instance."></i>
@@ -47,7 +47,7 @@ limitations under the License.
 
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"
                   [formControlName]="Controls.SpotInstancePersistentRequest"
-                  valueChanged>
+                  kmValueChangedIndicator>
       Spot Instance Persistent Request
       <i class="km-icon-info km-pointer"
          matTooltip="Ensures that your request will be submitted every time your Spot Instance is terminated."></i>
@@ -57,5 +57,5 @@ limitations under the License.
   <mat-checkbox [id]="Controls.AssignPublicIP"
                 [formControlName]="Controls.AssignPublicIP"
                 class="checkbox"
-                valueChanged>Assign Public IP</mat-checkbox>
+                kmValueChangedIndicator>Assign Public IP</mat-checkbox>
 </form>

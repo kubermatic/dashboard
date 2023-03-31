@@ -27,7 +27,8 @@ END OF TERMS AND CONDITIONS
         fxLayoutGap="10px">
     <div>
       <mat-slide-toggle [formControlName]="controls.Enabled"
-                        class="toggle-button">
+                        class="toggle-button"
+                        kmValueChangedIndicator>
         Enable Metering
       </mat-slide-toggle>
     </div>
@@ -39,7 +40,8 @@ END OF TERMS AND CONDITIONS
              [formControlName]="controls.StorageClassName"
              type="text"
              autocomplete="off"
-             cdkFocusInitial>
+             cdkFocusInitial
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(controls.StorageClassName).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -54,7 +56,8 @@ END OF TERMS AND CONDITIONS
              matInput
              [formControlName]="controls.StorageSize"
              type="text"
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(controls.StorageSize).hasError('required')">
         <strong>Required</strong>
       </mat-error>

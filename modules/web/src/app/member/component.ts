@@ -69,7 +69,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService,
     private _router: Router,
-    private _isEditDialog: DialogModeService
+    private _dialogModeService: DialogModeService
   ) {}
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -179,7 +179,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   }
 
   editMember(member: Member): void {
-    this._isEditDialog.isEditDialog = true;
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditMemberComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.member = member;
@@ -190,6 +190,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
         if (isEdited) {
           this._membersUpdate.next();
         }
+      });
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
       });
   }
 

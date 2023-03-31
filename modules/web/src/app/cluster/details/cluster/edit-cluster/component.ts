@@ -48,7 +48,6 @@ import {
 } from '@shared/utils/cluster';
 import {KeyValueEntry} from '@shared/types/common';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Controls {
   Name = 'name',
@@ -109,8 +108,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService,
-    private readonly _isEditDialog: DialogModeService
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -387,6 +385,5 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._isEditDialog.isEditDialog = true;
   }
 }

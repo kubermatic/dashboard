@@ -42,6 +42,7 @@ import {takeUntil} from 'rxjs/operators';
 import {KeyValueEntry} from '@shared/types/common';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {ControlsOf} from '../../model/shared';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-label-form',
@@ -77,10 +78,11 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
   form: FormGroup;
   initialLabels: Record<string, string>;
+  removedLabels: {key: string; value: string}[] = [];
   disabledLabelFormGroup: FormGroup<ControlsOf<{key: string; value: string}>>;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _formBuilder: FormBuilder) {}
+  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {}
 
   get labelArray(): FormArray {
     return this.form?.get('labels') as FormArray;
@@ -151,6 +153,12 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
     // Save initial state of labels.
     this.initialLabels = this.labels;
+
+    this.form?.valueChanges.subscribe(value => {
+      this.removedLabels = this.removedLabels.filter(removedlabel => {
+        return !value.labels.some(label => removedlabel?.key === label?.key);
+      });
+    });
   }
 
   ngDoCheck(): void {
@@ -186,11 +194,17 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     return of(this.form.valid ? null : {invalid: true});
   }
 
-  isLabelsChange(index: any): boolean {
-    return (
-      !(this.labels[Object.keys(this.labels)[index]] === this.initialLabels[Object.keys(this.labels)[index]]) ||
-      !(this.labels[Object.values(this.labels)[index]] === this.initialLabels[Object.values(this.labels)[index]])
-    );
+  isLabelsChange(index: number): boolean {
+    const key = this.labels[Object.keys(this.labels)[index]];
+    const value = this.labels[Object.values(this.labels)[index]];
+    if (key) {
+      return (
+        (key !== this.initialLabels[Object.keys(this.labels)[index]] ||
+          value !== this.initialLabels[Object.values(this.labels)[index]]) &&
+        this._dialogModeService.isEditDialog
+      );
+    }
+    return false;
   }
 
   private _initForm() {
@@ -214,6 +228,8 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   deleteLabel(index: number): void {
+    this.removedLabels.push(this.labelArray.value[index]);
+
     this.labelArray.removeAt(index);
     this._updateLabelsObject();
   }

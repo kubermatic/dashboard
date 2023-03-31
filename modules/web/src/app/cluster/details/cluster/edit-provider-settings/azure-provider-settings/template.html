@@ -21,7 +21,8 @@ limitations under the License.
            [formControlName]="Control.ClientID"
            [name]="Control.ClientID"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.ClientID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -34,7 +35,8 @@ limitations under the License.
            [name]="Control.ClientSecret"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.ClientSecret).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -45,7 +47,8 @@ limitations under the License.
     <input matInput
            [formControlName]="Control.TenantID"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.TenantID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -56,7 +59,8 @@ limitations under the License.
     <input matInput
            [formControlName]="Control.SubscriptionID"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.SubscriptionID).hasError('required')">
       <strong>Required</strong>
     </mat-error>

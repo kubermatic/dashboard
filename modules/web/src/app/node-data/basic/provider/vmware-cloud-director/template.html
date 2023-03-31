@@ -91,7 +91,7 @@ limitations under the License.
     <mat-label>IP Allocation Mode</mat-label>
     <mat-select [formControlName]="Controls.IPAllocationMode"
                 disableOptionCentering
-                valueChanged>
+                kmValueChangedIndicator>
       <mat-option *ngFor="let mode of ipAllocationModes"
                   [value]="mode">
         {{mode}}

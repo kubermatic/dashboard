@@ -23,7 +23,8 @@ limitations under the License.
            [name]="Controls.TenantID"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -36,7 +37,8 @@ limitations under the License.
            [name]="Controls.SubscriptionID"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.SubscriptionID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -49,7 +51,8 @@ limitations under the License.
            [name]="Controls.ClientID"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ClientID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -62,7 +65,8 @@ limitations under the License.
            [name]="Controls.ClientSecret"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -70,7 +74,8 @@ limitations under the License.
 
   <mat-form-field fxFlex>
     <mat-label>LoadBalancer SKU</mat-label>
-    <mat-select [formControlName]="Controls.LoadBalancerSKU">
+    <mat-select [formControlName]="Controls.LoadBalancerSKU"
+                kmValueChangedIndicator>
       <mat-option *ngFor="let loadBalancerSKU of loadBalancerSKUs"
                   [value]="loadBalancerSKU">
         {{loadBalancerSKU}}
@@ -84,7 +89,8 @@ limitations under the License.
            [formControlName]="Controls.ResourceGroup"
            [name]="Controls.ResourceGroup"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -93,7 +99,8 @@ limitations under the License.
            [formControlName]="Controls.VNetResourceGroup"
            [name]="Controls.VNetResourceGroup"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -102,7 +109,8 @@ limitations under the License.
            [formControlName]="Controls.VNet"
            [name]="Controls.VNet"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -111,7 +119,8 @@ limitations under the License.
            [formControlName]="Controls.Subnet"
            [name]="Controls.Subnet"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -120,7 +129,8 @@ limitations under the License.
            [formControlName]="Controls.RouteTable"
            [name]="Controls.RouteTable"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -129,6 +139,7 @@ limitations under the License.
            [formControlName]="Controls.SecurityGroup"
            [name]="Controls.SecurityGroup"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

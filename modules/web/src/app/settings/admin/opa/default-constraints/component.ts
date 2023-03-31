@@ -29,6 +29,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DefaultConstraintDialog} from './default-constraint-dialog/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-default-constraint-list',
@@ -50,7 +51,8 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit() {
@@ -159,8 +161,14 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
         confirmLabel: 'Edit',
       },
     };
-
-    this._matDialog.open(DefaultConstraintDialog, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(DefaultConstraintDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   delete(defaultConstraint: Constraint): void {

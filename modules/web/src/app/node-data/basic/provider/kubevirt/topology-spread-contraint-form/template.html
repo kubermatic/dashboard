@@ -24,10 +24,12 @@ limitations under the License.
          fxLayout="row"
          fxLayoutGap="10px">
       <div fxFlex="29">
-        <km-number-stepper [formControlName]="Controls.MaxSkew"
+        <km-number-stepper [ngClass]="{'km-value-changed':isConstraintsChanged(i)}"
+                           [formControlName]="Controls.MaxSkew"
                            [min]="minimumMaxSkew"
                            [forceFormFieldMinWidth]="false"
                            [required]="!isLast"
+                           [enableKmValueChangedIndicator]="false"
                            mode="raw"
                            label="Max Skew">
         </km-number-stepper>
@@ -37,8 +39,7 @@ limitations under the License.
         <input matInput
                [name]="Controls.TopologyKey"
                [formControlName]="Controls.TopologyKey"
-               (keyup)="onControlValueChange(constraint)"
-               valueChanged>
+               (keyup)="onControlValueChange(constraint)">
         <mat-error *ngIf="constraint.get(Controls.TopologyKey).errors?.validLabelKeyUniqueness">
           Key is not unique.
         </mat-error>
@@ -47,8 +48,7 @@ limitations under the License.
         <mat-label>When Unsatisfiable</mat-label>
         <mat-select [formControlName]="Controls.WhenUnsatisfiable"
                     disableOptionCentering
-                    (selectionChange)="onControlValueChange(constraint)"
-                    valueChanged>
+                    (selectionChange)="onControlValueChange(constraint)">
           <mat-option *ngFor="let option of whenUnsatisfiableOptions"
                       [value]="option">
             {{option}}
@@ -64,3 +64,10 @@ limitations under the License.
     </div>
   </div>
 </form>
+<div *ngIf="removedConstraints?.length"
+     class="removed-constraint-form">
+  <p>Removed Constraint</p>
+  <div *ngFor="let constraint of removedConstraints">
+    <p>Max Skew: {{constraint?.maxSkew}}, Topology Key: {{constraint?.topologyKey}}, When Unsatisfiable: {{constraint?.whenUnsatisfiable}}</p>
+  </div>
+</div>

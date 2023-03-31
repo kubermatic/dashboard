@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {NotificationService} from '@core/services/notification';
@@ -21,13 +21,12 @@ import {ServiceAccount} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
 import {Observable} from 'rxjs';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-edit-dialog',
   templateUrl: './template.html',
 })
-export class EditServiceAccountDialogComponent implements OnInit, OnDestroy {
+export class EditServiceAccountDialogComponent implements OnInit {
   @Input() project: Project;
   @Input() serviceaccount: ServiceAccount;
   form: FormGroup;
@@ -35,8 +34,7 @@ export class EditServiceAccountDialogComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _matDialogRef: MatDialogRef<EditServiceAccountDialogComponent>,
-    private readonly _notificationService: NotificationService,
-    private _isEditDialog: DialogModeService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +42,6 @@ export class EditServiceAccountDialogComponent implements OnInit, OnDestroy {
       name: new FormControl(this.serviceaccount.name, [Validators.required]),
       group: new FormControl(this.serviceaccount.group.replace(/(-[\w\d]+$)/, ''), [Validators.required]),
     });
-  }
-
-  ngOnDestroy(): void {
-    this._isEditDialog.isEditDialog = false;
   }
 
   getObservable(): Observable<ServiceAccount> {

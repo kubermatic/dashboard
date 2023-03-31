@@ -30,6 +30,7 @@ import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/sched
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Column {
   name = 'name',
@@ -57,7 +58,8 @@ export class MeteringScheduleConfigComponent implements OnInit {
     private readonly _meteringService: MeteringService,
     private readonly _matDialog: MatDialog,
     private readonly _router: Router,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +94,14 @@ export class MeteringScheduleConfigComponent implements OnInit {
         retention: config.retention,
       },
     };
-    this._matDialog.open(MeteringScheduleEditDialog, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(MeteringScheduleEditDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   remove(name: string): void {

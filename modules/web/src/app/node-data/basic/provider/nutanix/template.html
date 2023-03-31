@@ -23,7 +23,7 @@ limitations under the License.
            type="text"
            autocomplete="off"
            required
-           valueChanged>
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <km-combobox [selected]="selectedSubnet"
@@ -53,7 +53,8 @@ limitations under the License.
   </km-number-stepper>
 
   <mat-checkbox [formControlName]="Controls.CPUPassthrough"
-                fxFlex>
+                fxFlex
+                kmValueChangedIndicator>
     CPU Passthrough
   </mat-checkbox>
 
@@ -94,6 +95,8 @@ limitations under the License.
                      [formControlName]="Controls.Category"
                      [label]="getCategoryLabel(control)"
                      [required]="true"
+                     [enableKmValueChangedIndicator]="false"
+                     [ngClass]="{'km-value-changed':isCategoryChanged(i)}"
                      inputLabel="Select category..."
                      filterBy="name"
                      fxFlex>
@@ -103,6 +106,7 @@ limitations under the License.
                      [formControlName]="Controls.CategoryValue"
                      [label]="categoryValuesLabel[getSelectedCategory(control)] || CategoryValueState.Empty"
                      [isDisabled]="control.get(Controls.Category).invalid"
+                     [enableKmValueChangedIndicator]="false"
                      [required]="true"
                      inputLabel="Select category value..."
                      filterBy="value"
@@ -117,6 +121,14 @@ limitations under the License.
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
       </div>
+    </div>
+  </div>
+
+  <div *ngIf="removedCategories?.length"
+       class="removed-categories-form">
+    <p>Removed Categories</p>
+    <div *ngFor="let category of removedCategories; let i = index;">
+      <p>Category: {{category?.category}}, Value: {{category?.categoryValue}}</p>
     </div>
   </div>
 

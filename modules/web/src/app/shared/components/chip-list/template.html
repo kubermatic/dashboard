@@ -23,7 +23,7 @@ limitations under the License.
     <mat-chip-list #chipList
                    class="km-chip-list-with-input"
                    [formControlName]="controls.Tags"
-                   valueChanged>
+                   kmValueChangedIndicator>
       <mat-chip *ngFor="let tag of tags"
                 [selectable]="false"
                 [removable]="true"

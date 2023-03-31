@@ -24,7 +24,8 @@ limitations under the License.
       <mat-label>Seed</mat-label>
       <mat-select [formControlName]="Controls.Seed"
                   disableOptionCentering
-                  required>
+                  required
+                  kmValueChangedIndicator>
         <mat-option *ngFor="let seed of data.seeds"
                     [value]="seed">
           {{seed}}
@@ -36,7 +37,8 @@ limitations under the License.
       <mat-label>Type</mat-label>
       <mat-select [formControlName]="Controls.Type"
                   disableOptionCentering
-                  required>
+                  required
+                  kmValueChangedIndicator>
         <mat-option *ngFor="let type of ruleGroupTypes"
                     [value]="type">
           {{type}}

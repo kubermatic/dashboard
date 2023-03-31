@@ -30,7 +30,8 @@ limitations under the License.
          [id]="id"
          (blur)="onTouch()"
          [attr.cdkFocusInitial]="focus ? focus : null"
-         valueChanged>
+         kmValueChangedIndicator
+         [ValueChangedIndicator]="enableKmValueChangedIndicator">
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>

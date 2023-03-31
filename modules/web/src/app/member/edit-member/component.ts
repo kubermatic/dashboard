@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {NotificationService} from '@core/services/notification';
@@ -21,13 +21,12 @@ import {Project} from '@shared/entity/project';
 import {MemberUtils} from '@shared/utils/member';
 import {MemberService} from '@core/services/member';
 import {Observable} from 'rxjs';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-edit-member',
   templateUrl: './template.html',
 })
-export class EditMemberComponent implements OnInit, OnDestroy {
+export class EditMemberComponent implements OnInit {
   @Input() project: Project;
   @Input() member: Member;
   form: FormGroup;
@@ -35,18 +34,13 @@ export class EditMemberComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _memberService: MemberService,
     private readonly _matDialogRef: MatDialogRef<EditMemberComponent>,
-    private readonly _notificationService: NotificationService,
-    private _isEditDialog: DialogModeService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       group: new FormControl(MemberUtils.getGroupInProject(this.member, this.project.id), [Validators.required]),
     });
-  }
-
-  ngOnDestroy(): void {
-    this._isEditDialog.isEditDialog = false;
   }
 
   getObservable(): Observable<Member> {

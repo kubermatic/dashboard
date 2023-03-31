@@ -19,7 +19,7 @@ import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/en
 import {Cluster} from '@shared/entity/cluster';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {finalize, take, takeUntil} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
@@ -140,14 +140,19 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   edit(addon: Addon): void {
-    const dialog = this._matDialog.open(EditAddonDialogComponent);
     this._dialogModeService.isEditDialog = true;
+    const dialog = this._matDialog.open(EditAddonDialogComponent);
     dialog.componentInstance.addon = addon;
     dialog.componentInstance.cluster = this.cluster;
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
     dialog
       .afterClosed()
-      .pipe(take(1))
+      .pipe(
+        finalize(() => {
+          this._dialogModeService.isEditDialog = false;
+        }),
+        take(1)
+      )
       .subscribe(editedAddon => {
         if (editedAddon) {
           this.editAddon.emit(editedAddon);

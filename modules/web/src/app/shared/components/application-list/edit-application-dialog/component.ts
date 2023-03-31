@@ -15,7 +15,6 @@
 import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 import {ApplicationService} from '@core/services/application';
 import {
   Application,
@@ -67,8 +66,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<EditApplicationDialogComponent>,
     private readonly _builder: FormBuilder,
-    private readonly _applicationService: ApplicationService,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +76,6 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._dialogModeService.isEditDialog = false;
   }
 
   onVersionChanged(version: string): void {

@@ -27,7 +27,7 @@ import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
 import {forkJoin, of, Subject} from 'rxjs';
-import {map, take, takeUntil} from 'rxjs/operators';
+import {finalize, map, take, takeUntil} from 'rxjs/operators';
 
 export enum ApplicationsListView {
   Default,
@@ -217,7 +217,12 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     dialog.componentInstance.projectID = this.projectID;
     dialog
       .afterClosed()
-      .pipe(take(1))
+      .pipe(
+        finalize(() => {
+          this._dialogModeService.isEditDialog = false;
+        }),
+        take(1)
+      )
       .subscribe(editedApplication => {
         if (editedApplication) {
           this.editApplication.emit(editedApplication);

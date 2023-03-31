@@ -20,7 +20,7 @@ limitations under the License.
   <mat-radio-group [(ngModel)]="selectedArchitecture"
                    (change)="onArchitectureChange()"
                    fxLayoutGap="15px"
-                   valueChanged>
+                   kmValueChangedIndicator>
     <mat-radio-button [value]="Architecture.X64">{{Architecture.X64}} architecture</mat-radio-button>
     <mat-radio-button [value]="Architecture.ARM64">{{Architecture.ARM64}} architecture</mat-radio-button>
   </mat-radio-group>
@@ -89,7 +89,7 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.AMI"
              autocomplete="off"
-             valueChanged>
+             kmValueChangedIndicator>
     </mat-form-field>
   </form>
 </div>

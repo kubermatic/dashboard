@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {Cluster, Token} from '@shared/entity/cluster';
@@ -24,14 +24,13 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
 import {forkJoin, Observable} from 'rxjs';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-revoke-token',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class RevokeTokenComponent implements OnInit, OnDestroy {
+export class RevokeTokenComponent implements OnInit {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   revokeAdminToken = false;
@@ -43,8 +42,7 @@ export class RevokeTokenComponent implements OnInit, OnDestroy {
     private readonly _matDialogRef: MatDialogRef<RevokeTokenComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService,
-    private readonly _isEditDialog: DialogModeService
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit(): void {
@@ -53,10 +51,6 @@ export class RevokeTokenComponent implements OnInit, OnDestroy {
     this._userService.getCurrentUserGroup(this.projectID).subscribe(userGroup => {
       this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
     });
-  }
-
-  ngOnDestroy(): void {
-    this._isEditDialog.isEditDialog = false;
   }
 
   isRevokeTokenEnabled(): boolean {

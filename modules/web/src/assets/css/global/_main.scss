@@ -719,9 +719,9 @@ km-cni-version {
   pointer-events: none;
 }
 
-// style for valueChanged directive
+// style for kmValueChangedIndicator directive
 
-.value-changed {
+.km-value-changed {
   position: relative;
 
   &:not(.mat-button-toggle-group):not(.radio-group-column)::after {
@@ -737,12 +737,13 @@ km-cni-version {
 
   &.mat-checkbox::after {
     left: -12px !important;
-    top: 7px !important;
+    top: 6px !important;
   }
 
   &.mat-radio-group:not(.radio-group-column)::after {
     height: 80% !important;
     left: -12px !important;
+    top: 3px !important;
   }
 
   &.radio-group-column {
@@ -753,10 +754,10 @@ km-cni-version {
         border-bottom-left-radius: variables.$border-radius;
         border-top-left-radius: variables.$border-radius;
         content: '';
-        height: 30%;
+        height: 33%;
         left: -12px;
         position: absolute;
-        top: 4px;
+        top: 2px;
         width: 5px;
       }
     }
@@ -766,6 +767,17 @@ km-cni-version {
     height: 44px !important;
     left: -11px !important;
     top: -17px !important;
+  }
+
+  &.mat-slide-toggle::after {
+   height: 95% !important;
+   left: -12px !important;
+   top: 1px !important;
+  }
+
+  &.ngx-monaco-editor::after {
+    height: 98% !important;
+    top: 0 !important;
   }
 
   .mat-button-toggle-checked::after {
@@ -778,20 +790,8 @@ km-cni-version {
   }
 }
 
-.ngx-monaco-editor {
-  &.value-changed::after {
-    border-bottom-left-radius: variables.$border-radius;
-    border-top-left-radius: variables.$border-radius;
-    content: '';
-    height: 98%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 5px;
-  }
-}
-
-.mat-form-field-infix:has(> .value-changed) {
+.mat-form-field-infix:not(:has(textarea)):has(> .km-value-changed),
+.mat-form-field-infix:has(> textarea):has(> .km-value-changed) {
   &::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
@@ -801,6 +801,10 @@ km-cni-version {
     position: absolute;
     top: -9px;
     width: 5px;
+  }
+
+  &:has(> textarea)::after {
+    height: 81px;
   }
 }
 

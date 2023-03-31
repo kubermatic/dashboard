@@ -29,7 +29,8 @@ limitations under the License.
              id="km-add-dc-name-input"
              type="text"
              autocomplete="off"
-             cdkFocusInitial>
+             cdkFocusInitial
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -77,7 +78,8 @@ limitations under the License.
       <mat-select required
                   disableOptionCentering
                   [formControlName]="controls.Country"
-                  id="km-add-dc-country-input">
+                  id="km-add-dc-country-input"
+                  kmValueChangedIndicator>
         <mat-select-trigger fxFlex
                             fxLayout="row">
           <div fxFlex
@@ -109,7 +111,8 @@ limitations under the License.
              [formControlName]="controls.Location"
              id="km-add-dc-location-input"
              type="text"
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(controls.Location).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -125,7 +128,8 @@ limitations under the License.
                   fxFlex>
     </km-chip-list>
 
-    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">
+    <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy"
+                  kmValueChangedIndicator>
       <div fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="4px">
@@ -136,7 +140,8 @@ limitations under the License.
       </div>
     </mat-checkbox>
 
-    <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
+    <mat-checkbox [formControlName]="controls.EnforceAuditLogging"
+                  kmValueChangedIndicator>Enforce Audit Logging</mat-checkbox>
 
     <km-machine-flavor-filter class="km-machine-flavor-filter"
                               [formControl]="form.get(controls.MachineFlavorFilter)"

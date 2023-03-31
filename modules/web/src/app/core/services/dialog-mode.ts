@@ -13,19 +13,18 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogModeService {
-  private _isEditDialog$ = new BehaviorSubject<boolean>(false);
+  private _isEditMode = false;
 
   get isEditDialog(): boolean {
-    return this._isEditDialog$.value;
+    return this._isEditMode;
   }
 
   set isEditDialog(value: boolean) {
-    this._isEditDialog$.next(value);
+    this._isEditMode = value;
   }
 }

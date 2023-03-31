@@ -30,7 +30,8 @@ limitations under the License.
            [name]="Controls.Domain"
            type="text"
            autocomplete="off"
-           [required]="isDomainRequired()">
+           [required]="isDomainRequired()"
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -42,7 +43,8 @@ limitations under the License.
            [formControlName]="Controls.Network"
            [name]="Controls.Network"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -51,7 +53,8 @@ limitations under the License.
            [formControlName]="Controls.SecurityGroups"
            [name]="Controls.SecurityGroups"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -60,7 +63,8 @@ limitations under the License.
            [formControlName]="Controls.FloatingIPPool"
            [name]="Controls.FloatingIPPool"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -69,7 +73,8 @@ limitations under the License.
            [formControlName]="Controls.RouterID"
            [name]="Controls.RouterID"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -78,6 +83,7 @@ limitations under the License.
            [formControlName]="Controls.SubnetID"
            [name]="Controls.SubnetID"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

@@ -37,7 +37,8 @@ limitations under the License.
              [formControlName]="Controls.Username"
              [name]="Controls.Username"
              type="text"
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -49,7 +50,8 @@ limitations under the License.
              [formControlName]="Controls.Password"
              [name]="Controls.Password"
              kmInputPassword
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -63,7 +65,8 @@ limitations under the License.
              [formControlName]="Controls.APIToken"
              [name]="Controls.Password"
              kmInputPassword
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -76,7 +79,8 @@ limitations under the License.
            [formControlName]="Controls.Organization"
            [name]="Controls.Organization"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Organization).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -89,7 +93,8 @@ limitations under the License.
            [name]="Controls.Vdc"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Vdc).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -101,7 +106,8 @@ limitations under the License.
            [formControlName]="Controls.OvdcNetwork"
            [name]="Controls.OvdcNetwork"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.OvdcNetwork).hasError('required')">
       <strong>Required</strong>
     </mat-error>

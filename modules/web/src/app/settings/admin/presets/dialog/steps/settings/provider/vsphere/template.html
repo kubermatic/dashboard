@@ -23,7 +23,8 @@ limitations under the License.
            [name]="Controls.Username"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -36,7 +37,8 @@ limitations under the License.
            [name]="Controls.Password"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -48,7 +50,8 @@ limitations under the License.
            [formControlName]="Controls.VMNetName"
            [name]="Controls.VMNetName"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -57,7 +60,8 @@ limitations under the License.
            [formControlName]="Controls.Datastore"
            [name]="Controls.Datastore"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -66,7 +70,8 @@ limitations under the License.
            [formControlName]="Controls.DatastoreCluster"
            [name]="Controls.DatastoreCluster"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -75,6 +80,7 @@ limitations under the License.
            [formControlName]="Controls.ResourcePool"
            [name]="Controls.ResourcePool"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

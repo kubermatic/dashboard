@@ -88,7 +88,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService,
-    private _isEditDialog: DialogModeService
+    private _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -206,7 +206,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
   editServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
-    this._isEditDialog.isEditDialog = true;
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditServiceAccountDialogComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.serviceaccount = serviceAccount;
@@ -217,6 +217,12 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
         if (isEdited) {
           this._serviceAccountUpdate.next();
         }
+      });
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
       });
   }
 

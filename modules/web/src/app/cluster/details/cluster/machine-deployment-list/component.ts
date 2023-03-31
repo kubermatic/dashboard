@@ -33,7 +33,6 @@ import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/heal
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {ClusterService} from '@core/services/cluster';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Column {
   Status = 'status',
@@ -74,8 +73,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _userService: UserService,
     private readonly _node: NodeService,
     private readonly _clusterService: ClusterService,
-    private readonly _notificationService: NotificationService,
-    private readonly _isEditDialog: DialogModeService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -149,8 +147,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
         },
         _ => this._notificationService.error(`Could not edit the ${md.name} machine deployment`)
       );
-
-    this._isEditDialog.isEditDialog = true;
   }
 
   isDeleteEnabled(): boolean {

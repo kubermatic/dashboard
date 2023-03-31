@@ -24,6 +24,7 @@ import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
 import {DestinationDialog, Mode} from './destination-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
 import {filter, switchMap, take} from 'rxjs/operators';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-destinations',
@@ -41,7 +42,8 @@ export class DestinationsComponent implements OnInit {
     private readonly _datacenterService: DatacenterService,
     private readonly _backupService: BackupService,
     private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +93,14 @@ export class DestinationsComponent implements OnInit {
       },
     };
 
-    this._matDialog.open(DestinationDialog, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(DestinationDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   editCredentials(destination: BackupDestination): void {

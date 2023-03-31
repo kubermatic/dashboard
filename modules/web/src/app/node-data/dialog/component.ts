@@ -34,7 +34,6 @@ import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-dep
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 import {coerce, lt} from 'semver';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Mode {
   Edit = 'Edit',
@@ -106,8 +105,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     private readonly _builder: FormBuilder,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _quotaCalculationService: QuotaCalculationService,
-    private readonly _isEditDialog: DialogModeService
+    private readonly _quotaCalculationService: QuotaCalculationService
   ) {
     super();
   }
@@ -134,8 +132,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
           coerce(this._nodeDataService.nodeData.spec.versions.kubelet),
           coerce(this.endOfDynamicKubeletConfigSupportVersion)
         );
-
-      this._isEditDialog.isEditDialog = true;
     }
 
     const key = `${this._data.projectID}-${this.provider}`;
@@ -162,7 +158,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   }
 
   ngOnDestroy() {
-    this._isEditDialog.isEditDialog = false;
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }

@@ -22,6 +22,7 @@ import {
   NG_VALUE_ACCESSOR,
   Validators,
 } from '@angular/forms';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {KubeVirtTopologySpreadConstraint, KubeVirtTopologyWhenUnsatisfiable} from '@shared/entity/provider/kubevirt';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
@@ -60,8 +61,9 @@ export class TopologySpreadConstraintFormComponent extends BaseFormValidator imp
 
   form: FormGroup;
   whenUnsatisfiableOptions = Object.keys(KubeVirtTopologyWhenUnsatisfiable);
-
-  constructor(private readonly _formBuilder: FormBuilder) {
+  initialConstraint: KubeVirtTopologySpreadConstraint[];
+  removedConstraints: KubeVirtTopologySpreadConstraint[] = [];
+  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {
     super();
   }
 
@@ -97,6 +99,15 @@ export class TopologySpreadConstraintFormComponent extends BaseFormValidator imp
 
     // Add initial constraint for the user.
     this._addConstraint();
+
+    this.initialConstraint = this.constraints;
+
+    this.form.valueChanges.subscribe(value => {
+      this.removedConstraints = this.removedConstraints?.filter(
+        removedConstraint =>
+          !value.constraints?.some(constraint => removedConstraint?.topologyKey === constraint?.topologyKey)
+      );
+    });
   }
 
   ngOnDestroy(): void {
@@ -115,8 +126,32 @@ export class TopologySpreadConstraintFormComponent extends BaseFormValidator imp
   }
 
   deleteConstraint(index: number): void {
+    this.removedConstraints?.push(this.constraints[index]);
+
     this.constraintArray.removeAt(index);
     this._updateConstraints();
+  }
+
+  isConstraintsChanged(index: number): boolean {
+    const [maxSkew, topologyKey, whenUnsatisfiable] = [
+      this.constraints[index]?.maxSkew,
+      this.constraints[index]?.topologyKey,
+      this.constraints[index]?.whenUnsatisfiable,
+    ];
+    const [initialMaxSkew, initialTopologyKey, initialWhenUnsatisfiable] = [
+      this.initialConstraint[index]?.maxSkew,
+      this.initialConstraint[index]?.topologyKey,
+      this.initialConstraint[index]?.whenUnsatisfiable,
+    ];
+    if (maxSkew && topologyKey && whenUnsatisfiable) {
+      return (
+        (maxSkew !== initialMaxSkew ||
+          topologyKey !== initialTopologyKey ||
+          whenUnsatisfiable !== initialWhenUnsatisfiable) &&
+        this._dialogModeService.isEditDialog
+      );
+    }
+    return false;
   }
 
   private static _isFilled(constraint: AbstractControl): boolean {

@@ -81,7 +81,7 @@ limitations under the License.
     <div fxLayout="column">
       <mat-button-toggle-group group="operatingSystemGroup"
                                [formControlName]="Controls.OperatingSystem"
-                               valueChanged>
+                               kmValueChangedIndicator>
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
                            *ngIf="isOperatingSystemSupported(OperatingSystem.Ubuntu)">
           <i class="km-os-image-ubuntu"></i>
@@ -123,7 +123,8 @@ limitations under the License.
           <input [formControlName]="Controls.RhelSubscriptionManagerUser"
                  matInput
                  type="text"
-                 autocomplete="off">
+                 autocomplete="off"
+                 kmValueChangedIndicator>
           <mat-hint>RHEL Subscription Manager User is required to register a machine.</mat-hint>
         </mat-form-field>
 
@@ -132,7 +133,8 @@ limitations under the License.
           <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
                  matInput
                  kmInputPassword
-                 autocomplete="off">
+                 autocomplete="off"
+                 kmValueChangedIndicator>
           <mat-hint>RHEL Subscription Manager Password is required to register a machine.</mat-hint>
         </mat-form-field>
 
@@ -141,7 +143,8 @@ limitations under the License.
           <input [formControlName]="Controls.RhelOfflineToken"
                  matInput
                  kmInputPassword
-                 autocomplete="off">
+                 autocomplete="off"
+                 kmValueChangedIndicator>
           <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
         </mat-form-field>
       </div>
@@ -153,7 +156,7 @@ limitations under the License.
              class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot"
-                        valueChanged>Upgrade system on first boot
+                        kmValueChangedIndicator>Upgrade system on first boot
           </mat-checkbox>
         </div>
 
@@ -162,7 +165,7 @@ limitations under the License.
              class="os-options">
           <mat-checkbox [id]="Controls.DisableAutoUpdate"
                         [formControlName]="Controls.DisableAutoUpdate"
-                        valueChanged>Disable auto-update
+                        kmValueChangedIndicator>Disable auto-update
           </mat-checkbox>
         </div>
       </div>

@@ -16,6 +16,7 @@ import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} 
 import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {Mode, PresetDialogComponent, PresetDialogData} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
@@ -33,7 +34,7 @@ import {
 } from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
 import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
-import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Column {
   Name = 'name',
@@ -74,7 +75,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialog: MatDialog,
     private readonly _presetDialogService: PresetDialogService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   get _presets$(): Observable<PresetList> {
@@ -239,11 +241,19 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       } as PresetDialogData,
     };
 
+    this._dialogModeService.isEditDialog = true;
     this._matDialog
       .open(PresetDialogComponent, dialogConfig)
       .afterClosed()
-      .pipe(take(1))
-      .subscribe(created => (created === true ? this._presetsChanged.next() : null));
+      .pipe(
+        finalize(() => {
+          this._dialogModeService.isEditDialog = false;
+        }),
+        take(1)
+      )
+      .subscribe(created => {
+        created === true ? this._presetsChanged.next() : null;
+      });
   }
 
   updatePresetStatus(name: string, enabled: boolean): void {

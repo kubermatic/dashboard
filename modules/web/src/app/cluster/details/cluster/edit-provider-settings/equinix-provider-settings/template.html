@@ -22,7 +22,8 @@ limitations under the License.
            [name]="Control.ApiKey"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.ApiKey).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -38,7 +39,8 @@ limitations under the License.
            [name]="Control.ProjectID"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.ProjectID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -53,7 +55,8 @@ limitations under the License.
       <mat-label>Billing Cycle</mat-label>
       <mat-select [formControlName]="Control.BillingCycle"
                   disableOptionCentering
-                  required>
+                  required
+                  kmValueChangedIndicator>
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                     [value]="billingCycle">
           {{billingCycle}}
