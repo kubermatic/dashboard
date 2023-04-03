@@ -18,7 +18,7 @@ updates:
     directory: "modules/web/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 15
     labels:
       - dependencies
       - docs/none
