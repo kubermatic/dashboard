@@ -539,7 +539,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.Name]: this._clusterSpecService?.cluster?.name ?? this.controlValue(Controls.Name),
           // remove the 'v' prefix from the version
           [Controls.Version]:
-            (clusterSpec?.version && clusterSpec?.version.slice(1)) ?? this.controlValue(Controls.Version),
+            (clusterSpec?.version && clusterSpec?.version.replace('v', '')) ?? this.controlValue(Controls.Version),
           [Controls.ContainerRuntime]: clusterSpec?.containerRuntime ?? this.controlValue(Controls.ContainerRuntime),
           [Controls.AuditLogging]: clusterSpec?.auditLogging?.enabled ?? this.controlValue(Controls.AuditLogging),
           [Controls.AuditPolicyPreset]:
