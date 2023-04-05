@@ -306,6 +306,7 @@ export class VSphereTags {
 export class VMwareCloudDirectorCloudSpec {
   username: string;
   password: string;
+  apiToken: string;
   organization: string;
   vdc: string;
   ovdcNetwork: string;
@@ -612,6 +613,7 @@ export class AlibabaCloudSpecPatch {
 export class VMwareCloudDirectorCloudSpecPatch {
   username: string;
   password: string;
+  apiToken: string;
   organization: string;
   vdc: string;
   ovdcNetwork: string;

@@ -25,6 +25,7 @@ import {catchError} from 'rxjs/operators';
 import {Provider} from './provider';
 
 export class VMwareCloudDirector extends Provider {
+  private apiTokenCredentials = false;
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
     super(http, projectID, provider);
 
@@ -50,6 +51,14 @@ export class VMwareCloudDirector extends Provider {
     return this;
   }
 
+  apiToken(apiToken: string): VMwareCloudDirector {
+    if (apiToken) {
+      this.apiTokenCredentials = true;
+      this._headers = this._headers.set(VMwareCloudDirector.Header.APIToken, apiToken);
+    }
+    return this;
+  }
+
   organization(organization: string): VMwareCloudDirector {
     if (organization) {
       this._headers = this._headers.set(VMwareCloudDirector.Header.Organization, organization);
@@ -70,7 +79,7 @@ export class VMwareCloudDirector extends Provider {
   }
 
   networks(seed: string, onLoadingCb: () => void = null): Observable<VMwareCloudDirectorNetwork[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this.hasRequiredHeaders()) {
       return EMPTY;
     }
 
@@ -85,7 +94,7 @@ export class VMwareCloudDirector extends Provider {
   }
 
   storageProfiles(seed: string, onLoadingCb: () => void = null): Observable<VMwareCloudDirectorStorageProfile[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this.hasRequiredHeaders()) {
       return EMPTY;
     }
 
@@ -98,7 +107,7 @@ export class VMwareCloudDirector extends Provider {
   }
 
   catalogs(seed: string, onLoadingCb: () => void = null): Observable<VMwareCloudDirectorCatalog[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this.hasRequiredHeaders()) {
       return EMPTY;
     }
 
@@ -115,7 +124,7 @@ export class VMwareCloudDirector extends Provider {
     catalogName: string,
     onLoadingCb: () => void = null
   ): Observable<VMwareCloudDirectorTemplate[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this.hasRequiredHeaders()) {
       return EMPTY;
     }
 
@@ -126,12 +135,26 @@ export class VMwareCloudDirector extends Provider {
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/templates/${catalogName}`;
     return this._http.get<VMwareCloudDirectorTemplate[]>(url, {headers: this._headers});
   }
+
+  private hasRequiredHeaders(): boolean {
+    if (this.apiTokenCredentials) {
+      this._setRequiredHeaders(
+        VMwareCloudDirector.Header.APIToken,
+        VMwareCloudDirector.Header.Organization,
+        VMwareCloudDirector.Header.VDC
+      );
+      this._cleanupOptionalHeaders();
+    }
+
+    return this._hasRequiredHeaders();
+  }
 }
 
 export namespace VMwareCloudDirector {
   export enum Header {
     Username = 'Username',
     Password = 'Password',
+    APIToken = 'APIToken',
     Organization = 'Organization',
     VDC = 'VDC',
   }
