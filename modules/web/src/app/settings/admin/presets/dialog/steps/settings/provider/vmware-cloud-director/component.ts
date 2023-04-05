@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {clearFormField} from '@app/shared/utils/form';
 import {VMwareCloudDirectorPresetSpec} from '@shared/entity/preset';
@@ -108,19 +108,7 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
     });
   }
 
-  getFormValidationErrors() {
-    Object.keys(this.form.controls).forEach(key => {
-      const controlErrors: ValidationErrors = this.form.get(key).errors;
-      if (controlErrors !== null) {
-        Object.keys(controlErrors).forEach(keyError => {
-          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
-        });
-      }
-    });
-  }
-
   private _update(): void {
-    this.getFormValidationErrors();
     this._presetDialogService.preset.spec.vmwareclouddirector = {
       username: this.form.get(Controls.Username).value,
       password: this.form.get(Controls.Password).value,
