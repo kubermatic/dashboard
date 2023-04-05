@@ -1328,7 +1328,7 @@ func TestClusterRoleUserReqValidate(t *testing.T) {
 		},
 
 		{
-			name:       "invalid: both service account and service account namespace must be defined (sa namspace empty)",
+			name:       "invalid: both service account and service account namespace must be defined (sa namespace empty)",
 			projectReq: common.ProjectReq{ProjectID: "project-id"},
 			body: apiv1.ClusterRoleUser{
 				ServiceAccount:          "sa",
@@ -1462,7 +1462,7 @@ func TestRoleUserReqValidate(t *testing.T) {
 		},
 
 		{
-			name:       "invalid: both service account and service account namespace must be defined (sa namspace empty)",
+			name:       "invalid: both service account and service account namespace must be defined (sa namespace empty)",
 			projectReq: common.ProjectReq{ProjectID: "project-id"},
 			body: apiv1.RoleUser{
 				ServiceAccount:          "sa",
