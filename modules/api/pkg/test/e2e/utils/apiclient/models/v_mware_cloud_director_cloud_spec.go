@@ -18,6 +18,10 @@ import (
 // swagger:model VMwareCloudDirectorCloudSpec
 type VMwareCloudDirectorCloudSpec struct {
 
+	// APIToken is the VMware Cloud Director API token.
+	// +optional
+	APIToken string `json:"apiToken,omitempty"`
+
 	// Network is the name of organizational virtual data center network that will be associated with the VMs and vApp.
 	OVDCNetwork string `json:"ovdcNetwork,omitempty"`
 

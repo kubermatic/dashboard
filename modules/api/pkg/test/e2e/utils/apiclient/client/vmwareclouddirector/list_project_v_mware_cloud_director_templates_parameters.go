@@ -61,6 +61,9 @@ ListProjectVMwareCloudDirectorTemplatesParams contains all the parameters to sen
 */
 type ListProjectVMwareCloudDirectorTemplatesParams struct {
 
+	// APIToken.
+	APIToken *string
+
 	// Credential.
 	Credential *string
 
@@ -142,6 +145,17 @@ func (o *ListProjectVMwareCloudDirectorTemplatesParams) WithHTTPClient(client *h
 // SetHTTPClient adds the HTTPClient to the list project v mware cloud director templates params
 func (o *ListProjectVMwareCloudDirectorTemplatesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
+}
+
+// WithAPIToken adds the aPIToken to the list project v mware cloud director templates params
+func (o *ListProjectVMwareCloudDirectorTemplatesParams) WithAPIToken(aPIToken *string) *ListProjectVMwareCloudDirectorTemplatesParams {
+	o.SetAPIToken(aPIToken)
+	return o
+}
+
+// SetAPIToken adds the apiToken to the list project v mware cloud director templates params
+func (o *ListProjectVMwareCloudDirectorTemplatesParams) SetAPIToken(aPIToken *string) {
+	o.APIToken = aPIToken
 }
 
 // WithCredential adds the credential to the list project v mware cloud director templates params
@@ -239,6 +253,14 @@ func (o *ListProjectVMwareCloudDirectorTemplatesParams) WriteToRequest(r runtime
 		return err
 	}
 	var res []error
+
+	if o.APIToken != nil {
+
+		// header param APIToken
+		if err := r.SetHeaderParam("APIToken", *o.APIToken); err != nil {
+			return err
+		}
+	}
 
 	if o.Credential != nil {
 

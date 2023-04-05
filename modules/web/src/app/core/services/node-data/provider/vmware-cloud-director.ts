@@ -180,6 +180,7 @@ export class NodeDataVMwareCloudDirectorProvider {
       .provider(NodeProvider.VMWARECLOUDDIRECTOR)
       .username(cluster.spec.cloud.vmwareclouddirector.username)
       .password(cluster.spec.cloud.vmwareclouddirector.password)
+      .apiToken(cluster.spec.cloud.vmwareclouddirector.apiToken)
       .organization(cluster.spec.cloud.vmwareclouddirector.organization)
       .vdc(cluster.spec.cloud.vmwareclouddirector.vdc)
       .credential(this._presetService.preset);

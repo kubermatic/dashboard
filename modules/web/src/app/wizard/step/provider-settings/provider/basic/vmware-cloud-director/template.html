@@ -16,29 +16,59 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Username</mat-label>
-    <input matInput
-           [formControlName]="Controls.Username"
-           [name]="Controls.Username"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
-      <strong>Required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex>
-    <mat-label>Password</mat-label>
-    <input matInput
-           [formControlName]="Controls.Password"
-           [name]="Controls.Password"
-           kmInputPassword
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
-      <strong>Required</strong>
-    </mat-error>
-  </mat-form-field>
+  <mat-button-toggle-group class="km-button-toggle-group"
+                           group="bindingType"
+                           (change)="changeView($event.value)">
+    <mat-button-toggle [value]="CredentialsType.Default"
+                       [checked]="selectedCredentialsType === CredentialsType.Default">
+      User Credentials
+    </mat-button-toggle>
+    <mat-button-toggle [value]="CredentialsType.APIToken"
+                       [checked]="selectedCredentialsType === CredentialsType.APIToken">
+      API Token
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <ng-container *ngIf="selectedCredentialsType === CredentialsType.Default">
+    <mat-form-field fxFlex>
+      <mat-label>Username</mat-label>
+      <input matInput
+             [formControlName]="Controls.Username"
+             [name]="Controls.Username"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Password</mat-label>
+      <input matInput
+             [formControlName]="Controls.Password"
+             [name]="Controls.Password"
+             kmInputPassword
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="selectedCredentialsType === CredentialsType.APIToken">
+    <mat-form-field fxFlex>
+      <mat-label>API Token</mat-label>
+      <input matInput
+             [formControlName]="Controls.APIToken"
+             [name]="Controls.Password"
+             kmInputPassword
+             autocomplete="off">
+      <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
   <mat-form-field fxFlex>
     <mat-label>Organization</mat-label>
     <input matInput

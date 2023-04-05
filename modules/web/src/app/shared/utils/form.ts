@@ -1,4 +1,4 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+import {FormGroup} from '@angular/forms';
 
-.warning-container {
-  margin-bottom: 20px;
+export function clearFormField(form: FormGroup, field: string): void {
+  const control = form.get(field);
+  if (control) {
+    control.reset();
+    control.clearValidators();
+    control.updateValueAndValidity();
+  }
 }

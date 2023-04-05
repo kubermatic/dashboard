@@ -94,6 +94,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
   private _preset = '';
   private _username = '';
   private _password = '';
+  private _apiToken = '';
   private _organization = '';
   private _vdc = '';
   networks: VMwareCloudDirectorNetwork[] = [];
@@ -227,6 +228,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
       .provider(NodeProvider.VMWARECLOUDDIRECTOR)
       .username(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.username)
       .password(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.password)
+      .apiToken(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.apiToken)
       .organization(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.organization)
       .vdc(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.vdc)
       .networks(this._clusterSpecService.cluster.spec.cloud.dc, this._onNetworkLoading.bind(this))
@@ -262,6 +264,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
       .provider(NodeProvider.VMWARECLOUDDIRECTOR)
       .username(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.username)
       .password(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.password)
+      .apiToken(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.apiToken)
       .organization(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.organization)
       .vdc(this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.vdc)
       .credential(this._presets.preset)
@@ -308,8 +311,9 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
   private _hasRequiredCredentials(): boolean {
     return !!(
       this._presets.preset ||
-      (this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.username &&
-        this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.password &&
+      (((this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.username &&
+        this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.password) ||
+        this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.apiToken) &&
         this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.organization &&
         this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.vdc)
     );
@@ -332,6 +336,11 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
       credentialsChanged = true;
     }
 
+    if (cluster.spec.cloud.vmwareclouddirector.apiToken !== this._apiToken) {
+      this._apiToken = cluster.spec.cloud.vmwareclouddirector.apiToken;
+      credentialsChanged = true;
+    }
+
     if (cluster.spec.cloud.vmwareclouddirector.organization !== this._organization) {
       this._organization = cluster.spec.cloud.vmwareclouddirector.organization;
       credentialsChanged = true;
@@ -349,6 +358,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
     this._preset = '';
     this._username = '';
     this._password = '';
+    this._apiToken = '';
     this._organization = '';
     this._vdc = '';
   }

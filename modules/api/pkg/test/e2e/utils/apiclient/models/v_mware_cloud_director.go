@@ -17,6 +17,9 @@ import (
 // swagger:model VMwareCloudDirector
 type VMwareCloudDirector struct {
 
+	// API token
+	APIToken string `json:"apiToken,omitempty"`
+
 	// If datacenter is set, this preset is only applicable to the
 	// configured datacenter.
 	Datacenter string `json:"datacenter,omitempty"`
