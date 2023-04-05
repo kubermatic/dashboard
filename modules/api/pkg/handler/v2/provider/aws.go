@@ -135,6 +135,7 @@ func DecodeAWSCommonReq(c context.Context, r *http.Request) (interface{}, error)
 	req.Credential = r.Header.Get("Credential")
 	req.AssumeRoleARN = r.Header.Get("AssumeRoleARN")
 	req.AssumeRoleExternalID = r.Header.Get("AssumeRoleExternalID")
+	req.VPC = r.Header.Get("VPC")
 
 	return req, nil
 }
