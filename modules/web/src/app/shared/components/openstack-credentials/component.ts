@@ -69,7 +69,6 @@ export enum Mode {
       multi: true,
     },
   ],
-  styleUrls: ['style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {

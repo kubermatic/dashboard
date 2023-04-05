@@ -14,34 +14,6 @@
 
 @use 'variables';
 
-.openstack-button-toggle-group {
-  &.mat-button-toggle-group {
-    border-radius: variables.$border-radius;
-    margin-bottom: 0;
-
-    .mat-button-toggle {
-      border-radius: 0;
-      margin-right: 0;
-      max-height: 45px;
-      min-height: 45px;
-
-      &:first-child {
-        border-bottom-left-radius: variables.$border-radius;
-        border-top-left-radius: variables.$border-radius;
-        max-width: initial;
-        min-width: 82px;
-      }
-
-      &:last-child {
-        border-bottom-right-radius: variables.$border-radius;
-        border-top-right-radius: variables.$border-radius;
-        max-width: initial;
-        min-width: 115px;
-      }
-    }
-  }
-}
-
 .warning-container {
   margin-bottom: 20px;
 }
