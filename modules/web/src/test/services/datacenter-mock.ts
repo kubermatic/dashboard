@@ -29,7 +29,7 @@ export class DatacenterMockService {
   }
 
   getDatacenter(dcName: string): Observable<Datacenter> {
-    const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
+    const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]) as Datacenter;
     return of(dc);
   }
 
