@@ -51,6 +51,10 @@ type VMwareCloudDirectorCommonReq struct {
 	Password string
 
 	// in: header
+	// name: APIToken
+	APIToken string
+
+	// in: header
 	// name: Organization
 	Organization string
 
@@ -74,6 +78,7 @@ func DecodeVMwareCloudDirectorCommonReq(c context.Context, r *http.Request) (int
 
 	req.Username = r.Header.Get("Username")
 	req.Password = r.Header.Get("Password")
+	req.APIToken = r.Header.Get("APIToken")
 	req.Organization = r.Header.Get("Organization")
 	req.VDC = r.Header.Get("VDC")
 	req.Credential = r.Header.Get("Credential")
@@ -240,6 +245,7 @@ func DecodeVMwareCloudDirectorTemplateNoCredentialsReq(c context.Context, r *htt
 func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareCloudDirectorCommonReq, projectID string, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter) (*vcd.Auth, error) {
 	username := req.Username
 	password := req.Password
+	apiToken := req.APIToken
 	organization := req.Organization
 	vdc := req.VDC
 
@@ -256,6 +262,7 @@ func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareClo
 		if credentials := preset.Spec.VMwareCloudDirector; credentials != nil {
 			username = credentials.Username
 			password = credentials.Password
+			apiToken = credentials.APIToken
 			organization = credentials.Organization
 			vdc = credentials.VDC
 		}
@@ -272,6 +279,7 @@ func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareClo
 	return &vcd.Auth{
 		Username:      username,
 		Password:      password,
+		APIToken:      apiToken,
 		Organization:  organization,
 		VDC:           vdc,
 		URL:           dc.Spec.VMwareCloudDirector.URL,

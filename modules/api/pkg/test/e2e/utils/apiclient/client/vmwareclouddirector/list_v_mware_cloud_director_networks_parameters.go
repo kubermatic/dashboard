@@ -61,6 +61,9 @@ ListVMwareCloudDirectorNetworksParams contains all the parameters to send to the
 */
 type ListVMwareCloudDirectorNetworksParams struct {
 
+	// APIToken.
+	APIToken *string
+
 	// Credential.
 	Credential *string
 
@@ -133,6 +136,17 @@ func (o *ListVMwareCloudDirectorNetworksParams) WithHTTPClient(client *http.Clie
 // SetHTTPClient adds the HTTPClient to the list v mware cloud director networks params
 func (o *ListVMwareCloudDirectorNetworksParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
+}
+
+// WithAPIToken adds the aPIToken to the list v mware cloud director networks params
+func (o *ListVMwareCloudDirectorNetworksParams) WithAPIToken(aPIToken *string) *ListVMwareCloudDirectorNetworksParams {
+	o.SetAPIToken(aPIToken)
+	return o
+}
+
+// SetAPIToken adds the apiToken to the list v mware cloud director networks params
+func (o *ListVMwareCloudDirectorNetworksParams) SetAPIToken(aPIToken *string) {
+	o.APIToken = aPIToken
 }
 
 // WithCredential adds the credential to the list v mware cloud director networks params
@@ -208,6 +222,14 @@ func (o *ListVMwareCloudDirectorNetworksParams) WriteToRequest(r runtime.ClientR
 		return err
 	}
 	var res []error
+
+	if o.APIToken != nil {
+
+		// header param APIToken
+		if err := r.SetHeaderParam("APIToken", *o.APIToken); err != nil {
+			return err
+		}
+	}
 
 	if o.Credential != nil {
 

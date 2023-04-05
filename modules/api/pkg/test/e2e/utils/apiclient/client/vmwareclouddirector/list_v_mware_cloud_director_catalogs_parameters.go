@@ -61,6 +61,9 @@ ListVMwareCloudDirectorCatalogsParams contains all the parameters to send to the
 */
 type ListVMwareCloudDirectorCatalogsParams struct {
 
+	// APIToken.
+	APIToken *string
+
 	// Credential.
 	Credential *string
 
@@ -133,6 +136,17 @@ func (o *ListVMwareCloudDirectorCatalogsParams) WithHTTPClient(client *http.Clie
 // SetHTTPClient adds the HTTPClient to the list v mware cloud director catalogs params
 func (o *ListVMwareCloudDirectorCatalogsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
+}
+
+// WithAPIToken adds the aPIToken to the list v mware cloud director catalogs params
+func (o *ListVMwareCloudDirectorCatalogsParams) WithAPIToken(aPIToken *string) *ListVMwareCloudDirectorCatalogsParams {
+	o.SetAPIToken(aPIToken)
+	return o
+}
+
+// SetAPIToken adds the apiToken to the list v mware cloud director catalogs params
+func (o *ListVMwareCloudDirectorCatalogsParams) SetAPIToken(aPIToken *string) {
+	o.APIToken = aPIToken
 }
 
 // WithCredential adds the credential to the list v mware cloud director catalogs params
@@ -208,6 +222,14 @@ func (o *ListVMwareCloudDirectorCatalogsParams) WriteToRequest(r runtime.ClientR
 		return err
 	}
 	var res []error
+
+	if o.APIToken != nil {
+
+		// header param APIToken
+		if err := r.SetHeaderParam("APIToken", *o.APIToken); err != nil {
+			return err
+		}
+	}
 
 	if o.Credential != nil {
 

@@ -23444,6 +23444,11 @@
           },
           {
             "type": "string",
+            "name": "APIToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Organization",
             "in": "header"
           },
@@ -23508,6 +23513,11 @@
           {
             "type": "string",
             "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "APIToken",
             "in": "header"
           },
           {
@@ -23580,6 +23590,11 @@
           },
           {
             "type": "string",
+            "name": "APIToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Organization",
             "in": "header"
           },
@@ -23644,6 +23659,11 @@
           {
             "type": "string",
             "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "APIToken",
             "in": "header"
           },
           {
@@ -26107,6 +26127,11 @@
           },
           {
             "type": "string",
+            "name": "APIToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Organization",
             "in": "header"
           },
@@ -26164,6 +26189,11 @@
           {
             "type": "string",
             "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "APIToken",
             "in": "header"
           },
           {
@@ -26229,6 +26259,11 @@
           },
           {
             "type": "string",
+            "name": "APIToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Organization",
             "in": "header"
           },
@@ -26286,6 +26321,11 @@
           {
             "type": "string",
             "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "APIToken",
             "in": "header"
           },
           {
@@ -39929,6 +39969,10 @@
     "VMwareCloudDirector": {
       "type": "object",
       "properties": {
+        "apiToken": {
+          "type": "string",
+          "x-go-name": "APIToken"
+        },
         "datacenter": {
           "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
           "type": "string",
@@ -40001,6 +40045,11 @@
       "type": "object",
       "title": "VMwareCloudDirectorCloudSpec specifies access data to VMware Cloud Director cloud.",
       "properties": {
+        "apiToken": {
+          "description": "APIToken is the VMware Cloud Director API token.\n+optional",
+          "type": "string",
+          "x-go-name": "APIToken"
+        },
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"
         },
