@@ -593,12 +593,12 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 	spec := cluster.Spec.Cloud.VMwareCloudDirector
 
 	// already migrated
-	if spec.Username == "" && spec.Password == "" && spec.Organization == "" && spec.VDC == "" {
+	if spec.Username == "" && spec.Password == "" && spec.Organization == "" && spec.VDC == "" && spec.APIToken == "" {
 		return false, nil
 	}
 
 	if validate != nil {
-		if err := vmwareclouddirector.ValidateCredentials(ctx, validate.Datacenter.Spec.VMwareCloudDirector, spec.Username, spec.Password, spec.Organization, spec.VDC); err != nil {
+		if err := vmwareclouddirector.ValidateCredentials(ctx, validate.Datacenter.Spec.VMwareCloudDirector, spec.Username, spec.Password, spec.APIToken, spec.Organization, spec.VDC); err != nil {
 			return false, fmt.Errorf("invalid VMware Cloud Director credentials: %w", err)
 		}
 	}
@@ -607,6 +607,7 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 	credentialRef, err := ensureCredentialSecret(ctx, seedClient, cluster, map[string][]byte{
 		resources.VMwareCloudDirectorUsername:     []byte(spec.Username),
 		resources.VMwareCloudDirectorPassword:     []byte(spec.Password),
+		resources.VMwareCloudDirectorAPIToken:     []byte(spec.APIToken),
 		resources.VMwareCloudDirectorOrganization: []byte(spec.Organization),
 		resources.VMwareCloudDirectorVDC:          []byte(spec.VDC),
 	})
@@ -620,6 +621,7 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 	// clean old inline credentials
 	cluster.Spec.Cloud.VMwareCloudDirector.Username = ""
 	cluster.Spec.Cloud.VMwareCloudDirector.Password = ""
+	cluster.Spec.Cloud.VMwareCloudDirector.APIToken = ""
 	cluster.Spec.Cloud.VMwareCloudDirector.Organization = ""
 	cluster.Spec.Cloud.VMwareCloudDirector.VDC = ""
 

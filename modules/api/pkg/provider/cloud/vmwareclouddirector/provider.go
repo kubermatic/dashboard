@@ -50,28 +50,9 @@ var _ provider.CloudProvider = &Provider{}
 func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (creds *resources.VMwareCloudDirectorCredentials, err error) {
 	username := cloud.VMwareCloudDirector.Username
 	password := cloud.VMwareCloudDirector.Password
+	apiToken := cloud.VMwareCloudDirector.APIToken
 	organization := cloud.VMwareCloudDirector.Organization
 	vdc := cloud.VMwareCloudDirector.VDC
-
-	if username == "" {
-		if cloud.VMwareCloudDirector.CredentialsReference == nil {
-			return nil, errors.New("no credentials provided")
-		}
-		username, err = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorUsername)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if password == "" {
-		if cloud.VMwareCloudDirector.CredentialsReference == nil {
-			return nil, errors.New("no credentials provided")
-		}
-		password, err = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorPassword)
-		if err != nil {
-			return nil, err
-		}
-	}
 
 	if organization == "" {
 		if cloud.VMwareCloudDirector.CredentialsReference == nil {
@@ -88,6 +69,39 @@ func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector pr
 			return nil, errors.New("no credentials provided")
 		}
 		vdc, err = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorVDC)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Check if API Token exists.
+	if apiToken == "" && cloud.VMwareCloudDirector.CredentialsReference != nil {
+		apiToken, _ = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorAPIToken)
+	}
+	if apiToken != "" {
+		return &resources.VMwareCloudDirectorCredentials{
+			Organization: organization,
+			APIToken:     apiToken,
+			VDC:          vdc,
+		}, nil
+	}
+
+	// Check for Username/password since API token doesn't exist.
+	if username == "" {
+		if cloud.VMwareCloudDirector.CredentialsReference == nil {
+			return nil, errors.New("no credentials provided")
+		}
+		username, err = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorUsername)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if password == "" {
+		if cloud.VMwareCloudDirector.CredentialsReference == nil {
+			return nil, errors.New("no credentials provided")
+		}
+		password, err = secretKeySelector(cloud.VMwareCloudDirector.CredentialsReference, resources.VMwareCloudDirectorPassword)
 		if err != nil {
 			return nil, err
 		}
