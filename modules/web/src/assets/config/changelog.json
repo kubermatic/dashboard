@@ -10,6 +10,10 @@
         "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.3."
     },
     {
+        "category": "changed",
+        "description": "Update machine-controller to v1.56.2."
+    },
+    {
         "category": "fixed",
         "description": "Fix OOM in usercluster-controller by limiting the history of helm releases. This fix is critical if user-cluster is using Cilium >= 1.13.0 as CNI."
     },
