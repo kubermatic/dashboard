@@ -1,33 +1,41 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2222",
   "entries": [
     {
         "category": "added",
-        "description": "Add support for ca-bundle to metering cronjobs."
-    },
-    {
-        "category": "added",
-        "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
+        "description": "Configure Ingress Hostname cluster settings of OpenStack provider via the cluster wizard."
     },
     {
         "category": "changed",
-        "description": "Update Metering to v1.0.3."
+        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.3."
     },
     {
         "category": "fixed",
-        "description": "Fix uppercase labels in cluster/project metrics."
+        "description": "Fix OOM in usercluster-controller by limiting the history of helm releases. This fix is critical if user-cluster is using Cilium >= 1.13.0 as CNI."
     },
     {
         "category": "fixed",
-        "description": "Fix mla-monitoring-agent configuration being invalid when custom scraping configuration is provided."
+        "description": "Pull konnectivity images from registry.k8s.io instead of legacy GCR registry."
     },
     {
         "category": "fixed",
-        "description": "Set proper NodePort range in Cilium config if non-default range is used."
+        "description": "Fix calculation of node CPU utilisation in MLA Grafana dashboards."
     },
     {
         "category": "fixed",
-        "description": "Fix a bug where KKP managed vSphere folders are enforced but shouldn't."
+        "description": "Show correct health information for Machine Deployments with no replicas."
+    },
+    {
+        "category": "fixed",
+        "description": "AWS subnets are fetched correctly if credentials are provided directly instead of using a preset."
+    },
+    {
+        "category": "fixed",
+        "description": "Fix cluster wizard not selecting a default version if custom versions are configured in KubermaticConfiguration."
+    },
+    {
+        "category": "fixed",
+        "description": "Update external-snapshotter validation webhook server to v6.0.1, fixing the default-storageclass addon for OpenStack clusters."
     }
   ]
 }
