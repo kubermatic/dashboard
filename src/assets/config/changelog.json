@@ -3,43 +3,27 @@
   "entries": [
     {
         "category": "added",
-        "description": "Add support for ca-bundle to metering cronjobs."
-    },
-    {
-        "category": "added",
-        "description": "Allow `clusterNetwork.proxyMode` update via the KKP API (PATCH endpoint)."
+        "description": "Configure Ingress Hostname cluster settings of OpenStack provider via the cluster wizard."
     },
     {
         "category": "changed",
-        "description": "Update Metering to v1.0.3."
+        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.3."
+    },
+    {
+        "category": "changed",
+        "description": "Update machine-controller to v1.54.6."
     },
     {
         "category": "fixed",
-        "description": "Update machine-controller to v1.54.5. This fixes an issue with Flatcar nodes not joining the cluster for clusters that don't use OSM."
+        "description": "Pull konnectivity images from registry.k8s.io instead of legacy GCR registry."
     },
     {
         "category": "fixed",
-        "description": "Fix partially deployed CSI validating webhook on CCM/CSI migrated clusters on vSphere."
+        "description": "Fix calculation of node CPU utilisation in MLA Grafana dashboards."
     },
     {
         "category": "fixed",
-        "description": "Fix setting a provider incompatibility rule for all providers."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix uppercase labels in cluster/project metrics."
-    },
-    {
-        "category": "fixed",
-        "description": "Include tunneling agent IP in apiserver's TLS cert SANs."
-    },
-    {
-        "category": "fixed",
-        "description": "Remove promtail sidecar from user cluster MLA that sets `fs.inotify.max_user_instances`."
-    },
-    {
-        "category": "fixed",
-        "description": "Set proper NodePort range in Cilium config if non-default range is used."
+        "description": "Show correct health information for Machine Deployments with no replicas."
     }
   ]
 }
