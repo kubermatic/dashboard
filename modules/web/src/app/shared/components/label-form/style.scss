@@ -26,3 +26,9 @@
   margin-top: -18px;
   padding-bottom: 21px;
 }
+
+.removed-label-form {
+  border-bottom-left-radius: variables.$border-radius;
+  border-top-left-radius: variables.$border-radius;
+  padding-left: 10px;
+}

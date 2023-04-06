@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'variables';
+
 .mat-icon-button {
   &.delete-button {
     margin-top: 4px;
@@ -20,4 +22,10 @@
 
 .categories-msg {
   padding-bottom: 15px;
+}
+
+.removed-categories-form {
+  border-bottom-left-radius: variables.$border-radius;
+  border-top-left-radius: variables.$border-radius;
+  padding-left: 10px;
 }

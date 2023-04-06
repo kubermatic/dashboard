@@ -21,3 +21,13 @@
 .delete-button {
   margin-top: 4px;
 }
+
+.km-value-changed::after {
+  height: 44px !important;
+}
+
+.removed-constraint-form {
+  border-bottom-left-radius: variables.$border-radius;
+  border-top-left-radius: variables.$border-radius;
+  padding-left: 10px;
+}

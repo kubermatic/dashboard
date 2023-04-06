@@ -47,6 +47,10 @@
 @import 'src/app/settings/admin/nav/theme';
 @import 'src/app/shared/components/side-nav-field/theme';
 @import 'src/app/dynamic/enterprise/quotas/quota-widget/theme';
+@import 'src/app/shared/components/taint-form/theme';
+@import 'src/app/shared/components/label-form/theme';
+@import 'src/app/node-data/basic/provider/kubevirt/topology-spread-contraint-form/theme';
+@import 'src/app/node-data/basic/provider/nutanix/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -84,4 +88,8 @@
   @include theme-terminal-toolbar-component($colors);
   @include theme-terminal-status-bar-component($colors);
   @include theme-terminal-overlay-component($colors);
+  @include theme-taint-form-component($colors);
+  @include theme-label-form-component($colors);
+  @include theme-topology-spread-contraint-form-component($colors);
+  @include theme-nutanix-basic-node-data-component($colors);
 }

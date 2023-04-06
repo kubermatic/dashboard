@@ -23,7 +23,8 @@ limitations under the License.
            [name]="Controls.ProjectID"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -36,7 +37,8 @@ limitations under the License.
            [name]="Controls.ApiKey"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ApiKey).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -44,7 +46,8 @@ limitations under the License.
 
   <mat-form-field fxFlex>
     <mat-label>Billing Cycle</mat-label>
-    <mat-select [formControlName]="Controls.BillingCycle">
+    <mat-select [formControlName]="Controls.BillingCycle"
+                kmValueChangedIndicator>
       <mat-option value="hourly">Hourly</mat-option>
       <mat-option value="daily">Daily</mat-option>
     </mat-select>

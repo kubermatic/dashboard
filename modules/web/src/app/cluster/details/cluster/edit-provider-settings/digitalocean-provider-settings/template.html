@@ -23,7 +23,8 @@ limitations under the License.
            [name]="Control.Token"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.Token).hasError('minlength') || form.get(Control.Token).hasError('maxlength')">
       DigitalOcean Personal Access Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>

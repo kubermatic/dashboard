@@ -17,6 +17,7 @@ import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} 
 import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
@@ -52,7 +53,8 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
     private readonly _datacenterService: DatacenterService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit() {
@@ -157,8 +159,14 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
         confirmLabel: 'Edit',
       },
     };
-
-    this._matDialog.open(DatacenterDataDialogComponent, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(DatacenterDataDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   delete(datacenter: Datacenter): void {

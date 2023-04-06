@@ -41,7 +41,8 @@ limitations under the License.
              [name]="Control.Username"
              type="text"
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Username).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -52,7 +53,8 @@ limitations under the License.
              [formControlName]="Control.Password"
              kmInputPassword
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Password).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -64,7 +66,8 @@ limitations under the License.
              [name]="Control.Project"
              [required]="!defaultCredentialsForm.get(Control.ProjectID).value"
              matInput
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Project).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -76,7 +79,8 @@ limitations under the License.
              [name]="Control.ProjectID"
              [required]="!defaultCredentialsForm.get(Control.Project).value"
              matInput
-             autocomplete="off">
+             autocomplete="off"
+             kmValueChangedIndicator>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.ProjectID).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -101,7 +105,8 @@ limitations under the License.
              [name]="Control.ApplicationCredentialID"
              matInput
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
       <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialID).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -114,7 +119,8 @@ limitations under the License.
              matInput
              kmInputPassword
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
       <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialSecret).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -127,7 +133,8 @@ limitations under the License.
            [name]="Control.Domain"
            matInput
            autocomplete="off"
-           [required]="credentialsType === CredentialsType.Default">
+           [required]="credentialsType === CredentialsType.Default"
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.Domain).hasError('required')">
       <strong>Required</strong>
     </mat-error>

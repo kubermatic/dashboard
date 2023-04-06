@@ -27,6 +27,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-constraint-templates-list',
@@ -45,7 +46,8 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     private readonly _opaService: OPAService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit() {
@@ -116,11 +118,14 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       },
     };
 
+    this._dialogModeService.isEditDialog = true;
     this._matDialog
       .open(ConstraintTemplateDialog, dialogConfig)
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   delete(constraintTemplate: ConstraintTemplate): void {

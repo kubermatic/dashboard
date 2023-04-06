@@ -21,9 +21,10 @@ import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
-import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
+import {catchError, filter, finalize, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import {DialogModeService} from './dialog-mode';
 
 @Injectable()
 export class NodeService {
@@ -74,7 +75,8 @@ export class NodeService {
   constructor(
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _matDialog: MatDialog,
-    private readonly _inj: Injector
+    private readonly _inj: Injector,
+    private readonly _dialogModeService: DialogModeService
   ) {
     this._notificationService = this._inj.get(NotificationService);
   }
@@ -107,6 +109,8 @@ export class NodeService {
     cluster: Cluster,
     projectID: string
   ): Observable<MachineDeployment> {
+    this._dialogModeService.isEditDialog = true;
+
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
         initialClusterData: cluster,
@@ -125,6 +129,9 @@ export class NodeService {
     });
 
     return dialogRef.afterClosed().pipe(
+      finalize(() => {
+        this._dialogModeService.isEditDialog = false;
+      }),
       filter(data => !!data),
       switchMap(data =>
         this._machineDeploymentService.patch(NodeService._createPatch(data), md.id, cluster.id, projectID)

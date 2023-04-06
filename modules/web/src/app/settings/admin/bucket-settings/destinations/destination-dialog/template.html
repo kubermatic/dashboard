@@ -38,7 +38,8 @@ limitations under the License.
              [formControlName]="Controls.Bucket"
              type="text"
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
     </mat-form-field>
 
     <mat-form-field fxFlex>
@@ -47,11 +48,13 @@ limitations under the License.
              [formControlName]="Controls.Endpoint"
              type="text"
              autocomplete="off"
-             required>
+             required
+             kmValueChangedIndicator>
     </mat-form-field>
 
     <mat-checkbox [formControlName]="Controls.Default"
-                  class="default-checkbox">
+                  class="default-checkbox"
+                  kmValueChangedIndicator>
       <span>Use as default for admin enforced backups for each cluster in the seed</span>
     </mat-checkbox>
 

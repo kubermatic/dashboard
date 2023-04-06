@@ -23,7 +23,7 @@ import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/
 import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {MatSort} from '@angular/material/sort';
-import {takeUntil, filter, switchMap, tap} from 'rxjs/operators';
+import {takeUntil, filter, switchMap, tap, take} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
@@ -33,6 +33,7 @@ import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
 import {getProgressBarAccent} from './utils/common';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Column {
   ProjectId = 'ProjectId',
@@ -77,7 +78,8 @@ export class QuotasComponent implements OnInit {
     private readonly _notificationService: NotificationService,
     private readonly _quotaService: QuotaService,
     private readonly _userService: UserService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -124,10 +126,17 @@ export class QuotasComponent implements OnInit {
   }
 
   editQuota(quota: QuotaDetails): void {
-    this._matDialog.open<ProjectQuotaDialogComponent, QuotaDetails, never>(ProjectQuotaDialogComponent, {
-      panelClass: 'km-quota-dialog',
-      data: quota,
-    });
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open<ProjectQuotaDialogComponent, QuotaDetails, never>(ProjectQuotaDialogComponent, {
+        panelClass: 'km-quota-dialog',
+        data: quota,
+      })
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   getProgressBarData(projectId: string, resourceType: string): progressBarData {

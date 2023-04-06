@@ -38,6 +38,7 @@ import {
   ServiceAccountTokenDialogData,
   ServiceAccountTokenDialogMode,
 } from '@app/serviceaccount/token/add/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 class TokenList {
   initializing = true;
@@ -86,7 +87,8 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _matDialog: MatDialog,
     private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -204,6 +206,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
   editServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditServiceAccountDialogComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.serviceaccount = serviceAccount;
@@ -214,6 +217,12 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
         if (isEdited) {
           this._serviceAccountUpdate.next();
         }
+      });
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
       });
   }
 

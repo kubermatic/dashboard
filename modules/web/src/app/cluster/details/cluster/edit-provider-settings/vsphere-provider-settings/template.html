@@ -22,7 +22,8 @@ limitations under the License.
            [name]="Control.InfraManagementUsername"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.InfraManagementUsername).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -35,7 +36,8 @@ limitations under the License.
            [name]="Control.InfraManagementPassword"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Control.InfraManagementPassword).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -48,7 +50,8 @@ limitations under the License.
            [name]="Control.Username"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -58,6 +61,7 @@ limitations under the License.
            [name]="Control.Password"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

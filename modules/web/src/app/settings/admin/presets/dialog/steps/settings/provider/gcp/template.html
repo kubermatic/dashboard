@@ -23,7 +23,8 @@ limitations under the License.
               required
               [formControlName]="Controls.ServiceAccount"
               [name]="Controls.ServiceAccount"
-              autocomplete="off"></textarea>
+              autocomplete="off"
+              kmValueChangedIndicator></textarea>
     <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -35,7 +36,8 @@ limitations under the License.
            [formControlName]="Controls.Network"
            [name]="Controls.Network"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -44,6 +46,7 @@ limitations under the License.
            [formControlName]="Controls.Subnetwork"
            [name]="Controls.Subnetwork"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

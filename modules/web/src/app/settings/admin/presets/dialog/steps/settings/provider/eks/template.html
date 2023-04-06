@@ -23,7 +23,8 @@ limitations under the License.
            [name]="Controls.AccessKeyID"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -36,7 +37,8 @@ limitations under the License.
            [name]="Controls.SecretAccessKey"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.SecretAccessKey).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -48,7 +50,8 @@ limitations under the License.
            [formControlName]="Controls.Region"
            [name]="Controls.Region"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Region).hasError('required')">
       <strong>Required</strong>
     </mat-error>

@@ -330,4 +330,28 @@
       }
     }
   }
+
+  // style for kmValueChangedIndicator directive
+
+  .km-value-changed {
+    &:not(.mat-button-toggle-group)::after {
+      background-color: map.get($colors, primary);
+    }
+
+    .mat-button-toggle-checked::after {
+      background-color: map.get($colors, primary);
+    }
+  }
+
+  .radio-group-column {
+    .mat-radio-checked::after {
+      background-color: map.get($colors, primary);
+    }
+  }
+
+  .mat-form-field-infix:has(> .km-value-changed) {
+    &::after {
+      background-color: map.get($colors, primary);
+    }
+  }
 }

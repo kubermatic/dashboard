@@ -24,7 +24,8 @@ limitations under the License.
            [name]="Controls.Username"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -37,7 +38,8 @@ limitations under the License.
            [name]="Controls.Password"
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -49,7 +51,8 @@ limitations under the License.
            [formControlName]="Controls.ProxyURL"
            [name]="Controls.ProxyURL"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -59,7 +62,8 @@ limitations under the License.
            [name]="Controls.ClusterName"
            type="text"
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ProxyURL).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -71,6 +75,7 @@ limitations under the License.
            [formControlName]="Controls.ProjectName"
            [name]="Controls.ProjectName"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
   </mat-form-field>
 </form>

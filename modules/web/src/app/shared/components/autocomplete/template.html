@@ -22,7 +22,8 @@ limitations under the License.
            matInput
            [formControlName]="controls.Main"
            [required]="required"
-           [matAutocomplete]="auto">
+           [matAutocomplete]="auto"
+           kmValueChangedIndicator>
     <mat-spinner matSuffix
                  *ngIf="isLoading && !form.disabled"
                  [diameter]="20"></mat-spinner>

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
 import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {Component, Input, OnInit} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {Cluster, Token} from '@shared/entity/cluster';

@@ -90,7 +90,8 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>IP Allocation Mode</mat-label>
     <mat-select [formControlName]="Controls.IPAllocationMode"
-                disableOptionCentering>
+                disableOptionCentering
+                kmValueChangedIndicator>
       <mat-option *ngFor="let mode of ipAllocationModes"
                   [value]="mode">
         {{mode}}

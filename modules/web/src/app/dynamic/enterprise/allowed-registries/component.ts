@@ -34,6 +34,7 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AllowedRegistryDialog} from './allowed-registry-dialog/component';
 import {DialogActionMode} from '@shared/types/common';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-allowed-registries-list',
@@ -52,7 +53,8 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
     private readonly _allowedRegistriesService: AllowedRegistriesService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {
     super();
   }
@@ -121,7 +123,14 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
       },
     };
 
-    this._matDialog.open(AllowedRegistryDialog, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(AllowedRegistryDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   delete(allowedRegistry: AllowedRegistry): void {

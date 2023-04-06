@@ -28,7 +28,8 @@ limitations under the License.
                [formControlName]="Controls.Name"
                type="text"
                autocomplete="off"
-               cdkFocusInitial>
+               cdkFocusInitial
+               kmValueChangedIndicator>
         <mat-error *ngIf="form.controls.name.hasError('required')">
           <strong>Required</strong>
         </mat-error>

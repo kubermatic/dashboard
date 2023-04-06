@@ -22,7 +22,8 @@ limitations under the License.
            [name]="Controls.Username"
            matInput
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -35,7 +36,8 @@ limitations under the License.
            matInput
            kmInputPassword
            autocomplete="off"
-           required>
+           required
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -47,7 +49,8 @@ limitations under the License.
            [formControlName]="Controls.Project"
            [name]="Controls.Project"
            [matAutocomplete]="autoProject"
-           [required]="isRequired(Controls.Project)">
+           [required]="isRequired(Controls.Project)"
+           kmValueChangedIndicator>
     <mat-autocomplete #autoProject="matAutocomplete">
       <mat-option *ngFor="let project of projects"
                   [value]="project.name">
@@ -66,7 +69,8 @@ limitations under the License.
            [name]="Controls.ProjectID"
            [required]="isRequired(Controls.ProjectID)"
            matInput
-           autocomplete="off">
+           autocomplete="off"
+           kmValueChangedIndicator>
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
       <strong>Required</strong>
     </mat-error>

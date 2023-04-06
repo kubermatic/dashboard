@@ -51,7 +51,8 @@ END OF TERMS AND CONDITIONS
         <input [formControlName]="controls.Schedule"
                type="text"
                matInput
-               required>
+               required
+               kmValueChangedIndicator>
         <mat-hint>
           Cron expression that describes how often a report should be created. Must match the criteria specified
           <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"

@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+@use 'sass:map';
 
-.delete-button {
-  margin-top: 7px;
-}
-
-.removed-taint-form {
-  border-bottom-left-radius: variables.$border-radius;
-  border-top-left-radius: variables.$border-radius;
-  padding-left: 10px;
+@mixin theme-taint-form-component($colors) {
+  .removed-taint-form {
+    border-left: 5px solid map.get($colors, primary);
+  }
 }

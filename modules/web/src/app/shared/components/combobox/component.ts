@@ -69,6 +69,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() valueFormatter: (selected: string | string[]) => string;
   @Input() multiple = false;
   @Input() customId = undefined;
+  @Input() enableKmValueChangedIndicator = true;
 
   @Output() changed = new EventEmitter<string | string[]>();
   @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;

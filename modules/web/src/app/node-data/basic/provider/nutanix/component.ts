@@ -39,6 +39,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Controls {
   ImageName = 'imageName',
@@ -69,6 +70,11 @@ enum CategoryValueState {
   Ready = 'Value',
   Loading = 'Loading...',
   Empty = 'No Values Available',
+}
+
+interface Category {
+  category: string;
+  categoryValue: string;
 }
 
 @Component({
@@ -102,6 +108,8 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
   categories: NutanixCategory[] = [];
+  initialSelectedCategories: Category[];
+  removedCategories: Category[] = [];
   filteredCategories: Record<string, NutanixCategory[]> = {};
   categoryLabel = CategoryState.Empty;
   categoryValues: Record<string, NutanixCategoryValue[]> = {};
@@ -113,7 +121,8 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private _dialogModeService: DialogModeService
   ) {
     super();
 
@@ -191,6 +200,18 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       .subscribe(_ => {
         this._nodeDataService.nodeData.spec.cloud.nutanix.categories = this._getCategories();
       });
+
+    this.initialSelectedCategories = this.form.get(Controls.Categories).value;
+
+    this.form
+      .get(Controls.Categories)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        values =>
+          (this.removedCategories = this.removedCategories?.filter(
+            category => !values?.some(value => category?.category === value?.category?.select)
+          ))
+      );
   }
 
   ngAfterViewChecked(): void {
@@ -262,6 +283,11 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   removeCategory(index: number): void {
+    this.removedCategories?.push({
+      category: this.categoriesFormArray.value[index].category.select,
+      categoryValue: this.categoriesFormArray.value[index].categoryValue.select,
+    });
+
     const selectedCategory = this.categoriesFormArray.at(index).get(Controls.Category).value[ComboboxControls.Select];
     this.categoriesFormArray.removeAt(index);
     if (selectedCategory) {
@@ -269,6 +295,19 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       delete this.categoryValuesSubscription[selectedCategory];
     }
     this._updateFilteredCategories();
+  }
+
+  isCategoryChanged(index: number): boolean {
+    const category = this.categoriesFormArray.value[index].category.select;
+    const categoryValue = this.categoriesFormArray.value[index].categoryValue.select;
+    if (category) {
+      return (
+        (category !== this.initialSelectedCategories[index]?.category ||
+          categoryValue !== this.initialSelectedCategories[index]?.categoryValue) &&
+        this._dialogModeService.isEditDialog
+      );
+    }
+    return false;
   }
 
   private get _subnetsObservable(): Observable<NutanixSubnet[]> {

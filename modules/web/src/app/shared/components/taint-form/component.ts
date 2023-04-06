@@ -25,6 +25,7 @@ import {
 import {Taint} from '../../entity/node';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {TaintFormValidators} from '../../validators/taint-form.validators';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-taint-form',
@@ -48,9 +49,11 @@ export class TaintFormComponent implements OnInit {
   @Input() taints: Taint[];
   @Output() taintsChange = new EventEmitter<Taint[]>();
   form: FormGroup;
+  removedTaints: Taint[] = [];
+  initialTaints: Taint[];
   availableEffects = Taint.getAvailableEffects();
 
-  constructor(private readonly _formBuilder: FormBuilder) {}
+  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {}
 
   get taintArray(): FormArray {
     return this.form.get('taints') as FormArray;
@@ -84,9 +87,17 @@ export class TaintFormComponent implements OnInit {
 
     // Add initial taint for the user.
     this._addTaint();
+    this.initialTaints = this.taints;
+
+    this.form.valueChanges.subscribe(value => {
+      this.removedTaints = this.removedTaints.filter(
+        removedtaint => !value.taints.some(taint => removedtaint?.key === taint?.key)
+      );
+    });
   }
 
   deleteTaint(index: number): void {
+    this.removedTaints?.push(this.taints[index]);
     this.taintArray.removeAt(index);
     this._updateTaints();
   }
@@ -99,6 +110,18 @@ export class TaintFormComponent implements OnInit {
     this._addTaintIfNeeded();
     this._validateKey(index);
     this._updateTaints();
+  }
+
+  isTaintChanged(index: number): boolean {
+    if (this.taints[index]?.key) {
+      return (
+        (this.taints[index]?.key !== this.initialTaints[index]?.key ||
+          this.taints[index]?.value !== this.initialTaints[index]?.value ||
+          this.taints[index]?.effect !== this.initialTaints[index]?.effect) &&
+        this._dialogModeService.isEditDialog
+      );
+    }
+    return false;
   }
 
   private _addTaintIfNeeded(): void {

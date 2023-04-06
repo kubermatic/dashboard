@@ -79,6 +79,7 @@ import {SSHKeyService} from '@core/services/ssh-key';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {NutanixService} from '@core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
+import {DialogModeService} from '@core/services/dialog-mode';
 
 const components = [
   SidenavComponent,
@@ -145,6 +146,7 @@ const services = [
   KubeOneClusterSpecService,
   KubeOnePresetsService,
   VSphereService,
+  DialogModeService,
 ];
 
 const interceptors = [

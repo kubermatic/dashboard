@@ -20,12 +20,14 @@
 
 import {Component, Input} from '@angular/core';
 import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {
   MeteringConfigurationDialog,
   MeteringConfigurationDialogConfig,
 } from '@app/dynamic/enterprise/metering/config/config-dialog/component';
 import {MeteringCredentialsDialog} from '@app/dynamic/enterprise/metering/config/credentials-dialog/component';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'km-metering-config',
@@ -35,12 +37,19 @@ import {MeteringConfiguration} from '@shared/entity/datacenter';
 export class MeteringConfigComponent {
   @Input() config: MeteringConfiguration;
 
-  constructor(private readonly _dialog: MatDialog) {}
+  constructor(private readonly _dialog: MatDialog, private readonly _dialogModeService: DialogModeService) {}
 
   configureMetering(): void {
-    this._dialog.open(MeteringConfigurationDialog, {
-      data: {configuration: this.config} as MeteringConfigurationDialogConfig,
-    });
+    this._dialogModeService.isEditDialog = true;
+    this._dialog
+      .open(MeteringConfigurationDialog, {
+        data: {configuration: this.config} as MeteringConfigurationDialogConfig,
+      })
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   configureCredentials(): void {

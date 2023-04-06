@@ -52,6 +52,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {QuotaService} from '../dynamic/enterprise/quotas/service';
 import {GlobalModule} from '@core/services/global/module';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-project',
@@ -121,7 +122,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _previousRouteService: PreviousRouteService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
-    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
+    @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie,
+    private readonly _dialogModeService: DialogModeService
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
@@ -514,6 +516,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   editProject(project: Project, event: Event): void {
     event.stopPropagation();
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditProjectComponent);
     modal.componentInstance.project = project;
     modal
@@ -523,6 +526,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         if (editedProject) {
           this._projectService.onProjectsUpdate.next();
         }
+      });
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
       });
   }
 

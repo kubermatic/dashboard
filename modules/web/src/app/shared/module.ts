@@ -138,6 +138,7 @@ import {TerminalComponent} from '@shared/components/terminal/component';
 import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-toolbar/component';
 import {TerminalStatusBarComponent} from '@shared/components/terminal/terminal-status-bar/component';
 import {InputPasswordDirective} from './directives/input-password';
+import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
 
 const modules = [
   CommonModule,
@@ -266,7 +267,13 @@ const components = [
   MachineFlavorFilterComponent,
 ];
 
-const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective, InputPasswordDirective];
+const directives = [
+  AutofocusDirective,
+  ThrottleClickDirective,
+  OptionDirective,
+  InputPasswordDirective,
+  ValueChangedIndicatorDirective,
+];
 
 @NgModule({
   imports: [...modules],

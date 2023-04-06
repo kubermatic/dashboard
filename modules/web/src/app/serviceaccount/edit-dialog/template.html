@@ -29,7 +29,8 @@ limitations under the License.
              type="text"
              autocomplete="off"
              required
-             cdkFocusInitial>
+             cdkFocusInitial
+             kmValueChangedIndicator>
       <mat-error *ngIf="form.controls.name.hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -39,7 +40,8 @@ limitations under the License.
     <mat-radio-group formControlName="group"
                      fxFlex
                      fxLayout="column"
-                     class="km-radio-group">
+                     class="km-radio-group"
+                     kmValueChangedIndicator>
       <mat-radio-button value="projectmanagers"
                         class="km-radio-button">
         <div class="km-radio-button-title">Project Manager</div>

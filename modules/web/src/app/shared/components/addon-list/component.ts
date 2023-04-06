@@ -19,12 +19,13 @@ import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/en
 import {Cluster} from '@shared/entity/cluster';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {finalize, take, takeUntil} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 import {AddonService} from '@core/services/addon';
 import {getEditionVersion} from '@shared/utils/common';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-addon-list',
@@ -54,7 +55,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
-    private readonly _domSanitizer: DomSanitizer
+    private readonly _domSanitizer: DomSanitizer,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -138,13 +140,19 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   edit(addon: Addon): void {
+    this._dialogModeService.isEditDialog = true;
     const dialog = this._matDialog.open(EditAddonDialogComponent);
     dialog.componentInstance.addon = addon;
     dialog.componentInstance.cluster = this.cluster;
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
     dialog
       .afterClosed()
-      .pipe(take(1))
+      .pipe(
+        finalize(() => {
+          this._dialogModeService.isEditDialog = false;
+        }),
+        take(1)
+      )
       .subscribe(editedAddon => {
         if (editedAddon) {
           this.editAddon.emit(editedAddon);

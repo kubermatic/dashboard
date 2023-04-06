@@ -29,6 +29,7 @@ import _ from 'lodash';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AdminRuleGroupDialog} from './rule-group-dialog/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-admin-settings-rule-groups',
@@ -55,7 +56,8 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
     private readonly _mlaService: MLAService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _datacenterService: DatacenterService,
+    private readonly _dialogModeService: DialogModeService
   ) {}
 
   ngOnInit(): void {
@@ -154,7 +156,14 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       },
     };
 
-    this._matDialog.open(AdminRuleGroupDialog, dialogConfig);
+    this._dialogModeService.isEditDialog = true;
+    this._matDialog
+      .open(AdminRuleGroupDialog, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
   }
 
   delete(adminRuleGroup: AdminRuleGroup): void {

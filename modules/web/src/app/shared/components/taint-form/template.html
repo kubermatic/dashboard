@@ -28,7 +28,8 @@ limitations under the License.
         <input matInput
                (keyup)="check(i)"
                name="key"
-               formControlName="key">
+               formControlName="key"
+               [ngClass]="{'km-value-changed':isTaintChanged(i)}">
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyUniqueness">
           Key is not unique.
         </mat-error>
@@ -84,3 +85,10 @@ limitations under the License.
     </div>
   </div>
 </form>
+<div *ngIf="removedTaints.length"
+     class="removed-taint-form">
+  <p>Removed Node Taint</p>
+  <div *ngFor="let taint of removedTaints">
+    <p>Key: {{taint?.key}}, Value: {{taint?.value}}, Effect: {{taint?.effect}}</p>
+  </div>
+</div>
