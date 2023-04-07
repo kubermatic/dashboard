@@ -77,6 +77,8 @@ issues:
   - cyclomatic complexity [0-9]+ of func `validateOpenStackCloudSpec` is high
   # gocritic
   - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
+  # govet
+  - loop variable tc captured by func literal
 
 linters-settings:
   depguard:
