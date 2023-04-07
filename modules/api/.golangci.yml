@@ -78,7 +78,7 @@ issues:
   # gocritic
   - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
   # govet
-  - loop variable tc captured by func literal
+  - loop variable tc captured by func literal # TODO: fix tests and remove this exclude
 
 linters-settings:
   depguard:
