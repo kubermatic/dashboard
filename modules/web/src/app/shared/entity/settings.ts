@@ -48,6 +48,7 @@ export interface AdminSettings {
   notifications?: NotificationOptions;
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
+  machineDeploymentOptions?: MachineDeploymentOptions;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -91,6 +92,11 @@ export interface OpenStack {
 export interface DefaultProjectQuota {
   description?: string;
   quota: QuotaVariables;
+}
+
+export interface MachineDeploymentOptions {
+  autoUpdatesEnabled: boolean;
+  autoUpdatesEnforced: boolean;
 }
 
 export class CustomLink {
