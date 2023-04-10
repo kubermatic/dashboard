@@ -26,7 +26,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {MeteringReportConfiguration, MeteringReportType} from '@app/shared/entity/datacenter';
 import {KmValidators} from '@app/shared/validators/validators';
 import {Observable, Subject, take} from 'rxjs';
 
@@ -36,6 +36,7 @@ export interface MeteringScheduleEditDialogConfig {
   schedule: string;
   interval: number;
   retention: number;
+  types: MeteringReportType[];
 }
 
 enum Controls {
@@ -43,6 +44,7 @@ enum Controls {
   Schedule = 'schedule',
   Interval = 'interval',
   Retention = 'retention',
+  Types = 'types',
 }
 
 @Component({
@@ -52,6 +54,7 @@ enum Controls {
 export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
+  readonly reportTypes: MeteringReportType[] = Object.values(MeteringReportType);
   form: FormGroup;
 
   constructor(
@@ -70,6 +73,7 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
         KmValidators.cronExpression(),
         Validators.required,
       ]),
+      [Controls.Types]: this._builder.control(this.data.types, Validators.required),
     });
   }
 
@@ -94,6 +98,7 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
       schedule: this.form.get(Controls.Schedule).value,
       interval: this.form.get(Controls.Interval).value,
       retention: this.form.get(Controls.Retention).value,
+      types: this.form.get(Controls.Types).value,
     };
   }
 }

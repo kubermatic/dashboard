@@ -37,6 +37,7 @@ enum Column {
   retention = 'retention',
   interval = 'interval',
   schedule = 'schedule',
+  types = 'types',
   actions = 'actions',
 }
 
@@ -92,6 +93,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
         schedule: config.schedule,
         interval: config.interval,
         retention: config.retention,
+        types: config.types,
       },
     };
     this._dialogModeService.isEditDialog = true;

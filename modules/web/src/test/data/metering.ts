@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {MeteringReportConfiguration, MeteringReportType} from '@app/shared/entity/datacenter';
 
 export function fakeScheduleConfiguration(name: string): MeteringReportConfiguration {
   return {
     name,
     schedule: '0 1 * * *',
     interval: 7,
+    types: [MeteringReportType.Cluster, MeteringReportType.Namespace],
   };
 }

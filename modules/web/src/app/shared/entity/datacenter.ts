@@ -168,6 +168,13 @@ export class MeteringReportConfiguration {
   // create any lifecycle rule which results in keeping reports forever. Please note that this functionality works only
   // for object storage that supports an object lifecycle management mechanism.
   retention?: number;
+  // Types of reports to generate. By default, all types of reports are generated.
+  types?: MeteringReportType[];
+}
+
+export enum MeteringReportType {
+  Cluster = 'cluster',
+  Namespace = 'namespace',
 }
 
 export class MLA {

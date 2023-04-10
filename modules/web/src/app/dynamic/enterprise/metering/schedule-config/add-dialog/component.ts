@@ -26,7 +26,7 @@ import {
 } from '@angular/material/legacy-dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {MeteringReportConfiguration, MeteringReportType} from '@app/shared/entity/datacenter';
 import {KmValidators} from '@app/shared/validators/validators';
 import {Observable, Subject, take, takeUntil} from 'rxjs';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
@@ -41,6 +41,7 @@ enum Controls {
   Group = 'group',
   Interval = 'interval',
   Retention = 'retention',
+  Types = 'types',
 }
 
 enum DefaultScheduleOption {
@@ -76,6 +77,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
   readonly ScheduleOption = DefaultScheduleOption;
+  readonly reportTypes: MeteringReportType[] = Object.values(MeteringReportType);
   form: FormGroup;
 
   private get _group(): DefaultScheduleOption {
@@ -136,6 +138,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
       [Controls.Schedule]: this._builder.control(DefaultSchedule.Daily),
       [Controls.Interval]: this._builder.control('1', Validators.min(1)),
       [Controls.Retention]: this._builder.control(null, Validators.min(1)),
+      [Controls.Types]: this._builder.control(this.reportTypes, Validators.required),
     });
 
     this.form
@@ -177,11 +180,17 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
   }
 
   private _toMeteringScheduleConfiguration(): MeteringReportConfiguration {
-    return {
+    const config = {
       name: this.form.get(Controls.Name).value,
       schedule: this._schedule,
       interval: this._interval,
       retention: this._retention,
-    };
+    } as MeteringReportConfiguration;
+
+    if (this._group === DefaultScheduleOption.Custom) {
+      config.types = this.form.get(Controls.Types).value;
+    }
+
+    return config;
   }
 }

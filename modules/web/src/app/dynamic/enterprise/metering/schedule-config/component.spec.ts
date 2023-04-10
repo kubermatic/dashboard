@@ -95,6 +95,7 @@ describe('MeteringScheduleConfigComponent', () => {
         scheduleName: fakeSchedule.name,
         schedule: fakeSchedule.schedule,
         interval: fakeSchedule.interval,
+        types: fakeSchedule.types,
       },
     });
   });
