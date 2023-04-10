@@ -14192,13 +14192,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14210,6 +14203,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14726,11 +14726,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14742,6 +14737,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -34390,6 +34390,9 @@
           "type": "boolean",
           "x-go-name": "EnableWebTerminal"
         },
+        "machineDeploymentOptions": {
+          "$ref": "#/definitions/MachineDeploymentOptions"
+        },
         "machineDeploymentVMResourceQuota": {
           "$ref": "#/definitions/MachineFlavorFilter"
         },
@@ -35836,6 +35839,22 @@
         },
         "monitoringResources": {
           "$ref": "#/definitions/ResourceRequirements"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "MachineDeploymentOptions": {
+      "type": "object",
+      "properties": {
+        "autoUpdatesEnabled": {
+          "description": "AutoUpdatesEnabled enables the auto updates option for machine deployments on the dashboard.\nIn case of flatcar linux, this will enable automatic updates through update engine and for other operating systems,\nthis will enable package updates on boot for the machines.",
+          "type": "boolean",
+          "x-go-name": "AutoUpdatesEnabled"
+        },
+        "autoUpdatesEnforced": {
+          "description": "AutoUpdatesEnforced enforces the auto updates option for machine deployments on the dashboard.\nIn case of flatcar linux, this will enable automatic updates through update engine and for other operating systems,\nthis will enable package updates on boot for the machines.",
+          "type": "boolean",
+          "x-go-name": "AutoUpdatesEnforced"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"

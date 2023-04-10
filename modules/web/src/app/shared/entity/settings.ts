@@ -48,7 +48,7 @@ export interface AdminSettings {
   notifications?: NotificationOptions;
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
-  machineDeploymentOptions?: MachineDeploymentOptions;
+  machineDeploymentOptions: MachineDeploymentOptions;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -180,6 +180,10 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     minCPU: 0,
     maxCPU: 0,
     enableGPU: false,
+  },
+  machineDeploymentOptions: {
+    autoUpdatesEnabled: false,
+    autoUpdatesEnforced: false,
   },
   opaOptions: {
     enforced: false,

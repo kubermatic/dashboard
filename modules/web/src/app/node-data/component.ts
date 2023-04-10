@@ -272,7 +272,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
-      const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled
+      const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
       const replicas =
         this.dialogEditMode || this.isCusterTemplateEditMode
           ? this._nodeDataService.nodeData.count

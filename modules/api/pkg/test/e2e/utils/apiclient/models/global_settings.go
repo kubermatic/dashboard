@@ -66,6 +66,9 @@ type GlobalSettings struct {
 	// default quota
 	DefaultQuota *ProjectResourceQuota `json:"defaultQuota,omitempty"`
 
+	// machine deployment options
+	MachineDeploymentOptions *MachineDeploymentOptions `json:"machineDeploymentOptions,omitempty"`
+
 	// machine deployment VM resource quota
 	MachineDeploymentVMResourceQuota *MachineFlavorFilter `json:"machineDeploymentVMResourceQuota,omitempty"`
 
@@ -95,6 +98,10 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDefaultQuota(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateMachineDeploymentOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -171,6 +178,25 @@ func (m *GlobalSettings) validateDefaultQuota(formats strfmt.Registry) error {
 				return ve.ValidateName("defaultQuota")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateMachineDeploymentOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.MachineDeploymentOptions) { // not required
+		return nil
+	}
+
+	if m.MachineDeploymentOptions != nil {
+		if err := m.MachineDeploymentOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("machineDeploymentOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("machineDeploymentOptions")
 			}
 			return err
 		}
@@ -290,6 +316,10 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateMachineDeploymentOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateMachineDeploymentVMResourceQuota(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -354,6 +384,22 @@ func (m *GlobalSettings) contextValidateDefaultQuota(ctx context.Context, format
 				return ve.ValidateName("defaultQuota")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateMachineDeploymentOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.MachineDeploymentOptions != nil {
+		if err := m.MachineDeploymentOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("machineDeploymentOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("machineDeploymentOptions")
 			}
 			return err
 		}

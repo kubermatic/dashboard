@@ -32,7 +32,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
     }
 
     const element = this._el.nativeElement;
-    const classList = [...element.classList];
+    const classList = Array.from(element.classList);
     this._initialValue = this._control.control.value;
 
     if (classList?.includes('mat-input-element')) {
@@ -74,7 +74,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
   }
 
   addClassToMatSelect(element: HTMLElement, value: string | string[]): void {
-    const classList = [...element.classList];
+    const classList = Array.from(element.classList);
     if (classList?.includes('mat-select-multiple')) {
       if (this._initialValue && value) {
         element.classList.toggle('km-value-changed', !_.isEqual(this._initialValue as string[], value as string[]));
