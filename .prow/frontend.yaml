@@ -43,7 +43,7 @@ presubmits:
       preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.1
           imagePullPolicy: Always
           command:
             - make
@@ -98,7 +98,7 @@ presubmits:
       preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.1
           imagePullPolicy: Always
           command:
             - make
@@ -133,7 +133,7 @@ presubmits:
       preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.1
           imagePullPolicy: Always
           command:
             - make
@@ -161,7 +161,7 @@ presubmits:
       preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.1
           imagePullPolicy: Always
           command:
             - make
@@ -189,7 +189,7 @@ presubmits:
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.1
           command:
             - make
             - web-test-headless
@@ -215,7 +215,7 @@ presubmits:
       preset-goproxy: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-5
+        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.17-4
           command:
             - make
             - web-check-dependencies
@@ -231,7 +231,7 @@ presubmits:
       preset-goproxy: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-5
+        - image: quay.io/kubermatic/build:go-1.20-node-18-4
           command:
             - make
             - web-lint
@@ -251,7 +251,7 @@ presubmits:
       preset-goproxy: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-5
+        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.17-4
           command:
             - make
             - web-check

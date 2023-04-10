@@ -14,11 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v1.6.0
+TAG=v1.6.1
 
 set -euo pipefail
 
 cd $(dirname $0)
+
+# Ensure that you build for linux in apple silicon.
+if [[ $(uname -m) == 'arm64' ]]; then
+  export DOCKER_DEFAULT_PLATFORM=linux/amd64
+fi
 
 docker build --no-cache --pull -t quay.io/kubermatic/chrome-headless:${TAG} .
 docker push quay.io/kubermatic/chrome-headless:${TAG}
