@@ -2069,6 +2069,9 @@ type GlobalSettings struct {
 	// will be set for all projects that do not have a custom quota already set. EE-version only.
 	// +optional
 	DefaultProjectResourceQuota *ProjectResourceQuota `json:"defaultQuota,omitempty"`
+
+	// +optional
+	MachineDeploymentOptions kubermaticv1.MachineDeploymentOptions `json:"machineDeploymentOptions,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.
