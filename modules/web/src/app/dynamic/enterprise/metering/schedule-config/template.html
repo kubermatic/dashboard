@@ -56,7 +56,7 @@ END OF TERMS AND CONDITIONS
       <ng-container [matColumnDef]="column.retention">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20"
+            class="km-header-cell p-15"
             mat-sort-header>
           <div fxLayout="row"
                fxLayoutGap="4px"
@@ -75,7 +75,7 @@ END OF TERMS AND CONDITIONS
       <ng-container [matColumnDef]="column.interval">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20"
+            class="km-header-cell p-15"
             mat-sort-header>
           <div fxLayout="row"
                fxLayoutGap="4px"
@@ -105,6 +105,22 @@ END OF TERMS AND CONDITIONS
         </th>
         <td mat-cell
             *matCellDef="let element">{{element.schedule}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="column.types">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <span>Report Types</span>
+            <div class="km-icon-info km-pointer tooltip"
+                 matTooltip="Types of reports to generate."></div>
+          </div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.types.join(', ')}}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.actions">

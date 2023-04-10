@@ -109,6 +109,26 @@ END OF TERMS AND CONDITIONS
                target="_blank">here. </a> Please note that specifying seconds is not supported.
           </mat-hint>
         </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Report Types</mat-label>
+          <mat-select [formControlName]="controls.Types"
+                      multiple
+                      panelClass="km-multiple-values-dropdown"
+                      disableOptionCentering
+                      required>
+            <mat-option *ngFor="let type of reportTypes"
+                        [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+          <mat-hint>
+            Types of reports to generate. By default, all types of reports are generated.
+          </mat-hint>
+          <mat-error *ngIf="form.get(controls.Types).hasError('required')">
+            <strong>Required</strong>
+          </mat-error>
+        </mat-form-field>
       </div>
     </form>
   </mat-dialog-content>
