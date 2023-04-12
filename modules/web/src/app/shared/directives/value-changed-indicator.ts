@@ -37,9 +37,11 @@ export class ValueChangedIndicatorDirective implements OnInit {
 
     if (classList?.includes('mat-input-element')) {
       if (element.getAttribute('type') === 'number') {
-        this._initialValue = !element.getAttribute('ng-reflect-model')
-          ? this._control.control.value
-          : parseInt(element.getAttribute('ng-reflect-model'));
+        setTimeout(() => {
+          this._initialValue = this._control.control.value;
+        }, 0);
+      } else {
+        this._initialValue = this._initialValue === null ? '' : this._initialValue;
       }
     }
 
@@ -56,10 +58,12 @@ export class ValueChangedIndicatorDirective implements OnInit {
         this.addClassToMatSelect(element, value);
       } else if (classList?.includes('mat-input-element')) {
         if (element.getAttribute('type') === 'number') {
-          this._initialValue =
-            !this._initialValue && this._initialValue !== null ? this._control.control.value : this._initialValue;
+          setTimeout(() => {
+            element.classList.toggle('km-value-changed', this._initialValue !== value);
+          }, 0);
+        } else {
+          element.classList.toggle('km-value-changed', this._initialValue !== value);
         }
-        element.classList.toggle('km-value-changed', this._initialValue !== value);
       } else if (classList.includes('mat-radio-group')) {
         this._initialValue = !this._initialValue ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
