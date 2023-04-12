@@ -102,12 +102,12 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 replace (
 	k8c.io/kubeone => k8c.io/kubeone v1.6.0-rc.2.0.20230228113747-15c597a27192
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.1-0.20230405131538-7c5359f5b8e7
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.1-0.20230406111832-e4bc5b558e94
 )
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.1-0.20230405131538-7c5359f5b8e7
+	k8c.io/kubermatic/v2 v2.22.1-0.20230406111832-e4bc5b558e94
 )
 
 require (
@@ -148,7 +148,6 @@ require (
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/coreos/ignition v0.35.0 // indirect
-	github.com/coreos/locksmith v0.6.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/distribution/distribution/v3 v3.0.0-20230223072852-e5d5810851d1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect

@@ -140,6 +140,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		Notifications:                    settings.Notifications,
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
+		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {
@@ -175,6 +176,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		Notifications:                    settings.Notifications,
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
+		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {

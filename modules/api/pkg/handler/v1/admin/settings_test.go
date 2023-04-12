@@ -43,7 +43,7 @@ func TestGetGlobalSettings(t *testing.T) {
 		// scenario 1
 		{
 			name:                   "scenario 1: user gets settings first time",
-			expectedResponse:       `{"customLinks":[],"defaultNodeCount":2,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":false,"enableDashboard":true,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false}}`,
+			expectedResponse:       `{"customLinks":[],"defaultNodeCount":2,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":false,"enableDashboard":true,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false},"machineDeploymentOptions":{}}`,
 			httpStatus:             http.StatusOK,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
 			existingAPIUser:        test.GenDefaultAPIUser(),
@@ -51,7 +51,7 @@ func TestGetGlobalSettings(t *testing.T) {
 		// scenario 2
 		{
 			name:             "scenario 2: user gets existing global settings",
-			expectedResponse: `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"defaultNodeCount":5,"displayDemoInfo":true,"displayAPIDocs":true,"displayTermsOfService":true,"enableDashboard":false,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{"enabled":true,"enforced":true},"mlaOptions":{"loggingEnabled":true,"loggingEnforced":true,"monitoringEnabled":true,"monitoringEnforced":true},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"defaultQuota":{"quota":{"cpu":2,"memory":5,"storage":10}}}`,
+			expectedResponse: `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"defaultNodeCount":5,"displayDemoInfo":true,"displayAPIDocs":true,"displayTermsOfService":true,"enableDashboard":false,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{"enabled":true,"enforced":true},"mlaOptions":{"loggingEnabled":true,"loggingEnforced":true,"monitoringEnabled":true,"monitoringEnforced":true},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"defaultQuota":{"quota":{"cpu":2,"memory":5,"storage":10}},"machineDeploymentOptions":{}}`,
 			httpStatus:       http.StatusOK,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true),
 				test.GenDefaultGlobalSettings()},
@@ -106,8 +106,8 @@ func TestUpdateGlobalSettings(t *testing.T) {
 		// scenario 2
 		{
 			name:                   "scenario 2: authorized user updates default settings",
-			body:                   `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"cleanupOptions":{"enabled":true,"enforced":true},"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true}`,
-			expectedResponse:       `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"enableDashboard":true,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false}}`,
+			body:                   `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"cleanupOptions":{"enabled":true,"enforced":true},"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"machineDeploymentOptions":{}}`,
+			expectedResponse:       `{"customLinks":[{"label":"label","url":"url:label","icon":"icon","location":"EU"}],"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"enableDashboard":true,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false},"machineDeploymentOptions":{}}`,
 			httpStatus:             http.StatusOK,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
 			existingAPIUser:        test.GenDefaultAPIUser(),
@@ -115,8 +115,8 @@ func TestUpdateGlobalSettings(t *testing.T) {
 		// scenario 3
 		{
 			name:             "scenario 3: authorized user updates existing global settings",
-			body:             `{"customLinks":[],"cleanupOptions":{"enabled":true,"enforced":true},"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"userProjectsLimit":10,"restrictProjectCreation":true,"defaultQuota":{"cpu":4,"storage":12}}`,
-			expectedResponse: `{"customLinks":[],"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"enableDashboard":false,"enableOIDCKubeconfig":false,"userProjectsLimit":10,"restrictProjectCreation":true,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{"enabled":true,"enforced":true},"mlaOptions":{"loggingEnabled":true,"loggingEnforced":true,"monitoringEnabled":true,"monitoringEnforced":true},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"defaultQuota":{"quota":{"cpu":2,"memory":5,"storage":10}}}`,
+			body:             `{"customLinks":[],"cleanupOptions":{"enabled":true,"enforced":true},"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"userProjectsLimit":10,"restrictProjectCreation":true,"defaultQuota":{"cpu":4,"storage":12},"machineDeploymentOptions":{}}`,
+			expectedResponse: `{"customLinks":[],"defaultNodeCount":100,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":true,"enableDashboard":false,"enableOIDCKubeconfig":false,"userProjectsLimit":10,"restrictProjectCreation":true,"enableExternalClusterImport":true,"cleanupOptions":{"enabled":true,"enforced":true},"opaOptions":{"enabled":true,"enforced":true},"mlaOptions":{"loggingEnabled":true,"loggingEnforced":true,"monitoringEnabled":true,"monitoringEnforced":true},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"defaultQuota":{"quota":{"cpu":2,"memory":5,"storage":10}},"machineDeploymentOptions":{}}`,
 			httpStatus:       http.StatusOK,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true),
 				test.GenDefaultGlobalSettings()},
