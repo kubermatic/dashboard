@@ -78,7 +78,9 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
   }
 
   openChangelog(): void {
-    this._changelogService.open();
+    if (this.settings && !this.settings.disableChangelogPopup) {
+      this._changelogService.open();
+    }
     this._isOpen = false;
   }
 
@@ -97,7 +99,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
 
   shouldShowPanel(): boolean {
     return (
-      this.hasChangelog() ||
+      (!this.settings.disableChangelogPopup && this.hasChangelog()) ||
       this.settings.displayAPIDocs ||
       this.settings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
     );

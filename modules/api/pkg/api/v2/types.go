@@ -2072,6 +2072,9 @@ type GlobalSettings struct {
 
 	// +optional
 	MachineDeploymentOptions kubermaticv1.MachineDeploymentOptions `json:"machineDeploymentOptions,omitempty"`
+
+	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
+	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

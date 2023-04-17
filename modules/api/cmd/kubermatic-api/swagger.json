@@ -34352,6 +34352,11 @@
         "defaultQuota": {
           "$ref": "#/definitions/ProjectResourceQuota"
         },
+        "disableChangelogPopup": {
+          "description": "DisableChangelogPopup disables the changelog popup in KKP dashboard.",
+          "type": "boolean",
+          "x-go-name": "DisableChangelogPopup"
+        },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
           "type": "boolean",
