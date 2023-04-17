@@ -187,6 +187,7 @@ export class AzureNodeSpec {
   osDiskSize: number;
   dataDiskSize: number;
   assignAvailabilitySet: boolean;
+  enableAcceleratedNetworking: boolean;
 }
 
 export class DigitaloceanNodeSpec {
