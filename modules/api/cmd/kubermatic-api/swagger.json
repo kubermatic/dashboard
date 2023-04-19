@@ -30031,6 +30031,11 @@
           "format": "int32",
           "x-go-name": "DataDiskSize"
         },
+        "enableAcceleratedNetworking": {
+          "description": "EnableAcceleratedNetworking is used to check if an accelerating networking should be used for azure vms.",
+          "type": "boolean",
+          "x-go-name": "EnableAcceleratedNetworking"
+        },
         "imageID": {
           "description": "ImageID represents the ID of the image that should be used to run the node",
           "type": "string",
@@ -30132,6 +30137,10 @@
       "type": "object",
       "title": "AzureSize is the object representing Azure VM sizes.",
       "properties": {
+        "acceleratedNetworkingEnabled": {
+          "type": "boolean",
+          "x-go-name": "AcceleratedNetworkingEnabled"
+        },
         "maxDataDiskCount": {
           "type": "integer",
           "format": "int32",
@@ -31817,7 +31826,7 @@
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
         "customNetworkPolicies": {
-          "description": "CustomNetworkPolicies (optional) allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
+          "description": "Optional: CustomNetworkPolicies allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/CustomNetworkPolicy"
@@ -31832,11 +31841,16 @@
           "type": "string",
           "x-go-name": "DNSPolicy"
         },
+        "enableDefaultNetworkPolicies": {
+          "description": "Optional: EnableDefaultNetworkPolicies enables deployment of default network policies like cluster isolation.\nDefaults to true.",
+          "type": "boolean",
+          "x-go-name": "EnableDefaultNetworkPolicies"
+        },
         "images": {
           "$ref": "#/definitions/KubeVirtImageSources"
         },
         "infraStorageClasses": {
-          "description": "InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names\nthat will be used to initialise StorageClasses in the tenant cluster.\nIn the tenant cluster, the created StorageClass name will have as name:\nkubevirt-\u003cinfra-storageClass-name\u003e",
+          "description": "Optional: InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names\nthat will be used to initialise StorageClasses in the tenant cluster.\nIn the tenant cluster, the created StorageClass name will have as name:\nkubevirt-\u003cinfra-storageClass-name\u003e",
           "type": "array",
           "items": {
             "$ref": "#/definitions/KubeVirtInfraStorageClass"
@@ -35541,7 +35555,7 @@
           "x-go-name": "ImageCloningEnabled"
         },
         "infraStorageClasses": {
-          "description": "Deprecated: in favor of InfraStorageClasses.\nInfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
+          "description": "Deprecated: in favor of StorageClasses.\nInfraStorageClasses is a list of storage classes from KubeVirt infra cluster that are used for\ninitialization of user cluster storage classes by the CSI driver kubevirt (hot pluggable disks)",
           "type": "array",
           "items": {
             "type": "string"
@@ -35554,7 +35568,7 @@
           "x-go-name": "Kubeconfig"
         },
         "preAllocatedDataVolumes": {
-          "description": "PreAllocatedDataVolumes represents a list of DataVolumes that are tied to cluster lifecycle and can be referenced by machines.\nCustom Images are a good example of this use case.",
+          "description": "Custom Images are a good example of this use case.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PreAllocatedDataVolume"

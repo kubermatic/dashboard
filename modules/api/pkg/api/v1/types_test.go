@@ -245,7 +245,7 @@ func TestAzureNodeSpec_MarshalJSON(t *testing.T) {
 			&apiv1.AzureNodeSpec{
 				Size: "test-size",
 			},
-			"{\"size\":\"test-size\",\"assignPublicIP\":false,\"osDiskSize\":0,\"dataDiskSize\":0,\"zones\":null,\"imageID\":\"\",\"assignAvailabilitySet\":false}",
+			"{\"size\":\"test-size\",\"assignPublicIP\":false,\"osDiskSize\":0,\"dataDiskSize\":0,\"zones\":null,\"imageID\":\"\",\"assignAvailabilitySet\":false,\"enableAcceleratedNetworking\":null}",
 		},
 	}
 

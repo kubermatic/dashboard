@@ -1036,6 +1036,9 @@ limitations under the License.
                 <km-property-boolean label="Assign Public IP"
                                      [value]="machineDeployment.spec.template.cloud?.azure?.assignPublicIP">
                 </km-property-boolean>
+                <km-property-boolean label="Accelerated Networking"
+                                     [value]="machineDeployment.spec.template.cloud?.azure?.enableAcceleratedNetworking">
+                </km-property-boolean>
               </ng-container>
 
               <!-- DigitalOcean Node Options -->

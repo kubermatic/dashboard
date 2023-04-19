@@ -24,7 +24,7 @@ import {merge} from 'rxjs';
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
   Tags = 'tags',
-  AcceleratedNetworking = 'acceleratedNetworking'
+  AcceleratedNetworking = 'acceleratedNetworking',
 }
 
 @Component({
@@ -60,7 +60,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
     this.form = this._builder.group({
       [Controls.AssignPublicIP]: this._builder.control(true),
       [Controls.Tags]: this._builder.control(''),
-      [Controls.AcceleratedNetworking]: this._builder.control(false)
+      [Controls.AcceleratedNetworking]: this._builder.control(false),
     });
 
     this._init();
@@ -70,8 +70,11 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
       this.form.get(Controls.AssignPublicIP).valueChanges,
       this.form.get(Controls.AcceleratedNetworking).valueChanges
     )
-    .pipe(takeUntil(this._unsubscribe))
-    .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.azure.acceleratedNetworking.next(this.form.get(Controls.AcceleratedNetworking).value);
+        this._nodeDataService.nodeData = this._getNodeData();
+      });
   }
 
   onTagsChange(tags: object): void {
@@ -103,6 +106,6 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
           } as AzureNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
-    } as NodeData;    
+    } as NodeData;
   }
 }

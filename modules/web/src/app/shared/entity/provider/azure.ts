@@ -20,6 +20,7 @@ export class AzureSizes {
   resourceDiskSizeInMB: number;
   memoryInMB: number;
   maxDataDiskCount: number;
+  acceleratedNetworkingEnabled: boolean;
 }
 
 export class AzureZones {
