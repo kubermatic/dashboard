@@ -49,6 +49,7 @@ export interface AdminSettings {
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
   machineDeploymentOptions: MachineDeploymentOptions;
+  disableChangelogPopup?: boolean;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -205,4 +206,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   defaultQuota: {
     quota: {},
   },
+  disableChangelogPopup: false,
 };

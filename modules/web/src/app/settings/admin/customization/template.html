@@ -54,6 +54,10 @@ limitations under the License.
                           id="km-demo-info-setting"
                           (change)="onSettingsChange()">Display Demo Information
             </mat-checkbox>
+            <mat-checkbox [checked]="!settings.disableChangelogPopup"
+                          id="km-changelog-setting"
+                          (change)="onChangelogSettingsChange($event)">Display What's New
+            </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isDisplayLinksEqual()"></km-spinner-with-confirmation>
           </div>
         </div>

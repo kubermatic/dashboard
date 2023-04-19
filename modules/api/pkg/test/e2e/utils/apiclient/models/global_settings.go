@@ -21,6 +21,9 @@ type GlobalSettings struct {
 	// DefaultNodeCount is the default number of replicas for the initial MachineDeployment.
 	DefaultNodeCount int8 `json:"defaultNodeCount,omitempty"`
 
+	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
+	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
+
 	// DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.
 	DisplayAPIDocs bool `json:"displayAPIDocs,omitempty"`
 

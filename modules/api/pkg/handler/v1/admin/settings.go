@@ -141,6 +141,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
+		DisableChangelogPopup:            settings.DisableChangelogPopup,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {
@@ -177,6 +178,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
+		DisableChangelogPopup:            settings.DisableChangelogPopup,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {

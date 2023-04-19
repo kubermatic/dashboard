@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatLegacyCheckboxChange} from '@angular/material/legacy-checkbox';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -69,6 +70,11 @@ export class CustomizationComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  onChangelogSettingsChange(event: MatLegacyCheckboxChange) {
+    this.settings.disableChangelogPopup = !event.checked;
+    this._settingsChange.next();
+  }
+
   onSettingsChange(): void {
     this._settingsChange.next();
   }
@@ -81,7 +87,8 @@ export class CustomizationComponent implements OnInit, OnDestroy {
     return (
       this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
       this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
-      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
+      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService) &&
+      this.isEqual(this.settings.disableChangelogPopup, this.apiSettings.disableChangelogPopup)
     );
   }
 
