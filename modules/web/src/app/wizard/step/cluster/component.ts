@@ -163,6 +163,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
 
+  get isKubernetesDashboardEnable(): boolean {
+    return this._settings.enableDashboard;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _cdr: ChangeDetectorRef,
@@ -201,6 +205,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
+      }
+      if (!settings.enableDashboard) {
+        this.form.get(Controls.KubernetesDashboardEnabled).setValue(false);
       }
       this.form.updateValueAndValidity();
     });
@@ -552,7 +559,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),
           [Controls.MLALogging]: clusterSpec?.mla?.loggingEnabled ?? this.controlValue(Controls.MLALogging),
           [Controls.KubernetesDashboardEnabled]:
-            clusterSpec?.kubernetesDashboard?.enabled ?? this.controlValue(Controls.KubernetesDashboardEnabled),
+            (this.isKubernetesDashboardEnable && clusterSpec?.kubernetesDashboard?.enabled) ??
+            this.controlValue(Controls.KubernetesDashboardEnabled),
           [Controls.MLAMonitoring]: clusterSpec?.mla?.monitoringEnabled ?? this.controlValue(Controls.MLAMonitoring),
           [Controls.AdmissionPlugins]: clusterSpec?.admissionPlugins ?? this.controlValue(Controls.AdmissionPlugins),
           [Controls.EventRateLimitConfig]:

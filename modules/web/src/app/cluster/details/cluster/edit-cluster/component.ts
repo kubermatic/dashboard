@@ -102,6 +102,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
 
+  get isKubernetesDashboardEnable(): boolean {
+    return this._settings.enableDashboard;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _clusterService: ClusterService,
