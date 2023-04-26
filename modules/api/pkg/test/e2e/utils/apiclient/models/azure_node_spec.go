@@ -28,6 +28,9 @@ type AzureNodeSpec struct {
 	// Data disk size in GB
 	DataDiskSize int32 `json:"dataDiskSize,omitempty"`
 
+	// EnableAcceleratedNetworking is used to check if an accelerating networking should be used for azure vms.
+	EnableAcceleratedNetworking bool `json:"enableAcceleratedNetworking,omitempty"`
+
 	// ImageID represents the ID of the image that should be used to run the node
 	ImageID string `json:"imageID,omitempty"`
 

@@ -17,6 +17,9 @@ import (
 // swagger:model AzureSize
 type AzureSize struct {
 
+	// accelerated networking enabled
+	AcceleratedNetworkingEnabled bool `json:"acceleratedNetworkingEnabled,omitempty"`
+
 	// max data disk count
 	MaxDataDiskCount int32 `json:"maxDataDiskCount,omitempty"`
 

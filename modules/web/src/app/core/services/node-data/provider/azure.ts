@@ -22,11 +22,12 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {Observable, of, onErrorResumeNext} from 'rxjs';
+import {BehaviorSubject, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 
 export class NodeDataAzureProvider {
   private readonly _debounce = 500;
+  acceleratedNetworking = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly _nodeDataService: NodeDataService,

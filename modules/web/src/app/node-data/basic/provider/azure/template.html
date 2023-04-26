@@ -19,7 +19,7 @@ limitations under the License.
   <km-combobox [required]="true"
                [grouped]="false"
                [selected]="selectedSize"
-               [options]="sizes"
+               [options]="currentSizes"
                [formControlName]="Controls.Size"
                [valueFormatter]="sizeDisplayName.bind(this)"
                (changed)="onSizeChange($event)"

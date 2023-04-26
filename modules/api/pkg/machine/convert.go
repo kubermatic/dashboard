@@ -163,13 +163,14 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			return nil, fmt.Errorf("failed to parse Azure config: %w", err)
 		}
 		cloudSpec.Azure = &apiv1.AzureNodeSpec{
-			Size:           config.VMSize.Value,
-			AssignPublicIP: config.AssignPublicIP.Value != nil && *config.AssignPublicIP.Value,
-			Tags:           config.Tags,
-			ImageID:        config.ImageID.Value,
-			Zones:          config.Zones,
-			DataDiskSize:   config.DataDiskSize,
-			OSDiskSize:     config.OSDiskSize,
+			Size:                        config.VMSize.Value,
+			AssignPublicIP:              config.AssignPublicIP.Value != nil && *config.AssignPublicIP.Value,
+			Tags:                        config.Tags,
+			ImageID:                     config.ImageID.Value,
+			Zones:                       config.Zones,
+			DataDiskSize:                config.DataDiskSize,
+			OSDiskSize:                  config.OSDiskSize,
+			EnableAcceleratedNetworking: config.EnableAcceleratedNetworking,
 		}
 	case providerconfig.CloudProviderDigitalocean:
 		config := &digitalocean.RawConfig{}

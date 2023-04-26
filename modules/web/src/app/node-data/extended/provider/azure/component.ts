@@ -19,10 +19,12 @@ import {takeUntil} from 'rxjs/operators';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {merge} from 'rxjs';
 
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
   Tags = 'tags',
+  AcceleratedNetworking = 'acceleratedNetworking',
 }
 
 @Component({
@@ -58,15 +60,21 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
     this.form = this._builder.group({
       [Controls.AssignPublicIP]: this._builder.control(true),
       [Controls.Tags]: this._builder.control(''),
+      [Controls.AcceleratedNetworking]: this._builder.control(false),
     });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form
-      .get(Controls.AssignPublicIP)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+    merge(
+      this.form.get(Controls.AssignPublicIP).valueChanges,
+      this.form.get(Controls.AcceleratedNetworking).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.azure.acceleratedNetworking.next(this.form.get(Controls.AcceleratedNetworking).value);
+        this._nodeDataService.nodeData = this._getNodeData();
+      });
   }
 
   onTagsChange(tags: object): void {
@@ -94,6 +102,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
         cloud: {
           azure: {
             assignPublicIP: this.form.get(Controls.AssignPublicIP).value,
+            enableAcceleratedNetworking: this.form.get(Controls.AcceleratedNetworking).value,
           } as AzureNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

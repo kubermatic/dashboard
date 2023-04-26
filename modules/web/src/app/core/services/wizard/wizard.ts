@@ -53,7 +53,7 @@ export class WizardService {
     }
 
     private _hideStep(step: StepRegistry): void {
-      this._parent.steps.forEach((item, idx) => {
+      this._parent.steps?.forEach((item, idx) => {
         if (item.name === step) {
           this._parent.steps[idx].enabled = false;
           this._parent.stepsChanges.emit(step);
@@ -62,7 +62,7 @@ export class WizardService {
     }
 
     private _showStep(step: StepRegistry): void {
-      this._parent.steps.forEach((item, idx) => {
+      this._parent.steps?.forEach((item, idx) => {
         if (item.name === step) {
           this._parent.steps[idx].enabled = true;
           this._parent.stepsChanges.emit(step);

@@ -383,10 +383,16 @@ func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilt
 	}
 
 	// prepare set of valid VM size types from SKU resources
-	validSKUSet := make(map[string]struct{}, len(skuList))
+	validSKUSet := make(map[string]struct{ AcceleratedNetworkingEnabled bool }, len(skuList))
 	for _, v := range skuList {
 		if isValidVM(v, location) {
-			validSKUSet[*v.Name] = struct{}{}
+			skuInfo := struct{ AcceleratedNetworkingEnabled bool }{AcceleratedNetworkingEnabled: false}
+			for _, acc := range v.Capabilities {
+				if *acc.Name == "AcceleratedNetworkingEnabled" && *acc.Value == "True" {
+					skuInfo.AcceleratedNetworkingEnabled = true
+				}
+			}
+			validSKUSet[*v.Name] = skuInfo
 		}
 	}
 
@@ -406,10 +412,11 @@ func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilt
 					Name:          vmName,
 					NumberOfCores: *v.NumberOfCores,
 					// TODO: Use this to validate user-defined disk size.
-					OsDiskSizeInMB:       *v.OSDiskSizeInMB,
-					ResourceDiskSizeInMB: *v.ResourceDiskSizeInMB,
-					MemoryInMB:           *v.MemoryInMB,
-					MaxDataDiskCount:     *v.MaxDataDiskCount,
+					OsDiskSizeInMB:               *v.OSDiskSizeInMB,
+					ResourceDiskSizeInMB:         *v.ResourceDiskSizeInMB,
+					MemoryInMB:                   *v.MemoryInMB,
+					MaxDataDiskCount:             *v.MaxDataDiskCount,
+					AcceleratedNetworkingEnabled: validSKUSet[vmName].AcceleratedNetworkingEnabled,
 				}
 
 				if gpus, okGPU := gpuInstanceFamilies[vmName]; okGPU {

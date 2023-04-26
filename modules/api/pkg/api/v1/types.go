@@ -380,13 +380,14 @@ type AzureSizeList []AzureSize
 // AzureSize is the object representing Azure VM sizes.
 // swagger:model AzureSize
 type AzureSize struct {
-	Name                 string `json:"name"`
-	NumberOfCores        int32  `json:"numberOfCores"`
-	NumberOfGPUs         int32  `json:"numberOfGPUs"`
-	OsDiskSizeInMB       int32  `json:"osDiskSizeInMB"`
-	ResourceDiskSizeInMB int32  `json:"resourceDiskSizeInMB"`
-	MemoryInMB           int32  `json:"memoryInMB"`
-	MaxDataDiskCount     int32  `json:"maxDataDiskCount"`
+	Name                         string `json:"name"`
+	NumberOfCores                int32  `json:"numberOfCores"`
+	NumberOfGPUs                 int32  `json:"numberOfGPUs"`
+	OsDiskSizeInMB               int32  `json:"osDiskSizeInMB"`
+	ResourceDiskSizeInMB         int32  `json:"resourceDiskSizeInMB"`
+	MemoryInMB                   int32  `json:"memoryInMB"`
+	MaxDataDiskCount             int32  `json:"maxDataDiskCount"`
+	AcceleratedNetworkingEnabled bool   `json:"acceleratedNetworkingEnabled"`
 }
 
 // HetznerSizeList represents an array of Hetzner sizes.
@@ -1601,6 +1602,8 @@ type AzureNodeSpec struct {
 	ImageID string `json:"imageID"`
 	// AssignAvailabilitySet is used to check if an availability set should be created and assigned to the cluster.
 	AssignAvailabilitySet bool `json:"assignAvailabilitySet"`
+	// EnableAcceleratedNetworking is used to check if an accelerating networking should be used for azure vms.
+	EnableAcceleratedNetworking *bool `json:"enableAcceleratedNetworking,omitempty"`
 }
 
 func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
@@ -1615,23 +1618,25 @@ func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		Size                  string            `json:"size"`
-		AssignPublicIP        bool              `json:"assignPublicIP"`
-		Tags                  map[string]string `json:"tags,omitempty"`
-		OSDiskSize            int32             `json:"osDiskSize"`
-		DataDiskSize          int32             `json:"dataDiskSize"`
-		Zones                 []string          `json:"zones"`
-		ImageID               string            `json:"imageID"`
-		AssignAvailabilitySet bool              `json:"assignAvailabilitySet"`
+		Size                        string            `json:"size"`
+		AssignPublicIP              bool              `json:"assignPublicIP"`
+		Tags                        map[string]string `json:"tags,omitempty"`
+		OSDiskSize                  int32             `json:"osDiskSize"`
+		DataDiskSize                int32             `json:"dataDiskSize"`
+		Zones                       []string          `json:"zones"`
+		ImageID                     string            `json:"imageID"`
+		AssignAvailabilitySet       bool              `json:"assignAvailabilitySet"`
+		EnableAcceleratedNetworking *bool             `json:"enableAcceleratedNetworking"`
 	}{
-		Size:                  spec.Size,
-		AssignPublicIP:        spec.AssignPublicIP,
-		Tags:                  spec.Tags,
-		OSDiskSize:            spec.OSDiskSize,
-		DataDiskSize:          spec.DataDiskSize,
-		Zones:                 spec.Zones,
-		ImageID:               spec.ImageID,
-		AssignAvailabilitySet: spec.AssignAvailabilitySet,
+		Size:                        spec.Size,
+		AssignPublicIP:              spec.AssignPublicIP,
+		Tags:                        spec.Tags,
+		OSDiskSize:                  spec.OSDiskSize,
+		DataDiskSize:                spec.DataDiskSize,
+		Zones:                       spec.Zones,
+		ImageID:                     spec.ImageID,
+		AssignAvailabilitySet:       spec.AssignAvailabilitySet,
+		EnableAcceleratedNetworking: spec.EnableAcceleratedNetworking,
 	}
 
 	return json.Marshal(&res)

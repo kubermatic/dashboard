@@ -70,8 +70,8 @@ func TestAzureSizeEndpoint(t *testing.T) {
 			location:   locationUS,
 			secret:     "secret",
 			expectedResponse: `[
-				{"name":"Standard_GS3", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024},
-				{"name":"Standard_A5", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024}
+				{"name":"Standard_GS3", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024, "acceleratedNetworkingEnabled": false},
+				{"name":"Standard_A5", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024, "acceleratedNetworkingEnabled": false}
 			]`,
 		},
 		{
@@ -80,7 +80,7 @@ func TestAzureSizeEndpoint(t *testing.T) {
 			location:   locationEU,
 			secret:     "secret",
 			expectedResponse: `[
-				{"name":"Standard_GS3", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024}
+				{"name":"Standard_GS3", "maxDataDiskCount": 3, "memoryInMB": 2048, "numberOfCores": 8, "numberOfGPUs": 0, "osDiskSizeInMB": 1024, "resourceDiskSizeInMB":1024, "acceleratedNetworkingEnabled": false}
 			]`,
 		},
 	}

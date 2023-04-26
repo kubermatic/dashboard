@@ -83,12 +83,14 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   readonly Controls = Controls;
 
-  sizes: AzureSizes[] = [];
+  allSizes: AzureSizes[] = [];
+  currentSizes: AzureSizes[] = [];
   zones: Array<{name: string}> = [];
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
   selectedZone = '';
+  isAcceleratedNetworkingEnabled: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private _quotaCalculationService: QuotaCalculationService;
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
@@ -126,8 +128,20 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
+    this._nodeDataService.azure.acceleratedNetworking.subscribe(accNet => {
+      if (this.allSizes.length) {
+        if (accNet) {
+          this.currentSizes = this.allSizes.filter(size => size.acceleratedNetworkingEnabled);
+          this.selectedSize = this._findCheapestInstance(this.currentSizes).name;
+          this.onSizeChange(this.selectedSize);
+        } else {
+          this.currentSizes = this.allSizes;
+          this.selectedSize = this._findCheapestInstance(this.currentSizes)?.name;
+          this.onSizeChange(this.selectedSize);
+        }
+      }
+    });
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
-
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
     this._nodeDataService.operatingSystemChanges
@@ -196,7 +210,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   sizeDisplayName(sizeName: string): string {
-    const size = this.sizes.find(size => size.name === sizeName);
+    const size = this.currentSizes.find(size => size.name === sizeName);
     return size ? this.getSizeDisplayName(size) : sizeName;
   }
 
@@ -250,7 +264,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _clearSize(): void {
     this.selectedSize = '';
-    this.sizes = [];
+    this.currentSizes = [];
     this.sizeLabel = SizeState.Empty;
     this._cdr.detectChanges();
   }
@@ -262,11 +276,16 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   private _setDefaultSize(sizes: AzureSizes[]): void {
-    this.sizes = sizes;
+    this.allSizes = sizes;
+    if (this.isAcceleratedNetworkingEnabled) {
+      this.currentSizes = sizes.filter(size => size.acceleratedNetworkingEnabled);
+    } else {
+      this.currentSizes = sizes;
+    }
     this.selectedSize = this._nodeDataService.nodeData.spec.cloud.azure.size;
 
-    if (!this.selectedSize && this.sizes.length > 0) {
-      this.selectedSize = this._findCheapestInstance(sizes).name;
+    if (!this.selectedSize && this.currentSizes.length > 0) {
+      this.selectedSize = this._findCheapestInstance(this.currentSizes).name;
     }
 
     this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
@@ -310,7 +329,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   private _getQuotaCalculationPayload(): ResourceQuotaCalculationPayload {
     const memoryBase = 1024;
     const size = this._nodeDataService.nodeData.spec.cloud.azure.size;
-    const selectedSize = this.sizes.find(s => s.name === size);
+    const selectedSize = this.currentSizes.find(s => s.name === size);
 
     if (!selectedSize) {
       return null;
