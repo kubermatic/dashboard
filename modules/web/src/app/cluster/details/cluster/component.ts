@@ -66,7 +66,7 @@ import {
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare} from 'semver';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
@@ -210,8 +210,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this.isClusterRunning
                 ? [
                     this._addonService.list(this.projectID, this.cluster.id),
-                    this._clusterService.nodes(this.projectID, this.cluster.id),
-                    this._machineDeploymentService.list(this.cluster.id, this.projectID),
+                    this._clusterService.nodes(this.projectID, this.cluster.id).pipe(
+                      tap(nodes => {
+                        this.nodes = nodes;
+                      })
+                    ),
+                    this._machineDeploymentService.list(this.cluster.id, this.projectID).pipe(
+                      tap(machineDeployments => {
+                        this.machineDeployments = machineDeployments;
+                        this.areMachineDeploymentsInitialized = true;
+                      })
+                    ),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                     this._applicationService.list(this.projectID, this.cluster.id),
                   ]
@@ -261,8 +270,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           upgrades,
           cniVersions,
           addons,
-          nodes,
-          machineDeployments,
+          _nodes,
+          _machineDeployments,
           metrics,
           applications,
           alertmanagerConfig,
@@ -283,9 +292,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           GatekeeperConfig
         ]) => {
           this.addons = addons;
-          this.nodes = nodes;
-          this.machineDeployments = machineDeployments;
-          this.areMachineDeploymentsInitialized = true;
           this.metrics = metrics;
           this.applications = applications;
           this.alertmanagerConfig = alertmanagerConfig;
