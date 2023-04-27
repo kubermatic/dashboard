@@ -68,12 +68,12 @@ require (
 	k8c.io/kubeone v1.6.0
 	k8c.io/operating-system-manager v1.2.1-0.20230316111943-fefdb70fecee
 	k8c.io/reconciler v0.3.1
-	k8s.io/api v0.26.2
-	k8s.io/apiextensions-apiserver v0.26.2
-	k8s.io/apimachinery v0.26.2
+	k8s.io/api v0.26.4
+	k8s.io/apiextensions-apiserver v0.26.4
+	k8s.io/apimachinery v0.26.4
 	k8s.io/apiserver v0.26.2
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/code-generator v0.26.2
+	k8s.io/code-generator v0.26.4
 	k8s.io/klog/v2 v2.90.1
 	k8s.io/kubectl v0.26.2
 	k8s.io/metrics v0.26.2
@@ -102,12 +102,12 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 replace (
 	k8c.io/kubeone => k8c.io/kubeone v1.6.0-rc.2.0.20230228113747-15c597a27192
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.1-0.20230419140934-0ee7810a629a
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.1-0.20230427083914-b575ef223b19
 )
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.1-0.20230419140934-0ee7810a629a
+	k8c.io/kubermatic/v2 v2.22.1-0.20230427083914-b575ef223b19
 )
 
 require (
@@ -262,7 +262,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	helm.sh/helm/v3 v3.11.1 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0 // indirect
-	k8s.io/component-base v0.26.2 // indirect
+	k8s.io/component-base v0.26.4 // indirect
 	k8s.io/gengo v0.0.0-20220902162205-c0856e24416d // indirect
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.26.2 // indirect

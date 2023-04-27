@@ -54,6 +54,10 @@ limitations under the License.
                           [(ngModel)]="settings.restrictProjectCreation"
                           (change)="onSettingsChange()">Restrict Project Creation to Administrators
             </mat-checkbox>
+            <mat-checkbox fxLayoutAlign=" center"
+                          [(ngModel)]="settings.restrictProjectDeletion"
+                          (change)="onSettingsChange()">Restrict Project Deletion to Administrators
+            </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
           </div>
         </div>

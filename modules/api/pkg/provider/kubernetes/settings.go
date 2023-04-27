@@ -86,6 +86,7 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 			EnableOIDCKubeconfig:        false,
 			UserProjectsLimit:           0,
 			RestrictProjectCreation:     false,
+			RestrictProjectDeletion:     false,
 			EnableExternalClusterImport: true,
 			MachineDeploymentVMResourceQuota: &kubermaticv1.MachineFlavorFilter{
 				MinCPU:    2,

@@ -57,6 +57,9 @@ type GlobalSettings struct {
 	// restrict project creation
 	RestrictProjectCreation bool `json:"restrictProjectCreation,omitempty"`
 
+	// restrict project deletion
+	RestrictProjectDeletion bool `json:"restrictProjectDeletion,omitempty"`
+
 	// UserProjectsLimit is the maximum number of projects a user can create.
 	UserProjectsLimit int64 `json:"userProjectsLimit,omitempty"`
 

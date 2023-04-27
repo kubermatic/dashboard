@@ -59,6 +59,7 @@ func TestGetDefaultGlobalSettings(t *testing.T) {
 				EnableOIDCKubeconfig:        false,
 				UserProjectsLimit:           0,
 				RestrictProjectCreation:     false,
+				RestrictProjectDeletion:     false,
 				EnableExternalClusterImport: false,
 			},
 		},
