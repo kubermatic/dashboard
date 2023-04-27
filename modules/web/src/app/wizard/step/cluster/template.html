@@ -437,7 +437,8 @@ limitations under the License.
               </mat-checkbox>
             </ng-container>
 
-            <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled">
+            <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
+                          *ngIf="isKubernetesDashboardEnable">
               Kubernetes Dashboard
             </mat-checkbox>
 

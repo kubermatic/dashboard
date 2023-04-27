@@ -187,7 +187,8 @@ limitations under the License.
            matTooltip="User Cluster Monitoring is enforced by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
+      <mat-checkbox *ngIf="isKubernetesDashboardEnable"
+                    [formControlName]="Controls.KubernetesDashboardEnabled"
                     kmValueChangedIndicator>
         Kubernetes Dashboard
       </mat-checkbox>
