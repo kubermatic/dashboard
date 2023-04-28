@@ -34439,6 +34439,10 @@
           "type": "boolean",
           "x-go-name": "RestrictProjectCreation"
         },
+        "restrictProjectDeletion": {
+          "type": "boolean",
+          "x-go-name": "RestrictProjectDeletion"
+        },
         "userProjectsLimit": {
           "description": "UserProjectsLimit is the maximum number of projects a user can create.",
           "type": "integer",

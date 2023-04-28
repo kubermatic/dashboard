@@ -1803,7 +1803,7 @@ func (r Routing) deleteProject() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(project.DeleteEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
+		)(project.DeleteEndpoint(r.projectProvider, r.settingsProvider, r.privilegedProjectProvider, r.userInfoGetter)),
 		project.DecodeDelete,
 		EncodeJSON,
 		r.defaultServerOptions()...,

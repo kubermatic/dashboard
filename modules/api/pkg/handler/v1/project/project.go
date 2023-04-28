@@ -60,7 +60,7 @@ func CreateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 
 		user := ctx.Value(middleware.UserCRContextKey).(*kubermaticv1.User)
 
-		if err := checkProjectRestriction(user, settings); err != nil {
+		if err := checkProjectCreationRestriction(user, settings); err != nil {
 			return nil, err
 		}
 
@@ -167,12 +167,22 @@ func createProjectByServiceAccount(ctx context.Context, saEmail string, projectR
 	return common.ConvertInternalProjectToExternal(kubermaticProject, owners, 0), nil
 }
 
-func checkProjectRestriction(user *kubermaticv1.User, settings *kubermaticv1.KubermaticSetting) error {
+func checkProjectCreationRestriction(user *kubermaticv1.User, settings *kubermaticv1.KubermaticSetting) error {
 	if user.Spec.IsAdmin {
 		return nil
 	}
 	if settings.Spec.RestrictProjectCreation {
 		return utilerrors.New(http.StatusForbidden, "project creation is restricted")
+	}
+	return nil
+}
+
+func checkProjectDeletionRestriction(user *kubermaticv1.User, settings *kubermaticv1.KubermaticSetting) error {
+	if user.Spec.IsAdmin {
+		return nil
+	}
+	if settings.Spec.RestrictProjectDeletion {
+		return utilerrors.New(http.StatusForbidden, "project deletion is restricted")
 	}
 	return nil
 }
@@ -367,7 +377,7 @@ func isStatus(err error, status int32) bool {
 }
 
 // DeleteEndpoint defines an HTTP endpoint for deleting a project.
-func DeleteEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func DeleteEndpoint(projectProvider provider.ProjectProvider, settingsProvider provider.SettingsProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(deleteRq)
 		if !ok {
@@ -377,6 +387,16 @@ func DeleteEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 			return nil, utilerrors.NewBadRequest("the id of the project cannot be empty")
 		}
 
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		user := ctx.Value(middleware.UserCRContextKey).(*kubermaticv1.User)
+
+		if err := checkProjectDeletionRestriction(user, settings); err != nil {
+			return nil, err
+		}
 		// check if admin user
 		adminUserInfo, err := userInfoGetter(ctx, "")
 		if err != nil {

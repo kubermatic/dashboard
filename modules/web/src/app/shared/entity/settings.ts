@@ -39,6 +39,7 @@ export interface AdminSettings {
   enableOIDCKubeconfig: boolean;
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
+  restrictProjectDeletion: boolean;
   enableExternalClusterImport: boolean;
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
   opaOptions: OpaOptions;
@@ -174,6 +175,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableShareCluster: false,
   enableOIDCKubeconfig: false,
   restrictProjectCreation: false,
+  restrictProjectDeletion: false,
   enableExternalClusterImport: true,
   machineDeploymentVMResourceQuota: {
     minRAM: 0,

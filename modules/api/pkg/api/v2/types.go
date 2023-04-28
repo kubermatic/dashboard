@@ -2039,9 +2039,11 @@ type GlobalSettings struct {
 
 	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig"` //nolint:tagliatelle
 	// UserProjectsLimit is the maximum number of projects a user can create.
-	UserProjectsLimit           int64 `json:"userProjectsLimit"`
-	RestrictProjectCreation     bool  `json:"restrictProjectCreation"`
-	EnableExternalClusterImport bool  `json:"enableExternalClusterImport"`
+	UserProjectsLimit       int64 `json:"userProjectsLimit"`
+	RestrictProjectCreation bool  `json:"restrictProjectCreation"`
+	RestrictProjectDeletion bool  `json:"restrictProjectDeletion"`
+
+	EnableExternalClusterImport bool `json:"enableExternalClusterImport"`
 
 	// CleanupOptions control what happens when a cluster is deleted via the dashboard.
 	// +optional
