@@ -298,6 +298,10 @@
     background-color: transparent;
   }
 
+  .mat-dialog-content {
+    border-bottom: 1px solid map.get($colors, divider);
+  }
+
   .km-notification {
     &.mat-snack-bar-container {
       background-color: map.get($colors, option-background);
