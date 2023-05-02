@@ -123,6 +123,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this.wizardMode === WizardMode.CustomizeClusterTemplate || !this.wizardMode;
   }
 
+  get nodeHasAdvanceSettings(): boolean {
+    return NodeProviderConstants.nodeHasAdvanceSettings(this._clusterSpecService.provider);
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nameGenerator: NameGeneratorService,

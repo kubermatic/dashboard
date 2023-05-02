@@ -98,6 +98,19 @@ export namespace NodeProviderConstants {
     }
   }
 
+  export function nodeHasAdvanceSettings(provider: NodeProvider): boolean {
+    return [
+      NodeProvider.ALIBABA,
+      NodeProvider.AWS,
+      NodeProvider.AZURE,
+      NodeProvider.DIGITALOCEAN,
+      NodeProvider.EQUINIX,
+      NodeProvider.GCP,
+      NodeProvider.OPENSTACK,
+      NodeProvider.VSPHERE,
+    ].includes(provider);
+  }
+
   export function getOperatingSystemSpecName(spec: NodeSpec) {
     if (spec.operatingSystem.ubuntu) {
       return OperatingSystem.Ubuntu;
