@@ -185,13 +185,13 @@ limitations under the License.
       </span>
     </km-autocomplete>
 
-    <div *ngIf="isDialogView()">
+    <div *ngIf="isDialogView() && nodeHasAdvanceSettings">
       <km-expansion-panel expandLabel="Advanced Settings"
                           collapseLabel="Advanced Settings">
         <ng-container>
-          <mat-card-title class="provider-options">{{ providerDisplayName }} Options</mat-card-title>
+          <mat-card-title class="provider-options">{{ providerDisplayName }} Settings</mat-card-title>
           <km-extended-node-data [provider]="provider"
-                                 [visible]="true"
+                                 [visible]="nodeHasAdvanceSettings"
                                  [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
         </ng-container>
       </km-expansion-panel>
