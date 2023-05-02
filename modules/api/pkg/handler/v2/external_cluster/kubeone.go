@@ -254,6 +254,10 @@ func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string
 		return setGCPCredentials(preset, kubeOneCloudSpec)
 	case providerName == resources.KubeOneAzure:
 		return setAzureCredentials(preset, kubeOneCloudSpec)
+	case providerName == resources.KubeOneHetzner:
+		return setHetznerCredentials(preset, kubeOneCloudSpec)
+	case providerName == resources.KubeOneDigitalOcean:
+		return setDigitalOceanCredentials(preset, kubeOneCloudSpec)
 	}
 
 	return nil, fmt.Errorf("Provider %s not supported", providerName)
@@ -308,6 +312,36 @@ func setAzureCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.Kub
 	kubeOneCloudSpec.Azure.TenantID = credentials.TenantID
 	kubeOneCloudSpec.Azure.ClientSecret = credentials.ClientSecret
 	kubeOneCloudSpec.Azure.SubscriptionID = credentials.SubscriptionID
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setHetznerCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.Hetzner == nil {
+		return nil, emptyCredentialError(preset.Name, "Hetzner")
+	}
+
+	credentials := preset.Spec.Hetzner
+
+	if kubeOneCloudSpec.Hetzner == nil {
+		kubeOneCloudSpec.Hetzner = &apiv2.KubeOneHetznerCloudSpec{}
+	}
+	kubeOneCloudSpec.Hetzner.Token = credentials.Token
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setDigitalOceanCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.Digitalocean == nil {
+		return nil, emptyCredentialError(preset.Name, "Digitalocean")
+	}
+
+	credentials := preset.Spec.Digitalocean
+
+	if kubeOneCloudSpec.DigitalOcean == nil {
+		kubeOneCloudSpec.DigitalOcean = &apiv2.KubeOneDigitalOceanCloudSpec{}
+	}
+	kubeOneCloudSpec.DigitalOcean.Token = credentials.Token
 
 	return &kubeOneCloudSpec, nil
 }
