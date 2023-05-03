@@ -43,7 +43,12 @@ enum Controls {
   ],
 })
 export class KubeOneProviderStepComponent extends StepBase implements OnInit {
-  readonly providers: NodeProvider[] = [NodeProvider.AWS, NodeProvider.GCP, NodeProvider.AZURE];
+  readonly providers: NodeProvider[] = [
+    NodeProvider.AWS,
+    NodeProvider.GCP,
+    NodeProvider.AZURE,
+    NodeProvider.DIGITALOCEAN,
+  ];
   readonly controls = Controls;
 
   constructor(

@@ -78,6 +78,13 @@ limitations under the License.
               <div value>{{SECRET_MASK}}</div>
             </km-property>
           </ng-container>
+          <!-- DigitalOcean -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.digitalocean">
+            <km-property>
+              <div key>Token</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+          </ng-container>
         </ng-template>
       </div>
     </div>

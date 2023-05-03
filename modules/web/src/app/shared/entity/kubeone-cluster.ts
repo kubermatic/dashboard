@@ -37,6 +37,7 @@ export class KubeOneCloudSpec {
   aws?: KubeOneAWSCloudSpec;
   gcp?: KubeOneGCPCloudSpec;
   azure?: KubeOneAzureCloudSpec;
+  digitalOcean?: KubeOneDigitalOceanCloudSpec;
 }
 
 export class KubeOneAWSCloudSpec {
@@ -53,4 +54,8 @@ export class KubeOneAzureCloudSpec {
   clientSecret: string;
   subscriptionID: string;
   tenantID: string;
+}
+
+export class KubeOneDigitalOceanCloudSpec {
+  token: string;
 }

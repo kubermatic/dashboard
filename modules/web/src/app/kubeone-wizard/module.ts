@@ -27,6 +27,7 @@ import {SharedModule} from '@shared/module';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
 import {KubeOneWizardComponent} from './component';
 import {Routing} from './routing';
+import {KubeOneDigitaloceanCredentialsBasicComponent} from './steps/credentials/provider/basic/digitalocean/component';
 
 const components = [
   KubeOneWizardComponent,
@@ -36,6 +37,7 @@ const components = [
   KubeOneAWSCredentialsBasicComponent,
   KubeOneGCPCredentialsBasicComponent,
   KubeOneAzureCredentialsBasicComponent,
+  KubeOneDigitaloceanCredentialsBasicComponent,
   KubeOneClusterStepComponent,
   KubeOneSummaryStepComponent,
   KubeOnePresetsComponent,
