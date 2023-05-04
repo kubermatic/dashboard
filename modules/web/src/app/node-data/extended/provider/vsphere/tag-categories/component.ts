@@ -169,7 +169,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
   }
 
   private static _isFilled(tag: AbstractControl): boolean {
-    return tag.get(Controls.Category).value && tag.get(Controls.Tag).value;
+    return tag.get(Controls.Category).value || tag.get(Controls.Tag).value;
   }
 
   private get _categoriesObservable(): Observable<VSphereTagCategory[]> {
