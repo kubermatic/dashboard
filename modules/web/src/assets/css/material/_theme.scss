@@ -170,6 +170,10 @@
     }
   }
 
+  .mat-form-field-empty.mat-form-field-label .mat-form-field-required-marker {
+    color: map.get($colors, secondary);
+  }
+
   div.mat-form-field-outline.mat-form-field-outline-thick {
     color: map.get($colors, secondary);
   }
