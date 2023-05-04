@@ -62,7 +62,8 @@ limitations under the License.
 </div>
 
 <div *ngIf="isClusterReady"
-     class="applications-container">
+     class="applications-container"
+     [ngClass]="{'table-view': !showCards}">
   <div *ngIf="showCards || !applicationsDataSource.data?.length; else applicationsTable">
     <div class="application-cards-view"
          fxFlex
