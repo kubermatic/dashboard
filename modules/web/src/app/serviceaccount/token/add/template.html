@@ -63,7 +63,9 @@ limitations under the License.
 
 <form *ngIf="mode === modes.Edit"
       (keydown.enter)="form.valid ? update() : null">
-  <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+  <mat-dialog-content>
+    <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
+  </mat-dialog-content>
 
   <mat-dialog-actions>
     <mat-spinner fxFlexAlign="center"
@@ -87,7 +89,9 @@ limitations under the License.
   </ng-container>
 
   <ng-container *ngIf="!updating">
-    <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)"></km-serviceaccount-token-information-step>
+    <mat-dialog-content>
+      <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)"></km-serviceaccount-token-information-step>
+    </mat-dialog-content>
 
     <mat-dialog-actions>
       <ng-container *ngTemplateOutlet="downloadButton"></ng-container>

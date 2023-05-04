@@ -86,6 +86,12 @@ km-wizard {
 .mat-mdc-dialog-container {
   .mat-mdc-dialog-title {
     font-weight: 400;
+
+    .km-close-dialog-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
   }
 
   .mat-card-title {
@@ -127,6 +133,10 @@ km-wizard {
     justify-content: flex-end;
     margin: 0;
     padding-top: 20px;
+  }
+
+  .km-stepper-in-dialog {
+    padding: 20px 24px;
   }
 }
 
