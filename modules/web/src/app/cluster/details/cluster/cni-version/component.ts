@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {Cluster} from '@shared/entity/cluster';
 import {CNIVersionDialog} from './cni-version-dialog/component';
 import {coerce, lt} from 'semver';

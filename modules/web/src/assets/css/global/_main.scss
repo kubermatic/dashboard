@@ -522,7 +522,7 @@ km-dashboard {
     max-height: 660px;
     overflow: hidden;
 
-    .mat-dialog-container {
+    .mat-mdc-dialog-container {
       min-width: 600px;
       overflow: hidden;
     }
@@ -536,14 +536,14 @@ km-dashboard {
   }
 
   &.km-changelog-dialog {
-    .mat-dialog-container {
+    .mat-mdc-dialog-container {
       height: auto;
       margin: 20px 0;
       max-width: 600px;
       min-height: 400px;
       min-width: 600px;
 
-      .mat-dialog-content {
+      .mat-mdc-dialog-content {
         max-height: 600px;
       }
     }

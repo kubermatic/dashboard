@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, ViewChild} from '@angular/core';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {

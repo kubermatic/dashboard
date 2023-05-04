@@ -35,7 +35,7 @@ import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {UserService} from '@core/services/user';
 import {filter, Subject, take, takeUntil} from 'rxjs';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,

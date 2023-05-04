@@ -26,7 +26,7 @@ import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-pagin
 import {Report} from '@shared/entity/metering';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
 import {Subject} from 'rxjs';

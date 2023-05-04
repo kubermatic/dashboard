@@ -22,7 +22,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {
   IPV6_CIDR_PATTERN_VALIDATOR,
   IPV4_CIDR_PATTERN_VALIDATOR,

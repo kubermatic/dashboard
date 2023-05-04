@@ -20,7 +20,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {NotificationService} from '@core/services/notification';
 import {pushToSide} from '@shared/animations/push';

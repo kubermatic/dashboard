@@ -14,7 +14,7 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {GlobalModule} from '@core/services/global/module';
 import {NotificationService} from '@core/services/notification';
 import {DynamicModule} from '@app/dynamic/module-registry';
