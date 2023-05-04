@@ -28,6 +28,7 @@ import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/confi
 import {KubeOneWizardComponent} from './component';
 import {Routing} from './routing';
 import {KubeOneDigitaloceanCredentialsBasicComponent} from './steps/credentials/provider/basic/digitalocean/component';
+import {KubeOneHetznerCredentialsBasicComponent} from './steps/credentials/provider/basic/hetzner/component';
 
 const components = [
   KubeOneWizardComponent,
@@ -38,6 +39,7 @@ const components = [
   KubeOneGCPCredentialsBasicComponent,
   KubeOneAzureCredentialsBasicComponent,
   KubeOneDigitaloceanCredentialsBasicComponent,
+  KubeOneHetznerCredentialsBasicComponent,
   KubeOneClusterStepComponent,
   KubeOneSummaryStepComponent,
   KubeOnePresetsComponent,

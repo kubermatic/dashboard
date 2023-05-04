@@ -85,6 +85,13 @@ limitations under the License.
               <div value>{{SECRET_MASK}}</div>
             </km-property>
           </ng-container>
+          <!-- Hetzner -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.hetzner">
+            <km-property>
+              <div key>Token</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+          </ng-container>
         </ng-template>
       </div>
     </div>

@@ -38,6 +38,7 @@ export class KubeOneCloudSpec {
   gcp?: KubeOneGCPCloudSpec;
   azure?: KubeOneAzureCloudSpec;
   digitalOcean?: KubeOneDigitalOceanCloudSpec;
+  hetzner?: KubeOneHetznerCloudSpec;
 }
 
 export class KubeOneAWSCloudSpec {
@@ -57,5 +58,8 @@ export class KubeOneAzureCloudSpec {
 }
 
 export class KubeOneDigitalOceanCloudSpec {
+  token: string;
+}
+export class KubeOneHetznerCloudSpec {
   token: string;
 }
