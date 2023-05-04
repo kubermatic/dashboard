@@ -32,7 +32,9 @@
   }
 
   // Dialogs.
-  .mat-dialog-container {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-supporting-text-color: map.get($colors, text);
+
     color: map.get($colors, text);
   }
 

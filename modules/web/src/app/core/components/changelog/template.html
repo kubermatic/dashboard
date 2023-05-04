@@ -15,15 +15,7 @@ limitations under the License.
 -->
 <div fxFlex
      fxLayout="column">
-  <div class="header-title">
-    <div>What's New</div>
-    <div fxFlex></div>
-    <div>
-      <i class="km-icon-close km-pointer"
-         aria-hidden="true"
-         mat-dialog-close></i>
-    </div>
-  </div>
+  <km-dialog-title>What's New</km-dialog-title>
   <div class="header-info">
     Version {{version}}
     <ng-container *ngIf="released"> - Released {{released | date:'MMM d, y'}}</ng-container>

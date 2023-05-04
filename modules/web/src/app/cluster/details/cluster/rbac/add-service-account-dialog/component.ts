@@ -14,7 +14,7 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';

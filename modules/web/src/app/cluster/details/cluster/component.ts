@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, EventEmitter, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {AddonService} from '@core/services/addon';

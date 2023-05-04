@@ -20,10 +20,7 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-} from '@angular/material/legacy-dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration, MeteringReportType} from '@app/shared/entity/datacenter';

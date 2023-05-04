@@ -39,14 +39,14 @@ limitations under the License.
                      [asyncKeyValidators]=asyncLabelValidators
                      [formControlName]="Controls.Labels"></km-label-form>
 
-      <ng-container *ngIf="isEnterpriseEdition && projectQouta && user.isAdmin">
+      <div *ngIf="isEnterpriseEdition && projectQouta && user.isAdmin">
         <mat-card-header>
           <mat-card-title>Quota</mat-card-title>
         </mat-card-header>
         <div class="km-quota-inputs"
              fxLayout="row"
-             fxLayoutGap="5px"
-             fxLayoutAlign="space-between center">
+             fxLayoutAlign="flex-start center"
+             fxLayoutGap="10px">
           <km-number-stepper id="km-cpu-input"
                              label="CPU"
                              min="0"
@@ -67,7 +67,7 @@ limitations under the License.
                              [formControlName]="Controls.StorageQuota">
           </km-number-stepper>
         </div>
-      </ng-container>
+      </div>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

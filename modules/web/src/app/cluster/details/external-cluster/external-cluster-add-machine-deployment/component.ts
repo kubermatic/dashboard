@@ -15,10 +15,7 @@
 import {Component, forwardRef, Inject} from '@angular/core';
 import {BaseFormValidator} from '@app/shared/validators/base-form.validator';
 import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-} from '@angular/material/legacy-dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
 

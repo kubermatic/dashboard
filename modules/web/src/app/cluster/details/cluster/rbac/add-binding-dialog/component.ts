@@ -15,7 +15,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';

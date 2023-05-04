@@ -49,7 +49,7 @@ import {Quota} from '@shared/entity/quota';
 import {GlobalModule} from '@core/services/global/module';
 import {PathParam, ParamsService} from '@core/services/params';
 import {EditProjectComponent} from '@app/project/edit-project/component';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'km-project-overview',

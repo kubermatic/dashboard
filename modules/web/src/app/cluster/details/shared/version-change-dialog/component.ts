@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {MachineDeploymentService} from '@core/services/machine-deployment';

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';

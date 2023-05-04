@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';

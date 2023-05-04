@@ -97,7 +97,9 @@ $foreground: map.merge($foreground, (divider: #464647));
 $foreground: map.merge($foreground, (disabled-divider: #313132));
 $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 
+/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated */
 @include mat.all-legacy-component-themes($theme-dark);
+@include mat.all-component-themes($theme-dark);
 @include main.theme($theme-dark, $colors-dark);
 
 // Make icons and logos white with 85% opacity.

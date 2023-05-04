@@ -14,14 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>
-  <span>Change Control Plane Version</span>
-  <div *ngIf="!isClusterDeprecated() && hasVersionOptions"
-       class="km-update-available-badge">
-    <i class="km-icon-update-available-arrow"></i>
-    <span>Update Available</span>
+  <div fxLayout="row inline"
+       fxLayoutAlign=" center">
+    <span>Change Control Plane Version</span>
+    <div *ngIf="!isClusterDeprecated() && hasVersionOptions"
+         class="km-update-available-badge">
+      <i class="km-icon-update-available-arrow"></i>
+      <span>Update Available</span>
+    </div>
+    <km-cluster-type-eol [version]="cluster.spec?.version"
+                         type="badge"></km-cluster-type-eol>
   </div>
-  <km-cluster-type-eol [version]="cluster.spec?.version"
-                       type="badge"></km-cluster-type-eol>
 </km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description">Change Control Plane Version of <b>{{cluster.name}}</b> cluster</p>

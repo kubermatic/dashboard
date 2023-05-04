@@ -13,10 +13,7 @@
 // limitations under the License.
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
 import {AppConfigMockService} from '@test/services/app-config-mock';

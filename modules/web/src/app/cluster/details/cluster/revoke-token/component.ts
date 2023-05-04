@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {Component, Input, OnInit} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';

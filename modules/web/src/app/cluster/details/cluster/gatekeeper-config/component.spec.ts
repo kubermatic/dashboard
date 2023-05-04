@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
@@ -69,7 +69,7 @@ describe('GatekeeperConfigComponent', () => {
     noop.detectChanges();
     tick(waitTime);
 
-    const dialogTitle = document.body.querySelector('.mat-dialog-title');
+    const dialogTitle = document.body.querySelector('.mat-mdc-dialog-title');
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete Gatekeeper Config');

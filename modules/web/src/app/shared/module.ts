@@ -26,10 +26,7 @@ import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/le
 import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
 import {MatRippleModule} from '@angular/material/core';
 import {MatLegacyOptionModule as MatOptionModule} from '@angular/material/legacy-core';
-import {
-  MAT_LEGACY_DIALOG_DEFAULT_OPTIONS as MAT_DIALOG_DEFAULT_OPTIONS,
-  MatLegacyDialogModule as MatDialogModule,
-} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
@@ -285,6 +282,8 @@ const directives = [
       useValue: {
         disableClose: false,
         hasBackdrop: true,
+        minWidth: 660,
+        maxWidth: 660,
       },
     },
     OpenstackCredentialsTypeService,

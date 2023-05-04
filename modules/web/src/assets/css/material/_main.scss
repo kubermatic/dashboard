@@ -79,16 +79,19 @@ km-wizard {
 }
 
 // Dialogs.
-.cdk-overlay-pane .mat-dialog-container {
+.cdk-overlay-pane .mat-mdc-dialog-container {
   box-shadow: variables.$border-box-shadow;
 }
 
-.mat-dialog-container {
-  max-width: variables.$dialog-width;
-  min-width: variables.$dialog-width;
-
-  .mat-dialog-title {
+.mat-mdc-dialog-container {
+  .mat-mdc-dialog-title {
     font-weight: 400;
+
+    .km-close-dialog-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
   }
 
   .mat-card-title {
@@ -99,12 +102,12 @@ km-wizard {
     margin: 0;
     padding: 0;
 
-    .mat-dialog-title {
+    .mat-mdc-dialog-title {
       font-weight: normal;
     }
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     font-size: variables.$font-size-subhead;
     font-weight: 400;
     line-height: 24px;
@@ -126,10 +129,14 @@ km-wizard {
     }
   }
 
-  .mat-dialog-actions {
+  .mat-mdc-dialog-actions {
     justify-content: flex-end;
     margin: 0;
     padding-top: 20px;
+  }
+
+  .km-stepper-in-dialog {
+    padding: 20px 24px;
   }
 }
 

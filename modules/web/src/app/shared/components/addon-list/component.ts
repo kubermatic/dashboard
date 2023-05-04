@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';

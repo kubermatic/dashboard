@@ -18,11 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {
-  MatLegacyDialogModule as MatDialogModule,
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-} from '@angular/material/legacy-dialog';
+import {MatDialogModule, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TestBed, ComponentFixture} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
