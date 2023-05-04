@@ -228,7 +228,9 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   deleteLabel(index: number): void {
-    this.removedLabels.push(this.labelArray.value[index]);
+    if (this._dialogModeService.isEditDialog) {
+      this.removedLabels.push(this.labelArray.value[index]);
+    }
 
     this.labelArray.removeAt(index);
     this._updateLabelsObject();

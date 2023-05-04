@@ -78,7 +78,7 @@ limitations under the License.
       </mat-form-field>
       <button mat-icon-button
               class="delete-button"
-              *ngIf="isRemovable()"
+              *ngIf="isRemovable(i)"
               (click)="deleteTaint(i)">
         <i class="km-icon-mask km-icon-delete"></i>
       </button>

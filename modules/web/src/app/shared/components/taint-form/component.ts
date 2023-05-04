@@ -97,13 +97,15 @@ export class TaintFormComponent implements OnInit {
   }
 
   deleteTaint(index: number): void {
-    this.removedTaints?.push(this.taints[index]);
+    if (this._dialogModeService.isEditDialog) {
+      this.removedTaints?.push(this.taints[index]);
+    }
     this.taintArray.removeAt(index);
     this._updateTaints();
   }
 
-  isRemovable(): boolean {
-    return this.taintArray.length > 1;
+  isRemovable(index: number): boolean {
+    return index < this.taintArray.length - 1;
   }
 
   check(index: number): void {
