@@ -68,7 +68,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AssignPublicIP]: this._builder.control(true),
+      [Controls.AssignPublicIP]: this._builder.control(false),
       [Controls.IsSpotInstance]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
       [Controls.SpotInstanceMaxPrice]: this._builder.control('', [KmValidators.largerThan(0)]),
@@ -116,7 +116,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
 
       if (this.nodeData.name) {
-        const assignPublicIP = this.nodeData.spec.cloud.aws.assignPublicIP ?? true;
+        const assignPublicIP = this.nodeData.spec.cloud.aws.assignPublicIP ?? false;
         this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
 
         const isSpotInstance = this.nodeData.spec.cloud.aws.isSpotInstance ?? false;
