@@ -61,7 +61,8 @@ limitations under the License.
           <mat-hint *ngIf="isAdmin && !hasDestinations()">
             <a class="km-pointer"
                href="/settings/backupdestinations"
-               target="_blank">Configure a destination for this seed.</a>
+               fxLayoutAlign=" center"
+               target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.</a>
           </mat-hint>
           <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
           </mat-hint>
@@ -116,7 +117,11 @@ limitations under the License.
           <mat-hint>
             Cron expression that describes how often a backup should be created. Must match the criteria specified
             <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
-               target="_blank">here. </a> Please note that specifying seconds is not supported.
+               fxLayout="row inline"
+               fxLayoutAlign=" center"
+               target="_blank"
+               rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>.
+            Please note that specifying seconds is not supported.
           </mat-hint>
         </mat-form-field>
 

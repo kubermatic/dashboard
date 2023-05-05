@@ -60,8 +60,10 @@ limitations under the License.
           </mat-select>
           <mat-hint *ngIf="isAdmin && !hasDestinations()">
             <a class="km-pointer"
+               fxLayoutAlign=" center"
                href="/settings/backupdestinations"
-               target="_blank">Configure a destination for this seed.</a>
+               target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.
+            </a>
           </mat-hint>
           <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
           </mat-hint>

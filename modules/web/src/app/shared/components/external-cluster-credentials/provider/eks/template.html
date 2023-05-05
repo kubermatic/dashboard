@@ -69,9 +69,12 @@ limitations under the License.
              required>
       <mat-hint>
         Specify to use an assumed role to run the user cluster.
-        More information can be found&nbsp;<a target="_blank"
+        More information can be found
+        <a target="_blank"
            rel="noopener"
-           href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here</a>.
+           fxLayout="row inline"
+           fxLayoutAlign=" center"
+           href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here <i class="km-icon-external-link"></i></a>.
       </mat-hint>
       <mat-error *ngIf="form.get(Controls.AssumeRoleARN).hasError('required')">
         <strong>Required</strong>
@@ -88,9 +91,12 @@ limitations under the License.
              required>
       <mat-hint>
         Specify to use an external ID in combination with the assumed role.
-        More information can be found&nbsp;<a target="_blank"
+        More information can be found
+        <a target="_blank"
            rel="noopener"
-           href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here</a>.
+           fxLayout="row inline"
+           fxLayoutAlign=" center"
+           href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here <i class="km-icon-external-link"></i></a>.
       </mat-hint>
       <mat-error *ngIf="form.get(Controls.AssumeRoleExternalID).hasError('required')">
         <strong>Required</strong>
@@ -103,5 +109,7 @@ limitations under the License.
 <ng-template #awsAccessKeysDocLink>
   <a target="_blank"
      rel="noopener"
-     href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">check</a>.
+     fxLayout="row inline"
+     fxLayoutAlign=" center"
+     href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">check <i class="km-icon-external-link"></i></a>.
 </ng-template>
