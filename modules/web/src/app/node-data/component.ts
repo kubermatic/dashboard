@@ -283,11 +283,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           : settings.defaultNodeCount;
 
       this.form.get(Controls.Count).setValue(replicas);
-      this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
-      this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
-      if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
-        this.form.get(Controls.UpgradeOnBoot).disable();
-        this.form.get(Controls.DisableAutoUpdate).disable();
+      if (!this.dialogEditMode) {
+        this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
+        this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
+        if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
+          this.form.get(Controls.UpgradeOnBoot).disable();
+          this.form.get(Controls.DisableAutoUpdate).disable();
+        }
       }
     });
 
