@@ -419,6 +419,10 @@ mat-form-field {
     .mat-form-field-label-wrapper {
       top: -20px;
     }
+
+    .mat-form-field-subscript-wrapper i {
+      @include mixins.size(16px, 16px, true);
+    }
   }
 }
 

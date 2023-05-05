@@ -332,6 +332,10 @@
 
 .km-icon-external-link {
   @include mixins.mask-image('/assets/images/icons/external-link.svg', 24px);
+
+  &.i-18 {
+    @include mixins.size(18px, 18px, true);
+  }
 }
 
 .km-icon-help {
