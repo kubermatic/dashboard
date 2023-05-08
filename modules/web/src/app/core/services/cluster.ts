@@ -36,12 +36,17 @@ import {Health} from '@shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {merge, Observable, of, Subject, timer, map} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
+
+type ClusterList = {
+  isPartial: boolean;
+  clusters: Cluster[];
+};
 
 @Injectable()
 export class ClusterService {
@@ -50,7 +55,7 @@ export class ClusterService {
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
-  private _clusters$ = new Map<string, Observable<Cluster[]>>();
+  private _clusters$ = new Map<string, Observable<ClusterList>>();
   private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
   private _externalCluster$ = new Map<string, Observable<ExternalCluster>>();
@@ -69,7 +74,7 @@ export class ClusterService {
     this._providerSettingsPatch.next(patch);
   }
 
-  clusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {
+  clusterList(projectID: string, showMachineDeploymentCount = false): Observable<ClusterList> {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$).pipe(
         switchMapTo(this._getClusters(projectID, showMachineDeploymentCount)),
@@ -79,6 +84,10 @@ export class ClusterService {
     }
 
     return this._clusters$.get(projectID);
+  }
+
+  clusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {
+    return this.clusterList(projectID, showMachineDeploymentCount).pipe(map(clusterList => clusterList.clusters));
   }
 
   externalClusters(projectID: string): Observable<ExternalCluster[]> {
@@ -357,9 +366,9 @@ export class ClusterService {
     return this._http.get<CNIPluginVersions>(url);
   }
 
-  private _getClusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {
+  private _getClusters(projectID: string, showMachineDeploymentCount = false): Observable<ClusterList> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters?show_dm_count=${showMachineDeploymentCount}`;
-    return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
+    return this._http.get<ClusterList>(url).pipe(catchError(() => of<ClusterList>()));
   }
 
   private _getExternalClusters(projectID: string): Observable<ExternalCluster[]> {
