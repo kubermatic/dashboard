@@ -64,7 +64,7 @@ ListClustersOK describes a response with status code 200, with default header va
 ClusterList
 */
 type ListClustersOK struct {
-	Payload models.ClusterList
+	Payload *models.ClusterList
 }
 
 // IsSuccess returns true when this list clusters o k response has a 2xx status code
@@ -100,14 +100,16 @@ func (o *ListClustersOK) String() string {
 	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] listClustersOK  %+v", 200, o.Payload)
 }
 
-func (o *ListClustersOK) GetPayload() models.ClusterList {
+func (o *ListClustersOK) GetPayload() *models.ClusterList {
 	return o.Payload
 }
 
 func (o *ListClustersOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.ClusterList)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
