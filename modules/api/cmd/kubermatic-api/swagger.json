@@ -3991,6 +3991,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -4009,11 +4014,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "Region",
-            "in": "header"
           }
         ],
         "responses": {
@@ -30632,10 +30632,21 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ClusterList": {
-      "description": "ClusterList represents a list of clusters",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Cluster"
+      "description": "ClusterList represents a list of clusters and information if the response is partial",
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cluster"
+          },
+          "x-go-name": "Clusters"
+        },
+        "isPartial": {
+          "description": "IsPartial indicates if list of clusters is complete. In case that connection to any seed fails, its value is set to true.",
+          "type": "boolean",
+          "x-go-name": "IsPartial"
+        }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },

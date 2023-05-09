@@ -1666,7 +1666,7 @@ func (r *TestClient) CreateClusterTemplateInstance(projectID, templateID string,
 }
 
 // ListClusters method lists user clusters.
-func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount bool) ([]*apiv1.Cluster, error) {
+func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount bool) (*apiv1.ClusterList, error) {
 	params := &project.ListClustersV2Params{
 		ProjectID:                  projectID,
 		ShowDeploymentMachineCount: pointer.Bool(showDeploymentMachineCount),
@@ -1678,22 +1678,25 @@ func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount b
 		Factor:   1.5,
 	})
 
-	clusterList := []*apiv1.Cluster{}
-
-	clusters, err := r.client.Project.ListClustersV2(params, r.bearerToken)
+	clusterList, err := r.client.Project.ListClustersV2(params, r.bearerToken)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, cluster := range clusters.Payload {
+	clusters := []apiv1.Cluster{}
+
+	for _, cluster := range clusterList.Payload.Clusters {
 		apiCluster, err := convertCluster(cluster)
 		if err != nil {
 			return nil, err
 		}
-		clusterList = append(clusterList, apiCluster)
+		clusters = append(clusters, *apiCluster)
 	}
 
-	return clusterList, nil
+	return &apiv1.ClusterList{
+		IsPartial: clusterList.Payload.IsPartial,
+		Clusters:  clusters,
+	}, nil
 }
 
 // ListDOSizes returns list DO sizes.

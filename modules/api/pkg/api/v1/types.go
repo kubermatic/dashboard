@@ -1378,7 +1378,7 @@ type AddonConfig struct {
 // ClusterList represents a list of clusters and information if the response is partial
 // swagger:model ClusterList
 type ClusterList struct {
-	Clusters []*Cluster `json:"clusters"`
+	Clusters []Cluster `json:"clusters"`
 
 	// IsPartial indicates if list of clusters is complete. In case that connection to any seed fails, its value is set to true.
 	IsPartial bool `json:"isPartial"`

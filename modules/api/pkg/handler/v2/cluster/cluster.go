@@ -83,7 +83,7 @@ func ListEndpoint(
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ListClustersReq)
-		clusterList := make([]*apiv1.Cluster, 0)
+		clusterList := make([]apiv1.Cluster, 0)
 
 		seeds, err := seedsGetter()
 		if err != nil {
@@ -94,7 +94,7 @@ func ListEndpoint(
 		isPartial := false
 
 		for _, seed := range seeds {
-			// if a Seed is bad, do not forward that error to the user, but log and indicate response as partial
+			// if a Seed is bad, do not forward that error to the user, but log and mark response as partial
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				kubermaticlog.Logger.Errorw("failed to create cluster provider", "seed", seed.Name, zap.Error(err))
@@ -105,7 +105,9 @@ func ListEndpoint(
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
-			clusterList = append(clusterList, apiClusters...)
+			for _, cluster := range apiClusters {
+				clusterList = append(clusterList, *cluster)
+			}
 		}
 
 		return apiv1.ClusterList{

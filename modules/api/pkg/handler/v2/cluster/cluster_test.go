@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -344,7 +345,7 @@ func TestListClusters(t *testing.T) {
 	t.Parallel()
 	testcases := []struct {
 		Name                   string
-		ExpectedClusters       []apiv1.Cluster
+		ExpectedClusters       apiv1.ClusterList
 		HTTPStatus             int
 		ExistingAPIUser        *apiv1.User
 		ExistingKubermaticObjs []ctrlruntimeclient.Object
@@ -352,128 +353,131 @@ func TestListClusters(t *testing.T) {
 		// scenario 1
 		{
 			Name: "scenario 1: list clusters that belong to the given project",
-			ExpectedClusters: []apiv1.Cluster{
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterAbcID",
-						Name:              "clusterAbc",
-						CreationTimestamp: apiv1.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "private-do1",
-							Fake:           &kubermaticv1.FakeCloudSpec{},
+			ExpectedClusters: apiv1.ClusterList{
+				IsPartial: false,
+				Clusters: []apiv1.Cluster{
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterAbcID",
+							Name:              "clusterAbc",
+							CreationTimestamp: apiv1.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC),
 						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "private-do1",
+								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
-							DNSDomain: "cluster.local",
-						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
-						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
-					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
-					},
-					Type: "kubernetes",
-				},
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterDefID",
-						Name:              "clusterDef",
-						CreationTimestamp: apiv1.Date(2013, 02, 04, 01, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "private-do1",
-							Fake:           &kubermaticv1.FakeCloudSpec{},
-						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
 							},
-							DNSDomain: "cluster.local",
-						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
-						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
-					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
-					},
-					Type: "kubernetes",
-				},
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterOpenstackID",
-						Name:              "clusterOpenstack",
-						CreationTimestamp: apiv1.Date(2013, 02, 04, 03, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "OpenstackDatacenter",
-							Openstack: &kubermaticv1.OpenstackCloudSpec{
-								FloatingIPPool: "floatingIPPool",
-								SubnetID:       "subnetID",
-								Domain:         "domain",
-								Network:        "network",
-								RouterID:       "routerID",
-								SecurityGroups: "securityGroups",
-								Project:        "project",
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
 							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
 						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
+						},
+						Type: "kubernetes",
+					},
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterDefID",
+							Name:              "clusterDef",
+							CreationTimestamp: apiv1.Date(2013, 02, 04, 01, 54, 0, 0, time.UTC),
+						},
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "private-do1",
+								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
-							DNSDomain: "cluster.local",
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
+							},
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
 						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
 						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
+						Type: "kubernetes",
 					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationSupported,
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterOpenstackID",
+							Name:              "clusterOpenstack",
+							CreationTimestamp: apiv1.Date(2013, 02, 04, 03, 54, 0, 0, time.UTC),
+						},
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "OpenstackDatacenter",
+								Openstack: &kubermaticv1.OpenstackCloudSpec{
+									FloatingIPPool: "floatingIPPool",
+									SubnetID:       "subnetID",
+									Domain:         "domain",
+									Network:        "network",
+									RouterID:       "routerID",
+									SecurityGroups: "securityGroups",
+									Project:        "project",
+								},
+							},
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
+							},
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
+						},
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationSupported,
+						},
+						Type: "kubernetes",
 					},
-					Type: "kubernetes",
 				},
 			},
 			HTTPStatus: http.StatusOK,
@@ -494,128 +498,131 @@ func TestListClusters(t *testing.T) {
 		// scenario 2
 		{
 			Name: "scenario 2: the admin John can list Bob's clusters",
-			ExpectedClusters: []apiv1.Cluster{
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterAbcID",
-						Name:              "clusterAbc",
-						CreationTimestamp: apiv1.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "private-do1",
-							Fake:           &kubermaticv1.FakeCloudSpec{},
+			ExpectedClusters: apiv1.ClusterList{
+				IsPartial: false,
+				Clusters: []apiv1.Cluster{
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterAbcID",
+							Name:              "clusterAbc",
+							CreationTimestamp: apiv1.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC),
 						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "private-do1",
+								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
-							DNSDomain: "cluster.local",
-						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
-						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
-					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
-					},
-					Type: "kubernetes",
-				},
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterDefID",
-						Name:              "clusterDef",
-						CreationTimestamp: apiv1.Date(2013, 02, 04, 01, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "private-do1",
-							Fake:           &kubermaticv1.FakeCloudSpec{},
-						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
 							},
-							DNSDomain: "cluster.local",
-						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
-						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
-					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
-					},
-					Type: "kubernetes",
-				},
-				{
-					ObjectMeta: apiv1.ObjectMeta{
-						ID:                "clusterOpenstackID",
-						Name:              "clusterOpenstack",
-						CreationTimestamp: apiv1.Date(2013, 02, 04, 03, 54, 0, 0, time.UTC),
-					},
-					Spec: apiv1.ClusterSpec{
-						Cloud: kubermaticv1.CloudSpec{
-							DatacenterName: "OpenstackDatacenter",
-							Openstack: &kubermaticv1.OpenstackCloudSpec{
-								FloatingIPPool: "floatingIPPool",
-								SubnetID:       "subnetID",
-								Domain:         "domain",
-								Network:        "network",
-								RouterID:       "routerID",
-								SecurityGroups: "securityGroups",
-								Project:        "project",
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
 							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
 						},
-						ContainerRuntime: "containerd",
-						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
-							IPFamily:             kubermaticv1.IPFamilyIPv4,
-							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
-							Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
-							ProxyMode:            resources.IPVSProxyMode,
-							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.Bool(true),
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
+						},
+						Type: "kubernetes",
+					},
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterDefID",
+							Name:              "clusterDef",
+							CreationTimestamp: apiv1.Date(2013, 02, 04, 01, 54, 0, 0, time.UTC),
+						},
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "private-do1",
+								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
-							DNSDomain: "cluster.local",
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
+							},
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
 						},
-						CNIPlugin: &kubermaticv1.CNIPluginSettings{
-							Type:    kubermaticv1.CNIPluginTypeCanal,
-							Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationUnsupported,
 						},
-						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
-						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.Bool(false),
+						Type: "kubernetes",
 					},
-					Status: apiv1.ClusterStatus{
-						Version:              *semver.NewSemverOrDie("9.9.9"),
-						URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
-						ExternalCCMMigration: apiv1.ExternalCCMMigrationSupported,
+					{
+						ObjectMeta: apiv1.ObjectMeta{
+							ID:                "clusterOpenstackID",
+							Name:              "clusterOpenstack",
+							CreationTimestamp: apiv1.Date(2013, 02, 04, 03, 54, 0, 0, time.UTC),
+						},
+						Spec: apiv1.ClusterSpec{
+							Cloud: kubermaticv1.CloudSpec{
+								DatacenterName: "OpenstackDatacenter",
+								Openstack: &kubermaticv1.OpenstackCloudSpec{
+									FloatingIPPool: "floatingIPPool",
+									SubnetID:       "subnetID",
+									Domain:         "domain",
+									Network:        "network",
+									RouterID:       "routerID",
+									SecurityGroups: "securityGroups",
+									Project:        "project",
+								},
+							},
+							ContainerRuntime: "containerd",
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								IPFamily:             kubermaticv1.IPFamilyIPv4,
+								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
+								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
+								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								ProxyMode:            resources.IPVSProxyMode,
+								IPVS: &kubermaticv1.IPVSConfiguration{
+									StrictArp: pointer.Bool(true),
+								},
+								DNSDomain: "cluster.local",
+							},
+							CNIPlugin: &kubermaticv1.CNIPluginSettings{
+								Type:    kubermaticv1.CNIPluginTypeCanal,
+								Version: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginTypeCanal),
+							},
+							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
+							Version:               *semver.NewSemverOrDie("9.9.9"),
+							EnableUserSSHKeyAgent: pointer.Bool(false),
+						},
+						Status: apiv1.ClusterStatus{
+							Version:              *semver.NewSemverOrDie("9.9.9"),
+							URL:                  "https://w225mx4z66.asia-east1-a-1.cloud.kubermatic.io:31885",
+							ExternalCCMMigration: apiv1.ExternalCCMMigrationSupported,
+						},
+						Type: "kubernetes",
 					},
-					Type: "kubernetes",
 				},
 			},
 			HTTPStatus: http.StatusOK,
@@ -653,15 +660,25 @@ func TestListClusters(t *testing.T) {
 				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
 			}
 
-			actualClusters := test.NewClusterV1SliceWrapper{}
-			actualClusters.DecodeOrDie(res.Body, t).Sort()
+			actualClusters := DecodeClusterListOrDie(res.Body, t)
 
-			wrappedExpectedClusters := test.NewClusterV1SliceWrapper(tc.ExpectedClusters)
+			wrappedExpectedClusters := test.NewClusterV1SliceWrapper(test.NewClusterV1SliceWrapper(tc.ExpectedClusters.Clusters))
 			wrappedExpectedClusters.Sort()
 
 			actualClusters.EqualOrDie(wrappedExpectedClusters, t)
 		})
 	}
+}
+
+func DecodeClusterListOrDie(r io.Reader, t *testing.T) test.NewClusterV1SliceWrapper {
+	t.Helper()
+	clusterList := &apiv1.ClusterList{}
+	dec := json.NewDecoder(r)
+	err := dec.Decode(clusterList)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return test.NewClusterV1SliceWrapper(clusterList.Clusters)
 }
 
 func TestGetCluster(t *testing.T) {

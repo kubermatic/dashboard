@@ -186,20 +186,21 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 
 	if tc.isToReturnMachineDeploymentCount {
 		clustersList, err := testClient.ListClusters(project.ID, tc.isToReturnMachineDeploymentCount)
+
 		if err != nil {
 			t.Fatalf("failed to get clusters list: %v", err)
 		}
 
-		if len(clustersList) != 1 {
-			t.Fatalf("expected one cluster from list, got %v", len(clustersList))
+		if len(clustersList.Clusters) != 1 {
+			t.Fatalf("expected one cluster from list, got %v", len(clustersList.Clusters))
 		}
 
-		if clustersList[0].MachineDeploymentCount == nil {
+		if clustersList.Clusters[0].MachineDeploymentCount == nil {
 			t.Fatal("expected machine deployment count value, got nil")
 		}
 
-		if *clustersList[0].MachineDeploymentCount != tc.expectedMachineDeploymentCount {
-			t.Fatalf("expected machine deployment count %d, but got %d", tc.expectedMachineDeploymentCount, *clustersList[0].MachineDeploymentCount)
+		if *clustersList.Clusters[0].MachineDeploymentCount != tc.expectedMachineDeploymentCount {
+			t.Fatalf("expected machine deployment count %d, but got %d", tc.expectedMachineDeploymentCount, *clustersList.Clusters[0].MachineDeploymentCount)
 		}
 	}
 
