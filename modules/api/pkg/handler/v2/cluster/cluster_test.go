@@ -660,25 +660,14 @@ func TestListClusters(t *testing.T) {
 				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
 			}
 
-			actualClusters := DecodeClusterListOrDie(res.Body, t)
+			actualClusters := decodeClusterListOrDie(res.Body, t)
 
-			wrappedExpectedClusters := test.NewClusterV1SliceWrapper(test.NewClusterV1SliceWrapper(tc.ExpectedClusters.Clusters))
+			wrappedExpectedClusters := test.NewClusterV1SliceWrapper(tc.ExpectedClusters.Clusters)
 			wrappedExpectedClusters.Sort()
 
 			actualClusters.EqualOrDie(wrappedExpectedClusters, t)
 		})
 	}
-}
-
-func DecodeClusterListOrDie(r io.Reader, t *testing.T) test.NewClusterV1SliceWrapper {
-	t.Helper()
-	clusterList := &apiv1.ClusterList{}
-	dec := json.NewDecoder(r)
-	err := dec.Decode(clusterList)
-	if err != nil {
-		t.Fatal(err)
-	}
-	return test.NewClusterV1SliceWrapper(clusterList.Clusters)
 }
 
 func TestGetCluster(t *testing.T) {
@@ -2298,4 +2287,15 @@ func genUser(name, email string, isAdmin bool) *kubermaticv1.User {
 	user := test.GenUser("", name, email)
 	user.Spec.IsAdmin = isAdmin
 	return user
+}
+
+func decodeClusterListOrDie(r io.Reader, t *testing.T) test.NewClusterV1SliceWrapper {
+	t.Helper()
+	clusterList := &apiv1.ClusterList{}
+	dec := json.NewDecoder(r)
+	err := dec.Decode(clusterList)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return test.NewClusterV1SliceWrapper(clusterList.Clusters)
 }
