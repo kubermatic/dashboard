@@ -258,6 +258,8 @@ func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string
 		return setHetznerCredentials(preset, kubeOneCloudSpec)
 	case providerName == resources.KubeOneDigitalOcean:
 		return setDigitalOceanCredentials(preset, kubeOneCloudSpec)
+	case providerName == resources.KubeOneOpenStack:
+		return setOpenStackCredentials(preset, kubeOneCloudSpec)
 	}
 
 	return nil, fmt.Errorf("Provider %s not supported", providerName)
@@ -342,6 +344,26 @@ func setDigitalOceanCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec ap
 		kubeOneCloudSpec.DigitalOcean = &apiv2.KubeOneDigitalOceanCloudSpec{}
 	}
 	kubeOneCloudSpec.DigitalOcean.Token = credentials.Token
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setOpenStackCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.Openstack == nil {
+		return nil, emptyCredentialError(preset.Name, "OpenStack")
+	}
+
+	credentials := preset.Spec.Openstack
+
+	if kubeOneCloudSpec.OpenStack == nil {
+		kubeOneCloudSpec.OpenStack = &apiv2.KubeOneOpenStackCloudSpec{}
+	}
+
+	kubeOneCloudSpec.OpenStack.Username = credentials.Username
+	kubeOneCloudSpec.OpenStack.Password = credentials.Password
+	kubeOneCloudSpec.OpenStack.Domain = credentials.Domain
+	kubeOneCloudSpec.OpenStack.Project = credentials.Project
+	kubeOneCloudSpec.OpenStack.ProjectID = credentials.ProjectID
 
 	return &kubeOneCloudSpec, nil
 }
