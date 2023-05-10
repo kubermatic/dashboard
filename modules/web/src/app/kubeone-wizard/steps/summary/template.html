@@ -92,6 +92,37 @@ limitations under the License.
               <div value>{{SECRET_MASK}}</div>
             </km-property>
           </ng-container>
+          <!-- OpenStack -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.openstack">
+            <km-property>
+              <div key>AuthURL</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.authURL}}</div>
+            </km-property>
+            <km-property>
+              <div key>Username</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.username}}</div>
+            </km-property>
+            <km-property>
+              <div key>Password</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Domain</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.domain}}</div>
+            </km-property>
+            <km-property>
+              <div key>Project Name</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.project}}</div>
+            </km-property>
+            <km-property>
+              <div key>Project ID</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.projectID}}</div>
+            </km-property>
+            <km-property>
+              <div key>Region</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.region}}</div>
+            </km-property>
+          </ng-container>
         </ng-template>
       </div>
     </div>
