@@ -57,13 +57,13 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     private readonly _pageTitleService: PageTitleService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {
+    this.version = this.appConfigService.getGitVersion();
     this._registerRouterWatch();
     this._loadDefaultTheme();
   }
 
   ngOnInit(): void {
     this.config = this.appConfigService.getConfig();
-    this.version = this.appConfigService.getGitVersion();
     if (this.config.google_analytics_code) {
       this.googleAnalyticsService.activate(
         this.config.google_analytics_code,
@@ -118,7 +118,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     const retryDelay = 500;
     const defaultThemeName = 'light';
     const defaultThemeClass = `km-style-${defaultThemeName}`;
-    const defaultThemePath = `${defaultThemeName}.css`;
+    const defaultThemePath = `${defaultThemeName}.css?${this.version.tag}`;
     const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
     const themeElement: HTMLLinkElement = this._document.createElement('link');
     themeElement.setAttribute('rel', 'stylesheet');

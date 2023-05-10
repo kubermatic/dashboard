@@ -20,6 +20,7 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Inject, Injectable} from '@angular/core';
+import {AppConfigService} from '@app/config.service';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
@@ -39,7 +40,8 @@ export class ThemeManagerService {
     private readonly _colorSchemeService: ColorSchemeService,
     private readonly _themeService: ThemeService,
     private readonly _userService: UserService,
-    private readonly _themeInformerService: ThemeInformerService
+    private readonly _themeInformerService: ThemeInformerService,
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   get isSystemDefaultThemeDark(): boolean {
@@ -90,7 +92,9 @@ export class ThemeManagerService {
 
   private readonly _themeClassName = themeName => `km-style-${themeName}`;
 
-  private readonly _themesPath = themeName => `${themeName}.css`;
+  private readonly _themesPath = themeName => {
+    return `${themeName}.css?${this._appConfigService.getGitVersion().tag}`;
+  };
 
   private _isThemeDark(name: string): boolean {
     if (name === this.systemDefaultOption) {
