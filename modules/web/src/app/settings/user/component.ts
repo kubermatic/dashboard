@@ -17,6 +17,7 @@ import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
+import {ITEMS_PER_PAGE_OPTIONS} from '@shared/components/pagination-page-size/component';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
@@ -32,8 +33,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['style.scss'],
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  readonly itemsPerPageOptions = [5, 10, 15, 20, 25];
+  readonly itemsPerPageOptions = ITEMS_PER_PAGE_OPTIONS;
   projects: Project[] = [];
   projectIds: string[] = [];
   user: Member;

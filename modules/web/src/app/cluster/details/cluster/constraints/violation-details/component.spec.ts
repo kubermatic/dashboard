@@ -15,11 +15,13 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {UserService} from '@core/services/user';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeConstraints, fakeViolations} from '@test/data/opa';
 import {fakeProject} from '@test/data/project';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
+import {UserMockService} from '@test/services/user-mock';
 import {ViolationDetailsComponent} from './component';
 
 describe('ViolationDetailsComponent', () => {
@@ -38,7 +40,10 @@ describe('ViolationDetailsComponent', () => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [ViolationDetailsComponent],
-      providers: [{provide: OPAService, useValue: opaMock}],
+      providers: [
+        {provide: UserService, useClass: UserMockService},
+        {provide: OPAService, useValue: opaMock},
+      ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));

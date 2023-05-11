@@ -939,3 +939,29 @@ km-side-nav-field .sub-menu-item:last-child {
     }
   }
 }
+
+.km-pagination-page-size-select-container {
+  font-size: variables.$font-size-caption;
+
+  mat-form-field.mat-form-field {
+    width: 70px;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+
+      .mat-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mat-select .mat-select-trigger {
+        align-items: flex-end;
+        display: flex;
+
+        .mat-select-arrow-wrapper {
+          align-items: flex-end;
+          display: flex;
+        }
+      }
+    }
+  }
+}

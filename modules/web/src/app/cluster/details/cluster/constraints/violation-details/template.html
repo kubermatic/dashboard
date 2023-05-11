@@ -72,7 +72,12 @@ limitations under the License.
   </div>
 </ng-container>
 
-<div [hidden]="!isPaginatorVisible()">
-  <mat-paginator showFirstLastButtons
-                 (page)="onPaginateChange($event)"></mat-paginator>
+<div [hidden]="!isPaginatorVisible()"
+     class="km-paginator-container">
+  <div fxLayout="row"
+       fxLayoutAlign="flex-end center">
+    <km-pagination-page-size></km-pagination-page-size>
+    <mat-paginator showFirstLastButtons
+                   (page)="onPaginateChange($event)"></mat-paginator>
+  </div>
 </div>
