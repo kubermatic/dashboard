@@ -29,15 +29,6 @@ limitations under the License.
             matTooltip="Go back to the backup list">
       <i class="km-icon-mask km-icon-arrow-left"></i>
     </button>
-    <button mat-flat-button
-            type="button"
-            color="tertiary"
-            [attr.id]="'km-delete-backup-' + backup.name"
-            (click)="delete(backup)"
-            [disabled]="!canDelete">
-      <i class="km-icon-mask km-icon-delete"></i>
-      <span>Delete Automatic Backup</span>
-    </button>
   </div>
 
   <mat-card class="info">
@@ -49,6 +40,17 @@ limitations under the License.
         <i class="health-state km-icon-circle {{isEnabled(backup) ? 'km-success-bg' : 'km-unknown-bg'}}"></i>
         <div>{{backup.name}}</div>
       </mat-card-title>
+      <div fxFlex></div>
+      <div fxLayout="row">
+        <button mat-icon-button
+                color="tertiary"
+                [attr.id]="'km-delete-backup-' + backup.name"
+                (click)="delete(backup)"
+                [disabled]="!canDelete"
+                matTooltip="Delete Automatic Backup">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
     </mat-card-header>
 
     <mat-card-content fxLayout="row">

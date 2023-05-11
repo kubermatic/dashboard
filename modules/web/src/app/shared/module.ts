@@ -34,7 +34,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
-import {MatLegacyPaginatorModule as MatPaginatorModule} from '@angular/material/legacy-paginator';
+import {
+  MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
+  MatLegacyPaginatorModule as MatPaginatorModule,
+} from '@angular/material/legacy-paginator';
 import {MatLegacyProgressBarModule as MatProgressBarModule} from '@angular/material/legacy-progress-bar';
 import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
@@ -70,6 +73,7 @@ import {EKSCredentialsComponent} from '@shared/components/external-cluster-crede
 import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {MachineFlavorFilterComponent} from '@shared/components/machine-flavor-filter/component';
+import {PaginationPageSizeComponent} from '@shared/components/pagination-page-size/component';
 import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
@@ -262,6 +266,7 @@ const components = [
   TerminalToolBarComponent,
   TerminalStatusBarComponent,
   MachineFlavorFilterComponent,
+  PaginationPageSizeComponent,
 ];
 
 const directives = [
@@ -284,6 +289,12 @@ const directives = [
         hasBackdrop: true,
         minWidth: 660,
         maxWidth: 660,
+      },
+    },
+    {
+      provide: MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: {
+        hidePageSize: true,
       },
     },
     OpenstackCredentialsTypeService,

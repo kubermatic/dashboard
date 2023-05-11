@@ -210,8 +210,13 @@ limitations under the License.
 
       <km-loader *ngIf="isLoadingData()"></km-loader>
 
-      <div [hidden]="!isPaginatorVisible()">
-        <mat-paginator showFirstLastButtons></mat-paginator>
+      <div [hidden]="!isPaginatorVisible()"
+           class="km-paginator-container">
+        <div fxLayout="row"
+             fxLayoutAlign="flex-end center">
+          <km-pagination-page-size></km-pagination-page-size>
+          <mat-paginator showFirstLastButtons></mat-paginator>
+        </div>
       </div>
 
       <ol *ngIf="!!cluster.spec.cloud.bringyourown"

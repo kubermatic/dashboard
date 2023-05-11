@@ -366,4 +366,12 @@
       background-color: map.get($colors, primary);
     }
   }
+
+  .km-paginator-container {
+    border-top: 1px solid map.get($colors, divider);
+  }
+
+  .km-pagination-page-size-select-container {
+    color: map.get($colors, text-secondary);
+  }
 }
