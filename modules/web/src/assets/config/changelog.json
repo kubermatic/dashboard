@@ -36,6 +36,10 @@
     {
         "category": "fixed",
         "description": "The MLA stack is now able to recover from a lost Grafana volume, properly recreating organizations for KKP projects."
+    },
+    {
+        "category": "fixed",
+        "description": "Initialize Machine Deployments without waiting for all cluster details to finish loading."
     }
   ]
 }
