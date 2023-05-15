@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 KUBERMATIC_EDITION?=ee
-KUBERMATIC_VERSION?=v2.21.8
+KUBERMATIC_VERSION?=v2.21.9
 REPO=quay.io/kubermatic/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && echo "\-${KUBERMATIC_EDITION}" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
