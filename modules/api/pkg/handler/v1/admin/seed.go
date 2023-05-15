@@ -187,6 +187,12 @@ func UpdateSeedEndpoint(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 			}
 		}
 
+		if req.Body.Spec.EtcdBackupRestore != nil {
+			if req.Body.Spec.EtcdBackupRestore.DefaultDestination == "" {
+				seed.Spec.EtcdBackupRestore.DefaultDestination = ""
+			}
+		}
+
 		originalJSON, err := json.Marshal(seed.Spec)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert current seed to JSON: %v", err))
