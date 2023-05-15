@@ -62,8 +62,6 @@ func TestListConstraints(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
 				WithScheme(scheme.Scheme).
@@ -125,8 +123,6 @@ func TestGetConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
 				WithScheme(scheme.Scheme).
@@ -176,8 +172,6 @@ func TestDeleteConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
 				WithScheme(scheme.Scheme).
@@ -217,8 +211,6 @@ func TestCreateConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 				return client, nil
@@ -269,8 +261,6 @@ func TestUpdateConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			ctx := context.Background()
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
@@ -322,8 +312,6 @@ func TestCreateDefaultConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 				return client, nil
@@ -367,8 +355,6 @@ func TestListDefaultConstraints(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
 				WithScheme(scheme.Scheme).
@@ -428,8 +414,6 @@ func TestGetDefaultConstraint(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			client := fakectrlruntimeclient.
 				NewClientBuilder().
 				WithScheme(scheme.Scheme).
