@@ -81,7 +81,7 @@
     "js-base64": "3.7.5",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
-    "modern-normalize": "1.1.0",
+    "modern-normalize": "2.0.0",
     "moment": "2.29.4",
     "monaco-editor": "0.37.1",
     "ngx-clipboard": "16.0.0",
