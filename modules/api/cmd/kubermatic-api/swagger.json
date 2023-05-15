@@ -29217,6 +29217,11 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "Anything": {
+      "description": "Anything is a struct wrapper around a field of type `interface{}`\nthat plays nicely with controller-gen\n+kubebuilder:object:generate=false\n+kubebuilder:validation:Type=\"\"",
+      "type": "object",
+      "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/core/templates"
+    },
     "Application": {
       "description": "Application represents a set of applications that are to be installed for the cluster",
       "type": "object",
@@ -31100,6 +31105,20 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "Code": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string",
+          "x-go-name": "Engine",
+          "example": "\"Rego\". Required."
+        },
+        "source": {
+          "$ref": "#/definitions/Anything"
+        }
+      },
+      "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
     },
     "ConditionStatus": {
       "type": "string",
@@ -39667,6 +39686,14 @@
     "Target": {
       "type": "object",
       "properties": {
+        "code": {
+          "description": "The source code options for the constraint template. \"Rego\" can only\nbe specified in one place (either here or in the \"rego\" field)\n+listType=map\n+listMapKey=engine\n+kubebuilder:validation:Required",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Code"
+          },
+          "x-go-name": "Code"
+        },
         "libs": {
           "type": "array",
           "items": {
