@@ -91,7 +91,7 @@
     "rxjs": "7.8.1",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.8",
-    "swagger-ui": "4.17.0",
+    "swagger-ui": "4.18.3",
     "xterm": "5.1.0",
     "xterm-addon-fit": "0.7.0",
     "zone.js": "0.13.0"
