@@ -225,7 +225,7 @@ func ParseNutanixError(err error) (*ErrorResponse, error) {
 	var resp ErrorResponse
 
 	if parseErr := json.Unmarshal([]byte(errJsonString), &resp); parseErr != nil {
-		return nil, fmt.Errorf("failed to parse '%v': %w", err, parseErr)
+		return nil, fmt.Errorf("failed to parse '%s': %w", err.Error(), parseErr)
 	}
 
 	return &resp, nil

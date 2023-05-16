@@ -1,45 +1,45 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2222",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2223",
   "entries": [
     {
-        "category": "added",
-        "description": "Configure Ingress Hostname cluster settings of OpenStack provider via the cluster wizard."
+        "category": "changed",
+        "description": "Patch cilium v1.12 and v1.11 to latest patch releases (v1.12.9) (v1.11.16)."
     },
     {
         "category": "changed",
-        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.3."
+        "description": "Update kube-state-metrics to v2.5.0 and node-exporter to v1.4.0."
     },
     {
         "category": "changed",
-        "description": "Update machine-controller to v1.56.2."
+        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.4."
     },
     {
         "category": "fixed",
-        "description": "Fix OOM in usercluster-controller by limiting the history of helm releases. This fix is critical if user-cluster is using Cilium >= 1.13.0 as CNI."
+        "description": "Add a dedicated service account for CSI snapshot webhook server (Openstack)."
     },
     {
         "category": "fixed",
-        "description": "Pull konnectivity images from registry.k8s.io instead of legacy GCR registry."
+        "description": "Do not override floating IP settings from user input for OpenStack initial MD."
     },
     {
         "category": "fixed",
-        "description": "Fix calculation of node CPU utilisation in MLA Grafana dashboards."
+        "description": "Do not try to watch `Cluster` resources on the master in `usersshkey-synchronizer` and use Seeds as correct source instead."
     },
     {
         "category": "fixed",
-        "description": "Show correct health information for Machine Deployments with no replicas."
+        "description": "Fix a bug that lead to metering reports overwriting each other when used with multiple seeds. Report names now include seed name prefixes."
     },
     {
         "category": "fixed",
-        "description": "AWS subnets are fetched correctly if credentials are provided directly instead of using a preset."
+        "description": "Fix MLA stack constantly updating Grafana datasources."
     },
     {
         "category": "fixed",
-        "description": "Fix cluster wizard not selecting a default version if custom versions are configured in KubermaticConfiguration."
+        "description": "The MLA stack is now able to recover from a lost Grafana volume, properly recreating organizations for KKP projects."
     },
     {
         "category": "fixed",
-        "description": "Update external-snapshotter validation webhook server to v6.0.1, fixing the default-storageclass addon for OpenStack clusters."
+        "description": "Initialize Machine Deployments without waiting for all cluster details to finish loading."
     }
   ]
 }

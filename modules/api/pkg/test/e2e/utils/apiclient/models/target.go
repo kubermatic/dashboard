@@ -7,7 +7,9 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +18,13 @@ import (
 //
 // swagger:model Target
 type Target struct {
+
+	// The source code options for the constraint template. "Rego" can only
+	// be specified in one place (either here or in the "rego" field)
+	// +listType=map
+	// +listMapKey=engine
+	// +kubebuilder:validation:Required
+	Code []*Code `json:"code"`
 
 	// libs
 	Libs []string `json:"libs"`
@@ -29,11 +38,75 @@ type Target struct {
 
 // Validate validates this target
 func (m *Target) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this target based on context it is used
+func (m *Target) validateCode(formats strfmt.Registry) error {
+	if swag.IsZero(m.Code) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Code); i++ {
+		if swag.IsZero(m.Code[i]) { // not required
+			continue
+		}
+
+		if m.Code[i] != nil {
+			if err := m.Code[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("code" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("code" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this target based on the context it is used
 func (m *Target) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Target) contextValidateCode(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Code); i++ {
+
+		if m.Code[i] != nil {
+			if err := m.Code[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("code" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("code" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
