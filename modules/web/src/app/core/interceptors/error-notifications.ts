@@ -27,6 +27,7 @@ export interface APIError {
 export interface Error {
   code: number;
   message: string;
+  shortMessage?: string;
 }
 
 enum Errors {
@@ -99,7 +100,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
           }
 
           error = this._mapError(error);
-          this._notificationService.error(error.message);
+          this._notificationService.error(error.message, error.shortMessage);
         },
       })
     );
@@ -141,6 +142,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       : {
           message: httpError.message || httpError.statusText,
           code: httpError.status,
+          shortMessage: httpError.statusText,
         };
   }
 }

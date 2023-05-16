@@ -224,16 +224,14 @@ hr {
 }
 
 .km-notification-overlay {
-  bottom: 80px;
+  bottom: 65px;
   position: relative !important;
-  right: 24px;
+  right: 32px;
 
   .km-notification {
     &.mat-snack-bar-container {
       border-radius: variables.$border-radius;
       box-shadow: variables.$notification-shadow;
-      display: flex;
-      flex: 1 1 auto;
       margin: 0;
       max-height: variables.$notification-max-height;
       max-width: variables.$notification-width;
@@ -243,7 +241,6 @@ hr {
       padding: 0;
 
       div {
-        flex: 1 1 auto;
         height: 100%;
       }
     }

@@ -30,6 +30,9 @@ export class NotificationComponent implements AfterViewInit {
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;
   private _type: NotificationType;
 
+  readonly headlineMaxLength = 38;
+  readonly messageMaxLength = 128;
+
   set snackBarRef(ref: MatSnackBarRef<NotificationComponent>) {
     this._snackBarRef = ref;
   }
@@ -40,8 +43,9 @@ export class NotificationComponent implements AfterViewInit {
   }
 
   message: string;
-  typeIconBackground: string;
+  shortMessage: string;
   typeIconClassName: string;
+  isMessageCollapsed = true;
 
   constructor(@Inject(DOCUMENT) private readonly _document: Document) {}
 
@@ -57,23 +61,45 @@ export class NotificationComponent implements AfterViewInit {
     }
   }
 
-  private _init(): void {
-    switch (this._type) {
-      case NotificationType.success:
-        this.typeIconBackground = 'success';
-        this.typeIconClassName = 'km-icon-mask-white km-icon-check';
-        break;
-      case NotificationType.error:
-        this.typeIconBackground = 'error';
-        this.typeIconClassName = 'km-icon-error';
+  showMessageSection(): boolean {
+    return !!(this.message && (this.shortMessage || this._type === NotificationType.error));
+  }
+
+  hasLongMessage(): boolean {
+    return this.message?.length > this.messageMaxLength;
+  }
+
+  getHeadline(): string {
+    if (this.shortMessage) {
+      return this.shortMessage.length > this.headlineMaxLength
+        ? `${this.shortMessage.slice(0, this.headlineMaxLength)}...`
+        : this.shortMessage;
+    } else if (this._type === NotificationType.error) {
+      return 'Something went wrong.';
     }
+    return this.hasLongMessage() ? `${this.message?.slice(0, this.messageMaxLength)}...` : this.message;
   }
 
   dismiss(): void {
     this._snackBarRef.dismiss();
   }
 
-  copyToClipboard(): void {
+  copyHeadlineToClipboard(): void {
+    navigator.clipboard.writeText(this.shortMessage || this.message);
+  }
+
+  copyMessageToClipboard(): void {
     navigator.clipboard.writeText(this.message);
+  }
+
+  private _init(): void {
+    switch (this._type) {
+      case NotificationType.success:
+        this.typeIconClassName = 'km-icon-notification-success';
+        break;
+      case NotificationType.error:
+        this.typeIconClassName = 'km-icon-notification-error';
+        break;
+    }
   }
 }

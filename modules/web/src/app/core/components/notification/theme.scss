@@ -19,13 +19,9 @@
     background: map.get($colors, background-app-bar);
     color: map.get($colors, text);
 
-    .type {
-      &.success {
-        background: map.get($colors, indicator-green);
-      }
-
-      &.error {
-        background: map.get($colors, indicator-red);
+    .notification-container {
+      &.show-message-section > :nth-child(-n + 3) {
+        border-bottom: 1px solid map.get($colors, divider);
       }
     }
   }

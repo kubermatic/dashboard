@@ -24,6 +24,7 @@ import {NotificationComponent, NotificationType} from '../components/notificatio
 
 export interface Notification {
   message: string;
+  shortMessage?: string;
   type: NotificationType;
   timestamp: string;
   beingDispatched: boolean;
@@ -35,7 +36,7 @@ export interface Notification {
 })
 export class NotificationService {
   private readonly _config: MatSnackBarConfig = {
-    duration: 5000,
+    duration: 0, // 5000,
     horizontalPosition: 'end',
     verticalPosition: 'bottom',
     panelClass: 'km-notification',
@@ -58,15 +59,15 @@ export class NotificationService {
         })
       )
       .pipe(map(queue => queue[0]))
-      .subscribe(snackBarItem => this._open(snackBarItem.message, snackBarItem.type));
+      .subscribe(snackBarItem => this._open(snackBarItem.message, snackBarItem.shortMessage, snackBarItem.type));
   }
 
   success(message: string): void {
-    this._pushNotification(message, NotificationType.success);
+    this._pushNotification(NotificationType.success, message);
   }
 
-  error(message: string): void {
-    this._pushNotification(message, NotificationType.error);
+  error(message: string, shortMessage?: string): void {
+    this._pushNotification(NotificationType.error, message, shortMessage);
   }
 
   getNotificationHistory(): Observable<Notification[]> {
@@ -86,10 +87,11 @@ export class NotificationService {
     );
   }
 
-  private _open(message: string, type: NotificationType): void {
+  private _open(message: string, shortMessage: string, type: NotificationType): void {
     const snackBarRef = this._snackBar.openFromComponent(NotificationComponent, this._config);
 
     snackBarRef.instance.message = message;
+    snackBarRef.instance.shortMessage = shortMessage;
     snackBarRef.instance.snackBarRef = snackBarRef;
     snackBarRef.instance.type = type;
 
@@ -109,9 +111,10 @@ export class NotificationService {
       });
   }
 
-  private _pushNotification(message: string, type: NotificationType): void {
+  private _pushNotification(type: NotificationType, message: string, shortMessage?: string): void {
     const notification: Notification = {
       message,
+      shortMessage,
       type,
       timestamp: new Date().toUTCString(),
       beingDispatched: false,
