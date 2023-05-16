@@ -85,7 +85,7 @@
     "moment": "2.29.4",
     "monaco-editor": "0.38.0",
     "ngx-clipboard": "16.0.0",
-    "ngx-cookie-service": "15.0.0",
+    "ngx-cookie-service": "16.0.0",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
     "rxjs": "7.8.1",
