@@ -83,7 +83,7 @@
     "lodash": "4.17.21",
     "modern-normalize": "2.0.0",
     "moment": "2.29.4",
-    "monaco-editor": "0.37.1",
+    "monaco-editor": "0.38.0",
     "ngx-clipboard": "16.0.0",
     "ngx-cookie-service": "15.0.0",
     "ngx-filter-pipe": "2.1.2",
