@@ -33,6 +33,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _isAnimating = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
   notifications: Notification[] = [];
+  unseenNotificationsCount = 0;
   readonly NotificationType = NotificationType;
 
   constructor(
@@ -51,15 +52,18 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
     this._notificationService
       .getNotificationHistory()
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        notifications =>
-          (this.notifications = notifications.sort((a, b) => {
-            const aDate = new Date(a.timestamp);
-            const bDate = new Date(b.timestamp);
+      .subscribe(notifications => {
+        this.unseenNotificationsCount =
+          notifications.length && !this._isOpen
+            ? this.unseenNotificationsCount + (notifications.length - this.notifications.length)
+            : 0;
+        this.notifications = notifications.sort((a, b) => {
+          const aDate = new Date(a.timestamp);
+          const bDate = new Date(b.timestamp);
 
-            return aDate < bDate ? 1 : aDate > bDate ? -1 : 0;
-          }))
-      );
+          return aDate < bDate ? 1 : aDate > bDate ? -1 : 0;
+        });
+      });
   }
 
   ngOnDestroy(): void {
@@ -84,6 +88,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   toggle(): void {
     this._isOpen = !this._isOpen;
+    this.unseenNotificationsCount = 0;
 
     if (this._isOpen) {
       this._onOpen();
