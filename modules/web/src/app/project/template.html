@@ -218,8 +218,13 @@ limitations under the License.
                            [diameter]="25"></mat-spinner>
             </div>
 
-            <div [hidden]="!isPaginatorVisible || showCards">
-              <mat-paginator showFirstLastButtons></mat-paginator>
+            <div [hidden]="!isPaginatorVisible || showCards"
+                 class="km-paginator-container">
+              <div fxLayout="row"
+                   fxLayoutAlign="flex-end center">
+                <km-pagination-page-size></km-pagination-page-size>
+                <mat-paginator showFirstLastButtons></mat-paginator>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
@@ -350,8 +355,10 @@ limitations under the License.
         <p>Dive right into your first project.</p>
         <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/project-and-cluster-management/"
            target="_blank"
-           rel="noreferrer noopener">
-          Learn more in our documentation >
+           rel="noreferrer noopener"
+           fxLayout="row inline"
+           fxLayoutAlign=" center">
+          Learn more in our documentation <i class="km-icon-external-link"></i>
         </a>
       </div>
       <ng-container *ngTemplateOutlet="addProjectButton"></ng-container>

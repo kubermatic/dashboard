@@ -49,7 +49,7 @@ $colors-light: (
   changelog-security: #028c99,
   scrollbar: #a5aeb8,
   scrollbar-background: #edeff0,
-  search-outline: #7e868f,
+  search-outline: #e0e3e5,
   tab-divider: #cad1d9,
   shadow: 0 4px 4px rgb(0 0 0 / 8%),
   shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
@@ -90,5 +90,7 @@ $foreground: map.merge($foreground, (divider: #e0e3e5));
 $foreground: map.merge($foreground, (disabled-divider: #eff1f2));
 $theme-light: map.merge($theme-light, (foreground: $foreground));
 
+/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated */
 @include mat.all-legacy-component-themes($theme-light);
+@include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);

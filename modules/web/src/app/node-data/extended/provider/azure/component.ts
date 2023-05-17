@@ -58,7 +58,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AssignPublicIP]: this._builder.control(true),
+      [Controls.AssignPublicIP]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
       [Controls.AcceleratedNetworking]: this._builder.control(false),
     });
@@ -91,7 +91,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
       this.onTagsChange(this.nodeData.spec.cloud.azure.tags);
 
-      const assignPublicIP = this.nodeData.name ? this.nodeData.spec.cloud.azure.assignPublicIP : true;
+      const assignPublicIP = this.nodeData.name ? this.nodeData.spec.cloud.azure.assignPublicIP : false;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
     }
   }

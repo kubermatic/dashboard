@@ -56,6 +56,7 @@ limitations under the License.
          fxLayoutAlign="center center"
          [href]="getProxyURL()"
          target="_blank"
+         rel="noopener noreferrer"
          mat-flat-button
          [disabled]="!isKubernetesDashboardHealthy"
          [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"

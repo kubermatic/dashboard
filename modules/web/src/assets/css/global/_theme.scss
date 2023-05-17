@@ -20,8 +20,16 @@
     &:not(.mat-button-base) {
       color: map.get($colors, primary);
 
+      i.km-icon-external-link {
+        background-color: map.get($colors, primary);
+      }
+
       &:hover {
         color: map.get($colors, primary-hover);
+
+        i.km-icon-external-link {
+          background-color: map.get($colors, primary-hover);
+        }
       }
     }
 
@@ -298,7 +306,7 @@
     background-color: transparent;
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     border-bottom: 1px solid map.get($colors, divider);
   }
 
@@ -357,5 +365,13 @@
     &::after {
       background-color: map.get($colors, primary);
     }
+  }
+
+  .km-paginator-container {
+    border-top: 1px solid map.get($colors, divider);
+  }
+
+  .km-pagination-page-size-select-container {
+    color: map.get($colors, text-secondary);
   }
 }

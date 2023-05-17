@@ -39,10 +39,10 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Control.InfraManagementUsername]: this._builder.control('', Validators.required),
-      [Control.InfraManagementPassword]: this._builder.control('', Validators.required),
       [Control.Username]: this._builder.control('', Validators.required),
       [Control.Password]: this._builder.control('', Validators.required),
+      [Control.InfraManagementUsername]: this._builder.control(''),
+      [Control.InfraManagementPassword]: this._builder.control(''),
     });
 
     merge(

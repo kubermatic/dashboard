@@ -22,7 +22,7 @@ import {AdminSeed} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DestinationDialog, Mode} from '@app/settings/admin/bucket-settings/destinations/destination-dialog/component';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
 enum Column {
   StateArrow = 'stateArrow',

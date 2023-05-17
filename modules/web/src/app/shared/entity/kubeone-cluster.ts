@@ -39,6 +39,7 @@ export class KubeOneCloudSpec {
   azure?: KubeOneAzureCloudSpec;
   digitalOcean?: KubeOneDigitalOceanCloudSpec;
   hetzner?: KubeOneHetznerCloudSpec;
+  openstack?: KubeOneOpenstackCloudSpec;
 }
 
 export class KubeOneAWSCloudSpec {
@@ -62,4 +63,14 @@ export class KubeOneDigitalOceanCloudSpec {
 }
 export class KubeOneHetznerCloudSpec {
   token: string;
+}
+
+export class KubeOneOpenstackCloudSpec {
+  authURL: string;
+  username: string;
+  password: string;
+  domain: string;
+  project: string;
+  projectID: string;
+  region: string;
 }

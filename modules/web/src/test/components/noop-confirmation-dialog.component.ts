@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, NgModule} from '@angular/core';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from '@shared/module';
 

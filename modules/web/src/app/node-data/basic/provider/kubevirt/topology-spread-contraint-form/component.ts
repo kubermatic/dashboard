@@ -126,7 +126,9 @@ export class TopologySpreadConstraintFormComponent extends BaseFormValidator imp
   }
 
   deleteConstraint(index: number): void {
-    this.removedConstraints?.push(this.constraints[index]);
+    if (this._dialogModeService.isEditDialog) {
+      this.removedConstraints?.push(this.constraints[index]);
+    }
 
     this.constraintArray.removeAt(index);
     this._updateConstraints();

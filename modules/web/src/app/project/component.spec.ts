@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
@@ -93,7 +93,7 @@ describe('ProjectComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    const dialogTitle = document.body.querySelector('.mat-dialog-title');
+    const dialogTitle = document.body.querySelector('.mat-mdc-dialog-title');
     const deleteButton = document.body.querySelector('#km-delete-project-dialog-confirm-btn') as HTMLInputElement;
     const dialogInput = document.querySelector('#km-delete-project-dialog-input');
 

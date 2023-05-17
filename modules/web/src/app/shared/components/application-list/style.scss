@@ -40,6 +40,11 @@ $application-card-width: 320px;
 
 .applications-container {
   margin-top: 20px;
+
+  &.table-view {
+    margin-left: -30px;
+    margin-right: -30px;
+  }
 }
 
 .system-applications-toggle {

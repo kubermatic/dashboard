@@ -81,6 +81,11 @@ limitations under the License.
                [diameter]="25"></mat-spinner>
 </div>
 
-<div [hidden]="!hasPaginator">
-  <mat-paginator showFirstLastButtons></mat-paginator>
+<div [hidden]="!hasPaginator"
+     class="km-paginator-container">
+  <div fxLayout="row"
+       fxLayoutAlign="flex-end center">
+    <km-pagination-page-size></km-pagination-page-size>
+    <mat-paginator showFirstLastButtons></mat-paginator>
+  </div>
 </div>

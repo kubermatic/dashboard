@@ -197,6 +197,7 @@ hr {
   padding: 8px 60px 0;
 
   > * {
+    height: 62px;
     margin-bottom: 10px;
   }
 }
@@ -442,7 +443,7 @@ km-dashboard {
 .km-admission-plugin-warning {
   margin-bottom: 24px;
 
-  i {
+  i.km-icon-warning {
     margin: 0 8px;
   }
 
@@ -522,7 +523,7 @@ km-dashboard {
     max-height: 660px;
     overflow: hidden;
 
-    .mat-dialog-container {
+    .mat-mdc-dialog-container {
       min-width: 600px;
       overflow: hidden;
     }
@@ -536,14 +537,14 @@ km-dashboard {
   }
 
   &.km-changelog-dialog {
-    .mat-dialog-container {
+    .mat-mdc-dialog-container {
       height: auto;
       margin: 20px 0;
       max-width: 600px;
       min-height: 400px;
       min-width: 600px;
 
-      .mat-dialog-content {
+      .mat-mdc-dialog-content {
         max-height: 600px;
       }
     }
@@ -934,6 +935,32 @@ km-side-nav-field .sub-menu-item:last-child {
         border-top-right-radius: variables.$border-radius;
         max-width: initial;
         min-width: 115px;
+      }
+    }
+  }
+}
+
+.km-pagination-page-size-select-container {
+  font-size: variables.$font-size-caption;
+
+  mat-form-field.mat-form-field {
+    width: 70px;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+
+      .mat-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .mat-select .mat-select-trigger {
+        align-items: flex-end;
+        display: flex;
+
+        .mat-select-arrow-wrapper {
+          align-items: flex-end;
+          display: flex;
+        }
       }
     }
   }

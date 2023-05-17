@@ -17,49 +17,56 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <mat-card-header class="km-no-padding"
+                   *ngIf="useCustomCloudCredentials">
+    <mat-card-title>Credentials for CCM and CSI drivers</mat-card-title>
+  </mat-card-header>
   <mat-form-field fxFlex>
     <mat-label>Username</mat-label>
     <input matInput
-           [formControlName]="Controls.InfraManagementUsername"
-           [name]="Controls.InfraManagementUsername"
+           [formControlName]="Controls.Username"
            type="text"
            autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.InfraManagementUsername).hasError('required')">
+           required />
+    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
-  <div fxLayout="column">
-    <mat-form-field fxFlex>
-      <mat-label>Password</mat-label>
-      <input matInput
-             [formControlName]="Controls.InfraManagementPassword"
-             [name]="Controls.InfraManagementUsername"
-             kmInputPassword
-             autocomplete="off"
-             required>
-      <mat-error *ngIf="form.get(Controls.InfraManagementPassword).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-checkbox [formControlName]="Controls.UseCustomCloudCredentials"
-                  [name]="Controls.UseCustomCloudCredentials"
-                  matTooltip="If not selected, above credentials will be used for VSphere Cloud Provider.">
-      Use custom VSphere Cloud credentials
-    </mat-checkbox>
-  </div>
+  <mat-form-field fxFlex>
+    <mat-label>Password</mat-label>
+    <input matInput
+           [formControlName]="Controls.Password"
+           kmInputPassword
+           autocomplete="off"
+           required />
+    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+      <strong>Required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox [formControlName]="Controls.UseCustomCloudCredentials"
+                [name]="Controls.UseCustomCloudCredentials">
+    Use dedicated credentials to provision vSphere resources
+    <div fxFlex
+         class="km-icon-info km-pointer p-10"
+         matTooltip="These credentials will be used for managing resources like tags, folders, networks etc. For cloud provider functionality i.e. external CCM and CSI drivers, the credentials specified above will be used."></div>
+  </mat-checkbox>
+
+  <mat-card-header class="km-no-padding"
+                   *ngIf="useCustomCloudCredentials">
+    <mat-card-title>Credentials for provisioning vSphere resources</mat-card-title>
+  </mat-card-header>
 
   <ng-container *ngIf="useCustomCloudCredentials">
     <mat-form-field fxFlex>
       <mat-label>VSphere Cloud Provider Username</mat-label>
       <input matInput
-             [formControlName]="Controls.Username"
-             [name]="Controls.Username"
+             [formControlName]="Controls.InfraManagementUsername"
              type="text"
              autocomplete="off"
-             required>
-      <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
+             required />
+      <mat-error *ngIf="form.get(Controls.InfraManagementUsername).hasError('required')">
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
@@ -67,12 +74,11 @@ limitations under the License.
     <mat-form-field fxFlex>
       <mat-label>VSphere Cloud Provider Password</mat-label>
       <input matInput
-             [formControlName]="Controls.Password"
-             [name]="Controls.Password"
+             [formControlName]="Controls.InfraManagementPassword"
              kmInputPassword
              autocomplete="off"
-             required>
-      <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
+             required />
+      <mat-error *ngIf="form.get(Controls.InfraManagementPassword).hasError('required')">
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>

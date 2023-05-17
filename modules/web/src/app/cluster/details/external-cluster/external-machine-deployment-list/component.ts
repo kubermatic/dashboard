@@ -26,7 +26,7 @@ import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MemberUtils, Permission} from '@shared/utils/member';
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
-import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {MatStepper} from '@angular/material/stepper';
 import {filter, take, takeUntil} from 'rxjs/operators';

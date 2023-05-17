@@ -16,7 +16,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
-import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec, VSphereInfraManagementUser} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -62,24 +62,12 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
     return this.form.get(Controls.UseCustomCloudCredentials).value;
   }
 
-  private get _cloudUsername(): string {
-    return this.form.get(Controls.Username).value
-      ? this.form.get(Controls.Username).value
-      : this.form.get(Controls.InfraManagementUsername).value;
-  }
-
-  private get _cloudPassword(): string {
-    return this.form.get(Controls.Password).value
-      ? this.form.get(Controls.Password).value
-      : this.form.get(Controls.InfraManagementPassword).value;
-  }
-
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.InfraManagementUsername]: this._builder.control('', Validators.required),
-      [Controls.InfraManagementPassword]: this._builder.control('', Validators.required),
-      [Controls.Username]: this._builder.control(''),
-      [Controls.Password]: this._builder.control(''),
+      [Controls.Username]: this._builder.control('', Validators.required),
+      [Controls.Password]: this._builder.control('', Validators.required),
+      [Controls.InfraManagementUsername]: this._builder.control(''),
+      [Controls.InfraManagementPassword]: this._builder.control(''),
       [Controls.UseCustomCloudCredentials]: this._builder.control(false),
     });
 
@@ -120,15 +108,15 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
 
   private _handleCloudCredentials(selected: boolean): void {
     if (!selected) {
-      this.form.get(Controls.Username).clearValidators();
-      this.form.get(Controls.Password).clearValidators();
+      this.form.get(Controls.InfraManagementUsername).clearValidators();
+      this.form.get(Controls.InfraManagementPassword).clearValidators();
     } else {
-      this.form.get(Controls.Username).setValidators(Validators.required);
-      this.form.get(Controls.Password).setValidators(Validators.required);
+      this.form.get(Controls.InfraManagementUsername).setValidators(Validators.required);
+      this.form.get(Controls.InfraManagementPassword).setValidators(Validators.required);
     }
 
-    this.form.get(Controls.Username).setValue('');
-    this.form.get(Controls.Password).setValue('');
+    this.form.get(Controls.InfraManagementUsername).setValue('');
+    this.form.get(Controls.InfraManagementPassword).setValue('');
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -142,16 +130,21 @@ export class VSphereProviderBasicComponent extends BaseFormValidator implements 
   }
 
   private _getCluster(): Cluster {
+    let infraUser = null;
+    if (this.useCustomCloudCredentials) {
+      infraUser = {
+        username: this.form.get(Controls.InfraManagementUsername).value,
+        password: this.form.get(Controls.InfraManagementPassword).value,
+      } as VSphereInfraManagementUser;
+    }
+
     return {
       spec: {
         cloud: {
           vsphere: {
-            username: this._cloudUsername,
-            password: this._cloudPassword,
-            infraManagementUser: {
-              username: this.form.get(Controls.InfraManagementUsername).value,
-              password: this.form.get(Controls.InfraManagementPassword).value,
-            },
+            username: this.form.get(Controls.Username).value,
+            password: this.form.get(Controls.Password).value,
+            infraManagementUser: infraUser,
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

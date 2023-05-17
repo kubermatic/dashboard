@@ -15,9 +15,7 @@ limitations under the License.
 -->
 <div id="km-confirmation-dialog"
      (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>
-    <div>{{data.title}}</div>
-  </km-dialog-title>
+  <km-dialog-title>{{data.title}}</km-dialog-title>
   <mat-dialog-content>
     <p [innerHTML]="data.message"></p>
     <div *ngIf="!!data.warning"

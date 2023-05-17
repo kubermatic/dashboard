@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <km-dialog-title>Add Application</km-dialog-title>
-<mat-dialog-content class="add-application-dialog-content">
+<div class="add-application-dialog-content">
   <mat-horizontal-stepper class="km-stepper-in-dialog"
                           linear
                           disableRipple
@@ -31,8 +31,10 @@ limitations under the License.
           Install third party Applications into a cluster,
           <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/applications/"
              target="_blank"
-             rel="noreferrer noopener">
-            learn more about Applications >
+             rel="noreferrer noopener"
+             fxLayout="row inline"
+             fxLayoutAlign=" center">
+            learn more about Applications <i class="km-icon-external-link i-18"></i>.
           </a>
         </p>
         <div class="applications-search">
@@ -178,7 +180,7 @@ limitations under the License.
       </ng-container>
     </mat-step>
   </mat-horizontal-stepper>
-</mat-dialog-content>
+</div>
 <mat-dialog-actions *ngIf="stepper.selectedIndex > 0">
   <button mat-flat-button
           type="button"

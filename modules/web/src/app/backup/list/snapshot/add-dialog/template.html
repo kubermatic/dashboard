@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div id="km-add-snapshot-dialog">
-  <km-dialog-title>
-    <div>Add Snapshot</div>
-  </km-dialog-title>
+  <km-dialog-title>Add Snapshot</km-dialog-title>
 
   <mat-dialog-content>
     <form [formGroup]="form"
@@ -62,8 +60,10 @@ limitations under the License.
           </mat-select>
           <mat-hint *ngIf="isAdmin && !hasDestinations()">
             <a class="km-pointer"
+               fxLayoutAlign=" center"
                href="/settings/backupdestinations"
-               target="_blank">Configure a destination for this seed.</a>
+               target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.
+            </a>
           </mat-hint>
           <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
           </mat-hint>

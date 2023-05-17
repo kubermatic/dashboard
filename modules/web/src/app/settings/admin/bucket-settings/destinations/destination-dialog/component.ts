@@ -14,10 +14,7 @@
 
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
@@ -143,7 +140,7 @@ export class DestinationDialog implements OnInit, OnDestroy {
   onNext(): void {
     this._matDialogRef.close();
     this._notificationService.success(
-      `${this.data.mode === Mode.Add ? 'Added' : ' Created'} the ${
+      `${this.data.mode === Mode.Add ? 'Added' : ' Updated'} the ${
         this.form.get(Controls.DestinationName).value
       } destination`
     );
@@ -151,10 +148,6 @@ export class DestinationDialog implements OnInit, OnDestroy {
   }
 
   private _isDefault(): boolean {
-    return !this._hasDefaultDestination() || this.currentDefault === this.data?.destination?.destinationName;
-  }
-
-  private _hasDefaultDestination(): boolean {
-    return !!this.currentDefault;
+    return this.currentDefault === this.data?.destination?.destinationName;
   }
 }

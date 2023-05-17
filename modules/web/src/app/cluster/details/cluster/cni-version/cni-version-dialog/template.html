@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>
-  <span>Change CNI Plugin Version</span>
-  <div *ngIf="upgradeAvailable()"
-       class="km-update-available-badge">
-    <i class="km-icon-update-available-arrow"></i>
-    <span>Update Available</span>
+  <div fxLayout="row inline"
+       fxLayoutAlign=" center">
+    <span>Change CNI Plugin Version</span>
+    <div *ngIf="upgradeAvailable()"
+         class="km-update-available-badge">
+      <i class="km-icon-update-available-arrow"></i>
+      <span>Update Available</span>
+    </div>
   </div>
 </km-dialog-title>
 <mat-dialog-content>

@@ -32,7 +32,9 @@
   }
 
   // Dialogs.
-  .mat-dialog-container {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-supporting-text-color: map.get($colors, text);
+
     color: map.get($colors, text);
   }
 
@@ -80,8 +82,6 @@
   }
 
   .mat-paginator {
-    border-top: 1px solid map.get($colors, divider);
-
     .mat-paginator-range-actions > .mat-icon-button:not([disabled]) {
       color: map.get($colors, text-secondary);
     }
@@ -166,6 +166,10 @@
         color: map.get($colors, divider-disabled);
       }
     }
+  }
+
+  .mat-form-field-empty.mat-form-field-label .mat-form-field-required-marker {
+    color: map.get($colors, secondary);
   }
 
   div.mat-form-field-outline.mat-form-field-outline-thick {

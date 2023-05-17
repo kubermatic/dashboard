@@ -15,37 +15,39 @@ limitations under the License.
 -->
 <km-dialog-title>Edit Preset</km-dialog-title>
 
-<p class="km-dialog-context-description">Edit <b>{{data.preset.name}}</b> provider preset</p>
+<mat-dialog-content>
+  <p class="km-dialog-context-description">Edit <b>{{data.preset.name}}</b> provider preset</p>
 
-<div class="header"
-     fxLayoutAlign="space-between">
-  <div>Provider</div>
-  <div fxLayout="row"
-       class="show">
-    Show
-    <div fxFlexAlign="center"
-         fxLayoutAlign="center"
-         class="km-icon-info km-pointer tooltip"
-         matTooltip="Shows if the Preset provider is enabled or disabled. If disabled it will not be possible to create a cluster for the provider using this preset."></div>
-  </div>
-</div>
-
-<div class="table">
-  <div *ngFor="let provider of data.preset.providers"
-       class="row">
-    <div fxFlex
-         fxLayout="row"
-         fxLayoutAlign="space-between">
-      <div fxFlexAlign="center">
-        <i class="km-provider-logo km-provider-logo-{{provider.name}}"
-           [ngClass]="provider.enabled ? '' : 'disabled'"></i>
-      </div>
-
-      <km-button iconButton="true"
-                 [icon]="provider.enabled ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-hide'"
-                 [observable]="getObservable(provider.name, !provider.enabled)"
-                 (next)="onNext(provider.name, !provider.enabled)">
-      </km-button>
+  <div class="header"
+       fxLayoutAlign="space-between">
+    <div>Provider</div>
+    <div fxLayout="row"
+         class="show">
+      Show
+      <div fxFlexAlign="center"
+           fxLayoutAlign="center"
+           class="km-icon-info km-pointer tooltip"
+           matTooltip="Shows if the Preset provider is enabled or disabled. If disabled it will not be possible to create a cluster for the provider using this preset."></div>
     </div>
   </div>
-</div>
+
+  <div class="table">
+    <div *ngFor="let provider of data.preset.providers"
+         class="row">
+      <div fxFlex
+           fxLayout="row"
+           fxLayoutAlign="space-between">
+        <div fxFlexAlign="center">
+          <i class="km-provider-logo km-provider-logo-{{provider.name}}"
+             [ngClass]="provider.enabled ? '' : 'disabled'"></i>
+        </div>
+
+        <km-button iconButton="true"
+                   [icon]="provider.enabled ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-hide'"
+                   [observable]="getObservable(provider.name, !provider.enabled)"
+                   (next)="onNext(provider.name, !provider.enabled)">
+        </km-button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -283,10 +283,12 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   removeCategory(index: number): void {
-    this.removedCategories?.push({
-      category: this.categoriesFormArray.value[index].category.select,
-      categoryValue: this.categoriesFormArray.value[index].categoryValue.select,
-    });
+    if (this._dialogModeService.isEditDialog) {
+      this.removedCategories?.push({
+        category: this.categoriesFormArray.value[index].category.select,
+        categoryValue: this.categoriesFormArray.value[index].categoryValue.select,
+      });
+    }
 
     const selectedCategory = this.categoriesFormArray.at(index).get(Controls.Category).value[ComboboxControls.Select];
     this.categoriesFormArray.removeAt(index);
