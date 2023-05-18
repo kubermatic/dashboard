@@ -38535,7 +38535,7 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ProjectClusterList": {
-      "description": "An error message is added to the response in case when there was a problem with creating clinet for any of seeds.",
+      "description": "An error message is added to the response in case when there was a problem with creating client for any of seeds.",
       "type": "object",
       "title": "ProjectClusterList contains a list of clusters for a project and an optional error message.",
       "properties": {
