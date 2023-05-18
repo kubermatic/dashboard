@@ -2110,3 +2110,11 @@ type VSphereTag struct {
 	// UsedBy is the list of actors that have resources attached to this tag.
 	UsedBy []string `json:"usedBy"`
 }
+
+// ProjectClusterList contains a list of clusters for a project and an optional error message.
+// An error message is added to the response in case when there was a problem with creating clinet for any of seeds.
+// swagger:model ProjectClusterList
+type ProjectClusterList struct {
+	Clusters     apiv1.ClusterList `json:"clusters"`
+	ErrorMessage *string           `json:"errorMessage,omitempty"`
+}

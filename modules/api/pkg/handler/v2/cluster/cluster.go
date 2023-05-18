@@ -30,6 +30,7 @@ import (
 	"go.uber.org/zap"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -83,25 +84,33 @@ func ListEndpoint(
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ListClustersReq)
-		clusterList := make([]apiv1.Cluster, 0)
+		clusterList := apiv1.ClusterList{}
 
 		seeds, err := seedsGetter()
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		// Indicates problems connecting to any of Seeds
-		isPartial := false
-
+		brokenSeeds := []string{}
 		for _, seed := range seeds {
-			// if a Seed is bad, do not forward that error to the user, but log and mark response as partial
+			// if a Seed is bad, log error and put seed's name on the list of broken seeds.
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				kubermaticlog.Logger.Errorw("failed to create cluster provider", "seed", seed.Name, zap.Error(err))
-				isPartial = true
+				brokenSeeds = append(brokenSeeds, seed.Name)
 				continue
 			}
-			apiClusters, err := handlercommon.GetClusters(ctx, userInfoGetter, clusterProvider, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, configGetter, req.ShowDeploymentMachineCount)
+			apiClusters, err := handlercommon.GetClusters(
+				ctx,
+				userInfoGetter,
+				clusterProvider,
+				projectProvider,
+				privilegedProjectProvider,
+				seedsGetter,
+				req.ProjectID,
+				configGetter,
+				req.ShowDeploymentMachineCount,
+			)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -110,9 +119,26 @@ func ListEndpoint(
 			}
 		}
 
-		return apiv1.ClusterList{
-			Clusters:  clusterList,
-			IsPartial: isPartial,
+		if len(brokenSeeds) > 0 {
+			errMsg := "Failed to fetch data for one or more seeds. Please contact an administrator."
+
+			user, err := userInfoGetter(ctx, "")
+			if err != nil {
+				return nil, err
+			}
+			if user.IsAdmin {
+				brokenSeedsAsStr := strings.Join(brokenSeeds, `, `)
+				errMsg = fmt.Sprintf("Failed to fetch data for following seeds: %s", brokenSeedsAsStr)
+			}
+
+			return apiv2.ProjectClusterList{
+				Clusters:     clusterList,
+				ErrorMessage: &errMsg,
+			}, nil
+		}
+
+		return apiv2.ProjectClusterList{
+			Clusters: clusterList,
 		}, nil
 	}
 }

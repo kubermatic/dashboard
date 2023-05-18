@@ -1375,14 +1375,9 @@ type AddonConfig struct {
 	Spec kubermaticv1.AddonConfigSpec `json:"spec"`
 }
 
-// ClusterList represents a list of clusters and information if the response is partial
+// ClusterList represents a list of clusters
 // swagger:model ClusterList
-type ClusterList struct {
-	Clusters []Cluster `json:"clusters"`
-
-	// IsPartial indicates if list of clusters is complete. In case that connection to any seed fails, its value is set to true.
-	IsPartial bool `json:"isPartial"`
-}
+type ClusterList []Cluster
 
 // Node represents a worker node that is part of a cluster
 // swagger:model Node

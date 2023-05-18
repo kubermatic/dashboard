@@ -1666,7 +1666,7 @@ func (r *TestClient) CreateClusterTemplateInstance(projectID, templateID string,
 }
 
 // ListClusters method lists user clusters.
-func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount bool) (*apiv1.ClusterList, error) {
+func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount bool) (*apiv2.ProjectClusterList, error) {
 	params := &project.ListClustersV2Params{
 		ProjectID:                  projectID,
 		ShowDeploymentMachineCount: pointer.Bool(showDeploymentMachineCount),
@@ -1693,9 +1693,8 @@ func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount b
 		clusters = append(clusters, *apiCluster)
 	}
 
-	return &apiv1.ClusterList{
-		IsPartial: clusterList.Payload.IsPartial,
-		Clusters:  clusters,
+	return &apiv2.ProjectClusterList{
+		Clusters: clusters,
 	}, nil
 }
 

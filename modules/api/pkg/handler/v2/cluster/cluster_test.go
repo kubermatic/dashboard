@@ -29,6 +29,7 @@ import (
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -345,7 +346,7 @@ func TestListClusters(t *testing.T) {
 	t.Parallel()
 	testcases := []struct {
 		Name                   string
-		ExpectedClusters       apiv1.ClusterList
+		ExpectedClusters       apiv2.ProjectClusterList
 		HTTPStatus             int
 		ExistingAPIUser        *apiv1.User
 		ExistingKubermaticObjs []ctrlruntimeclient.Object
@@ -353,8 +354,7 @@ func TestListClusters(t *testing.T) {
 		// scenario 1
 		{
 			Name: "scenario 1: list clusters that belong to the given project",
-			ExpectedClusters: apiv1.ClusterList{
-				IsPartial: false,
+			ExpectedClusters: apiv2.ProjectClusterList{
 				Clusters: []apiv1.Cluster{
 					{
 						ObjectMeta: apiv1.ObjectMeta{
@@ -498,8 +498,7 @@ func TestListClusters(t *testing.T) {
 		// scenario 2
 		{
 			Name: "scenario 2: the admin John can list Bob's clusters",
-			ExpectedClusters: apiv1.ClusterList{
-				IsPartial: false,
+			ExpectedClusters: apiv2.ProjectClusterList{
 				Clusters: []apiv1.Cluster{
 					{
 						ObjectMeta: apiv1.ObjectMeta{
@@ -660,7 +659,7 @@ func TestListClusters(t *testing.T) {
 				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.HTTPStatus, res.Code, res.Body.String())
 			}
 
-			actualClusters := decodeClusterListOrDie(res.Body, t)
+			actualClusters := decodeProjectClusterListOrDie(res.Body, t)
 
 			wrappedExpectedClusters := test.NewClusterV1SliceWrapper(tc.ExpectedClusters.Clusters)
 			wrappedExpectedClusters.Sort()
@@ -2289,13 +2288,13 @@ func genUser(name, email string, isAdmin bool) *kubermaticv1.User {
 	return user
 }
 
-func decodeClusterListOrDie(r io.Reader, t *testing.T) test.NewClusterV1SliceWrapper {
+func decodeProjectClusterListOrDie(r io.Reader, t *testing.T) test.NewClusterV1SliceWrapper {
 	t.Helper()
-	clusterList := &apiv1.ClusterList{}
+	clusterListResp := &apiv2.ProjectClusterList{}
 	dec := json.NewDecoder(r)
-	err := dec.Decode(clusterList)
+	err := dec.Decode(clusterListResp)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return test.NewClusterV1SliceWrapper(clusterList.Clusters)
+	return test.NewClusterV1SliceWrapper(clusterListResp.Clusters)
 }
