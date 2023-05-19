@@ -28,6 +28,7 @@ import {
   CreateClusterModel,
   Finalizer,
   MasterVersion,
+  ProjectClusterList,
   ProviderSettingsPatch,
   Token,
 } from '@shared/entity/cluster';
@@ -42,11 +43,6 @@ import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shar
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
-
-type ProjectClusterList = {
-  clusters: Cluster[];
-  errorMessage: boolean;
-};
 
 @Injectable()
 export class ClusterService {

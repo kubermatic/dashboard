@@ -1,49 +1,47 @@
-[
-  {
-    "id": "k9kmvms7kl",
-    "name": "test-cluster",
-    "creationTimestamp": "2021-10-15T08:50:22Z",
-    "type": "kubernetes",
-    "spec": {
-      "cloud": {
-        "dc": "byo-europe-west3-c",
-        "bringyourown": {},
-        "providerName": "bringyourown"
-      },
-      "version": "1.21.5",
-      "oidc": {},
-      "enableUserSSHKeyAgent": true,
-      "auditLogging": {},
-      "opaIntegration": {},
-      "mla": {
-        "monitoringEnabled": true,
-        "loggingEnabled": true
-      },
-      "containerRuntime": "containerd",
-      "clusterNetwork": {
-        "services": {
-          "cidrBlocks": [
-            "10.240.16.0/20"
-          ]
+{
+  "clusters": [
+    {
+      "id": "k9kmvms7kl",
+      "name": "test-cluster",
+      "creationTimestamp": "2021-10-15T08:50:22Z",
+      "type": "kubernetes",
+      "spec": {
+        "cloud": {
+          "dc": "byo-europe-west3-c",
+          "bringyourown": {},
+          "providerName": "bringyourown"
         },
-        "pods": {
-          "cidrBlocks": [
-            "172.25.0.0/16"
-          ]
+        "version": "1.21.5",
+        "oidc": {},
+        "enableUserSSHKeyAgent": true,
+        "auditLogging": {},
+        "opaIntegration": {},
+        "mla": {
+          "monitoringEnabled": true,
+          "loggingEnabled": true
         },
-        "dnsDomain": "cluster.local",
-        "proxyMode": "ipvs",
-        "nodeLocalDNSCacheEnabled": true
+        "containerRuntime": "containerd",
+        "clusterNetwork": {
+          "services": {
+            "cidrBlocks": ["10.240.16.0/20"]
+          },
+          "pods": {
+            "cidrBlocks": ["172.25.0.0/16"]
+          },
+          "dnsDomain": "cluster.local",
+          "proxyMode": "ipvs",
+          "nodeLocalDNSCacheEnabled": true
+        },
+        "cniPlugin": {
+          "type": "canal",
+          "version": "v3.20"
+        }
       },
-      "cniPlugin": {
-        "type": "canal",
-        "version": "v3.20"
+      "status": {
+        "version": "1.21.5",
+        "url": "https://k9kmvms7kl.europe-west3-c.test.io:6443",
+        "externalCCMMigration": "Unsupported"
       }
-    },
-    "status": {
-      "version": "1.21.5",
-      "url": "https://k9kmvms7kl.europe-west3-c.test.io:6443",
-      "externalCCMMigration": "Unsupported"
     }
-  }
-]
+  ]
+}

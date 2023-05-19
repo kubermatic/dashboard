@@ -125,6 +125,7 @@ type Resource = typeof Resource;
 
 const EmptyArray = 'empty-array.json';
 const EmptyObject = 'empty-object.json';
+const EmptyProjectClusterList = 'empty-project-cluster-list.json';
 const Members = 'members.json';
 const User = {
   id: 'user-j9e03',
@@ -152,5 +153,5 @@ const Settings = {
   Datacenter: 'datacenter.json',
 };
 
-export const Fixtures = {Provider, Resource, EmptyArray, EmptyObject, User, Members, Settings};
+export const Fixtures = {Provider, Resource, EmptyArray, EmptyObject, EmptyProjectClusterList, User, Members, Settings};
 export type Fixtures = typeof Fixtures;

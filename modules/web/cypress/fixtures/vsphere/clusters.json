@@ -1,49 +1,47 @@
-[
-  {
-    "id": "x78pcbxcjq",
-    "name": "test-cluster",
-    "creationTimestamp": "2021-10-07T09:57:31Z",
-    "type": "kubernetes",
-    "spec": {
-      "cloud": {
-        "dc": "test-vsphere-dc",
-        "vsphere": {},
-        "providerName": "vsphere"
-      },
-      "version": "1.21.5",
-      "oidc": {},
-      "enableUserSSHKeyAgent": true,
-      "auditLogging": {},
-      "opaIntegration": {},
-      "mla": {
-        "monitoringEnabled": true,
-        "loggingEnabled": true
-      },
-      "containerRuntime": "containerd",
-      "clusterNetwork": {
-        "services": {
-          "cidrBlocks": [
-            "10.241.0.0/20"
-          ]
+{
+  "clusters": [
+    {
+      "id": "x78pcbxcjq",
+      "name": "test-cluster",
+      "creationTimestamp": "2021-10-07T09:57:31Z",
+      "type": "kubernetes",
+      "spec": {
+        "cloud": {
+          "dc": "test-vsphere-dc",
+          "vsphere": {},
+          "providerName": "vsphere"
         },
-        "pods": {
-          "cidrBlocks": [
-            "172.26.0.0/16"
-          ]
+        "version": "1.21.5",
+        "oidc": {},
+        "enableUserSSHKeyAgent": true,
+        "auditLogging": {},
+        "opaIntegration": {},
+        "mla": {
+          "monitoringEnabled": true,
+          "loggingEnabled": true
         },
-        "dnsDomain": "cluster.local",
-        "proxyMode": "ipvs",
-        "nodeLocalDNSCacheEnabled": true
+        "containerRuntime": "containerd",
+        "clusterNetwork": {
+          "services": {
+            "cidrBlocks": ["10.241.0.0/20"]
+          },
+          "pods": {
+            "cidrBlocks": ["172.26.0.0/16"]
+          },
+          "dnsDomain": "cluster.local",
+          "proxyMode": "ipvs",
+          "nodeLocalDNSCacheEnabled": true
+        },
+        "cniPlugin": {
+          "type": "canal",
+          "version": "v3.20"
+        }
       },
-      "cniPlugin": {
-        "type": "canal",
-        "version": "v3.20"
+      "status": {
+        "version": "1.21.5",
+        "url": "",
+        "externalCCMMigration": "NotNeeded"
       }
-    },
-    "status": {
-      "version": "1.21.5",
-      "url": "",
-      "externalCCMMigration": "NotNeeded"
     }
-  }
-]
+  ]
+}
