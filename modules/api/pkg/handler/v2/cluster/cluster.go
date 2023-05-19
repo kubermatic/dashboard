@@ -128,7 +128,7 @@ func ListEndpoint(
 			}
 			if user.IsAdmin {
 				brokenSeedsAsStr := strings.Join(brokenSeeds, `, `)
-				errMsg = fmt.Sprintf("Failed to fetch data for following seeds: %s", brokenSeedsAsStr)
+				errMsg = fmt.Sprintf("Failed to fetch data for following seeds: %s.", brokenSeedsAsStr)
 			}
 
 			return apiv2.ProjectClusterList{
