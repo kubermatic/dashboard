@@ -1694,7 +1694,8 @@ func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount b
 	}
 
 	return &apiv2.ProjectClusterList{
-		Clusters: clusters,
+		Clusters:     clusters,
+		ErrorMessage: &clusterList.Payload.ErrorMessage,
 	}, nil
 }
 

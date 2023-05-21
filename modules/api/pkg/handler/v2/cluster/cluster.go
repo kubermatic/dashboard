@@ -84,7 +84,7 @@ func ListEndpoint(
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ListClustersReq)
-		clusterList := apiv1.ClusterList{}
+		allClusters := make([]*apiv1.Cluster, 0)
 
 		seeds, err := seedsGetter()
 		if err != nil {
@@ -94,16 +94,16 @@ func ListEndpoint(
 		brokenSeeds := []string{}
 		for _, seed := range seeds {
 			// if a Seed is bad, log error and put seed's name on the list of broken seeds.
-			clusterProvider, err := clusterProviderGetter(seed)
+			seedClusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				kubermaticlog.Logger.Errorw("failed to create cluster provider", "seed", seed.Name, zap.Error(err))
 				brokenSeeds = append(brokenSeeds, seed.Name)
 				continue
 			}
-			apiClusters, err := handlercommon.GetClusters(
+			seedClusters, err := handlercommon.GetClusters(
 				ctx,
 				userInfoGetter,
-				clusterProvider,
+				seedClusterProvider,
 				projectProvider,
 				privilegedProjectProvider,
 				seedsGetter,
@@ -114,9 +114,12 @@ func ListEndpoint(
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
-			for _, cluster := range apiClusters {
-				clusterList = append(clusterList, *cluster)
-			}
+			allClusters = append(allClusters, seedClusters...)
+		}
+
+		clusterList := make(apiv1.ClusterList, len(allClusters))
+		for idx, cluster := range allClusters {
+			clusterList[idx] = *cluster
 		}
 
 		if len(brokenSeeds) > 0 {

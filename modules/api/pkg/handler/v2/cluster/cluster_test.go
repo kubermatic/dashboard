@@ -355,7 +355,7 @@ func TestListClusters(t *testing.T) {
 		{
 			Name: "scenario 1: list clusters that belong to the given project",
 			ExpectedClusters: apiv2.ProjectClusterList{
-				Clusters: []apiv1.Cluster{
+				Clusters: apiv1.ClusterList{
 					{
 						ObjectMeta: apiv1.ObjectMeta{
 							ID:                "clusterAbcID",
@@ -499,7 +499,7 @@ func TestListClusters(t *testing.T) {
 		{
 			Name: "scenario 2: the admin John can list Bob's clusters",
 			ExpectedClusters: apiv2.ProjectClusterList{
-				Clusters: []apiv1.Cluster{
+				Clusters: apiv1.ClusterList{
 					{
 						ObjectMeta: apiv1.ObjectMeta{
 							ID:                "clusterAbcID",
