@@ -10250,9 +10250,9 @@
         ],
         "responses": {
           "200": {
-            "description": "ClusterList",
+            "description": "ProjectClusterList",
             "schema": {
-              "$ref": "#/definitions/ClusterList"
+              "$ref": "#/definitions/ProjectClusterList"
             }
           },
           "401": {
@@ -38533,6 +38533,21 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "ProjectClusterList": {
+      "description": "An error message is added to the response in case when there was a problem with creating client for any of seeds.",
+      "type": "object",
+      "title": "ProjectClusterList contains a list of clusters for a project and an optional error message.",
+      "properties": {
+        "clusters": {
+          "$ref": "#/definitions/ClusterList"
+        },
+        "errorMessage": {
+          "type": "string",
+          "x-go-name": "ErrorMessage"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "ProjectGroup": {
       "description": "ProjectGroup is a helper data structure that\nstores the information about a project and a group prefix that a user belongs to.",

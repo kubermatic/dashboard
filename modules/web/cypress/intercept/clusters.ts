@@ -67,14 +67,14 @@ class ProviderFactory {
 }
 
 abstract class ProviderBase implements Interceptor {
-  protected static _clusterListFixture: string = Fixtures.EmptyArray;
+  protected static _projectClusterListFixture: string = Fixtures.EmptyProjectClusterList;
   protected static _clusterFixture: string = Fixtures.Provider.BringYourOwn.Cluster;
   protected static _machineDeploymentListFixture: string;
   protected static _machineDeploymentFixture: string;
 
   protected constructor() {
     cy.intercept(RequestType.GET, Endpoints.Resource.Cluster.List, req =>
-      req.reply({fixture: ProviderBase._clusterListFixture})
+      req.reply({fixture: ProviderBase._projectClusterListFixture})
     );
     cy.intercept(RequestType.POST, Endpoints.Resource.Cluster.Create, req =>
       req.reply({fixture: ProviderBase._clusterFixture})
@@ -83,7 +83,7 @@ abstract class ProviderBase implements Interceptor {
   }
 
   onDelete(): void {
-    ProviderBase._clusterListFixture = Fixtures.EmptyArray;
+    ProviderBase._projectClusterListFixture = Fixtures.EmptyProjectClusterList;
     ProviderBase._clusterFixture = Fixtures.EmptyObject;
   }
 
@@ -100,7 +100,7 @@ class Alibaba extends ProviderBase {
   }
 
   onCreate(): void {
-    ProviderBase._clusterListFixture = Fixtures.Provider.Alibaba.ClusterList;
+    ProviderBase._projectClusterListFixture = Fixtures.Provider.Alibaba.ClusterList;
     ProviderBase._clusterFixture = Fixtures.Provider.Alibaba.Cluster;
   }
 }
@@ -111,7 +111,7 @@ class BringYourOwn extends ProviderBase {
   }
 
   onCreate(): void {
-    ProviderBase._clusterListFixture = Fixtures.Provider.BringYourOwn.ClusterList;
+    ProviderBase._projectClusterListFixture = Fixtures.Provider.BringYourOwn.ClusterList;
     ProviderBase._clusterFixture = Fixtures.Provider.BringYourOwn.Cluster;
   }
 }
@@ -132,7 +132,7 @@ class Digitalocean extends ProviderBase {
   }
 
   onCreate(): void {
-    ProviderBase._clusterListFixture = Fixtures.Provider.Digitalocean.ClusterList;
+    ProviderBase._projectClusterListFixture = Fixtures.Provider.Digitalocean.ClusterList;
     ProviderBase._clusterFixture = Fixtures.Provider.Digitalocean.Cluster;
     ProviderBase._machineDeploymentListFixture = Fixtures.Provider.Digitalocean.MachineDeploymentList;
     ProviderBase._machineDeploymentFixture = Fixtures.Provider.Digitalocean.MachineDeployment;

@@ -1790,7 +1790,7 @@ func (r Routing) createCluster() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: ClusterList
+//	  200: ProjectClusterList
 //	  401: empty
 //	  403: empty
 func (r Routing) listClusters() http.Handler {

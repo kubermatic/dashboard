@@ -1,51 +1,49 @@
-[
-  {
-    "id": "s8ztcnc8bp",
-    "name": "test-cluster",
-    "creationTimestamp": "2021-10-11T08:25:59Z",
-    "type": "kubernetes",
-    "spec": {
-      "cloud": {
-        "dc": "test-digitalocean-dc",
-        "digitalocean": {},
-        "providerName": "digitalocean"
-      },
-      "version": "1.21.5",
-      "oidc": {},
-      "enableUserSSHKeyAgent": true,
-      "auditLogging": {},
-      "opaIntegration": {
-        "enabled": true
-      },
-      "mla": {
-        "monitoringEnabled": true,
-        "loggingEnabled": true
-      },
-      "containerRuntime": "containerd",
-      "clusterNetwork": {
-        "services": {
-          "cidrBlocks": [
-            "10.240.16.0/20"
-          ]
+{
+  "clusters": [
+    {
+      "id": "s8ztcnc8bp",
+      "name": "test-cluster",
+      "creationTimestamp": "2021-10-11T08:25:59Z",
+      "type": "kubernetes",
+      "spec": {
+        "cloud": {
+          "dc": "test-digitalocean-dc",
+          "digitalocean": {},
+          "providerName": "digitalocean"
         },
-        "pods": {
-          "cidrBlocks": [
-            "172.25.0.0/16"
-          ]
+        "version": "1.21.5",
+        "oidc": {},
+        "enableUserSSHKeyAgent": true,
+        "auditLogging": {},
+        "opaIntegration": {
+          "enabled": true
         },
-        "dnsDomain": "cluster.local",
-        "proxyMode": "ipvs",
-        "nodeLocalDNSCacheEnabled": true
+        "mla": {
+          "monitoringEnabled": true,
+          "loggingEnabled": true
+        },
+        "containerRuntime": "containerd",
+        "clusterNetwork": {
+          "services": {
+            "cidrBlocks": ["10.240.16.0/20"]
+          },
+          "pods": {
+            "cidrBlocks": ["172.25.0.0/16"]
+          },
+          "dnsDomain": "cluster.local",
+          "proxyMode": "ipvs",
+          "nodeLocalDNSCacheEnabled": true
+        },
+        "cniPlugin": {
+          "type": "canal",
+          "version": "v3.20"
+        }
       },
-      "cniPlugin": {
-        "type": "canal",
-        "version": "v3.20"
+      "status": {
+        "version": "1.21.5",
+        "url": "",
+        "externalCCMMigration": "Unsupported"
       }
-    },
-    "status": {
-      "version": "1.21.5",
-      "url": "",
-      "externalCCMMigration": "Unsupported"
     }
-  }
-]
+  ]
+}

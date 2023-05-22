@@ -61,10 +61,10 @@ func NewListClustersV2OK() *ListClustersV2OK {
 /*
 ListClustersV2OK describes a response with status code 200, with default header values.
 
-ClusterList
+ProjectClusterList
 */
 type ListClustersV2OK struct {
-	Payload models.ClusterList
+	Payload *models.ProjectClusterList
 }
 
 // IsSuccess returns true when this list clusters v2 o k response has a 2xx status code
@@ -100,14 +100,16 @@ func (o *ListClustersV2OK) String() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters][%d] listClustersV2OK  %+v", 200, o.Payload)
 }
 
-func (o *ListClustersV2OK) GetPayload() models.ClusterList {
+func (o *ListClustersV2OK) GetPayload() *models.ProjectClusterList {
 	return o.Payload
 }
 
 func (o *ListClustersV2OK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.ProjectClusterList)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

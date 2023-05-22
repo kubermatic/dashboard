@@ -116,18 +116,15 @@ func TestHttpClientWithRetries(t *testing.T) {
 			handlerFuncs: []http.HandlerFunc{
 				func(w http.ResponseWriter, r *http.Request) {
 					time.AfterFunc(20*time.Millisecond, func() {
-						w.WriteHeader(http.StatusOK)
 						fmt.Fprintln(w, "success")
 					})
 				},
 				func(w http.ResponseWriter, r *http.Request) {
 					time.AfterFunc(20*time.Millisecond, func() {
-						w.WriteHeader(http.StatusOK)
 						fmt.Fprintln(w, "success")
 					})
 				},
 				func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
 					fmt.Fprintln(w, "success")
 				},
 			},

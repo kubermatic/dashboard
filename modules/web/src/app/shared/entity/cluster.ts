@@ -641,3 +641,8 @@ class ClusterModel {
   credential?: string;
   annotations?: Record<ClusterAnnotation | string, string>;
 }
+
+export class ProjectClusterList {
+  clusters: Cluster[];
+  errorMessage: boolean;
+}

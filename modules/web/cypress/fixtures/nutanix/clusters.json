@@ -1,46 +1,44 @@
-[
+{
+  "clusters": [
     {
-        "id": "nqs54sdp8x",
-        "name": "test-cluster",
-        "creationTimestamp": "2022-02-14T19:38:25Z",
-        "type": "kubernetes",
-        "spec": {
-            "cloud": {
-                "dc": "test-nutanix-dc",
-                "nutanix": {}
-            },
-            "version": "1.21.8",
-            "oidc": {},
-            "enableUserSSHKeyAgent": true,
-            "auditLogging": {},
-            "opaIntegration": {
-                "webhookTimeoutSeconds": 10
-            },
-            "mla": {},
-            "containerRuntime": "containerd",
-            "clusterNetwork": {
-                "services": {
-                    "cidrBlocks": [
-                        "10.240.16.0/20"
-                    ]
-                },
-                "pods": {
-                    "cidrBlocks": [
-                        "172.25.0.0/16"
-                    ]
-                },
-                "dnsDomain": "cluster.local",
-                "proxyMode": "ipvs",
-                "nodeLocalDNSCacheEnabled": true,
-                "konnectivityEnabled": true
-            },
-            "cniPlugin": {
-                "type": "canal",
-                "version": "v3.21"
-            }
+      "id": "nqs54sdp8x",
+      "name": "test-cluster",
+      "creationTimestamp": "2022-02-14T19:38:25Z",
+      "type": "kubernetes",
+      "spec": {
+        "cloud": {
+          "dc": "test-nutanix-dc",
+          "nutanix": {}
         },
-        "status": {
-            "version": "1.21.8"
+        "version": "1.21.8",
+        "oidc": {},
+        "enableUserSSHKeyAgent": true,
+        "auditLogging": {},
+        "opaIntegration": {
+          "webhookTimeoutSeconds": 10
+        },
+        "mla": {},
+        "containerRuntime": "containerd",
+        "clusterNetwork": {
+          "services": {
+            "cidrBlocks": ["10.240.16.0/20"]
+          },
+          "pods": {
+            "cidrBlocks": ["172.25.0.0/16"]
+          },
+          "dnsDomain": "cluster.local",
+          "proxyMode": "ipvs",
+          "nodeLocalDNSCacheEnabled": true,
+          "konnectivityEnabled": true
+        },
+        "cniPlugin": {
+          "type": "canal",
+          "version": "v3.21"
         }
+      },
+      "status": {
+        "version": "1.21.8"
+      }
     }
-]
+  ]
+}
