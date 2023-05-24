@@ -14,25 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div fxFlex
-     fxLayout="row"
-     class="type"
-     [ngClass]="typeIconBackground">
-  <i fxFlexAlign="center"
-     class="notification"
-     [ngClass]="typeIconClassName"></i>
-</div>
+<div class="notification-container"
+     [ngClass]="{'show-message-section': showMessageSection()}">
+  <div fxLayoutAlign="center center">
+    <i [ngClass]="typeIconClassName"></i>
+  </div>
 
-<div fxFlex="100"
-     fxFlexAlign="center"
-     class="content km-pointer"
-     (click)="copyToClipboard()"
-     matTooltip="Click to copy">
-  <div *ngIf="message?.length <= 128; else truncated">{{message}}</div>
-  <ng-template #truncated>
-    <div>{{message | slice:0:128}}...</div>
-  </ng-template>
-</div>
+  <div class="notification-headline km-pointer"
+       fxLayoutAlign=" center"
+       (click)="copyHeadlineToClipboard()"
+       matTooltip="Click to copy">
+    {{getHeadline()}}
+  </div>
 
-<button class="km-icon-close km-pointer"
-        (click)="dismiss()"></button>
+  <div fxLayoutAlign="center center">
+    <button mat-icon-button
+            (click)="dismiss()">
+      <i class="km-icon-close"></i>
+    </button>
+  </div>
+
+  <ng-container *ngIf="showMessageSection()">
+    <div class="notification-message km-pointer"
+         (click)="copyMessageToClipboard()"
+         matTooltip="Click to copy">
+      <ng-container *ngIf="!hasLongMessage() || !isMessageCollapsed; else truncated">{{message}}</ng-container>
+      <ng-template #truncated>
+        {{message | slice:0:messageMaxLength}}...
+      </ng-template>
+    </div>
+
+    <div *ngIf="hasLongMessage()"
+         class="notification-message-expansion"
+         fxLayoutAlign="center">
+      <button mat-icon-button
+              (click)="isMessageCollapsed = !isMessageCollapsed">
+        <i class="km-icon-arrow-{{isMessageCollapsed ? 'down' : 'up'}}"></i>
+      </button>
+    </div>
+  </ng-container>
+</div>

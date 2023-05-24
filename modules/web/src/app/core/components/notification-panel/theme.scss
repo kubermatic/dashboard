@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-notification-panel-component($colors) {
   .notification-success-bg {
     background-color: #1dc67f;
@@ -21,5 +23,10 @@
         background-color: #fff;
       }
     }
+  }
+
+  .notification-badge {
+    border: 1px solid map.get($colors, background-app-bar);
+    color: #fff;
   }
 }

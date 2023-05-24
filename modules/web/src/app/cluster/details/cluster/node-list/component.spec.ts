@@ -21,6 +21,7 @@ import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {nodeAWSFake, nodeFake} from '@test/data/node';
 import {fakeProject} from '@test/data/project';
 import {ClusterMockService} from '@test/services/cluster-mock';
+import {NotificationMockService} from '@test/services/notification-mock';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {ClusterService} from '@core/services/cluster';
@@ -51,8 +52,8 @@ describe('NodeComponent', () => {
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: SettingsService, useClass: SettingsMockService},
         {provide: UserService, useClass: UserMockService},
+        {provide: NotificationService, useClass: NotificationMockService},
         GoogleAnalyticsService,
-        NotificationService,
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();

@@ -100,6 +100,10 @@
     background-color: map.get($colors, indicator-red);
   }
 
+  .km-info-bg {
+    background-color: map.get($colors, primary);
+  }
+
   .km-unknown-bg {
     background-color: map.get($colors, changelog-deprecated);
   }

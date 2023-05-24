@@ -170,6 +170,22 @@
   margin: 4px 14px 4px 0;
 }
 
+.km-icon-notification-error {
+  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
+
+  background-color: #eb5757;
+  background-size: 14px;
+  border-radius: 50%;
+}
+
+.km-icon-notification-success {
+  @include mixins.background-image('/assets/images/icons/check-white.svg', 16px);
+
+  background-color: #1dc67f;
+  background-size: 10px;
+  border-radius: 50%;
+}
+
 .km-icon-unknown {
   @include mixins.background-image('/assets/images/icons/circle-empty.svg', 16px);
 

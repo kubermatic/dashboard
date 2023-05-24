@@ -19,6 +19,8 @@ limitations under the License.
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-bell"></i>
+    <span *ngIf="unseenNotificationsCount > 0"
+          class="notification-badge km-info-bg">{{unseenNotificationsCount > 99 ? '99+' : unseenNotificationsCount}}</span>
   </button>
   <div class="panel"
        fxLayout="column"

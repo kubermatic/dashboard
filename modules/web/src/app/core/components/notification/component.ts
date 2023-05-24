@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {DOCUMENT} from '@angular/common';
-import {AfterViewInit, Component, Inject} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatLegacySnackBarRef as MatSnackBarRef} from '@angular/material/legacy-snack-bar';
+import {EMPTY, fromEvent, interval, merge, Subject, takeWhile} from 'rxjs';
+import {map, scan, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
 export enum NotificationType {
   success,
@@ -26,9 +28,14 @@ export enum NotificationType {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class NotificationComponent implements AfterViewInit {
+export class NotificationComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly NOTIFICATION_DURATION = 5; // seconds
+  private readonly _unsubscribe = new Subject<void>();
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;
   private _type: NotificationType;
+
+  readonly headlineMaxLength = 38;
+  readonly messageMaxLength = 128;
 
   set snackBarRef(ref: MatSnackBarRef<NotificationComponent>) {
     this._snackBarRef = ref;
@@ -40,10 +47,15 @@ export class NotificationComponent implements AfterViewInit {
   }
 
   message: string;
-  typeIconBackground: string;
+  shortMessage: string;
   typeIconClassName: string;
+  isMessageCollapsed = true;
 
-  constructor(@Inject(DOCUMENT) private readonly _document: Document) {}
+  constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _elementRef: ElementRef) {}
+
+  ngOnInit(): void {
+    this._startDismissTimer();
+  }
 
   ngAfterViewInit(): void {
     // As there is no other way to style wrapping overlay container
@@ -57,23 +69,71 @@ export class NotificationComponent implements AfterViewInit {
     }
   }
 
-  private _init(): void {
-    switch (this._type) {
-      case NotificationType.success:
-        this.typeIconBackground = 'success';
-        this.typeIconClassName = 'km-icon-mask-white km-icon-check';
-        break;
-      case NotificationType.error:
-        this.typeIconBackground = 'error';
-        this.typeIconClassName = 'km-icon-error';
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  showMessageSection(): boolean {
+    return !!(this.message && (this.shortMessage || this._type === NotificationType.error));
+  }
+
+  hasLongMessage(): boolean {
+    return this.message?.length > this.messageMaxLength;
+  }
+
+  getHeadline(): string {
+    if (this.shortMessage) {
+      return this.shortMessage.length > this.headlineMaxLength
+        ? `${this.shortMessage.slice(0, this.headlineMaxLength)}...`
+        : this.shortMessage;
+    } else if (this._type === NotificationType.error) {
+      return 'Something went wrong.';
     }
+    return this.hasLongMessage() ? `${this.message?.slice(0, this.messageMaxLength)}...` : this.message;
   }
 
   dismiss(): void {
     this._snackBarRef.dismiss();
   }
 
-  copyToClipboard(): void {
+  copyHeadlineToClipboard(): void {
+    navigator.clipboard.writeText(this.shortMessage || this.message);
+  }
+
+  copyMessageToClipboard(): void {
     navigator.clipboard.writeText(this.message);
+  }
+
+  private _init(): void {
+    switch (this._type) {
+      case NotificationType.success:
+        this.typeIconClassName = 'km-icon-notification-success';
+        break;
+      case NotificationType.error:
+        this.typeIconClassName = 'km-icon-notification-error';
+        break;
+    }
+  }
+
+  private _startDismissTimer(): void {
+    const intervalDuration = 1000;
+    const interval$ = interval(intervalDuration).pipe(map(_ => -1));
+    const pause$ = fromEvent(this._elementRef.nativeElement, 'mouseenter').pipe(map(_ => false));
+    const resume$ = fromEvent(this._elementRef.nativeElement, 'mouseleave').pipe(map(_ => true));
+
+    merge(pause$, resume$)
+      .pipe(
+        startWith(interval$),
+        switchMap(value => (value ? interval$ : EMPTY)),
+        scan((acc, curr) => (curr ? curr + acc : acc), this.NOTIFICATION_DURATION),
+        takeWhile(value => value >= 0),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(value => {
+        if (value === 0) {
+          this.dismiss();
+        }
+      });
   }
 }

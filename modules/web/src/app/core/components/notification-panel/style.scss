@@ -19,6 +19,20 @@
   @include mixins.toolbar-button(2);
 }
 
+.notification-badge {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  font-size: variables.$font-size-small;
+  justify-content: center;
+  left: 17px;
+  max-height: 20px;
+  min-width: 20px;
+  padding: 4px;
+  position: absolute;
+  top: 4px;
+}
+
 .panel {
   @include mixins.size(350px);
 
