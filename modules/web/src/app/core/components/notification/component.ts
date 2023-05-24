@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {DOCUMENT} from '@angular/common';
-import {AfterViewInit, Component, Inject} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatLegacySnackBarRef as MatSnackBarRef} from '@angular/material/legacy-snack-bar';
+import {EMPTY, fromEvent, interval, merge, Subject, takeWhile} from 'rxjs';
+import {map, scan, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
 export enum NotificationType {
   success,
@@ -26,7 +28,9 @@ export enum NotificationType {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class NotificationComponent implements AfterViewInit {
+export class NotificationComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly NOTIFICATION_DURATION = 5; // seconds
+  private readonly _unsubscribe = new Subject<void>();
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;
   private _type: NotificationType;
 
@@ -47,7 +51,11 @@ export class NotificationComponent implements AfterViewInit {
   typeIconClassName: string;
   isMessageCollapsed = true;
 
-  constructor(@Inject(DOCUMENT) private readonly _document: Document) {}
+  constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _elementRef: ElementRef) {}
+
+  ngOnInit(): void {
+    this._startDismissTimer();
+  }
 
   ngAfterViewInit(): void {
     // As there is no other way to style wrapping overlay container
@@ -59,6 +67,11 @@ export class NotificationComponent implements AfterViewInit {
     if (overlayElement) {
       overlayElement.classList.add('km-notification-overlay');
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   showMessageSection(): boolean {
@@ -101,5 +114,26 @@ export class NotificationComponent implements AfterViewInit {
         this.typeIconClassName = 'km-icon-notification-error';
         break;
     }
+  }
+
+  private _startDismissTimer(): void {
+    const intervalDuration = 1000;
+    const interval$ = interval(intervalDuration).pipe(map(_ => -1));
+    const pause$ = fromEvent(this._elementRef.nativeElement, 'mouseenter').pipe(map(_ => false));
+    const resume$ = fromEvent(this._elementRef.nativeElement, 'mouseleave').pipe(map(_ => true));
+
+    merge(pause$, resume$)
+      .pipe(
+        startWith(interval$),
+        switchMap(value => (value ? interval$ : EMPTY)),
+        scan((acc, curr) => (curr ? curr + acc : acc), this.NOTIFICATION_DURATION),
+        takeWhile(value => value >= 0),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(value => {
+        if (value === 0) {
+          this.dismiss();
+        }
+      });
   }
 }

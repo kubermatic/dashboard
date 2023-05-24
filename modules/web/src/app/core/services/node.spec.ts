@@ -22,6 +22,7 @@ import {machineDeploymentsFake} from '@test/data/node';
 import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
+import {NotificationMockService} from '@test/services/notification-mock';
 import {of} from 'rxjs';
 import {NodeService} from './node';
 import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
@@ -42,7 +43,7 @@ describe('NodeService', () => {
         GoogleAnalyticsService,
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
-        NotificationService,
+        {provide: NotificationService, useClass: NotificationMockService},
       ],
       teardown: {destroyAfterEach: false},
     });

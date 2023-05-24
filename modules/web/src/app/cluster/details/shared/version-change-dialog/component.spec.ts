@@ -21,6 +21,7 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
+import {NotificationMockService} from '@test/services/notification-mock';
 import {RouterStub} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
@@ -60,8 +61,8 @@ describe('ChangeClusterVersionComponent', () => {
         {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         {provide: Router, useClass: RouterStub},
         {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: NotificationService, useClass: NotificationMockService},
         GoogleAnalyticsService,
-        NotificationService,
         EndOfLifeService,
       ],
       teardown: {destroyAfterEach: false},
