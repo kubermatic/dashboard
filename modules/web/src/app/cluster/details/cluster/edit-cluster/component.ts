@@ -45,7 +45,6 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
-  handleClusterDefaultNodeSelector,
 } from '@shared/utils/cluster';
 import {KeyValueEntry} from '@shared/types/common';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
@@ -190,6 +189,20 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this.checkForLegacyAdmissionPlugins();
 
+    this.form
+      .get(Controls.AdmissionPlugins)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        const selectedPlugins = this.form.get(Controls.AdmissionPlugins).value;
+        if (
+          !selectedPlugins.includes(AdmissionPlugin.PodSecurityPolicy) &&
+          !_.isEmpty(this.podNodeSelectorAdmissionPluginConfig)
+        ) {
+          this.form.get(Controls.PodNodeSelectorAdmissionPluginConfig).reset();
+          this.onPodNodeSelectorAdmissionPluginConfigChange(null);
+        }
+      });
+
     const [initialClusterDefaultNodeSelectorKey] =
       this.podNodeSelectorAdmissionPluginConfig?.[this.CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
 
@@ -210,16 +223,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   onLabelsChange(labels: Record<string, string>): void {
-    const [key, value] = this.clusterDefaultNodeSelectorNamespace ?? [];
-
-    if (key && value) {
-      labels = {...labels, [key]: value};
-    }
-
-    if (!Object.hasOwnProperty.call(labels, this.initialClusterDefaultNodeSelectorKey)) {
-      labels = {...labels, [this.initialClusterDefaultNodeSelectorKey]: null};
-    }
-
     this.labels = labels;
   }
 
@@ -369,15 +372,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private _handleClusterDefaultNodeSelector(config: Record<string, string>): void {
-    handleClusterDefaultNodeSelector(
-      this.labels ?? {},
-      config,
-      this.clusterDefaultNodeSelectorNamespace,
-      (entry, labels): void => {
-        this.clusterDefaultNodeSelectorNamespace = entry;
-        this.onLabelsChange(labels);
-      }
-    );
+    const [currKey, currValue] = config?.[CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
+    this.clusterDefaultNodeSelectorNamespace = [currKey, currValue];
   }
 
   private getAPIServerAllowedIPRange(): NetworkRanges {

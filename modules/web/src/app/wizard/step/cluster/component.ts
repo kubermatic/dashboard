@@ -68,10 +68,10 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
-  handleClusterDefaultNodeSelector,
 } from '@shared/utils/cluster';
 import {KeyValueEntry} from '@shared/types/common';
 import {getEditionVersion} from '@shared/utils/common';
+import _ from 'lodash';
 
 enum Controls {
   Name = 'name',
@@ -255,7 +255,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.AdmissionPlugins)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
+      .subscribe(() => {
+        const selectedPlugins = this.form.get(Controls.AdmissionPlugins).value;
+        this._clusterSpecService.admissionPlugins = selectedPlugins;
+        if (
+          !selectedPlugins.includes(AdmissionPlugin.PodSecurityPolicy) &&
+          !_.isEmpty(this.podNodeSelectorAdmissionPluginConfig)
+        ) {
+          this.control(Controls.PodNodeSelectorAdmissionPluginConfig).reset();
+          this.onPodNodeSelectorAdmissionPluginConfigChange({});
+        }
+      });
 
     merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.IPFamily).valueChanges)
       .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
@@ -362,12 +372,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   onLabelsChange(labels: Record<string, string>): void {
-    const [key, value] = this.clusterDefaultNodeSelectorNamespace ?? [];
-
-    if (key && value) {
-      labels = {...labels, [key]: value};
-    }
-
     this.labels = labels;
     this._clusterSpecService.labels = labels;
   }
@@ -376,15 +380,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.podNodeSelectorAdmissionPluginConfig = config;
     this._clusterSpecService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
 
-    handleClusterDefaultNodeSelector(
-      this.labels ?? {},
-      config,
-      this.clusterDefaultNodeSelectorNamespace,
-      (entry, labels) => {
-        this.clusterDefaultNodeSelectorNamespace = entry;
-        this.onLabelsChange(labels);
-      }
-    );
+    const [currKey, currValue] = config[CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
+    this.clusterDefaultNodeSelectorNamespace = [currKey, currValue];
   }
 
   isEnforced(control: Controls): boolean {
