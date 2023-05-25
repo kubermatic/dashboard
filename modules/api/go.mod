@@ -50,8 +50,8 @@ require (
 	github.com/kubermatic/machine-controller v1.56.1-0.20230511171924-bc2e86d29674
 	github.com/minio/minio-go/v7 v7.0.49
 	github.com/onsi/ginkgo v1.16.5
-	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.5.1
-	github.com/open-policy-agent/gatekeeper v0.0.0-20230414171823-770d9756db04 // v3.8.1
+	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.9.0+
+	github.com/open-policy-agent/gatekeeper v0.0.0-20230414171823-770d9756db04 // v3.12.0
 	github.com/packethost/packngo v0.29.0
 	github.com/prometheus/client_golang v1.15.0
 	github.com/spf13/cobra v1.6.1
