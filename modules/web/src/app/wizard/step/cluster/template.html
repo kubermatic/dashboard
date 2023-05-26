@@ -447,12 +447,13 @@ limitations under the License.
                  matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
             </mat-checkbox>
 
-            <km-label-form title="Labels"
+            <km-label-form [title]="'Labels'"
                            [labels]="labels"
                            [asyncKeyValidators]="asyncLabelValidators"
                            [formControlName]="Controls.Labels"
                            [disabledLabel]="clusterDefaultNodeSelectorNamespace"
                            [disabledLabelTooltip]="CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP"
+                           [canDeleteDisabledLabel]="true"
                            (labelsChange)="onLabelsChange($event)"
                            fxFlex="100">
             </km-label-form>
