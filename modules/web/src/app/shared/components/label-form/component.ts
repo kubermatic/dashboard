@@ -42,6 +42,7 @@ import {takeUntil} from 'rxjs/operators';
 import {KeyValueEntry} from '@shared/types/common';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 import {ControlsOf} from '../../model/shared';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-label-form',
@@ -67,6 +68,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() labels: Record<string, string>;
   @Input() disabledLabel: KeyValueEntry;
   @Input() disabledLabelTooltip: string;
+  @Input() canDeleteDisabledLabel: boolean;
   @Input() labelHint: string;
   @Input() labelHintKey: string;
   @Input() inheritedLabels: object = {};
@@ -110,12 +112,6 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     if (!this.form) {
       this._initForm();
     }
-    if (changes && changes.keyName) {
-      this.keyName = changes.keyName.currentValue;
-    }
-    if (changes && changes.valueName) {
-      this.valueName = changes.valueName.currentValue;
-    }
     if (changes?.disabledLabel) {
       const [key = '', value = ''] = this.disabledLabel ?? [];
 
@@ -136,6 +132,10 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
         if (removeLabelIndex >= 0) {
           this.labelArray.removeAt(removeLabelIndex);
         }
+      }
+
+      if (key || value || !_.isEmpty(this.labels)) {
+        this._updateLabelsObject();
       }
     }
   }
@@ -210,6 +210,13 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     this._updateLabelsObject();
   }
 
+  deleteDisabledLabel(): void {
+    this.disabledLabelFormGroup = null;
+    this.disabledLabel = null;
+
+    this._updateLabelsObject();
+  }
+
   check(index: number): void {
     this._addLabelIfNeeded();
     this._validateKey(index);
@@ -279,6 +286,9 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
         return true;
       }
     }
+    if (this.disabledLabelFormGroup?.value.key && this.disabledLabelFormGroup?.value.key === currentKey) {
+      return true;
+    }
     return false;
   }
 
@@ -293,12 +303,20 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
       }
     });
 
-    // Nullify initial labels data (it is needed to make edit work as it uses JSON Merge Patch).
-    Object.keys(this.initialLabels).forEach(initialKey => {
-      if (!Object.prototype.hasOwnProperty.call(labelsObject, initialKey)) {
-        labelsObject[initialKey] = null;
-      }
-    });
+    if (this.initialLabels) {
+      // Nullify initial labels data (it is needed to make edit work as it uses JSON Merge Patch).
+      Object.keys(this.initialLabels).forEach(initialKey => {
+        if (!Object.prototype.hasOwnProperty.call(labelsObject, initialKey)) {
+          labelsObject[initialKey] = null;
+        }
+      });
+    }
+
+    const disabledLabelKey = this.disabledLabelFormGroup?.value.key;
+    const disabledLabelValue = this.disabledLabelFormGroup?.value.value;
+    if (disabledLabelKey && disabledLabelValue) {
+      labelsObject[disabledLabelKey] = disabledLabelValue;
+    }
 
     // Update labels object.
     this.labels = labelsObject;
