@@ -1,7 +1,5 @@
 # Dashboard for the Kubermatic Kubernetes Platform
 
-[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/main/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
-
 ## Overview & More information
 
 This repo contains the Dashboard for the Kubermatic Kubernetes Platform. For more information regarding overview, installation and user guides check [Kubermatic Kubernetes Platform repo][5] & [Kubermatic Kubernetes Platform docs website][21].
