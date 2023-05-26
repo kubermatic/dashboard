@@ -644,5 +644,5 @@ class ClusterModel {
 
 export class ProjectClusterList {
   clusters: Cluster[];
-  errorMessage: boolean;
+  errorMessage: string;
 }
