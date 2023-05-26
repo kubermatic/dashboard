@@ -37,7 +37,8 @@ limitations under the License.
         <button mat-icon-button
                 type="button"
                 class="delete-button"
-                [disabled]="true">
+                [disabled]="!canDeleteDisabledLabel"
+                (click)="deleteDisabledLabel()">
           <i class="km-icon-mask km-icon-delete"
              aria-hidden="true"></i>
         </button>
