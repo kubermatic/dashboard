@@ -79,7 +79,8 @@ enum ZoneState {
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
-  private readonly _defaultDiskSize = 30;
+  private readonly _defaultOSDiskSize = 30;
+  private readonly _defaultDataDiskSize = 0;
 
   readonly Controls = Controls;
 
@@ -122,7 +123,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Zone]: this._builder.control(''),
       [Controls.ImageID]: this._builder.control(''),
       [Controls.OSDiskSize]: this._builder.control(this.defaultOSDiskSize(), Validators.required),
-      [Controls.DataDiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
+      [Controls.DataDiskSize]: this._builder.control(this._defaultDataDiskSize),
     });
 
     this._init();
@@ -230,7 +231,9 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
         : selectedOSDiskSize;
     }
 
-    return this._nodeDataService.operatingSystem === OperatingSystem.RHEL ? defaultDiskSizeRHEL : this._defaultDiskSize;
+    return this._nodeDataService.operatingSystem === OperatingSystem.RHEL
+      ? defaultDiskSizeRHEL
+      : this._defaultOSDiskSize;
   }
 
   private _init(): void {
@@ -244,7 +247,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
         .setValue(this._nodeDataService.nodeData.spec.cloud.azure.osDiskSize || this.defaultOSDiskSize());
       this.form
         .get(Controls.DataDiskSize)
-        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.dataDiskSize || this._defaultDiskSize);
+        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.dataDiskSize || this._defaultDataDiskSize);
 
       this._cdr.detectChanges();
     }
