@@ -49,12 +49,12 @@ describe('ClusterListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     const clusterServiceMock = {
-      clusters: jest.fn(),
+      projectClusterList: jest.fn(),
       health: jest.fn(),
       refreshClusters: () => {},
       restores: jest.fn(),
     };
-    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
+    getClustersSpy = clusterServiceMock.projectClusterList.mockReturnValue(asyncData({clusters: [fakeAWSCluster()]}));
     clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
     clusterServiceMock.restores.mockReturnValue(asyncData([]));
 
