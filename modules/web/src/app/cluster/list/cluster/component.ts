@@ -76,6 +76,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
   clusters: Cluster[] = [];
+  projectClusterListErrorMessage: string;
   clusterTemplates: ClusterTemplate[] = [];
   isInitialized = false;
   nodeDC: Datacenter[] = [];
@@ -85,6 +86,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
+
+  get isAdmin(): boolean {
+    return this._user.isAdmin;
+  }
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -142,14 +147,19 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           this._etcdRestores = restores;
         })
       )
-      .pipe(switchMap(_ => this._clusterService.clusters(this._selectedProject.id)))
-      .pipe(tap(clusters => (this.clusters = clusters)))
+      .pipe(switchMap(_ => this._clusterService.projectClusterList(this._selectedProject.id)))
       .pipe(
-        switchMap(clusters =>
+        tap(projectCluster => {
+          this.projectClusterListErrorMessage = projectCluster.errorMessage;
+          this.clusters = projectCluster.clusters;
+        })
+      )
+      .pipe(
+        switchMap(projectCluster =>
           iif(
-            () => clusters.length > 0,
+            () => projectCluster.clusters.length > 0,
             combineLatest([
-              ...clusters.map(cluster =>
+              ...projectCluster.clusters.map(cluster =>
                 combineLatest([
                   of(cluster),
                   this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1)),

@@ -14,12 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card class="km-card">
+<mat-card fxLayout="column"
+          class="km-card">
   <mat-card-header>
     <mat-card-title>Clusters</mat-card-title>
   </mat-card-header>
-  <div fxLayout
+  <div *ngIf="!!projectClusterListErrorMessage"
        fxLayoutAlign=" center"
+       class="error-message">
+    <i class="km-icon-warning"></i>
+    <div>{{projectClusterListErrorMessage}}
+      <a *ngIf="isAdmin"
+         href="settings/seeds">Check Seed Configuration</a>
+    </div>
+  </div>
+  <div fxLayoutAlign=" center"
        class="header">
     <km-search-field (queryChange)="onSearch($event)"></km-search-field>
     <div fxFlex></div>
