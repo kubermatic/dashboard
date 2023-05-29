@@ -229,7 +229,7 @@ hr {
   right: 32px;
 
   .km-notification {
-    &.mat-snack-bar-container {
+    &.mat-mdc-snack-bar-container {
       border-radius: variables.$border-radius;
       box-shadow: variables.$notification-shadow;
       margin: 0;
@@ -242,6 +242,16 @@ hr {
 
       div {
         height: 100%;
+      }
+
+      /* stylelint-disable-next-line selector-class-pattern */
+      .mdc-snackbar__surface {
+        padding: 0;
+        width: 100%;
+
+        .mat-mdc-snack-bar-label {
+          padding: 0;
+        }
       }
     }
   }

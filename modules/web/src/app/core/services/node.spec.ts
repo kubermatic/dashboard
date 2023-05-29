@@ -14,7 +14,7 @@
 
 import {fakeAsync, flush, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
