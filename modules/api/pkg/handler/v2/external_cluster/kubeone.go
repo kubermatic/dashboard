@@ -260,6 +260,8 @@ func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string
 		return setDigitalOceanCredentials(preset, kubeOneCloudSpec)
 	case providerName == resources.KubeOneOpenStack:
 		return setOpenStackCredentials(preset, kubeOneCloudSpec)
+	case providerName == resources.KubeOneVSphere:
+		return setVsphereCredentials(preset, kubeOneCloudSpec)
 	}
 
 	return nil, fmt.Errorf("Provider %s not supported", providerName)
@@ -364,6 +366,23 @@ func setOpenStackCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2
 	kubeOneCloudSpec.OpenStack.Domain = credentials.Domain
 	kubeOneCloudSpec.OpenStack.Project = credentials.Project
 	kubeOneCloudSpec.OpenStack.ProjectID = credentials.ProjectID
+
+	return &kubeOneCloudSpec, nil
+}
+
+func setVsphereCredentials(preset *kubermaticv1.Preset, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
+	if preset.Spec.VSphere == nil {
+		return nil, emptyCredentialError(preset.Name, "VSphere")
+	}
+
+	credentials := preset.Spec.VSphere
+
+	if kubeOneCloudSpec.VSphere == nil {
+		kubeOneCloudSpec.VSphere = &apiv2.KubeOneVSphereCloudSpec{}
+	}
+
+	kubeOneCloudSpec.VSphere.Username = credentials.Username
+	kubeOneCloudSpec.VSphere.Password = credentials.Password
 
 	return &kubeOneCloudSpec, nil
 }

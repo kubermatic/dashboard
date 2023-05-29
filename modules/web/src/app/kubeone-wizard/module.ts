@@ -30,6 +30,7 @@ import {Routing} from './routing';
 import {KubeOneDigitaloceanCredentialsBasicComponent} from './steps/credentials/provider/basic/digitalocean/component';
 import {KubeOneHetznerCredentialsBasicComponent} from './steps/credentials/provider/basic/hetzner/component';
 import {KubeOneOpenstackCredentialsBasicComponent} from './steps/credentials/provider/basic/openstack/component';
+import {KubeOneVSphereCredentialsBasicComponent} from './steps/credentials/provider/basic/vsphere/component';
 
 const components = [
   KubeOneWizardComponent,
@@ -42,6 +43,7 @@ const components = [
   KubeOneDigitaloceanCredentialsBasicComponent,
   KubeOneHetznerCredentialsBasicComponent,
   KubeOneOpenstackCredentialsBasicComponent,
+  KubeOneVSphereCredentialsBasicComponent,
   KubeOneClusterStepComponent,
   KubeOneSummaryStepComponent,
   KubeOnePresetsComponent,

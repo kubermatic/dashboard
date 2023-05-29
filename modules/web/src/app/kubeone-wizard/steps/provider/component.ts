@@ -50,6 +50,7 @@ export class KubeOneProviderStepComponent extends StepBase implements OnInit {
     NodeProvider.DIGITALOCEAN,
     NodeProvider.HETZNER,
     NodeProvider.OPENSTACK,
+    NodeProvider.VSPHERE,
   ];
   readonly controls = Controls;
 
