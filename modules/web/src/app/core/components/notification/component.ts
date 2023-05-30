@@ -14,7 +14,7 @@
 
 import {DOCUMENT} from '@angular/common';
 import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MatLegacySnackBarRef as MatSnackBarRef} from '@angular/material/legacy-snack-bar';
+import {MatSnackBarRef} from '@angular/material/snack-bar';
 import {EMPTY, fromEvent, interval, merge, Subject, takeWhile} from 'rxjs';
 import {map, scan, startWith, switchMap, takeUntil} from 'rxjs/operators';
 

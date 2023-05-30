@@ -33,7 +33,7 @@
 
   // Dialogs.
   .mat-mdc-dialog-container {
-    --mdc-dialog-supporting-text-color: map.get($colors, text);
+    --mdc-dialog-supporting-text-color: #{map.get($colors, text)};
 
     color: map.get($colors, text);
   }
@@ -426,5 +426,10 @@
     .mat-tab-header {
       border-bottom: 1px solid map.get($colors, tab-divider);
     }
+  }
+
+  // Snackbar
+  .mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: #{map.get($colors, option-background)};
   }
 }

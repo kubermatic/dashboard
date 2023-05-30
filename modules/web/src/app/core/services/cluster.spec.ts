@@ -16,7 +16,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {TestBed} from '@angular/core/testing';
 import {lastValueFrom} from 'rxjs';
 import {MatDialogModule} from '@angular/material/dialog';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {RouterTestingModule} from '@angular/router/testing';
 
 import {AppConfigService} from '@app/config.service';
