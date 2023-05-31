@@ -1,19 +1,11 @@
 @use 'sass:map';
 
 @mixin theme-quota-widget-component($colors) {
-  .km-quota-percentages {
-    .property-usage-bar {
-      & svg {
-        background-color: map.get($colors, divider);
-        fill: map.get($colors, divider) !important;
-      }
-    }
-  }
-
   .extended-progress {
     .property-usage-bar:not(.mat-warn) {
-      .mat-progress-bar-buffer {
-        background-color: map.get($colors, estimate-quota-bar) !important;
+      /* stylelint-disable-next-line selector-class-pattern */
+      .mdc-linear-progress__buffer-bar {
+        background-color: map.get($colors, estimate-quota-bar);
       }
     }
   }
