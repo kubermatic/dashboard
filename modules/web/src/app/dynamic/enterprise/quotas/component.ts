@@ -19,6 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
@@ -50,7 +51,7 @@ enum ResourceType {
 }
 
 interface progressBarData {
-  color: string;
+  color: ThemePalette;
   value: number;
   usageQuota: string;
 }
@@ -142,7 +143,7 @@ export class QuotasComponent implements OnInit {
   getProgressBarData(projectId: string, resourceType: string): progressBarData {
     const quota = this.quotas.find(quota => quota.subjectName === projectId);
     const progressBar: progressBarData = {
-      color: '',
+      color: 'primary',
       value: 0,
       usageQuota: '',
     };

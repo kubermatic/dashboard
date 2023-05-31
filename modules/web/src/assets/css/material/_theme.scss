@@ -432,4 +432,21 @@
   .mat-mdc-snack-bar-container {
     --mdc-snackbar-container-color: #{map.get($colors, option-background)};
   }
+
+  // Progress bar
+  .mat-mdc-progress-bar, .mat-mdc-progress-bar.mat-accent {
+    /* stylelint-disable-next-line selector-class-pattern */
+    .mdc-linear-progress__buffer-bar, .mdc-linear-progress__buffer-dots {
+      background-color: map.get($colors, divider);
+    }
+
+    /* stylelint-disable-next-line selector-class-pattern */
+    .mdc-linear-progress__buffer-dots {
+      background-image: none;
+    }
+  }
+
+  .mat-mdc-progress-bar.mat-accent {
+    --mdc-linear-progress-active-indicator-color: #{map.get($colors, indicator-orange)};
+  }
 }

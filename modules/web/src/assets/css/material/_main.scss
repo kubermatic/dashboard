@@ -734,3 +734,9 @@ mat-tooltip-component .mat-tooltip {
 .mat-optgroup .mat-option:not(.mat-option-multiple) {
   padding-left: 16px !important;
 }
+
+// Progress bar
+/* stylelint-disable-next-line selector-class-pattern */
+.mat-mdc-progress-bar .mdc-linear-progress__buffer-dots {
+  animation: none;
+}

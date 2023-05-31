@@ -38,7 +38,7 @@ import {
   MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
   MatLegacyPaginatorModule as MatPaginatorModule,
 } from '@angular/material/legacy-paginator';
-import {MatLegacyProgressBarModule as MatProgressBarModule} from '@angular/material/legacy-progress-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';

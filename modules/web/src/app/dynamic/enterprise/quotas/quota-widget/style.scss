@@ -72,6 +72,8 @@
     padding-top: 9px;
 
     .property-usage-bar {
+      --mdc-linear-progress-track-height: 5px;
+
       border-radius: variables.$border-radius;
       height: 5px;
     }
@@ -129,14 +131,12 @@
       width: 100%;
 
       .property-usage-bar {
+        --mdc-linear-progress-track-height: 6px;
+
         border-radius: variables.$border-radius;
         height: 6px;
         margin: 8px 0;
         min-width: 100px;
-
-        & svg {
-          animation: none;
-        }
       }
     }
   }
