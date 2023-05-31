@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatLegacyButton} from '@angular/material/legacy-button';
 import {NavigationStart, Router} from '@angular/router';
 import {NotificationType} from '@core/components/notification/component';
 import {Notification, NotificationService} from '@core/services/notification';
@@ -32,6 +33,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _filter: NotificationType = undefined;
   private _isAnimating = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
+  @ViewChild('toggleButton') toggleButton: MatLegacyButton;
   notifications: Notification[] = [];
   unseenNotificationsCount = 0;
   readonly NotificationType = NotificationType;
@@ -73,7 +75,11 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: Event): void {
-    if (!this._elementRef.nativeElement.contains(event.target) && this.isOpen()) {
+    if (
+      this.isOpen() &&
+      !this._elementRef.nativeElement.contains(event.target) &&
+      this.toggleButton._elementRef.nativeElement !== event.target
+    ) {
       this.close();
     }
   }
