@@ -19,7 +19,7 @@ import {environment} from '@environments/environment';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
 import {tap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {Observable, lastValueFrom} from 'rxjs';
 
 @Injectable()
 export class AppConfigService {
@@ -35,19 +35,18 @@ export class AppConfigService {
   }
 
   loadAppConfig(): Promise<{}> {
-    return this._http
-      .get(environment.configUrl)
-      .pipe(
-        tap(
-          resp => {
-            this._appConfig = resp as Config;
+    return lastValueFrom(
+      this._http.get(environment.configUrl).pipe(
+        tap({
+          next: resp => {
+            this._appConfig = (resp as Config) || {};
           },
-          () => {
+          error: () => {
             this._notificationService.error('Could not read configuration file');
-          }
-        )
+          },
+        })
       )
-      .toPromise();
+    );
   }
 
   getConfig(): Config {
@@ -55,19 +54,18 @@ export class AppConfigService {
   }
 
   loadUserGroupConfig(): Promise<{}> {
-    return this._http
-      .get('../assets/config/userGroupConfig.json')
-      .pipe(
-        tap(
-          resp => {
+    return lastValueFrom(
+      this._http.get('../assets/config/userGroupConfig.json').pipe(
+        tap({
+          next: resp => {
             this._userGroupConfig = resp as UserGroupConfig;
           },
-          () => {
+          error: () => {
             this._notificationService.error('Could not read user group configuration file');
-          }
-        )
+          },
+        })
       )
-      .toPromise();
+    );
   }
 
   getUserGroupConfig(): UserGroupConfig {
@@ -75,19 +73,18 @@ export class AppConfigService {
   }
 
   loadGitVersion(): Promise<{}> {
-    return this._http
-      .get(environment.gitVersionUrl)
-      .pipe(
-        tap(
-          resp => {
+    return lastValueFrom(
+      this._http.get(environment.gitVersionUrl).pipe(
+        tap({
+          next: resp => {
             this._gitVersion = resp as VersionInfo;
           },
-          () => {
+          error: () => {
             this._notificationService.error('Could not read Git version file');
-          }
-        )
+          },
+        })
       )
-      .toPromise();
+    );
   }
 
   getGitVersion(): VersionInfo {
