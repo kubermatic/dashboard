@@ -39,12 +39,7 @@ export class AppConfigService {
       this._http.get(environment.configUrl).pipe(
         tap({
           next: resp => {
-            if (resp === null) {
-              // Handling case when `config.json` is an empty file.
-              this._appConfig = {} as Config;
-            } else {
-              this._appConfig = resp as Config;
-            }
+            this._appConfig = (resp as Config) || {};
           },
           error: () => {
             this._notificationService.error('Could not read configuration file');
