@@ -16,11 +16,12 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {KubeOneClusterSpecService} from '@core/services/kubeone-cluster-spec';
 import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
+import {ProjectService} from '@core/services/project';
 import {SimplePresetList} from '@shared/entity/preset';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {map, switchMap, takeUntil} from 'rxjs/operators';
-import {ProjectService} from '@core/services/project';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 export enum Controls {
   Preset = 'name',
@@ -89,6 +90,16 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
     });
 
     this._clusterSpecService.providerChanges
+      .pipe(tap(_ => this.reset()))
+      .pipe(
+        filter(_ => {
+          if (!this.isPresetSupported()) {
+            this._enable(false, Controls.Preset);
+            return false;
+          }
+          return true;
+        })
+      )
       .pipe(
         switchMap(_ =>
           this._presetsService.presets(this._projectService.selectedProjectID, this._clusterSpecService.provider)
@@ -97,7 +108,6 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
       .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
-        this.reset();
         this.presetsLoaded = presetList.names ? !_.isEmpty(presetList.names) : false;
         this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
         this.presetList = presetList;
@@ -112,7 +122,7 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
       });
 
     this._presetsService.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
-      if (this._state !== PresetsState.Empty) {
+      if (this._state !== PresetsState.Empty && this.isPresetSupported()) {
         this._enable(enable, Controls.Preset);
       }
     });
@@ -125,6 +135,19 @@ export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit
 
   reset(): void {
     this.selectedPreset = '';
+    this.presetsLoaded = false;
+    this._state = PresetsState.Empty;
+    this.presetList = new SimplePresetList();
+  }
+
+  isPresetSupported(): boolean {
+    switch (this._clusterSpecService.provider) {
+      case NodeProvider.OPENSTACK:
+      case NodeProvider.VSPHERE:
+        return false;
+      default:
+        return true;
+    }
   }
 
   private _enable(enable: boolean, name: Controls): void {
