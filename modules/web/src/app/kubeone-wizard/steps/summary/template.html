@@ -123,6 +123,21 @@ limitations under the License.
               <div value>{{kubeOneClusterSpec?.cloudSpec?.openstack?.region}}</div>
             </km-property>
           </ng-container>
+          <!-- VSphere -->
+          <ng-container *ngIf="kubeOneClusterSpec?.cloudSpec?.vsphere">
+            <km-property>
+              <div key>Username</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.username}}</div>
+            </km-property>
+            <km-property>
+              <div key>Password</div>
+              <div value>{{SECRET_MASK}}</div>
+            </km-property>
+            <km-property>
+              <div key>Server URL</div>
+              <div value>{{kubeOneClusterSpec?.cloudSpec?.vsphere?.server}}</div>
+            </km-property>
+          </ng-container>
         </ng-template>
       </div>
     </div>
