@@ -27,7 +27,7 @@ p {
   margin: 0;
 }
 
-@media screen and (max-height: 504px), screen and (max-width: 504px) {
+@media screen and (height <= 504px), screen and (width <= 504px) {
   h1 {
     font-size: 80px;
     margin: 0;
