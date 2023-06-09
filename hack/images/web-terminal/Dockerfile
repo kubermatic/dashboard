@@ -15,11 +15,11 @@
 FROM docker.io/alpine:3.17
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.25.txt
-ENV KUBECTL_VERSION=v1.25.8
+# Source: https://dl.k8s.io/release/stable-1.26.txt
+ENV KUBECTL_VERSION=v1.26.5
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.11.2
+ENV HELM_VERSION=v3.11.3
 
 ARG ARCH=amd64
 
