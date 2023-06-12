@@ -105,7 +105,7 @@
     "@types/js-yaml": "4.0.5",
     "@types/lodash": "4.14.195",
     "@types/node": "20.2.5",
-    "@typescript-eslint/eslint-plugin": "5.59.9",
+    "@typescript-eslint/eslint-plugin": "5.59.10",
     "@typescript-eslint/parser": "5.59.9",
     "browserlist": "1.0.1",
     "btoa": "1.2.1",
