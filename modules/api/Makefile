@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
-KUBERMATIC_VERSION?=v2.23.0-beta.0
+KUBERMATIC_VERSION?=v2.23.0-beta.1
 DOCKER_REPO ?= quay.io/kubermatic
 REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
