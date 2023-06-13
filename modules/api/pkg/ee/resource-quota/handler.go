@@ -648,9 +648,18 @@ func getOpenstackResourceDetails(provider ProviderNodeTemplate, nc *kubermaticpr
 	if err := nc.WithMemory(provider.OpenstackSize.Memory, "M"); err != nil {
 		return err
 	}
-	if err := nc.WithStorage(provider.OpenstackSize.Disk, "G"); err != nil {
-		return err
+
+	if provider.DiskSizeGB == 0 {
+		if err := nc.WithStorage(provider.OpenstackSize.Disk, "G"); err != nil {
+			return err
+		}
+	} else {
+		// Setting custom disk size
+		if err := nc.WithStorage(provider.DiskSizeGB, "G"); err != nil {
+			return err
+		}
 	}
+
 	return nil
 }
 
