@@ -665,13 +665,33 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withOpenstack(2, 3000, 10).
+				withOpenstack(2, 3000, 10, 0).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
 				withQuota(genAPIQuota(12, 10, 30)).
 				withGlobalUsage(genAPIQuota(2, 3, 5)).
 				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process openstack request with custom disk successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "50G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withOpenstack(2, 3000, 10, 20).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 50)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 45)).
 				build(),
 		},
 		{
@@ -925,11 +945,14 @@ func (c *calcReq) withNutanix(cpu, memory, storage int64, withDisk bool) *calcRe
 	return c
 }
 
-func (c *calcReq) withOpenstack(cpu, memory, storage int) *calcReq {
+func (c *calcReq) withOpenstack(cpu, memory, storage int, customDisk int) *calcReq {
 	c.OpenstackSize = &apiv1.OpenstackSize{
 		VCPUs:  cpu,
 		Memory: memory,
 		Disk:   storage,
+	}
+	if customDisk != 0 {
+		c.DiskSizeGB = customDisk
 	}
 	return c
 }
