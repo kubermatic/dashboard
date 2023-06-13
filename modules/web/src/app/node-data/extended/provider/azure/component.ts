@@ -93,6 +93,11 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
 
       const assignPublicIP = this.nodeData.name ? this.nodeData.spec.cloud.azure.assignPublicIP : false;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
+
+      const acceleratedNetworking = this.nodeData.name
+        ? this.nodeData.spec.cloud.azure.enableAcceleratedNetworking
+        : false;
+      this.form.get(Controls.AcceleratedNetworking).setValue(acceleratedNetworking);
     }
   }
 
