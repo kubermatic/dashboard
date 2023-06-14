@@ -75,11 +75,17 @@ limitations under the License.
     <i class="km-icon-mask km-icon-next"></i>
     <span>Next</span>
   </button>
+  <div *ngIf="quotaExceeded && last"
+       class="warning-message"
+       fxLayoutAlign="end center">
+    <i class="km-icon-warning"></i>
+    <div><strong>Quota exceeded.</strong> <br>Cluster creation is disabled.</div>
+  </div>
   <km-button *ngIf="last"
              id="cluster-from-template-add-btn"
              icon="km-icon-add"
              label="Create Cluster"
-             [disabled]="invalid"
+             [disabled]="invalid || quotaExceeded"
              [observable]="getObservable()"
              (next)="onNext()">
   </km-button>

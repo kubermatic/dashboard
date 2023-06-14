@@ -23,6 +23,9 @@ import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
+import {QuotaService} from '@app/dynamic/enterprise/quotas/service';
+import {GlobalModule} from '@app/core/services/global/module';
+import {DynamicModule} from '@app/dynamic/module-registry';
 
 export enum Step {
   Template = 'Select Template',
@@ -38,6 +41,7 @@ export class AddClusterFromTemplateDialogData {
 @Component({
   selector: 'km-add-cluster-from-template-dialog',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
   showDetails = false;
@@ -45,9 +49,12 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
   replicas: number;
   steps: Step[] = [Step.Template, Step.Cluster];
   quotaWidget: TemplateRef<QuotaWidgetComponent>;
+  quotaExceeded: boolean;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly step = Step;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private readonly _unsubscribe = new Subject<void>();
+  private _quotaService: QuotaService;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: AddClusterFromTemplateDialogData,
@@ -55,7 +62,11 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
     private readonly _router: Router,
     private readonly _notificationService: NotificationService,
     private readonly _clusterTemplateService: ClusterTemplateService
-  ) {}
+  ) {
+    if (this.isEnterpriseEdition) {
+      this._quotaService = GlobalModule.injector.get(QuotaService);
+    }
+  }
 
   ngOnInit(): void {
     this.quotaWidget = this.data.quotaWidget;
@@ -69,6 +80,12 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
       .pipe(filter(replicas => !!replicas))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(replicas => (this.replicas = replicas));
+
+    if (this.isEnterpriseEdition) {
+      this._quotaService.quotaExceeded.pipe(takeUntil(this._unsubscribe)).subscribe(isQuotaExceeded => {
+        this.quotaExceeded = isQuotaExceeded;
+      });
+    }
   }
 
   ngOnDestroy() {
