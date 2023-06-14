@@ -37,7 +37,7 @@ export class AddMemberComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       group: new FormControl('', [Validators.required]),
     });
   }
