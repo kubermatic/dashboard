@@ -125,7 +125,7 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._router.navigate([`/projects/${this.selectedProject.id}/backups`]));
+      .subscribe(_ => this._router.navigate([`/projects/${this.selectedProject.id}/${View.Snapshots}`]));
   }
 
   isEnabled(backup: EtcdBackupConfig): boolean {
