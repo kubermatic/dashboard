@@ -139,6 +139,20 @@ export class ClusterSummaryComponent {
     return this._sshKeys;
   }
 
+  getApplicationsCounterClass(): string {
+    let counter = 5;
+    const bringyourownStepsCount = 3;
+    if (this.cluster.spec.cloud?.bringyourown) {
+      counter = bringyourownStepsCount;
+    }
+
+    if (this.clusterTemplateEditMode) {
+      counter--;
+    }
+
+    return `counter-${counter}`;
+  }
+
   displaySettings(): boolean {
     return Object.values(NodeProvider).some(p => this._hasProviderOptions(p));
   }

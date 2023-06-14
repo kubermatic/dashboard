@@ -50,15 +50,16 @@ limitations under the License.
       </mat-button-toggle>
     </mat-button-toggle-group>
   </ng-container>
-  <button mat-flat-button
-          color="quaternary"
-          [matTooltip]="getAddBtnTooltip()"
-          [disabled]="!isClusterReady"
-          fxLayoutAlign="center center"
-          (click)="onAddApplication()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Application</span>
-  </button>
+  <div [matTooltip]="getAddBtnTooltip()">
+    <button mat-flat-button
+            color="quaternary"
+            [disabled]="!canAdd()"
+            fxLayoutAlign="center center"
+            (click)="onAddApplication()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Application</span>
+    </button>
+  </div>
 </div>
 
 <div *ngIf="isClusterReady"
