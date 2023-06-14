@@ -159,6 +159,10 @@
 
 .km-icon-pending {
   @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px, 16px, #7e868f);
+
+  &.i-24 {
+    @include mixins.size(24px, 24px, true);
+  }
 }
 
 .km-icon-error {
