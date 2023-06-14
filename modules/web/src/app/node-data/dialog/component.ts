@@ -77,6 +77,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   isRecreationWarningVisible = false;
   isDynamicKubeletConfigWarningVisible = false;
   isQuotaExceeded: boolean;
+  isCalculatingQuota: boolean;
   mode = Mode.Add;
 
   readonly Control = Controls;
@@ -152,6 +153,10 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       .subscribe(isQuotaExceeded => {
         this.isQuotaExceeded = isQuotaExceeded;
       });
+
+    this._quotaCalculationService.calculationInProgress.pipe(takeUntil(this._unsubscribe)).subscribe(value => {
+      this.isCalculatingQuota = value;
+    });
   }
 
   ngOnDestroy() {
