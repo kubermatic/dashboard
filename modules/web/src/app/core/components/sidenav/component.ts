@@ -117,9 +117,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (url === View.ClusterTemplates) {
       return (
         isProjectAndUrlExists ||
-        mode === WizardMode.CreateClusterTemplate ||
-        mode === WizardMode.EditClusterTemplate ||
-        mode === WizardMode.CustomizeClusterTemplate
+        [
+          WizardMode.CreateClusterTemplate,
+          WizardMode.EditClusterTemplate,
+          WizardMode.CustomizeClusterTemplate,
+        ].includes(mode)
       );
     }
     if (url === View.Clusters) {
@@ -131,6 +133,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       return isProjectAndUrlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
     } else if (url === View.KubeOneClusters) {
       return isProjectAndUrlExists || !!urlArray.find(x => x === View.KubeOneWizard);
+    } else if (url === View.Backups) {
+      return isProjectAndUrlExists && !urlArray.find(x => x === View.Snapshots);
     }
     return isProjectAndUrlExists;
   }

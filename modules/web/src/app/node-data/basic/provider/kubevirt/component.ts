@@ -559,7 +559,7 @@ export class KubeVirtBasicNodeDataComponent
           link: osVersions[version],
         }))
       : [];
-    const selectedOSImage = this.form.get(Controls.PrimaryDiskOSImage).value[ComboboxControls?.Select];
+    const selectedOSImage = this.form.get(Controls.PrimaryDiskOSImage).value?.[ComboboxControls?.Select];
     if (selectedOSImage && !this.osImageDropdownOptions.find(osImage => osImage.link === selectedOSImage)) {
       this._osImageCombobox.reset();
     }

@@ -47,10 +47,12 @@ limitations under the License.
 
   <mat-checkbox [formControlName]="Controls.UseCustomCloudCredentials"
                 [name]="Controls.UseCustomCloudCredentials">
-    Use dedicated credentials to provision vSphere resources
-    <div fxFlex
-         class="km-icon-info km-pointer p-10"
-         matTooltip="These credentials will be used for managing resources like tags, folders, networks etc. For cloud provider functionality i.e. external CCM and CSI drivers, the credentials specified above will be used."></div>
+    <div fxLayoutAlign=" center"
+         fxLayoutGap="5px">
+      <span>Use dedicated credentials to provision vSphere resources</span>
+      <i class="km-icon-info km-pointer"
+         matTooltip="These credentials will be used for managing resources like tags, folders, networks etc. For cloud provider functionality i.e. external CCM and CSI drivers, the credentials specified above will be used."></i>
+    </div>
   </mat-checkbox>
 
   <mat-card-header class="km-no-padding"

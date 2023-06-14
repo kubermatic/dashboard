@@ -60,7 +60,12 @@ limitations under the License.
         <div *ngIf="!applicationDefsDataSource.filteredData?.length"
              class="km-no-data-message"
              fxFlex>
-          No results for "{{applicationDefsDataSource.filter}}" found.
+          <ng-container *ngIf="applicationDefsDataSource.filter; else noApplicationDefs">
+            No results for "{{applicationDefsDataSource.filter}}" found.
+          </ng-container>
+          <ng-template #noApplicationDefs>
+            No applications found.
+          </ng-template>
         </div>
       </div>
     </mat-step>

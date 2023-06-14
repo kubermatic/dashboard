@@ -175,6 +175,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     merge(
       this.form.get(Controls.CustomDiskSize).valueChanges,
+      this.form.get(Controls.UseCustomDisk).valueChanges,
       this.form.get(Controls.Image).valueChanges,
       this.form.get(Controls.UseFloatingIP).valueChanges,
       this.form.get(Controls.InstanceReadyCheckPeriod).valueChanges,
@@ -206,7 +207,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this.form.get(Controls.UseCustomDisk).disable();
         this.form.get(Controls.CustomDiskSize).setValidators(Validators.required);
         this.form.get(Controls.CustomDiskSize).updateValueAndValidity();
-      } else {
+      } else if (this.form.get(Controls.UseCustomDisk).disabled) {
         this.form.get(Controls.UseCustomDisk).enable();
         this.form.get(Controls.CustomDiskSize).clearValidators();
         this.form.get(Controls.UseCustomDisk).setValue(false);
@@ -430,7 +431,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
           openstack: {
             image: this.form.get(Controls.Image).value,
             useFloatingIP: this.form.get(Controls.UseFloatingIP).value,
-            diskSize: this.form.get(Controls.CustomDiskSize).value,
+            diskSize: this.form.get(Controls.UseCustomDisk).value ? this.form.get(Controls.CustomDiskSize).value : null,
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
             instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
             serverGroup: this.selectedServerGroupID,
@@ -450,7 +451,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     let payload: ResourceQuotaCalculationPayload = {
       replicas: this._nodeDataService.nodeData.count,
-      diskSizeGB: this.form.get(Controls.CustomDiskSize).value,
+      diskSizeGB: this.form.get(Controls.UseCustomDisk).value ? this.form.get(Controls.CustomDiskSize).value : null,
       openstackSize: {
         ...selectedFlavour,
       } as OpenstackFlavor,

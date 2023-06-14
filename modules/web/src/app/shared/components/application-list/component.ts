@@ -170,7 +170,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     if (!this.canEdit) {
       return 'You have no permissions to edit applications in this cluster.';
     } else if (this.applicationDefinitions.length === 0) {
-      return 'There are no application available.';
+      return 'There are no applications available.';
     }
     return '';
   }
@@ -179,8 +179,12 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
 
+  canAdd(): boolean {
+    return this.isClusterReady && this.canEdit && !_.isEmpty(this.applicationDefinitions);
+  }
+
   onAddApplication(): void {
-    if (this._canAdd()) {
+    if (this.canAdd()) {
       const dialog = this._matDialog.open(AddApplicationDialogComponent);
       dialog.componentInstance.installedApplications = this.applications;
       dialog.componentInstance.applicationDefinitions = this.applicationDefinitions;
@@ -388,10 +392,6 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           }
         });
       });
-  }
-
-  private _canAdd(): boolean {
-    return this.isClusterReady && this.canEdit && !_.isEmpty(this.applicationDefinitions);
   }
 
   private _filter(application: Application, query: string): boolean {

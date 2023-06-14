@@ -31,7 +31,7 @@ const routes: Routes = [
     canActivate: [AuthGuard, AuthzGuard],
   },
   {
-    path: 'snapshot/:backupID',
+    path: 'snapshots/:backupID',
     component: SnapshotDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },

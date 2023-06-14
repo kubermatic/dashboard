@@ -160,6 +160,6 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   }
 
   goToDetails(backup: EtcdBackupConfig): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/backups/snapshot/${backup.id}`]);
+    this._router.navigate([`/projects/${this._selectedProject.id}/backups/${View.Snapshots}/${backup.id}`]);
   }
 }
