@@ -72,7 +72,7 @@ limitations under the License.
               [disabled]="!isWebTerminalEnabled()"
               (click)="toggleTerminal()">
         <i class="km-icon-mask km-icon-terminal"></i>
-        <span>Web Terminal</span>
+        <span [matTooltip]="isWebTerminalEnabled() ? '' : 'At least one machine should be running to enable Web Terminal'">Web Terminal</span>
       </button>
 
       <div class="provider-menu">
