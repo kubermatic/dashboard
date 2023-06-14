@@ -57,7 +57,7 @@ limitations under the License.
             </div>
           </div>
         </div>
-        <div *ngIf="!applicationDefsDataSource.filteredData?.length"
+        <div *ngIf="applicationDefsDataSource.filter && !applicationDefsDataSource.filteredData?.length"
              class="km-no-data-message"
              fxFlex>
           No results for "{{applicationDefsDataSource.filter}}" found.
