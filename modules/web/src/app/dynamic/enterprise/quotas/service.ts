@@ -35,6 +35,7 @@ export class QuotaService {
 
   private _quotas$: Observable<QuotaDetails[]>;
   private _quotasRefresh$ = new Subject<void>();
+  private _quotaExceeded$ = new Subject<boolean>();
 
   private readonly _refreshTime = 5;
   private readonly _newRestRoot = environment.newRestRoot;
@@ -44,6 +45,10 @@ export class QuotaService {
 
   private _quotaMap = new Map<string, Observable<QuotaDetails>>();
   private _previousQuotaMap = new Map<string, QuotaDetails>();
+
+  get quotaExceeded(): Observable<boolean> {
+    return this._quotaExceeded$;
+  }
 
   get quotas(): Observable<QuotaDetails[]> {
     if (!this._quotas$) {
@@ -60,6 +65,10 @@ export class QuotaService {
       return this._quotas$.pipe(startWith(this._previousQuotas));
     }
     return this._quotas$;
+  }
+
+  setQuotaExceeded(isQuotaExceeded: boolean): void {
+    this._quotaExceeded$.next(isQuotaExceeded);
   }
 
   refreshQuotas(): void {

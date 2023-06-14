@@ -247,6 +247,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   private _setShowWarningIcon(): void {
     this.showWarning = Object.values(this.quotaPercentage).some((quota: number) => quota > this.quotaLimit);
+    this._quotaService.setQuotaExceeded(this.showWarning);
   }
 
   private _setShowNotApplicableText(): void {
