@@ -128,18 +128,21 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
-
-    this._nodeDataService.azure.acceleratedNetworking.subscribe(accNet => {
+    this._nodeDataService.azure.acceleratedNetworking.pipe(takeUntil(this._unsubscribe)).subscribe(accNet => {
+      this.isAcceleratedNetworkingEnabled = accNet;
       if (this.allSizes.length) {
         if (accNet) {
           this.currentSizes = this.allSizes.filter(size => size.acceleratedNetworkingEnabled);
-          this.selectedSize = this._findCheapestInstance(this.currentSizes).name;
-          this.onSizeChange(this.selectedSize);
         } else {
           this.currentSizes = this.allSizes;
-          this.selectedSize = this._findCheapestInstance(this.currentSizes)?.name;
-          this.onSizeChange(this.selectedSize);
         }
+        this.selectedSize = this.currentSizes.find(
+          sizes => sizes.name === this._nodeDataService.nodeData.spec.cloud.azure.size
+        )?.name;
+        if (!this.selectedSize) {
+          this.selectedSize = this._findCheapestInstance(this.currentSizes).name;
+        }
+        this.onSizeChange(this.selectedSize);
       }
     });
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
