@@ -280,6 +280,9 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {
+    this._subnets = subnets;
+    this._subnetMap = {};
+
     if (subnets.length === 0) {
       this.selectedSubnet = '';
       this.subnetLabel = SubnetState.Empty;
@@ -287,8 +290,6 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
       return;
     }
 
-    this._subnets = subnets;
-    this._subnetMap = {};
     this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.aws.subnetID;
 
     if (this._subnets.length && !this._subnets.find(subnet => subnet.id === this.selectedSubnet)) {
