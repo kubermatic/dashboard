@@ -1,37 +1,17 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2219",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22110",
   "entries": [
     {
         "category": "added",
-        "description": "Add a new alert for NodeTimeDrift."
+        "description": "Add support for Kubernetes 1.24.15 (fixing CVE-2023-2431, CVE-2023-2727 and CVE-2023-2728)."
     },
     {
         "category": "changed",
-        "description": "Patch cilium v1.12 and v1.11 to latest patch releases (v1.12.9) (v1.11.16)."
-    },
-    {
-        "category": "changed",
-        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.4."
+        "description": "Change `etcd-defragger` CronJob `SuccessfulJobsHistoryLimit` from 0 to 1 to save logs of the most recent successful job."
     },
     {
         "category": "fixed",
-        "description": "Do not try to watch `Cluster` resources on the master in `usersshkey-synchronizer` and use Seeds as correct source instead."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix a bug that lead to metering reports overwriting each other when used with multiple seeds. Report names now include a seed name prefix."
-    },
-    {
-        "category": "fixed",
-        "description": "The MLA stack is now able to recover from a lost Grafana volume, properly recreating organizations for KKP projects."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix OOM on usercluster-controller by limiting the history of helm releases. This fix is critical if user-cluster is using Cilium >= 1.13.0 as CNI."
-    },
-    {
-        "category": "fixed",
-        "description": "Initialize Machine Deployments without waiting for all cluster details to finish loading."
+        "description": "The kubeconfig used by konnectivity's server component gets renewed automatically now, no longer causing konnectivity to stop working when the embedded certificate expires."
     }
   ]
 }
