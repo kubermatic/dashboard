@@ -42,6 +42,7 @@
     "noUnusedParameters": true,
     // TODO: Any should be blocked
     "noImplicitAny": false,
+    "skipLibCheck": false,
     "lib": [
       "ES2020",
       "dom"

@@ -4,3 +4,5 @@ hack
 docs/
 .prow
 .github
+node_modules/
+vendor/
