@@ -1,8 +1,7 @@
 ---
 name: Pre-Release
 title: "[vX.XX] Pre-Release Procedure"
-assignees: ahmadhamzh, KhizerRehan, Waseem826, Talha-Jamil-TJ
-about: The list of steps that should be executed prior to the release step list 
+about: The list of steps that should be executed prior to the release step list
 labels: sig/ui, sig/release
 ---
 
@@ -70,7 +69,7 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check external cluster disconnect functionality
 
 ### Cluster Templates
-- [ ] Check creation of cluster templates with SSH key in the project scope and verify it was saved 
+- [ ] Check creation of cluster templates with SSH key in the project scope and verify it was saved
 - [ ] Check creation of cluster templates in the user scope and verify it was saved
 - [ ] Check creation of cluster templates in the global scope and verify it was saved
 - [ ] Check cluster creation from the templates created before and verify if it is the same as expected
