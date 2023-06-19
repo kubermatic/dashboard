@@ -19,7 +19,7 @@ import (
 // swagger:model DatacenterSpecKubevirt
 type DatacenterSpecKubevirt struct {
 
-	// CustomNetworkPolicies (optional) allows to add some extra custom NetworkPolicies, that are deployed
+	// Optional: CustomNetworkPolicies allows to add some extra custom NetworkPolicies, that are deployed
 	// in the dedicated infra KubeVirt cluster. They are added to the defaults.
 	CustomNetworkPolicies []*CustomNetworkPolicy `json:"customNetworkPolicies"`
 
@@ -28,7 +28,11 @@ type DatacenterSpecKubevirt struct {
 	// policy selected with DNSPolicy.
 	DNSPolicy string `json:"dnsPolicy,omitempty"`
 
-	// InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names
+	// Optional: EnableDefaultNetworkPolicies enables deployment of default network policies like cluster isolation.
+	// Defaults to true.
+	EnableDefaultNetworkPolicies bool `json:"enableDefaultNetworkPolicies,omitempty"`
+
+	// Optional: InfraStorageClasses contains a list of KubeVirt infra cluster StorageClasses names
 	// that will be used to initialise StorageClasses in the tenant cluster.
 	// In the tenant cluster, the created StorageClass name will have as name:
 	// kubevirt-<infra-storageClass-name>
