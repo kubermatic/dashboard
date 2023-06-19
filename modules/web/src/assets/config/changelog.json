@@ -1,45 +1,41 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2223",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2224",
   "entries": [
     {
-        "category": "changed",
-        "description": "Patch cilium v1.12 and v1.11 to latest patch releases (v1.12.9) (v1.11.16)."
+        "category": "added",
+        "description": "Add option to disable deployment of default network policies in KubeVirt cluster."
+    },
+    {
+        "category": "added",
+        "description": "Add support for Kubernetes 1.24.15, 1.25.11 and 1.26.6 (fixing CVE-2023-2431, CVE-2023-2727 and CVE-2023-2728) and set default Kubernetes version to 1.25.11."
     },
     {
         "category": "changed",
-        "description": "Update kube-state-metrics to v2.5.0 and node-exporter to v1.4.0."
+        "description": "Force update for canal below 3.22 on k8s version 1.26 and above."
     },
     {
         "category": "changed",
-        "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.4."
+        "description": "Limit EtcdDatabaseHighFragmentationRatio rule to avoid triggering excessively for small etcd instances."
+    },
+    {
+        "category": "changed",
+        "description": "Change `etcd-defragger` CronJob `SuccessfulJobsHistoryLimit` from 0 to 1 to save logs of the most recent successful job."
     },
     {
         "category": "fixed",
-        "description": "Add a dedicated service account for CSI snapshot webhook server (Openstack)."
+        "description": "Fix a bug where redundant webhooks for OSM were not being removed from the seed cluster."
     },
     {
         "category": "fixed",
-        "description": "Do not override floating IP settings from user input for OpenStack initial MD."
+        "description": "Fix storage calculation for openstack's resource quota when custom disk size was provided."
     },
     {
         "category": "fixed",
-        "description": "Do not try to watch `Cluster` resources on the master in `usersshkey-synchronizer` and use Seeds as correct source instead."
+        "description": "The kubeconfig used by konnectivity's server component gets renewed automatically now, no longer causing konnectivity to stop working when the embedded certificate expires."
     },
     {
         "category": "fixed",
-        "description": "Fix a bug that lead to metering reports overwriting each other when used with multiple seeds. Report names now include seed name prefixes."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix MLA stack constantly updating Grafana datasources."
-    },
-    {
-        "category": "fixed",
-        "description": "The MLA stack is now able to recover from a lost Grafana volume, properly recreating organizations for KKP projects."
-    },
-    {
-        "category": "fixed",
-        "description": "Initialize Machine Deployments without waiting for all cluster details to finish loading."
+        "description": "Allow removing cluster label when PodNodeSelector admission plugin and clusterDefaultNodeSelector namespace are set."
     }
   ]
 }
