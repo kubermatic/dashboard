@@ -48,9 +48,9 @@ limitations under the License.
     </div>
     <button mat-flat-button
             (click)="onConfirm()"
-            [disabled]="form.invalid || isQuotaExceeded || isCalculatingQuota"
+            [disabled]="form.invalid || isQuotaExceeded || (quotaCalculationInProgress$ | async)"
             class="btn btn-primary">
-      <i [ngClass]="isCalculatingQuota ? 'km-icon-mask km-icon-pending i-24' : getIconClass()"></i>
+      <i [ngClass]="(quotaCalculationInProgress$ | async) ? 'km-icon-mask km-icon-pending i-24' : getIconClass()"></i>
       <span>{{getConfirmButtonText()}}</span>
     </button>
   </mat-dialog-actions>

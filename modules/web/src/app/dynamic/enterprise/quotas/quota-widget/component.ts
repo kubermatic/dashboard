@@ -32,7 +32,7 @@ import {
 } from '@angular/core';
 import {QuotaCalculationService} from '../services/quota-calculation';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {QuotaDetails, QuotaVariables, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
@@ -72,10 +72,10 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   estimatedQuotaPercentage: QuotaVariables;
   isEstimatedQuotaExceeded: boolean;
   quotaDetails: QuotaDetails;
-  isEstimationInProgress: boolean;
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
+  calculationInProgress$: Observable<boolean>;
   isCollapsed: boolean;
   getProgressBarAccent = getProgressBarAccent;
 
@@ -126,6 +126,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.isCollapsed = window.innerWidth <= quotaWidgetCollapsibleWidth && this.collapsible;
+    this.calculationInProgress$ = this._quotaCalculationService.calculationInProgress;
     this._initSubscriptions();
     this._setShowNotApplicableText();
   }
@@ -200,10 +201,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
       this._subscribeToQuotaDetails();
     });
-
-    this._quotaCalculationService.calculationInProgress
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(inProgress => (this.isEstimationInProgress = inProgress));
   }
 
   private _subscribeToQuotaDetails(): void {

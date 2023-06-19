@@ -17,7 +17,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NodeDataService} from '@core/services/node-data/service';
 import _ from 'lodash';
-import {merge, of} from 'rxjs';
+import {merge, Observable, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Cluster, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
@@ -77,7 +77,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
   isRecreationWarningVisible = false;
   isDynamicKubeletConfigWarningVisible = false;
   isQuotaExceeded: boolean;
-  isCalculatingQuota: boolean;
+  quotaCalculationInProgress$: Observable<boolean>;
   mode = Mode.Add;
 
   readonly Control = Controls;
@@ -134,6 +134,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
     const key = `${this._data.projectID}-${this.provider}`;
     this._quotaCalculationService.reset(key);
+    this.quotaCalculationInProgress$ = this._quotaCalculationService.calculationInProgress;
 
     merge(this._nodeDataService.nodeDataChanges, this._nodeDataService.operatingSystemChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -153,10 +154,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       .subscribe(isQuotaExceeded => {
         this.isQuotaExceeded = isQuotaExceeded;
       });
-
-    this._quotaCalculationService.calculationInProgress.pipe(takeUntil(this._unsubscribe)).subscribe(value => {
-      this.isCalculatingQuota = value;
-    });
   }
 
   ngOnDestroy() {
