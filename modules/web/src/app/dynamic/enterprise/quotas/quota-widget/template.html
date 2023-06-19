@@ -208,7 +208,7 @@ END OF TERMS AND CONDITIONS
       <div *ngIf="showIcon"
            class="km-quota-heading"
            fxLayoutAlign=" center">
-        <mat-spinner *ngIf="isEstimationInProgress; else quotaIcon"
+        <mat-spinner *ngIf="calculationInProgress$ | async; else quotaIcon"
                      [diameter]="25"></mat-spinner>
         <ng-template #quotaIcon>
           <i class="km-icon-mask km-icon-quota"></i>
