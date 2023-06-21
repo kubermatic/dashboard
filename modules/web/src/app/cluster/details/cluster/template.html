@@ -47,6 +47,8 @@ limitations under the License.
       <km-button color="alternative"
                  icon="km-icon-download"
                  label="Get Kubeconfig"
+                 [disabled]="isDeletingState"
+                 [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
                  [observable]="getObservable()"
                  (next)="onNext($event)">
       </km-button>
@@ -58,8 +60,8 @@ limitations under the License.
          target="_blank"
          rel="noopener noreferrer"
          mat-flat-button
-         [disabled]="!isKubernetesDashboardHealthy"
-         [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
+         [disabled]="!isKubernetesDashboardHealthy || isDeletingState"
+         [matTooltip]="getOpenDashboardTooltip()"
          *ngIf="adminSettings.enableDashboard">
         <i class="km-icon-mask km-icon-external-link"></i>
         <span>Open Dashboard</span>
@@ -72,7 +74,7 @@ limitations under the License.
               [disabled]="!isWebTerminalEnabled()"
               (click)="toggleTerminal()">
         <i class="km-icon-mask km-icon-terminal"></i>
-        <span [matTooltip]="isWebTerminalEnabled() ? '' : 'At least one machine should be running to enable Web Terminal'">Web Terminal</span>
+        <span [matTooltip]="getWebTerminalTooltip()">Web Terminal</span>
       </button>
 
       <div class="provider-menu">

@@ -91,7 +91,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   readonly HealthType = HealthType;
   readonly IPFamily = IPFamily;
-
+  readonly clusterDeletionTooltip = 'Cluster is being deleted';
   adminSettings: AdminSettings;
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
@@ -123,6 +123,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
+  }
+
+  get isDeletingState(): boolean {
+    return this.healthStatus?.message === StatusMassage?.Deleting;
   }
 
   get isKubernetesDashboardHealthy(): boolean {
@@ -616,11 +620,36 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isWebTerminalEnabled(): boolean {
     if (this.machineDeployments?.length) {
-      return this.machineDeployments.some(
-        (md: MachineDeployment) => getMachineDeploymentHealthStatus(md)?.message === StatusMassage.Running
+      return (
+        this.machineDeployments.some(
+          (md: MachineDeployment) => getMachineDeploymentHealthStatus(md)?.message === StatusMassage.Running
+        ) && !this.isDeletingState
       );
     }
     return false;
+  }
+
+  getWebTerminalTooltip(): string {
+    if (this.isDeletingState) {
+      return this.clusterDeletionTooltip;
+    }
+
+    if (!this.isWebTerminalEnabled()) {
+      return 'At least one machine should be running to enable Web Terminal';
+    }
+    return '';
+  }
+
+  getOpenDashboardTooltip(): string {
+    if (this.isDeletingState) {
+      return this.clusterDeletionTooltip;
+    }
+    if (!this.isKubernetesDashboardHealthy) {
+      return this.cluster?.spec?.kubernetesDashboard?.enabled
+        ? 'Kubernetes Dashboard is not running'
+        : 'Kubernetes Dashboard is disabled';
+    }
+    return '';
   }
 
   private _canReloadVersions(): boolean {
