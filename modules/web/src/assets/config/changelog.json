@@ -1,4 +1,161 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md",
-  "entries": []
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md",
+  "entries": [
+    {
+      "category": "added",
+      "description": "Add support for Kubernetes 1.27."
+    },
+    {
+      "category": "added",
+      "description": "Add support for Kubernetes 1.24.15, 1.25.11, 1.26.6 and 1.27.3 (fixing CVE-2023-2431, CVE-2023-2727 and CVE-2023-2728)."
+    },
+    {
+      "category": "added",
+      "description": "Add option to disable deployment of default network policies in KubeVirt cluster."
+    },
+    {
+      "category": "added",
+      "description": "Add support for Canal 3.25."
+    },
+    {
+      "category": "added",
+      "description": "Add support for Cilium 1.13.3."
+    },
+    {
+      "category": "added",
+      "description": "VMware Cloud Director now supports authentication using API Token."
+    },
+    {
+      "category": "added",
+      "description": "Add option to restrict project deletion to admin."
+    },
+    {
+      "category": "added",
+      "description": "Add indicator of what was changed on editing dialogs."
+    },
+    {
+      "category": "added",
+      "description": "Add warning message in the cluster list page in case some seeds are not reachable."
+    },
+    {
+      "category": "changed",
+      "description": "Update Metering to v1.0.3 (EE)."
+    },
+    {
+      "category": "changed",
+      "description": "Move to Egress based cluster isolation network policies for KubeVirt. Custom Network policies for KubeVirt datacenters might need adjustment."
+    },
+    {
+      "category": "changed",
+      "description": "Update AWS CCM to 1.25.3 / 1.26.1 / 1.27.1."
+    },
+    {
+      "category": "changed",
+      "description": "Update AWS EBS CSI to 2.18.0."
+    },
+    {
+      "category": "changed",
+      "description": "Update Azure CCM to 1.24.18 / 1.25.12 / 1.26.8 / 1.27.1."
+    },
+    {
+      "category": "changed",
+      "description": "Update Azure Disk CSI to 1.27.1."
+    },
+    {
+      "category": "changed",
+      "description": "Update Azure File CSI to 1.27.0."
+    },
+    {
+      "category": "changed",
+      "description": "Update vSphere CCM/CSI to 1.24.5 / 1.25.2 / 1.26.1."
+    },
+    {
+      "category": "changed",
+      "description": "Update VMware Cloud Director CSI driver to 1.3.2."
+    },
+    {
+      "category": "changed",
+      "description": "Update OpenStack CCM/CSI to 1.25.5 / 1.26.2. Container images are now using `registry.k8s.io` instead of `docker.io`."
+    },
+    {
+      "category": "changed",
+      "description": "Update Digitalocean CCM to 0.1.42."
+    },
+    {
+      "category": "changed",
+      "description": "Update Anexia CCM (cloud-controller-manager) to version 1.5.4."
+    },
+    {
+      "category": "changed",
+      "description": "Update Hetzner CCM to 1.15.0."
+    },
+    {
+      "category": "changed",
+      "description": "Update Hetzner CSI to 2.3.2."
+    },
+    {
+      "category": "changed",
+      "description": "Update Cilium versions to 1.12.9 and 1.11.16."
+    },
+    {
+      "category": "changed",
+      "description": "Update machine-controller to 1.57.0 and operating-system-manager to 1.3.0."
+    },
+    {
+      "category": "changed",
+      "description": "Update KubeOne for external clusters to 1.6.2."
+    },
+    {
+      "category": "changed",
+      "description": "Update Gatekeeper to 3.12.0."
+    },
+    {
+      "category": "changed",
+      "description": "Update Prometheus to 2.43.1."
+    },
+    {
+      "category": "changed",
+      "description": "UI/UX improvements for vSphere credentials in provider settings step: By default, username/password will be configured and dedicated credentials will be used to configure infra management user for vSphere."
+    },
+    {
+      "category": "changed",
+      "description": "Allow removing cluster label when PodNodeSelector admission plugin and clusterDefaultNodeSelector namespace are set."
+    },
+    {
+      "category": "changed",
+      "description": "Improve page responsiveness for smaller screen sizes."
+    },
+    {
+      "category": "fixed",
+      "description": "The kubeconfig used by konnectivity's server component gets renewed automatically now, no longer causing konnectivity to stop working when the embedded certificate expires."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix storage calculation for Openstack resource quota when custom disk size is provided (EE)."
+    },
+    {
+      "category": "fixed",
+      "description": "Don't override floating IP settings from user input for OpenStack initial MachineDeployment."
+    },
+    {
+      "category": "fixed",
+      "description": "AWS subnets are fetched correctly if credentials are provided directly instead of using a preset."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix cluster wizard not selecting a default version if custom versions are configured."
+    },
+    {
+      "category": "fixed",
+      "description": "Machine Deployments are initialized without waiting for all cluster details to finish loading."
+    },
+    {
+      "category": "fixed",
+      "description": "Show correct health information for Machine Deployments with no replicas."
+    },
+    {
+      "category": "deprecated",
+      "description": "Deprecate Canal 3.22 and enforce update for Canal below 3.22 on Kubernetes 1.25 and above."
+    }
+  ]
 }
