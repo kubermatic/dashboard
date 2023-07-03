@@ -94,7 +94,7 @@
     "swagger-ui": "4.19.0",
     "xterm": "5.1.0",
     "xterm-addon-fit": "0.7.0",
-    "zone.js": "0.13.0"
+    "zone.js": "0.13.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "15.2.8",
