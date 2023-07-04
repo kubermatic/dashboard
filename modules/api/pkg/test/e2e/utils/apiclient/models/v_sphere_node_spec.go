@@ -33,6 +33,9 @@ type VSphereNodeSpec struct {
 
 	// template
 	Template string `json:"template,omitempty"`
+
+	// Automatically create anti affinity rules for machines.
+	VMAntiAffinity bool `json:"vmAntiAffinity,omitempty"`
 }
 
 // Validate validates this v sphere node spec

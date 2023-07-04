@@ -234,6 +234,7 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		Folder:           providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.Folder},
 		AllowInsecure:    providerconfig.ConfigVarBool{Value: pointer.Bool(dc.Spec.VSphere.AllowInsecure)},
 		ResourcePool:     providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.ResourcePool},
+		VMAntiAffinity:   providerconfig.ConfigVarBool{Value: nodeSpec.Cloud.VSphere.VMAntiAffinity},
 	}
 
 	config.Tags = []vsphere.Tag{}

@@ -40460,6 +40460,11 @@
         "template": {
           "type": "string",
           "x-go-name": "Template"
+        },
+        "vmAntiAffinity": {
+          "description": "Automatically create anti affinity rules for machines.",
+          "type": "boolean",
+          "x-go-name": "VMAntiAffinity"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"

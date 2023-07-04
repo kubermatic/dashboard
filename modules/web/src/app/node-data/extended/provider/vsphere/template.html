@@ -17,6 +17,17 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <mat-checkbox [formControlName]="controls.VMAntiAffinity"
+                fxFlex
+                kmValueChangedIndicator>
+    <div fxLayoutAlign=" center"
+         fxLayoutGap="5px">
+      <span>VM Anti Affinity</span>
+      <i class="km-icon-info km-pointer"
+         matTooltip="Automatically create anti affinity rules for machines."></i>
+    </div>
+  </mat-checkbox>
+
   <km-vsphere-tags [formControlName]="controls.Tags"
                    [tags]="tags"
                    (tagsChange)="onTagsChange($event)"></km-vsphere-tags>

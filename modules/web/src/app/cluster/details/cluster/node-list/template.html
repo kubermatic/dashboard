@@ -361,6 +361,9 @@ limitations under the License.
               <div key>VM Template</div>
               <div value>{{element.spec.cloud.vsphere.template}}</div>
             </km-property>
+            <km-property-boolean label="VM Anti Affinity"
+                                 [value]="element.spec.cloud.vsphere?.vmAntiAffinity">
+            </km-property-boolean>
 
             <km-property *ngIf="element.spec.cloud.anexia?.cpus">
               <div key>Number of CPU's</div>

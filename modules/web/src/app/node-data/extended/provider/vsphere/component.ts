@@ -15,12 +15,14 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
+import {NodeCloudSpec, NodeSpec, VSphereNodeSpec, VSphereTag} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {VSphereTag} from '@shared/entity/node';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Tags = 'tags',
+  VMAntiAffinity = 'vmAntiAffinity',
 }
 
 @Component({
@@ -53,11 +55,20 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
   }
 
   ngOnInit(): void {
-    this._init();
-
     this.form = this._builder.group({
       [Controls.Tags]: this._builder.control(''),
+      [Controls.VMAntiAffinity]: this._builder.control(false),
     });
+
+    this._init();
+    this._nodeDataService.nodeData = this._getNodeData();
+
+    this.form
+      .get(Controls.VMAntiAffinity)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.nodeData = this._getNodeData();
+      });
   }
 
   ngOnDestroy(): void {
@@ -75,6 +86,23 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
     if (vSphereNodeCloudSpec) {
       this.tags = vSphereNodeCloudSpec.tags;
+
+      if (this.nodeData.name) {
+        const vmAntiAffinity = this.nodeData.spec.cloud.vsphere.vmAntiAffinity ?? false;
+        this.form.get(Controls.VMAntiAffinity).setValue(vmAntiAffinity);
+      }
     }
+  }
+
+  private _getNodeData(): NodeData {
+    return {
+      spec: {
+        cloud: {
+          vsphere: {
+            vmAntiAffinity: this.form.get(Controls.VMAntiAffinity).value,
+          } as VSphereNodeSpec,
+        } as NodeCloudSpec,
+      } as NodeSpec,
+    } as NodeData;
   }
 }

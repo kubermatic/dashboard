@@ -946,6 +946,9 @@ limitations under the License.
                 <div key>Template</div>
                 <div value>{{machineDeployment.spec.template.cloud?.vsphere?.template}}</div>
               </km-property>
+              <km-property-boolean label="VM Anti Affinity"
+                                   [value]="machineDeployment.spec.template.cloud?.vsphere?.vmAntiAffinity">
+              </km-property-boolean>
             </ng-container>
 
             <!-- Anexia Nodes -->

@@ -1652,6 +1652,8 @@ type VSphereNodeSpec struct {
 	// Additional metadata to set
 	// required: false
 	Tags []VSphereTag `json:"tags,omitempty"`
+	// Automatically create anti affinity rules for machines.
+	VMAntiAffinity *bool `json:"vmAntiAffinity"`
 }
 
 // VSphereTag represents vsphere tag.
@@ -1687,17 +1689,19 @@ func (spec *VSphereNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		CPUs       int          `json:"cpus"`
-		Memory     int          `json:"memory"`
-		DiskSizeGB *int64       `json:"diskSizeGB,omitempty"`
-		Template   string       `json:"template"`
-		Tags       []VSphereTag `json:"tags,omitempty"`
+		CPUs           int          `json:"cpus"`
+		Memory         int          `json:"memory"`
+		DiskSizeGB     *int64       `json:"diskSizeGB,omitempty"`
+		Template       string       `json:"template"`
+		Tags           []VSphereTag `json:"tags,omitempty"`
+		VMAntiAffinity *bool        `json:"vmAntiAffinity"`
 	}{
-		CPUs:       spec.CPUs,
-		Memory:     spec.Memory,
-		DiskSizeGB: spec.DiskSizeGB,
-		Template:   spec.Template,
-		Tags:       spec.Tags,
+		CPUs:           spec.CPUs,
+		Memory:         spec.Memory,
+		DiskSizeGB:     spec.DiskSizeGB,
+		Template:       spec.Template,
+		Tags:           spec.Tags,
+		VMAntiAffinity: spec.VMAntiAffinity,
 	}
 
 	return json.Marshal(&res)
