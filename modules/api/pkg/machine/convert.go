@@ -224,10 +224,11 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			return nil, fmt.Errorf("failed to parse vsphere config: %w", err)
 		}
 		cloudSpec.VSphere = &apiv1.VSphereNodeSpec{
-			CPUs:       int(config.CPUs),
-			Memory:     int(config.MemoryMB),
-			DiskSizeGB: config.DiskSizeGB,
-			Template:   config.TemplateVMName.Value,
+			CPUs:           int(config.CPUs),
+			Memory:         int(config.MemoryMB),
+			DiskSizeGB:     config.DiskSizeGB,
+			Template:       config.TemplateVMName.Value,
+			VMAntiAffinity: config.VMAntiAffinity.Value,
 		}
 		for _, v := range config.Tags {
 			cloudSpec.VSphere.Tags = append(cloudSpec.VSphere.Tags, apiv1.VSphereTag{
