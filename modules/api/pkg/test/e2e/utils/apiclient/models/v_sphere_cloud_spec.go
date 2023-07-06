@@ -34,6 +34,10 @@ type VSphereCloudSpec struct {
 	// +optional
 	Folder string `json:"folder,omitempty"`
 
+	// Networks is the list of vSphere networks.
+	// +optional
+	Networks []string `json:"networks"`
+
 	// Password is the vSphere user password.
 	// +optional
 	Password string `json:"password,omitempty"`
@@ -51,6 +55,8 @@ type VSphereCloudSpec struct {
 	Username string `json:"username,omitempty"`
 
 	// VMNetName is the name of the vSphere network.
+	// Deprecated: Use networks instead.
+	// +optional
 	VMNetName string `json:"vmNetName,omitempty"`
 
 	// credentials reference

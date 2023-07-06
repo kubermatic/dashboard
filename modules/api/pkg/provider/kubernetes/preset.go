@@ -402,6 +402,7 @@ func (m *PresetProvider) setVsphereCredentials(preset *kubermaticv1.Preset, clou
 	cloud.VSphere.Username = credentials.Username
 
 	cloud.VSphere.VMNetName = credentials.VMNetName
+	cloud.VSphere.Networks = credentials.Networks
 	cloud.VSphere.Datastore = credentials.Datastore
 	cloud.VSphere.DatastoreCluster = credentials.DatastoreCluster
 	cloud.VSphere.ResourcePool = credentials.ResourcePool
