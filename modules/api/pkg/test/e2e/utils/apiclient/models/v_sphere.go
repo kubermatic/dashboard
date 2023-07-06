@@ -30,6 +30,9 @@ type VSphere struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
+	// networks
+	Networks []string `json:"networks"`
+
 	// password
 	Password string `json:"password,omitempty"`
 
@@ -39,7 +42,7 @@ type VSphere struct {
 	// username
 	Username string `json:"username,omitempty"`
 
-	// VM net name
+	// Deprecated: Use networks instead.
 	VMNetName string `json:"vmNetName,omitempty"`
 }
 
