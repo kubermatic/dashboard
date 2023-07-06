@@ -112,7 +112,7 @@ export function fakeVSphereCluster(): Cluster {
         vsphere: {
           username: 'foo',
           password: 'bar',
-          vmNetName: '',
+          networks: [''],
           folder: '',
           infraManagementUser: {
             username: 'foo',

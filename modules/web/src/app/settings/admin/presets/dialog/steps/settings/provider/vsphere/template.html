@@ -24,7 +24,7 @@ limitations under the License.
            type="text"
            autocomplete="off"
            required
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -38,21 +38,20 @@ limitations under the License.
            kmInputPassword
            autocomplete="off"
            required
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
       <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>VMNet Name</mat-label>
-    <input matInput
-           [formControlName]="Controls.VMNetName"
-           [name]="Controls.VMNetName"
-           type="text"
-           autocomplete="off"
-           kmValueChangedIndicator>
-  </mat-form-field>
+  <km-chip-list label="Networks"
+                placeholder="Networks to attach to VMs..."
+                description="Use commas, space or enter key as the separators."
+                [tags]="networks"
+                (onChange)="onNetworksChange($event)"
+                [formControlName]="Controls.Networks"
+                fxFlex>
+  </km-chip-list>
 
   <mat-form-field fxFlex>
     <mat-label>Datastore</mat-label>
@@ -61,7 +60,7 @@ limitations under the License.
            [name]="Controls.Datastore"
            type="text"
            autocomplete="off"
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -71,7 +70,7 @@ limitations under the License.
            [name]="Controls.DatastoreCluster"
            type="text"
            autocomplete="off"
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -81,6 +80,6 @@ limitations under the License.
            [name]="Controls.ResourcePool"
            type="text"
            autocomplete="off"
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
   </mat-form-field>
 </form>

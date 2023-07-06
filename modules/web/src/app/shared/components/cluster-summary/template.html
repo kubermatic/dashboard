@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-cluster-summary  km-wizard-summary summary-with-number"
+<div class="km-cluster-summary km-wizard-summary summary-with-number"
      [fxLayout]="flipLayout ? 'column' : 'row'"
      fxLayout.lt-md="column">
-
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column">
     <div class="step">
@@ -32,7 +31,8 @@ limitations under the License.
           </km-property>
           <km-property>
             <div key>Datacenter</div>
-            <div value><span *ngIf="datacenter?.spec">{{datacenter.spec.location}} ({{datacenter.spec.country}})</span>
+            <div value>
+              <span *ngIf="datacenter?.spec">{{datacenter.spec.location}} ({{datacenter.spec.country}})</span>
             </div>
           </km-property>
         </div>
@@ -248,10 +248,8 @@ limitations under the License.
                    fxLayoutGap="10px">
                 <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
                 <div><span class="km-text-muted">QPS:</span> {{namespace.qps}}</div>
-                <div><span class="km-text-muted">Burst:</span> {{namespace.burst}}
-                </div>
-                <div><span class="km-text-muted">Cache Size:</span> {{namespace.cacheSize}}
-                </div>
+                <div><span class="km-text-muted">Burst:</span> {{namespace.burst}}</div>
+                <div><span class="km-text-muted">Cache Size:</span> {{namespace.cacheSize}}</div>
               </div>
             </km-property>
 
@@ -266,7 +264,6 @@ limitations under the License.
         </div>
       </div>
     </div>
-
 
     <div *ngIf="!cluster.spec.cloud?.bringyourown && (cluster.credential || displaySettings())"
          class="step">
@@ -480,9 +477,9 @@ limitations under the License.
               <div key>VSphere Cloud Provider Username</div>
               <div value>{{cluster.spec.cloud?.vsphere?.infraManagementUser?.username}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.cloud?.vsphere.vmNetName">
-              <div key>Network</div>
-              <div value>{{cluster.spec.cloud?.vsphere.vmNetName}}</div>
+            <km-property *ngIf="this.cluster.spec.cloud?.vsphere?.networks">
+              <div key>Networks</div>
+              <div value>{{this.cluster.spec.cloud?.vsphere?.networks}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud?.vsphere.folder">
               <div key>Folder</div>
@@ -535,7 +532,6 @@ limitations under the License.
               </km-property>
             </ng-container>
           </ng-container>
-
         </ng-container>
       </div>
     </div>
@@ -705,7 +701,9 @@ limitations under the License.
               </km-property>
               <km-property *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstanceMaxPrice > 0">
                 <div key>Spot Instance Max Price</div>
-                <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
+                <div value>
+                  {{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}
+                </div>
               </km-property>
             </ng-container>
 
@@ -726,9 +724,7 @@ limitations under the License.
               <km-property>
                 <div key>Data Disk Size</div>
                 <div *ngIf="machineDeployment.spec.template.cloud?.azure.dataDiskSize === 0"
-                     value>
-                  Default
-                </div>
+                     value>Default</div>
                 <div value
                      *ngIf="machineDeployment.spec.template.cloud?.azure.dataDiskSize !== 0">
                   {{machineDeployment.spec.template.cloud?.azure.dataDiskSize}} GB
@@ -737,11 +733,10 @@ limitations under the License.
               <km-property>
                 <div key>OS Disk Size</div>
                 <div *ngIf="machineDeployment.spec.template.cloud?.azure.osDiskSize === 0"
-                     value>
-                  Default
-                </div>
+                     value>Default</div>
                 <div *ngIf="machineDeployment.spec.template.cloud?.azure.osDiskSize !== 0"
-                     value>{{machineDeployment.spec.template.cloud?.azure.osDiskSize}} GB
+                     value>
+                  {{machineDeployment.spec.template.cloud?.azure.osDiskSize}} GB
                 </div>
               </km-property>
             </ng-container>
@@ -1139,7 +1134,6 @@ limitations under the License.
                 <km-labels [labels]="convertVSphereTagsIntoObject(machineDeployment.spec.template.cloud?.vsphere?.tags)"></km-labels>
               </div>
             </km-property>
-
           </div>
         </div>
       </div>
@@ -1155,9 +1149,7 @@ limitations under the License.
                              [canEdit]="false"
                              [cluster]="cluster"
                              [view]="ApplicationsListView.Summary"></km-application-list>
-        <ng-template #noApplications>
-          No application selected.
-        </ng-template>
+        <ng-template #noApplications> No application selected. </ng-template>
       </div>
     </div>
   </div>
