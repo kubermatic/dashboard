@@ -14,8 +14,8 @@
 
 import {Application} from '@shared/entity/application';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import _ from 'lodash';
 import {isObjectEmpty} from '@shared/utils/common';
+import _ from 'lodash';
 
 export enum Provider {
   Alibaba = 'alibaba',
@@ -284,8 +284,8 @@ export class EquinixCloudSpec {
 export class VSphereCloudSpec {
   username: string;
   password: string;
-  vmNetName: string;
-  networks: string[];
+  vmNetName?: string;
+  networks?: string[];
   folder?: string;
   infraManagementUser: VSphereInfraManagementUser;
   datastore?: string;

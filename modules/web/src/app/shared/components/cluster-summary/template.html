@@ -477,9 +477,9 @@ limitations under the License.
               <div key>VSphere Cloud Provider Username</div>
               <div value>{{cluster.spec.cloud?.vsphere?.infraManagementUser?.username}}</div>
             </km-property>
-            <km-property *ngIf="this.cluster.spec.cloud?.vsphere?.networks">
+            <km-property *ngIf="cluster.spec.cloud?.vsphere?.networks">
               <div key>Networks</div>
-              <div value>{{this.cluster.spec.cloud?.vsphere?.networks}}</div>
+              <div value>{{cluster.spec.cloud?.vsphere?.networks}}</div>
             </km-property>
             <km-property *ngIf="cluster.spec.cloud?.vsphere.folder">
               <div key>Folder</div>
