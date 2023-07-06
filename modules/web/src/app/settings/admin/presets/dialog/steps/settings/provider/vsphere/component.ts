@@ -23,7 +23,7 @@ import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 export enum Controls {
   Username = 'username',
   Password = 'password',
-  VMNetName = 'vmNetName',
+  Networks = 'networks',
   Datastore = 'datastore',
   DatastoreCluster = 'datastoreCluster',
   ResourcePool = 'resourcePool',
@@ -48,6 +48,8 @@ export enum Controls {
 export class VSphereSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
+  networks: string[] = [];
+
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
     super();
   }
@@ -56,7 +58,7 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
     this.form = this._builder.group({
       [Controls.Username]: this._builder.control(null, Validators.required),
       [Controls.Password]: this._builder.control(null, Validators.required),
-      [Controls.VMNetName]: this._builder.control(null),
+      [Controls.Networks]: this._builder.control([]),
       [Controls.Datastore]: this._builder.control(null),
       [Controls.DatastoreCluster]: this._builder.control(null),
       [Controls.ResourcePool]: this._builder.control(null),
@@ -78,11 +80,16 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
     delete this._presetDialogService.preset.spec.vsphere;
   }
 
+  onNetworksChange(networks: string[]): void {
+    this.networks = networks;
+    this.form.get(Controls.Networks).updateValueAndValidity();
+  }
+
   private _update(): void {
     this._presetDialogService.preset.spec.vsphere = {
       username: this.form.get(Controls.Username).value,
       password: this.form.get(Controls.Password).value,
-      vmNetName: this.form.get(Controls.VMNetName).value,
+      networks: this.form.get(Controls.Networks).value,
       datastore: this.form.get(Controls.Datastore).value,
       datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
       resourcePool: this.form.get(Controls.ResourcePool).value,

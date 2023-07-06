@@ -209,6 +209,7 @@ export class VSpherePresetSpec extends PresetProviderSpec {
   password: string;
 
   vmNetName?: string;
+  networks?: string[];
   datastore?: string;
   datastoreCluster?: string;
   resourcePool?: string;

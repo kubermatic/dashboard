@@ -19,13 +19,13 @@ import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
-import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
+import {VSphereTag, getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {KubeVirtNodeInstanceType, KubeVirtNodePreference} from '@shared/entity/provider/kubevirt';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import _ from 'lodash';
 import {convertArrayToObject} from '@shared/utils/common';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-summary',

@@ -26,7 +26,7 @@ export function fakeClusterWithMachineNetwork(): Cluster {
         vsphere: {
           username: 'foo',
           password: 'bar',
-          vmNetName: '',
+          networks: [''],
           folder: '',
           infraManagementUser: {
             username: 'foo',
@@ -64,7 +64,7 @@ export function fakeGatewayInCidr(): Cluster {
         vsphere: {
           username: 'foo',
           password: 'bar',
-          vmNetName: '',
+          networks: [''],
           folder: '',
           infraManagementUser: {
             username: 'foo',
@@ -102,7 +102,7 @@ export function fakeGatewayNotInCidr(): Cluster {
         vsphere: {
           username: 'foo',
           password: 'bar',
-          vmNetName: '',
+          networks: [''],
           folder: '',
           infraManagementUser: {
             username: 'foo',
