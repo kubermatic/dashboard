@@ -51,7 +51,7 @@ enum Controls {
 enum NetworkState {
   Empty = 'No Networks Available',
   Loading = 'Loading...',
-  Ready = 'Network',
+  Ready = 'Networks',
 }
 
 enum FolderState {

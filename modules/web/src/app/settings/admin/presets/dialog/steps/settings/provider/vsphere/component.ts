@@ -89,7 +89,7 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
     this._presetDialogService.preset.spec.vsphere = {
       username: this.form.get(Controls.Username).value,
       password: this.form.get(Controls.Password).value,
-      networks: this.form.get(Controls.Networks).value,
+      networks: this.form.get(Controls.Networks).value?.tags,
       datastore: this.form.get(Controls.Datastore).value,
       datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
       resourcePool: this.form.get(Controls.ResourcePool).value,
