@@ -14,11 +14,12 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
+import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
-import {AdminSettings} from '@shared/entity/settings';
+import {AdminSettings, AllowedOperatingSystems} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -36,7 +37,9 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   interfaceTypeUrl = '';
   isOIDCKubeCfgEndpointEnabled = true;
   isOpenIDAuthPluginEnabled = true;
+  allowedOperatingSystems: string[] = Object.values(OperatingSystem);
 
+  readonly OperatingSystem = OperatingSystem;
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -63,6 +66,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
         }
         this._applySettings(settings);
       }
+
+      !_.isEmpty(settings?.allowedOperatingSystems) &&
+        (this.allowedOperatingSystems = Object.keys(settings?.allowedOperatingSystems).filter(
+          os => settings.allowedOperatingSystems[os] === true
+        ));
     });
 
     this._settingsChange
@@ -113,6 +121,25 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   isKubernetesDashboardFeatureGatesEnabled(): boolean {
     return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
+  }
+
+  onOperatingSystemChange(val: string[]): void {
+    const allOperatingSystem = Object.values(OperatingSystem);
+    if (!val.length) {
+      val = allOperatingSystem;
+    }
+    this.settings.allowedOperatingSystems = {} as AllowedOperatingSystems;
+    allOperatingSystem.forEach(os => {
+      this.settings.allowedOperatingSystems[os] = val.includes(os) ? true : false;
+    });
+    this.onSettingsChange();
+  }
+
+  isLastEnabledOS(os: OperatingSystem): boolean {
+    if (this.allowedOperatingSystems.length === 1) {
+      return os === this.allowedOperatingSystems[0];
+    }
+    return false;
   }
 
   private _verifyEnableKubernetesDashboardRequirements() {

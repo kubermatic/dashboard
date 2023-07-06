@@ -142,6 +142,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
+		AllowedOperatingSystems:          settings.AllowedOperatingSystems,
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
 	}
 
@@ -180,6 +181,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		ProviderConfiguration:            settings.ProviderConfiguration,
 		MachineDeploymentVMResourceQuota: settings.MachineDeploymentVMResourceQuota,
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
+		AllowedOperatingSystems:          settings.AllowedOperatingSystems,
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
 	}
 
