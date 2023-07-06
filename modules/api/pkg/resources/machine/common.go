@@ -237,6 +237,13 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		VMAntiAffinity:   providerconfig.ConfigVarBool{Value: nodeSpec.Cloud.VSphere.VMAntiAffinity},
 	}
 
+	if len(c.Spec.Cloud.VSphere.Networks) > 0 {
+		config.Networks = make([]providerconfig.ConfigVarString, len(c.Spec.Cloud.VSphere.Networks))
+		for i, network := range c.Spec.Cloud.VSphere.Networks {
+			config.Networks[i].Value = network
+		}
+	}
+
 	config.Tags = []vsphere.Tag{}
 	for _, tag := range nodeSpec.Cloud.VSphere.Tags {
 		vsphereTag := vsphere.Tag{

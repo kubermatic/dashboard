@@ -32,14 +32,14 @@ import {VSphereFolder, VSphereNetwork, VSphereTagCategory} from '@shared/entity/
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
+import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@app/shared/validators/others';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import _ from 'lodash';
 import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@app/shared/validators/others';
 
 enum Controls {
-  VMNetName = 'vmNetName',
+  Networks = 'networks',
   Folder = 'folder',
   Datastore = 'datastore',
   DatastoreCluster = 'datastoreCluster',
@@ -51,7 +51,7 @@ enum Controls {
 enum NetworkState {
   Empty = 'No Networks Available',
   Loading = 'Loading...',
-  Ready = 'Network',
+  Ready = 'Networks',
 }
 
 enum FolderState {
@@ -107,6 +107,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   tagCategoryLabel = TagCategoryState.Empty;
   selectedTagCategory = '';
   tags: string[] = [];
+  networks: string[] = [];
   tagValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
   tagValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
@@ -126,7 +127,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.VMNetName]: this._builder.control({value: '', disabled: true}),
+      [Controls.Networks]: this._builder.control({value: [], disabled: true}),
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
       [Controls.Datastore]: this._builder.control(''),
       [Controls.DatastoreCluster]: this._builder.control(''),
@@ -214,8 +215,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     return this._networkMap[type];
   }
 
-  onNetworkChange(network: string): void {
-    this._clusterSpecService.cluster.spec.cloud.vsphere.vmNetName = network;
+  onNetworkChange(networks: string[]): void {
+    this._clusterSpecService.cluster.spec.cloud.vsphere.networks = networks;
   }
 
   onFolderChange(folder: string): void {
@@ -251,9 +252,9 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   getHint(control: Controls): string {
     switch (control) {
-      case Controls.VMNetName:
       case Controls.Folder:
       case Controls.TagCategory:
+      case Controls.Networks:
         return this.hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
 

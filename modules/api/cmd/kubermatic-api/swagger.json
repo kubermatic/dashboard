@@ -40287,6 +40287,13 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Networks"
+        },
         "password": {
           "type": "string",
           "x-go-name": "Password"
@@ -40300,6 +40307,7 @@
           "x-go-name": "Username"
         },
         "vmNetName": {
+          "description": "Deprecated: Use networks instead.",
           "type": "string",
           "x-go-name": "VMNetName"
         }
@@ -40331,6 +40339,14 @@
         "infraManagementUser": {
           "$ref": "#/definitions/VSphereCredentials"
         },
+        "networks": {
+          "description": "Networks is the list of vSphere networks.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Networks"
+        },
         "password": {
           "description": "Password is the vSphere user password.\n+optional",
           "type": "string",
@@ -40355,7 +40371,7 @@
           "x-go-name": "Username"
         },
         "vmNetName": {
-          "description": "VMNetName is the name of the vSphere network.",
+          "description": "VMNetName is the name of the vSphere network.\nDeprecated: Use networks instead.\n+optional",
           "type": "string",
           "x-go-name": "VMNetName"
         }
