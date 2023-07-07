@@ -40307,7 +40307,7 @@
           "x-go-name": "Username"
         },
         "vmNetName": {
-          "description": "Deprecated: Use networks instead.",
+          "description": "VMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.",
           "type": "string",
           "x-go-name": "VMNetName"
         }
@@ -40371,7 +40371,7 @@
           "x-go-name": "Username"
         },
         "vmNetName": {
-          "description": "VMNetName is the name of the vSphere network.\nDeprecated: Use networks instead.\n+optional",
+          "description": "VMNetName is the name of the vSphere network.\nVMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.\n+optional",
           "type": "string",
           "x-go-name": "VMNetName"
         }

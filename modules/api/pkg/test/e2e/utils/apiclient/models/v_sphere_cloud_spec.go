@@ -55,7 +55,7 @@ type VSphereCloudSpec struct {
 	Username string `json:"username,omitempty"`
 
 	// VMNetName is the name of the vSphere network.
-	// Deprecated: Use networks instead.
+	// VMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.
 	// +optional
 	VMNetName string `json:"vmNetName,omitempty"`
 

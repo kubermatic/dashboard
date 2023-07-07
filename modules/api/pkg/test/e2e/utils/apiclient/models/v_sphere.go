@@ -42,7 +42,7 @@ type VSphere struct {
 	// username
 	Username string `json:"username,omitempty"`
 
-	// Deprecated: Use networks instead.
+	// VMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.
 	VMNetName string `json:"vmNetName,omitempty"`
 }
 

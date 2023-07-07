@@ -401,8 +401,6 @@ func (m *PresetProvider) setVsphereCredentials(preset *kubermaticv1.Preset, clou
 	cloud.VSphere.Password = credentials.Password
 	cloud.VSphere.Username = credentials.Username
 
-	//nolint:staticcheck
-	//lint:ignore SA1019: credentials.VMNetName is deprecated: Use networks instead.
 	cloud.VSphere.VMNetName = credentials.VMNetName
 	cloud.VSphere.Networks = credentials.Networks
 	cloud.VSphere.Datastore = credentials.Datastore
