@@ -322,13 +322,17 @@ func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGet
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
-		if err := listReq.Validate(); err != nil {
+		var err error
+		if err = listReq.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, listReq.GetProjectID())
-		if err != nil {
-			return nil, err
+		sa := listReq.ServiceAccount
+		if listReq.Credential != "" {
+			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, listReq.GetProjectID())
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		return providercommon.ListGCPDiskTypes(ctx, sa, listReq.Zone)
@@ -342,14 +346,18 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
-		if err := projectReq.Validate(); err != nil {
+		var err error
+		if err = projectReq.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
 		projectID := projectReq.GetProjectID()
-		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, projectReq.Credential, projectID)
-		if err != nil {
-			return nil, err
+		sa := projectReq.ServiceAccount
+		if projectReq.Credential != "" {
+			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, projectReq.Credential, projectID)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		userInfo, err := userInfoGetter(ctx, projectID)
@@ -368,13 +376,18 @@ func ListProjectGCPNetworks(presetProvider provider.PresetProvider, userInfoGett
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
-		if err := listReq.Validate(); err != nil {
+		var err error
+
+		if err = listReq.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
-		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, listReq.GetProjectID())
-		if err != nil {
-			return nil, err
+		sa := listReq.ServiceAccount
+		if listReq.Credential != "" {
+			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, listReq.GetProjectID())
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		return providercommon.ListGCPNetworks(ctx, sa)
@@ -385,7 +398,8 @@ func ListProjectGCPSubnetworks(presetProvider provider.PresetProvider, userInfoG
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		listReq := request.(GCPProjectSubnetReq)
 
-		if err := listReq.Validate(); err != nil {
+		var err error
+		if err = listReq.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
@@ -395,9 +409,12 @@ func ListProjectGCPSubnetworks(presetProvider provider.PresetProvider, userInfoG
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
-		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, projectID)
-		if err != nil {
-			return nil, err
+		sa := listReq.ServiceAccount
+		if listReq.Credential != "" {
+			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, projectID)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		return providercommon.ListGCPSubnetworks(ctx, userInfo, listReq.DC, sa, listReq.Network, seedGetter)
@@ -422,9 +439,12 @@ func ListProjectGCPVMSizes(presetProvider provider.PresetProvider, userInfoGette
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, projectID)
-		if err != nil {
-			return nil, err
+		sa := listReq.ServiceAccount
+		if listReq.Credential != "" {
+			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, listReq.Credential, listReq.GetProjectID())
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		settings, err := settingsProvider.GetGlobalSettings(ctx)
