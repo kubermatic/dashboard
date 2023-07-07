@@ -34,6 +34,10 @@ type VSphereCloudSpec struct {
 	// +optional
 	Folder string `json:"folder,omitempty"`
 
+	// Networks is the list of vSphere networks.
+	// +optional
+	Networks []string `json:"networks"`
+
 	// Password is the vSphere user password.
 	// +optional
 	Password string `json:"password,omitempty"`
@@ -51,6 +55,8 @@ type VSphereCloudSpec struct {
 	Username string `json:"username,omitempty"`
 
 	// VMNetName is the name of the vSphere network.
+	// VMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.
+	// +optional
 	VMNetName string `json:"vmNetName,omitempty"`
 
 	// credentials reference

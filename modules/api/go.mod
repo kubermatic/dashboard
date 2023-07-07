@@ -47,7 +47,9 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.40.0
-	github.com/kubermatic/machine-controller v1.57.0
+	// Pinned to https://github.com/kubermatic/machine-controller/commit/7eab515b642dd3902b845d4861d1f41b4b37753e
+	// TODO: Replace this with v1.57.1 before release
+	github.com/kubermatic/machine-controller v1.57.1-0.20230707082432-7eab515b642d
 	github.com/minio/minio-go/v7 v7.0.49
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.9.0+
@@ -60,14 +62,14 @@ require (
 	github.com/stretchr/testify v1.8.2
 	github.com/vmware/go-vcloud-director/v2 v2.19.0
 	github.com/vmware/govmomi v0.30.2
-	go.anx.io/go-anxcloud v0.5.1
+	go.anx.io/go-anxcloud v0.5.3
 	go.uber.org/zap v1.24.0
 	golang.org/x/oauth2 v0.7.0
 	google.golang.org/api v0.111.0
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.6.2
-	k8c.io/kubermatic/v2 v2.23.0-beta.2.0.20230623095307-7f33e0f146d0
+	k8c.io/kubermatic/v2 v2.23.1-0.20230707115631-4aa4aa14544e
 	k8c.io/operating-system-manager v1.3.0
 	k8c.io/reconciler v0.3.1
 	k8s.io/api v0.26.4
@@ -102,7 +104,8 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.0-rc.0.0.20230628124610-7d8c91254e68
+	// Pinned to https://github.com/kubermatic/kubermatic/commit/4aa4aa14544e89c8ab85ff5428514585e326b3bf
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230707115631-4aa4aa14544e
 )
 
 require (
@@ -237,14 +240,14 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
-	golang.org/x/crypto v0.8.0 // indirect
-	golang.org/x/mod v0.9.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
-	golang.org/x/term v0.7.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/crypto v0.10.0 // indirect
+	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/term v0.9.0 // indirect
+	golang.org/x/text v0.10.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.7.0 // indirect
+	golang.org/x/tools v0.9.3 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488 // indirect

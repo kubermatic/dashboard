@@ -20,16 +20,15 @@ limitations under the License.
                [grouped]="true"
                [isDisabled]="isPresetSelected"
                [groups]="networkTypes"
+               [multiple]="true"
                [optionsGetter]="getNetworks.bind(this)"
-               [formControlName]="Controls.VMNetName"
-               [hint]="getHint(Controls.VMNetName)"
+               [formControlName]="Controls.Networks"
+               [hint]="getHint(Controls.Networks)"
                (changed)="onNetworkChange($event)"
                [label]="networkLabel"
-               inputLabel="Select network..."
+               inputLabel="Select networks..."
                filterBy="absolutePath">
-    <div *option="let network">
-      {{network.relativePath}}
-    </div>
+    <div *option="let network">{{network.relativePath}}</div>
   </km-combobox>
 
   <km-combobox #folderCombobox
@@ -42,9 +41,7 @@ limitations under the License.
                [label]="folderLabel"
                inputLabel="Select folder..."
                filterBy="path">
-    <div *option="let folder">
-      {{folder.path}}
-    </div>
+    <div *option="let folder">{{folder.path}}</div>
   </km-combobox>
 
   <km-autocomplete label="Datastore"
@@ -63,7 +60,7 @@ limitations under the License.
            [formControlName]="Controls.DatastoreCluster"
            [name]="Controls.DatastoreCluster"
            type="text"
-           autocomplete="off">
+           autocomplete="off" />
     <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
   </mat-form-field>
 
@@ -73,7 +70,7 @@ limitations under the License.
            [formControlName]="Controls.ResourcePool"
            [name]="Controls.ResourcePool"
            type="text"
-           autocomplete="off">
+           autocomplete="off" />
   </mat-form-field>
 
   <mat-card-header class="km-no-padding">
@@ -92,9 +89,7 @@ limitations under the License.
                [label]="tagCategoryLabel"
                inputLabel="Select Tag Category..."
                filterBy="name">
-    <div *option="let category">
-      {{category.name}}
-    </div>
+    <div *option="let category">{{category.name}}</div>
   </km-combobox>
 
   <km-chip-list label="Tags"
@@ -108,5 +103,4 @@ limitations under the License.
                 [kmRequired]="!!form.get(Controls.TagCategory).value"
                 fxFlex>
   </km-chip-list>
-
 </form>
