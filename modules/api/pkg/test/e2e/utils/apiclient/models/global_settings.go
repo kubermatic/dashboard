@@ -18,6 +18,9 @@ import (
 // swagger:model GlobalSettings
 type GlobalSettings struct {
 
+	// AllowedOperatingSystems shows the available operating systems to use in the machine deployment.
+	AllowedOperatingSystems map[string]bool `json:"allowedOperatingSystems,omitempty"`
+
 	// DefaultNodeCount is the default number of replicas for the initial MachineDeployment.
 	DefaultNodeCount int8 `json:"defaultNodeCount,omitempty"`
 

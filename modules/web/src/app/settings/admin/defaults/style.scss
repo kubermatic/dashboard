@@ -39,4 +39,34 @@
 
     margin-left: 4px;
   }
+
+  mat-button-toggle-group[group='operatingSystemGroup'] {
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+
+    .mat-button-toggle {
+      border-radius: variables.$border-radius;
+      max-height: 45px;
+      max-width: 170px;
+      min-height: 45px;
+      min-width: 120px;
+      outline: none;
+
+      i {
+        margin-right: 10px;
+        min-height: 28px;
+        min-width: 28px;
+
+        &:not(.km-os-image-rhel) {
+          filter: grayscale(100%);
+        }
+      }
+
+      &.mat-button-toggle-checked {
+        i {
+          filter: none;
+        }
+      }
+    }
+  }
 }

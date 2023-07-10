@@ -50,6 +50,7 @@ export interface AdminSettings {
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
   machineDeploymentOptions: MachineDeploymentOptions;
+  allowedOperatingSystems?: AllowedOperatingSystems;
   disableChangelogPopup?: boolean;
 }
 
@@ -59,6 +60,15 @@ export interface MachineDeploymentVMResourceQuota {
   minRAM: number;
   maxRAM: number;
   enableGPU: boolean;
+}
+
+export interface AllowedOperatingSystems {
+  ubuntu?: boolean;
+  centos?: boolean;
+  amzn2?: boolean;
+  rhel?: boolean;
+  flatcar?: boolean;
+  rockylinux?: boolean;
 }
 
 export interface CleanupOptions {
@@ -160,6 +170,14 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 };
 
 export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
+  allowedOperatingSystems: {
+    ubuntu: true,
+    centos: true,
+    amzn2: true,
+    rhel: true,
+    flatcar: true,
+    rockylinux: true,
+  },
   cleanupOptions: {
     enforced: false,
     enabled: false,

@@ -49,6 +49,8 @@ import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota
 import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
+import _ from 'lodash';
+import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 
 enum Controls {
   Name = 'name',
@@ -106,6 +108,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isLoadingOSProfiles: boolean;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   wizardMode: WizardMode;
+  currentNodeOS: OperatingSystem;
+  allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
 
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
@@ -207,6 +211,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       }
     }
 
+    this.currentNodeOS = (this.dialogEditMode || this.wizardMode) && this._nodeDataService.operatingSystem;
+
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
@@ -276,6 +282,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
+      this.allowedOperatingSystems = settings?.allowedOperatingSystems && settings.allowedOperatingSystems;
+      this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
+
       const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
       const replicas =
         this.dialogEditMode || this.isCusterTemplateEditMode
@@ -353,6 +362,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.AmazonLinux2:
         return this.isProvider(NodeProvider.AWS);
     }
+  }
+
+  isOperatingSystemAllowed(os: OperatingSystem): boolean {
+    if (this.dialogEditMode || this.wizardMode !== WizardMode.CreateClusterTemplate) {
+      return this.isOperatingSystemSupported(os) && (this.allowedOperatingSystems[os] || this.currentNodeOS === os);
+    }
+    return this.isOperatingSystemSupported(os) && this.allowedOperatingSystems[os];
   }
 
   isOperatingSystemSelected(...os: OperatingSystem[]): boolean {
@@ -477,24 +493,26 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultOS(): OperatingSystem {
-    if (this.isOperatingSystemSupported(this._nodeDataService.operatingSystem)) {
+    if (this.dialogEditMode || (this.wizardMode && this.wizardMode !== WizardMode.CreateClusterTemplate)) {
       return this._nodeDataService.operatingSystem;
     }
 
     if (this._datacenterSpec) {
       const defaultSystemTemplateOS = this._getDefaultSystemTemplate(this.provider);
-      if (defaultSystemTemplateOS) {
+      if (defaultSystemTemplateOS && this.allowedOperatingSystems[defaultSystemTemplateOS]) {
         return defaultSystemTemplateOS;
       }
     }
 
-    let defaultOS = OperatingSystem.Ubuntu;
+    let defaultOS = this.allowedOperatingSystems[OperatingSystem.Ubuntu] ? OperatingSystem.Ubuntu : undefined;
     if (this.isProvider(NodeProvider.ANEXIA)) {
       defaultOS = OperatingSystem.Flatcar;
     }
 
     if (!this.isOperatingSystemSupported(defaultOS)) {
-      defaultOS = Object.values(OperatingSystem).find(os => this.isOperatingSystemSupported(os));
+      defaultOS = Object.values(OperatingSystem).find(
+        os => this.isOperatingSystemSupported(os) && this.allowedOperatingSystems[os]
+      );
     }
 
     return defaultOS;
@@ -513,7 +531,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private getSupportedOperatingSystemProfiles(): string[] {
     return this.operatingSystemProfiles
-      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value.toLowerCase())
+      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value?.toLowerCase())
       .filter(
         // Packet was renamed to EquinixMetal for the machines.
         osp =>

@@ -83,37 +83,40 @@ limitations under the License.
                                [formControlName]="Controls.OperatingSystem"
                                kmValueChangedIndicator>
         <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.Ubuntu)">
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.Ubuntu)">
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.CentOS"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.CentOS)">
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.CentOS)">
           <i class="km-os-image-centos"></i>
           CentOS
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.Flatcar"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.Flatcar)">
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.Flatcar)">
           <i class="km-os-image-flatcar"></i>
           Flatcar
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.AmazonLinux2"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.AmazonLinux2)">
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.AmazonLinux2)">
           <i class="km-os-image-amazon-linux-2"></i>
           Amazon Linux 2
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RHEL"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)"
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.RHEL)"
                            #rhelToggle>
           <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
           RHEL
         </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RockyLinux"
-                           *ngIf="isOperatingSystemSupported(OperatingSystem.RockyLinux)">
+                           *ngIf="isOperatingSystemAllowed(OperatingSystem.RockyLinux)">
           <i class="km-os-image-rockylinux"></i>
           Rocky Linux
         </mat-button-toggle>
       </mat-button-toggle-group>
+      <mat-error *ngIf="form.get(Controls.OperatingSystem).hasError('required')">
+        No operating system supported. Please contact your administrator.
+      </mat-error>
 
       <!-- Options for RHEL -->
       <div *ngIf="isOperatingSystemSelected(OperatingSystem.RHEL)"
@@ -172,7 +175,7 @@ limitations under the License.
     </div>
 
 
-    <km-autocomplete *ngIf="isOperatingSystemManagerEnabled"
+    <km-autocomplete *ngIf="isOperatingSystemManagerEnabled && form.get(Controls.OperatingSystem).value"
                      label="Operating System Profile"
                      [formControlName]="Controls.OperatingSystemProfile"
                      [isLoading]="isLoadingOSProfiles"

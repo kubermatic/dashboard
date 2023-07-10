@@ -34351,6 +34351,14 @@
       "description": "GlobalSettings defines global settings",
       "type": "object",
       "properties": {
+        "allowedOperatingSystems": {
+          "description": "AllowedOperatingSystems shows the available operating systems to use in the machine deployment.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "x-go-name": "AllowedOperatingSystems"
+        },
         "cleanupOptions": {
           "$ref": "#/definitions/CleanupOptions"
         },

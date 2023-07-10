@@ -21,6 +21,7 @@ import (
 
 	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
 
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -2074,6 +2075,9 @@ type GlobalSettings struct {
 
 	// +optional
 	MachineDeploymentOptions kubermaticv1.MachineDeploymentOptions `json:"machineDeploymentOptions,omitempty"`
+
+	// AllowedOperatingSystems shows the available operating systems to use in the machine deployment.
+	AllowedOperatingSystems map[providerconfig.OperatingSystem]bool `json:"allowedOperatingSystems,omitempty"`
 
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
