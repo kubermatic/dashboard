@@ -1,5 +1,13 @@
+_build/*
+.angular/*
+.husky/*
+.idea/*
+.vscode/*
+cmd/*
+containers/*
 dist/*
+hack/*
+vendor/*
 node_modules/*
-src/environments/environment.e2e*.ts
-src/environments/environment.prod*.ts
+src/environments/*
 src/app/dynamic/module-registry.ce.ts
