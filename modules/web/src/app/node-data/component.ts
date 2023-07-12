@@ -24,33 +24,32 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ResourceType} from '@app/shared/entity/common';
+import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
+import {AsyncValidators} from '@app/shared/validators/async.validators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {OperatingSystemManagerService} from '@core/services/operating-system-manager';
+import {ParamsService, PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
+import {ResourceQuotaCalculation, ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ParamsService, PathParam} from '@core/services/params';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
-import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
-import {DynamicModule} from '@dynamic/module-registry';
-import {AsyncValidators} from '@app/shared/validators/async.validators';
-import {ResourceType} from '@app/shared/entity/common';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {WizardMode} from '@app/wizard/types/wizard-mode';
-import _ from 'lodash';
-import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 
 enum Controls {
   Name = 'name',
@@ -481,14 +480,17 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem | null {
-    switch (provider) {
-      case NodeProvider.VSPHERE: {
-        return this._datacenterSpec.spec.vsphere.templates
-          ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
-          : null;
-      }
-    }
+    if (provider === NodeProvider.VSPHERE) {
+      const ubuntuExists = this._datacenterSpec.spec.vsphere.templates?.[OperatingSystem.Ubuntu];
 
+      if (ubuntuExists && this.allowedOperatingSystems[OperatingSystem.Ubuntu]) {
+        return OperatingSystem.Ubuntu;
+      }
+
+      return this._datacenterSpec.spec.vsphere.templates
+        ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
+        : null;
+    }
     return null;
   }
 
