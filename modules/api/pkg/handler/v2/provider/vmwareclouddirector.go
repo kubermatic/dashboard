@@ -67,7 +67,7 @@ type VMwareCloudDirectorCommonReq struct {
 	Credential string
 }
 
-// swagger:parameters listProjectVMwareCloudDirectorNetworks listProjectVMwareCloudDirectorStorageProfiles listProjectVMwareCloudDirectorCatalogs listProjectVMwareCloudDirectorTemplates
+// swagger:parameters listProjectVMwareCloudDirectorNetworks listProjectVMwareCloudDirectorStorageProfiles listProjectVMwareCloudDirectorCatalogs listProjectVMwareCloudDirectorTemplates listProjectVMwareCloudDirectorPlacementPolicies listProjectVMwareCloudDirectorSizingPolicies
 type VMwareCloudDirectorProjectCommonReq struct {
 	common.ProjectReq
 	VMwareCloudDirectorCommonReq
@@ -128,7 +128,7 @@ type VMwareCloudDirectorStorageProfileReq struct {
 }
 
 // VMwareCloudDirectorNoCredentialsReq represent a request for VMwareCloudDirector information with cluster-provided credentials
-// swagger:parameters listVMwareCloudDirectorNetworksNoCredentials listVMwareCloudDirectorStorageProfilesNoCredentials listVMwareCloudDirectorCatalogsNoCredentials
+// swagger:parameters listVMwareCloudDirectorNetworksNoCredentials listVMwareCloudDirectorStorageProfilesNoCredentials listVMwareCloudDirectorCatalogsNoCredentials listVMwareCloudDirectorPlacementPoliciesNoCredentials listVMwareCloudDirectorSizingPoliciesNoCredentials
 type VMwareCloudDirectorNoCredentialsReq struct {
 	cluster.GetClusterReq
 }
@@ -381,6 +381,70 @@ func VMwareCloudDirectorStorageProfilesEndpoint(presetProvider provider.PresetPr
 	}
 }
 
+func VMwareCloudDirectorPlacementPoliciesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       VMwareCloudDirectorCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorCommonReq
+			projectID = projectReq.GetProjectID()
+		}
+
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, projectID, userInfoGetter, presetProvider, seedsGetter)
+		if err != nil {
+			return nil, err
+		}
+
+		return vcd.ListPlacementPolicies(ctx, *creds)
+	}
+}
+
+func VMwareCloudDirectorSizingPoliciesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       VMwareCloudDirectorCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			var ok bool
+			req, ok = request.(VMwareCloudDirectorCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+		} else {
+			projectReq, ok := request.(VMwareCloudDirectorProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.VMwareCloudDirectorCommonReq
+			projectID = projectReq.GetProjectID()
+		}
+
+		creds, err := getVMwareCloudDirectorCredentialsFromReq(ctx, req, projectID, userInfoGetter, presetProvider, seedsGetter)
+		if err != nil {
+			return nil, err
+		}
+
+		return vcd.ListSizingPolicies(ctx, *creds)
+	}
+}
+
 func VMwareCloudDirectorCatalogsEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
@@ -490,6 +554,38 @@ func VMwareCloudDirectorCatalogsWithClusterCredentialsEndpoint(projectProvider p
 		}
 
 		return vcd.ListCatalogs(ctx, *creds)
+	}
+}
+
+func VMwareCloudDirectorPlacementPoliciesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(VMwareCloudDirectorNoCredentialsReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		creds, err := getVMwareCloudDirectorCredentialsFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
+		if err != nil {
+			return nil, err
+		}
+
+		return vcd.ListPlacementPolicies(ctx, *creds)
+	}
+}
+
+func VMwareCloudDirectorSizingPoliciesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(VMwareCloudDirectorNoCredentialsReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		creds, err := getVMwareCloudDirectorCredentialsFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
+		if err != nil {
+			return nil, err
+		}
+
+		return vcd.ListSizingPolicies(ctx, *creds)
 	}
 }
 

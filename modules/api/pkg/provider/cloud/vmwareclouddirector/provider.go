@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -200,6 +201,56 @@ func ListOVDCNetworks(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirector
 	return orgVDCNetworks, nil
 }
 
+func ListPlacementPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorPlacementPolicyList, error) {
+	client, err := NewClientWithAuth(auth)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
+	}
+
+	org, err := client.GetOrganization()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
+	}
+
+	allPolicies, err := org.GetAllVdcComputePolicies(url.Values{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
+	}
+
+	var policies apiv1.VMwareCloudDirectorPlacementPolicyList
+	for _, policy := range allPolicies {
+		policies = append(policies, apiv1.VMwareCloudDirectorPlacementPolicy{
+			Name: policy.VdcComputePolicy.Name,
+		})
+	}
+	return policies, nil
+}
+
+func ListSizingPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorSizingPolicyList, error) {
+	client, err := NewClientWithAuth(auth)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
+	}
+
+	org, err := client.GetOrganization()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
+	}
+
+	allPolicies, err := org.GetAllVdcComputePolicies(url.Values{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
+	}
+
+	var policies apiv1.VMwareCloudDirectorSizingPolicyList
+	for _, policy := range allPolicies {
+		policies = append(policies, apiv1.VMwareCloudDirectorSizingPolicy{
+			Name: policy.VdcComputePolicy.Name,
+		})
+	}
+	return policies, nil
+}
+
 func ListStorageProfiles(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorStorageProfileList, error) {
 	client, err := NewClientWithAuth(auth)
 	if err != nil {
@@ -210,6 +261,8 @@ func ListStorageProfiles(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirec
 	if err != nil {
 		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
 	}
+
+	org.GetAllVdcComputePolicies(url.Values{})
 
 	orgVDC, err := client.GetVDCForOrg(*org)
 	if err != nil {
