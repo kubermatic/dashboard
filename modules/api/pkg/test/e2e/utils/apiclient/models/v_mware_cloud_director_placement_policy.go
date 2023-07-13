@@ -17,6 +17,15 @@ import (
 // swagger:model VMwareCloudDirectorPlacementPolicy
 type VMwareCloudDirectorPlacementPolicy struct {
 
+	// description
+	Description string `json:"description,omitempty"`
+
+	// ID
+	ID string `json:"id,omitempty"`
+
+	// is sizing only
+	IsSizingOnly bool `json:"isSizingOnly,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 }

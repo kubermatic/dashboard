@@ -207,12 +207,7 @@ func ListPlacementPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDir
 		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
 	}
 
-	org, err := client.GetOrganization()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
-	}
-
-	allPolicies, err := org.GetAllVdcComputePolicies(url.Values{})
+	allPolicies, err := client.VCDClient.GetAllVdcComputePoliciesV2(url.Values{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
 	}
@@ -220,7 +215,10 @@ func ListPlacementPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDir
 	var policies apiv1.VMwareCloudDirectorPlacementPolicyList
 	for _, policy := range allPolicies {
 		policies = append(policies, apiv1.VMwareCloudDirectorPlacementPolicy{
-			Name: policy.VdcComputePolicy.Name,
+			ID: policy.VdcComputePolicyV2.ID,
+			Name: policy.VdcComputePolicyV2.Name,
+			Description: *policy.VdcComputePolicyV2.Description,
+			IsSizingOnly: policy.VdcComputePolicyV2.IsSizingOnly,
 		})
 	}
 	return policies, nil
@@ -261,8 +259,6 @@ func ListStorageProfiles(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirec
 	if err != nil {
 		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
 	}
-
-	org.GetAllVdcComputePolicies(url.Values{})
 
 	orgVDC, err := client.GetVDCForOrg(*org)
 	if err != nil {
