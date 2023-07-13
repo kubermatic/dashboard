@@ -68,6 +68,18 @@ limitations under the License.
     <div *option="let template">{{template.name}}</div>
   </km-combobox>
 
+  <km-combobox #placementPolicyCombobox
+               [selected]="selectedPlacementPolicy"
+               [options]="placementPolicies"
+               [formControlName]="Controls.PlacementPolicy"
+               [label]="placementPolicyLabel"
+               [required]="true"
+               (changed)="onPlacementPolicyChanged($event)"
+               inputLabel="Select placement policy..."
+               filterBy="name">
+    <div *option="let placementPolicy">{{placementPolicy.name}}</div>
+  </km-combobox>
+
   <km-combobox #storageProfileCombobox
                [selected]="selectedStorageProfile"
                [options]="storageProfiles"

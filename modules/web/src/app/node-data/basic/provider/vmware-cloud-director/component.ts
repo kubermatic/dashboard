@@ -23,27 +23,28 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {GlobalModule} from '@core/services/global/module';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
-import {DynamicModule} from '@app/dynamic/module-registry';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, VMwareCloudDirectorNodeSpec} from '@shared/entity/node';
 import {
   VMwareCloudDirectorCatalog,
   VMwareCloudDirectorIPAllocationMode,
+  VMwareCloudDirectorPlacementPolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, Observable, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 
 enum Controls {
   CPUs = 'cpus',
@@ -54,6 +55,7 @@ enum Controls {
   IPAllocationMode = 'ipAllocationMode',
   StorageProfile = 'storageProfile',
   Catalog = 'catalog',
+  PlacementPolicy = 'placementPolicy',
   Template = 'template',
 }
 
@@ -73,6 +75,12 @@ enum CatalogState {
   Ready = 'Catalog',
   Loading = 'Loading...',
   Empty = 'No catalogs available',
+}
+
+enum PlacementPolicyState {
+  Ready = 'Placement Policy',
+  Loading = 'Loading...',
+  Empty = 'No placement policies available',
 }
 
 @Component({
@@ -105,16 +113,21 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   private readonly _catalogCombobox: FilteredComboboxComponent;
   @ViewChild('templateCombobox')
   private readonly _templateCombobox: FilteredComboboxComponent;
+  @ViewChild('placementPolicyCombobox')
+  private readonly _placementPolicyCombobox: FilteredComboboxComponent;
 
   storageProfiles: VMwareCloudDirectorStorageProfile[] = [];
   catalogs: VMwareCloudDirectorCatalog[] = [];
   templates: VMwareCloudDirectorTemplate[] = [];
+  placementPolicies: VMwareCloudDirectorPlacementPolicy[] = [];
   selectedStorageProfile = '';
+  selectedPlacementPolicy = '';
   selectedCatalog = '';
   selectedTemplate = '';
   storageProfileLabel = StorageProfileState.Empty;
   templateLabel = TemplateState.Empty;
   catalogLabel = CatalogState.Empty;
+  placementPolicyLabel = PlacementPolicyState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _catalogChanges = new Subject<boolean>();
@@ -165,7 +178,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.IPAllocationMode).valueChanges,
       this.form.get(Controls.StorageProfile).valueChanges,
       this.form.get(Controls.Template).valueChanges,
-      this.form.get(Controls.Catalog).valueChanges
+      this.form.get(Controls.Catalog).valueChanges,
+      this.form.get(Controls.PlacementPolicy).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -192,6 +206,10 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultStorageProfile.bind(this));
 
+    this._placementPoliciesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultPlacementPolicy.bind(this));
+
     this._catalogsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultCatalog.bind(this));
 
     this._catalogChanges
@@ -214,6 +232,12 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   onStorageProfileChanged(storageProfile: string): void {
     this.selectedStorageProfile = storageProfile;
     this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.storageProfile = storageProfile;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onPlacementPolicyChanged(placementPolicy: string): void {
+    this.selectedPlacementPolicy = placementPolicy;
+    this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.placementPolicy = placementPolicy;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -247,6 +271,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       ]),
       [Controls.Template]: this._builder.control(values ? values.template : defaults.template, [Validators.required]),
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
+      [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
     });
   }
 
@@ -254,6 +279,13 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     return this._nodeDataService.vmwareclouddirector.storageProfiles(
       this._clearStorageProfile.bind(this),
       this._onStorageProfileLoading.bind(this)
+    );
+  }
+
+  private get _placementPoliciesObservable(): Observable<VMwareCloudDirectorPlacementPolicy[]> {
+    return this._nodeDataService.vmwareclouddirector.placementPolicies(
+      this._clearPlacementPolicy.bind(this),
+      this._onPlacementPolicyLoading.bind(this)
     );
   }
 
@@ -277,11 +309,24 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
+  private _onPlacementPolicyLoading(): void {
+    this.placementPolicyLabel = PlacementPolicyState.Loading;
+    this._cdr.detectChanges();
+  }
+
   private _clearStorageProfile(): void {
     this.selectedStorageProfile = '';
     this.storageProfiles = [];
     this.storageProfileLabel = StorageProfileState.Empty;
     this._storageProfileCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearPlacementPolicy(): void {
+    this.selectedPlacementPolicy = '';
+    this.placementPolicies = [];
+    this.placementPolicyLabel = PlacementPolicyState.Empty;
+    this._placementPolicyCombobox.reset();
     this._cdr.detectChanges();
   }
 
@@ -306,6 +351,21 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     }
 
     this.storageProfileLabel = storageProfiles?.length ? StorageProfileState.Ready : StorageProfileState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultPlacementPolicy(placementPolicies: VMwareCloudDirectorPlacementPolicy[]): void {
+    this.placementPolicies = placementPolicies;
+    this.selectedPlacementPolicy = this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector?.placementPolicy;
+
+    if (
+      this.selectedPlacementPolicy &&
+      !placementPolicies?.find(policy => policy.name === this.selectedPlacementPolicy)
+    ) {
+      this.selectedPlacementPolicy = '';
+    }
+
+    this.placementPolicyLabel = placementPolicies?.length ? PlacementPolicyState.Ready : PlacementPolicyState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -399,6 +459,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.StorageProfile]: this.form.get(Controls.StorageProfile).value?.[ComboboxControls.Select],
         [Controls.Template]: this.form.get(Controls.Template).value?.[ComboboxControls.Select],
         [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
+        [Controls.PlacementPolicy]: this.form.get(Controls.PlacementPolicy).value?.[ComboboxControls.Select],
       } as VMwareCloudDirectorNodeSpec,
     };
 

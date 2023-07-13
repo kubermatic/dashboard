@@ -19,6 +19,7 @@ import {
   VMwareCloudDirectorCatalog,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
+  VMwareCloudDirectorPlacementPolicy,
 } from '@shared/entity/provider/vmware-cloud-director';
 import {Observable} from 'rxjs';
 
@@ -36,6 +37,11 @@ export class VMwareCloudDirectorService {
   getCatalogs(projectID: string, clusterID: string): Observable<VMwareCloudDirectorCatalog[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/vmwareclouddirector/catalogs`;
     return this._httpClient.get<VMwareCloudDirectorCatalog[]>(url);
+  }
+
+  getPlacementPolicies(projectID: string, clusterID: string): Observable<VMwareCloudDirectorPlacementPolicy[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/vmwareclouddirector/placementpolicies`;
+    return this._httpClient.get<VMwareCloudDirectorPlacementPolicy[]>(url);
   }
 
   getTemplates(projectID: string, clusterID: string, catalogName: string): Observable<VMwareCloudDirectorTemplate[]> {

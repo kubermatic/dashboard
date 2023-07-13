@@ -16,6 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {
   VMwareCloudDirectorCatalog,
   VMwareCloudDirectorNetwork,
+  VMwareCloudDirectorPlacementPolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
@@ -117,6 +118,19 @@ export class VMwareCloudDirector extends Provider {
 
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/catalogs`;
     return this._http.get<VMwareCloudDirectorCatalog[]>(url, {headers: this._headers});
+  }
+
+  placementpolicies(seed: string, onLoadingCb: () => void = null): Observable<VMwareCloudDirectorPlacementPolicy[]> {
+    if (!this.hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/placementpolicies`;
+    return this._http.get<VMwareCloudDirectorPlacementPolicy[]>(url, {headers: this._headers});
   }
 
   templates(

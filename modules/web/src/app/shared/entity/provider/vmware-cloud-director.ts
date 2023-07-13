@@ -32,3 +32,7 @@ export class VMwareCloudDirectorCatalog {
 export class VMwareCloudDirectorTemplate {
   name: string;
 }
+
+export class VMwareCloudDirectorPlacementPolicy {
+  name: string;
+}
