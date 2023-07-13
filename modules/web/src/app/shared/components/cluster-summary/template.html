@@ -996,6 +996,10 @@ limitations under the License.
                 <div key>Storage Profile</div>
                 <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.storageProfile}}</div>
               </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector.placementPolicy">
+                <div key>Placement Policy</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.placementPolicy}}</div>
+              </km-property>
               <km-property>
                 <div key>IP Allocation Mode</div>
                 <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.ipAllocationMode}}</div>

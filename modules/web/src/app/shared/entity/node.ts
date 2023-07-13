@@ -288,6 +288,7 @@ export class VMwareCloudDirectorNodeSpec {
   vapp?: string;
   catalog: string;
   template: string;
+  placementPolicy?: string;
 }
 
 export function getDefaultNodeProviderSpec(provider: string): object {
