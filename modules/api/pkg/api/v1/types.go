@@ -524,6 +524,9 @@ type VMwareCloudDirectorNetworkList []VMwareCloudDirectorNetwork
 // swagger:model VMwareCloudDirectorPlacementPolicy
 type VMwareCloudDirectorPlacementPolicy struct {
 	Name string `json:"name"`
+	ID string `json:"id"`
+	Description string `json:"description,omitempty"`
+	IsSizingOnly bool `json:"isSizingOnly,omitempty"`
 }
 
 // VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.
