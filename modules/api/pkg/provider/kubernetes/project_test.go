@@ -25,12 +25,11 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	"k8s.io/apimachinery/pkg/api/equality"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestListProjects(t *testing.T) {
@@ -74,9 +73,8 @@ func TestListProjects(t *testing.T) {
 			for _, binding := range tc.existingProjects {
 				kubermaticObjects = append(kubermaticObjects, binding)
 			}
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubermaticObjects...).
 				Build()
 
@@ -152,9 +150,8 @@ func TestGetUnsecuredProjects(t *testing.T) {
 				kubermaticObjects = append(kubermaticObjects, binding)
 			}
 
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubermaticObjects...).
 				Build()
 

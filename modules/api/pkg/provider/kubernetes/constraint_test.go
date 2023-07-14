@@ -27,11 +27,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -64,9 +63,8 @@ func TestListConstraints(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -127,9 +125,8 @@ func TestGetConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -178,9 +175,8 @@ func TestDeleteConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -219,7 +215,7 @@ func TestCreateConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
+			client := fake.NewClientBuilder().Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 				return client, nil
 			}
@@ -272,9 +268,8 @@ func TestUpdateConstraint(t *testing.T) {
 			t.Parallel()
 
 			ctx := context.Background()
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -324,7 +319,7 @@ func TestCreateDefaultConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
+			client := fake.NewClientBuilder().Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 				return client, nil
 			}
@@ -369,9 +364,8 @@ func TestListDefaultConstraints(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -430,9 +424,8 @@ func TestGetDefaultConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -476,9 +469,8 @@ func TestDeleteDefaultConstraint(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -523,9 +515,8 @@ func TestUpdateDefaultConstraint(t *testing.T) {
 			t.Parallel()
 
 			ctx := context.Background()
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 

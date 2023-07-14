@@ -33,13 +33,12 @@ import (
 	resourcequotas "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -48,9 +47,8 @@ const (
 )
 
 func createResourceProviderHelper(existingObjects []ctrlruntimeclient.Object) *resourcequotas.ResourceQuotaProvider {
-	fakeClient := fakectrlruntimeclient.
+	fakeClient := fake.
 		NewClientBuilder().
-		WithScheme(scheme.Scheme).
 		WithObjects(existingObjects...).
 		Build()
 

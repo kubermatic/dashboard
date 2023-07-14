@@ -25,7 +25,7 @@ import (
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
-	configv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
+	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -62,7 +62,7 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		conf := &configv1alpha1.Config{}
+		conf := &gatekeeperconfigv1alpha1.Config{}
 		if err := clusterCli.Get(ctx, types.NamespacedName{Namespace: ConfigNamespace, Name: ConfigName}, conf); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -95,7 +95,7 @@ func DecodeGatkeeperConfigReq(c context.Context, r *http.Request) (interface{}, 
 	return req, nil
 }
 
-func convertExternalToAPI(conf *configv1alpha1.Config) (*apiv2.GatekeeperConfig, error) {
+func convertExternalToAPI(conf *gatekeeperconfigv1alpha1.Config) (*apiv2.GatekeeperConfig, error) {
 	apiConf := &apiv2.GatekeeperConfig{}
 
 	specRaw, err := json.Marshal(&conf.Spec)
@@ -111,8 +111,8 @@ func convertExternalToAPI(conf *configv1alpha1.Config) (*apiv2.GatekeeperConfig,
 	return apiConf, nil
 }
 
-func convertAPIToExternal(conf *apiv2.GatekeeperConfig) (*configv1alpha1.Config, error) {
-	externalConf := &configv1alpha1.Config{}
+func convertAPIToExternal(conf *apiv2.GatekeeperConfig) (*gatekeeperconfigv1alpha1.Config, error) {
+	externalConf := &gatekeeperconfigv1alpha1.Config{}
 
 	specRaw, err := json.Marshal(&conf.Spec)
 	if err != nil {
@@ -143,7 +143,7 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		conf := &configv1alpha1.Config{}
+		conf := &gatekeeperconfigv1alpha1.Config{}
 		conf.SetName(ConfigName)
 		conf.SetNamespace(ConfigNamespace)
 		if err := clusterCli.Delete(ctx, conf); err != nil {
@@ -226,7 +226,7 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		originalConf := &configv1alpha1.Config{}
+		originalConf := &gatekeeperconfigv1alpha1.Config{}
 		if err := clusterCli.Get(ctx, types.NamespacedName{Namespace: ConfigNamespace, Name: ConfigName}, originalConf); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}

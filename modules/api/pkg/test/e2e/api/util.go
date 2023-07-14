@@ -119,7 +119,7 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 	}
 
 	// wait for controller to provision the roles
-	if err := wait.PollImmediate(ctx, 3*time.Second, 3*time.Minute, func() (error, error) {
+	if err := wait.PollImmediate(ctx, 3*time.Second, 3*time.Minute, func(ctx context.Context) (error, error) {
 		roleNameList, err := testClient.GetRoles(project.ID, tc.dc, cluster.ID)
 		if err != nil {
 			return fmt.Errorf("failed to get Roles: %w", err), nil
@@ -141,7 +141,7 @@ func testCluster(ctx context.Context, token string, project *apiv1.Project, clus
 	}
 
 	// wait for controller to provision the cluster roles
-	if err := wait.PollImmediate(ctx, 3*time.Second, 3*time.Minute, func() (error, error) {
+	if err := wait.PollImmediate(ctx, 3*time.Second, 3*time.Minute, func(ctx context.Context) (error, error) {
 		clusterRoleNameList, err := testClient.GetClusterRoles(project.ID, tc.dc, cluster.ID)
 		if err != nil {
 			return fmt.Errorf("failed to get ClusterRoles: %w", err), nil

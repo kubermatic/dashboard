@@ -23,16 +23,16 @@ import (
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 	cdiv1beta1 "kubevirt.io/containerized-data-importer-api/pkg/apis/core/v1beta1"
 
-	"k8s.io/apimachinery/pkg/runtime"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
+
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	nativescheme "k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	ctrlruntimeclientfake "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
-var scheme = runtime.NewScheme()
+var scheme = fake.NewScheme()
 
 func init() {
 	utilruntime.Must(nativescheme.AddToScheme(scheme))
@@ -75,7 +75,7 @@ func newClient(kubeconfig string, opts ClientOptions) (*Client, error) {
 	}
 
 	if opts.loadFakeClient {
-		client = ctrlruntimeclientfake.NewClientBuilder().WithObjects(opts.FakeObjects...).Build()
+		client = fake.NewClientBuilder().WithScheme(scheme).WithObjects(opts.FakeObjects...).Build()
 	} else {
 		client, err = ctrlruntimeclient.New(restConfig, opts.ControllerRuntimeOptions)
 		if err != nil {

@@ -324,7 +324,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		}
 	}
 
-	if !WaitFor(5*time.Second, timeout, func() bool {
+	if !WaitFor(ctx, 5*time.Second, timeout, func(ctx context.Context) bool {
 		pod := &corev1.Pod{}
 		if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 			Namespace: metav1.NamespaceSystem,
@@ -742,9 +742,9 @@ func EncodeUserEmailtoID(email string) string {
 }
 
 // WaitFor is a function to wait until callback function return true.
-func WaitFor(interval time.Duration, timeout time.Duration, callback func() bool) bool {
-	err := wait.PollImmediate(interval, timeout, func() (bool, error) {
-		return callback(), nil
+func WaitFor(ctx context.Context, interval time.Duration, timeout time.Duration, callback func(ctx context.Context) bool) bool {
+	err := wait.PollUntilContextTimeout(ctx, interval, timeout, true, func(ctx context.Context) (bool, error) {
+		return callback(ctx), nil
 	})
 	return err == nil
 }

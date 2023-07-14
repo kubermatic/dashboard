@@ -289,7 +289,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		connectionsPerUser.increaseActiveConnections(userProjectClusterUniqueKey)
 		defer connectionsPerUser.decreaseActiveConnections(userProjectClusterUniqueKey)
 
-		if !wsh.WaitFor(5*time.Second, waitForKubeconfigSecretTimeout, func() bool {
+		if !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
 			kubeconfigSecret := &corev1.Secret{}
 			if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 				Namespace: metav1.NamespaceSystem,

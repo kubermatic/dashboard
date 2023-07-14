@@ -27,11 +27,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/client-go/kubernetes/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -65,8 +64,7 @@ func TestGetMLAAdminSetting(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			mlaAdminSettingProvider := kubernetes.NewPrivilegedMLAAdminSettingProvider(client)
@@ -114,8 +112,7 @@ func TestCreateMLAAdminSetting(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			mlaAdminSettingProvider := kubernetes.NewPrivilegedMLAAdminSettingProvider(client)
@@ -166,8 +163,7 @@ func TestUpdateMLAAdminSetting(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			mlaAdminSettingProvider := kubernetes.NewPrivilegedMLAAdminSettingProvider(client)
@@ -227,8 +223,7 @@ func TestDeleteMLAAdminSetting(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			mlaAdminSettingProvider := kubernetes.NewPrivilegedMLAAdminSettingProvider(client)

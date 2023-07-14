@@ -25,11 +25,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestListConstraintTemplates(t *testing.T) {
@@ -50,9 +49,8 @@ func TestListConstraintTemplates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -107,9 +105,8 @@ func TestGetConstraintTemplates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -152,7 +149,7 @@ func TestCreateConstraintTemplates(t *testing.T) {
 		tc := testCases[idx]
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			client := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
+			client := fake.NewClientBuilder().Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
 				return client, nil
 			}
@@ -198,9 +195,8 @@ func TestUpdateConstraintTemplates(t *testing.T) {
 			t.Parallel()
 
 			ctx := context.Background()
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -251,9 +247,8 @@ func TestDeleteConstraintTemplates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 

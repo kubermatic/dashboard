@@ -26,21 +26,19 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	"k8s.io/apimachinery/pkg/util/diff"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestCreateBinding(t *testing.T) {
 	// test data
 	kubermaticObjects := []ctrlruntimeclient.Object{}
-	fakeClient := fakectrlruntimeclient.
+	fakeClient := fake.
 		NewClientBuilder().
-		WithScheme(scheme.Scheme).
 		WithObjects(kubermaticObjects...).
 		Build()
 	authenticatedUser := createAuthenitactedUser()
@@ -128,9 +126,8 @@ func TestListBinding(t *testing.T) {
 			for _, sa := range tc.existingSA {
 				kubermaticObjects = append(kubermaticObjects, sa)
 			}
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubermaticObjects...).
 				Build()
 
@@ -232,9 +229,8 @@ func TestRoleMapper(t *testing.T) {
 			for _, gpb := range tc.existingGroupProjectBindings {
 				kubermaticObjects = append(kubermaticObjects, gpb)
 			}
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubermaticObjects...).
 				Build()
 

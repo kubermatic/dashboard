@@ -50,8 +50,8 @@ require (
 	github.com/kubermatic/machine-controller v1.57.1-0.20230704163314-5f4e903ddafe
 	github.com/minio/minio-go/v7 v7.0.59
 	github.com/onsi/ginkgo v1.16.5
-	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.9.0+
-	github.com/open-policy-agent/gatekeeper v0.0.0-20230414171823-770d9756db04 // v3.12.0
+	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230606213221-6ccacf85c2c5 // v0.9.0+
+	github.com/open-policy-agent/gatekeeper/v3 v3.13.0-beta.1.0.20230707015109-3adf472e914f
 	github.com/packethost/packngo v0.30.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.16.0
@@ -67,42 +67,42 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.6.2
-	k8c.io/kubermatic/v2 v2.23.1-0.20230706081415-9f554cf9c5c5
+	k8c.io/kubermatic/v2 v2.23.1-0.20230714120150-8d201de030e4
 	k8c.io/operating-system-manager v1.3.0
-	k8c.io/reconciler v0.3.1
-	k8s.io/api v0.26.4
-	k8s.io/apiextensions-apiserver v0.26.4
-	k8s.io/apimachinery v0.26.4
-	k8s.io/apiserver v0.26.3
+	k8c.io/reconciler v0.4.0
+	k8s.io/api v0.27.3
+	k8s.io/apiextensions-apiserver v0.27.2
+	k8s.io/apimachinery v0.27.3
+	k8s.io/apiserver v0.27.2
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/code-generator v0.26.4
+	k8s.io/code-generator v0.27.2
 	k8s.io/klog/v2 v2.100.1
-	k8s.io/kubectl v0.26.2
-	k8s.io/metrics v0.26.2
+	k8s.io/kubectl v0.27.2
+	k8s.io/metrics v0.27.2
 	k8s.io/utils v0.0.0-20230505201702-9f6742963106
 	kubevirt.io/api v0.59.2
 	kubevirt.io/containerized-data-importer-api v1.56.0
-	sigs.k8s.io/controller-runtime v0.14.6
+	sigs.k8s.io/controller-runtime v0.15.0
 	sigs.k8s.io/controller-tools v0.11.3
 	sigs.k8s.io/yaml v1.3.0
 )
 
 replace (
-	k8s.io/api => k8s.io/api v0.26.2
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.26.2
-	k8s.io/apimachinery => k8s.io/apimachinery v0.26.2
-	k8s.io/client-go => k8s.io/client-go v0.26.2
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.26.2
-	k8s.io/code-generator => k8s.io/code-generator v0.26.2
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.26.2
-	k8s.io/kubectl => k8s.io/kubectl v0.26.2
-	k8s.io/kubelet => k8s.io/kubelet v0.26.2
-	k8s.io/metrics => k8s.io/metrics v0.26.2
+	k8s.io/api => k8s.io/api v0.27.2
+	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.27.2
+	k8s.io/apimachinery => k8s.io/apimachinery v0.27.2
+	k8s.io/client-go => k8s.io/client-go v0.27.2
+	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.27.2
+	k8s.io/code-generator => k8s.io/code-generator v0.27.2
+	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.27.2
+	k8s.io/kubectl => k8s.io/kubectl v0.27.2
+	k8s.io/kubelet => k8s.io/kubelet v0.27.2
+	k8s.io/metrics => k8s.io/metrics v0.27.2
 )
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230706081415-9f554cf9c5c5
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230714120150-8d201de030e4
 )
 
 require (
@@ -190,7 +190,7 @@ require (
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
@@ -233,9 +233,10 @@ require (
 	github.com/vincent-petithory/dataurl v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.11.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/otel v1.14.0 // indirect
-	go.opentelemetry.io/otel/trace v1.14.0 // indirect
-	go.uber.org/atomic v1.10.0 // indirect
+	go.opentelemetry.io/otel v1.16.0 // indirect
+	go.opentelemetry.io/otel/metric v1.16.0 // indirect
+	go.opentelemetry.io/otel/trace v1.16.0 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
@@ -256,12 +257,12 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	helm.sh/helm/v3 v3.11.1 // indirect
+	helm.sh/helm/v3 v3.12.1 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0 // indirect
-	k8s.io/component-base v0.26.4 // indirect
+	k8s.io/component-base v0.27.2 // indirect
 	k8s.io/gengo v0.0.0-20220902162205-c0856e24416d // indirect
 	k8s.io/klog v1.0.0 // indirect
-	k8s.io/kube-aggregator v0.26.2 // indirect
+	k8s.io/kube-aggregator v0.27.2 // indirect
 	k8s.io/kube-openapi v0.0.0-20230501164219-8b0f38b5fd1f // indirect
 	k8s.io/kubelet v0.26.4 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect

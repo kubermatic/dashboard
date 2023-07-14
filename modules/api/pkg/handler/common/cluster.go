@@ -140,7 +140,7 @@ func CreateEndpoint(
 
 	// Block for up to 10 seconds to give the rbac controller time to create the bindings.
 	// During that time we swallow all errors
-	if err := wait.PollImmediate(time.Second, 10*time.Second, func() (bool, error) {
+	if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
 		_, err := GetInternalCluster(ctx, userInfoGetter, clusterProvider, privilegedClusterProvider, project, projectID, newCluster.Name, &provider.ClusterGetOptions{})
 		if err != nil {
 			log.Debugw("Error when waiting for cluster to become ready after creation", zap.Error(err))

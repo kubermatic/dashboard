@@ -48,7 +48,7 @@ func (watcher *SettingsWatcher) Subscribe(subscription pubsub.Subscription) pubs
 	return watcher.publisher.Subscribe(subscription)
 }
 
-func (watcher *SettingsWatcher) OnAdd(obj interface{}) {
+func (watcher *SettingsWatcher) OnAdd(obj interface{}, isInInitialList bool) {
 	watcher.onEvent(toolscache.Added, obj)
 }
 

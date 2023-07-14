@@ -27,12 +27,11 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -69,8 +68,7 @@ func TestGetRuleGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -162,8 +160,7 @@ func TestListRuleGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -236,8 +233,7 @@ func TestCreateRuleGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -297,8 +293,7 @@ func TestUpdateRuleGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -362,8 +357,7 @@ func TestDeleteRuleGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {

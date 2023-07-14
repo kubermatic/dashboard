@@ -31,7 +31,7 @@ import (
 	"time"
 
 	constrainttemplatev1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
-	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
+	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
 	"go.uber.org/zap"
 
@@ -58,9 +58,9 @@ import (
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
 	"k8c.io/kubermatic/v2/pkg/controller/operator/common"
 	"k8c.io/kubermatic/v2/pkg/features"
-	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/semver"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
@@ -72,6 +72,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	k8sjson "k8s.io/apimachinery/pkg/util/json"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	kubernetesclientset "k8s.io/client-go/kubernetes"
 	fakerestclient "k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/kubernetes/scheme"
@@ -80,31 +81,20 @@ import (
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
+
+var testScheme = fake.NewScheme()
 
 func init() {
 	// We call this in init because even thought it is possible to register the same
 	// scheme multiple times it is an unprotected concurrent map access and these tests
 	// are very good at making that panic
-	if err := clusterv1alpha1.SchemeBuilder.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", clusterv1alpha1.SchemeGroupVersion), zap.Error(err))
-	}
-	if err := kubermaticv1.SchemeBuilder.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", kubermaticv1.SchemeGroupVersion), zap.Error(err))
-	}
-	if err := v1beta1.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", v1beta1.SchemeGroupVersion), zap.Error(err))
-	}
-	if err := apiextensionsv1.SchemeBuilder.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", apiextensionsv1.SchemeGroupVersion), zap.Error(err))
-	}
-	if err := gatekeeperconfigv1alpha1.SchemeBuilder.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", gatekeeperconfigv1alpha1.GroupVersion), zap.Error(err))
-	}
-	if err := osmv1alpha1.SchemeBuilder.AddToScheme(scheme.Scheme); err != nil {
-		kubermaticlog.Logger.Fatalw("Failed to register scheme", zap.Stringer("api", osmv1alpha1.SchemeGroupVersion), zap.Error(err))
-	}
+	utilruntime.Must(clusterv1alpha1.SchemeBuilder.AddToScheme(testScheme))
+	utilruntime.Must(v1beta1.AddToScheme(testScheme))
+	utilruntime.Must(SchemeBuilder.AddToScheme(testScheme))
+	utilruntime.Must(apiextensionsv1.SchemeBuilder.AddToScheme(testScheme))
+	utilruntime.Must(gatekeeperconfigv1alpha1.SchemeBuilder.AddToScheme(testScheme))
+	utilruntime.Must(osmv1alpha1.SchemeBuilder.AddToScheme(testScheme))
 
 	middleware.Now = func() time.Time {
 		return UserLastSeen
@@ -287,9 +277,9 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	}
 
 	allObjects = append(allObjects, kubermaticConfiguration)
-	fakeClient := fakectrlruntimeclient.
+	fakeClient := fake.
 		NewClientBuilder().
-		WithScheme(scheme.Scheme).
+		WithScheme(testScheme).
 		WithObjects(allObjects...).
 		WithIndex(&corev1.Event{}, handlerv1common.EventFieldIndexerKey, handlerv1common.EventIndexer()).
 		Build()
