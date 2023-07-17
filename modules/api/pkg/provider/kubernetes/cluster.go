@@ -184,8 +184,8 @@ func (p *ClusterProvider) NewUnsecured(ctx context.Context, project *kubermaticv
 }
 
 func (p *ClusterProvider) waitForCluster(ctx context.Context, client ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster) error {
-	waiter := reconciling.WaitUntilObjectExistsInCacheConditionFunc(ctx, client, zap.NewNop().Sugar(), ctrlruntimeclient.ObjectKeyFromObject(cluster), cluster)
-	if err := wait.Poll(100*time.Millisecond, 5*time.Second, waiter); err != nil {
+	waiter := reconciling.WaitUntilObjectExistsInCacheConditionFunc(client, zap.NewNop().Sugar(), ctrlruntimeclient.ObjectKeyFromObject(cluster), cluster)
+	if err := wait.PollUntilContextTimeout(ctx, 100*time.Millisecond, 5*time.Second, false, waiter); err != nil {
 		return fmt.Errorf("failed waiting for the new cluster to appear in the cache: %w", err)
 	}
 

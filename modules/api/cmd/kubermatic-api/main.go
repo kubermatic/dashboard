@@ -59,7 +59,7 @@ import (
 	"github.com/go-logr/zapr"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
+	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
 	"go.uber.org/zap"
 
@@ -80,9 +80,9 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	metricspkg "k8c.io/kubermatic/v2/pkg/metrics"
-	"k8c.io/kubermatic/v2/pkg/pprof"
 	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/util/cli"
+	"k8c.io/kubermatic/v2/pkg/util/flagopts"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"
@@ -102,7 +102,7 @@ import (
 
 func main() {
 	klog.InitFlags(nil)
-	pprofOpts := &pprof.Opts{}
+	pprofOpts := &flagopts.PProf{}
 	pprofOpts.AddFlags(flag.CommandLine)
 	options, err := newServerRunOptions()
 	if err != nil {
@@ -149,6 +149,7 @@ func main() {
 			return ctx
 		},
 		MetricsBindAddress: "0",
+		PprofBindAddress:   pprofOpts.ListenAddress,
 	})
 	if err != nil {
 		log.Fatalw("failed to construct manager", zap.Error(err))
@@ -170,12 +171,6 @@ func main() {
 	if err != nil {
 		log.Fatalw("failed to create API Handler", zap.Error(err))
 	}
-
-	go func() {
-		if err := pprofOpts.Start(ctx); err != nil {
-			log.Fatalw("Failed to start pprof handler", zap.Error(err))
-		}
-	}()
 
 	go metricspkg.ServeForever(options.internalAddr, "/metrics")
 	log.Infow("the API server listening", "listenAddress", options.listenAddress)

@@ -23,13 +23,12 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/semver"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	"k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/client-go/kubernetes/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestListAdmissionPluginsFromVersion(t *testing.T) {
@@ -219,9 +218,8 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.plugins...).
 				Build()
 

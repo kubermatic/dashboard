@@ -26,13 +26,12 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -112,9 +111,8 @@ func TestCreateOrUpdateKubeconfigSecretForCluster(t *testing.T) {
 		tc := testCases[idx]
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 
@@ -247,9 +245,8 @@ func TestCreateOrUpdateCloudSecretForCluster(t *testing.T) {
 		tc := testCases[idx]
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			client := fakectrlruntimeclient.
+			client := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.existingObjects...).
 				Build()
 

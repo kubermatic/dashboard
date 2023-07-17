@@ -44,10 +44,6 @@ const (
 )
 
 func TestListConstraints(t *testing.T) {
-	if err := test.RegisterScheme(test.SchemeBuilder); err != nil {
-		t.Fatal(err)
-	}
-
 	t.Parallel()
 	testcases := []struct {
 		Name                      string
@@ -175,10 +171,6 @@ func TestListConstraints(t *testing.T) {
 }
 
 func TestGetConstraints(t *testing.T) {
-	if err := test.RegisterScheme(test.SchemeBuilder); err != nil {
-		t.Fatal(err)
-	}
-
 	t.Parallel()
 	testcases := []struct {
 		Name                      string

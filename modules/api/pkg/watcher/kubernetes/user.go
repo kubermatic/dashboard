@@ -64,7 +64,7 @@ func (watcher *UserWatcher) Subscribe(subscription pubsub.Subscription, opts ...
 	return watcher.publisher.Subscribe(subscription, opts...)
 }
 
-func (watcher *UserWatcher) OnAdd(obj interface{}) {
+func (watcher *UserWatcher) OnAdd(obj interface{}, isInInitialList bool) {
 	user, ok := obj.(*kubermaticv1.User)
 	if !ok {
 		watcher.log.Warnf("expected User but got %T", obj)

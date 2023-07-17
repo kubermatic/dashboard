@@ -38,24 +38,18 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	kubernetesclientset "k8s.io/client-go/kubernetes"
 	fakerestclient "k8s.io/client-go/kubernetes/fake"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
-
-func init() {
-	utilruntime.Must(kubermaticv1.AddToScheme(scheme.Scheme))
-}
 
 func TestRenameProjectEndpoint(t *testing.T) {
 	t.Parallel()
@@ -511,9 +505,8 @@ func TestListProjectMethod(t *testing.T) {
 			testSeed := test.GenTestSeed()
 			tc.ExistingKubermaticObjects = append(tc.ExistingKubermaticObjects, testSeed)
 
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(tc.ExistingKubermaticObjects...).
 				Build()
 

@@ -166,7 +166,11 @@ func GetClients() (ctrlruntimeclient.Client, rest.Interface, *rest.Config, error
 	}
 
 	config := ctrlruntime.GetConfigOrDie()
-	mapper, err := apiutil.NewDynamicRESTMapper(config)
+	httpClient, err := rest.HTTPClientFor(config)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("failed to create HTTP client: %w", err)
+	}
+	mapper, err := apiutil.NewDynamicRESTMapper(config, httpClient)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to create dynamic REST mapper: %w", err)
 	}
@@ -174,7 +178,7 @@ func GetClients() (ctrlruntimeclient.Client, rest.Interface, *rest.Config, error
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to get pod GVK: %w", err)
 	}
-	podRestClient, err := apiutil.RESTClientForGVK(gvk, false, config, serializer.NewCodecFactory(sc))
+	podRestClient, err := apiutil.RESTClientForGVK(gvk, false, config, serializer.NewCodecFactory(sc), httpClient)
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("failed to create pod rest client: %w", err)
 	}
@@ -204,7 +208,7 @@ func WaitForPodsCreated(ctx context.Context, c ctrlruntimeclient.Client, log *za
 	// List the pods, making sure we observe all the replicas.
 	foundPods := []string{}
 
-	err := kwait.PollImmediate(2*time.Second, timeout, func() (done bool, err error) {
+	err := kwait.PollUntilContextTimeout(ctx, 2*time.Second, timeout, true, func(ctx context.Context) (done bool, err error) {
 		pods := corev1.PodList{}
 		if err := c.List(ctx, &pods, listOpts...); err != nil {
 			return false, fmt.Errorf("failed to list Pods: %w", err)
@@ -253,7 +257,7 @@ func WaitForPodCondition(ctx context.Context, c ctrlruntimeclient.Client, log *z
 	logger := log.With("pod", podName)
 	logger.Infof("Waiting for Pod to be %q...", desc)
 
-	return kwait.PollImmediate(pollPeriod, timeout, func() (bool, error) {
+	return kwait.PollUntilContextTimeout(ctx, pollPeriod, timeout, true, func(ctx context.Context) (bool, error) {
 		pod := corev1.Pod{}
 		if err := c.Get(ctx, key, &pod); err != nil {
 			if apierrors.IsNotFound(err) {
@@ -330,7 +334,7 @@ func WaitForDeploymentReady(ctx context.Context, c ctrlruntimeclient.Client, log
 	logger := log.With("deployment", key.String())
 	logger.Info("Waiting for Deployment to be ready...")
 
-	return wait.PollImmediateLog(ctx, log, 5*time.Second, timeout, func() (error, error) {
+	return wait.PollImmediateLog(ctx, log, 5*time.Second, timeout, func(ctx context.Context) (error, error) {
 		status, err := resources.HealthyDeployment(ctx, c, key, -1)
 		if err != nil {
 			return nil, err

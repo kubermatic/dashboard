@@ -17,6 +17,7 @@ limitations under the License.
 package utils
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -110,7 +111,7 @@ func (r *TestClient) CreateProject(name string, ignoredStatusCodes ...int) (*api
 	}
 
 	var apiProject *apiv1.Project
-	if !WaitFor(1*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 1*time.Second, timeout, func(ctx context.Context) bool {
 		apiProject, _ = r.GetProject(response.Payload.ID)
 		return apiProject != nil && apiProject.Status == string(kubermaticv1.ProjectActive)
 	}) {
@@ -145,7 +146,7 @@ func (r *TestClient) CreateProjectBySA(name string, users []string) (*apiv1.Proj
 	}
 
 	var apiProject *apiv1.Project
-	if !WaitFor(1*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 1*time.Second, timeout, func(ctx context.Context) bool {
 		apiProject, _ = r.GetProject(response.Payload.ID)
 		return apiProject != nil && apiProject.Status == string(kubermaticv1.ProjectActive)
 	}) {
@@ -255,7 +256,7 @@ func (r *TestClient) CleanupProject(t *testing.T, id string) {
 	timeout := 3 * time.Minute
 	t.Logf("Waiting %v for project to be gone...", timeout)
 
-	err := wait.PollImmediate(time.Second, timeout, func() (bool, error) {
+	err := wait.PollUntilContextTimeout(context.Background(), time.Second, timeout, true, func(ctx context.Context) (bool, error) {
 		_, err := r.GetProject(id)
 		return err != nil, nil // return true if there *was* an error, i.e. project is gone
 	})
@@ -277,7 +278,7 @@ func (r *TestClient) CleanupCluster(t *testing.T, projectID, dc, clusterID strin
 	timeout := 5 * time.Minute
 	t.Logf("Waiting %v for cluster to be gone...", timeout)
 
-	err := wait.PollImmediate(time.Second, timeout, func() (bool, error) {
+	err := wait.PollUntilContextTimeout(context.Background(), time.Second, timeout, true, func(ctx context.Context) (bool, error) {
 		_, err := r.GetCluster(projectID, dc, clusterID)
 		return err != nil, nil // return true if there *was* an error, i.e. project is gone
 	})
@@ -304,7 +305,7 @@ func (r *TestClient) CreateServiceAccount(name, group, projectID string) (*apiv1
 	before := time.Now()
 
 	var apiServiceAccount *apiv1.ServiceAccount
-	if !WaitFor(1*time.Second, 60*time.Second, func() bool {
+	if !WaitFor(context.Background(), 1*time.Second, 60*time.Second, func(ctx context.Context) bool {
 		apiServiceAccount, _ = r.GetServiceAccount(sa.Payload.ID, projectID)
 		return apiServiceAccount != nil && apiServiceAccount.Status == apiv1.ServiceAccountActive
 	}) {
@@ -733,7 +734,7 @@ func (r *TestClient) WaitForClusterHealthy(projectID, dc, clusterID string) erro
 
 	r.test.Logf("Waiting %v for cluster %s to become healthy...", timeout, clusterID)
 
-	if !WaitFor(5*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 5*time.Second, timeout, func(ctx context.Context) bool {
 		healthStatus, _ := r.GetClusterHealthStatus(projectID, dc, clusterID)
 		return IsHealthyCluster(healthStatus)
 	}) {
@@ -750,7 +751,7 @@ func (r *TestClient) WaitForOPAEnabledClusterHealthy(projectID, dc, clusterID st
 
 	r.test.Logf("Waiting %v for OPA enabled cluster %s to become healthy...", timeout, clusterID)
 
-	if !WaitFor(5*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 5*time.Second, timeout, func(ctx context.Context) bool {
 		healthStatus, _ := r.GetClusterHealthStatus(projectID, dc, clusterID)
 		return IsHealthyCluster(healthStatus) &&
 			healthStatus.GatekeeperController != nil &&
@@ -808,7 +809,7 @@ func (r *TestClient) WaitForClusterNodeDeploymentsToExist(projectID, dc, cluster
 
 	r.test.Logf("Waiting %v for NodeDeployment in cluster %s to exist...", timeout, clusterID)
 
-	if !WaitFor(1*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 1*time.Second, timeout, func(ctx context.Context) bool {
 		deployments, _ := r.GetClusterNodeDeployments(projectID, dc, clusterID)
 		return len(deployments) > 0
 	}) {
@@ -825,7 +826,7 @@ func (r *TestClient) WaitForClusterNodeDeploymentsToByReady(projectID, dc, clust
 
 	r.test.Logf("Waiting %v for NodeDeployment in cluster %s to become ready...", timeout, clusterID)
 
-	if !WaitFor(5*time.Second, timeout, func() bool {
+	if !WaitFor(context.Background(), 5*time.Second, timeout, func(ctx context.Context) bool {
 		deployments, _ := r.GetClusterNodeDeployments(projectID, dc, clusterID)
 		return len(deployments) > 0 && deployments[0].Status.AvailableReplicas == replicas
 	}) {

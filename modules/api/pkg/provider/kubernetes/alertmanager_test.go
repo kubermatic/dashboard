@@ -27,15 +27,14 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 const (
@@ -81,8 +80,7 @@ func TestGetAlertmanager(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -168,8 +166,7 @@ func TestUpdateAlertmanager(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {
@@ -246,8 +243,7 @@ func TestResetAlertmanager(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			client := fakectrlruntimeclient.NewClientBuilder().
-				WithScheme(scheme.Scheme).
+			client := fake.NewClientBuilder().
 				WithObjects(tc.existingObjects...).
 				Build()
 			fakeImpersonationClient := func(impCfg restclient.ImpersonationConfig) (ctrlruntimeclient.Client, error) {

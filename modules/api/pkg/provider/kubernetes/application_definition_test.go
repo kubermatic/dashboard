@@ -23,10 +23,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
-	"k8s.io/client-go/kubernetes/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestListApplicationDefinitions(t *testing.T) {
@@ -51,9 +50,8 @@ func TestListApplicationDefinitions(t *testing.T) {
 			for _, binding := range tc.existingAppDefs {
 				kubermaticObjects = append(kubermaticObjects, binding)
 			}
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubermaticObjects...).
 				Build()
 

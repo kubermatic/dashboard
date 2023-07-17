@@ -21,7 +21,7 @@ import (
 // swagger:model NetworkPolicyEgressRule
 type NetworkPolicyEgressRule struct {
 
-	// List of destination ports for outgoing traffic.
+	// ports is a list of destination ports for outgoing traffic.
 	// Each item in this list is combined using a logical OR. If this field is
 	// empty or missing, this rule matches all ports (traffic not restricted by port).
 	// If this field is present and contains at least one item, then this rule allows
@@ -29,7 +29,7 @@ type NetworkPolicyEgressRule struct {
 	// +optional
 	Ports []*NetworkPolicyPort `json:"ports"`
 
-	// List of destinations for outgoing traffic of pods selected for this rule.
+	// to is a list of destinations for outgoing traffic of pods selected for this rule.
 	// Items in this list are combined using a logical OR operation. If this field is
 	// empty or missing, this rule matches all destinations (traffic not restricted by
 	// destination). If this field is present and contains at least one item, this rule

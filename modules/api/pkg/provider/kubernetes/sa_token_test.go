@@ -27,14 +27,13 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/fake"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/equality"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
-	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
 func TestCreateToken(t *testing.T) {
@@ -67,7 +66,7 @@ func TestCreateToken(t *testing.T) {
 	}
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			fakeClient := fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).Build()
+			fakeClient := fake.NewClientBuilder().Build()
 			tokenGenerator := &fakeJWTTokenGenerator{}
 			token, err := tokenGenerator.Generate(serviceaccount.Claims(tc.saEmail, tc.projectToSync, tc.tokenID))
 			if err != nil {
@@ -158,9 +157,8 @@ func TestListTokens(t *testing.T) {
 			for _, secret := range tc.secrets {
 				kubeObjects = append(kubeObjects, secret)
 			}
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubeObjects...).
 				Build()
 
@@ -244,9 +242,8 @@ func TestGetToken(t *testing.T) {
 				kubeObjects = append(kubeObjects, secret)
 			}
 
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubeObjects...).
 				Build()
 
@@ -320,9 +317,8 @@ func TestUpdateToken(t *testing.T) {
 				kubeObjects = append(kubeObjects, secret)
 			}
 
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubeObjects...).
 				Build()
 
@@ -391,9 +387,8 @@ func TestDeleteToken(t *testing.T) {
 				kubeObjects = append(kubeObjects, secret)
 			}
 
-			fakeClient := fakectrlruntimeclient.
+			fakeClient := fake.
 				NewClientBuilder().
-				WithScheme(scheme.Scheme).
 				WithObjects(kubeObjects...).
 				Build()
 

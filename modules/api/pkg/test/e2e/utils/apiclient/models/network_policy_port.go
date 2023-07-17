@@ -18,7 +18,7 @@ import (
 // swagger:model NetworkPolicyPort
 type NetworkPolicyPort struct {
 
-	// If set, indicates that the range of ports from port to endPort, inclusive,
+	// endPort indicates that the range of ports from port to endPort if set, inclusive,
 	// should be allowed by the policy. This field cannot be defined if the port field
 	// is not defined or if the port field is defined as a named (string) port.
 	// The endPort must be equal or greater than port.

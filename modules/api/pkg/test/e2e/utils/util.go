@@ -17,6 +17,7 @@ limitations under the License.
 package utils
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/url"
@@ -70,9 +71,9 @@ func KubernetesVersion() string {
 
 // WaitFor is a convenience wrapper that makes simple, "brute force"
 // waiting loops easier to write.
-func WaitFor(interval time.Duration, timeout time.Duration, callback func() bool) bool {
-	err := wait.PollImmediate(interval, timeout, func() (bool, error) {
-		return callback(), nil
+func WaitFor(ctx context.Context, interval time.Duration, timeout time.Duration, callback func(ctx context.Context) bool) bool {
+	err := wait.PollUntilContextTimeout(ctx, interval, timeout, true, func(ctx context.Context) (bool, error) {
+		return callback(ctx), nil
 	})
 
 	return err == nil
