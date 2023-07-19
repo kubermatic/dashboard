@@ -100,7 +100,7 @@
     "@angular-devkit/build-angular": "15.2.8",
     "@angular/cli": "15.2.8",
     "@angular/compiler-cli": "15.2.9",
-    "@jest/globals": "29.5.0",
+    "@jest/globals": "29.6.1",
     "@types/jest": "29.5.2",
     "@types/js-yaml": "4.0.5",
     "@types/lodash": "4.14.195",
