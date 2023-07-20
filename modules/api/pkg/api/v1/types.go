@@ -520,28 +520,18 @@ type VMwareCloudDirectorNetwork struct {
 // swagger:model VMwareCloudDirectorNetworkList
 type VMwareCloudDirectorNetworkList []VMwareCloudDirectorNetwork
 
-// VMwareCloudDirectorPlacementPolicy represents a VMware Cloud Director placement policy.
-// swagger:model VMwareCloudDirectorPlacementPolicy
-type VMwareCloudDirectorPlacementPolicy struct {
-	Name string `json:"name"`
-	ID string `json:"id"`
-	Description string `json:"description,omitempty"`
-	IsSizingOnly bool `json:"isSizingOnly,omitempty"`
+// VMwareCloudDirectorComputePolicy represents a VMware Cloud Director placement policy.
+// swagger:model VMwareCloudDirectorComputePolicy
+type VMwareCloudDirectorComputePolicy struct {
+	Name         string `json:"name"`
+	ID           string `json:"id"`
+	Description  string `json:"description,omitempty"`
+	IsSizingOnly bool   `json:"isSizingOnly,omitempty"`
 }
 
 // VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.
-// swagger:model VMwareCloudDirectorPlacementPolicyList
-type VMwareCloudDirectorPlacementPolicyList []VMwareCloudDirectorPlacementPolicy
-
-// VMwareCloudDirectorSizingPolicy represents a VMware Cloud Director sizing policy.
-// swagger:model VMwareCloudDirectorSizingPolicy
-type VMwareCloudDirectorSizingPolicy struct {
-	Name string `json:"name"`
-}
-
-// VMwareCloudDirectorSizingPolicyList represents an array of VMware Cloud Director sizing policies.
-// swagger:model VMwareCloudDirectorSizingPolicyList
-type VMwareCloudDirectorSizingPolicyList []VMwareCloudDirectorSizingPolicy
+// swagger:model VMwareCloudDirectorComputePolicyList
+type VMwareCloudDirectorComputePolicyList []VMwareCloudDirectorComputePolicy
 
 // VMwareCloudDirectorStorageProfile represents a VMware Cloud Director storage profile.
 // swagger:model VMwareCloudDirectorStorageProfile

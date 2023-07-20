@@ -33,6 +33,9 @@ export class VMwareCloudDirectorTemplate {
   name: string;
 }
 
-export class VMwareCloudDirectorPlacementPolicy {
+export class VMwareCloudDirectorComputePolicy {
   name: string;
+  id: string;
+  description: string;
+  isSizingOnly: boolean;
 }

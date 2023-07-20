@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// VMwareCloudDirectorPlacementPolicyList VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.
+// VMwareCloudDirectorComputePolicyList VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.
 //
-// swagger:model VMwareCloudDirectorPlacementPolicyList
-type VMwareCloudDirectorPlacementPolicyList []*VMwareCloudDirectorPlacementPolicy
+// swagger:model VMwareCloudDirectorComputePolicyList
+type VMwareCloudDirectorComputePolicyList []*VMwareCloudDirectorComputePolicy
 
-// Validate validates this v mware cloud director placement policy list
-func (m VMwareCloudDirectorPlacementPolicyList) Validate(formats strfmt.Registry) error {
+// Validate validates this v mware cloud director compute policy list
+func (m VMwareCloudDirectorComputePolicyList) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {
@@ -47,8 +47,8 @@ func (m VMwareCloudDirectorPlacementPolicyList) Validate(formats strfmt.Registry
 	return nil
 }
 
-// ContextValidate validate this v mware cloud director placement policy list based on the context it is used
-func (m VMwareCloudDirectorPlacementPolicyList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this v mware cloud director compute policy list based on the context it is used
+func (m VMwareCloudDirectorComputePolicyList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {

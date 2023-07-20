@@ -201,7 +201,7 @@ func ListOVDCNetworks(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirector
 	return orgVDCNetworks, nil
 }
 
-func ListPlacementPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorPlacementPolicyList, error) {
+func ListComputePolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorComputePolicyList, error) {
 	client, err := NewClientWithAuth(auth)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
@@ -212,38 +212,13 @@ func ListPlacementPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDir
 		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
 	}
 
-	var policies apiv1.VMwareCloudDirectorPlacementPolicyList
+	var policies apiv1.VMwareCloudDirectorComputePolicyList
 	for _, policy := range allPolicies {
-		policies = append(policies, apiv1.VMwareCloudDirectorPlacementPolicy{
-			ID: policy.VdcComputePolicyV2.ID,
-			Name: policy.VdcComputePolicyV2.Name,
-			Description: *policy.VdcComputePolicyV2.Description,
+		policies = append(policies, apiv1.VMwareCloudDirectorComputePolicy{
+			ID:           policy.VdcComputePolicyV2.ID,
+			Name:         policy.VdcComputePolicyV2.Name,
+			Description:  *policy.VdcComputePolicyV2.Description,
 			IsSizingOnly: policy.VdcComputePolicyV2.IsSizingOnly,
-		})
-	}
-	return policies, nil
-}
-
-func ListSizingPolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorSizingPolicyList, error) {
-	client, err := NewClientWithAuth(auth)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
-	}
-
-	org, err := client.GetOrganization()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization %s: %w", auth.Organization, err)
-	}
-
-	allPolicies, err := org.GetAllVdcComputePolicies(url.Values{})
-	if err != nil {
-		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
-	}
-
-	var policies apiv1.VMwareCloudDirectorSizingPolicyList
-	for _, policy := range allPolicies {
-		policies = append(policies, apiv1.VMwareCloudDirectorSizingPolicy{
-			Name: policy.VdcComputePolicy.Name,
 		})
 	}
 	return policies, nil

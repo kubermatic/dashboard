@@ -14192,13 +14192,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14210,6 +14203,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14726,11 +14726,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14742,6 +14737,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -15386,6 +15386,48 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies": {
+      "get": {
+        "description": "List VMware Cloud Director Compute Policies",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listVMwareCloudDirectorComputePoliciesNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorComputePolicyList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorComputePolicyList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/networks": {
       "get": {
         "description": "List VMware Cloud Director OVDC Networks",
@@ -15417,90 +15459,6 @@
             "description": "VMwareCloudDirectorNetworkList",
             "schema": {
               "$ref": "#/definitions/VMwareCloudDirectorNetworkList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/placementpolicies": {
-      "get": {
-        "description": "List VMware Cloud Director Placement Policies",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "vmwareclouddirector"
-        ],
-        "operationId": "listVMwareCloudDirectorPlacementPoliciesNoCredentials",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VMwareCloudDirectorPlacementPolicyList",
-            "schema": {
-              "$ref": "#/definitions/VMwareCloudDirectorPlacementPolicyList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/sizingpolicies": {
-      "get": {
-        "description": "List VMware Cloud Director Sizing Policies",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "vmwareclouddirector"
-        ],
-        "operationId": "listVMwareCloudDirectorSizingPoliciesNoCredentials",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VMwareCloudDirectorSizingPolicyList",
-            "schema": {
-              "$ref": "#/definitions/VMwareCloudDirectorSizingPolicyList"
             }
           },
           "default": {
@@ -23563,6 +23521,79 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies": {
+      "get": {
+        "description": "List VMware Cloud Director Compute Policies",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vmwareclouddirector"
+        ],
+        "operationId": "listProjectVMwareCloudDirectorComputePolicies",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "APIToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Organization",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VDC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VMwareCloudDirectorComputePolicyList",
+            "schema": {
+              "$ref": "#/definitions/VMwareCloudDirectorComputePolicyList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks": {
       "get": {
         "description": "List VMware Cloud Director OVDC Networks",
@@ -23625,152 +23656,6 @@
             "description": "VMwareCloudDirectorNetworkList",
             "schema": {
               "$ref": "#/definitions/VMwareCloudDirectorNetworkList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/placementpolicies": {
-      "get": {
-        "description": "List VMware Cloud Director Placement Policies",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "vmwareclouddirector"
-        ],
-        "operationId": "listProjectVMwareCloudDirectorPlacementPolicies",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "DC",
-            "description": "KKP Datacenter to use for endpoint",
-            "name": "dc",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "Username",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Password",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "APIToken",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Organization",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "VDC",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VMwareCloudDirectorPlacementPolicyList",
-            "schema": {
-              "$ref": "#/definitions/VMwareCloudDirectorPlacementPolicyList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/sizingpolicies": {
-      "get": {
-        "description": "List VMware Cloud Director Sizing Policies",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "vmwareclouddirector"
-        ],
-        "operationId": "listProjectVMwareCloudDirectorSizingPolicies",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "DC",
-            "description": "KKP Datacenter to use for endpoint",
-            "name": "dc",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "Username",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Password",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "APIToken",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Organization",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "VDC",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VMwareCloudDirectorSizingPolicyList",
-            "schema": {
-              "$ref": "#/definitions/VMwareCloudDirectorSizingPolicyList"
             }
           },
           "default": {
@@ -40376,6 +40261,37 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "VMwareCloudDirectorComputePolicy": {
+      "type": "object",
+      "title": "VMwareCloudDirectorComputePolicy represents a VMware Cloud Director placement policy.",
+      "properties": {
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "isSizingOnly": {
+          "type": "boolean",
+          "x-go-name": "IsSizingOnly"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "VMwareCloudDirectorComputePolicyList": {
+      "type": "array",
+      "title": "VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.",
+      "items": {
+        "$ref": "#/definitions/VMwareCloudDirectorComputePolicy"
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "VMwareCloudDirectorNetwork": {
       "type": "object",
       "title": "VMwareCloudDirectorNetwork represents a VMware Cloud Director network.",
@@ -40463,56 +40379,6 @@
           "type": "string",
           "x-go-name": "VApp"
         }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "VMwareCloudDirectorPlacementPolicy": {
-      "type": "object",
-      "title": "VMwareCloudDirectorPlacementPolicy represents a VMware Cloud Director placement policy.",
-      "properties": {
-        "description": {
-          "type": "string",
-          "x-go-name": "Description"
-        },
-        "id": {
-          "type": "string",
-          "x-go-name": "ID"
-        },
-        "isSizingOnly": {
-          "type": "boolean",
-          "x-go-name": "IsSizingOnly"
-        },
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "VMwareCloudDirectorPlacementPolicyList": {
-      "type": "array",
-      "title": "VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.",
-      "items": {
-        "$ref": "#/definitions/VMwareCloudDirectorPlacementPolicy"
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "VMwareCloudDirectorSizingPolicy": {
-      "type": "object",
-      "title": "VMwareCloudDirectorSizingPolicy represents a VMware Cloud Director sizing policy.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "VMwareCloudDirectorSizingPolicyList": {
-      "type": "array",
-      "title": "VMwareCloudDirectorSizingPolicyList represents an array of VMware Cloud Director sizing policies.",
-      "items": {
-        "$ref": "#/definitions/VMwareCloudDirectorSizingPolicy"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },

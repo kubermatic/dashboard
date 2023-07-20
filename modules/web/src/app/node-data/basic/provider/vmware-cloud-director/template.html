@@ -80,6 +80,18 @@ limitations under the License.
     <div *option="let placementPolicy">{{placementPolicy.name}}</div>
   </km-combobox>
 
+  <km-combobox #sizingPolicyCombobox
+               [selected]="selectedSizingPolicy"
+               [options]="sizingPolicies"
+               [formControlName]="Controls.SizingPolicy"
+               [label]="sizingPolicyLabel"
+               [required]="true"
+               (changed)="onSizingPolicyChanged($event)"
+               inputLabel="Select sizing policy..."
+               filterBy="name">
+    <div *option="let sizingPolicy">{{sizingPolicy.name}}</div>
+  </km-combobox>
+
   <km-combobox #storageProfileCombobox
                [selected]="selectedStorageProfile"
                [options]="storageProfiles"
