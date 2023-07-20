@@ -1000,6 +1000,10 @@ limitations under the License.
                 <div key>Placement Policy</div>
                 <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.placementPolicy}}</div>
               </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector.sizingPolicy">
+                <div key>Sizing Policy</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.sizingPolicy}}</div>
+              </km-property>
               <km-property>
                 <div key>IP Allocation Mode</div>
                 <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.ipAllocationMode}}</div>

@@ -818,12 +818,8 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectVMwareCloudDirectorTemplates())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/placementpolicies").
-		Handler(r.listProjectVMwareCloudDirectorPlacementPolicies())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/sizingpolicies").
-		Handler(r.listProjectVMwareCloudDirectorSizingPolicies())
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies").
+		Handler(r.listProjectVMwareCloudDirectorComputePolicies())
 
 	// AWS endpoints
 	mux.Methods(http.MethodGet).
@@ -1077,12 +1073,8 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listVMwareCloudDirectorTemplatesNoCredentials())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/placementpolicies").
-		Handler(r.listVMwareCloudDirectorPlacementPoliciesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/sizingpolicies").
-		Handler(r.listVMwareCloudDirectorSizingPoliciesNoCredentials())
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies").
+		Handler(r.listVMwareCloudDirectorComputePoliciesNoCredentials())
 
 	kubernetesdashboard.
 		NewLoginHandler(r.settingsProvider).
@@ -4864,48 +4856,24 @@ func (r Routing) listVMwareCloudDirectorCatalogsNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/placementpolicies vmwareclouddirector listVMwareCloudDirectorPlacementPoliciesNoCredentials
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies vmwareclouddirector listVMwareCloudDirectorComputePoliciesNoCredentials
 //
-// List VMware Cloud Director Placement Policies
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: VMwareCloudDirectorPlacementPolicyList
-func (r Routing) listVMwareCloudDirectorPlacementPoliciesNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.VMwareCloudDirectorPlacementPoliciesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
-		provider.DecodeVMwareCloudDirectorNoCredentialsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/sizingpolicies vmwareclouddirector listVMwareCloudDirectorSizingPoliciesNoCredentials
-//
-// List VMware Cloud Director Sizing Policies
+// List VMware Cloud Director Compute Policies
 //
 //	Produces:
 //	- application/json
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: VMwareCloudDirectorSizingPolicyList
-func (r Routing) listVMwareCloudDirectorSizingPoliciesNoCredentials() http.Handler {
+//	  200: VMwareCloudDirectorComputePolicyList
+func (r Routing) listVMwareCloudDirectorComputePoliciesNoCredentials() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.VMwareCloudDirectorSizingPoliciesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.VMwareCloudDirectorComputePoliciesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
 		provider.DecodeVMwareCloudDirectorNoCredentialsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6634,44 +6602,22 @@ func (r Routing) listProjectVMwareCloudDirectorStorageProfiles() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/placementpolicies vmwareclouddirector listProjectVMwareCloudDirectorPlacementPolicies
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies vmwareclouddirector listProjectVMwareCloudDirectorComputePolicies
 //
-// List VMware Cloud Director Placement Policies
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	default: errorResponse
-//	200: VMwareCloudDirectorPlacementPolicyList
-func (r Routing) listProjectVMwareCloudDirectorPlacementPolicies() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorPlacementPoliciesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
-		provider.DecodeVMwareCloudDirectorProjectCommonReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/sizingpolicies vmwareclouddirector listProjectVMwareCloudDirectorSizingPolicies
-//
-// List VMware Cloud Director Sizing Policies
+// List VMware Cloud Director Compute Policies
 //
 //	Produces:
 //	- application/json
 //
 //	Responses:
 //	default: errorResponse
-//	200: VMwareCloudDirectorSizingPolicyList
-func (r Routing) listProjectVMwareCloudDirectorSizingPolicies() http.Handler {
+//	200: VMwareCloudDirectorComputePolicyList
+func (r Routing) listProjectVMwareCloudDirectorComputePolicies() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.VMwareCloudDirectorSizingPoliciesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		)(provider.VMwareCloudDirectorComputePoliciesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeVMwareCloudDirectorProjectCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

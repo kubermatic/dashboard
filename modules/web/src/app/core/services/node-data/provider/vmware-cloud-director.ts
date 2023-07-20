@@ -21,7 +21,7 @@ import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-d
 import {Cluster} from '@shared/entity/cluster';
 import {
   VMwareCloudDirectorCatalog,
-  VMwareCloudDirectorPlacementPolicy,
+  VMwareCloudDirectorComputePolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
@@ -176,10 +176,10 @@ export class NodeDataVMwareCloudDirectorProvider {
     }
   }
 
-  placementPolicies(
+  computePolicies(
     onError: () => void = undefined,
     onLoadingCb: () => void = null
-  ): Observable<VMwareCloudDirectorPlacementPolicy[]> {
+  ): Observable<VMwareCloudDirectorComputePolicy[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
@@ -189,7 +189,7 @@ export class NodeDataVMwareCloudDirectorProvider {
           .pipe(
             switchMap(cluster =>
               this._getProvider(cluster)
-                .placementpolicies(cluster.spec.cloud.dc, onLoadingCb)
+                .computePolicies(cluster.spec.cloud.dc, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {
@@ -207,7 +207,7 @@ export class NodeDataVMwareCloudDirectorProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(project =>
-              this._vmwareCloudDirectorService.getPlacementPolicies(project.id, this._clusterSpecService.cluster.id)
+              this._vmwareCloudDirectorService.getComputePolicies(project.id, this._clusterSpecService.cluster.id)
             )
           )
           .pipe(

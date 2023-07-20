@@ -34,8 +34,8 @@ import {Datacenter} from '@shared/entity/datacenter';
 import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, VMwareCloudDirectorNodeSpec} from '@shared/entity/node';
 import {
   VMwareCloudDirectorCatalog,
+  VMwareCloudDirectorComputePolicy,
   VMwareCloudDirectorIPAllocationMode,
-  VMwareCloudDirectorPlacementPolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
@@ -56,6 +56,7 @@ enum Controls {
   StorageProfile = 'storageProfile',
   Catalog = 'catalog',
   PlacementPolicy = 'placementPolicy',
+  SizingPolicy = 'sizingPolicy',
   Template = 'template',
 }
 
@@ -81,6 +82,12 @@ enum PlacementPolicyState {
   Ready = 'Placement Policy',
   Loading = 'Loading...',
   Empty = 'No placement policies available',
+}
+
+enum SizingPolicyState {
+  Ready = 'Sizing Policy',
+  Loading = 'Loading...',
+  Empty = 'No sizing policies available',
 }
 
 @Component({
@@ -115,19 +122,23 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   private readonly _templateCombobox: FilteredComboboxComponent;
   @ViewChild('placementPolicyCombobox')
   private readonly _placementPolicyCombobox: FilteredComboboxComponent;
+  @ViewChild('sizingPolicyCombobox')
+  private readonly _sizingPolicyCombobox: FilteredComboboxComponent;
 
   storageProfiles: VMwareCloudDirectorStorageProfile[] = [];
   catalogs: VMwareCloudDirectorCatalog[] = [];
   templates: VMwareCloudDirectorTemplate[] = [];
-  placementPolicies: VMwareCloudDirectorPlacementPolicy[] = [];
+  computePolicies: VMwareCloudDirectorComputePolicy[] = [];
   selectedStorageProfile = '';
   selectedPlacementPolicy = '';
+  selectedSizingPolicy = '';
   selectedCatalog = '';
   selectedTemplate = '';
   storageProfileLabel = StorageProfileState.Empty;
   templateLabel = TemplateState.Empty;
   catalogLabel = CatalogState.Empty;
   placementPolicyLabel = PlacementPolicyState.Empty;
+  sizingPolicyLabel = SizingPolicyState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _catalogChanges = new Subject<boolean>();
@@ -147,6 +158,14 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     if (this.isEnterpriseEdition) {
       this._quotaCalculationService = GlobalModule.injector.get(QuotaCalculationService);
     }
+  }
+
+  get placementPolicies(): VMwareCloudDirectorComputePolicy[] {
+    return this.computePolicies.filter(policy => !policy.isSizingOnly);
+  }
+
+  get sizingPolicies(): VMwareCloudDirectorComputePolicy[] {
+    return this.computePolicies.filter(policy => policy.isSizingOnly);
   }
 
   ngOnInit(): void {
@@ -179,7 +198,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.StorageProfile).valueChanges,
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.Catalog).valueChanges,
-      this.form.get(Controls.PlacementPolicy).valueChanges
+      this.form.get(Controls.PlacementPolicy).valueChanges,
+      this.form.get(Controls.SizingPolicy).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -206,9 +226,9 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultStorageProfile.bind(this));
 
-    this._placementPoliciesObservable
+    this._computePoliciesObservable
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._setDefaultPlacementPolicy.bind(this));
+      .subscribe(this._setDefaultComputePolicy.bind(this));
 
     this._catalogsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultCatalog.bind(this));
 
@@ -238,6 +258,12 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   onPlacementPolicyChanged(placementPolicy: string): void {
     this.selectedPlacementPolicy = placementPolicy;
     this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.placementPolicy = placementPolicy;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onSizingPolicyChanged(sizingPolicy: string): void {
+    this.selectedSizingPolicy = sizingPolicy;
+    this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.sizingPolicy = sizingPolicy;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -272,6 +298,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Template]: this._builder.control(values ? values.template : defaults.template, [Validators.required]),
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
       [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
+      [Controls.SizingPolicy]: this._builder.control(values ? values.sizingPolicy : defaults.sizingPolicy),
     });
   }
 
@@ -282,10 +309,10 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     );
   }
 
-  private get _placementPoliciesObservable(): Observable<VMwareCloudDirectorPlacementPolicy[]> {
-    return this._nodeDataService.vmwareclouddirector.placementPolicies(
-      this._clearPlacementPolicy.bind(this),
-      this._onPlacementPolicyLoading.bind(this)
+  private get _computePoliciesObservable(): Observable<VMwareCloudDirectorComputePolicy[]> {
+    return this._nodeDataService.vmwareclouddirector.computePolicies(
+      this._clearComputePolicy.bind(this),
+      this._onComputePolicyLoading.bind(this)
     );
   }
 
@@ -309,8 +336,10 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
-  private _onPlacementPolicyLoading(): void {
+  private _onComputePolicyLoading(): void {
     this.placementPolicyLabel = PlacementPolicyState.Loading;
+    this.sizingPolicyLabel = SizingPolicyState.Loading;
+
     this._cdr.detectChanges();
   }
 
@@ -322,11 +351,14 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
-  private _clearPlacementPolicy(): void {
+  private _clearComputePolicy(): void {
     this.selectedPlacementPolicy = '';
-    this.placementPolicies = [];
+    this.selectedSizingPolicy = '';
+    this.computePolicies = [];
     this.placementPolicyLabel = PlacementPolicyState.Empty;
+    this.sizingPolicyLabel = SizingPolicyState.Empty;
     this._placementPolicyCombobox.reset();
+    this._sizingPolicyCombobox.reset();
     this._cdr.detectChanges();
   }
 
@@ -354,18 +386,24 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
-  private _setDefaultPlacementPolicy(placementPolicies: VMwareCloudDirectorPlacementPolicy[]): void {
-    this.placementPolicies = placementPolicies;
+  private _setDefaultComputePolicy(computePolicies: VMwareCloudDirectorComputePolicy[]): void {
+    this.computePolicies = computePolicies;
     this.selectedPlacementPolicy = this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector?.placementPolicy;
+    this.selectedSizingPolicy = this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector?.sizingPolicy;
 
     if (
       this.selectedPlacementPolicy &&
-      !placementPolicies?.find(policy => policy.name === this.selectedPlacementPolicy)
+      !computePolicies?.find(policy => policy.name === this.selectedPlacementPolicy)
     ) {
       this.selectedPlacementPolicy = '';
     }
 
-    this.placementPolicyLabel = placementPolicies?.length ? PlacementPolicyState.Ready : PlacementPolicyState.Empty;
+    if (this.selectedSizingPolicy && !computePolicies?.find(policy => policy.name === this.selectedSizingPolicy)) {
+      this.selectedSizingPolicy = '';
+    }
+
+    this.placementPolicyLabel = computePolicies?.length ? PlacementPolicyState.Ready : PlacementPolicyState.Empty;
+    this.sizingPolicyLabel = computePolicies?.length ? SizingPolicyState.Ready : SizingPolicyState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -460,6 +498,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.Template]: this.form.get(Controls.Template).value?.[ComboboxControls.Select],
         [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
         [Controls.PlacementPolicy]: this.form.get(Controls.PlacementPolicy).value?.[ComboboxControls.Select],
+        [Controls.SizingPolicy]: this.form.get(Controls.SizingPolicy).value?.[ComboboxControls.Select],
       } as VMwareCloudDirectorNodeSpec,
     };
 
