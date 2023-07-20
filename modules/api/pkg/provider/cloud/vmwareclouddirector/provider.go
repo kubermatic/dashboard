@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -198,6 +199,29 @@ func ListOVDCNetworks(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirector
 	}
 
 	return orgVDCNetworks, nil
+}
+
+func ListComputePolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorComputePolicyList, error) {
+	client, err := NewClientWithAuth(auth)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
+	}
+
+	allPolicies, err := client.VCDClient.GetAllVdcComputePoliciesV2(url.Values{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get VDC compute policies %s: %w", auth.Organization, err)
+	}
+
+	var policies apiv1.VMwareCloudDirectorComputePolicyList
+	for _, policy := range allPolicies {
+		policies = append(policies, apiv1.VMwareCloudDirectorComputePolicy{
+			ID:           policy.VdcComputePolicyV2.ID,
+			Name:         policy.VdcComputePolicyV2.Name,
+			Description:  *policy.VdcComputePolicyV2.Description,
+			IsSizingOnly: policy.VdcComputePolicyV2.IsSizingOnly,
+		})
+	}
+	return policies, nil
 }
 
 func ListStorageProfiles(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorStorageProfileList, error) {

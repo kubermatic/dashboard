@@ -21,6 +21,7 @@ import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-d
 import {Cluster} from '@shared/entity/cluster';
 import {
   VMwareCloudDirectorCatalog,
+  VMwareCloudDirectorComputePolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
@@ -160,6 +161,53 @@ export class NodeDataVMwareCloudDirectorProvider {
                 this._clusterSpecService.cluster.id,
                 catalogName
               )
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+    }
+  }
+
+  computePolicies(
+    onError: () => void = undefined,
+    onLoadingCb: () => void = null
+  ): Observable<VMwareCloudDirectorComputePolicy[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VMWARECLOUDDIRECTOR))
+          .pipe(debounceTime(this._debounce))
+          .pipe(map(() => this._clusterSpecService.cluster))
+          .pipe(
+            switchMap(cluster =>
+              this._getProvider(cluster)
+                .computePolicies(cluster.spec.cloud.dc, onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog:
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(project =>
+              this._vmwareCloudDirectorService.getComputePolicies(project.id, this._clusterSpecService.cluster.id)
             )
           )
           .pipe(

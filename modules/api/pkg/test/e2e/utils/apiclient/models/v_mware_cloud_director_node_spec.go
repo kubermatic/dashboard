@@ -42,6 +42,12 @@ type VMwareCloudDirectorNodeSpec struct {
 	// network
 	Network string `json:"network,omitempty"`
 
+	// placement policy
+	PlacementPolicy string `json:"placementPolicy,omitempty"`
+
+	// sizing policy
+	SizingPolicy string `json:"sizingPolicy,omitempty"`
+
 	// storage profile
 	StorageProfile string `json:"storageProfile,omitempty"`
 

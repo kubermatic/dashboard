@@ -264,6 +264,14 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			cloudSpec.VMwareCloudDirector.Metadata = *config.Metadata
 		}
 
+		if config.SizingPolicy != nil {
+			cloudSpec.VMwareCloudDirector.SizingPolicy = config.SizingPolicy
+		}
+
+		if config.PlacementPolicy != nil {
+			cloudSpec.VMwareCloudDirector.PlacementPolicy = config.PlacementPolicy
+		}
+
 	case providerconfig.CloudProviderEquinixMetal, providerconfig.CloudProviderPacket:
 		config := &equinixmetal.RawConfig{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {

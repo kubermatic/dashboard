@@ -817,6 +817,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
 		Handler(r.listProjectVMwareCloudDirectorTemplates())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies").
+		Handler(r.listProjectVMwareCloudDirectorComputePolicies())
+
 	// AWS endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/aws/sizes").
@@ -1067,6 +1071,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}").
 		Handler(r.listVMwareCloudDirectorTemplatesNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies").
+		Handler(r.listVMwareCloudDirectorComputePoliciesNoCredentials())
 
 	kubernetesdashboard.
 		NewLoginHandler(r.settingsProvider).
@@ -4848,6 +4856,30 @@ func (r Routing) listVMwareCloudDirectorCatalogsNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies vmwareclouddirector listVMwareCloudDirectorComputePoliciesNoCredentials
+//
+// List VMware Cloud Director Compute Policies
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VMwareCloudDirectorComputePolicyList
+func (r Routing) listVMwareCloudDirectorComputePoliciesNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.VMwareCloudDirectorComputePoliciesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		provider.DecodeVMwareCloudDirectorNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name} vmwareclouddirector listVMwareCloudDirectorTemplatesNoCredentials
 //
 // List VMware Cloud Director Templates
@@ -6564,6 +6596,28 @@ func (r Routing) listProjectVMwareCloudDirectorStorageProfiles() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.VMwareCloudDirectorStorageProfilesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeVMwareCloudDirectorProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies vmwareclouddirector listProjectVMwareCloudDirectorComputePolicies
+//
+// List VMware Cloud Director Compute Policies
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: VMwareCloudDirectorComputePolicyList
+func (r Routing) listProjectVMwareCloudDirectorComputePolicies() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VMwareCloudDirectorComputePoliciesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeVMwareCloudDirectorProjectCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

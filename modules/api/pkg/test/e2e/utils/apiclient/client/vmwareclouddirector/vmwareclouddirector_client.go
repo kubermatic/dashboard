@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	ListProjectVMwareCloudDirectorCatalogs(params *ListProjectVMwareCloudDirectorCatalogsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVMwareCloudDirectorCatalogsOK, error)
 
+	ListProjectVMwareCloudDirectorComputePolicies(params *ListProjectVMwareCloudDirectorComputePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVMwareCloudDirectorComputePoliciesOK, error)
+
 	ListProjectVMwareCloudDirectorNetworks(params *ListProjectVMwareCloudDirectorNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVMwareCloudDirectorNetworksOK, error)
 
 	ListProjectVMwareCloudDirectorStorageProfiles(params *ListProjectVMwareCloudDirectorStorageProfilesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVMwareCloudDirectorStorageProfilesOK, error)
@@ -39,6 +41,8 @@ type ClientService interface {
 	ListVMwareCloudDirectorCatalogs(params *ListVMwareCloudDirectorCatalogsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVMwareCloudDirectorCatalogsOK, error)
 
 	ListVMwareCloudDirectorCatalogsNoCredentials(params *ListVMwareCloudDirectorCatalogsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVMwareCloudDirectorCatalogsNoCredentialsOK, error)
+
+	ListVMwareCloudDirectorComputePoliciesNoCredentials(params *ListVMwareCloudDirectorComputePoliciesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVMwareCloudDirectorComputePoliciesNoCredentialsOK, error)
 
 	ListVMwareCloudDirectorNetworks(params *ListVMwareCloudDirectorNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVMwareCloudDirectorNetworksOK, error)
 
@@ -90,6 +94,44 @@ func (a *Client) ListProjectVMwareCloudDirectorCatalogs(params *ListProjectVMwar
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectVMwareCloudDirectorCatalogsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectVMwareCloudDirectorComputePolicies List VMware Cloud Director Compute Policies
+*/
+func (a *Client) ListProjectVMwareCloudDirectorComputePolicies(params *ListProjectVMwareCloudDirectorComputePoliciesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVMwareCloudDirectorComputePoliciesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVMwareCloudDirectorComputePoliciesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVMwareCloudDirectorComputePolicies",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/computepolicies",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVMwareCloudDirectorComputePoliciesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVMwareCloudDirectorComputePoliciesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVMwareCloudDirectorComputePoliciesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -280,6 +322,44 @@ func (a *Client) ListVMwareCloudDirectorCatalogsNoCredentials(params *ListVMware
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVMwareCloudDirectorCatalogsNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVMwareCloudDirectorComputePoliciesNoCredentials List VMware Cloud Director Compute Policies
+*/
+func (a *Client) ListVMwareCloudDirectorComputePoliciesNoCredentials(params *ListVMwareCloudDirectorComputePoliciesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVMwareCloudDirectorComputePoliciesNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVMwareCloudDirectorComputePoliciesNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVMwareCloudDirectorComputePoliciesNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/computepolicies",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVMwareCloudDirectorComputePoliciesNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVMwareCloudDirectorComputePoliciesNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVMwareCloudDirectorComputePoliciesNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
