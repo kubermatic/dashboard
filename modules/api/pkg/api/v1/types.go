@@ -520,6 +520,19 @@ type VMwareCloudDirectorNetwork struct {
 // swagger:model VMwareCloudDirectorNetworkList
 type VMwareCloudDirectorNetworkList []VMwareCloudDirectorNetwork
 
+// VMwareCloudDirectorComputePolicy represents a VMware Cloud Director placement policy.
+// swagger:model VMwareCloudDirectorComputePolicy
+type VMwareCloudDirectorComputePolicy struct {
+	Name         string `json:"name"`
+	ID           string `json:"id"`
+	Description  string `json:"description,omitempty"`
+	IsSizingOnly bool   `json:"isSizingOnly,omitempty"`
+}
+
+// VMwareCloudDirectorNetworkList represents an array of VMware Cloud Director placement policies.
+// swagger:model VMwareCloudDirectorComputePolicyList
+type VMwareCloudDirectorComputePolicyList []VMwareCloudDirectorComputePolicy
+
 // VMwareCloudDirectorStorageProfile represents a VMware Cloud Director storage profile.
 // swagger:model VMwareCloudDirectorStorageProfile
 type VMwareCloudDirectorStorageProfile struct {
@@ -2339,6 +2352,8 @@ type VMwareCloudDirectorNodeSpec struct {
 	IPAllocationMode vcd.IPAllocationMode `json:"ipAllocationMode,omitempty"`
 	VApp             string               `json:"vapp,omitempty"`
 	Network          string               `json:"network,omitempty"`
+	PlacementPolicy  *string              `json:"placementPolicy,omitempty"`
+	SizingPolicy     *string              `json:"sizingPolicy,omitempty"`
 	// Additional metadata to set
 	// required: false
 	Metadata map[string]string `json:"metadata,omitempty"`
@@ -2392,6 +2407,8 @@ func (spec *VMwareCloudDirectorNodeSpec) MarshalJSON() ([]byte, error) {
 		VApp             string               `json:"vapp,omitempty"`
 		Network          string               `json:"network,omitempty"`
 		Metadata         map[string]string    `json:"metadata,omitempty"`
+		PlacementPolicy  *string              `json:"placementPolicy,omitempty"`
+		SizingPolicy     *string              `json:"sizingPolicy,omitempty"`
 	}{
 		CPUs:             spec.CPUs,
 		CPUCores:         spec.CPUCores,
@@ -2405,6 +2422,8 @@ func (spec *VMwareCloudDirectorNodeSpec) MarshalJSON() ([]byte, error) {
 		VApp:             spec.VApp,
 		Network:          spec.Network,
 		Metadata:         spec.Metadata,
+		PlacementPolicy:  spec.PlacementPolicy,
+		SizingPolicy:     spec.SizingPolicy,
 	}
 
 	return json.Marshal(&res)

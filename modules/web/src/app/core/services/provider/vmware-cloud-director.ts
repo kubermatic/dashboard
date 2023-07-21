@@ -17,6 +17,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {
   VMwareCloudDirectorCatalog,
+  VMwareCloudDirectorComputePolicy,
   VMwareCloudDirectorStorageProfile,
   VMwareCloudDirectorTemplate,
 } from '@shared/entity/provider/vmware-cloud-director';
@@ -36,6 +37,11 @@ export class VMwareCloudDirectorService {
   getCatalogs(projectID: string, clusterID: string): Observable<VMwareCloudDirectorCatalog[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/vmwareclouddirector/catalogs`;
     return this._httpClient.get<VMwareCloudDirectorCatalog[]>(url);
+  }
+
+  getComputePolicies(projectID: string, clusterID: string): Observable<VMwareCloudDirectorComputePolicy[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/vmwareclouddirector/computepolicies`;
+    return this._httpClient.get<VMwareCloudDirectorComputePolicy[]>(url);
   }
 
   getTemplates(projectID: string, clusterID: string, catalogName: string): Observable<VMwareCloudDirectorTemplate[]> {

@@ -302,6 +302,14 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 		config.Metadata = &nodeSpec.Cloud.VMwareCloudDirector.Metadata
 	}
 
+	if nodeSpec.Cloud.VMwareCloudDirector.SizingPolicy != nil {
+		config.SizingPolicy = nodeSpec.Cloud.VMwareCloudDirector.SizingPolicy
+	}
+
+	if nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy != nil {
+		config.PlacementPolicy = nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy
+	}
+
 	return config, nil
 }
 

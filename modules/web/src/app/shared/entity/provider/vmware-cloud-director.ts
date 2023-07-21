@@ -32,3 +32,10 @@ export class VMwareCloudDirectorCatalog {
 export class VMwareCloudDirectorTemplate {
   name: string;
 }
+
+export class VMwareCloudDirectorComputePolicy {
+  name: string;
+  id: string;
+  description: string;
+  isSizingOnly: boolean;
+}
