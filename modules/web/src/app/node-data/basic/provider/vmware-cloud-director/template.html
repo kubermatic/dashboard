@@ -73,7 +73,6 @@ limitations under the License.
                [options]="placementPolicies"
                [formControlName]="Controls.PlacementPolicy"
                [label]="placementPolicyLabel"
-               [required]="true"
                (changed)="onPlacementPolicyChanged($event)"
                inputLabel="Select placement policy..."
                filterBy="name">
@@ -85,7 +84,6 @@ limitations under the License.
                [options]="sizingPolicies"
                [formControlName]="Controls.SizingPolicy"
                [label]="sizingPolicyLabel"
-               [required]="true"
                (changed)="onSizingPolicyChanged($event)"
                inputLabel="Select sizing policy..."
                filterBy="name">
