@@ -11,10 +11,6 @@
     },
     {
       "category": "added",
-      "description": "Add support for configuring multiple networks for vSphere."
-    },
-    {
-      "category": "added",
       "description": "VMware Cloud Director: add support for configuring placement and sizing policy for machines."
     },
     {
