@@ -1,41 +1,33 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2224",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2225",
   "entries": [
     {
-        "category": "added",
-        "description": "Add option to disable deployment of default network policies in KubeVirt cluster."
-    },
-    {
-        "category": "added",
-        "description": "Add support for Kubernetes 1.24.15, 1.25.11 and 1.26.6 (fixing CVE-2023-2431, CVE-2023-2727 and CVE-2023-2728) and set default Kubernetes version to 1.25.11."
+        "category": "changed",
+        "description": "Use buildx instead of Buildah to create multi-architecture KKP container images."
     },
     {
         "category": "changed",
-        "description": "Force update for canal below 3.22 on k8s version 1.26 and above."
+        "description": "Metrics server write timeout increased."
     },
     {
         "category": "changed",
-        "description": "Limit EtcdDatabaseHighFragmentationRatio rule to avoid triggering excessively for small etcd instances."
-    },
-    {
-        "category": "changed",
-        "description": "Change `etcd-defragger` CronJob `SuccessfulJobsHistoryLimit` from 0 to 1 to save logs of the most recent successful job."
+        "description": "Update to Golang 1.19.10."
     },
     {
         "category": "fixed",
-        "description": "Fix a bug where redundant webhooks for OSM were not being removed from the seed cluster."
+        "description": "Fix default url configuration of Blackbox exporter."
     },
     {
         "category": "fixed",
-        "description": "Fix storage calculation for openstack's resource quota when custom disk size was provided."
+        "description": "Alertmanager now allows blackbox exporter to perform healthcheck API call without AuthFailure."
     },
     {
         "category": "fixed",
-        "description": "The kubeconfig used by konnectivity's server component gets renewed automatically now, no longer causing konnectivity to stop working when the embedded certificate expires."
+        "description": "Fix a bug where project scope endpoints for GCP were working only with the presets instead of one of presets or credentials."
     },
     {
         "category": "fixed",
-        "description": "Allow removing cluster label when PodNodeSelector admission plugin and clusterDefaultNodeSelector namespace are set."
+        "description": "OpenStack: Fix project and projectID header propagation for project scoped endpoints."
     }
   ]
 }
