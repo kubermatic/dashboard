@@ -11,11 +11,11 @@
     },
     {
       "category": "changed",
-      "description": "Update Cilium CNI to 1.13.4, marking 113.0 as deprecated but kept 1.13.3 because 1.13.4 breaks IPSec support."
+      "description": "Update Cilium CNI to 1.13.4, marking 1.13.0 as deprecated but kept 1.13.3 because 1.13.4 breaks IPSec support."
     },
     {
       "category": "fixed",
-      "description": "Fix default url configuration of Blacbox exporter."
+      "description": "Fix default url configuration of Blackbox exporter."
     },
     {
       "category": "fixed",
