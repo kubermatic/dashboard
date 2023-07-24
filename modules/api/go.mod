@@ -47,9 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.40.0
-	// Pinned to https://github.com/kubermatic/machine-controller/commit/7eab515b642dd3902b845d4861d1f41b4b37753e
-	// TODO: Replace this with v1.57.1 before release
-	github.com/kubermatic/machine-controller v1.57.1-0.20230707082432-7eab515b642d
+	github.com/kubermatic/machine-controller v1.57.1
 	github.com/minio/minio-go/v7 v7.0.49
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.9.0+
