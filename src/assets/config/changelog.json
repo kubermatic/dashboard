@@ -1,17 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22110",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22111",
   "entries": [
     {
-        "category": "added",
-        "description": "Add support for Kubernetes 1.24.15 (fixing CVE-2023-2431, CVE-2023-2727 and CVE-2023-2728)."
-    },
-    {
-        "category": "changed",
-        "description": "Change `etcd-defragger` CronJob `SuccessfulJobsHistoryLimit` from 0 to 1 to save logs of the most recent successful job."
+        "category": "fixed",
+        "description": "Fix default url configuration of Blackbox exporter."
     },
     {
         "category": "fixed",
-        "description": "The kubeconfig used by konnectivity's server component gets renewed automatically now, no longer causing konnectivity to stop working when the embedded certificate expires."
+        "description": "Metrics server write timeout increased."
     }
   ]
 }
