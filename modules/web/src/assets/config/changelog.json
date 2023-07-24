@@ -10,6 +10,14 @@
       "description": "Add support for configuring multiple networks for vSphere."
     },
     {
+      "category": "added",
+      "description": "Add support for configuring multiple networks for vSphere."
+    },
+    {
+      "category": "added",
+      "description": "VMware Cloud Director: add support for configuring placement and sizing policy for machines."
+    },
+    {
       "category": "changed",
       "description": "Update Cilium CNI to 1.13.4, marking 1.13.0 as deprecated but kept 1.13.3 because 1.13.4 breaks IPSec support."
     },
@@ -24,6 +32,14 @@
     {
       "category": "fixed",
       "description": "Replace `irate` with `rate` for node cpu usage graphs."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where project scope endpoints for GCP were working only with the presets instead of one of presets or credentials."
+    },
+    {
+      "category": "fixed",
+      "description": "OpenStack: Fix project and projectID header propagation for project scoped endpoints."
     }
   ]
 }
