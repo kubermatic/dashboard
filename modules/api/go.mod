@@ -47,9 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.40.0
-	// Pinned to https://github.com/kubermatic/machine-controller/commit/7eab515b642dd3902b845d4861d1f41b4b37753e
-	// TODO: Replace this with v1.57.1 before release
-	github.com/kubermatic/machine-controller v1.57.1-0.20230707082432-7eab515b642d
+	github.com/kubermatic/machine-controller v1.57.1
 	github.com/minio/minio-go/v7 v7.0.49
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230304011918-d82cbe189211 // v0.9.0+
@@ -69,8 +67,8 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.6.2
-	k8c.io/kubermatic/v2 v2.23.1-0.20230707115631-4aa4aa14544e
-	k8c.io/operating-system-manager v1.3.0
+	k8c.io/kubermatic/v2 v2.23.1-0.20230721225522-609280632926
+	k8c.io/operating-system-manager v1.3.1
 	k8c.io/reconciler v0.3.1
 	k8s.io/api v0.26.4
 	k8s.io/apiextensions-apiserver v0.26.4
@@ -104,8 +102,7 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	// Pinned to https://github.com/kubermatic/kubermatic/commit/4aa4aa14544e89c8ab85ff5428514585e326b3bf
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230707115631-4aa4aa14544e
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230721225522-609280632926
 )
 
 require (
