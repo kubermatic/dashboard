@@ -4,6 +4,8 @@
     "target": "ES2019",
     "strict": true,
     "baseUrl": "./",
+    "sourceMap": false,
+    "inlineSourceMap": true,
     "paths": {
       "@kmtypes": ["types"],
       "@kmtypes/*": ["types/*"],
