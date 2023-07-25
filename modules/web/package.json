@@ -72,7 +72,7 @@
     "@fontsource/inconsolata": "4.5.10",
     "@fontsource/roboto": "5.0.5",
     "@fontsource/roboto-mono": "5.0.5",
-    "@fontsource/ubuntu": "5.0.5",
+    "@fontsource/ubuntu": "4.5.11",
     "@swimlane/ngx-charts": "20.4.1",
     "buffer": "6.0.3",
     "core-js": "3.31.1",
