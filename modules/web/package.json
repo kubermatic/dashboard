@@ -39,7 +39,7 @@
     "fix:license": "license-check-and-add add -r 2023",
     "clean": "gts clean",
     "vi": "node version.js",
-    "postinstall": "ngcc && npm run vi",
+    "postinstall": "npm run vi",
     "prepare": "cd ../../ && husky install modules/web/.husky",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "eslint --fix",
@@ -97,9 +97,7 @@
     "swagger-ui": "5.2.0",
     "xterm": "5.2.1",
     "xterm-addon-fit": "0.7.0",
-    "zone.js": "0.13.1",
-    "eslint": "^8.45.0",
-    "prettier": "^3.0.0"
+    "zone.js": "0.13.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.1.5",
@@ -132,6 +130,7 @@
     "license-compliance": "2.0.0",
     "lint-staged": "13.2.3",
     "ng2-mock-component": "0.2.0",
+    "prettier": "^3.0.0",
     "start-server-and-test": "2.0.0",
     "stream": "0.0.2",
     "stylelint": "15.10.2",
