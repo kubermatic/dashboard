@@ -17,20 +17,20 @@ import {CommonModule, DecimalPipe} from '@angular/common';
 import {ModuleWithProviders, NgModule, Type} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
-import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
-import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
-import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
 import {MatRippleModule} from '@angular/material/core';
-import {MatLegacyOptionModule as MatOptionModule} from '@angular/material/legacy-core';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
 import {MatIconModule} from '@angular/material/icon';
+import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
+import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
+import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
+import {MatLegacyOptionModule as MatOptionModule} from '@angular/material/legacy-core';
+import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
@@ -38,20 +38,20 @@ import {
   MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
   MatLegacyPaginatorModule as MatPaginatorModule,
 } from '@angular/material/legacy-paginator';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
 import {MatLegacySliderModule as MatSliderModule} from '@angular/material/legacy-slider';
+import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
+import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatStepperModule} from '@angular/material/stepper';
-import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
-import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
@@ -61,21 +61,14 @@ import {ClusterStepComponent} from '@shared/components/add-external-cluster-dial
 import {AKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
 import {EKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 import {GKEClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {ApplicationMethodIconComponent} from '@shared/components/application-list/application-method-icon/component';
 import {ApplicationListComponent} from '@shared/components/application-list/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
-import {CredentialsStepComponent} from '@shared/components/external-cluster-credentials/component';
-import {CredentialsPresetsComponent} from '@shared/components/external-cluster-credentials/preset/component';
-import {AKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/aks/component';
-import {CustomCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/custom/component';
-import {EKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/eks/component';
-import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
-import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
-import {MachineFlavorFilterComponent} from '@shared/components/machine-flavor-filter/component';
-import {PaginationPageSizeComponent} from '@shared/components/pagination-page-size/component';
-import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
+import {ButtonComponent} from '@shared/components/button/component';
+import {ChipAutocompleteComponent} from '@shared/components/chip-autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateComponent} from '@shared/components/cluster-from-template/content/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
@@ -83,23 +76,37 @@ import {ClusterSummaryComponent} from '@shared/components/cluster-summary/compon
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
-import {SideNavExpansionMenuComponent} from '@shared/components/side-nav-field/component';
+import {CredentialsStepComponent} from '@shared/components/external-cluster-credentials/component';
+import {CredentialsPresetsComponent} from '@shared/components/external-cluster-credentials/preset/component';
+import {AKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/aks/component';
+import {CustomCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/custom/component';
+import {EKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/eks/component';
+import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
+import {MachineFlavorFilterComponent} from '@shared/components/machine-flavor-filter/component';
 import {NumberStepperComponent} from '@shared/components/number-stepper/component';
+import {PaginationPageSizeComponent} from '@shared/components/pagination-page-size/component';
 import {PropertyHealthComponent} from '@shared/components/property-health/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
+import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
+import {SideNavExpansionMenuComponent} from '@shared/components/side-nav-field/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {TerminalComponent} from '@shared/components/terminal/component';
+import {TerminalStatusBarComponent} from '@shared/components/terminal/terminal-status-bar/component';
+import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-toolbar/component';
+import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {SizeFormatterPipe} from '@shared/pipes/size';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ClipboardModule} from 'ngx-clipboard';
-import {FilterPipeModule} from 'ngx-filter-pipe';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {AddProjectDialogComponent} from './components/add-project-dialog/component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/component';
 import {AddonsListComponent} from './components/addon-list/component';
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/component';
+import {ChipListComponent} from './components/chip-list/component';
 import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
@@ -122,24 +129,17 @@ import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/component';
 import {RelativeTimeComponent} from './components/relativetime/component';
 import {SearchFieldComponent} from './components/search-field/component';
+import {SelectComponent} from './components/select/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/component';
-import {ChipListComponent} from './components/chip-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
-import {ThrottleClickDirective} from './directives/throttle-click';
-import {RelativeTimePipe} from './pipes/relativetime';
-import {ButtonComponent} from '@shared/components/button/component';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
-import {ChipAutocompleteComponent} from '@shared/components/chip-autocomplete/component';
-import {SelectComponent} from './components/select/component';
-import {TerminalComponent} from '@shared/components/terminal/component';
-import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-toolbar/component';
-import {TerminalStatusBarComponent} from '@shared/components/terminal/terminal-status-bar/component';
 import {InputPasswordDirective} from './directives/input-password';
+import {ThrottleClickDirective} from './directives/throttle-click';
 import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
+import {PipesModule} from './pipes/ngx-filter-pipe/module';
+import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules = [
   CommonModule,
@@ -183,7 +183,7 @@ const modules = [
   MatRippleModule,
   MatRadioModule,
   ScrollingModule,
-  FilterPipeModule,
+  PipesModule,
   MonacoEditorModule,
   NgxChartsModule,
 ];

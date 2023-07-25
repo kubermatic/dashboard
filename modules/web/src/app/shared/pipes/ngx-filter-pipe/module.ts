@@ -1,4 +1,4 @@
-// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {enableProdMode} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {environment} from '@environments/environment';
-import {AppModule} from './app';
-import './polyfills';
+import {NgModule} from '@angular/core';
+import {FilterPipe} from './ngx-filter-pipe';
 
-if (environment.production) {
-  enableProdMode();
-}
-platformBrowserDynamic().bootstrapModule(AppModule);
+@NgModule({
+  declarations: [FilterPipe],
+  exports: [FilterPipe],
+})
+export class PipesModule {}
