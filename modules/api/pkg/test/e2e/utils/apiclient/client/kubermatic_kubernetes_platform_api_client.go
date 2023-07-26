@@ -25,6 +25,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/constraint"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/constraints"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/constrainttemplates"
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/credentials"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/datacenter"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/default_cluster"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/digitalocean"
@@ -120,6 +121,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Kubermatic
 	cli.Constraint = constraint.New(transport, formats)
 	cli.Constraints = constraints.New(transport, formats)
 	cli.Constrainttemplates = constrainttemplates.New(transport, formats)
+	cli.Credentials = credentials.New(transport, formats)
 	cli.Datacenter = datacenter.New(transport, formats)
 	cli.DefaultCluster = default_cluster.New(transport, formats)
 	cli.Digitalocean = digitalocean.New(transport, formats)
@@ -230,6 +232,8 @@ type KubermaticKubernetesPlatformAPI struct {
 
 	Constrainttemplates constrainttemplates.ClientService
 
+	Credentials credentials.ClientService
+
 	Datacenter datacenter.ClientService
 
 	DefaultCluster default_cluster.ClientService
@@ -323,6 +327,7 @@ func (c *KubermaticKubernetesPlatformAPI) SetTransport(transport runtime.ClientT
 	c.Constraint.SetTransport(transport)
 	c.Constraints.SetTransport(transport)
 	c.Constrainttemplates.SetTransport(transport)
+	c.Credentials.SetTransport(transport)
 	c.Datacenter.SetTransport(transport)
 	c.DefaultCluster.SetTransport(transport)
 	c.Digitalocean.SetTransport(transport)

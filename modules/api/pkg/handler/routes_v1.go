@@ -32,6 +32,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/dc"
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	"k8c.io/dashboard/v2/pkg/handler/v1/node"
+	"k8c.io/dashboard/v2/pkg/handler/v1/presets"
 	"k8c.io/dashboard/v2/pkg/handler/v1/project"
 	"k8c.io/dashboard/v2/pkg/handler/v1/seed"
 	"k8c.io/dashboard/v2/pkg/handler/v1/serviceaccount"
@@ -441,6 +442,10 @@ func (r Routing) RegisterV1(mux *mux.Router, metrics common.ServerMetrics) {
 	mux.Methods(http.MethodGet).
 		Path("/admission/plugins/{version}").
 		Handler(r.getAdmissionPlugins())
+
+	mux.Methods(http.MethodGet).
+		Path("/providers/{provider_name}/presets/credentials").
+		Handler(r.listCredentials())
 }
 
 // swagger:route GET /api/v1/projects/{project_id}/sshkeys project listSSHKeys
@@ -2848,6 +2853,28 @@ func (r Routing) getAdmissionPlugins() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(admissionplugin.GetAdmissionPluginEndpoint(r.admissionPluginProvider)),
 		admissionplugin.DecodeGetAdmissionPlugin,
+		EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v1/providers/{provider_name}/presets/credentials credentials listCredentials
+//
+// Lists credential names for the provider
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: CredentialList
+func (r Routing) listCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(presets.CredentialEndpoint(r.presetProvider, r.userInfoGetter)),
+		presets.DecodeProviderReq,
 		EncodeJSON,
 		r.defaultServerOptions()...,
 	)

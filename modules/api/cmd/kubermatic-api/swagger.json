@@ -5659,6 +5659,47 @@
         }
       }
     },
+    "/api/v1/providers/{provider_name}/presets/credentials": {
+      "get": {
+        "description": "Lists credential names for the provider",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "credentials"
+        ],
+        "operationId": "listCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProviderName",
+            "name": "provider_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Datacenter",
+            "name": "datacenter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CredentialList",
+            "schema": {
+              "$ref": "#/definitions/CredentialList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/seed": {
       "get": {
         "produces": [
