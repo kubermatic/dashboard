@@ -36,11 +36,8 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	apiclient "k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/admin"
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/azure"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/credentials"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/datacenter"
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/digitalocean"
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/gcp"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/project"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/serviceaccounts"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/tokens"
@@ -857,66 +854,6 @@ func convertCluster(cluster *models.Cluster) (*apiv1.Cluster, error) {
 	return apiCluster, nil
 }
 
-// ListGCPZones returns list of GCP zones.
-func (r *TestClient) ListGCPZones(credential, dc string) ([]string, error) {
-	params := &gcp.ListGCPZonesParams{Credential: &credential, DC: dc}
-	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
-
-	zonesResponse, err := r.client.Gcp.ListGCPZones(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	names := make([]string, 0)
-	for _, name := range zonesResponse.Payload {
-		names = append(names, name.Name)
-	}
-
-	return names, nil
-}
-
-// ListGCPDiskTypes returns list of GCP disk types.
-func (r *TestClient) ListGCPDiskTypes(credential, zone string) ([]string, error) {
-	params := &gcp.ListGCPDiskTypesParams{Credential: &credential, Zone: &zone}
-	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
-
-	typesResponse, err := r.client.Gcp.ListGCPDiskTypes(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	names := make([]string, 0)
-	for _, name := range typesResponse.Payload {
-		names = append(names, name.Name)
-	}
-
-	return names, nil
-}
-
-// ListGCPSizes returns list of GCP sizes.
-func (r *TestClient) ListGCPSizes(credential, zone string) ([]apiv1.GCPMachineSize, error) {
-	params := &gcp.ListGCPSizesParams{Credential: &credential, Zone: &zone}
-	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
-
-	sizesResponse, err := r.client.Gcp.ListGCPSizes(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	sizes := make([]apiv1.GCPMachineSize, 0)
-	for _, machineType := range sizesResponse.Payload {
-		mt := apiv1.GCPMachineSize{
-			Name:        machineType.Name,
-			Description: machineType.Description,
-			Memory:      machineType.Memory,
-			VCPUs:       machineType.VCPUs,
-		}
-		sizes = append(sizes, mt)
-	}
-
-	return sizes, nil
-}
-
 // IsHealthyCluster check if all cluster components are up.
 func IsHealthyCluster(healthStatus *apiv1.ClusterHealth) bool {
 	return healthStatus != nil &&
@@ -1196,40 +1133,6 @@ func (r *TestClient) GetRoleBindings(projectID, dc, clusterID string) ([]apiv1.R
 	}
 
 	return roleBindings, nil
-}
-
-func (r *TestClient) GetClusterBindings(projectID, dc, clusterID string) ([]apiv1.ClusterRoleBinding, error) {
-	params := &project.ListClusterRoleBindingParams{DC: dc, ProjectID: projectID, ClusterID: clusterID}
-	SetupRetryParams(r.test, params, Backoff{
-		Steps:    4,
-		Duration: 10 * time.Millisecond,
-		Factor:   5.0,
-		Jitter:   0.1,
-	})
-
-	response, err := r.client.Project.ListClusterRoleBinding(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	clusterRoleBindings := []apiv1.ClusterRoleBinding{}
-	for _, roleBinding := range response.Payload {
-		subjects := []rbacv1.Subject{}
-		for _, subject := range roleBinding.Subjects {
-			subjects = append(subjects, rbacv1.Subject{
-				Kind:     subject.Kind,
-				APIGroup: subject.APIGroup,
-				Name:     subject.Name,
-			})
-		}
-
-		clusterRoleBindings = append(clusterRoleBindings, apiv1.ClusterRoleBinding{
-			RoleRefName: roleBinding.RoleRefName,
-			Subjects:    subjects,
-		})
-	}
-
-	return clusterRoleBindings, nil
 }
 
 func (r *TestClient) UpdateCluster(projectID, dc, clusterID string, patch PatchCluster) (*apiv1.Cluster, error) {
@@ -1698,45 +1601,6 @@ func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount b
 		Clusters:     clusters,
 		ErrorMessage: &clusterList.Payload.ErrorMessage,
 	}, nil
-}
-
-// ListDOSizes returns list DO sizes.
-func (r *TestClient) ListDOSizes(credential string) (*models.DigitaloceanSizeList, error) {
-	params := &digitalocean.ListDigitaloceanSizesParams{
-		Credential: &credential,
-	}
-	SetupRetryParams(r.test, params, Backoff{
-		Duration: 1 * time.Second,
-		Steps:    4,
-		Factor:   1.5,
-	})
-
-	sizesResponse, err := r.client.Digitalocean.ListDigitaloceanSizes(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	return sizesResponse.Payload, nil
-}
-
-// ListAzureSizes returns list Azure sizes.
-func (r *TestClient) ListAzureSizes(credential, location string) (models.AzureSizeList, error) {
-	params := azure.NewListAzureSizesParamsWithTimeout(time.Second * 30)
-	params.Credential = &credential
-	params.Location = &location
-
-	SetupRetryParams(r.test, params, Backoff{
-		Duration: 1 * time.Second,
-		Steps:    4,
-		Factor:   1.5,
-	})
-
-	sizesResponse, err := r.client.Azure.ListAzureSizes(params, r.bearerToken)
-	if err != nil {
-		return nil, err
-	}
-
-	return sizesResponse.Payload, nil
 }
 
 func (r *TestClient) ConnectClusterTerminal(token, clusterID, projectID string) (*websocket.Conn, error) {

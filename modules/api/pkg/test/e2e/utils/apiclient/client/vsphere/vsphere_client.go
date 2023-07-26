@@ -40,15 +40,7 @@ type ClientService interface {
 
 	ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error)
 
-	ListVSphereFolders(params *ListVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersOK, error)
-
-	ListVSphereFoldersNoCredentials(params *ListVSphereFoldersNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsOK, error)
-
 	ListVSphereFoldersNoCredentialsV2(params *ListVSphereFoldersNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsV2OK, error)
-
-	ListVSphereNetworks(params *ListVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksOK, error)
-
-	ListVSphereNetworksNoCredentials(params *ListVSphereNetworksNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsOK, error)
 
 	ListVSphereNetworksNoCredentialsV2(params *ListVSphereNetworksNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsV2OK, error)
 
@@ -288,82 +280,6 @@ func (a *Client) ListVSphereDatastores(params *ListVSphereDatastoresParams, auth
 }
 
 /*
-ListVSphereFolders Lists folders from vsphere datacenter
-*/
-func (a *Client) ListVSphereFolders(params *ListVSphereFoldersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListVSphereFoldersParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listVSphereFolders",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/vsphere/folders",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListVSphereFoldersReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListVSphereFoldersOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListVSphereFoldersDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListVSphereFoldersNoCredentials Lists folders from vsphere datacenter
-*/
-func (a *Client) ListVSphereFoldersNoCredentials(params *ListVSphereFoldersNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListVSphereFoldersNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listVSphereFoldersNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/providers/vsphere/folders",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListVSphereFoldersNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListVSphereFoldersNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListVSphereFoldersNoCredentialsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
 ListVSphereFoldersNoCredentialsV2 Lists folders from vsphere datacenter
 */
 func (a *Client) ListVSphereFoldersNoCredentialsV2(params *ListVSphereFoldersNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsV2OK, error) {
@@ -398,82 +314,6 @@ func (a *Client) ListVSphereFoldersNoCredentialsV2(params *ListVSphereFoldersNoC
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVSphereFoldersNoCredentialsV2Default)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListVSphereNetworks Lists networks from vsphere datacenter
-*/
-func (a *Client) ListVSphereNetworks(params *ListVSphereNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListVSphereNetworksParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listVSphereNetworks",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/vsphere/networks",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListVSphereNetworksReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListVSphereNetworksOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListVSphereNetworksDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListVSphereNetworksNoCredentials Lists networks from vsphere datacenter
-*/
-func (a *Client) ListVSphereNetworksNoCredentials(params *ListVSphereNetworksNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereNetworksNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListVSphereNetworksNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listVSphereNetworksNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/providers/vsphere/networks",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListVSphereNetworksNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListVSphereNetworksNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListVSphereNetworksNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

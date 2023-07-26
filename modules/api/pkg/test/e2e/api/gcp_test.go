@@ -18,153 +18,155 @@ limitations under the License.
 
 package api
 
-import (
-	"context"
-	"sort"
-	"testing"
+// TODO: We need to remove dependency of E2E tests on V1 API.
 
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils"
+// import (
+// 	"context"
+// 	"sort"
+// 	"testing"
 
-	"k8s.io/apimachinery/pkg/api/equality"
-	"k8s.io/apimachinery/pkg/util/sets"
-)
+// 	"k8c.io/dashboard/v2/pkg/test/e2e/utils"
 
-func TestGCPZones(t *testing.T) {
-	tests := []struct {
-		name                string
-		provider            string
-		expectedCredentials []string
-		datacenter          string
-		resultList          []string
-	}{
-		{
-			name:                "test, get GCP zones",
-			provider:            "gcp",
-			expectedCredentials: []string{"e2e-gcp"},
-			datacenter:          "gcp-westeurope",
-			resultList:          []string{"europe-west3-a", "europe-west3-b", "europe-west3-c"},
-		},
-	}
+// 	"k8s.io/apimachinery/pkg/api/equality"
+// 	"k8s.io/apimachinery/pkg/util/sets"
+// )
 
-	ctx := context.Background()
+// func TestGCPZones(t *testing.T) {
+// 	tests := []struct {
+// 		name                string
+// 		provider            string
+// 		expectedCredentials []string
+// 		datacenter          string
+// 		resultList          []string
+// 	}{
+// 		{
+// 			name:                "test, get GCP zones",
+// 			provider:            "gcp",
+// 			expectedCredentials: []string{"e2e-gcp"},
+// 			datacenter:          "gcp-westeurope",
+// 			resultList:          []string{"europe-west3-a", "europe-west3-b", "europe-west3-c"},
+// 		},
+// 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			masterToken, err := utils.RetrieveMasterToken(ctx)
-			if err != nil {
-				t.Fatalf("failed to get master token: %v", err)
-			}
+// 	ctx := context.Background()
 
-			testClient := utils.NewTestClient(masterToken, t)
-			credentialList, err := testClient.ListCredentials(tc.provider, "")
-			if err != nil {
-				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
-			}
-			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
-				t.Fatalf("expected: %v, got %v", tc.expectedCredentials, credentialList)
-			}
+// 	for _, tc := range tests {
+// 		t.Run(tc.name, func(t *testing.T) {
+// 			masterToken, err := utils.RetrieveMasterToken(ctx)
+// 			if err != nil {
+// 				t.Fatalf("failed to get master token: %v", err)
+// 			}
 
-			zoneList, err := testClient.ListGCPZones(credentialList[0], tc.datacenter)
-			if err != nil {
-				t.Fatalf("failed to get zones %v", err)
-			}
+// 			testClient := utils.NewTestClient(masterToken, t)
+// 			credentialList, err := testClient.ListCredentials(tc.provider, "")
+// 			if err != nil {
+// 				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
+// 			}
+// 			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
+// 				t.Fatalf("expected: %v, got %v", tc.expectedCredentials, credentialList)
+// 			}
 
-			sort.Strings(zoneList)
-			sort.Strings(tc.resultList)
+// 			zoneList, err := testClient.ListGCPZones(credentialList[0], tc.datacenter)
+// 			if err != nil {
+// 				t.Fatalf("failed to get zones %v", err)
+// 			}
 
-			if !equality.Semantic.DeepEqual(tc.resultList, zoneList) {
-				t.Fatalf("expected: %v, but got %v", tc.resultList, zoneList)
-			}
-		})
-	}
-}
+// 			sort.Strings(zoneList)
+// 			sort.Strings(tc.resultList)
 
-func TestGCPDiskTypes(t *testing.T) {
-	tests := []struct {
-		name                string
-		provider            string
-		expectedCredentials []string
-		zone                string
-		resultList          []string
-	}{
-		{
-			name:                "test, get GCP disk types",
-			provider:            "gcp",
-			expectedCredentials: []string{"e2e-gcp"},
-			zone:                "europe-west3-c",
-			resultList:          []string{"pd-ssd", "pd-standard"},
-		},
-	}
+// 			if !equality.Semantic.DeepEqual(tc.resultList, zoneList) {
+// 				t.Fatalf("expected: %v, but got %v", tc.resultList, zoneList)
+// 			}
+// 		})
+// 	}
+// }
 
-	ctx := context.Background()
+// func TestGCPDiskTypes(t *testing.T) {
+// 	tests := []struct {
+// 		name                string
+// 		provider            string
+// 		expectedCredentials []string
+// 		zone                string
+// 		resultList          []string
+// 	}{
+// 		{
+// 			name:                "test, get GCP disk types",
+// 			provider:            "gcp",
+// 			expectedCredentials: []string{"e2e-gcp"},
+// 			zone:                "europe-west3-c",
+// 			resultList:          []string{"pd-ssd", "pd-standard"},
+// 		},
+// 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			masterToken, err := utils.RetrieveMasterToken(ctx)
-			if err != nil {
-				t.Fatalf("failed to get master token: %v", err)
-			}
+// 	ctx := context.Background()
 
-			testClient := utils.NewTestClient(masterToken, t)
-			credentialList, err := testClient.ListCredentials(tc.provider, "")
-			if err != nil {
-				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
-			}
-			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
-				t.Fatalf("expected: %v, got %v", tc.expectedCredentials, credentialList)
-			}
+// 	for _, tc := range tests {
+// 		t.Run(tc.name, func(t *testing.T) {
+// 			masterToken, err := utils.RetrieveMasterToken(ctx)
+// 			if err != nil {
+// 				t.Fatalf("failed to get master token: %v", err)
+// 			}
 
-			diskTypeList, err := testClient.ListGCPDiskTypes(credentialList[0], tc.zone)
-			if err != nil {
-				t.Fatalf("failed to get disk types: %v", err)
-			}
+// 			testClient := utils.NewTestClient(masterToken, t)
+// 			credentialList, err := testClient.ListCredentials(tc.provider, "")
+// 			if err != nil {
+// 				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
+// 			}
+// 			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
+// 				t.Fatalf("expected: %v, got %v", tc.expectedCredentials, credentialList)
+// 			}
 
-			expectedDiskTypeList := sets.New(diskTypeList...)
+// 			diskTypeList, err := testClient.ListGCPDiskTypes(credentialList[0], tc.zone)
+// 			if err != nil {
+// 				t.Fatalf("failed to get disk types: %v", err)
+// 			}
 
-			if !expectedDiskTypeList.HasAll(tc.resultList...) {
-				t.Fatalf("expected: %v, but got %v", tc.resultList, diskTypeList)
-			}
-		})
-	}
-}
+// 			expectedDiskTypeList := sets.New(diskTypeList...)
 
-func TestGCPSizes(t *testing.T) {
-	tests := []struct {
-		name                string
-		provider            string
-		expectedCredentials []string
-		zone                string
-	}{
-		{
-			name:                "test, get GCP sizes",
-			provider:            "gcp",
-			expectedCredentials: []string{"e2e-gcp"},
-			zone:                "europe-west3-c",
-		},
-	}
+// 			if !expectedDiskTypeList.HasAll(tc.resultList...) {
+// 				t.Fatalf("expected: %v, but got %v", tc.resultList, diskTypeList)
+// 			}
+// 		})
+// 	}
+// }
 
-	ctx := context.Background()
+// func TestGCPSizes(t *testing.T) {
+// 	tests := []struct {
+// 		name                string
+// 		provider            string
+// 		expectedCredentials []string
+// 		zone                string
+// 	}{
+// 		{
+// 			name:                "test, get GCP sizes",
+// 			provider:            "gcp",
+// 			expectedCredentials: []string{"e2e-gcp"},
+// 			zone:                "europe-west3-c",
+// 		},
+// 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			masterToken, err := utils.RetrieveMasterToken(ctx)
-			if err != nil {
-				t.Fatalf("failed to get master token: %v", err)
-			}
+// 	ctx := context.Background()
 
-			testClient := utils.NewTestClient(masterToken, t)
-			credentialList, err := testClient.ListCredentials(tc.provider, "")
-			if err != nil {
-				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
-			}
-			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
-				t.Fatalf("expected: %v, but got %v", tc.expectedCredentials, credentialList)
-			}
+// 	for _, tc := range tests {
+// 		t.Run(tc.name, func(t *testing.T) {
+// 			masterToken, err := utils.RetrieveMasterToken(ctx)
+// 			if err != nil {
+// 				t.Fatalf("failed to get master token: %v", err)
+// 			}
 
-			_, err = testClient.ListGCPSizes(credentialList[0], tc.zone)
-			if err != nil {
-				t.Fatalf("failed to get sizes: %v", err)
-			}
-		})
-	}
-}
+// 			testClient := utils.NewTestClient(masterToken, t)
+// 			credentialList, err := testClient.ListCredentials(tc.provider, "")
+// 			if err != nil {
+// 				t.Fatalf("failed to get credential names for provider %s: %v", tc.provider, err)
+// 			}
+// 			if !equality.Semantic.DeepEqual(tc.expectedCredentials, credentialList) {
+// 				t.Fatalf("expected: %v, but got %v", tc.expectedCredentials, credentialList)
+// 			}
+
+// 			_, err = testClient.ListGCPSizes(credentialList[0], tc.zone)
+// 			if err != nil {
+// 				t.Fatalf("failed to get sizes: %v", err)
+// 			}
+// 		})
+// 	}
+// }

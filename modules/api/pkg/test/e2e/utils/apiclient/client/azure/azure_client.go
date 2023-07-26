@@ -28,10 +28,6 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListAzureAvailabilityZones(params *ListAzureAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureAvailabilityZonesOK, error)
-
-	ListAzureAvailabilityZonesNoCredentials(params *ListAzureAvailabilityZonesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureAvailabilityZonesNoCredentialsOK, error)
-
 	ListAzureAvailabilityZonesNoCredentialsV2(params *ListAzureAvailabilityZonesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureAvailabilityZonesNoCredentialsV2OK, error)
 
 	ListAzureResourceGroups(params *ListAzureResourceGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureResourceGroupsOK, error)
@@ -39,10 +35,6 @@ type ClientService interface {
 	ListAzureRouteTables(params *ListAzureRouteTablesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureRouteTablesOK, error)
 
 	ListAzureSecurityGroups(params *ListAzureSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSecurityGroupsOK, error)
-
-	ListAzureSizes(params *ListAzureSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSizesOK, error)
-
-	ListAzureSizesNoCredentials(params *ListAzureSizesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSizesNoCredentialsOK, error)
 
 	ListAzureSizesNoCredentialsV2(params *ListAzureSizesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSizesNoCredentialsV2OK, error)
 
@@ -65,82 +57,6 @@ type ClientService interface {
 	ListProjectAzureVnets(params *ListProjectAzureVnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureVnetsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-ListAzureAvailabilityZones Lists VM availability zones in an Azure region
-*/
-func (a *Client) ListAzureAvailabilityZones(params *ListAzureAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureAvailabilityZonesOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAzureAvailabilityZonesParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAzureAvailabilityZones",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/azure/availabilityzones",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAzureAvailabilityZonesReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAzureAvailabilityZonesOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAzureAvailabilityZonesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListAzureAvailabilityZonesNoCredentials Lists available VM availability zones in an Azure region
-*/
-func (a *Client) ListAzureAvailabilityZonesNoCredentials(params *ListAzureAvailabilityZonesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureAvailabilityZonesNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAzureAvailabilityZonesNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAzureAvailabilityZonesNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/providers/azure/availabilityzones",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAzureAvailabilityZonesNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAzureAvailabilityZonesNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAzureAvailabilityZonesNoCredentialsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -292,82 +208,6 @@ func (a *Client) ListAzureSecurityGroups(params *ListAzureSecurityGroupsParams, 
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListAzureSecurityGroupsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListAzureSizes Lists available VM sizes in an Azure region
-*/
-func (a *Client) ListAzureSizes(params *ListAzureSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSizesOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAzureSizesParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAzureSizes",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/azure/sizes",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAzureSizesReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAzureSizesOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAzureSizesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListAzureSizesNoCredentials Lists available VM sizes in an Azure region
-*/
-func (a *Client) ListAzureSizesNoCredentials(params *ListAzureSizesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureSizesNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAzureSizesNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAzureSizesNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/providers/azure/sizes",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAzureSizesNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAzureSizesNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAzureSizesNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
