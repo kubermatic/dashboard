@@ -3,23 +3,11 @@
   "entries": [
     {
         "category": "changed",
-        "description": "Use buildx instead of Buildah to create multi-architecture KKP container images."
+        "description": "Update machine-controller to v1.56.4."
     },
     {
         "category": "changed",
         "description": "Metrics server write timeout increased."
-    },
-    {
-        "category": "changed",
-        "description": "Update to Golang 1.19.10."
-    },
-    {
-        "category": "fixed",
-        "description": "Fix default url configuration of Blackbox exporter."
-    },
-    {
-        "category": "fixed",
-        "description": "Alertmanager now allows blackbox exporter to perform healthcheck API call without AuthFailure."
     },
     {
         "category": "fixed",
