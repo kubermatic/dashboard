@@ -100,8 +100,6 @@ type ClientService interface {
 
 	DeleteNodeDeployment(params *DeleteNodeDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteNodeDeploymentOK, error)
 
-	DeleteNodeForClusterLegacy(params *DeleteNodeForClusterLegacyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteNodeForClusterLegacyOK, error)
-
 	DeleteProject(params *DeleteProjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteProjectOK, error)
 
 	DeleteRole(params *DeleteRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteRoleOK, error)
@@ -193,8 +191,6 @@ type ClientService interface {
 	ListCNIPluginVersionsForCluster(params *ListCNIPluginVersionsForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCNIPluginVersionsForClusterOK, error)
 
 	ListClusterRole(params *ListClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleOK, error)
-
-	ListClusterRoleBinding(params *ListClusterRoleBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleBindingOK, error)
 
 	ListClusterRoleBindingV2(params *ListClusterRoleBindingV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleBindingV2OK, error)
 
@@ -319,8 +315,6 @@ type ClientService interface {
 	RevokeClusterViewerToken(params *RevokeClusterViewerTokenParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RevokeClusterViewerTokenOK, error)
 
 	RevokeClusterViewerTokenV2(params *RevokeClusterViewerTokenV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RevokeClusterViewerTokenV2OK, error)
-
-	UnbindUserFromClusterRoleBinding(params *UnbindUserFromClusterRoleBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UnbindUserFromClusterRoleBindingOK, error)
 
 	UnbindUserFromClusterRoleBindingV2(params *UnbindUserFromClusterRoleBindingV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UnbindUserFromClusterRoleBindingV2OK, error)
 
@@ -1710,46 +1704,6 @@ func (a *Client) DeleteNodeDeployment(params *DeleteNodeDeploymentParams, authIn
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteNodeDeploymentDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-DeleteNodeForClusterLegacy deprecateds deletes the given node that belongs to the cluster
-
-This endpoint is deprecated, please create a Node Deployment instead.
-*/
-func (a *Client) DeleteNodeForClusterLegacy(params *DeleteNodeForClusterLegacyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteNodeForClusterLegacyOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteNodeForClusterLegacyParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "deleteNodeForClusterLegacy",
-		Method:             "DELETE",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/{node_id}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &DeleteNodeForClusterLegacyReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*DeleteNodeForClusterLegacyOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*DeleteNodeForClusterLegacyDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3498,44 +3452,6 @@ func (a *Client) ListClusterRole(params *ListClusterRoleParams, authInfo runtime
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListClusterRoleDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListClusterRoleBinding List cluster role binding
-*/
-func (a *Client) ListClusterRoleBinding(params *ListClusterRoleBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleBindingOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListClusterRoleBindingParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listClusterRoleBinding",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterbindings",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListClusterRoleBindingReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListClusterRoleBindingOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListClusterRoleBindingDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5906,44 +5822,6 @@ func (a *Client) RevokeClusterViewerTokenV2(params *RevokeClusterViewerTokenV2Pa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*RevokeClusterViewerTokenV2Default)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-UnbindUserFromClusterRoleBinding Unbinds user from cluster role binding
-*/
-func (a *Client) UnbindUserFromClusterRoleBinding(params *UnbindUserFromClusterRoleBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UnbindUserFromClusterRoleBindingOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUnbindUserFromClusterRoleBindingParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "unbindUserFromClusterRoleBinding",
-		Method:             "DELETE",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &UnbindUserFromClusterRoleBindingReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*UnbindUserFromClusterRoleBindingOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*UnbindUserFromClusterRoleBindingDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

@@ -28,89 +28,9 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListPacketSizes(params *ListPacketSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesOK, error)
-
-	ListPacketSizesNoCredentials(params *ListPacketSizesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesNoCredentialsOK, error)
-
 	ListPacketSizesNoCredentialsV2(params *ListPacketSizesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesNoCredentialsV2OK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-ListPacketSizes Lists sizes from packet
-*/
-func (a *Client) ListPacketSizes(params *ListPacketSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListPacketSizesParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listPacketSizes",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/packet/sizes",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListPacketSizesReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListPacketSizesOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListPacketSizesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListPacketSizesNoCredentials Lists sizes from packet
-*/
-func (a *Client) ListPacketSizesNoCredentials(params *ListPacketSizesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListPacketSizesNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listPacketSizesNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/providers/packet/sizes",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListPacketSizesNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListPacketSizesNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListPacketSizesNoCredentialsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

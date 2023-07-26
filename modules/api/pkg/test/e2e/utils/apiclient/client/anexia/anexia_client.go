@@ -28,11 +28,7 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
-	ListAnexiaTemplates(params *ListAnexiaTemplatesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaTemplatesOK, error)
-
 	ListAnexiaTemplatesNoCredentialsV2(params *ListAnexiaTemplatesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaTemplatesNoCredentialsV2OK, error)
-
-	ListAnexiaVlans(params *ListAnexiaVlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaVlansOK, error)
 
 	ListAnexiaVlansNoCredentialsV2(params *ListAnexiaVlansNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaVlansNoCredentialsV2OK, error)
 
@@ -41,44 +37,6 @@ type ClientService interface {
 	ListProjectAnexiaVlans(params *ListProjectAnexiaVlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAnexiaVlansOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
-}
-
-/*
-ListAnexiaTemplates Lists templates from anexia
-*/
-func (a *Client) ListAnexiaTemplates(params *ListAnexiaTemplatesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaTemplatesOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAnexiaTemplatesParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAnexiaTemplates",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/anexia/templates",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAnexiaTemplatesReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAnexiaTemplatesOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAnexiaTemplatesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -116,44 +74,6 @@ func (a *Client) ListAnexiaTemplatesNoCredentialsV2(params *ListAnexiaTemplatesN
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListAnexiaTemplatesNoCredentialsV2Default)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListAnexiaVlans Lists vlans from anexia
-*/
-func (a *Client) ListAnexiaVlans(params *ListAnexiaVlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaVlansOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListAnexiaVlansParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listAnexiaVlans",
-		Method:             "GET",
-		PathPattern:        "/api/v1/providers/anexia/vlans",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListAnexiaVlansReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListAnexiaVlansOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListAnexiaVlansDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
