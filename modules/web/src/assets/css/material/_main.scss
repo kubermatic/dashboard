@@ -137,6 +137,15 @@ km-wizard {
 
   .km-stepper-in-dialog {
     padding: 20px 24px;
+
+  }
+
+  .mat-stepper-horizontal .mat-horizontal-content-container {
+    margin-right: -24px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-left: 1px; // To avoid clipping of tiles border in dialog e.g. install addon dialog
+    padding-right: 24px;
   }
 }
 
