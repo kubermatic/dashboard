@@ -7,7 +7,7 @@
     },
     {
       "category": "added",
-      "description": "Add support for configuring multiple networks for vSphere."
+      "description": "vSphere: Add support for configuring multiple networks."
     },
     {
       "category": "added",
@@ -18,16 +18,12 @@
       "description": "Update Cilium CNI to 1.13.4, marking 1.13.0 as deprecated but kept 1.13.3 because 1.13.4 breaks IPSec support."
     },
     {
-      "category": "fixed",
-      "description": "Fix default url configuration of Blackbox exporter."
+      "category": "changed",
+      "description": "Update machine-controller to v1.57.1."
     },
     {
       "category": "fixed",
       "description": "Hetzner CSI: recreate CSIDriver to allow upgrade from 1.6.0 to 2.2.0."
-    },
-    {
-      "category": "fixed",
-      "description": "Replace `irate` with `rate` for node cpu usage graphs."
     },
     {
       "category": "fixed",
