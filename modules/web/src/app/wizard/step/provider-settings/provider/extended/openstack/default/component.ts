@@ -36,7 +36,7 @@ import {
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {OpenstackCredentialsTypeService} from '../service';
 import {IPVersion} from '../shared/types/ip-version';
@@ -169,22 +169,34 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(debounceTime(this._debounceTime))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(
+        tap(_ => {
+          if (!this._hasRequiredCredentials()) {
+            this._clearSecurityGroup();
+            this._clearNetwork();
+            this._clearSubnetPool();
+          }
+        })
+      )
       .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._securityGroupListObservable()))
+      .pipe(
+        switchMap(_ => {
+          return forkJoin([
+            this._securityGroupListObservable(),
+            this._networkListObservable(),
+            Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)
+              ? this._subnetPoolListObservable()
+              : of([] as OpenstackSubnetPool[]),
+          ]);
+        })
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSecurityGroups.bind(this));
-
-    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearNetwork() : null)))
-      .pipe(filter(_ => this._hasRequiredCredentials()))
-      .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._networkListObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadNetworks.bind(this));
+      .subscribe(([securityGroups, networks, subnetPools]) => {
+        this._loadSecurityGroups(securityGroups);
+        this._loadNetworks(networks);
+        this._loadSubnetPools(subnetPools);
+      });
 
     this.form
       .get(Controls.Network)
@@ -195,17 +207,6 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .pipe(switchMap(_ => this._subnetIDListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetIDs.bind(this));
-
-    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearNetwork() : null)))
-      .pipe(filter(_ => this._hasRequiredCredentials()))
-      .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._subnetPoolListObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSubnetPools.bind(this));
   }
 
   onSecurityGroupChange(securityGroup: string): void {
