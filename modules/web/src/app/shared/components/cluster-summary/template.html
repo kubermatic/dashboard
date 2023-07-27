@@ -1036,6 +1036,10 @@ limitations under the License.
                                    label="Assign Public IP"
                                    [value]="machineDeployment.spec.template.cloud?.aws?.assignPublicIP">
               </km-property-boolean>
+              <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.ebsVolumeEncrypted !== undefined"
+                                   label="EBS Volume Encryption"
+                                   [value]="machineDeployment.spec.template.cloud?.aws?.ebsVolumeEncrypted">
+              </km-property-boolean>
             </ng-container>
 
             <!-- Azure Node Options -->

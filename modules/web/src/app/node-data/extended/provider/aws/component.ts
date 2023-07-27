@@ -29,6 +29,7 @@ enum Controls {
   SpotInstanceMaxPrice = 'spotInstanceMaxPrice',
   SpotInstancePersistentRequest = 'spotInstancePersistentRequest',
   Tags = 'tags',
+  EBSVolumeEncrypted = 'ebsVolumeEncrypted',
 }
 
 @Component({
@@ -73,6 +74,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.Tags]: this._builder.control(''),
       [Controls.SpotInstanceMaxPrice]: this._builder.control('', [KmValidators.largerThan(0)]),
       [Controls.SpotInstancePersistentRequest]: this._builder.control(false),
+      [Controls.EBSVolumeEncrypted]: this._builder.control(false),
     });
 
     this._init();
@@ -82,7 +84,8 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       this.form.get(Controls.AssignPublicIP).valueChanges,
       this.form.get(Controls.IsSpotInstance).valueChanges,
       this.form.get(Controls.SpotInstanceMaxPrice).valueChanges,
-      this.form.get(Controls.SpotInstancePersistentRequest).valueChanges
+      this.form.get(Controls.SpotInstancePersistentRequest).valueChanges,
+      this.form.get(Controls.EBSVolumeEncrypted).valueChanges,
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -127,6 +130,9 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
         const spotInstancePersistentRequest = this.nodeData.spec.cloud.aws.spotInstancePersistentRequest ?? false;
         this.form.get(Controls.SpotInstancePersistentRequest).setValue(spotInstancePersistentRequest);
+
+        const ebsVolumeEncrypted = this.nodeData.spec.cloud.aws.ebsVolumeEncrypted ?? false;
+        this.form.get(Controls.EBSVolumeEncrypted).setValue(ebsVolumeEncrypted);
       }
     }
   }
@@ -140,6 +146,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
             isSpotInstance: this.form.get(Controls.IsSpotInstance).value,
             spotInstanceMaxPrice: `${this.form.get(Controls.SpotInstanceMaxPrice).value}`,
             spotInstancePersistentRequest: this.form.get(Controls.SpotInstancePersistentRequest).value,
+            ebsVolumeEncrypted: this.form.get(Controls.EBSVolumeEncrypted).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,

@@ -156,6 +156,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			SpotInstanceInterruptionBehavior: spotInstanceInterruptionBehavior,
 			AssumeRoleARN:                    config.AssumeRoleARN.Value,
 			AssumeRoleExternalID:             config.AssumeRoleExternalID.Value,
+			EBSVolumeEncrypted:               config.EBSVolumeEncrypted.Value,
 		}
 	case providerconfig.CloudProviderAzure:
 		config := &azure.RawConfig{}
