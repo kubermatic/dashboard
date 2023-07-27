@@ -20,14 +20,7 @@ limitations under the License.
          fxLayoutAlign=" center">
       <km-search-field (queryChange)="onSearch($event)"></km-search-field>
       <div fxFlex></div>
-      <mat-slide-toggle *ngIf="isAdmin"
-                        class="all-projects-toggle"
-                        [disabled]="isProjectsLoading"
-                        labelPosition="before"
-                        [matTooltip]="isProjectsLoading ? 'Please wait while projects are loading' : null"
-                        [ngModel]="settings.displayAllProjectsForAdmin"
-                        (toggleChange)="changeProjectVisibility()">Show All Projects
-      </mat-slide-toggle>
+      <ng-container  *ngTemplateOutlet="allProjectToggle"></ng-container>
       <mat-button-toggle-group class="project-view-switch"
                                group="projectsView"
                                (change)="changeView()">
@@ -342,6 +335,7 @@ limitations under the License.
 </div>
 
 <ng-template #placeholder>
+  <ng-container  *ngTemplateOutlet="allProjectToggle"></ng-container>
   <div fxLayout="column"
        fxLayoutAlign="center center"
        class="placeholder">
@@ -376,4 +370,15 @@ limitations under the License.
     <i class="km-icon-mask km-icon-add"></i>
     <span>Add Project</span>
   </button>
+</ng-template>
+
+<ng-template #allProjectToggle>
+  <mat-slide-toggle *ngIf="isAdmin"
+                        class="all-projects-toggle"
+                        [disabled]="isProjectsLoading"
+                        labelPosition="before"
+                        [matTooltip]="isProjectsLoading ? 'Please wait while projects are loading' : null"
+                        [ngModel]="settings.displayAllProjectsForAdmin"
+                        (toggleChange)="changeProjectVisibility()">Show All Projects
+  </mat-slide-toggle>
 </ng-template>
