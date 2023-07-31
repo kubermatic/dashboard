@@ -166,22 +166,22 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(debounceTime(this._debounceTime))
-      .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(
+        tap(_ => {
+          if (!this._hasApplicationCredentials()) {
+            this._clearSecurityGroup();
+            this._clearNetwork();
+            this._clearSubnetPool();
+          }
+        })
+      )
       .pipe(filter(_ => this._hasApplicationCredentials()))
       .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._securityGroupListObservable()))
+      .pipe(tap(_ => this._securityGroupListObservable().subscribe(this._loadSecurityGroups.bind(this))))
+      .pipe(tap(_ => this._networkListObservable().subscribe(this._loadNetworks.bind(this))))
+      .pipe(tap(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster) ? this._subnetPoolListObservable().subscribe(this._loadSubnetPools.bind(this)) : null))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSecurityGroups.bind(this));
-
-    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearNetwork() : null)))
-      .pipe(filter(_ => this._hasApplicationCredentials()))
-      .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._networkListObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadNetworks.bind(this));
+      .subscribe(_ => {});
 
     this.form
       .get(Controls.Network)
@@ -192,17 +192,6 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       .pipe(switchMap(_ => this._subnetIDListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetIDs.bind(this));
-
-    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)))
-      .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSubnetPool() : null)))
-      .pipe(filter(_ => this._hasApplicationCredentials()))
-      .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(switchMap(_ => this._subnetPoolListObservable()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._loadSubnetPools.bind(this));
   }
 
   onSecurityGroupChange(securityGroup: string): void {
