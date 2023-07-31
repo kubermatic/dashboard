@@ -1835,6 +1835,8 @@ type AWSNodeSpec struct {
 	// Using an external ID can help to prevent the "confused deputy problem".
 	// required: false
 	AssumeRoleExternalID string `json:"assumeRoleExternalID"`
+	// EBSVolumeEncrypted indicates whether EBS volume encryption is enabled.
+	EBSVolumeEncrypted *bool `json:"ebsVolumeEncrypted"`
 }
 
 func (spec *AWSNodeSpec) MarshalJSON() ([]byte, error) {
@@ -1869,6 +1871,7 @@ func (spec *AWSNodeSpec) MarshalJSON() ([]byte, error) {
 		SpotInstanceMaxPrice             *string           `json:"spotInstanceMaxPrice,omitempty"`
 		SpotInstancePersistentRequest    *bool             `json:"spotInstancePersistentRequest,omitempty"`
 		SpotInstanceInterruptionBehavior *string           `json:"spotInstanceInterruptionBehavior,omitempty"`
+		EBSVolumeEncrypted               *bool             `json:"ebsVolumeEncrypted"`
 	}{
 		InstanceType:                     spec.InstanceType,
 		VolumeSize:                       spec.VolumeSize,
@@ -1882,6 +1885,7 @@ func (spec *AWSNodeSpec) MarshalJSON() ([]byte, error) {
 		SpotInstanceMaxPrice:             spec.SpotInstanceMaxPrice,
 		SpotInstancePersistentRequest:    spec.SpotInstancePersistentRequest,
 		SpotInstanceInterruptionBehavior: spec.SpotInstanceInterruptionBehavior,
+		EBSVolumeEncrypted:               spec.EBSVolumeEncrypted,
 	}
 
 	return json.Marshal(&res)

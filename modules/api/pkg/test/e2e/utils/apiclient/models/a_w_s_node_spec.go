@@ -37,6 +37,9 @@ type AWSNodeSpec struct {
 	// Availability zone in which to place the node. It is coupled with the subnet to which the node will belong.
 	AvailabilityZone string `json:"availabilityZone,omitempty"`
 
+	// EBSVolumeEncrypted indicates whether EBS volume encryption is enabled.
+	EBSVolumeEncrypted bool `json:"ebsVolumeEncrypted,omitempty"`
+
 	// instance type
 	// Example: t2.micro
 	// Required: true

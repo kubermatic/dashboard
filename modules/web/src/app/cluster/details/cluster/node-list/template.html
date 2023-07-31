@@ -512,6 +512,10 @@ limitations under the License.
                                  label="Spot Instance Persistent Request"
                                  [value]="element.spec.cloud.aws.spotInstancePersistentRequest">
             </km-property-boolean>
+            <km-property-boolean *ngIf="element.spec.cloud.aws"
+                                 label="EBS Volume Encryption"
+                                 [value]="element.spec.cloud.aws.ebsVolumeEncrypted">
+            </km-property-boolean>
             <!-- End of boolean properties. -->
 
             <div *ngIf="getMetrics(element.name)"

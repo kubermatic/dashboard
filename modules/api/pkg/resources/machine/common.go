@@ -133,7 +133,7 @@ func GetAWSProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *
 		SpotInstanceConfig:   spotConfig,
 		AssumeRoleARN:        providerconfig.ConfigVarString{Value: nodeSpec.Cloud.AWS.AssumeRoleARN},
 		AssumeRoleExternalID: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.AWS.AssumeRoleExternalID},
-		EBSVolumeEncrypted:   providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
+		EBSVolumeEncrypted:   providerconfig.ConfigVarBool{Value: nodeSpec.Cloud.AWS.EBSVolumeEncrypted},
 	}
 	if config.DiskType.Value == "" {
 		config.DiskType.Value = string(ec2types.VolumeTypeGp2)

@@ -176,6 +176,7 @@ export class AWSNodeSpec {
   isSpotInstance?: boolean;
   spotInstanceMaxPrice?: string;
   spotInstancePersistentRequest?: boolean;
+  ebsVolumeEncrypted?: boolean;
 }
 
 export class AzureNodeSpec {

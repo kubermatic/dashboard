@@ -25504,6 +25504,11 @@
           "format": "int32",
           "x-go-name": "VolumeSize"
         },
+        "ebsVolumeEncrypted": {
+          "description": "EBSVolumeEncrypted indicates whether EBS volume encryption is enabled.",
+          "type": "boolean",
+          "x-go-name": "EBSVolumeEncrypted"
+        },
         "instanceType": {
           "type": "string",
           "x-go-name": "InstanceType",
