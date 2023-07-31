@@ -36,7 +36,7 @@ import {
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {OpenstackCredentialsTypeService} from '../service';
 import {IPVersion} from '../shared/types/ip-version';
@@ -180,23 +180,11 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(
-        switchMap(_ => {
-          return forkJoin([
-            this._securityGroupListObservable(),
-            this._networkListObservable(),
-            Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)
-              ? this._subnetPoolListObservable()
-              : of([] as OpenstackSubnetPool[]),
-          ]);
-        })
-      )
+      .pipe(tap(_ => this._securityGroupListObservable().subscribe(this._loadSecurityGroups.bind(this))))
+      .pipe(tap(_ => this._networkListObservable().subscribe(this._loadNetworks.bind(this))))
+      .pipe(tap(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster) ? this._subnetPoolListObservable().subscribe(this._loadSubnetPools.bind(this)) : null))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([securityGroups, networks, subnetPools]) => {
-        this._loadSecurityGroups(securityGroups);
-        this._loadNetworks(networks);
-        this._loadSubnetPools(subnetPools);
-      });
+      .subscribe(_ => {});
 
     this.form
       .get(Controls.Network)
