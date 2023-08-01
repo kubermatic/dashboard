@@ -73,6 +73,7 @@
 
     .property-usage-bar {
       --mdc-linear-progress-track-height: 5px;
+      --mdc-linear-progress-active-indicator-height: 5px;
 
       border-radius: variables.$border-radius;
       height: 5px;
@@ -132,6 +133,7 @@
 
       .property-usage-bar {
         --mdc-linear-progress-track-height: 6px;
+        --mdc-linear-progress-active-indicator-height: 6px;
 
         border-radius: variables.$border-radius;
         height: 6px;
