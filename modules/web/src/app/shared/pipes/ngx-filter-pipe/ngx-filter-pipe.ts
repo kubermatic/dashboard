@@ -16,6 +16,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'filterBy',
+  pure: false,
 })
 export class FilterPipe implements PipeTransform {
   static isFoundOnWalking(value: any, key: any): boolean {
@@ -34,6 +35,9 @@ export class FilterPipe implements PipeTransform {
     return !isNaN(parseInt(value, 10)) && isFinite(value);
   }
 
+  /**
+   * Checks function's value if type is function otherwise same value
+   */
   static getValue(value: any): any {
     return typeof value === 'function' ? value() : value;
   }
@@ -54,7 +58,7 @@ export class FilterPipe implements PipeTransform {
   }
 
   private filterByObject(filter: any) {
-    return function (value) {
+    return value => {
       for (const key in filter) {
         if (key === '$or') {
           if (!this.filterByOr(filter.$or)(FilterPipe.getValue(value))) {
@@ -73,10 +77,46 @@ export class FilterPipe implements PipeTransform {
     };
   }
 
-  private filterDefault(filter: any) {
-    return function (value) {
-      return filter === undefined || filter === value;
+  private isMatching(filter, val) {
+    switch (typeof filter) {
+      case 'boolean':
+        return this.filterByBoolean(filter)(val);
+      case 'string':
+        return this.filterByString(filter)(val);
+      case 'object':
+        return this.filterByObject(filter)(val);
+    }
+    return this.filterDefault(filter)(val);
+  }
+
+  /**
+   * Filter value by $or
+   */
+  private filterByOr(filter: any[]): (value: any) => boolean {
+    return (value: any) => {
+      const length = filter.length;
+
+      const arrayComparison = i => value.indexOf(filter[i]) !== -1;
+      const otherComparison = i => this.isMatching(filter[i], value);
+      const comparison = Array.isArray(value)
+        ? arrayComparison
+        : otherComparison;
+
+      for (let i = 0; i < length; i++) {
+        if (comparison(i)) {
+          return true;
+        }
+      }
+
+      return false;
     };
+  }
+
+  /**
+   * Default filterDefault function
+   */
+  private filterDefault(filter: any): (value: any) => boolean {
+    return (value: any) => filter === undefined || filter === value;
   }
 
   transform(array: any[], filter: any): any {
