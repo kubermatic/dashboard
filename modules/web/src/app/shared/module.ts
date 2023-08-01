@@ -35,9 +35,9 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
 import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 import {
-  MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
-  MatLegacyPaginatorModule as MatPaginatorModule,
-} from '@angular/material/legacy-paginator';
+  MAT_PAGINATOR_DEFAULT_OPTIONS,
+  MatPaginatorModule as MatPaginatorModule,
+} from '@angular/material/paginator';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
 import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
@@ -292,7 +292,7 @@ const directives = [
       },
     },
     {
-      provide: MAT_LEGACY_PAGINATOR_DEFAULT_OPTIONS,
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
       useValue: {
         hidePageSize: true,
       },

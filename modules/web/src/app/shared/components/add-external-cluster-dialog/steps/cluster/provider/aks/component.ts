@@ -17,7 +17,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {UserService} from '@core/services/user';
 import {AKSCluster} from '@app/shared/entity/provider/aks';
 

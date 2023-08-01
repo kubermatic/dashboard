@@ -21,7 +21,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {takeUntil, filter, switchMap, tap, take} from 'rxjs/operators';
