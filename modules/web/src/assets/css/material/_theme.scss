@@ -120,10 +120,10 @@
   // Menus.
   .mat-drawer-container {
     background-color: map.get($colors, background);
-  }
 
-  .mat-drawer-side {
-    border: none;
+    .mat-drawer-side {
+      border: none;
+    }
   }
 
   // Forms.
@@ -438,11 +438,15 @@
     /* stylelint-disable-next-line selector-class-pattern */
     .mdc-linear-progress__buffer-bar, .mdc-linear-progress__buffer-dots {
       background-color: map.get($colors, divider);
+      transition: none;
     }
 
     /* stylelint-disable-next-line selector-class-pattern */
     .mdc-linear-progress__buffer-dots {
       background-image: none;
+      /* stylelint-disable-next-line property-no-vendor-prefix */
+      -webkit-mask-image: none; // required for chrome
+      mask-image: none;
     }
   }
 
