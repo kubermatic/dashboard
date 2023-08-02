@@ -70,6 +70,7 @@ $colors-dark: (
   terminal-status-bar-button-border-color: #e0e3e5,
   estimate-quota-bar: #4ec3ea,
   progress-bar-buffer: #dfe3e5,
+  slide-toggle-handle-color: #bdbdbd,
 );
 $colors-dark-palette: mat.$blue-palette;
 $colors-dark-palette: map.merge($colors-dark-palette, (500: #0072b0));
