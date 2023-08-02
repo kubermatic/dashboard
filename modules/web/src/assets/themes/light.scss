@@ -66,6 +66,7 @@ $colors-light: (
   terminal-status-bar-button-border-color: #e0e3e5,
   estimate-quota-bar: #4ec3ea,
   progress-bar-buffer: #dfe3e5,
+  slide-toggle-handle-color: #fafafa,
 );
 $colors-light-palette: mat.$blue-palette;
 $colors-light-palette: map.merge($colors-light-palette, (500: #00517d));

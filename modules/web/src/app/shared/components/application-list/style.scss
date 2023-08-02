@@ -20,6 +20,8 @@ $view-switch-width: 50px;
 $application-card-width: 320px;
 
 .applications-view-switch {
+  margin-right: 10px;
+
   .mat-button-toggle {
     @include mixins.size($view-switch-width, $view-switch-height, true);
 

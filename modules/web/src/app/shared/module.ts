@@ -40,8 +40,7 @@ import {
 } from '@angular/material/legacy-paginator';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
-import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
-import {MatLegacySliderModule as MatSliderModule} from '@angular/material/legacy-slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
 import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
 import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
@@ -164,7 +163,6 @@ const modules = [
   MatChipsModule,
   MatCardModule,
   MatDialogModule,
-  MatSliderModule,
   MatSlideToggleModule,
   MatProgressBarModule,
   MatExpansionModule,

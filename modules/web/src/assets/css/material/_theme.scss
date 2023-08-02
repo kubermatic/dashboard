@@ -323,21 +323,33 @@
     }
   }
 
-  .mat-slide-toggle {
-    .mat-slide-toggle-label {
-      .mat-slide-toggle-bar {
-        background-color: map.get($colors, divider);
-      }
-    }
+  .mat-mdc-slide-toggle {
+    &.mat-accent {
+      // track color
+      --mdc-switch-selected-track-color: #{map.get($colors, primary)};
+      --mdc-switch-selected-focus-track-color: var(--mdc-switch-selected-track-color);
+      --mdc-switch-selected-hover-track-color: var(--mdc-switch-selected-track-color);
+      --mdc-switch-selected-pressed-track-color: var(--mdc-switch-selected-track-color);
+      --mdc-switch-unselected-track-color: #{map.get($colors, divider)};
+      --mdc-switch-unselected-focus-track-color: var(--mdc-switch-unselected-track-color);
+      --mdc-switch-unselected-hover-track-color: var(--mdc-switch-unselected-track-color);
+      --mdc-switch-unselected-pressed-track-color: var(--mdc-switch-unselected-track-color);
 
-    &.mat-checked {
-      .mat-slide-toggle-bar {
-        background-color: map.get($colors, primary);
-      }
+      // handle color
+      --mdc-switch-handle-surface-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mdc-switch-selected-handle-color: #fafafa;
+      --mdc-switch-selected-focus-handle-color: var(--mdc-switch-selected-handle-color);
+      --mdc-switch-selected-hover-handle-color: var(--mdc-switch-selected-handle-color);
+      --mdc-switch-selected-pressed-handle-color: var(--mdc-switch-selected-handle-color);
+      --mdc-switch-unselected-handle-color: #{map.get($colors, slide-toggle-handle-color)};
+      --mdc-switch-unselected-focus-handle-color: var(--mdc-switch-unselected-handle-color);
+      --mdc-switch-unselected-hover-handle-color: var(--mdc-switch-unselected-handle-color);
+      --mdc-switch-unselected-pressed-handle-color: var(--mdc-switch-unselected-handle-color);
 
-      .mat-slide-toggle-thumb {
-        background-color: #fafafa;
-      }
+      // ripple color
+      --mdc-switch-selected-focus-state-layer-color: var(--mdc-switch-selected-track-color);
+      --mdc-switch-selected-hover-state-layer-color: var(--mdc-switch-selected-track-color);
+      --mdc-switch-selected-pressed-state-layer-color: var(--mdc-switch-selected-track-color);
     }
   }
 
