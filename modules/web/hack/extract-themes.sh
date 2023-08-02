@@ -26,4 +26,4 @@ ABS_ROOT_DIR="$(
 
 rm -rf ${REL_ROOT_DIR}/${THEMES_DIR}
 mkdir ${REL_ROOT_DIR}/${THEMES_DIR}
-cp -r ${REL_ROOT_DIR}/dist/assets/themes/*.css ${REL_ROOT_DIR}/${THEMES_DIR}
+cp -r ${REL_ROOT_DIR}/dist/assets/themes/*.scss ${REL_ROOT_DIR}/${THEMES_DIR}
