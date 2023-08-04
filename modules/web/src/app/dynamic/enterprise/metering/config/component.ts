@@ -37,7 +37,10 @@ import {take} from 'rxjs';
 export class MeteringConfigComponent {
   @Input() config: MeteringConfiguration;
 
-  constructor(private readonly _dialog: MatDialog, private readonly _dialogModeService: DialogModeService) {}
+  constructor(
+    private readonly _dialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
+  ) {}
 
   configureMetering(): void {
     this._dialogModeService.isEditDialog = true;

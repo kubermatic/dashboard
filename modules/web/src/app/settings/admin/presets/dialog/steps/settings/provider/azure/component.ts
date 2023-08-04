@@ -55,7 +55,10 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
   readonly Controls = Controls;
   loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService
+  ) {
     super();
   }
 

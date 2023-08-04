@@ -33,7 +33,10 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   @Input() isSidenavCollapsed: boolean;
   @Input() lastItem = false;
 
-  constructor(private _router: Router, private readonly _cdr: ChangeDetectorRef) {}
+  constructor(
+    private _router: Router,
+    private readonly _cdr: ChangeDetectorRef
+  ) {}
 
   get expanded(): boolean {
     return this._expanded;

@@ -40,7 +40,10 @@ export class PresetsService {
   readonly presetStatusChanges = new EventEmitter<boolean>();
   readonly presetChanges = new EventEmitter<string>();
 
-  constructor(private readonly _http: HttpClient, private readonly _projectService: ProjectService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _projectService: ProjectService
+  ) {}
 
   private _preset: string;
 

@@ -37,7 +37,10 @@ export class AccountsComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService
+  ) {}
 
   ngOnInit() {
     this.dataSource.data = this.users;

@@ -37,7 +37,10 @@ export class BackupService {
   readonly onAutomaticBackupsUpdate = new Subject<void>();
   readonly onSnapshotsUpdate = new Subject<void>();
 
-  constructor(private readonly _appConfig: AppConfigService, private readonly _http: HttpClient) {}
+  constructor(
+    private readonly _appConfig: AppConfigService,
+    private readonly _http: HttpClient
+  ) {}
 
   list(projectID: string, isSnapshot = false): Observable<EtcdBackupConfig[]> {
     if (isSnapshot) {

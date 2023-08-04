@@ -48,7 +48,10 @@ export class SeedConfigurationsComponent implements OnDestroy {
   displayedColumns: string[] = Object.values(Column);
   private readonly _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _datacenterService: DatacenterService, private readonly _router: Router) {}
+  constructor(
+    private readonly _datacenterService: DatacenterService,
+    private readonly _router: Router
+  ) {}
 
   ngOnInit(): void {
     this.sort.active = Column.Name;

@@ -35,7 +35,10 @@ export class AllowedRegistriesService {
   private _allowedRegistriesRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   get allowedRegistries(): Observable<AllowedRegistry[]> {
     if (!this._allowedRegistries$) {

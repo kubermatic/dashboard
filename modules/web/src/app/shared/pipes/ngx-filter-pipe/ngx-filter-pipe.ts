@@ -98,9 +98,7 @@ export class FilterPipe implements PipeTransform {
 
       const arrayComparison = i => value.indexOf(filter[i]) !== -1;
       const otherComparison = i => this.isMatching(filter[i], value);
-      const comparison = Array.isArray(value)
-        ? arrayComparison
-        : otherComparison;
+      const comparison = Array.isArray(value) ? arrayComparison : otherComparison;
 
       for (let i = 0; i < length; i++) {
         if (comparison(i)) {

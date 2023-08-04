@@ -262,7 +262,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             Observable<AlertmanagerConfig>,
             Observable<RuleGroup[]>,
             Observable<Constraint[]>,
-            Observable<GatekeeperConfig>
+            Observable<GatekeeperConfig>,
           ];
 
           return combineLatest(reload$);
@@ -293,7 +293,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           AlertmanagerConfig,
           RuleGroup[],
           Constraint[],
-          GatekeeperConfig
+          GatekeeperConfig,
         ]) => {
           this.addons = addons;
           this.metrics = metrics;

@@ -34,7 +34,10 @@ export class GroupService {
   private readonly _retryTime = 3;
   private readonly _maxRetries = 5;
 
-  constructor(private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _httpClient: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   list(projectID: string): Observable<Group[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/groupbindings`;

@@ -41,7 +41,10 @@ export class MeteringService {
   readonly onScheduleConfigurationChange$ = new Subject<void>();
   readonly onReportListChange$ = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService
+  ) {}
 
   saveConfiguration(configuration: MeteringConfiguration): Observable<void> {
     const url = `${this._restRoot}/admin/metering/configurations`;

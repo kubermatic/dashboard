@@ -34,7 +34,10 @@ export class ClusterServiceAccountService {
   private _previousServiceAccountsMap = new Map<string, ClusterServiceAccount[]>();
   private _refreshServiceAccounts = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService
+  ) {}
 
   get(projectID: string, clusterID: string): Observable<ClusterServiceAccount[]> {
     const mapKey = projectID + '-' + clusterID;

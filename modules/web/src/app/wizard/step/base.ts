@@ -19,7 +19,10 @@ import {Directive} from '@angular/core';
 
 @Directive()
 export class StepBase extends BaseFormValidator {
-  constructor(protected readonly _wizard: WizardService, formName = 'Form') {
+  constructor(
+    protected readonly _wizard: WizardService,
+    formName = 'Form'
+  ) {
     super(formName);
   }
 

@@ -63,7 +63,10 @@ export class TopologySpreadConstraintFormComponent extends BaseFormValidator imp
   whenUnsatisfiableOptions = Object.keys(KubeVirtTopologyWhenUnsatisfiable);
   initialConstraint: KubeVirtTopologySpreadConstraint[];
   removedConstraints: KubeVirtTopologySpreadConstraint[] = [];
-  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {
+  constructor(
+    private readonly _formBuilder: FormBuilder,
+    private readonly _dialogModeService: DialogModeService
+  ) {
     super();
   }
 

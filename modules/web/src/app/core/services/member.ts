@@ -26,7 +26,10 @@ export class MemberService {
   private readonly _retryTime = 3;
   private readonly _maxRetries = 5;
 
-  constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
+  constructor(
+    private readonly _appConfigService: AppConfigService,
+    private readonly _httpClient: HttpClient
+  ) {}
 
   /**
    * Adds member into a project.

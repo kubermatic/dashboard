@@ -43,7 +43,10 @@ export enum Controls {
 export class DigitaloceanSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService
+  ) {
     super();
   }
 

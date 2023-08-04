@@ -53,7 +53,10 @@ export class TaintFormComponent implements OnInit {
   initialTaints: Taint[];
   availableEffects = Taint.getAvailableEffects();
 
-  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {}
+  constructor(
+    private readonly _formBuilder: FormBuilder,
+    private readonly _dialogModeService: DialogModeService
+  ) {}
 
   get taintArray(): FormArray {
     return this.form.get('taints') as FormArray;

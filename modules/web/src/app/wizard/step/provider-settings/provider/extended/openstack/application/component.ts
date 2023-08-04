@@ -179,7 +179,13 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       .pipe(filter(_ => this._areCredentialsChanged()))
       .pipe(tap(_ => this._securityGroupListObservable().subscribe(this._loadSecurityGroups.bind(this))))
       .pipe(tap(_ => this._networkListObservable().subscribe(this._loadNetworks.bind(this))))
-      .pipe(tap(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster) ? this._subnetPoolListObservable().subscribe(this._loadSubnetPools.bind(this)) : null))
+      .pipe(
+        tap(_ =>
+          Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)
+            ? this._subnetPoolListObservable().subscribe(this._loadSubnetPools.bind(this))
+            : null
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {});
 

@@ -30,7 +30,10 @@ export class ChangelogService {
     return _.isEmpty(this._changelog) ? undefined : this._changelog;
   }
 
-  constructor(private readonly _http: HttpClient, private readonly _matDialog: MatDialog) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   init(): void {
     this._http

@@ -138,9 +138,9 @@ export class Auth {
           break;
         default:
           if (logoutUrl.searchParams.has('redirectUri')) {
-              logoutUrl.searchParams.set('redirectUri', this._redirectUri);
+            logoutUrl.searchParams.set('redirectUri', this._redirectUri);
           } else {
-              logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
+            logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
           }
           break;
       }

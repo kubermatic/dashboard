@@ -42,7 +42,10 @@ export class VMwareCloudDirectorProviderSettingsComponent implements OnInit, OnD
   readonly CredentialsType = CredentialsType;
   selectedCredentialsType = CredentialsType.Default;
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
+  constructor(
+    private readonly _clusterService: ClusterService,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this._initForm();

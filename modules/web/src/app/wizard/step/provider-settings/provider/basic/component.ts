@@ -46,7 +46,10 @@ export class ProviderBasicComponent extends BaseFormValidator implements OnInit 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: ClusterSpecService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _clusterSpecService: ClusterSpecService
+  ) {
     super('Provider Basic');
   }
 

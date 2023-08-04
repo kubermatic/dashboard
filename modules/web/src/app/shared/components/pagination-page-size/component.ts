@@ -38,7 +38,10 @@ export class PaginationPageSizeComponent implements OnInit, OnDestroy {
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _userService: UserService, private readonly _notificationService: NotificationService) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {

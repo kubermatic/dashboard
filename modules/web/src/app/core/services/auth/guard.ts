@@ -24,7 +24,10 @@ import {Auth} from './service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private readonly _userService: UserService, private readonly _router: Router) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _router: Router
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return this._userService.currentUser.pipe(
@@ -49,7 +52,10 @@ export class AuthGuard implements CanActivate {
 
 @Injectable()
 export class AuthzGuard implements CanActivate {
-  constructor(private readonly _userService: UserService, private readonly _router: Router) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _router: Router
+  ) {}
 
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const projectID = this._getProjectID(state.url);

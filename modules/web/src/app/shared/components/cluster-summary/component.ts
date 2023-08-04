@@ -49,7 +49,7 @@ export class ClusterSummaryComponent {
 
   @Input()
   set sshKeys(keys: string[]) {
-    this._sshKeys = keys?.map(key => ({name: key} as SSHKey));
+    this._sshKeys = keys?.map(key => ({name: key}) as SSHKey);
   }
 
   get provider(): NodeProvider {

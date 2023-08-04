@@ -144,7 +144,10 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     return this.type === 'integer' ? this._integerPattern : '';
   }
 
-  constructor(private readonly _decimalPipe: DecimalPipe, private readonly _cdr: ChangeDetectorRef) {}
+  constructor(
+    private readonly _decimalPipe: DecimalPipe,
+    private readonly _cdr: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit(): void {
     this._model.statusChanges.subscribe(status => {

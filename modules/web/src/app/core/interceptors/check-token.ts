@@ -20,7 +20,10 @@ import {Observable} from 'rxjs';
 
 @Injectable()
 export class CheckTokenInterceptor implements HttpInterceptor {
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(
+    private auth: Auth,
+    private router: Router
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!this.auth.authenticated()) {

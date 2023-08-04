@@ -63,7 +63,10 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     return this.form.get(Controls.IsSpotInstance).value;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 
@@ -85,7 +88,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       this.form.get(Controls.IsSpotInstance).valueChanges,
       this.form.get(Controls.SpotInstanceMaxPrice).valueChanges,
       this.form.get(Controls.SpotInstancePersistentRequest).valueChanges,
-      this.form.get(Controls.EBSVolumeEncrypted).valueChanges,
+      this.form.get(Controls.EBSVolumeEncrypted).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));

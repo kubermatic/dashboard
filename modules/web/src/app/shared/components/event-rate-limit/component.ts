@@ -55,7 +55,10 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   private readonly _cacheSizeDefault = 4096;
   private readonly _defaultLimitType = 'Namespace';
 
-  constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: ClusterSpecService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _clusterSpecService: ClusterSpecService
+  ) {
     super();
   }
 

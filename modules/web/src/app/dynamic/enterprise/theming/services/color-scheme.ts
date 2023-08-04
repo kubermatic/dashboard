@@ -36,7 +36,10 @@ export class ColorSchemeService {
   private _selectedColorScheme = ColorScheme.NoPreference;
   readonly onColorSchemeUpdate = new BehaviorSubject<ColorScheme>(ColorScheme.NoPreference);
 
-  constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _themeService: ThemeService) {
+  constructor(
+    @Inject(DOCUMENT) private readonly _document: Document,
+    private readonly _themeService: ThemeService
+  ) {
     // Load initial color scheme.
     this._updateColorScheme(this._document.defaultView.matchMedia(this._colorSchemeQuery).matches);
 
