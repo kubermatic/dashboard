@@ -14,7 +14,7 @@
 
 import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';

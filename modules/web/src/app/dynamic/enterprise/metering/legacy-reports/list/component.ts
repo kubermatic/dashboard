@@ -22,7 +22,7 @@ import {DOCUMENT} from '@angular/common';
 import {Component, OnInit, ViewChild, Inject, Input, OnDestroy} from '@angular/core';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {Report} from '@shared/entity/metering';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';

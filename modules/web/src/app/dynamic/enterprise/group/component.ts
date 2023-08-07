@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
