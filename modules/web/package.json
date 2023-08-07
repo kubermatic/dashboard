@@ -106,7 +106,7 @@
     "@types/jest": "29.5.3",
     "@types/js-yaml": "4.0.5",
     "@types/lodash": "4.14.195",
-    "@types/node": "20.4.4",
+    "@types/node": "20.4.8",
     "@typescript-eslint/eslint-plugin": "6.2.0",
     "@typescript-eslint/parser": "6.2.1",
     "browserlist": "1.0.1",
