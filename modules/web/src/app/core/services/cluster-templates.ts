@@ -36,7 +36,10 @@ export class ClusterTemplateService {
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onUpdate = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService
+  ) {}
 
   create(template: ClusterTemplate, projectID: string): Observable<ClusterTemplate> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates`;

@@ -50,7 +50,10 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
 
   networks: string[] = [];
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService
+  ) {
     super();
   }
 

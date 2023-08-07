@@ -91,7 +91,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
           .flatMap(tuples =>
             tuples.map(
               tuple =>
-                ({seed: tuple[0], name: tuple[1].name, data: tuple[1].data, type: tuple[1].type} as AdminRuleGroup)
+                ({seed: tuple[0], name: tuple[1].name, data: tuple[1].data, type: tuple[1].type}) as AdminRuleGroup
             )
           );
 

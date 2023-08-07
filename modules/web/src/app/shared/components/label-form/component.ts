@@ -84,7 +84,10 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   disabledLabelFormGroup: FormGroup<ControlsOf<{key: string; value: string}>>;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _formBuilder: FormBuilder, private readonly _dialogModeService: DialogModeService) {}
+  constructor(
+    private readonly _formBuilder: FormBuilder,
+    private readonly _dialogModeService: DialogModeService
+  ) {}
 
   get labelArray(): FormArray {
     return this.form?.get('labels') as FormArray;

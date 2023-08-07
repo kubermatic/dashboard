@@ -30,7 +30,10 @@ export class ParamsService {
   private _paramMap: ParamMap;
   private _currentUrl = '';
 
-  constructor(private _router: Router, private _route: ActivatedRoute) {
+  constructor(
+    private _router: Router,
+    private _route: ActivatedRoute
+  ) {
     this._router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .pipe(

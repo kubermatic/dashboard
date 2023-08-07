@@ -36,7 +36,10 @@ export class NutanixProviderSettingsComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
   form: FormGroup;
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
+  constructor(
+    private readonly _clusterService: ClusterService,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({

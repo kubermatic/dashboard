@@ -43,7 +43,10 @@ export class RBACService {
   private _clusterBindingsMap = new Map<string, Observable<ClusterBinding[]>>();
   private _namespaceBindingsMap = new Map<string, Observable<NamespaceBinding[]>>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   getClusterRoleNames(clusterID: string, projectID: string): Observable<ClusterRoleName[]> {
     const mapKey = projectID + '-' + clusterID;

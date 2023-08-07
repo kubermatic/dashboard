@@ -45,7 +45,10 @@ export class GCPExtendedNodeDataComponent extends BaseFormValidator implements O
 
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

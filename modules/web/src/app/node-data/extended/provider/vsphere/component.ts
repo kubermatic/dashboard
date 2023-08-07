@@ -46,7 +46,10 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   tags: VSphereTag[];
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

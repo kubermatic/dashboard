@@ -34,10 +34,7 @@ import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/
 import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import {MatLegacyListModule as MatListModule} from '@angular/material/legacy-list';
 import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
-import {
-  MAT_PAGINATOR_DEFAULT_OPTIONS,
-  MatPaginatorModule as MatPaginatorModule,
-} from '@angular/material/paginator';
+import {MAT_PAGINATOR_DEFAULT_OPTIONS, MatPaginatorModule as MatPaginatorModule} from '@angular/material/paginator';
 import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';

@@ -22,7 +22,10 @@ import {Auth} from '@core/services/auth/service';
   styleUrls: ['./style.scss'],
 })
 export class TermsOfServiceComponent {
-  constructor(private readonly _auth: Auth, private readonly _router: Router) {}
+  constructor(
+    private readonly _auth: Auth,
+    private readonly _router: Router
+  ) {}
 
   backToApp(): void {
     if (this._auth.authenticated()) {

@@ -31,7 +31,10 @@ export class ApplicationService {
   private _applicationDefinitions$: Observable<ApplicationDefinition[]>;
   readonly applicationChanges = new EventEmitter<Application[]>();
 
-  constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
+  constructor(
+    private readonly _appConfigService: AppConfigService,
+    private readonly _httpClient: HttpClient
+  ) {}
 
   get applications(): Application[] {
     return this._applications;

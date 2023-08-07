@@ -47,7 +47,10 @@ export class ServiceAccountTokenNameStepComponent extends BaseFormValidator impl
     return this._service.projectID;
   }
 
-  constructor(private readonly _service: ServiceAccountTokenDialogService, private readonly _builder: FormBuilder) {
+  constructor(
+    private readonly _service: ServiceAccountTokenDialogService,
+    private readonly _builder: FormBuilder
+  ) {
     super();
   }
 

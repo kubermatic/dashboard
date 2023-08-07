@@ -64,7 +64,10 @@ export class ClusterService {
   onClusterUpdate = new Subject<void>();
   onExternalClusterUpdate = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfig: AppConfigService
+  ) {}
 
   changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
     this._providerSettingsPatch.next(patch);

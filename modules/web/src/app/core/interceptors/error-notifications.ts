@@ -69,7 +69,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
 
   private adminSettings: AdminSettings;
 
-  constructor(private readonly _inj: Injector, private readonly _settingsService: SettingsService) {
+  constructor(
+    private readonly _inj: Injector,
+    private readonly _settingsService: SettingsService
+  ) {
     this._notificationService = this._inj.get(NotificationService);
     this._settingsService = this._inj.get(SettingsService);
 

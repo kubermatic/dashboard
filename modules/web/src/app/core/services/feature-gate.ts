@@ -33,7 +33,10 @@ export class FeatureGateService {
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _featureGates$: Observable<FeatureGates>;
 
-  constructor(private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _httpClient: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   get featureGates(): Observable<FeatureGates> {
     if (!this._featureGates$) {

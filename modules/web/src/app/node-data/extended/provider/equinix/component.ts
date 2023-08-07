@@ -47,7 +47,10 @@ export class EquinixExtendedNodeDataComponent extends BaseFormValidator implemen
     return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

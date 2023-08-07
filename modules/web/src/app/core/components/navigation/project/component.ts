@@ -37,7 +37,10 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   private _displayAllProjects: boolean;
   private _projects: Project[];
 
-  constructor(private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _projectService: ProjectService,
+    private readonly _userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this._displayAllProjects = this._userService.defaultUserSettings.displayAllProjectsForAdmin;

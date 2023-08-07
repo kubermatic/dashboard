@@ -51,7 +51,10 @@ export class NotificationComponent implements OnInit, AfterViewInit, OnDestroy {
   typeIconClassName: string;
   isMessageCollapsed = true;
 
-  constructor(@Inject(DOCUMENT) private readonly _document: Document, private readonly _elementRef: ElementRef) {}
+  constructor(
+    @Inject(DOCUMENT) private readonly _document: Document,
+    private readonly _elementRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this._startDismissTimer();

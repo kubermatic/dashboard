@@ -33,7 +33,10 @@ export class MLAService {
   private _adminRuleGroups$ = new Map<string, Observable<RuleGroup[]>>();
   private _adminRuleGroupsRefresh$ = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   alertmanagerConfig(projectId: string, clusterId: string): Observable<AlertmanagerConfig> {
     const id = `${projectId}-${clusterId}`;

@@ -36,7 +36,10 @@ export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
     return this.form.controls.kubeconfig;
   }
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
+  constructor(
+    private readonly _clusterService: ClusterService,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({

@@ -19,7 +19,10 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 @Directive()
 export class StepBase extends BaseFormValidator implements OnDestroy {
-  constructor(protected readonly _wizard: KubeOneWizardService, formName = 'Form') {
+  constructor(
+    protected readonly _wizard: KubeOneWizardService,
+    formName = 'Form'
+  ) {
     super(formName);
   }
 

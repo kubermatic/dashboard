@@ -44,7 +44,10 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   ];
   silenceErrorEvents = false;
 
-  constructor(private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.events;

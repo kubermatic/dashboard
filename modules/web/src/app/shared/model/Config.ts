@@ -139,5 +139,5 @@ export class Backups implements Viewable {
 }
 
 export enum OIDCProviders {
-  Keycloak = 'keycloak'
+  Keycloak = 'keycloak',
 }

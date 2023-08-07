@@ -53,7 +53,10 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
     return this._nodeDataService.nodeData;
   }
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService
+  ) {
     super();
   }
 

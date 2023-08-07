@@ -36,7 +36,10 @@ export class OPAService {
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _violationPageIndex = new Map<string, number>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   get constraintTemplates(): Observable<ConstraintTemplate[]> {
     if (!this._constraintTemplates$) {

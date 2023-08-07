@@ -31,7 +31,10 @@ import _ from 'lodash';
   providedIn: 'root',
 })
 export class QuotaService {
-  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   private _quotas$: Observable<QuotaDetails[]>;
   private _quotasRefresh$ = new Subject<void>();

@@ -25,7 +25,10 @@ import {Auth} from '@core/services/auth/service';
 export class FrontpageComponent implements OnInit {
   @ViewChild('loginButton') private readonly _loginButton: MatAnchor;
 
-  constructor(private readonly _auth: Auth, private readonly _router: Router) {}
+  constructor(
+    private readonly _auth: Auth,
+    private readonly _router: Router
+  ) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {

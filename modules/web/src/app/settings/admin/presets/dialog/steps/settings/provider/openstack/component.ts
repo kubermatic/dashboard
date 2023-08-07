@@ -53,7 +53,10 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
   readonly Controls = Controls;
   readonly Modes = Mode;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService
+  ) {
     super();
   }
 

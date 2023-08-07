@@ -25,9 +25,7 @@ const modifiedConfig = _.merge(
     arrowParens: 'avoid',
     bracketSameLine: true,
     bracketSpacing: false,
-    requirePragma: true,
     singleQuote: true,
-    trailingComma: "all",
     endOfLine: "lf",
     // Specify the line length that the printer will wrap on.
     printWidth: 120,

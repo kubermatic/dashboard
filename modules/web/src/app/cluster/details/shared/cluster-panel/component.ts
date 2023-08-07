@@ -29,7 +29,10 @@ export class ClusterPanelComponent {
   @Input() datacenter: Datacenter;
   @Input() projectID: string;
 
-  constructor(private readonly _router: Router, private _route: ActivatedRoute) {}
+  constructor(
+    private readonly _router: Router,
+    private _route: ActivatedRoute
+  ) {}
 
   get region(): string {
     if (

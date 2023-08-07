@@ -28,7 +28,10 @@ export class AddonService {
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _addonConfigs$: Observable<AddonConfig[]>;
 
-  constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
+  constructor(
+    private readonly _appConfigService: AppConfigService,
+    private readonly _httpClient: HttpClient
+  ) {}
 
   /**
    * Adds addon into a cluster.

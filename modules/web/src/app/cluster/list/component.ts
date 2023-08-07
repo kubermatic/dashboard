@@ -29,7 +29,10 @@ export class ClustersComponent implements OnInit, OnDestroy {
   areExternalClustersEnabled = false;
   resourcesType = '';
 
-  constructor(private readonly _settingsService: SettingsService, private _router: Router) {}
+  constructor(
+    private readonly _settingsService: SettingsService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings

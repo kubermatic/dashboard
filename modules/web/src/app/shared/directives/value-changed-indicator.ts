@@ -24,7 +24,11 @@ export class ValueChangedIndicatorDirective implements OnInit {
   private _initialValue: string | string[] | boolean | number;
   @Input() ValueChangedIndicator = true;
 
-  constructor(private _el: ElementRef, private _control: NgControl, private _dialogModeService: DialogModeService) {}
+  constructor(
+    private _el: ElementRef,
+    private _control: NgControl,
+    private _dialogModeService: DialogModeService
+  ) {}
 
   ngOnInit(): void {
     if (!this._dialogModeService.isEditDialog || !this.ValueChangedIndicator) {

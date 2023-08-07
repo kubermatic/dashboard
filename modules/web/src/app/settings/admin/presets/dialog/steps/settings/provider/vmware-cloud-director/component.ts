@@ -56,7 +56,10 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
   readonly CredentialsType = CredentialsType;
   selectedCredentialsType = CredentialsType.Default;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService
+  ) {
     super();
   }
 

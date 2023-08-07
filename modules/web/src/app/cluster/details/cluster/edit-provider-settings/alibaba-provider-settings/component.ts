@@ -33,7 +33,10 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
   readonly Control = Control;
   form: FormGroup;
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
+  constructor(
+    private readonly _clusterService: ClusterService,
+    private readonly _builder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
