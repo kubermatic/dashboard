@@ -28,6 +28,7 @@ export interface Config {
   };
   google_analytics_code?: string;
   google_analytics_config?: object;
+  oidc_provider?: string;
   oidc_provider_url?: string;
   oidc_provider_scope?: string;
   oidc_provider_client_id?: string;
@@ -129,4 +130,8 @@ export class Backups implements Viewable {
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
+}
+
+export enum OIDCProviders {
+  Keycloak = 'keycloak',
 }
