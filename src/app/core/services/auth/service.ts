@@ -23,6 +23,7 @@ import {take, tap} from 'rxjs/operators';
 import {PreviousRouteService} from '../previous-route';
 import {TokenService} from '../token';
 import {UserService} from '../user';
+import {OIDCProviders} from '@app/shared/model/Config';
 
 @Injectable()
 export class Auth {
@@ -126,10 +127,18 @@ export class Auth {
     const config = this._appConfigService.getConfig();
     if (config.oidc_logout_url) {
       const logoutUrl = new URL(config.oidc_logout_url);
-      if (logoutUrl.searchParams.has('redirectUri')) {
-        logoutUrl.searchParams.set('redirectUri', this._redirectUri);
-      } else {
-        logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
+      switch (config.oidc_provider?.toLowerCase()) {
+        case OIDCProviders.Keycloak:
+          logoutUrl.searchParams.set('post_logout_redirect_uri', this._redirectUri);
+          logoutUrl.searchParams.set('id_token_hint', this.getBearerToken());
+          break;
+        default:
+          if (logoutUrl.searchParams.has('redirectUri')) {
+            logoutUrl.searchParams.set('redirectUri', this._redirectUri);
+          } else {
+            logoutUrl.searchParams.set('redirect_uri', this._redirectUri);
+          }
+          break;
       }
       window.location.href = logoutUrl.toString();
     }
