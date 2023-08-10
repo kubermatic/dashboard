@@ -110,6 +110,21 @@ func getFlavors(authClient *gophercloud.ProviderClient, region string) ([]osflav
 	return allFlavors, nil
 }
 
+func getProjectByName(authClient *gophercloud.ProviderClient, projectName string, region string) (*osprojects.Project, error) {
+	projects, err := getTenants(authClient, region)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, project := range projects {
+		if project.Name == projectName {
+			return &project, nil
+		}
+	}
+
+	return nil, fmt.Errorf("project with name %s not found", projectName)
+}
+
 func getTenants(authClient *gophercloud.ProviderClient, region string) ([]osprojects.Project, error) {
 	sc, err := goopenstack.NewIdentityV3(authClient, gophercloud.EndpointOpts{Region: region})
 	if err != nil {
