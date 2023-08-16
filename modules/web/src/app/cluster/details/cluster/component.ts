@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {AddonService} from '@core/services/addon';
 import {ApplicationService} from '@core/services/application';
 import {ClusterService} from '@core/services/cluster';
@@ -27,18 +28,19 @@ import {OPAService} from '@core/services/opa';
 import {PathParam} from '@core/services/params';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
 import {Application} from '@shared/entity/application';
 import {
-  Cluster,
   CNIPlugin,
   CNIPluginVersions,
+  Cluster,
   ExternalCCMMigrationStatus,
-  getExternalCCMMigrationStatusMessage,
   IPFamily,
   MasterVersion,
   Provider,
+  getExternalCCMMigrationStatusMessage,
 } from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -49,23 +51,23 @@ import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import {Node} from '@shared/entity/node';
-import {AdminSettings} from '@shared/entity/settings';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
+import {AdminSettings} from '@shared/entity/settings';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
-  getClusterHealthStatus,
   HealthStatus,
+  StatusMassage,
+  getClusterHealthStatus,
+  getMachineDeploymentHealthStatus,
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
-  getMachineDeploymentHealthStatus,
-  StatusMassage,
 } from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
+import {Observable, Subject, combineLatest, iif, of} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare} from 'semver';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
@@ -73,8 +75,6 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-cluster-details',
@@ -225,7 +225,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                         this.areMachineDeploymentsInitialized = true;
                       })
                     ),
-                    this._clusterService.metrics(this.projectID, this.cluster.id),
+                    this.nodes.length > 0
+                      ? this._clusterService.metrics(this.projectID, this.cluster.id)
+                      : of<ClusterMetrics>({} as ClusterMetrics),
                     this._applicationService.list(this.projectID, this.cluster.id),
                   ]
                 : [

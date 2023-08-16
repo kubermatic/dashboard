@@ -322,20 +322,15 @@ func ListNodesForCluster(ctx context.Context, userInfoGetter provider.UserInfoGe
 	// Go over all machines first
 	for i := range machineList.Items {
 		node := getNodeForMachine(&machineList.Items[i], nodeList.Items)
-		if node != nil {
-			matchedMachineNodes.Insert(string(node.UID))
-		}
-
-		// Do not list Machines that are controlled, i.e. by Machine Set.
-		if len(machineList.Items[i].ObjectMeta.OwnerReferences) != 0 {
+		if node == nil {
 			continue
 		}
 
+		matchedMachineNodes.Insert(string(node.UID))
 		outNode, err := outputMachine(&machineList.Items[i], node, hideInitialConditions)
 		if err != nil {
 			return nil, fmt.Errorf("failed to output machine %s: %w", machineList.Items[i].Name, err)
 		}
-
 		nodesV1 = append(nodesV1, outNode)
 	}
 
