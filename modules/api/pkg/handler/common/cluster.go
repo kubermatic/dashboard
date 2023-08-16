@@ -717,6 +717,11 @@ func GetMetricsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGet
 	if err := client.List(ctx, nodeList); err != nil {
 		return nil, err
 	}
+
+	if len(nodeList.Items) == 0 {
+		return nil, utilerrors.New(http.StatusNotFound, "no nodes found")
+	}
+
 	availableResources := make(map[string]corev1.ResourceList)
 	for _, n := range nodeList.Items {
 		availableResources[n.Name] = n.Status.Allocatable
