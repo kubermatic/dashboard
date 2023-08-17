@@ -1,21 +1,41 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2225",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2226",
   "entries": [
     {
-        "category": "changed",
-        "description": "Update machine-controller to v1.56.4."
+      "category": "changed",
+      "description": "Update metering to v1.0.4 with increased namespace report generation performance and Prometheus v2.37.9."
     },
     {
-        "category": "changed",
-        "description": "Metrics server write timeout increased."
+      "category": "changed",
+      "description": "Mark all canal CRDs with preserveUnknownFields: false."
     },
     {
-        "category": "fixed",
-        "description": "Fix a bug where project scope endpoints for GCP were working only with the presets instead of one of presets or credentials."
+      "category": "fixed",
+      "description": "Add missing images from envoy-agent DaemonSet in Tunneling expose strategy when running `kubermatic-installer mirror-images`."
     },
     {
-        "category": "fixed",
-        "description": "OpenStack: Fix project and projectID header propagation for project scoped endpoints."
+      "category": "fixed",
+      "description": "Fix a reconcile loop for `seed-proxy-token` Secret on Kubernetes 1.27."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix an issue in the kubermatic-installer mirror-images command, which led to failure on the mla-consul chart."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where network and IPv6 subnet pool options were not loading during Openstack cluster creation."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix support for keycloak OIDC logout. New field `oidc_provider` was introduced to support OIDC provider specific configurations. Configuring `oidc_provider` as `keycloak` will properly configure the logout workflow."
+    },
+    {
+      "category": "fixed",
+      "description": "MLA: fix the Kubernetes overview dashboard in Grafana."
+    },
+    {
+      "category": "fixed",
+      "description": "MLA: fix configuration live reload for monitoring-agent and logging-agent."
     }
   ]
 }
