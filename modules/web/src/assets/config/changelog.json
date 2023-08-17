@@ -1,37 +1,57 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#2231",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#2232",
   "entries": [
     {
       "category": "added",
-      "description": "Add support for configuring IPFamilies and IPFamilyPolicy for nodeport-proxy."
+      "description": "Added support for configuring the dex theme via values file."
     },
     {
       "category": "added",
-      "description": "vSphere: Add support for configuring multiple networks."
-    },
-    {
-      "category": "added",
-      "description": "VMware Cloud Director: add support for configuring placement and sizing policy for machines."
+      "description": "Added vertical scroll to the install Addon dialog."
     },
     {
       "category": "changed",
-      "description": "Update Cilium CNI to 1.13.4, marking 1.13.0 as deprecated but kept 1.13.3 because 1.13.4 breaks IPSec support."
+      "description": "Update metering to v1.0.4 with increased namespace report generation performance and Prometheus v2.37.9."
     },
     {
       "category": "changed",
-      "description": "Update machine-controller to v1.57.1."
+      "description": "Update operating-system-manager (OSM) to v1.3.1. (TODO: Update after OSM patch release)"
     },
     {
       "category": "fixed",
-      "description": "Hetzner CSI: recreate CSIDriver to allow upgrade from 1.6.0 to 2.2.0."
+      "description": "Fix kube_service_labels metric scraping. The related scraping config was adapted accordingly."
     },
     {
       "category": "fixed",
-      "description": "Fix a bug where project scope endpoints for GCP were working only with the presets instead of one of presets or credentials."
+      "description": "VSphere: Fix a bug where datastore cluster value was not being propagated to the CSI driver."
     },
     {
       "category": "fixed",
-      "description": "OpenStack: Fix project and projectID header propagation for project scoped endpoints."
+      "description": "Add missing images from envoy-agent DaemonSet in Tunneling expose strategy when running `kubermatic-installer mirror-images`."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix an issue in the kubermatic-installer mirror-images command, which led to failure on the mla-consul chart."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix an issue where IPv6 IPs were being ignored when determining the address of a user cluster."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a reconcile loop for `seed-proxy-token` Secret on Kubernetes 1.27."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix support for keycloak OIDC logout. New field `oidc_provider` was introduced to support OIDC provider specific configurations. Configuring `oidc_provider` as `keycloak` will properly configure the logout workflow."
+    },
+    {
+      "category": "fixed",
+      "description": "MLA: fix the Kubernetes overview dashboard in Grafana."
+    },
+    {
+      "category": "fixed",
+      "description": "MLA: fix configuration live reload for monitoring-agent and logging-agent."
     }
   ]
 }
