@@ -14,27 +14,27 @@
 
 presubmits:
   - name: pre-dashboard-api-e2e
-    run_if_changed: 'modules/api/pkg'
+    run_if_changed: "modules/api/pkg"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-digitalocean: 'true'
-      preset-hetzner: 'true'
-      preset-openstack: 'true'
-      preset-azure: 'true'
-      preset-kubeconfig-ci: 'true'
-      preset-docker-mirror: 'true'
-      preset-docker-pull: 'true'
-      preset-docker-push: 'true'
-      preset-gce: 'true'
-      preset-kind-volume-mounts: 'true'
-      preset-vault: 'true'
-      preset-goproxy: 'true'
+      preset-digitalocean: "true"
+      preset-hetzner: "true"
+      preset-openstack: "true"
+      preset-azure: "true"
+      preset-kubeconfig-ci: "true"
+      preset-docker-mirror: "true"
+      preset-docker-pull: "true"
+      preset-docker-push: "true"
+      preset-gce: "true"
+      preset-kind-volume-mounts: "true"
+      preset-vault: "true"
+      preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-kind-0.20-1
           command:
-            - './hack/ci/run-api-e2e.sh'
+            - "./hack/ci/run-api-e2e.sh"
           env:
             - name: KUBERMATIC_EDITION
               value: ee
@@ -53,14 +53,14 @@ presubmits:
               memory: 6Gi
 
   - name: pre-dashboard-api-unit
-    run_if_changed: 'modules/api'
+    run_if_changed: "modules/api"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-1
           command:
             - make
           args:
@@ -74,14 +74,14 @@ presubmits:
               value: ee
 
   - name: pre-dashboard-api-lint
-    run_if_changed: 'modules/api'
+    run_if_changed: "modules/api"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-1
           command:
             - make
             - api-lint
@@ -94,14 +94,14 @@ presubmits:
               value: ee
 
   - name: pre-dashboard-api-verify
-    run_if_changed: 'modules/api'
+    run_if_changed: "modules/api"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-1
           command:
             - make
             - api-verify

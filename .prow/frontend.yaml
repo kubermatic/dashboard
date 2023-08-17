@@ -17,30 +17,30 @@ presubmits:
     #run_if_changed: 'modules/web'
     optional: true
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
         base_ref: main
-        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
+        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
-      preset-alibaba: 'true'
-      preset-anexia: 'true'
-      preset-aws-kkp: 'true'
-      preset-azure: 'true'
-      preset-digitalocean: 'true'
-      preset-gce: 'true'
-      preset-hetzner: 'true'
-      preset-kubevirt: 'true'
-      preset-openstack: 'true'
-      preset-packet: 'true'
-      preset-vsphere: 'true'
-      preset-docker-pull: 'true'
-      preset-goproxy: 'true'
-      preset-kind-volume-mounts: 'true'
-      preset-kubeconfig-ci: 'true'
-      preset-minio: 'true'
+      preset-alibaba: "true"
+      preset-anexia: "true"
+      preset-aws-kkp: "true"
+      preset-azure: "true"
+      preset-digitalocean: "true"
+      preset-gce: "true"
+      preset-hetzner: "true"
+      preset-kubevirt: "true"
+      preset-openstack: "true"
+      preset-packet: "true"
+      preset-vsphere: "true"
+      preset-docker-pull: "true"
+      preset-goproxy: "true"
+      preset-kind-volume-mounts: "true"
+      preset-kubeconfig-ci: "true"
+      preset-minio: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.2
@@ -59,9 +59,9 @@ presubmits:
               cpu: 4
           env:
             - name: NO_COLOR
-              value: '1'
+              value: "1"
             - name: NODE_OPTIONS
-              value: '--max-old-space-size=6144'
+              value: "--max-old-space-size=6144"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -72,30 +72,30 @@ presubmits:
     #run_if_changed: 'modules/web'
     optional: true
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
         base_ref: main
-        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
+        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
-      preset-alibaba: 'true'
-      preset-anexia: 'true'
-      preset-aws-kkp: 'true'
-      preset-azure: 'true'
-      preset-digitalocean: 'true'
-      preset-gce: 'true'
-      preset-hetzner: 'true'
-      preset-kubevirt: 'true'
-      preset-openstack: 'true'
-      preset-packet: 'true'
-      preset-vsphere: 'true'
-      preset-docker-pull: 'true'
-      preset-goproxy: 'true'
-      preset-kind-volume-mounts: 'true'
-      preset-kubeconfig-ci: 'true'
-      preset-minio: 'true'
+      preset-alibaba: "true"
+      preset-anexia: "true"
+      preset-aws-kkp: "true"
+      preset-azure: "true"
+      preset-digitalocean: "true"
+      preset-gce: "true"
+      preset-hetzner: "true"
+      preset-kubevirt: "true"
+      preset-openstack: "true"
+      preset-packet: "true"
+      preset-vsphere: "true"
+      preset-docker-pull: "true"
+      preset-goproxy: "true"
+      preset-kind-volume-mounts: "true"
+      preset-kubeconfig-ci: "true"
+      preset-minio: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.2
@@ -116,9 +116,9 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ce
             - name: NO_COLOR
-              value: '1'
+              value: "1"
             - name: NODE_OPTIONS
-              value: '--max-old-space-size=6144'
+              value: "--max-old-space-size=6144"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -126,11 +126,11 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-web-integration-tests
-    run_if_changed: 'modules/web'
+    run_if_changed: "modules/web"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-minio: 'true'
+      preset-minio: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.2
@@ -147,18 +147,18 @@ presubmits:
               cpu: 4
           env:
             - name: NO_COLOR
-              value: '1'
+              value: "1"
             - name: CYPRESS_MOCKS
-              value: 'true'
+              value: "true"
             - name: NODE_OPTIONS
-              value: '--max-old-space-size=6144'
+              value: "--max-old-space-size=6144"
 
   - name: pre-dashboard-web-integration-tests-ce
-    run_if_changed: 'modules/web'
+    run_if_changed: "modules/web"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-minio: 'true'
+      preset-minio: "true"
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.2
@@ -177,16 +177,16 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ce
             - name: NO_COLOR
-              value: '1'
+              value: "1"
             - name: CYPRESS_MOCKS
-              value: 'true'
+              value: "true"
             - name: NODE_OPTIONS
-              value: '--max-old-space-size=6144'
+              value: "--max-old-space-size=6144"
 
   - name: pre-dashboard-web-unit
-    run_if_changed: 'modules/web'
+    run_if_changed: "modules/web"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.2
@@ -208,14 +208,14 @@ presubmits:
                   key: token
 
   - name: pre-dashboard-web-go-mod-verify
-    run_if_changed: 'modules/web/cmd/|modules/web/go.mod|modules/web/go.sum'
+    run_if_changed: "modules/web/cmd/|modules/web/go.mod|modules/web/go.sum"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-goproxy: 'true'
+      preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-kind-0.20-1
           command:
             - make
             - web-check-dependencies
@@ -224,14 +224,14 @@ presubmits:
               cpu: 100m
 
   - name: pre-dashboard-web-lint
-    run_if_changed: 'modules/web/cmd/|modules/web/go.mod|modules/web/go.sum'
+    run_if_changed: "modules/web/cmd/|modules/web/go.mod|modules/web/go.sum"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-goproxy: 'true'
+      preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-1
           command:
             - make
             - web-lint
@@ -244,14 +244,14 @@ presubmits:
               value: ee
 
   - name: pre-dashboard-web-check
-    run_if_changed: 'modules/web'
+    run_if_changed: "modules/web"
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-goproxy: 'true'
+      preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-kind-0.20-1
           command:
             - make
             - web-check
