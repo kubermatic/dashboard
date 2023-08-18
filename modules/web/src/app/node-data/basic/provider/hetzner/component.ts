@@ -14,19 +14,19 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {GlobalModule} from '@core/services/global/module';
 import {DynamicModule} from '@app/dynamic/module-registry';
-import _ from 'lodash';
-import {Observable} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
+import _ from 'lodash';
+import {Observable} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Type = 'type',
@@ -102,12 +102,11 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this.form
       .get(Controls.Type)
-      .valueChanges.pipe(filter(_ => this.isEnterpriseEdition))
-      .pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
-        const payload = this._getQuotaCalculationPayload();
-        if (payload) {
+        if (this.isEnterpriseEdition) {
+          const payload = this._getQuotaCalculationPayload();
           this._quotaCalculationService.refreshQuotaCalculations(payload);
         }
       });

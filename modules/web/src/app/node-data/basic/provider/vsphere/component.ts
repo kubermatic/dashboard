@@ -102,12 +102,13 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.DiskSizeGB).valueChanges
     )
-      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
-        const payload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations(payload);
+        if (this.isEnterpriseEdition) {
+          const payload = this._getQuotaCalculationPayload();
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
