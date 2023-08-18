@@ -102,12 +102,12 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 replace (
 	k8c.io/kubeone => k8c.io/kubeone v1.5.0-beta.0.0.20230216134849-7f23d49b8002
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.5-0.20230721225522-82653f028f46
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.6-0.20230816123400-bf384fdbd1d8
 )
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.5-0.20230721225522-82653f028f46
+	k8c.io/kubermatic/v2 v2.22.6-0.20230816123400-bf384fdbd1d8
 )
 
 require (
@@ -182,7 +182,7 @@ require (
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
-	github.com/imdario/mergo v0.3.13 // indirect
+	github.com/imdario/mergo v0.3.15 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
