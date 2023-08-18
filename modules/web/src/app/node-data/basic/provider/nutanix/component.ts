@@ -177,12 +177,13 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.SubnetName).valueChanges,
       this.form.get(Controls.Categories).valueChanges
     )
-      .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
-        const payload = this._getQuotaCalculationPayload();
-        this._quotaCalculationService.refreshQuotaCalculations(payload);
+        if (this.isEnterpriseEdition) {
+          const payload = this._getQuotaCalculationPayload();
+          this._quotaCalculationService.refreshQuotaCalculations(payload);
+        }
       });
 
     this.form
