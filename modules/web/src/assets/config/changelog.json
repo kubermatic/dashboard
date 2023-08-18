@@ -47,6 +47,10 @@
     },
     {
       "category": "fixed",
+      "description": "Fix a bug, for Community Edition, where the values configured for vSphere, Hetzner, and Nutanix nodes were not being persisted."
+    },
+    {
+      "category": "fixed",
       "description": "MLA: fix the Kubernetes overview dashboard in Grafana."
     },
     {
