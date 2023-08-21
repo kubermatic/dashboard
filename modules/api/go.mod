@@ -68,7 +68,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.6.2
 	k8c.io/kubermatic/v2 v2.23.1-0.20230714120150-8d201de030e4
-	k8c.io/operating-system-manager v1.3.0
+	k8c.io/operating-system-manager v1.3.1
 	k8c.io/reconciler v0.4.0
 	k8s.io/api v0.27.3
 	k8s.io/apiextensions-apiserver v0.27.2
@@ -102,7 +102,7 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230714120150-8d201de030e4
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20230818122606-f0cb4e1a1357
 )
 
 require (
