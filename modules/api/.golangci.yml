@@ -78,14 +78,14 @@ issues:
     # gocritic
     - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
     # govet
-    - loop variable tc captured by func literal # TODO: fix tests and remove this exclude
+    - loop variable tc captured by func literal
 
 linters-settings:
   depguard:
-    include-go-root: true
-    packages:
-      - io/ioutil # https://go.dev/doc/go1.16#ioutil
-      - github.com/ghodss/yaml # use sigs.k8s.io/yaml instead
+    rules:
+      main:
+        deny:
+          - { pkg: io/ioutil, desc: https://go.dev/doc/go1.16#ioutil }
 
   importas:
     no-unaliased: true

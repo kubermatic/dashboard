@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 	"time"
 )
@@ -189,13 +190,24 @@ func iterateHandlerFuncs(funcs ...http.HandlerFunc) http.HandlerFunc {
 	for _, f := range funcs {
 		handlersChan <- f
 	}
+	close(handlersChan)
+
+	var wg sync.WaitGroup
+	wg.Add(len(funcs))
 	return func(w http.ResponseWriter, r *http.Request) {
 		select {
-		case h := <-handlersChan:
-			h(w, r)
+		case h, ok := <-handlersChan:
+			if ok {
+				h(w, r)
+				wg.Done()
+			} else {
+				// once exhausted the channel just run the latest func
+				funcs[len(funcs)-1](w, r)
+			}
 		default:
 			// once exhausted the channel just run the latest func
 			funcs[len(funcs)-1](w, r)
 		}
+		wg.Wait()
 	}
 }

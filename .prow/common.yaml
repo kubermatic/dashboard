@@ -16,12 +16,12 @@ presubmits:
   - name: pre-dashboard-common-verify
     always_run: true
     decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
-      preset-goproxy: 'true'
+      preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.20-node-18-kind-0.18-8
+        - image: quay.io/kubermatic/build:go-1.21-node-18-kind-0.20-1
           command:
             - ./hack/ci/verify.sh
           resources:
