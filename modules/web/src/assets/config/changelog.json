@@ -18,6 +18,14 @@
       "description": "Update operating-system-manager (OSM) to v1.3.1. (TODO: Update after OSM patch release)"
     },
     {
+      "category": "changed",
+      "description": "Update machine-controller to v1.57.3 and OSM to v1.3.2."
+    },
+    {
+      "category": "changed",
+      "description": "Update telemetry-agent to v0.4.1."
+    },
+    {
       "category": "fixed",
       "description": "Fix kube_service_labels metric scraping. The related scraping config was adapted accordingly."
     },
