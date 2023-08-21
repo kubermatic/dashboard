@@ -18,7 +18,12 @@ import (
 type MeteringReportConfiguration struct {
 
 	// Interval defines the number of days consulted in the metering report.
+	// Ignored when `Monthly` is set to true
 	Interval uint32 `json:"interval,omitempty"`
+
+	// +optional
+	// Monthly creates a report for the previous month.
+	Monthly bool `json:"monthly,omitempty"`
 
 	// Retention defines a number of days after which reports are queued for removal. If not set, reports are kept forever.
 	// Please note that this functionality works only for object storage that supports an object lifecycle management mechanism.
