@@ -130,6 +130,7 @@ export class VSphereTagsComponent extends BaseFormValidator implements OnInit, O
           this.clusterCategory = null;
           this.disabledTags = null;
         }
+        this._updateTags();
         this._cdr.detectChanges();
       }
     });
