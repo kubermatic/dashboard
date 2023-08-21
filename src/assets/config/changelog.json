@@ -2,16 +2,16 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22111",
   "entries": [
     {
-        "category": "changed",
-        "description": "Update machine-controller to v1.54.8."
+      "category": "fixed",
+      "description": "Fix support for keycloak OIDC logout. New field `oidc_provider` was introduced to support OIDC provider specific configurations. Configuring `oidc_provider` as `keycloak` will properly configure the logout workflow."
     },
     {
-        "category": "fixed",
-        "description": "Fix default url configuration of Blackbox exporter."
+      "category": "fixed",
+      "description": "Add missing images from envoy-agent DaemonSet in Tunneling expose strategy when running `kubermatic-installer mirror-images`."
     },
     {
-        "category": "fixed",
-        "description": "Metrics server write timeout increased."
+      "category": "changed",
+      "description": "Mark all canal CRDs with preserveUnknownFields: false."
     }
   ]
 }
