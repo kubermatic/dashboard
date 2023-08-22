@@ -113,6 +113,13 @@ limitations under the License.
               </div>
             </km-property>
 
+            <km-property *ngIf="nodePortsAllowedIPRanges as allowedIPRange">
+              <div key>Allowed IP Ranges for Node Ports</div>
+              <div value>
+                <km-labels [labels]="allowedIPRange"></km-labels>
+              </div>
+            </km-property>
+
             <ng-container *ngIf="!showIPv4"
                           [ngTemplateOutlet]="ipv4Properties"></ng-container>
           </div>
@@ -144,11 +151,6 @@ limitations under the License.
                   <div key>Node CIDR Mask Size</div>
                   <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv6}}</div>
                 </km-property>
-
-                <km-property *ngIf="ipv6NodePortsAllowedIPRange as allowedIPRange">
-                  <div key>Allowed IP Range for NodePorts</div>
-                  <div value>{{allowedIPRange}}</div>
-                </km-property>
               </div>
             </ng-container>
 
@@ -177,11 +179,6 @@ limitations under the License.
             <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv4">
               <div key>Node CIDR Mask Size</div>
               <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv4}}</div>
-            </km-property>
-
-            <km-property *ngIf="ipv4NodePortsAllowedIPRange as allowedIPRange">
-              <div key>Allowed IP Range for NodePorts</div>
-              <div value>{{allowedIPRange}}</div>
             </km-property>
           </ng-template>
         </div>

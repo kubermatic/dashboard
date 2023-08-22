@@ -24,14 +24,10 @@ import {
 } from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {
-  IPV6_CIDR_PATTERN_VALIDATOR,
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
+  IPV6_CIDR_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
-import {
-  CiliumApplicationValuesDialogComponent,
-  CiliumApplicationValuesDialogData,
-} from './cilium-application-values-dialog/component';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -41,37 +37,41 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {
   AuditPolicyPreset,
   Cluster,
+  ClusterAnnotation,
   ClusterNetwork,
   ClusterSpec,
   CNIPlugin,
   ContainerRuntime,
+  ExposeStrategy,
   ExtraCloudSpecOptions,
   IPFamily,
   MasterVersion,
-  ProxyMode,
-  ExposeStrategy,
   NetworkRanges,
-  ClusterAnnotation,
+  ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
+import {
+  CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
+  CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
+  CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+} from '@shared/utils/cluster';
+import {getEditionVersion} from '@shared/utils/common';
+import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
+import _ from 'lodash';
 import {combineLatest, merge} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
-import {AsyncValidators} from '@shared/validators/async.validators';
 import {
-  CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
-  CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
-  CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
-} from '@shared/utils/cluster';
-import {KeyValueEntry} from '@shared/types/common';
-import {getEditionVersion} from '@shared/utils/common';
-import _ from 'lodash';
+  CiliumApplicationValuesDialogComponent,
+  CiliumApplicationValuesDialogData,
+} from './cilium-application-values-dialog/component';
 
 enum Controls {
   Name = 'name',
@@ -99,14 +99,13 @@ enum Controls {
   IPv6ServicesCIDR = 'ipv6ServicesCIDR',
   CNIPlugin = 'cniPlugin',
   CNIPluginVersion = 'cniPluginVersion',
-  IPv4AllowedIPRange = 'ipv4AllowedIPRange',
-  IPv6AllowedIPRange = 'ipv6AllowedIPRange',
   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
   NodeLocalDNSCache = 'nodeLocalDNSCache',
   IPFamily = 'ipFamily',
   ExposeStrategy = 'exposeStrategy',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
+  NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
 }
 
 @Component({
@@ -158,8 +157,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _settings: AdminSettings;
   private _defaultProxyMode: ProxyMode;
   private readonly _minNameLength = 5;
-  private readonly _defaultAllowedIPRangeIPv4 = '0.0.0.0/0';
-  private readonly _defaultAllowedIPRangeIPv6 = '::/0';
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
 
@@ -298,23 +295,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
-    merge(
-      this.control(Controls.IPFamily).valueChanges,
-      this.control(Controls.IPv4AllowedIPRange).valueChanges,
-      this.control(Controls.IPv6AllowedIPRange).valueChanges
-    )
+    merge(this.control(Controls.IPFamily).valueChanges, this.control(Controls.NodePortsAllowedIPRanges).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        let cidrBlocks = [];
-        const ipv4AllowedIPRange = this.controlValue(Controls.IPv4AllowedIPRange);
-        if (ipv4AllowedIPRange) {
-          const ipv6AllowedIPRange = this.controlValue(Controls.IPv6AllowedIPRange);
-          cidrBlocks =
-            this.isDualStackIPFamilySelected() && ipv6AllowedIPRange
-              ? [ipv4AllowedIPRange, ipv6AllowedIPRange]
-              : [ipv4AllowedIPRange];
-        }
-        this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {cidrBlocks};
+        const nodePortsAllowedIPRanges = this.controlValue(Controls.NodePortsAllowedIPRanges)?.tags;
+        this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {
+          cidrBlocks: nodePortsAllowedIPRanges ? nodePortsAllowedIPRanges : [],
+        };
       });
 
     this._initDualStackControlsValueChangeListeners();
@@ -357,7 +344,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.CNIPlugin).valueChanges,
       this.form.get(Controls.CNIPluginVersion).valueChanges,
       this.form.get(Controls.ExposeStrategy).valueChanges,
-      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
+      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges,
+      this.form.get(Controls.NodePortsAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -491,6 +479,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.APIServerAllowedIPRanges]: this._builder.control(
         clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? null
       ),
+      [Controls.NodePortsAllowedIPRanges]: this._builder.control(
+        this.isAllowedIPRangeSupported() ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges : ''
+      ),
       [Controls.IPv4PodsCIDR]: this._builder.control(NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? '', [
         IPV4_CIDR_PATTERN_VALIDATOR,
         this._dualStackRequiredIfValidator(Controls.IPv6PodsCIDR),
@@ -506,18 +497,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv6ServicesCIDR]: this._builder.control(
         NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
         [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
-      ),
-      [Controls.IPv4AllowedIPRange]: this._builder.control(
-        this.isAllowedIPRangeSupported()
-          ? NetworkRanges.ipv4CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges)
-          : '',
-        [IPV4_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv6AllowedIPRange)]
-      ),
-      [Controls.IPv6AllowedIPRange]: this._builder.control(
-        this.isAllowedIPRangeSupported()
-          ? NetworkRanges.ipv6CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges)
-          : '',
-        [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange)]
       ),
     });
   }
@@ -577,6 +556,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.ExposeStrategy]: clusterSpec?.exposeStrategy ?? this.controlValue(Controls.ExposeStrategy),
           [Controls.APIServerAllowedIPRanges]:
             clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? this.controlValue(Controls.APIServerAllowedIPRanges),
+          [Controls.NodePortsAllowedIPRanges]: this.isAllowedIPRangeSupported()
+            ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges ??
+              this.controlValue(Controls.NodePortsAllowedIPRanges)
+            : this.controlValue(Controls.NodePortsAllowedIPRanges),
           [Controls.IPv4PodsCIDR]:
             NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? this.controlValue(Controls.IPv4PodsCIDR),
           [Controls.IPv6PodsCIDR]:
@@ -606,22 +589,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         if (!this.isDualStackAllowed) {
           this.control(Controls.IPFamily).reset();
           this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
-        }
-
-        if (this.isAllowedIPRangeSupported()) {
-          this.form.patchValue({
-            [Controls.IPv4AllowedIPRange]:
-              NetworkRanges.ipv4CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges) ??
-              this._defaultAllowedIPRangeIPv4,
-            [Controls.IPv6AllowedIPRange]:
-              NetworkRanges.ipv6CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges) ??
-              this._defaultAllowedIPRangeIPv6,
-          });
-        } else {
-          this.form.patchValue({
-            [Controls.IPv4AllowedIPRange]: null,
-            [Controls.IPv6AllowedIPRange]: null,
-          });
         }
 
         this._handleClusterSpecChanges();
@@ -671,8 +638,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _initDualStackControlsValueChangeListeners(): void {
-    const ipv4Controls = [Controls.IPv4PodsCIDR, Controls.IPv4ServicesCIDR, Controls.IPv4AllowedIPRange];
-    const ipv6Controls = [Controls.IPv6PodsCIDR, Controls.IPv6ServicesCIDR, Controls.IPv6AllowedIPRange];
+    const ipv4Controls = [Controls.IPv4PodsCIDR, Controls.IPv4ServicesCIDR];
+    const ipv6Controls = [Controls.IPv6PodsCIDR, Controls.IPv6ServicesCIDR];
 
     merge(
       this.control(Controls.IPFamily).valueChanges,
