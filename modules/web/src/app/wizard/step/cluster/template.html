@@ -20,7 +20,6 @@ limitations under the License.
                color="accent"></mat-spinner>
 </ng-container>
 
-
 <form *ngIf="!loadingClusterDefaults"
       [formGroup]="form">
   <div fxLayout="row"
@@ -40,7 +39,7 @@ limitations under the License.
                type="text"
                title="name"
                autocomplete="off"
-               required>
+               required />
         <button mat-icon-button
                 type="button"
                 matSuffix
@@ -62,7 +61,6 @@ limitations under the License.
       </mat-card-header>
       <div fxLayout="column"
            fxLayoutGap="7px">
-
         <div class="cni-plugin"
              fxLayout="column">
           <mat-button-toggle-group group="cniPluginTypeGroup"
@@ -73,9 +71,7 @@ limitations under the License.
             <mat-button-toggle [value]="cniPlugin.Cilium">
               <i class="km-cni-image-cilium"></i>
             </mat-button-toggle>
-            <mat-button-toggle [value]="cniPlugin.None">
-              None
-            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.None"> None </mat-button-toggle>
           </mat-button-toggle-group>
 
           <mat-form-field fxFlex
@@ -86,9 +82,7 @@ limitations under the License.
                         class="km-select-ellipsis"
                         disableOptionCentering>
               <mat-option *ngFor="let version of cniPluginVersions"
-                          [value]="version">
-                {{version}}
-              </mat-option>
+                          [value]="version"> {{version}} </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -116,9 +110,7 @@ limitations under the License.
                         class="km-select-ellipsis"
                         disableOptionCentering>
               <mat-option *ngFor="let proxyMode of availableProxyModes"
-                          [value]="proxyMode">
-                {{proxyMode}}
-              </mat-option>
+                          [value]="proxyMode"> {{proxyMode}} </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="km-dropdown-with-suffix km-long-subscript">
@@ -148,14 +140,23 @@ limitations under the License.
                         [kmPattern]="ipv4AndIPv6CidrRegex"
                         kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
             <ng-container hint>
-              Use commas, space or enter key as the separators. This feature is dependent on cloud provider capabilities.
-              Check the documentation for more information&nbsp;
+              Use commas, space or enter key as the separators. This feature is dependent on cloud provider
+              capabilities. Check the documentation for more information&nbsp;
               <a target="_blank"
                  rel="noopener"
                  fxLayout="row inline"
                  fxLayoutAlign=" center"
                  href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/apiserver-policies/#api-server-allowed-source-ip-ranges">here <i class="km-icon-external-link"></i></a>.
             </ng-container>
+          </km-chip-list>
+          <km-chip-list *ngIf="isAllowedIPRangeSupported()"
+                        class="tag-list"
+                        label="Allowed IP Ranges for NodePorts"
+                        placeholder="IP CIDRs..."
+                        description=""
+                        [formControlName]="Controls.NodePortsAllowedIPRanges"
+                        [kmPattern]="ipv4AndIPv6CidrRegex"
+                        kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
           </km-chip-list>
           <div fxLayout="row"
                fxLayoutGap="50px"
@@ -168,7 +169,7 @@ limitations under the License.
                 <input matInput
                        [formControlName]="Controls.IPv4PodsCIDR"
                        type="text"
-                       autocomplete="off">
+                       autocomplete="off" />
                 <mat-error *ngIf="form.get(Controls.IPv4PodsCIDR).hasError('required')">
                   <strong>Required</strong>
                 </mat-error>
@@ -181,7 +182,7 @@ limitations under the License.
                 <input matInput
                        [formControlName]="Controls.IPv4ServicesCIDR"
                        type="text"
-                       autocomplete="off">
+                       autocomplete="off" />
                 <mat-error *ngIf="form.get(Controls.IPv4ServicesCIDR).hasError('required')">
                   <strong>Required</strong>
                 </mat-error>
@@ -195,20 +196,6 @@ limitations under the License.
                                  max="32"
                                  label="Node CIDR Mask Size">
               </km-number-stepper>
-              <mat-form-field *ngIf="isAllowedIPRangeSupported()"
-                              class="km-long-subscript">
-                <mat-label>Allowed IP Range for NodePorts</mat-label>
-                <input matInput
-                       [formControlName]="Controls.IPv4AllowedIPRange"
-                       type="text"
-                       autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('required')">
-                  <strong>Required</strong>
-                </mat-error>
-                <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('pattern')">
-                  Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
-                </mat-error>
-              </mat-form-field>
             </div>
             <div *ngIf="isDualStackIPFamilySelected()"
                  fxLayout="column"
@@ -219,7 +206,7 @@ limitations under the License.
                 <input matInput
                        [formControlName]="Controls.IPv6PodsCIDR"
                        type="text"
-                       autocomplete="off">
+                       autocomplete="off" />
                 <mat-error *ngIf="form.get(Controls.IPv6PodsCIDR).hasError('required')">
                   <strong>Required</strong>
                 </mat-error>
@@ -232,7 +219,7 @@ limitations under the License.
                 <input matInput
                        [formControlName]="Controls.IPv6ServicesCIDR"
                        type="text"
-                       autocomplete="off">
+                       autocomplete="off" />
                 <mat-error *ngIf="form.get(Controls.IPv6ServicesCIDR).hasError('required')">
                   <strong>Required</strong>
                 </mat-error>
@@ -246,20 +233,6 @@ limitations under the License.
                                  max="128"
                                  label="Node CIDR Mask Size">
               </km-number-stepper>
-              <mat-form-field *ngIf="isAllowedIPRangeSupported()"
-                              class="km-long-subscript">
-                <mat-label>Allowed IP Range for NodePorts</mat-label>
-                <input matInput
-                       [formControlName]="Controls.IPv6AllowedIPRange"
-                       type="text"
-                       autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('required')">
-                  <strong>Required</strong>
-                </mat-error>
-                <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('pattern')">
-                  Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
-                </mat-error>
-              </mat-form-field>
             </div>
           </div>
           <div fxLayout="column"
@@ -275,9 +248,7 @@ limitations under the License.
                 <span>Edit CNI Values</span>
               </button>
             </div>
-            <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache">
-              Node Local DNS Cache
-            </mat-checkbox>
+            <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache"> Node Local DNS Cache </mat-checkbox>
             <mat-checkbox [formControlName]="Controls.Konnectivity"
                           [class.km-text-muted]="control(Controls.Konnectivity).disabled">
               Konnectivity
@@ -352,9 +323,10 @@ limitations under the License.
                  fxLayoutAlign=" center"
                  fxLayoutGap="8px">
               <i class="km-icon-warning km-warning km-pointer"></i>
-              <p fxFlex="95">An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm
-                charts will not work out of the box. Enabling Pod Security Policy is not recommended since this is a deprecated
-                feature that will be removed with Kubernetes v1.25.
+              <p fxFlex="95">
+                An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm charts will not
+                work out of the box. Enabling Pod Security Policy is not recommended since this is a deprecated feature
+                that will be removed with Kubernetes v1.25.
                 <a href="https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/#pod-security-changes"
                    target="_blank"
                    rel="noreferrer noopener"
@@ -383,13 +355,11 @@ limitations under the License.
             <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
               <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
             </div>
-
           </div>
 
           <div fxLayout="column"
                fxFlex="100"
                fxLayoutGap="10px">
-
             <div fxLayoutAlign=" center">
               <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
               <mat-button-toggle-group *ngIf="!!controlValue(Controls.AuditLogging)"

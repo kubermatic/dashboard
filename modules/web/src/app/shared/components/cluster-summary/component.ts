@@ -87,12 +87,8 @@ export class ClusterSummaryComponent {
     return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
   }
 
-  get ipv4NodePortsAllowedIPRange(): string {
-    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[0];
-  }
-
-  get ipv6NodePortsAllowedIPRange(): string {
-    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[1];
+  get nodePortsAllowedIPRanges(): string[] {
+    return this.cluster.spec?.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks;
   }
 
   get showIPv4(): boolean {
@@ -103,8 +99,7 @@ export class ClusterSummaryComponent {
       !!(
         clusterNetwork?.pods?.cidrBlocks?.length ||
         clusterNetwork?.services?.cidrBlocks?.length ||
-        clusterNetwork?.nodeCidrMaskSizeIPv4 ||
-        this.ipv4NodePortsAllowedIPRange
+        clusterNetwork?.nodeCidrMaskSizeIPv4
       )
     );
   }
@@ -117,8 +112,7 @@ export class ClusterSummaryComponent {
       !!(
         clusterNetwork?.pods?.cidrBlocks?.length > 1 ||
         clusterNetwork?.services?.cidrBlocks?.length > 1 ||
-        clusterNetwork?.nodeCidrMaskSizeIPv6 ||
-        this.ipv6NodePortsAllowedIPRange
+        clusterNetwork?.nodeCidrMaskSizeIPv6
       )
     );
   }
