@@ -480,6 +480,7 @@ func (m *PresetProvider) setVMwareCloudDirectorCredentials(preset *kubermaticv1.
 	cloud.VMwareCloudDirector.Organization = credentials.Organization
 	cloud.VMwareCloudDirector.VDC = credentials.VDC
 	cloud.VMwareCloudDirector.OVDCNetwork = credentials.OVDCNetwork
+	cloud.VMwareCloudDirector.APIToken = credentials.APIToken
 
 	return &cloud, nil
 }
