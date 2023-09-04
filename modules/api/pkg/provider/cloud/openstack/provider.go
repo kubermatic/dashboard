@@ -125,7 +125,7 @@ func GetNetworks(ctx context.Context, authURL, region string, credentials *resou
 		return nil, fmt.Errorf("couldn't get auth client: %w", err)
 	}
 
-	networks, err := getAllNetworks(authClient, osnetworks.ListOpts{})
+	networks, err := getAllNetworks(authClient, osnetworks.ListOpts{TenantID: credentials.ProjectID})
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get networks: %w", err)
 	}
@@ -140,7 +140,7 @@ func GetSecurityGroups(ctx context.Context, authURL, region string, credentials 
 		return nil, fmt.Errorf("couldn't get auth client: %w", err)
 	}
 
-	page, err := ossecuritygroups.List(netClient, ossecuritygroups.ListOpts{}).AllPages()
+	page, err := ossecuritygroups.List(netClient, ossecuritygroups.ListOpts{TenantID: credentials.ProjectID}).AllPages()
 	if err != nil {
 		return nil, fmt.Errorf("failed to list security groups: %w", err)
 	}
@@ -190,7 +190,7 @@ func GetSubnetPools(ctx context.Context, authURL, region string, credentials *re
 		return nil, fmt.Errorf("couldn't get auth client: %w", err)
 	}
 
-	subnetPools, err := getAllSubnetPools(authClient, ossubnetpools.ListOpts{IPVersion: ipVersion})
+	subnetPools, err := getAllSubnetPools(authClient, ossubnetpools.ListOpts{IPVersion: ipVersion, TenantID: credentials.ProjectID})
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get subnet pools: %w", err)
 	}
@@ -233,6 +233,15 @@ func getNetClient(ctx context.Context, authURL, region string, credentials *reso
 	authClient, err := getAuthClient(authURL, credentials, caBundle)
 	if err != nil {
 		return nil, err
+	}
+
+	// Set ProjectID when project's name is provided for later use in ListOpts.
+	if credentials.ProjectID == "" && credentials.Project != "" {
+		project, err := getProjectByName(authClient, credentials.Project, region)
+		if err != nil {
+			return nil, err
+		}
+		credentials.ProjectID = project.ID
 	}
 
 	serviceClient, err := goopenstack.NewNetworkV2(authClient, gophercloud.EndpointOpts{Region: region})
