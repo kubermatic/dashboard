@@ -785,6 +785,7 @@ km-side-nav-field .sub-menu-item:last-child {
 .go-back:not(.go-back-collapsed) {
   bottom: (1.5 * variables.$sidenav-item-margin);
   height: variables.$sidenav-item-height;
+  margin-top: 15px;
   position: relative;
   width: variables.$sidenav-width;
   z-index: 4;
@@ -811,6 +812,7 @@ km-side-nav-field .sub-menu-item:last-child {
 
 .go-back-collapsed {
   bottom: (1.5 * variables.$sidenav-item-margin);
+  margin-top: 15px;
   padding: variables.$sidenav-item-margin;
   position: relative;
   width: variables.$sidenav-width-collapsed;

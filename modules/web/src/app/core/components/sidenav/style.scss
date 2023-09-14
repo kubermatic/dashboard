@@ -22,8 +22,16 @@
   overflow-y: auto;
   padding-top: variables.$content-padding;
 
+  .sidenav-inner-container {
+    height: 100%;
+  }
+
   &.collapse-sidenav {
     @include mixins.size(variables.$sidenav-width-collapsed, 100%);
+
+    .sidenav-inner-container {
+      @include mixins.size(variables.$sidenav-inner-container-width-collapsed, 100%);
+    }
   }
 
   .menu-item {
