@@ -39,16 +39,11 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
-  screenWidth = 0;
+  isSidenavCollapsed: boolean;
 
   private readonly _debounceTime = 500;
   private _unsubscribe = new Subject<void>();
-  private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
-
-  get isSidenavCollapsed(): boolean {
-    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
-  }
 
   constructor(
     public dialog: MatDialog,
@@ -61,12 +56,14 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
     this._screenWidth
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(width => (this.screenWidth = width));
+      .subscribe(width => {
+        this.isSidenavCollapsed = width <= maxScreenWidth;
+      });
 
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.currentUser = user));
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
-      this._isSidenavCollapsed = this.settings.collapseSidenav;
+      this.isSidenavCollapsed = this.settings.collapseSidenav;
     });
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))

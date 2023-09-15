@@ -44,19 +44,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
-  screenWidth = 0;
   areExternalClustersEnabled = false;
+  isSidenavCollapsed: boolean;
 
   private readonly _debounceTime = 500;
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
-  private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
   private _unsubscribe = new Subject<void>();
-
-  get isSidenavCollapsed(): boolean {
-    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
-  }
 
   constructor(
     public dialog: MatDialog,
@@ -70,12 +65,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._screenWidth
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(width => (this.screenWidth = width));
+      .subscribe(width => {
+        this.isSidenavCollapsed = width <= maxScreenWidth;
+      });
 
     this._userService.currentUser.subscribe(user => (this.currentUser = user));
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this._isSidenavCollapsed = settings.collapseSidenav;
+      this.isSidenavCollapsed = settings.collapseSidenav;
       this.settings = settings;
     });
 
