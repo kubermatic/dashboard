@@ -102,12 +102,12 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 replace (
 	k8c.io/kubeone => k8c.io/kubeone v1.5.0-beta.0.0.20230216134849-7f23d49b8002
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.6-0.20230816123400-bf384fdbd1d8
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.7-0.20230914152521-4b19bad76730
 )
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.6-0.20230816123400-bf384fdbd1d8
+	k8c.io/kubermatic/v2 v2.22.7-0.20230914152521-4b19bad76730
 )
 
 require (
@@ -262,7 +262,7 @@ require (
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	helm.sh/helm/v3 v3.11.1 // indirect
-	k8s.io/autoscaler/vertical-pod-autoscaler v0.13.0 // indirect
+	k8s.io/autoscaler/vertical-pod-autoscaler v0.14.0 // indirect
 	k8s.io/component-base v0.26.4 // indirect
 	k8s.io/gengo v0.0.0-20220902162205-c0856e24416d // indirect
 	k8s.io/klog v1.0.0 // indirect
