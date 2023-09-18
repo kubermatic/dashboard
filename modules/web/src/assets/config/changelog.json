@@ -1,49 +1,25 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2226",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2227",
   "entries": [
     {
-      "category": "changed",
-      "description": "Update metering to v1.0.4 with increased namespace report generation performance and Prometheus v2.37.9."
+      "category": "added",
+      "description": "Add support for Kubernetes 1.25.14 and 1.26.9."
     },
     {
       "category": "changed",
-      "description": "Mark all canal CRDs with preserveUnknownFields: false."
-    },
-    {
-      "category": "changed",
-      "description": "Update telemetry-agent to v0.4.1."
+      "description": "Set default Kubernetes version to 1.25.14."
     },
     {
       "category": "fixed",
-      "description": "Add missing images from envoy-agent DaemonSet in Tunneling expose strategy when running `kubermatic-installer mirror-images`."
+      "description": "Fix migration for cluster templates failing when dynamic kubelet configuration was still configured on it."
     },
     {
       "category": "fixed",
-      "description": "Fix a reconcile loop for `seed-proxy-token` Secret on Kubernetes 1.27."
+      "description": "Allow expansion of side navigation on small screen sizes."
     },
     {
       "category": "fixed",
-      "description": "Fix an issue in the kubermatic-installer mirror-images command, which led to failure on the mla-consul chart."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug where network and IPv6 subnet pool options were not loading during Openstack cluster creation."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix support for keycloak OIDC logout. New field `oidc_provider` was introduced to support OIDC provider specific configurations. Configuring `oidc_provider` as `keycloak` will properly configure the logout workflow."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug, for Community Edition, where the values configured for vSphere, Hetzner, and Nutanix nodes were not being persisted."
-    },
-    {
-      "category": "fixed",
-      "description": "MLA: fix the Kubernetes overview dashboard in Grafana."
-    },
-    {
-      "category": "fixed",
-      "description": "MLA: fix configuration live reload for monitoring-agent and logging-agent."
+      "description": "Fix vSphere tags for initial machine deployments."
     }
   ]
 }
