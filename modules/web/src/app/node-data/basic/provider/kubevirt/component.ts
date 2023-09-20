@@ -559,7 +559,7 @@ export class KubeVirtBasicNodeDataComponent
           link: osVersions[version],
         }))
       : [];
-    const selectedOSImage = this.form.get(Controls.PrimaryDiskOSImage).value[ComboboxControls.Select];
+    const selectedOSImage = this.form.get(Controls.PrimaryDiskOSImage).value[ComboboxControls?.Select];
     if (selectedOSImage && !this.osImageDropdownOptions.find(osImage => osImage.link === selectedOSImage)) {
       this._osImageCombobox.reset();
     }
@@ -642,20 +642,18 @@ export class KubeVirtBasicNodeDataComponent
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
     const nodeAffinityPreset = this.form.get(Controls.NodeAffinityPreset).value;
-    const nodeAffinityPresetData: KubeVirtNodeAffinityPreset = !nodeAffinityPreset
-      ? null
-      : {
-          Type: nodeAffinityPreset,
-          Key: this.form.get(Controls.NodeAffinityPresetKey).value,
-          Values: this.nodeAffinityPresetValues,
-        };
+    const nodeAffinityPresetData: KubeVirtNodeAffinityPreset = {
+      Type: nodeAffinityPreset ? nodeAffinityPreset : '',
+      Key: nodeAffinityPreset ? this.form.get(Controls.NodeAffinityPresetKey).value : '',
+      Values: nodeAffinityPreset ? this.nodeAffinityPresetValues : [],
+    };
 
     return {
       spec: {
         cloud: {
           kubevirt: {
-            cpus: !instanceType && cpus ? `${cpus}` : null,
-            memory: !instanceType && memory ? `${memory}M` : null,
+            cpus: !instanceType && cpus ? `${cpus}` : '',
+            memory: !instanceType && memory ? `${memory}M` : '',
             primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[
               ComboboxControls.Select
             ],
