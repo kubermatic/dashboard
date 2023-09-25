@@ -1,45 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#2233",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2234",
   "entries": [
     {
-      "category": "added",
-      "description": "Add support for Kubernetes 1.25.14, 1.26.9 and 1.27.6."
-    },
-    {
-      "category": "added",
-      "description": "Add Cilium 1.13.6 as supported CNI version. Older 1.13.x releases are now deprecated."
-    },
-    {
-      "category": "changed",
-      "description": "Set default Kubernetes version to 1.26.9."
-    },
-    {
-      "category": "changed",
-      "description": "Mark MLA Grafana dashboards as non-editable as they are managed by KKP."
+      "category": "fixed",
+      "description": "No longer show 1.14.1 as available Cilium version as it was never supported."
     },
     {
       "category": "fixed",
-      "description": "Add missing cluster-autoscaler release for user clusters using Kubernetes 1.27."
-    },
-    {
-      "category": "fixed",
-      "description": "MLA Grafana Kubernetes dashboards will no longer repeatedly ask to be saved."
-    },
-    {
-      "category": "fixed",
-      "description": "Allow expansion of side navigation on small screen sizes."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix vSphere tags for initial machine deployments."
-    },
-    {
-      "category": "fixed",
-      "description": "Openstack: take TenantID into account while listing networks, security groups and subnet pools."
-    },
-    {
-      "category": "fixed",
-      "description": "VMware Cloud Director: fix an issue where the API Token from preset was not being sourced to the cluster."
+      "description": "If a vSphere user cluster uses a custom datastore, the seed's default datastore is no longer validated."
     }
   ]
 }
