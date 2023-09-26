@@ -116,7 +116,7 @@
     "cypress-fail-fast": "7.0.1",
     "del": "7.0.0",
     "eslint": "8.48.0",
-    "eslint-plugin-compat": "4.1.4",
+    "eslint-plugin-compat": "4.2.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-rxjs": "5.0.3",
     "gts": "5.0.1",
