@@ -116,6 +116,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     if (this.settings.enableShareCluster) {
       this.settings.enableShareCluster = false;
     }
+    if (this.settings.disableAdminKubeconfig) {
+      this.settings.disableAdminKubeconfig = false;
+    }
+
     this.onSettingsChange();
   }
 
