@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +17,18 @@ import (
 //
 // swagger:model ValidationRule
 type ValidationRule struct {
+
+	// fieldPath represents the field path returned when the validation fails.
+	// It must be a relative JSON path (i.e. with array notation) scoped to the location of this x-kubernetes-validations extension in the schema and refer to an existing field.
+	// e.g. when validation checks if a specific attribute `foo` under a map `testMap`, the fieldPath could be set to `.testMap.foo`
+	// If the validation checks two lists must have unique attributes, the fieldPath could be set to either of the list: e.g. `.testList`
+	// It does not support list numeric index.
+	// It supports child operation to refer to an existing field currently. Refer to [JSONPath support in Kubernetes](https://kubernetes.io/docs/reference/kubectl/jsonpath/) for more info.
+	// Numeric index of array is not supported.
+	// For field name which contains special characters, use `['specialName']` to refer the field name.
+	// e.g. for attribute `foo.34$` appears in a list `testList`, the fieldPath could be set to `.testList['foo.34$']`
+	// +optional
+	FieldPath string `json:"fieldPath,omitempty"`
 
 	// Message represents the message displayed when validation fails. The message is required if the Rule contains
 	// line breaks. The message must not contain line breaks.
@@ -38,15 +51,67 @@ type ValidationRule struct {
 	// The Rule is scoped to the location of the x-kubernetes-validations extension in the schema.
 	// The `self` variable in the CEL expression is bound to the scoped value.
 	Rule string `json:"rule,omitempty"`
+
+	// reason
+	Reason FieldValueErrorReason `json:"reason,omitempty"`
 }
 
 // Validate validates this validation rule
 func (m *ValidationRule) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateReason(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this validation rule based on context it is used
+func (m *ValidationRule) validateReason(formats strfmt.Registry) error {
+	if swag.IsZero(m.Reason) { // not required
+		return nil
+	}
+
+	if err := m.Reason.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("reason")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("reason")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this validation rule based on the context it is used
 func (m *ValidationRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateReason(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ValidationRule) contextValidateReason(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Reason.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("reason")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("reason")
+		}
+		return err
+	}
+
 	return nil
 }
 

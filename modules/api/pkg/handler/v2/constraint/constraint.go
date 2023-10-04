@@ -393,7 +393,7 @@ func validateConstraint(ctx context.Context, constraintTemplateProvider provider
 			return utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("Validation failed, error unmarshalling Constraint Template CRD validation spec %q: %v", ct.Name, err))
 		}
 
-		validator, _, err := validation.NewSchemaValidator(&apiextensions.CustomResourceValidation{OpenAPIV3Schema: openAPISpec})
+		validator, _, err := validation.NewSchemaValidator(openAPISpec)
 		if err != nil {
 			return utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("Validation failed, could not create schema validator from Constraint Template %q: %v", ct.Name, err))
 		}
