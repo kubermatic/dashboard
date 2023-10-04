@@ -54,6 +54,7 @@ export class Mocks {
     displayDemoInfo: false,
     displayAPIDocs: false,
     displayTermsOfService: false,
+    disableAdminKubeconfig: false,
     enableDashboard: true,
     enableOIDCKubeconfig: false,
     userProjectsLimit: 0,
