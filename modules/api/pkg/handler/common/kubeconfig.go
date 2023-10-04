@@ -62,7 +62,12 @@ const (
 	oidc           = "oidc"
 )
 
-func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	// Check if admin kubeconfig is enabled.
+	if err := isAdminKubeconfigEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
 	if err != nil {
@@ -99,6 +104,20 @@ func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.Use
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return &encodeKubeConifgResponse{clientCfg: adminClientCfg, filePrefix: filePrefix}, nil
+}
+
+func isAdminKubeconfigEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+	settings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return utilerrors.New(http.StatusInternalServerError, "could not read global settings")
+	}
+
+	if settings.Spec.DisableAdminKubeconfig {
+		return utilerrors.New(http.StatusForbidden, "Admin Kubeconfig feature is disabled by the global settings")
+	}
+
+	return nil
 }
 
 func GetKubeconfigEndpoint(ctx context.Context, cluster *kubermaticv1.ExternalCluster, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (interface{}, error) {

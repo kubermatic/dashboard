@@ -24,6 +24,9 @@ type GlobalSettings struct {
 	// DefaultNodeCount is the default number of replicas for the initial MachineDeployment.
 	DefaultNodeCount int8 `json:"defaultNodeCount,omitempty"`
 
+	// DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.
+	DisableAdminKubeconfig bool `json:"disableAdminKubeconfig,omitempty"`
+
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
 

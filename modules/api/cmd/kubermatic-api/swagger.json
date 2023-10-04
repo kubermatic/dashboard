@@ -31648,6 +31648,11 @@
         "defaultQuota": {
           "$ref": "#/definitions/ProjectResourceQuota"
         },
+        "disableAdminKubeconfig": {
+          "description": "DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.",
+          "type": "boolean",
+          "x-go-name": "DisableAdminKubeconfig"
+        },
         "disableChangelogPopup": {
           "description": "DisableChangelogPopup disables the changelog popup in KKP dashboard.",
           "type": "boolean",
