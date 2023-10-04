@@ -95,9 +95,11 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 	ctrlruntime "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	ctrlruntimelog "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
+	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 )
 
 func main() {
@@ -144,12 +146,18 @@ func main() {
 	// We use the manager only to get a lister-backed ctrlruntimeclient.Client. We can not use it for most
 	// other actions, because it doesn't support impersonation (and can't be changed to do that as that would mean it has to replicate the apiservers RBAC for the lister)
 	mgr, err := manager.New(masterCfg, manager.Options{
-		Namespace: options.namespace,
+		Cache: cache.Options{
+			DefaultNamespaces: map[string]cache.Config{
+				options.namespace: {},
+			},
+		},
 		BaseContext: func() context.Context {
 			return ctx
 		},
-		MetricsBindAddress: "0",
-		PprofBindAddress:   pprofOpts.ListenAddress,
+		Metrics: metricsserver.Options{
+			BindAddress: "0",
+		},
+		PprofBindAddress: pprofOpts.ListenAddress,
 	})
 	if err != nil {
 		log.Fatalw("failed to construct manager", zap.Error(err))
