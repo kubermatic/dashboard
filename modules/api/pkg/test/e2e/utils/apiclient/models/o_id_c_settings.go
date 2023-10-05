@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// OIDCSettings o ID c settings
+// OIDCSettings OIDCSettings contains OIDC configuration parameters for enabling authentication mechanism for the cluster.
 //
 // swagger:model OIDCSettings
 type OIDCSettings struct {

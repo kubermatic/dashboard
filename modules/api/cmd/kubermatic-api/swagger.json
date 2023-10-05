@@ -37384,6 +37384,7 @@
     },
     "OIDCSettings": {
       "type": "object",
+      "title": "OIDCSettings contains OIDC configuration parameters for enabling authentication mechanism for the cluster.",
       "properties": {
         "clientID": {
           "type": "string",
