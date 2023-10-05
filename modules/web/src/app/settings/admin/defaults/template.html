@@ -28,13 +28,14 @@ limitations under the License.
       <div fxFlex
            fxLayout="column"
            fxLayoutGap="16px">
+
         <div fxLayout="row">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
             <span>Cleanup on Cluster Deletion</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Set "clean up connected load balancers" and "clean up connected volumes (PVs and PVCS)" checkboxes on Cluster Deletion to enabled by default. Enable "Enforce" to make users unable to edit the checkboxes.'></div>
+                 matTooltip="Set &quot;clean up connected load balancers&quot; and &quot;clean up connected volumes (PVs and PVCS)&quot; checkboxes on Cluster Deletion to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkboxes."></div>
           </div>
           <div fxFlexAlign=" center"
                fxLayout="row">
@@ -58,7 +59,7 @@ limitations under the License.
                class="entry-label">
             <span>OPA Integration</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Set "OPA Integration" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+                 matTooltip="Set &quot;OPA Integration&quot; checkbox on cluster creation to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkbox."></div>
           </div>
           <div fxFlexAlign=" center"
                fxLayout="row">
@@ -82,7 +83,7 @@ limitations under the License.
                class="entry-label">
             <span>User Cluster Logging</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Set "User Cluster Logging" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+                 matTooltip="Set &quot;User Cluster Logging&quot; checkbox on cluster creation to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkbox."></div>
           </div>
           <div fxFlexAlign=" center"
                fxLayout="row">
@@ -104,7 +105,7 @@ limitations under the License.
                class="entry-label">
             <span>User Cluster Monitoring</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Set "User Cluster Monitoring" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+                 matTooltip="Set &quot;User Cluster Monitoring&quot; checkbox on cluster creation to enabled by default. Enable &quot;Enforce&quot; to make users unable to edit the checkbox."></div>
           </div>
           <div fxFlexAlign=" center"
                fxLayout="row">
@@ -140,7 +141,7 @@ limitations under the License.
                class="entry-label">
             <span>Enable Kubernetes Dashboard</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Open Dashboard" button on cluster details and allow/block Kubernetes Dashboard access through the API.'></div>
+                 matTooltip="Show/Hide &quot;Open Dashboard&quot; button on cluster details and allow/block Kubernetes Dashboard access through the API."></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.enableDashboard"
                         (change)="onSettingsChange()"
@@ -209,40 +210,14 @@ limitations under the License.
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)"></km-spinner-with-confirmation>
         </div>
-
-        <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
-            <span>Disable Admin Kubeconfig</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Disable the option to download admin kubeconfig and corresponding API endpoints."></div>
-          </div>
-          <mat-checkbox [(ngModel)]="settings.disableAdminKubeconfig"
-                        [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()"
-                        id="km-disabled-admin-kubeconfig-setting">
-            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 fxLayout="row inline"
-                 fxLayoutAlign=" center">
-                documentation <i class="km-icon-external-link i-18"></i>
-              </a>
-              to learn more.
-            </mat-hint>
-          </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)"></km-spinner-with-confirmation>
-        </div>
-
+        
         <div fxLayout="row">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
             <span>Enable WebTerminal</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
+                 matTooltip="Show/Hide &quot;Web Terminal&quot; button on cluster details and allow/block web terminal pod access thorough terminal."></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.enableWebTerminal"
                         [disabled]="!settings.enableOIDCKubeconfig"
@@ -258,7 +233,7 @@ limitations under the License.
                class="entry-label">
             <span>User Cluster Alertmanager Prefix</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "alertmanger" the final url would be "https://alertmanager.<seed-name>.<kkp-domain>"'></div>
+                 matTooltip="Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix &quot;alertmanger&quot; the final url would be &quot;https://alertmanager.<seed-name>.<kkp-domain>&quot;"></div>
           </div>
           <mat-form-field fxFlex="40"
                           fxFlexAlign=" center">
@@ -266,7 +241,7 @@ limitations under the License.
             <input matInput
                    (keyup)="onSettingsChange()"
                    [(ngModel)]="settings.mlaAlertmanagerPrefix"
-                   type="text" />
+                   type="text">
           </mat-form-field>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)"></km-spinner-with-confirmation>
         </div>
@@ -277,7 +252,7 @@ limitations under the License.
                class="entry-label">
             <span>User Cluster Grafana Prefix</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Domain name prefix on which the User Cluster Grafana is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "grafana" the final url would be "https://grafana.<seed-name>.<kkp-domain>"'></div>
+                 matTooltip="Domain name prefix on which the User Cluster Grafana is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix &quot;grafana&quot; the final url would be &quot;https://grafana.<seed-name>.<kkp-domain>&quot;"></div>
           </div>
           <mat-form-field fxFlex="40"
                           fxFlexAlign=" center">
@@ -285,7 +260,7 @@ limitations under the License.
             <input matInput
                    (keyup)="onSettingsChange()"
                    [(ngModel)]="settings.mlaGrafanaPrefix"
-                   type="text" />
+                   type="text">
           </mat-form-field>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaGrafanaPrefix, apiSettings.mlaGrafanaPrefix)"></km-spinner-with-confirmation>
         </div>
@@ -293,7 +268,8 @@ limitations under the License.
         <div fxLayout="row">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
-               class="entry-label">Machine Deployment</div>
+               class="entry-label">Machine Deployment
+          </div>
           <km-number-stepper [(ngModel)]="settings.defaultNodeCount"
                              (ngModelChange)="onSettingsChange()"
                              id="km-initial-replicas-setting"
@@ -310,6 +286,7 @@ limitations under the License.
   </mat-card-content>
 </mat-card>
 
+
 <mat-card>
   <mat-card-header>
     <mat-card-title fxFlex
@@ -325,6 +302,7 @@ limitations under the License.
       <div fxFlex
            fxLayout="column"
            fxLayoutGap="16px">
+
         <div fxLayout="row"
              fxLayoutAlign=" center">
           <div fxFlex="16%"
@@ -344,6 +322,7 @@ limitations under the License.
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, settings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
           </div>
         </div>
+
       </div>
     </div>
   </mat-card-content>
