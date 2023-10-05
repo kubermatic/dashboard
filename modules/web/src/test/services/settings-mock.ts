@@ -32,6 +32,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   displayAPIDocs: true,
   displayDemoInfo: false,
   displayTermsOfService: false,
+  disableAdminKubeconfig: false,
   enableDashboard: true,
   enableOIDCKubeconfig: false,
   enableWebTerminal: false,
