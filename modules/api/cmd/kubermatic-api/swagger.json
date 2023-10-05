@@ -34317,6 +34317,11 @@
         "defaultQuota": {
           "$ref": "#/definitions/ProjectResourceQuota"
         },
+        "disableAdminKubeconfig": {
+          "description": "DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.",
+          "type": "boolean",
+          "x-go-name": "DisableAdminKubeconfig"
+        },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
           "type": "boolean",

@@ -105,6 +105,9 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     if (this.settings.enableWebTerminal) {
       this.settings.enableWebTerminal = false;
     }
+    if (this.settings.disableAdminKubeconfig) {
+      this.settings.disableAdminKubeconfig = false;
+    }
     this.onSettingsChange();
   }
 
