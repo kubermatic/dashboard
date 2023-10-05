@@ -74,10 +74,11 @@ export class UserPanelComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    const token = this._auth.getBearerToken();
     this._auth.logout().subscribe(_ => {
       this._settingsService.refreshCustomLinks();
       if (this._appConfigService.getConfig().oidc_logout_url) {
-        this._auth.oidcProviderLogout();
+        this._auth.oidcProviderLogout(token);
       } else {
         this._router.navigate(['']);
         this._document.defaultView.location.reload();
