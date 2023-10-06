@@ -78,6 +78,9 @@ type ClusterSpec struct {
 	// expose strategy
 	ExposeStrategy ExposeStrategy `json:"exposeStrategy,omitempty"`
 
+	// kubelb
+	Kubelb *KubeLB `json:"kubelb,omitempty"`
+
 	// kubernetes dashboard
 	KubernetesDashboard *KubernetesDashboard `json:"kubernetesDashboard,omitempty"`
 
@@ -133,6 +136,10 @@ func (m *ClusterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateExposeStrategy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKubelb(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -327,6 +334,25 @@ func (m *ClusterSpec) validateExposeStrategy(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *ClusterSpec) validateKubelb(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kubelb) { // not required
+		return nil
+	}
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *ClusterSpec) validateKubernetesDashboard(formats strfmt.Registry) error {
 	if swag.IsZero(m.KubernetesDashboard) { // not required
 		return nil
@@ -494,6 +520,10 @@ func (m *ClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateKubelb(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateKubernetesDashboard(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -653,6 +683,22 @@ func (m *ClusterSpec) contextValidateExposeStrategy(ctx context.Context, formats
 			return ce.ValidateName("exposeStrategy")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
+			}
+			return err
+		}
 	}
 
 	return nil

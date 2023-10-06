@@ -17,6 +17,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AddonService} from '@core/services/addon';
 import {ApplicationService} from '@core/services/application';
 import {ClusterService} from '@core/services/cluster';
@@ -92,6 +93,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly HealthType = HealthType;
   readonly IPFamily = IPFamily;
   readonly clusterDeletionTooltip = 'Cluster is being deleted';
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   adminSettings: AdminSettings;
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;

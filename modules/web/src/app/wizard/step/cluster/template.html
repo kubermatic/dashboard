@@ -418,7 +418,7 @@ limitations under the License.
             </ng-container>
 
             <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
-                          *ngIf="isKubernetesDashboardEnable">
+                          *ngIf="isKubernetesDashboardEnabled">
               Kubernetes Dashboard
             </mat-checkbox>
 
@@ -426,6 +426,14 @@ limitations under the License.
               Operating System Manager
               <i class="km-icon-info km-pointer"
                  matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.KubeLB"
+                          *ngIf="isEnterpriseEdition && isKubeLBEnabled"
+                          [disabled]="isKubeLBEnforced">
+              Kubermatic KubeLB
+              <i class="km-icon-info km-pointer"
+                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB, responsible for provisioning and managing load balancers.'"></i>
             </mat-checkbox>
 
             <km-label-form [title]="'Labels'"

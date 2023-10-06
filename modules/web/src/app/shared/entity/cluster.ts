@@ -349,6 +349,11 @@ export class ClusterSpec {
   cniPlugin?: CNIPluginConfig;
   apiServerAllowedIPRanges?: NetworkRanges;
   exposeStrategy?: ExposeStrategy;
+  kubelb?: KubeLB;
+}
+
+export class KubeLB {
+  enabled: boolean;
 }
 
 export class EventRateLimitConfig {

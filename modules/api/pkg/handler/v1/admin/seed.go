@@ -397,6 +397,7 @@ func convertSeedSpec(seedSpec kubermaticv1.SeedSpec, seedName string) apiv1.Seed
 		ExposeStrategy:    seedSpec.ExposeStrategy,
 		MLA:               seedSpec.MLA,
 		EtcdBackupRestore: seedSpec.EtcdBackupRestore,
+		KubeLB:            seedSpec.KubeLB,
 	}
 	if seedSpec.Datacenters != nil {
 		resultSeedSpec.SeedDatacenters = make(map[string]apiv1.Datacenter)

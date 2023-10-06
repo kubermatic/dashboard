@@ -111,6 +111,10 @@ type DatacenterSpec struct {
 
 	// MachineFlavorFilter is used to filter out allowed machine flavors based on the specified resource limits like CPU, Memory, and GPU etc.
 	MachineFlavorFilter *kubermaticv1.MachineFlavorFilter `json:"machineFlavorFilter,omitempty"`
+
+	// Optional: KubeLB holds the configuration for the kubeLB at the data center level.
+	// Only available in Enterprise Edition.
+	KubeLB *kubermaticv1.KubeLBDatacenterSettings `json:"kubelb,omitempty"`
 }
 
 // DatacenterList represents a list of datacenters
@@ -962,6 +966,10 @@ type ClusterSpec struct {
 	// EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.
 	EnableOperatingSystemManager *bool `json:"enableOperatingSystemManager,omitempty"`
 
+	// KubeLB holds the configuration for the kubeLB component.
+	// Only available in Enterprise Edition.
+	KubeLB *kubermaticv1.KubeLB `json:"kubelb,omitempty"`
+
 	// KubernetesDashboard holds the configuration for kubernetes-dashboard component
 	KubernetesDashboard *kubermaticv1.KubernetesDashboard `json:"kubernetesDashboard,omitempty"`
 
@@ -1030,6 +1038,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UseEventRateLimitAdmissionPlugin     bool                                   `json:"useEventRateLimitAdmissionPlugin,omitempty"`
 		EnableUserSSHKeyAgent                *bool                                  `json:"enableUserSSHKeyAgent,omitempty"`
 		EnableOperatingSystemManager         *bool                                  `json:"enableOperatingSystemManager,omitempty"`
+		KubeLB                               *kubermaticv1.KubeLB                   `json:"kubelb,omitempty"`
 		KubernetesDashboard                  *kubermaticv1.KubernetesDashboard      `json:"kubernetesDashboard,omitempty"`
 		AuditLogging                         *kubermaticv1.AuditLoggingSettings     `json:"auditLogging,omitempty"`
 		AdmissionPlugins                     []string                               `json:"admissionPlugins,omitempty"`
@@ -1071,6 +1080,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UseEventRateLimitAdmissionPlugin:     cs.UseEventRateLimitAdmissionPlugin,
 		EnableUserSSHKeyAgent:                cs.EnableUserSSHKeyAgent,
 		EnableOperatingSystemManager:         cs.EnableOperatingSystemManager,
+		KubeLB:                               cs.KubeLB,
 		KubernetesDashboard:                  cs.KubernetesDashboard,
 		AuditLogging:                         cs.AuditLogging,
 		AdmissionPlugins:                     cs.AdmissionPlugins,
@@ -2818,6 +2828,9 @@ type SeedSpec struct {
 	// Optional: EtcdBackupRestore holds the configuration of the automatic etcd backup restores for the Seed.
 	// When set, enables automatic etcd backup and restore controllers with given configuration.
 	EtcdBackupRestore *kubermaticv1.EtcdBackupRestore `json:"etcdBackupRestore,omitempty"`
+	// KubeLB holds the configuration for the kubeLB at the Seed level. This component is responsible for managing load balancers.
+	// Only available in Enterprise Edition.
+	KubeLB *kubermaticv1.KubeLBSettings `json:"kubelb,omitempty"`
 }
 
 // CreateSeedSpec is the structure that is used to create seed.

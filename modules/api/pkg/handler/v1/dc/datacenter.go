@@ -642,6 +642,7 @@ func ConvertInternalDCToExternalSpec(dc *kubermaticv1.Datacenter, seedName strin
 		EnforceAuditLogging:            dc.Spec.EnforceAuditLogging,
 		EnforcePodSecurityPolicy:       dc.Spec.EnforcePodSecurityPolicy,
 		DefaultOperatingSystemProfiles: dc.Spec.DefaultOperatingSystemProfiles,
+		KubeLB:                         dc.Spec.KubeLB,
 		IPv6Enabled:                    dc.IsIPv6Enabled(kubermaticv1.ProviderType(p)),
 		MachineFlavorFilter:            dc.Spec.MachineFlavorFilter,
 	}, nil
