@@ -1684,6 +1684,8 @@ type StorageClass struct {
 type CNIVersions struct {
 	// CNIPluginType represents the type of the CNI Plugin
 	CNIPluginType string `json:"cniPluginType"`
+	// CNIDefaultVersion represents the default CNI Plugin version
+	CNIDefaultVersion string `json:"cniDefaultVersion"`
 	// Versions represents the list of the CNI Plugin versions that are supported
 	Versions []string `json:"versions"`
 }

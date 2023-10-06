@@ -53,8 +53,9 @@ func ListVersions() endpoint.Endpoint {
 		}
 
 		return apiv2.CNIVersions{
-			CNIPluginType: req.CNIPluginType,
-			Versions:      sets.List(versions),
+			CNIPluginType:     req.CNIPluginType,
+			Versions:          sets.List(versions),
+			CNIDefaultVersion: cni.GetDefaultCNIPluginVersion(kubermaticv1.CNIPluginType(req.CNIPluginType)),
 		}, nil
 	}
 }

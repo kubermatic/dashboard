@@ -27645,6 +27645,11 @@
       "description": "CNIVersions is a list of versions for a CNI Plugin",
       "type": "object",
       "properties": {
+        "cniDefaultVersion": {
+          "description": "CNIDefaultVersion represents the default CNI Plugin version",
+          "type": "string",
+          "x-go-name": "CNIDefaultVersion"
+        },
         "cniPluginType": {
           "description": "CNIPluginType represents the type of the CNI Plugin",
           "type": "string",
