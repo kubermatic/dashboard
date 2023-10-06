@@ -208,6 +208,15 @@ limitations under the License.
            [matTooltip]="form.get(Controls.OperatingSystemManager).value ? 'Operating System Manager cannot be disabled once it has been enabled.' : 'Disabling this is not recommended in a production environment. Enabling/disabling this will not rotate the machines automatically. The users need to update the Machine Deployments manually.'"></i>
       </mat-checkbox>
 
+      <mat-checkbox [formControlName]="Controls.KubeLB"
+                    [disabled]="isKubeLBEnforced"
+                    *ngIf="isEnterpriseEdition && isKubeLBEnabled"
+                    kmValueChangedIndicator>
+        Kubermatic KubeLB
+        <i class="km-icon-info km-pointer"
+           [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB.'"></i>
+      </mat-checkbox>
+
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"
                      [labels]="labels"

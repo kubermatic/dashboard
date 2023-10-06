@@ -201,6 +201,11 @@ limitations under the License.
                                  [value]="cluster.spec.enableUserSSHKeyAgent">
             </km-property-boolean>
 
+            <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled"
+                                 label="KKubermatic KubeLB"
+                                 [value]="cluster.spec.kubelb?.enabled">
+            </km-property-boolean>
+
             <km-property-boolean *ngIf="cluster.spec.opaIntegration?.enabled"
                                  label="OPA Integration"
                                  [value]="cluster.spec.opaIntegration?.enabled">

@@ -74,6 +74,9 @@ type DatacenterSpec struct {
 	// hetzner
 	Hetzner *DatacenterSpecHetzner `json:"hetzner,omitempty"`
 
+	// kubelb
+	Kubelb *KubeLBDatacenterSettings `json:"kubelb,omitempty"`
+
 	// kubevirt
 	Kubevirt *DatacenterSpecKubevirt `json:"kubevirt,omitempty"`
 
@@ -135,6 +138,10 @@ func (m *DatacenterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateHetzner(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKubelb(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -324,6 +331,25 @@ func (m *DatacenterSpec) validateHetzner(formats strfmt.Registry) error {
 				return ve.ValidateName("hetzner")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("hetzner")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpec) validateKubelb(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kubelb) { // not required
+		return nil
+	}
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
 			}
 			return err
 		}
@@ -539,6 +565,10 @@ func (m *DatacenterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateKubelb(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateKubevirt(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -701,6 +731,22 @@ func (m *DatacenterSpec) contextValidateHetzner(ctx context.Context, formats str
 				return ve.ValidateName("hetzner")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("hetzner")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
 			}
 			return err
 		}

@@ -243,6 +243,9 @@ limitations under the License.
             <km-property-health *ngIf="cluster.spec.kubernetesDashboard?.enabled"
                                 label="Kubernetes Dashboard"
                                 [healthState]="health?.kubernetesDashboard"></km-property-health>
+            <km-property-health *ngIf="isEnterpriseEdition && cluster.spec.kubelb?.enabled"
+                                label="Kubermatic KubeLB"
+                                [healthState]="health?.kubelb"></km-property-health>
           </div>
 
           <div fxFlex="33"
@@ -408,6 +411,11 @@ limitations under the License.
 
             <km-property-boolean label="User SSH Key Agent"
                                  [value]="cluster.spec.enableUserSSHKeyAgent">
+            </km-property-boolean>
+
+            <km-property-boolean label="Kubermatic KubeLB"
+                                 [value]="cluster.spec.kubelb?.enabled"
+                                 *ngIf="cluster.spec.kubelb?.enabled">
             </km-property-boolean>
 
             <km-property-boolean label="External CCM/CSI"

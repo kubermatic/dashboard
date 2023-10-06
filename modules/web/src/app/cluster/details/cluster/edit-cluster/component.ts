@@ -15,16 +15,17 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {
   AuditPolicyPreset,
+  CNIPlugin,
   Cluster,
   ClusterPatch,
   ClusterSpecPatch,
-  CNIPlugin,
   ContainerRuntime,
   EventRateLimitConfig,
   ExposeStrategy,
@@ -35,19 +36,19 @@ import {
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
+import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {getEditionVersion} from '@shared/utils/common';
-import {AsyncValidators} from '@shared/validators/async.validators';
-import _ from 'lodash';
-import {Observable, Subject} from 'rxjs';
-import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
 } from '@shared/utils/cluster';
-import {KeyValueEntry} from '@shared/types/common';
+import {getEditionVersion} from '@shared/utils/common';
+import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
+import _ from 'lodash';
+import {Observable, Subject} from 'rxjs';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
@@ -63,6 +64,7 @@ enum Controls {
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   OperatingSystemManager = 'enableOperatingSystemManager',
+  KubeLB = 'kubelb',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
 }
@@ -92,6 +94,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   apiServerAllowedIPRanges: string[] = [];
   editionVersion: string = getEditionVersion();
+  isKubeLBEnforced = false;
+  isKubeLBEnabled = false;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
@@ -148,6 +153,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       [Controls.OperatingSystemManager]: new FormControl(this.cluster.spec.enableOperatingSystemManager),
+      [Controls.KubeLB]: new FormControl(this.cluster.spec.kubelb?.enabled),
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
@@ -178,6 +184,13 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(tap(datacenter => (this.datacenter = datacenter)))
+      .pipe(
+        tap((datacenter: Datacenter) => {
+          this.datacenter = datacenter;
+          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+          this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+        })
+      )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
@@ -338,6 +351,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           enabled: this.form.get(Controls.KubernetesDashboardEnabled).value,
         },
         enableOperatingSystemManager: this.form.get(Controls.OperatingSystemManager).value,
+        kubelb: {
+          enabled: this.form.get(Controls.KubeLB).value,
+        },
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,
           monitoringEnabled: this.form.get(Controls.MLAMonitoring).value,

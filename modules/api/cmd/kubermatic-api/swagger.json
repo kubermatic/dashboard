@@ -28175,6 +28175,9 @@
         "exposeStrategy": {
           "$ref": "#/definitions/ExposeStrategy"
         },
+        "kubelb": {
+          "$ref": "#/definitions/KubeLB"
+        },
         "kubernetesDashboard": {
           "$ref": "#/definitions/KubernetesDashboard"
         },
@@ -28910,6 +28913,9 @@
           "description": "IPv6Enabled is a flag to indicate if the ipv6 is enabled for the datacenter.",
           "type": "boolean",
           "x-go-name": "IPv6Enabled"
+        },
+        "kubelb": {
+          "$ref": "#/definitions/KubeLBDatacenterSettings"
         },
         "kubevirt": {
           "$ref": "#/definitions/DatacenterSpecKubevirt"
@@ -32401,6 +32407,47 @@
             "type": "string"
           },
           "x-go-name": "Kinds"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubeLB": {
+      "description": "Only available in Enterprise Edition.",
+      "type": "object",
+      "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
+      "properties": {
+        "enabled": {
+          "description": "Controls whether kubeLB is deployed or not.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubeLBDatacenterSettings": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enabled is used to enable/disable kubeLB for the datacenter. This is used to control whether installing kubeLB is allowed or not for the datacenter.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "enforced": {
+          "description": "Enforced is used to enforce kubeLB installation for all the user clusters belonging to this datacenter. Setting enforced to false will not uninstall kubeLB from the user clusters and it needs to be disabled manually.",
+          "type": "boolean",
+          "x-go-name": "Enforced"
+        },
+        "kubeconfig": {
+          "$ref": "#/definitions/ObjectReference"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "KubeLBSettings": {
+      "type": "object",
+      "properties": {
+        "kubeconfig": {
+          "$ref": "#/definitions/ObjectReference"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -36716,6 +36763,9 @@
         "kubeconfig": {
           "$ref": "#/definitions/ObjectReference"
         },
+        "kubelb": {
+          "$ref": "#/definitions/KubeLBSettings"
+        },
         "location": {
           "description": "Optional: Detailed location of the cluster, like \"Hamburg\" or \"Datacenter 7\".\nFor informational purposes in the Kubermatic dashboard only.",
           "type": "string",
@@ -36839,6 +36889,9 @@
         },
         "kubeconfig": {
           "$ref": "#/definitions/ObjectReference"
+        },
+        "kubelb": {
+          "$ref": "#/definitions/KubeLBSettings"
         },
         "location": {
           "description": "Optional: Detailed location of the cluster, like \"Hamburg\" or \"Datacenter 7\".\nFor informational purposes in the Kubermatic dashboard only.",

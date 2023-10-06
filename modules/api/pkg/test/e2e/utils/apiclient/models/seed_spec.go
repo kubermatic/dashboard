@@ -45,6 +45,9 @@ type SeedSpec struct {
 	// kubeconfig
 	Kubeconfig *ObjectReference `json:"kubeconfig,omitempty"`
 
+	// kubelb
+	Kubelb *KubeLBSettings `json:"kubelb,omitempty"`
+
 	// mla
 	Mla *SeedMLASettings `json:"mla,omitempty"`
 
@@ -69,6 +72,10 @@ func (m *SeedSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateKubeconfig(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKubelb(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -167,6 +174,25 @@ func (m *SeedSpec) validateKubeconfig(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SeedSpec) validateKubelb(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kubelb) { // not required
+		return nil
+	}
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *SeedSpec) validateMla(formats strfmt.Registry) error {
 	if swag.IsZero(m.Mla) { // not required
 		return nil
@@ -222,6 +248,10 @@ func (m *SeedSpec) ContextValidate(ctx context.Context, formats strfmt.Registry)
 	}
 
 	if err := m.contextValidateKubeconfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateKubelb(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -292,6 +322,22 @@ func (m *SeedSpec) contextValidateKubeconfig(ctx context.Context, formats strfmt
 				return ve.ValidateName("kubeconfig")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("kubeconfig")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SeedSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Kubelb != nil {
+		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubelb")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubelb")
 			}
 			return err
 		}

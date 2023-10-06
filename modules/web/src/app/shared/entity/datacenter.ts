@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {StatusIcon} from '@shared/utils/health-status';
 import {NodeProvider} from '../model/NodeProviderConstants';
 import {Metadata} from './common';
-import {StatusIcon} from '@shared/utils/health-status';
-import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 export class CreateDatacenterModel {
   name: string;
@@ -35,6 +35,7 @@ export class DatacenterSpec {
   requiredEmails?: string[];
   enforceAuditLogging: boolean;
   enforcePodSecurityPolicy: boolean;
+  kubelb?: KubeLB;
   ipv6Enabled?: boolean;
   digitalocean?: DigitaloceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
@@ -60,6 +61,11 @@ export class MachineFlavorFilter {
   minRAM: number;
   maxRAM: number;
   enableGPU: boolean;
+}
+
+export class KubeLB {
+  enabled?: boolean;
+  enforced?: boolean;
 }
 
 export class DatacenterOperatingSystemOptions {

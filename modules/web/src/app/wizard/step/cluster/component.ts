@@ -23,6 +23,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
@@ -106,6 +107,7 @@ enum Controls {
   ExposeStrategy = 'exposeStrategy',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
+  KubeLB = 'kubelb',
 }
 
 @Component({
@@ -140,11 +142,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   editionVersion: string = getEditionVersion();
   exposeStrategies = [ExposeStrategy.loadbalancer, ExposeStrategy.nodePort, ExposeStrategy.tunneling];
   isDualStackAllowed = false;
+  isKubeLBEnabled = false;
+  isKubeLBEnforced = false;
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   clusterTemplateEditMode = false;
   loadingClusterDefaults = false;
   canEditCNIValues: boolean;
   cniApplicationValues: string;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
@@ -160,7 +165,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
 
-  get isKubernetesDashboardEnable(): boolean {
+  get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;
   }
 
@@ -217,6 +222,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
+          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+          this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
         })
@@ -345,7 +352,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.CNIPluginVersion).valueChanges,
       this.form.get(Controls.ExposeStrategy).valueChanges,
       this.form.get(Controls.APIServerAllowedIPRanges).valueChanges,
-      this.form.get(Controls.NodePortsAllowedIPRanges).valueChanges
+      this.form.get(Controls.NodePortsAllowedIPRanges).valueChanges,
+      this.form.get(Controls.KubeLB).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -458,6 +466,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
+      [Controls.KubeLB]: this._builder.control(clusterSpec?.kubelb?.enabled ?? false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
       [Controls.EventRateLimitConfig]: this._builder.control(clusterSpec?.eventRateLimitConfig ?? ''),
@@ -535,7 +544,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),
           [Controls.MLALogging]: clusterSpec?.mla?.loggingEnabled ?? this.controlValue(Controls.MLALogging),
           [Controls.KubernetesDashboardEnabled]:
-            (this.isKubernetesDashboardEnable && clusterSpec?.kubernetesDashboard?.enabled) ??
+            (this.isKubernetesDashboardEnabled && clusterSpec?.kubernetesDashboard?.enabled) ??
             this.controlValue(Controls.KubernetesDashboardEnabled),
           [Controls.MLAMonitoring]: clusterSpec?.mla?.monitoringEnabled ?? this.controlValue(Controls.MLAMonitoring),
           [Controls.AdmissionPlugins]: clusterSpec?.admissionPlugins ?? this.controlValue(Controls.AdmissionPlugins),
@@ -570,6 +579,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.IPv6ServicesCIDR]:
             NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ??
             this.controlValue(Controls.IPv6ServicesCIDR),
+          [Controls.KubeLB]: clusterSpec?.kubelb?.enabled ?? this.controlValue(Controls.KubeLB),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
@@ -799,6 +809,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         kubernetesDashboard: {
           enabled: this.controlValue(Controls.KubernetesDashboardEnabled),
+        },
+        kubelb: {
+          enabled: this.controlValue(Controls.KubeLB),
         },
         mla: {
           loggingEnabled: this.controlValue(Controls.MLALogging),
