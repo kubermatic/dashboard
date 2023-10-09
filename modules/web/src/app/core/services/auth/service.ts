@@ -127,14 +127,14 @@ export class Auth {
       .pipe(take(1));
   }
 
-  oidcProviderLogout(): void {
+  oidcProviderLogout(token: string): void {
     const config = this._appConfigService.getConfig();
     if (config.oidc_logout_url) {
       const logoutUrl = new URL(config.oidc_logout_url);
       switch (config.oidc_provider?.toLowerCase()) {
         case OIDCProviders.Keycloak:
           logoutUrl.searchParams.set('post_logout_redirect_uri', this._redirectUri);
-          logoutUrl.searchParams.set('id_token_hint', this.getBearerToken());
+          logoutUrl.searchParams.set('id_token_hint', token);
           break;
         default:
           if (logoutUrl.searchParams.has('redirectUri')) {
