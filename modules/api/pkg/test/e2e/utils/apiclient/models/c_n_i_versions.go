@@ -17,6 +17,9 @@ import (
 // swagger:model CNIVersions
 type CNIVersions struct {
 
+	// CNIDefaultVersion represents the default CNI Plugin version
+	CNIDefaultVersion string `json:"cniDefaultVersion,omitempty"`
+
 	// CNIPluginType represents the type of the CNI Plugin
 	CNIPluginType string `json:"cniPluginType,omitempty"`
 

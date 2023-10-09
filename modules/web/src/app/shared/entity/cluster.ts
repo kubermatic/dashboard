@@ -397,6 +397,7 @@ export class NetworkRanges {
 
 export class CNIPluginVersions {
   cniPluginType: string;
+  cniDefaultVersion: string;
   versions: string[];
 }
 

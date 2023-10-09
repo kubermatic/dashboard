@@ -278,7 +278,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._updateAvailableProxyModes();
         this.form.get(Controls.CNIPluginVersion).setValue('');
         this.cniPluginVersions = cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
-        this._setDefaultCNIVersion();
+        this._setDefaultCNIVersion(cniVersions.cniDefaultVersion);
       });
 
     this.control(Controls.Konnectivity)
@@ -639,7 +639,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(take(1))
       .subscribe(versions => {
         this.cniPluginVersions = versions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
-        this._setDefaultCNIVersion();
+        this._setDefaultCNIVersion(versions.cniDefaultVersion);
       });
   }
 
@@ -701,7 +701,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
-  private _setDefaultCNIVersion(): void {
+  private _setDefaultCNIVersion(cniDefaultVersion: string): void {
     if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
       // Dual-stack not allowed on Canal CNI version lower than 3.22.
       if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Canal && this.isDualStackIPFamilySelected()) {
@@ -709,8 +709,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           gte(coerce(v), this._canalDualStackMinimumSupportedVersion)
         );
       }
-
-      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+      if (this.cniPluginVersions.includes(cniDefaultVersion)) {
+        this.form.get(Controls.CNIPluginVersion).setValue(cniDefaultVersion);
+      } else {
+        this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+      }
     }
   }
 
