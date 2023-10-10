@@ -282,7 +282,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this.allowedOperatingSystems = settings?.allowedOperatingSystems && settings.allowedOperatingSystems;
-      this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS());
+      const defaultOS = this._getDefaultOS();
+      if (defaultOS !== this.form.get(Controls.OperatingSystem).value) {
+        this.form.get(Controls.OperatingSystem).setValue(defaultOS);
+      }
 
       const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
       const replicas =
