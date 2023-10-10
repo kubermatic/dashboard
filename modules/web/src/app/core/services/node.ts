@@ -59,6 +59,11 @@ export class NodeService {
         maxReplicas: data.nodeData.maxReplicas,
       },
     };
+    if (data.nodeData.operatingSystemProfile) {
+      patch.annotations = {
+        [OPERATING_SYSTEM_PROFILE_ANNOTATION]: data.nodeData.operatingSystemProfile,
+      };
+    }
 
     // As we are using merge patch to send whole spec we need to ensure that previous values will be unset
     // and replaced by the values from patch. That's why we need to set undefined fields to null.
