@@ -31,6 +31,7 @@ import (
 	hetzner "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/hetzner/types"
 	kubevirt "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/kubevirt/types"
 	nutanix "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/nutanix/types"
+	opennebula "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/opennebula/types"
 	openstack "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/openstack/types"
 	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
 	vsphere "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vsphere/types"
@@ -431,6 +432,23 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 				MemoryMB:       config.MemoryMB,
 				DiskSize:       config.DiskSize,
 			}
+		}
+	case providerconfig.CloudProviderOpenNebula:
+		config := &opennebula.RawConfig{}
+		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
+			return nil, fmt.Errorf("failed to parse opennebula config: %w", err)
+		}
+
+		cloudSpec.OpenNebula = &apiv1.OpenNebulaNodeSpec{
+			CPU:             config.CPU,
+			VCPU:            config.VCPU,
+			Memory:          config.Memory,
+			Image:           config.Image.Value,
+			Datastore:       config.Datastore.Value,
+			DiskSize:        config.DiskSize,
+			Network:         config.Network.Value,
+			EnableVNC:       config.EnableVNC.Value,
+			VMTemplateExtra: config.VMTemplateExtra,
 		}
 	default:
 		return nil, fmt.Errorf("unknown cloud provider %q", decodedProviderSpec.CloudProvider)
