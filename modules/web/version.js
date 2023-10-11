@@ -32,7 +32,7 @@ const gitInfo = gitDescribe.gitDescribeSync({
 // Append edition information
 gitInfo.edition = getEditionDisplayName();
 
-// Re-use the version logic from our Makefile
+// Reuse the version logic from our Makefile
 gitInfo.humanReadable = execSync("make version --no-print-directory").toString().trim();
 
 // Append date information
