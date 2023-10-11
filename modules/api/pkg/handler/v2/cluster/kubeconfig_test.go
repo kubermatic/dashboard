@@ -242,7 +242,7 @@ func TestGetClusterSAKubeconfig(t *testing.T) {
 			ExpectedResponseString: genToken("cluster-foo", "sa-test", "fake-sa-token"),
 		},
 		{
-			Name:                    "scenario 2: error is returned if service account has no secret (may happen in k8s >= 1.24 if secret is not annoated)",
+			Name:                    "scenario 2: error is returned if service account has no secret (may happen in k8s >= 1.24 if secret is not annotated)",
 			HTTPStatus:              http.StatusInternalServerError,
 			ProjectToGet:            "foo-ID",
 			ClusterToGet:            "cluster-foo",
