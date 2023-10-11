@@ -43,6 +43,7 @@ export class MachineDeploymentStatus {
 }
 
 export class MachineDeploymentPatch {
+  annotations?: object;
   spec: MachineDeploymentSpecPatch;
 }
 
