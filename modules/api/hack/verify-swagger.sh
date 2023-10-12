@@ -47,7 +47,7 @@ run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/ku
 # The sorting here is applied only to first level arrays, nested arrays are not
 # sorted.
 
-curr="$(jq --argfile f ${SWAGGER_FILE} -n '($f | (..  | arrays) |= sort)')"
-exp="$(jq --argfile f ${TMP_SWAGGER} -n '($f | (..  | arrays) |= sort)')"
+curr="$(jq '(. | (..  | arrays) |= sort)' "${SWAGGER_FILE}")"
+exp="$(jq '(. | (..  | arrays) |= sort)' "${TMP_SWAGGER}")"
 diff -Naup <(echo "${curr}") <(echo "${exp}")
 run_swagger validate ${SWAGGER_FILE}
