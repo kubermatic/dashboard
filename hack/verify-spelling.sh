@@ -24,7 +24,7 @@ CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-16 containerize ./ha
 echodate "Running codespell..."
 
 codespell \
-  --skip .git,_build,_dist,vendor,go.mod,go.sum,*.jpg,*.jpeg,*.png,*.woff,*.woff2,*.pem,node_modules,src,.angular,package-lock.json,dist,coverage,swagger.json,src \
+  --skip .git,_build,_dist,vendor,go.mod,go.sum,*.jpg,*.jpeg,*.png,*.woff,*.woff2,*.pem,node_modules,src,.angular,package-lock.json,dist,coverage,swagger.json,src,./modules/api/pkg/test/e2e/utils/apiclient \
   --ignore-words .codespell.exclude \
   --check-filenames \
   --check-hidden
