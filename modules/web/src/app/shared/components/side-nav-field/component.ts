@@ -25,7 +25,7 @@ import {shrinkGrow} from '@shared/animations/grow';
 export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   private _expanded = false;
   readonly view = View;
-  @Input() label = '';
+  @Input() label: ProjectSidenavSection | AdminPanelSections;
   readonly projectSidenavSections = ProjectSidenavSection;
   readonly adminPanelView = AdminPanelView;
   readonly adminPanelSections = AdminPanelSections;
@@ -83,6 +83,8 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
           this.checkUrl(View.Groups) ||
           this.checkUrl(View.ServiceAccounts)
         );
+      case ProjectSidenavSection.ClusterBackups:
+        return this.checkUrl(View.ClusterBackup) || this.checkUrl(View.ClusterRestore);
       default:
         return false;
     }

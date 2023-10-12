@@ -58,6 +58,8 @@ export enum View {
   Backups = 'backups',
   Snapshots = 'snapshots',
   Restores = 'restores',
+  ClusterBackup = 'cluster-backups',
+  ClusterRestore = 'cluster-restores',
   Access = 'access',
 }
 
@@ -86,6 +88,7 @@ export enum ViewDisplayName {
 export enum ProjectSidenavSection {
   Resources = 'Resources',
   Backups = 'etcd Backups',
+  ClusterBackups = 'Cluster Backups',
   Access = 'Access',
 }
 

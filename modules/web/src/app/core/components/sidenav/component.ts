@@ -110,6 +110,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
+
     const mode = window.history.state?.mode;
     if (url === View.ClusterTemplates) {
       return (
@@ -132,6 +133,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       return isProjectAndUrlExists || !!urlArray.find(x => x === View.KubeOneWizard);
     } else if (url === View.Backups) {
       return isProjectAndUrlExists && !urlArray.find(x => x === View.Snapshots);
+    }else if (url === View.ClusterBackup) {
+      return isProjectAndUrlExists || !!urlArray.find(x => x === View.ClusterBackup);
     }
     return isProjectAndUrlExists;
   }

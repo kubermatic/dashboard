@@ -1,0 +1,81 @@
+<mat-card class="km-card">
+  <mat-card-header>
+    <mat-card-title>Cluster Backups</mat-card-title>
+    <button mat-flat-button
+            type="button"
+            (click)="add()"
+            [disabled]="!canAdd"
+            fxLayoutAlign="center center">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Cluster Backup</span>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+
+           >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Name
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="cluster">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">Cluster ID
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="destination">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">Destination
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="schedule">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <div>Schedule</div>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Schedule is a cron expression defining when to perform the backup. If not set, the backup is performed exactly once, immediately."></div>
+          </div>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="keep">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-10">
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <div>Keep</div>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Keep is the total number of backups that are stored. Once the number is reached the oldest backup will be deleted to make room for the newest. If not set, it will be controlled by Kubermatic. Only used if Schedule is set."></div>
+          </div>
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="created">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Created
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="columns"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

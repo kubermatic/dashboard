@@ -1,0 +1,52 @@
+<mat-card class="km-card">
+  <mat-card-header>
+    <mat-card-title>Cluster Restores</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Name
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="phase">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Phase
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="clusterID">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">Cluster ID
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="backupName">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Backup Name
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="destination">
+        <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell p-15">Destination
+    </th>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="columns"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

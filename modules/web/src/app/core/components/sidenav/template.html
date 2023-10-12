@@ -165,6 +165,44 @@ limitations under the License.
       </ng-container>
     </km-side-nav-field>
 
+    <km-side-nav-field
+    [label]="projectSidenavSections.ClusterBackups"
+    icon="km-icon-backup"
+    [isSidenavCollapsed]="isSidenavCollapsed">
+    <ng-container *ngIf="!isSidenavCollapsed">
+      <div
+        [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}"
+        class="sub-menu-item">
+        <a fxLayoutAlign=" center" [routerLink]="getRouterLink(view.ClusterBackup)">
+          <span>Cluster Backups</span>
+        </a>
+      </div>
+      <div
+        [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
+        class="sub-menu-item">
+        <a fxLayoutAlign=" center" [routerLink]="getRouterLink(view.ClusterRestore)">
+          <span>Cluster Restore</span>
+        </a>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isSidenavCollapsed">
+      <a
+        fxLayoutAlign=" center"
+        [routerLink]="getRouterLink(view.ClusterBackup)"
+        class="collapsed-sub-menu-item"
+        [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}">
+        <span>Cluster Backups</span>
+      </a>
+      <a
+        fxLayoutAlign=" center"
+        [routerLink]="getRouterLink(view.ClusterRestore)"
+        class="collapsed-sub-menu-item"
+        [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
+        <span>Cluster Restore</span>
+      </a>
+    </ng-container>
+  </km-side-nav-field>
+
     <km-side-nav-field [label]="projectSidenavSections.Access"
                        icon="km-icon-key"
                        [isSidenavCollapsed]="isSidenavCollapsed"

@@ -1,0 +1,5 @@
+
+<ng-container [ngSwitch]="clustersBackupView">
+  <km-cluster-restore-list  *ngSwitchCase="view.ClusterRestore"></km-cluster-restore-list>
+  <km-cluster-backups-list  *ngSwitchCase="view.ClusterBackup"></km-cluster-backups-list>
+</ng-container>
