@@ -1,4 +1,4 @@
-# Title of the Poposal: e.g. **Angular Testing**
+# Title of the Proposal: e.g. **Angular Testing**
 
 **Author**: Eugenia Stempel (@j3ank)
 

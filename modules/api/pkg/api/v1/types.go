@@ -1989,11 +1989,11 @@ type KubevirtNodeSpec struct {
 	// Instancetype provide a way to define a set of resource, performance and other runtime characteristics,
 	// allowing users to reuse these definitions across multiple VirtualMachines.
 	// Anything provided within an instancetype cannot be overridden within the VirtualMachine.
-	// Type is very simple, re-use directly KubeVirt type.
+	// Type is very simple, reuse directly KubeVirt type.
 	Instancetype *kubevirtv1.InstancetypeMatcher `json:"instancetype"`
 	// Preference are like Instancetype defining runtime characteristics. But unlike Instancetypes,
 	// Preferences only represent the preferred values and as such can be overridden by values in the VirtualMachine.
-	// Type is very simple, re-use directly KubeVirt type.
+	// Type is very simple, reuse directly KubeVirt type.
 	Preference *kubevirtv1.PreferenceMatcher `json:"preference"`
 	// CPUs states how many cpus the kubevirt node will have.
 	// required: true

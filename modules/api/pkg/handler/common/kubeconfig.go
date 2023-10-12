@@ -205,7 +205,7 @@ func GetClusterSAKubeconfigEndpoint(ctx context.Context, userInfoGetter provider
 // getServiceAccountToken returns the token associated to the k8s service account named serviceAccountID in serviceAccountNamespace.
 // An error is returned for the following cases:
 //   - service account does not exist
-//   - service account does not have token associated. (ie no secret annoated with service account's name and uid)
+//   - service account does not have token associated. (ie no secret annotated with service account's name and uid)
 //   - secret that stores token does not have key "token"
 func getServiceAccountToken(ctx context.Context, client ctrlruntimeclient.Client, serviceAccountNamespace string, serviceAccountName string) (string, error) {
 	serviceAccount := &corev1.ServiceAccount{}
