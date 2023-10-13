@@ -1,17 +1,21 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22111",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22113",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix support for keycloak OIDC logout. New field `oidc_provider` was introduced to support OIDC provider specific configurations. Configuring `oidc_provider` as `keycloak` will properly configure the logout workflow."
+      "description": "Fix vSphere cluster validation: If a Cluster uses a custom datastore, the Seed's default datastore should not be validated."
     },
     {
       "category": "fixed",
-      "description": "Add missing images from envoy-agent DaemonSet in Tunneling expose strategy when running `kubermatic-installer mirror-images`."
+      "description": "Add operating system profile to the machine deployment patch object."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix the empty `id_token_hint` value when logout from keycloak."
     },
     {
       "category": "changed",
-      "description": "Mark all canal CRDs with preserveUnknownFields: false."
+      "description": "Update to OSM v1.1.4."
     }
   ]
 }
