@@ -42,7 +42,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -585,7 +585,7 @@ func getEKSCredentialsFromReq(ctx context.Context, req EKSRegionReq, userInfoGet
 
 	presetName := req.Credential
 	if len(presetName) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), presetName)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), presetName)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", presetName, userInfo.Email))
 		}
@@ -806,13 +806,13 @@ func createMachineDeploymentFromEKSNodePool(nodeGroup *ekstypes.Nodegroup, ready
 	md := apiv2.ExternalClusterMachineDeployment{
 		NodeDeployment: apiv1.NodeDeployment{
 			ObjectMeta: apiv1.ObjectMeta{
-				ID:   pointer.StringDeref(nodeGroup.NodegroupName, ""),
-				Name: pointer.StringDeref(nodeGroup.NodegroupName, ""),
+				ID:   ptr.Deref(nodeGroup.NodegroupName, ""),
+				Name: ptr.Deref(nodeGroup.NodegroupName, ""),
 			},
 			Spec: apiv1.NodeDeploymentSpec{
 				Template: apiv1.NodeSpec{
 					Versions: apiv1.NodeVersionInfo{
-						Kubelet: pointer.StringDeref(nodeGroup.Version, ""),
+						Kubelet: ptr.Deref(nodeGroup.Version, ""),
 					},
 				},
 			},
@@ -825,14 +825,14 @@ func createMachineDeploymentFromEKSNodePool(nodeGroup *ekstypes.Nodegroup, ready
 
 	md.Cloud.EKS = &apiv2.EKSMachineDeploymentCloudSpec{
 		Subnets:       nodeGroup.Subnets,
-		NodeRole:      pointer.StringDeref(nodeGroup.NodeRole, ""),
+		NodeRole:      ptr.Deref(nodeGroup.NodeRole, ""),
 		AmiType:       string(nodeGroup.AmiType),
 		CapacityType:  string(nodeGroup.CapacityType),
-		DiskSize:      pointer.Int32Deref(nodeGroup.DiskSize, 0),
+		DiskSize:      ptr.Deref(nodeGroup.DiskSize, 0),
 		InstanceTypes: nodeGroup.InstanceTypes,
 		Labels:        nodeGroup.Labels,
 		Tags:          nodeGroup.Tags,
-		Version:       pointer.StringDeref(nodeGroup.Version, ""),
+		Version:       ptr.Deref(nodeGroup.Version, ""),
 	}
 
 	if nodeGroup.CreatedAt != nil {
@@ -841,12 +841,12 @@ func createMachineDeploymentFromEKSNodePool(nodeGroup *ekstypes.Nodegroup, ready
 
 	scalingConfig := nodeGroup.ScalingConfig
 	if scalingConfig != nil {
-		md.NodeDeployment.Status.Replicas = pointer.Int32Deref(scalingConfig.DesiredSize, 0)
-		md.Spec.Replicas = pointer.Int32Deref(scalingConfig.DesiredSize, 0)
+		md.NodeDeployment.Status.Replicas = ptr.Deref(scalingConfig.DesiredSize, 0)
+		md.Spec.Replicas = ptr.Deref(scalingConfig.DesiredSize, 0)
 		md.Cloud.EKS.ScalingConfig = apiv2.EKSNodegroupScalingConfig{
-			DesiredSize: pointer.Int32Deref(scalingConfig.DesiredSize, 0),
-			MaxSize:     pointer.Int32Deref(scalingConfig.MaxSize, 0),
-			MinSize:     pointer.Int32Deref(scalingConfig.MinSize, 0),
+			DesiredSize: ptr.Deref(scalingConfig.DesiredSize, 0),
+			MaxSize:     ptr.Deref(scalingConfig.MaxSize, 0),
+			MinSize:     ptr.Deref(scalingConfig.MinSize, 0),
 		}
 	}
 
@@ -1103,7 +1103,7 @@ func getEKSClusterDetails(ctx context.Context, apiCluster *apiv2.ExternalCluster
 	}
 
 	clusterSpec := &apiv2.EKSClusterSpec{
-		Version:   pointer.StringDeref(cluster.Version, ""),
+		Version:   ptr.Deref(cluster.Version, ""),
 		CreatedAt: cluster.CreatedAt,
 	}
 

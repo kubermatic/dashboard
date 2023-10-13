@@ -30,7 +30,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // providerNames holds a list of providers. They must stay in this order.
@@ -81,7 +81,7 @@ func CredentialEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 		names := make([]string, 0)
 
 		providerN := parseProvider(req.ProviderName)
-		presets, err := presetProvider.GetPresets(ctx, userInfo, pointer.String(""))
+		presets, err := presetProvider.GetPresets(ctx, userInfo, ptr.To(""))
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
 		}

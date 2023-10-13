@@ -37,7 +37,7 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -271,7 +271,7 @@ func TestListNodeDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -302,7 +302,7 @@ func TestListNodeDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -348,7 +348,7 @@ func TestListNodeDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -379,7 +379,7 @@ func TestListNodeDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -475,7 +475,7 @@ func TestGetNodeDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
+					DynamicConfig: ptr.To(false),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -518,7 +518,7 @@ func TestGetNodeDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(true),
+					DynamicConfig: ptr.To(true),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -561,7 +561,7 @@ func TestGetNodeDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
+					DynamicConfig: ptr.To(false),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},

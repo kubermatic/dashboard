@@ -35,7 +35,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -65,7 +65,7 @@ func TestListConstraints(t *testing.T) {
 				test.GenDefaultAPIConstraint("ct3", "UniqueLabel"),
 				func() apiv2.Constraint {
 					c := test.GenDefaultAPIConstraint("ct4", "UniqueLabel")
-					c.Status = &apiv2.ConstraintStatus{Synced: pointer.Bool(false)}
+					c.Status = &apiv2.ConstraintStatus{Synced: ptr.To(false)}
 					return c
 				}(),
 			},

@@ -44,7 +44,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -372,10 +372,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -385,7 +385,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -410,10 +410,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -423,7 +423,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -456,10 +456,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -469,7 +469,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -516,10 +516,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -529,7 +529,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -554,10 +554,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -567,7 +567,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -600,10 +600,10 @@ func TestListClusters(t *testing.T) {
 								IPFamily:             kubermaticv1.IPFamilyIPv4,
 								Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
 								Services:             kubermaticv1.NetworkRanges{CIDRBlocks: []string{"5.6.7.8/8"}},
-								NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+								NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 								ProxyMode:            resources.IPVSProxyMode,
 								IPVS: &kubermaticv1.IPVSConfiguration{
-									StrictArp: pointer.Bool(true),
+									StrictArp: ptr.To(true),
 								},
 								DNSDomain: "cluster.local",
 							},
@@ -613,7 +613,7 @@ func TestListClusters(t *testing.T) {
 							},
 							ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 							Version:               *semver.NewSemverOrDie("9.9.9"),
-							EnableUserSSHKeyAgent: pointer.Bool(false),
+							EnableUserSSHKeyAgent: ptr.To(false),
 						},
 						Status: apiv1.ClusterStatus{
 							Version:              *semver.NewSemverOrDie("9.9.9"),

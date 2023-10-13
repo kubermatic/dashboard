@@ -28,7 +28,7 @@ import (
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func TestGetAnexiaProviderSpec(t *testing.T) {
@@ -51,7 +51,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				TemplateID: templateID,
 				CPUs:       4,
 				Memory:     4096,
-				DiskSize:   pointer.Int64(80),
+				DiskSize:   ptr.To[int64](80),
 			},
 			wantRawConf: &anexiatypes.RawConfig{
 				VlanID:     providerconfigtypes.ConfigVarString{Value: vlanID},
@@ -74,7 +74,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				Disks: []apiv1.AnexiaDiskConfig{
 					{
 						Size:            80,
-						PerformanceType: pointer.String("ENT2"),
+						PerformanceType: ptr.To("ENT2"),
 					},
 				},
 			},
@@ -101,11 +101,11 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				TemplateID: templateID,
 				CPUs:       4,
 				Memory:     4096,
-				DiskSize:   pointer.Int64(80),
+				DiskSize:   ptr.To[int64](80),
 				Disks: []apiv1.AnexiaDiskConfig{
 					{
 						Size:            80,
-						PerformanceType: pointer.String("ENT2"),
+						PerformanceType: ptr.To("ENT2"),
 					},
 				},
 			},

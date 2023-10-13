@@ -125,7 +125,7 @@ func (m *PresetProvider) UpdatePreset(ctx context.Context, preset *kubermaticv1.
 // all presets are considered (i.e. no filtering based on project association takes places). This should only be used in administrative
 // contexts.
 // For code that cannot provide project information and should not have access to project-scoped presets, pass a pointer to an empty string
-// (e.g. `pointer.String("")`) instead. This will enable project ID filtering, but no preset with project associations will be returned.
+// (e.g. `ptr.To("")`) instead. This will enable project ID filtering, but no preset with project associations will be returned.
 func (m *PresetProvider) GetPresets(ctx context.Context, userInfo *provider.UserInfo, projectID *string) ([]kubermaticv1.Preset, error) {
 	return m.getter(ctx, userInfo, projectID)
 }
@@ -134,7 +134,7 @@ func (m *PresetProvider) GetPresets(ctx context.Context, userInfo *provider.User
 // all presets are considered (i.e. no filtering based on project association takes places). This should only be used in administrative
 // contexts.
 // For code that cannot provide project information and should not have access to project-scoped presets, pass a pointer to an empty string
-// (e.g. `pointer.String("")`) instead. This will enable project ID filtering, but no preset with project associations will be returned.
+// (e.g. `ptr.To("")`) instead. This will enable project ID filtering, but no preset with project associations will be returned.
 func (m *PresetProvider) GetPreset(ctx context.Context, userInfo *provider.UserInfo, projectID *string, name string) (*kubermaticv1.Preset, error) {
 	presets, err := m.getter(ctx, userInfo, projectID)
 	if err != nil {
@@ -408,6 +408,7 @@ func (m *PresetProvider) setVsphereCredentials(preset *kubermaticv1.Preset, clou
 	cloud.VSphere.Datastore = credentials.Datastore
 	cloud.VSphere.DatastoreCluster = credentials.DatastoreCluster
 	cloud.VSphere.ResourcePool = credentials.ResourcePool
+	cloud.VSphere.BasePath = credentials.BasePath
 	if cloud.VSphere.StoragePolicy == "" {
 		cloud.VSphere.StoragePolicy = dc.Spec.VSphere.DefaultStoragePolicy
 	}

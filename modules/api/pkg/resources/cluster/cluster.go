@@ -30,13 +30,13 @@ import (
 	"k8c.io/kubermatic/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // Spec builds ClusterSpec kubermatic Custom Resource from API Cluster.
 // The ClusterTemplate can be nil.
 func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.ClusterTemplate, seed *kubermaticv1.Seed, dc *kubermaticv1.Datacenter, config *kubermaticv1.KubermaticConfiguration, secretKeyGetter provider.SecretKeySelectorValueFunc, caBundle *x509.CertPool, features features.FeatureGate) (*kubermaticv1.ClusterSpec, provider.CloudProvider, error) {
-	var userSSHKeysAgentEnabled = pointer.Bool(true)
+	var userSSHKeysAgentEnabled = ptr.To(true)
 	if apiCluster.Spec.EnableUserSSHKeyAgent != nil {
 		userSSHKeysAgentEnabled = apiCluster.Spec.EnableUserSSHKeyAgent
 	}
@@ -48,7 +48,7 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 	}
 
 	// Enable OSM by default.
-	var osmEnabled = pointer.Bool(true)
+	var osmEnabled = ptr.To(true)
 	if apiCluster.Spec.EnableOperatingSystemManager != nil {
 		osmEnabled = apiCluster.Spec.EnableOperatingSystemManager
 	}

@@ -60,7 +60,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -297,14 +297,14 @@ func GenerateCluster(
 	partialCluster.Labels[kubermaticv1.ProjectIDLabelKey] = projectID
 
 	if body.Cluster.Spec.EnableUserSSHKeyAgent == nil {
-		partialCluster.Spec.EnableUserSSHKeyAgent = pointer.Bool(true)
+		partialCluster.Spec.EnableUserSSHKeyAgent = ptr.To(true)
 	} else {
 		partialCluster.Spec.EnableUserSSHKeyAgent = body.Cluster.Spec.EnableUserSSHKeyAgent
 	}
 
 	// OSM is enabled by default.
 	if body.Cluster.Spec.EnableOperatingSystemManager == nil {
-		partialCluster.Spec.EnableOperatingSystemManager = pointer.Bool(true)
+		partialCluster.Spec.EnableOperatingSystemManager = ptr.To(true)
 	} else {
 		partialCluster.Spec.EnableOperatingSystemManager = body.Cluster.Spec.EnableOperatingSystemManager
 	}
@@ -363,7 +363,7 @@ func GetClusters(ctx context.Context, userInfoGetter provider.UserInfoGetter, cl
 					return
 				}
 
-				apiClusters[pos].MachineDeploymentCount = pointer.Int(len(machineDeployment.Items))
+				apiClusters[pos].MachineDeploymentCount = ptr.To[int](len(machineDeployment.Items))
 			}(i, internalCluster)
 		}
 

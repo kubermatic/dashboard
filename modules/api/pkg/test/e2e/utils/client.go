@@ -49,7 +49,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -842,7 +842,7 @@ func convertCluster(cluster *models.Cluster) (*apiv1.Cluster, error) {
 	apiCluster.Type = cluster.Type
 	apiCluster.Labels = cluster.Labels
 	if cluster.MachineDeploymentCount > 0 {
-		apiCluster.MachineDeploymentCount = pointer.Int(int(cluster.MachineDeploymentCount))
+		apiCluster.MachineDeploymentCount = ptr.To[int](int(cluster.MachineDeploymentCount))
 	}
 
 	creationTime, err := time.Parse(time.RFC3339, cluster.CreationTimestamp.String())
@@ -1573,7 +1573,7 @@ func (r *TestClient) CreateClusterTemplateInstance(projectID, templateID string,
 func (r *TestClient) ListClusters(projectID string, showDeploymentMachineCount bool) (*apiv2.ProjectClusterList, error) {
 	params := &project.ListClustersV2Params{
 		ProjectID:                  projectID,
-		ShowDeploymentMachineCount: pointer.Bool(showDeploymentMachineCount),
+		ShowDeploymentMachineCount: ptr.To(showDeploymentMachineCount),
 	}
 
 	SetupRetryParams(r.test, params, Backoff{

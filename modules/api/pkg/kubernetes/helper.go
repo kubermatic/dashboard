@@ -29,7 +29,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -79,7 +79,7 @@ func GetContainerRuntime(ctx context.Context,
 		return "", err
 	}
 
-	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient, pointer.Int64(1))
+	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient, ptr.To[int64](1))
 	if err != nil {
 		return "", fmt.Errorf("failed to list control plane nodes %w", err)
 	}

@@ -25,7 +25,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
@@ -118,10 +118,10 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode: "ipvs",
 				IPVS: &kubermaticv1.IPVSConfiguration{
-					StrictArp: pointer.Bool(false),
+					StrictArp: ptr.To(false),
 				},
-				NodeCIDRMaskSizeIPv4:     pointer.Int32(32),
-				NodeLocalDNSCacheEnabled: pointer.Bool(false),
+				NodeCIDRMaskSizeIPv4:     ptr.To[int32](32),
+				NodeLocalDNSCacheEnabled: ptr.To(false),
 				DNSDomain:                "cluster.local.test",
 			},
 			expectedFinalNetworkDefaults: apiv2.NetworkDefaults{
@@ -157,11 +157,11 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode: "proxy-test",
 				IPVS: &kubermaticv1.IPVSConfiguration{
-					StrictArp: pointer.Bool(false),
+					StrictArp: ptr.To(false),
 				},
-				NodeCIDRMaskSizeIPv4:     pointer.Int32(32),
-				NodeCIDRMaskSizeIPv6:     pointer.Int32(48),
-				NodeLocalDNSCacheEnabled: pointer.Bool(false),
+				NodeCIDRMaskSizeIPv4:     ptr.To[int32](32),
+				NodeCIDRMaskSizeIPv6:     ptr.To[int32](48),
+				NodeLocalDNSCacheEnabled: ptr.To(false),
 				DNSDomain:                "cluster.local.test",
 			},
 			expectedFinalNetworkDefaults: apiv2.NetworkDefaults{

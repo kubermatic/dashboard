@@ -46,7 +46,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 const (
@@ -87,7 +87,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 			cKinds.Insert(ct.Spec.ConstraintType)
 
 			apiConstraint := convertInternalToAPIConstraint(&ct)
-			apiConstraint.Status = &apiv2.ConstraintStatus{Synced: pointer.Bool(false)}
+			apiConstraint.Status = &apiv2.ConstraintStatus{Synced: ptr.To(false)}
 
 			apiConstraintMap[genConstraintKey(ct.Spec.ConstraintType, ct.Name)] = apiConstraint
 		}
@@ -145,7 +145,7 @@ func getConstraintStatus(uc *unstructured.Unstructured) (*apiv2.ConstraintStatus
 		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("error unmarshalling constraint status: %v", err))
 	}
 
-	constraintStatus.Synced = pointer.Bool(true)
+	constraintStatus.Synced = ptr.To(true)
 	return constraintStatus, nil
 }
 
@@ -220,7 +220,7 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 
 		if err := clusterCli.Get(ctx, types.NamespacedName{Namespace: ConstraintNamespace, Name: constraint.Name}, instance); err != nil {
 			// Can't get status, because the Kubermatic Constraint is not synced yet as a Gatekeeper Constraint on the user cluster
-			apiConstraint.Status = &apiv2.ConstraintStatus{Synced: pointer.Bool(false)}
+			apiConstraint.Status = &apiv2.ConstraintStatus{Synced: ptr.To(false)}
 			return apiConstraint, nil
 		}
 

@@ -43,7 +43,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -934,12 +934,12 @@ func (c *calcReq) withKubevirt(cpu, memory, primaryStorage, secondaryStorage str
 func (c *calcReq) withNutanix(cpu, memory, storage int64, withDisk bool) *calcReq {
 	c.NutanixNodeSpec = &apiv1.NutanixNodeSpec{
 		CPUs:     cpu,
-		CPUCores: pointer.Int64(1),
+		CPUCores: ptr.To[int64](1),
 		MemoryMB: memory,
 	}
 
 	if withDisk {
-		c.NutanixNodeSpec.DiskSize = pointer.Int64(storage)
+		c.NutanixNodeSpec.DiskSize = ptr.To[int64](storage)
 	}
 
 	return c
@@ -962,7 +962,7 @@ func (c *calcReq) withVMDirector(cpu, memory, storage int) *calcReq {
 		CPUCores:   1,
 		CPUs:       cpu,
 		MemoryMB:   memory,
-		DiskSizeGB: pointer.Int64(int64(storage)),
+		DiskSizeGB: ptr.To[int64](int64(storage)),
 		// needed for json encoding
 		Template: "t",
 		Catalog:  "c",
@@ -974,7 +974,7 @@ func (c *calcReq) withVsphere(cpu, memory, storage int) *calcReq {
 	c.VSphereNodeSpec = &apiv1.VSphereNodeSpec{
 		CPUs:       cpu,
 		Memory:     memory,
-		DiskSizeGB: pointer.Int64(int64(storage)),
+		DiskSizeGB: ptr.To[int64](int64(storage)),
 		// needed for json encoding
 		Template: "t",
 	}

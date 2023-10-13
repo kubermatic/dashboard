@@ -45,7 +45,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -430,7 +430,7 @@ func getAKSCredentialsFromReq(ctx context.Context, req AKSCommonReq, userInfoGet
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}
@@ -466,14 +466,14 @@ func createNewAKSCluster(ctx context.Context, aksclusterSpec *apiv2.AKSClusterSp
 	basicSettings := agentPoolProfiles.BasicSettings
 	optionalSettings := agentPoolProfiles.OptionalSettings
 	clusterToCreate := armcontainerservice.ManagedCluster{
-		Name:     pointer.String(aksCloudSpec.Name),
-		Location: pointer.String(aksCloudSpec.Location),
+		Name:     ptr.To(aksCloudSpec.Name),
+		Location: ptr.To(aksCloudSpec.Location),
 		Properties: &armcontainerservice.ManagedClusterProperties{
-			DNSPrefix:         pointer.String(aksCloudSpec.Name),
-			KubernetesVersion: pointer.String(clusterSpec.KubernetesVersion),
+			DNSPrefix:         ptr.To(aksCloudSpec.Name),
+			KubernetesVersion: ptr.To(clusterSpec.KubernetesVersion),
 			ServicePrincipalProfile: &armcontainerservice.ManagedClusterServicePrincipalProfile{
-				ClientID: pointer.String(aksCloudSpec.ClientID),
-				Secret:   pointer.String(aksCloudSpec.ClientSecret),
+				ClientID: ptr.To(aksCloudSpec.ClientID),
+				Secret:   ptr.To(aksCloudSpec.ClientSecret),
 			},
 		},
 	}
@@ -482,23 +482,23 @@ func createNewAKSCluster(ctx context.Context, aksclusterSpec *apiv2.AKSClusterSp
 
 	azs := []*string{}
 	for _, az := range basicSettings.AvailabilityZones {
-		azs = append(azs, pointer.String(az))
+		azs = append(azs, ptr.To(az))
 	}
 
 	agentPoolProfilesToBeCreated := &armcontainerservice.ManagedClusterAgentPoolProfile{
-		Name:              pointer.String(agentPoolProfiles.Name),
-		VMSize:            pointer.String(basicSettings.VMSize),
-		Count:             pointer.Int32(basicSettings.Count),
+		Name:              ptr.To(agentPoolProfiles.Name),
+		VMSize:            ptr.To(basicSettings.VMSize),
+		Count:             ptr.To[int32](basicSettings.Count),
 		Mode:              &mode,
-		OSDiskSizeGB:      pointer.Int32(basicSettings.OsDiskSizeGB),
+		OSDiskSizeGB:      ptr.To[int32](basicSettings.OsDiskSizeGB),
 		AvailabilityZones: azs,
 		NodeLabels:        optionalSettings.NodeLabels,
 	}
 
 	if basicSettings.EnableAutoScaling {
 		agentPoolProfilesToBeCreated.EnableAutoScaling = to.BoolPtr(basicSettings.EnableAutoScaling)
-		agentPoolProfilesToBeCreated.MaxCount = pointer.Int32(basicSettings.ScalingConfig.MaxCount)
-		agentPoolProfilesToBeCreated.MinCount = pointer.Int32(basicSettings.ScalingConfig.MinCount)
+		agentPoolProfilesToBeCreated.MaxCount = ptr.To[int32](basicSettings.ScalingConfig.MaxCount)
+		agentPoolProfilesToBeCreated.MinCount = ptr.To[int32](basicSettings.ScalingConfig.MinCount)
 	}
 
 	clusterToCreate.Properties.AgentPoolProfiles = []*armcontainerservice.ManagedClusterAgentPoolProfile{

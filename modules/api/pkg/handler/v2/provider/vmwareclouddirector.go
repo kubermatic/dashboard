@@ -33,7 +33,7 @@ import (
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 type VMwareCloudDirectorCommonReq struct {
@@ -255,7 +255,7 @@ func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareClo
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}

@@ -32,7 +32,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func VsphereNetworksWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider,
@@ -109,7 +109,7 @@ func VsphereDatastoreEndpoint(seedsGetter provider.SeedsGetter, presetProvider p
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -141,7 +141,7 @@ func VsphereNetworksEndpoint(seedsGetter provider.SeedsGetter, presetProvider pr
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -172,7 +172,7 @@ func VsphereTagCategoriesEndpoint(seedsGetter provider.SeedsGetter, presetProvid
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -203,7 +203,7 @@ func VsphereTagForTagCategoryEndpoint(seedsGetter provider.SeedsGetter, presetPr
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -234,7 +234,7 @@ func VsphereFoldersEndpoint(seedsGetter provider.SeedsGetter, presetProvider pro
 		password := req.Password
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}

@@ -31,7 +31,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // alibabaNoCredentialReq represent a request for Alibaba instance types.
@@ -157,7 +157,7 @@ func AlibabaInstanceTypesEndpoint(presetProvider provider.PresetProvider, userIn
 		}
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -201,7 +201,7 @@ func AlibabaZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter
 		}
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -229,7 +229,7 @@ func AlibabaVSwitchesEndpoint(presetProvider provider.PresetProvider, userInfoGe
 		}
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
