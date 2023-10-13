@@ -107,7 +107,7 @@ replace (
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.8-0.20231005111651-f7140fc88103
+	k8c.io/kubermatic/v2 v2.22.8-0.20231012134406-445d878161a9
 )
 
 require (
