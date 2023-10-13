@@ -20,6 +20,6 @@
     {
       "category": "fixed",
       "description": "Fix logout failing when Keycloak is used as identity provider."
-    },
+    }
   ]
 }
