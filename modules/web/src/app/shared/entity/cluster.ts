@@ -287,6 +287,7 @@ export class VSphereCloudSpec {
   vmNetName?: string;
   networks?: string[];
   folder?: string;
+  basePath?: string;
   infraManagementUser: VSphereInfraManagementUser;
   datastore?: string;
   datastoreCluster?: string;

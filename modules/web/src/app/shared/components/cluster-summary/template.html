@@ -487,6 +487,10 @@ limitations under the License.
               <div key>Folder</div>
               <div value>{{cluster.spec.cloud?.vsphere.folder}}</div>
             </km-property>
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.basePath">
+              <div key>Base Folder Path</div>
+              <div value>{{cluster.spec.cloud?.vsphere.basePath}}</div>
+            </km-property>
             <km-property *ngIf="cluster.spec.cloud?.vsphere.datastore">
               <div key>Datastore</div>
               <div value>{{cluster.spec.cloud?.vsphere.datastore}}</div>

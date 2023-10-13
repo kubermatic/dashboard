@@ -213,6 +213,7 @@ export class VSpherePresetSpec extends PresetProviderSpec {
   datastore?: string;
   datastoreCluster?: string;
   resourcePool?: string;
+  basePath?: string;
 }
 
 export class VMwareCloudDirectorPresetSpec extends PresetProviderSpec {
