@@ -24,12 +24,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func ec2VPCFilter(vpcID string) ec2types.Filter {
 	return ec2types.Filter{
-		Name:   pointer.String("vpc-id"),
+		Name:   ptr.To("vpc-id"),
 		Values: []string{vpcID},
 	}
 }
@@ -37,7 +37,7 @@ func ec2VPCFilter(vpcID string) ec2types.Filter {
 func getDefaultVPC(ctx context.Context, client *ec2.Client) (*ec2types.Vpc, error) {
 	vpcOut, err := client.DescribeVpcs(ctx, &ec2.DescribeVpcsInput{
 		Filters: []ec2types.Filter{{
-			Name:   pointer.String("isDefault"),
+			Name:   ptr.To("isDefault"),
 			Values: []string{"true"},
 		}},
 	})

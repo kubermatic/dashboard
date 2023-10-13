@@ -39,7 +39,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -170,7 +170,7 @@ func ListAWSSubnets(ctx context.Context, accessKeyID, secretAccessKey, assumeRol
 			IPv6CIDR:                subnetIpv6,
 			Tags:                    subnetTags,
 			State:                   string(s.State),
-			AvailableIPAddressCount: int64(pointer.Int32Deref(s.AvailableIpAddressCount, 0)),
+			AvailableIPAddressCount: int64(ptr.Deref(s.AvailableIpAddressCount, 0)),
 			DefaultForAz:            *s.DefaultForAz,
 		})
 	}

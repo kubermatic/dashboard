@@ -54,7 +54,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func getOsName(nodeSpec apiv1.NodeSpec) (providerconfig.OperatingSystem, error) {
@@ -184,7 +184,7 @@ func GetAzureProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 		EnableAcceleratedNetworking: nodeSpec.Cloud.Azure.EnableAcceleratedNetworking,
 
 		// https://github.com/kubermatic/kubermatic/issues/5013#issuecomment-580357280
-		AssignPublicIP: providerconfig.ConfigVarBool{Value: pointer.Bool(nodeSpec.Cloud.Azure.AssignPublicIP)},
+		AssignPublicIP: providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Azure.AssignPublicIP)},
 	}
 	config.Tags = map[string]string{}
 	for key, value := range nodeSpec.Cloud.Azure.Tags {
@@ -207,7 +207,7 @@ func getAzureProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *
 	}
 
 	if nodeSpec.Cloud.Azure.AssignPublicIP && c.Spec.Cloud.Azure.LoadBalancerSKU == kubermaticv1.AzureStandardLBSKU {
-		config.PublicIPSKU = pointer.String("standard")
+		config.PublicIPSKU = ptr.To("standard")
 	}
 
 	return EncodeAsRawExtension(config)
@@ -232,7 +232,7 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		DatastoreCluster: providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.DatastoreCluster},
 		Cluster:          providerconfig.ConfigVarString{Value: dc.Spec.VSphere.Cluster},
 		Folder:           providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.Folder},
-		AllowInsecure:    providerconfig.ConfigVarBool{Value: pointer.Bool(dc.Spec.VSphere.AllowInsecure)},
+		AllowInsecure:    providerconfig.ConfigVarBool{Value: ptr.To(dc.Spec.VSphere.AllowInsecure)},
 		ResourcePool:     providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.ResourcePool},
 		VMAntiAffinity:   providerconfig.ConfigVarBool{Value: nodeSpec.Cloud.VSphere.VMAntiAffinity},
 	}
@@ -284,7 +284,7 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 		CPUCores:         int64(nodeSpec.Cloud.VMwareCloudDirector.CPUCores),
 		MemoryMB:         int64(nodeSpec.Cloud.VMwareCloudDirector.MemoryMB),
 		IPAllocationMode: nodeSpec.Cloud.VMwareCloudDirector.IPAllocationMode,
-		AllowInsecure:    providerconfig.ConfigVarBool{Value: pointer.Bool(dc.Spec.VMwareCloudDirector.AllowInsecure)},
+		AllowInsecure:    providerconfig.ConfigVarBool{Value: ptr.To(dc.Spec.VMwareCloudDirector.AllowInsecure)},
 	}
 
 	if storageProfile != "" {
@@ -334,7 +334,7 @@ func GetOpenstackProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec
 		Subnet:                    providerconfig.ConfigVarString{Value: c.Spec.Cloud.Openstack.SubnetID},
 		InstanceReadyCheckPeriod:  providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.InstanceReadyCheckPeriod},
 		InstanceReadyCheckTimeout: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.InstanceReadyCheckTimeout},
-		TrustDevicePath:           providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
+		TrustDevicePath:           providerconfig.ConfigVarBool{Value: ptr.To(false)},
 		ServerGroup:               providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.ServerGroup},
 	}
 
@@ -422,11 +422,11 @@ func getHetznerProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 func GetDigitaloceanProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*digitalocean.RawConfig, error) {
 	config := &digitalocean.RawConfig{
 		Region:            providerconfig.ConfigVarString{Value: dc.Spec.Digitalocean.Region},
-		Backups:           providerconfig.ConfigVarBool{Value: pointer.Bool(nodeSpec.Cloud.Digitalocean.Backups)},
-		IPv6:              providerconfig.ConfigVarBool{Value: pointer.Bool(nodeSpec.Cloud.Digitalocean.IPv6)},
-		Monitoring:        providerconfig.ConfigVarBool{Value: pointer.Bool(nodeSpec.Cloud.Digitalocean.Monitoring)},
+		Backups:           providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Digitalocean.Backups)},
+		IPv6:              providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Digitalocean.IPv6)},
+		Monitoring:        providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Digitalocean.Monitoring)},
 		Size:              providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Digitalocean.Size},
-		PrivateNetworking: providerconfig.ConfigVarBool{Value: pointer.Bool(true)},
+		PrivateNetworking: providerconfig.ConfigVarBool{Value: ptr.To(true)},
 	}
 
 	tags := sets.New(nodeSpec.Cloud.Digitalocean.Tags...)
@@ -502,13 +502,13 @@ func GetGCPProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *
 		MachineType:           providerconfig.ConfigVarString{Value: nodeSpec.Cloud.GCP.MachineType},
 		DiskSize:              nodeSpec.Cloud.GCP.DiskSize,
 		DiskType:              providerconfig.ConfigVarString{Value: nodeSpec.Cloud.GCP.DiskType},
-		Preemptible:           providerconfig.ConfigVarBool{Value: pointer.Bool(nodeSpec.Cloud.GCP.Preemptible)},
+		Preemptible:           providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.GCP.Preemptible)},
 		Network:               providerconfig.ConfigVarString{Value: c.Spec.Cloud.GCP.Network},
 		Subnetwork:            providerconfig.ConfigVarString{Value: c.Spec.Cloud.GCP.Subnetwork},
-		AssignPublicIPAddress: &providerconfig.ConfigVarBool{Value: pointer.Bool(true)},
+		AssignPublicIPAddress: &providerconfig.ConfigVarBool{Value: ptr.To(true)},
 		CustomImage:           providerconfig.ConfigVarString{Value: nodeSpec.Cloud.GCP.CustomImage},
-		MultiZone:             providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
-		Regional:              providerconfig.ConfigVarBool{Value: pointer.Bool(false)},
+		MultiZone:             providerconfig.ConfigVarBool{Value: ptr.To(false)},
+		Regional:              providerconfig.ConfigVarBool{Value: ptr.To(false)},
 	}
 
 	tags := sets.New(nodeSpec.Cloud.GCP.Tags...)

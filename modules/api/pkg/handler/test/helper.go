@@ -79,7 +79,7 @@ import (
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/reference"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -1066,13 +1066,13 @@ func GenCluster(id string, name string, projectID string, creationTime time.Time
 			Version:               version,
 			ContainerRuntime:      "containerd",
 			HumanReadableName:     name,
-			EnableUserSSHKeyAgent: pointer.Bool(false),
+			EnableUserSSHKeyAgent: ptr.To(false),
 			ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 			ClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
 				DNSDomain: "cluster.local",
 				ProxyMode: "ipvs",
 				IPVS: &kubermaticv1.IPVSConfiguration{
-					StrictArp: pointer.Bool(true),
+					StrictArp: ptr.To(true),
 				},
 				IPFamily: kubermaticv1.IPFamilyIPv4,
 				Pods: kubermaticv1.NetworkRanges{
@@ -1081,7 +1081,7 @@ func GenCluster(id string, name string, projectID string, creationTime time.Time
 				Services: kubermaticv1.NetworkRanges{
 					CIDRBlocks: []string{"5.6.7.8/8"},
 				},
-				NodeCIDRMaskSizeIPv4: pointer.Int32(24),
+				NodeCIDRMaskSizeIPv4: ptr.To[int32](24),
 			},
 			CNIPlugin: &kubermaticv1.CNIPluginSettings{
 				Type:    kubermaticv1.CNIPluginTypeCanal,
@@ -1925,7 +1925,7 @@ func GenDefaultAPIConstraint(name, kind string) apiv2.Constraint {
 					Name:              "gatekeeper",
 				},
 			},
-			Synced: pointer.Bool(true),
+			Synced: ptr.To(true),
 		},
 	}
 }

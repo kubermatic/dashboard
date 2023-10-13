@@ -34,7 +34,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // awsSizeNoCredentialsReq represent a request for AWS machine types resources
@@ -300,7 +300,7 @@ func ListProjectAWSSubnets(userInfoGetter provider.UserInfoGetter, seedsGetter p
 		}
 
 		if len(req.Credential) > 0 {
-			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 			}
@@ -404,7 +404,7 @@ func getAWSCredentialsFromRequest(ctx context.Context, req AWSCommonReq, userInf
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}

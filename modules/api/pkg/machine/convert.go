@@ -45,7 +45,7 @@ import (
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
 
 	"k8s.io/apimachinery/pkg/util/json"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // GetAPIV1OperatingSystemSpec returns the api compatible OperatingSystemSpec for the given machine.
@@ -372,7 +372,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			}
 
 			if config.DiskSize > 0 {
-				cloudSpec.Anexia.DiskSize = pointer.Int64(int64(config.DiskSize))
+				cloudSpec.Anexia.DiskSize = ptr.To[int64](int64(config.DiskSize))
 			}
 
 			if diskCount := len(config.Disks); diskCount > 0 {
@@ -382,7 +382,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 					cloudSpec.Anexia.Disks[diskIndex].Size = int64(diskConfig.Size)
 
 					if diskConfig.PerformanceType.Value != "" {
-						cloudSpec.Anexia.Disks[diskIndex].PerformanceType = pointer.String(diskConfig.PerformanceType.Value)
+						cloudSpec.Anexia.Disks[diskIndex].PerformanceType = ptr.To(diskConfig.PerformanceType.Value)
 					}
 				}
 			}

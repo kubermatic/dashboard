@@ -37,7 +37,7 @@ import (
 	k8csemver "k8c.io/kubermatic/v2/pkg/semver"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -85,12 +85,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 			},
 		},
@@ -131,12 +131,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 			},
 		},
@@ -170,17 +170,17 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.21.*",
 					To:        "1.21.*",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.21.*",
 					To:        "1.22.*",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.22.*",
 					To:        "1.22.*",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 			},
 			incompatibilities: []kubermaticv1.Incompatibility{
@@ -242,12 +242,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 			},
 		},
@@ -439,12 +439,12 @@ func TestGetNodeUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.Bool(false),
+					Automatic: ptr.To(false),
 				},
 			},
 			existingVersions: []k8csemver.Semver{

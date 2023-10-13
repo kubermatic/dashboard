@@ -36,7 +36,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -402,7 +402,7 @@ func TestListMachineDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -433,7 +433,7 @@ func TestListMachineDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -479,7 +479,7 @@ func TestListMachineDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -510,7 +510,7 @@ func TestListMachineDeployments(t *testing.T) {
 						},
 						Replicas:      replicas,
 						Paused:        &paused,
-						DynamicConfig: pointer.Bool(false),
+						DynamicConfig: ptr.To(false),
 					},
 					Status: clusterv1alpha1.MachineDeploymentStatus{},
 				},
@@ -606,7 +606,7 @@ func TestGetMachineDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
+					DynamicConfig: ptr.To(false),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -649,7 +649,7 @@ func TestGetMachineDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(true),
+					DynamicConfig: ptr.To(true),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -692,7 +692,7 @@ func TestGetMachineDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
+					DynamicConfig: ptr.To(false),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -744,9 +744,9 @@ func TestGetMachineDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
-					MinReplicas:   pointer.Uint32(5),
-					MaxReplicas:   pointer.Uint32(7),
+					DynamicConfig: ptr.To(false),
+					MinReplicas:   ptr.To[uint32](5),
+					MaxReplicas:   ptr.To[uint32](7),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -796,8 +796,8 @@ func TestGetMachineDeployment(t *testing.T) {
 					},
 					Replicas:      replicas,
 					Paused:        &paused,
-					DynamicConfig: pointer.Bool(false),
-					MinReplicas:   pointer.Uint32(5),
+					DynamicConfig: ptr.To(false),
+					MinReplicas:   ptr.To[uint32](5),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -1688,7 +1688,7 @@ func TestPatchMachineDeployment(t *testing.T) {
 					md.Annotations = map[string]string{
 						machine.AutoscalerMinSizeAnnotation: fmt.Sprintf("%d", minReplicas),
 					}
-					md.Spec.Replicas = pointer.Int32(5)
+					md.Spec.Replicas = ptr.To[int32](5)
 					return md
 				}(),
 			},
@@ -1714,7 +1714,7 @@ func TestPatchMachineDeployment(t *testing.T) {
 						machine.AutoscalerMinSizeAnnotation: fmt.Sprintf("%d", minReplicas),
 						machine.AutoscalerMaxSizeAnnotation: fmt.Sprintf("%d", maxReplicas),
 					}
-					md.Spec.Replicas = pointer.Int32(5)
+					md.Spec.Replicas = ptr.To[int32](5)
 					return md
 				}(),
 			},

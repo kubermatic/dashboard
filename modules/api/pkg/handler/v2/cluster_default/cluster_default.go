@@ -37,7 +37,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 // getDefaultClusterReq represents a request for retrieving a default spec for the cluster.
@@ -160,12 +160,12 @@ func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster 
 		cluster.Spec.ClusterNetwork.TunnelingAgentIP = networkDefaults.TunnelingAgentIP
 	}
 	cluster.Spec.ClusterNetwork.ProxyMode = networkDefaults.ProxyMode
-	cluster.Spec.ClusterNetwork.NodeLocalDNSCacheEnabled = pointer.Bool(networkDefaults.NodeLocalDNSCacheEnabled)
+	cluster.Spec.ClusterNetwork.NodeLocalDNSCacheEnabled = ptr.To(networkDefaults.NodeLocalDNSCacheEnabled)
 	cluster.Spec.ClusterNetwork.IPFamily = kubermaticv1.IPFamilyIPv4 // always use IPv4 as the default address family (even if IPv6 defaults are provided)
 
 	// Mapping for IPv4
 	if networkDefaults.IPv4 != nil {
-		cluster.Spec.ClusterNetwork.NodeCIDRMaskSizeIPv4 = pointer.Int32(networkDefaults.IPv4.NodeCIDRMaskSize)
+		cluster.Spec.ClusterNetwork.NodeCIDRMaskSizeIPv4 = ptr.To[int32](networkDefaults.IPv4.NodeCIDRMaskSize)
 
 		if networkDefaults.IPv4.PodsCIDR != "" {
 			cluster.Spec.ClusterNetwork.Pods = kubermaticv1.NetworkRanges{
@@ -182,7 +182,7 @@ func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster 
 
 	// Mapping for IPv6
 	if networkDefaults.IPv6 != nil {
-		cluster.Spec.ClusterNetwork.NodeCIDRMaskSizeIPv6 = pointer.Int32(networkDefaults.IPv6.NodeCIDRMaskSize)
+		cluster.Spec.ClusterNetwork.NodeCIDRMaskSizeIPv6 = ptr.To[int32](networkDefaults.IPv6.NodeCIDRMaskSize)
 
 		if networkDefaults.IPv6.PodsCIDR != "" {
 			cluster.Spec.ClusterNetwork.Pods = kubermaticv1.NetworkRanges{
@@ -200,7 +200,7 @@ func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster 
 }
 
 func defaultClusterSpec(ctx context.Context, provider kubermaticv1.ProviderType, dc string, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate, cluster *kubermaticv1.Cluster) (*kubermaticv1.Cluster, error) {
-	cluster.Spec.EnableUserSSHKeyAgent = pointer.Bool(true)
+	cluster.Spec.EnableUserSSHKeyAgent = ptr.To(true)
 	cluster.Spec.ContainerRuntime = resources.ContainerRuntimeContainerd
 	cluster.Spec.Cloud = initializeCloudProviderSpec(dc, provider)
 

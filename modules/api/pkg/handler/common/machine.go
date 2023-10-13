@@ -47,7 +47,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
-	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -900,7 +900,7 @@ func getAutoscalingConfiguration(md *clusterv1alpha1.MachineDeployment) (*uint32
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %w", err)
 		}
-		minReplicas = pointer.Uint32(uint32(minInt))
+		minReplicas = ptr.To[uint32](uint32(minInt))
 	}
 
 	var maxReplicas *uint32
@@ -909,7 +909,7 @@ func getAutoscalingConfiguration(md *clusterv1alpha1.MachineDeployment) (*uint32
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %w", err)
 		}
-		maxReplicas = pointer.Uint32(uint32(maxInt))
+		maxReplicas = ptr.To[uint32](uint32(maxInt))
 	}
 
 	return minReplicas, maxReplicas, nil
