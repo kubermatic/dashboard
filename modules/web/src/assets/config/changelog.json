@@ -15,11 +15,11 @@
     },
     {
       "category": "fixed",
-      "description": "Add operating system profile to the machine deployment patch object."
+      "description": "Operating system profile is configured correctly when updating a MachineDeployment now."
     },
     {
       "category": "fixed",
-      "description": "Fix the empty `id_token_hint` value when logout from keycloak."
+      "description": "Fix logout failing when Keycloak is used as identity provider."
     },
     {
       "category": "fixed",
