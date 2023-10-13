@@ -18,6 +18,12 @@ import (
 // swagger:model VSphereCloudSpec
 type VSphereCloudSpec struct {
 
+	// Optional: BasePath configures a vCenter folder path that KKP will create an individual cluster folder in.
+	// If it's an absolute path, the RootPath configured in the datacenter will be ignored. If it is a relative path,
+	// the BasePath part will be appended to the RootPath (if set) to construct the full path.
+	// +optional
+	BasePath string `json:"basePath,omitempty"`
+
 	// Datastore to be used for storing virtual machines and as a default for
 	// dynamic volume provisioning, it is mutually exclusive with
 	// DatastoreCluster.

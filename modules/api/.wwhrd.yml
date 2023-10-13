@@ -35,6 +35,7 @@ exceptions:
   - github.com/embik/nutanix-client-go/pkg/client/v3 # MPL-2.0
   - github.com/gosimple/slug # MPL-2.0. Required for https://github.com/grafana-tools/sdk
   - github.com/hashicorp/go-version # MPL-2.0
+  - github.com/hashicorp/go-retryablehttp # MPL-2.0
   - github.com/hashicorp/golang-lru # MPL-2.0
   - github.com/hashicorp/golang-lru/simplelru # MPL-2.0
   - github.com/hashicorp/hcl # MPL-2.0

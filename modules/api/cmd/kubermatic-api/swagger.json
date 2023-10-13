@@ -27951,7 +27951,7 @@
           "$ref": "#/definitions/IPVSConfiguration"
         },
         "konnectivityEnabled": {
-          "description": "KonnectivityEnabled enables konnectivity for controlplane to node network communication.",
+          "description": "Deprecated: KonnectivityEnabled enables konnectivity for controlplane to node network communication.\nAs OpenVPN will be removed in the future KKP versions, clusters with konnectivity disabled will not be supported.\nAll existing clusters with OpenVPN should migrate to the Konnectivity.",
           "type": "boolean",
           "x-go-name": "KonnectivityEnabled"
         },
@@ -37658,6 +37658,11 @@
     "VSphere": {
       "type": "object",
       "properties": {
+        "basePath": {
+          "description": "BasePath configures a vCenter folder path that KKP will create an individual cluster folder in.\nIf it's an absolute path, the RootPath configured in the datacenter will be ignored. If it is a relative path,\nthe BasePath part will be appended to the RootPath to construct the full path.",
+          "type": "string",
+          "x-go-name": "BasePath"
+        },
         "datacenter": {
           "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
           "type": "string",
@@ -37707,6 +37712,11 @@
       "type": "object",
       "title": "VSphereCloudSpec specifies access data to VSphere cloud.",
       "properties": {
+        "basePath": {
+          "description": "Optional: BasePath configures a vCenter folder path that KKP will create an individual cluster folder in.\nIf it's an absolute path, the RootPath configured in the datacenter will be ignored. If it is a relative path,\nthe BasePath part will be appended to the RootPath (if set) to construct the full path.\n+optional",
+          "type": "string",
+          "x-go-name": "BasePath"
+        },
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"
         },
