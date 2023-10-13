@@ -19,6 +19,10 @@
     },
     {
       "category": "fixed",
+      "description": "Fix Hetzner API response validation for server type and networks."
+    },
+    {
+      "category": "fixed",
       "description": "Fix logout failing when Keycloak is used as identity provider."
     }
   ]
