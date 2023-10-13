@@ -44,12 +44,26 @@ limitations under the License.
     <div *option="let folder">{{folder.path}}</div>
   </km-combobox>
 
+  <km-combobox #baseFolderPathCombobox
+               [grouped]="false"
+               [isDisabled]="isPresetSelected"
+               [options]="folders"
+               [formControlName]="Controls.BaseFolderPath"
+               [hint]="getHint(Controls.BaseFolderPath)"
+               (changed)="onBaseFolderPathChange($event)"
+               [label]="folderLabel === FolderState.Ready ? 'Base Folder Path' : folderLabel"
+               inputLabel="Select base folder path..."
+               filterBy="path">
+    <div *option="let folder">{{folder.path}}</div>
+  </km-combobox>
+
   <km-autocomplete label="Datastore"
                    [formControlName]="Controls.Datastore"
                    [isLoading]="isLoadingDatastores"
                    [options]="datastores">
     <ng-container hint>
-      Datastore to be used for the virtual machines. It is mutually exclusive with Datastore Cluster field.
+      Datastore to be used for storing virtual machines and as a default for dynamic volume provisioning.
+      It is mutually exclusive with Datastore Cluster field.
       <span *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</span>
     </ng-container>
   </km-autocomplete>
@@ -61,7 +75,7 @@ limitations under the License.
            [name]="Controls.DatastoreCluster"
            type="text"
            autocomplete="off" />
-    <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
+    <mat-hint>DatastoreCluster to be used for storing virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>

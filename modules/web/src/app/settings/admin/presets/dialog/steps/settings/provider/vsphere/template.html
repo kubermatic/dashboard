@@ -82,4 +82,17 @@ limitations under the License.
            autocomplete="off"
            kmValueChangedIndicator />
   </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Base Folder Path</mat-label>
+    <input matInput
+           [formControlName]="Controls.BasePath"
+           [name]="Controls.BasePath"
+           type="text"
+           autocomplete="off"
+           kmValueChangedIndicator />
+    <mat-hint>
+      Base folder path configures a vCenter folder path where KKP will create an individual cluster folder.
+    </mat-hint>
+  </mat-form-field>
 </form>
