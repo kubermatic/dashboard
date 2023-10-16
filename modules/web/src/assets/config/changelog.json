@@ -1,13 +1,37 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2234",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2235",
   "entries": [
     {
-      "category": "fixed",
-      "description": "No longer show 1.14.1 as available Cilium version as it was never supported."
+      "category": "added",
+      "description": "Introduce `DisableAdminKubeconfig` flag in `KubermaticSettings` to disable the admin kubeconfig feature from dashboard."
+    },
+    {
+      "category": "changed",
+      "description": "Add Cilium 1.13.7 as supported CNI version, deprecate Cilium version 1.13.6 as it's impacted by CVE-2023-39347, CVE-2023-41333 (Moderate Severity), CVE-2023-41332 (Low Severity)."
+    },
+    {
+      "category": "changed",
+      "description": "Update to OSM v1.3.3."
+    },
+    {
+      "category": "changed",
+      "description": "Update to nginx-ingress-controller v1.9.3 (fixes CVE-2023-44487, HTTP/2 rapid reset attack)."
+    },
+    {
+      "category": "changed",
+      "description": "Update web terminal to use latest curl version (8.4.0)."
     },
     {
       "category": "fixed",
-      "description": "If a vSphere user cluster uses a custom datastore, the seed's default datastore is no longer validated."
+      "description": "Operating system profile is configured correctly when updating a MachineDeployment now."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix Hetzner API response validation for server type and networks."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix logout failing when Keycloak is used as identity provider."
     }
   ]
 }
