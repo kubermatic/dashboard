@@ -12,21 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.io/alpine:3.17
+FROM docker.io/alpine:3.18
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.26.txt
-ENV KUBECTL_VERSION=v1.26.5
+# Source: https://dl.k8s.io/release/stable-1.27.txt
+ENV KUBECTL_VERSION=v1.27.6
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.11.3
+ENV HELM_VERSION=v3.12.3
 
 ARG ARCH=amd64
 
+# ensure that we install a curl version that fixes CVE-2023-38545 and CVE-2023-38546.
 RUN apk add --no-cache -U \
   bash \
   ca-certificates \
-  curl \
+   'curl>=8.4.0-r0' \
   git \
   jq \
   make \
