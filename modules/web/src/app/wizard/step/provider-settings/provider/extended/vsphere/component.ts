@@ -93,8 +93,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   @ViewChild('folderCombobox')
   private readonly _folderCombobox: FilteredComboboxComponent;
-  @ViewChild('baseFolderPathCombobox')
-  private readonly _baseFolderPathCombobox: FilteredComboboxComponent;
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;
   @ViewChild('tagCategoryComboBox')
@@ -193,15 +191,13 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.BaseFolderPath)
       .valueChanges.pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((val: {select: string}) => this._enable(!val.select, Controls.Folder));
+      .subscribe((value: string) => this._enable(!value, Controls.Folder));
 
-    this.form
-      .get(Controls.DatastoreCluster)
-      .valueChanges.pipe(filter(_ => !this._presets.preset))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(val => this._enable(!val, Controls.Datastore));
-
-    merge(this.form.get(Controls.DatastoreCluster).valueChanges, this.form.get(Controls.ResourcePool).valueChanges)
+    merge(
+      this.form.get(Controls.DatastoreCluster).valueChanges,
+      this.form.get(Controls.ResourcePool).valueChanges,
+      this.form.get(Controls.BaseFolderPath).valueChanges
+    )
       .pipe(distinctUntilChanged(), takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
 
@@ -246,10 +242,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this._clusterSpecService.cluster.spec.cloud.vsphere.folder = folder;
   }
 
-  onBaseFolderPathChange(value: string): void {
-    this._clusterSpecService.cluster.spec.cloud.vsphere.basePath = value;
-  }
-
   onTagCategoryChange(tagCategory: string): void {
     this.selectedTagCategory = tagCategory;
     if (tagCategory) {
@@ -284,8 +276,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     switch (control) {
       case Controls.Folder:
         return 'Folder is used to group the provisioned virtual machines. It is mutually exclusive with Base Folder Path field.';
-      case Controls.BaseFolderPath:
-        return 'Base folder path configures a vCenter folder path where KKP will create an individual cluster folder.';
     }
 
     return '';
@@ -428,7 +418,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
     this.folders = [];
     this.folderLabel = FolderState.Empty;
     this._folderCombobox.reset();
-    this._baseFolderPathCombobox.reset();
     this._cdr.detectChanges();
   }
 
@@ -488,6 +477,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
           vsphere: {
             datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
             resourcePool: this.form.get(Controls.ResourcePool).value,
+            basePath: this.form.get(Controls.BaseFolderPath).value,
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
