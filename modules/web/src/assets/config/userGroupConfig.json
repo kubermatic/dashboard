@@ -71,6 +71,12 @@
       "edit": true,
       "create": true,
       "delete": true
+    },
+    "clusterbackups": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
     }
   },
   "editors": {
@@ -145,6 +151,12 @@
       "edit": true,
       "create": true,
       "delete": true
+    },
+    "clusterbackups": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
     }
   },
   "viewers": {
@@ -215,6 +227,12 @@
       "delete": false
     },
     "backups": {
+      "view": true,
+      "edit": false,
+      "create": false,
+      "delete": false
+    },
+    "clusterbackups": {
       "view": true,
       "edit": false,
       "create": false,

@@ -12,26 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {View} from '@app/shared/entity/common';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: 'km-cluster-backups',
+  selector: 'km-delete-backup-dialog',
   templateUrl: './template.html',
 })
-export class ClusterBackupsComponent implements OnInit {
-  readonly view = View;
-  clustersBackupView: string;
+export class DeleteBackupDialogComponent implements OnInit {
+  verificationInput = '';
+  backupName = '';
 
-  constructor(private _router: Router) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteBackupDialogComponent,
+    private readonly _dialogRef: MatDialogRef<DeleteBackupDialogComponent>
+  ) {}
 
   ngOnInit(): void {
-    this.getClusterBackupsView();
+    this.backupName = this._config.backupName;
   }
 
-  getClusterBackupsView(): void {
-    const urlArray = this._router.routerState.snapshot.url.split('/');
-    this.clustersBackupView = urlArray[urlArray.length - 1];
+  onEnterKeyDown(): void {
+    if (!this.isNameVerified()) {
+      return;
+    }
+    this._dialogRef.close(true);
+  }
+
+  isNameVerified(): boolean {
+    return this.verificationInput === this.backupName;
   }
 }

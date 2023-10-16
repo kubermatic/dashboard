@@ -132,3 +132,20 @@ export class S3BackupCredentials {
   accessKeyID: string;
   secretAccessKey: string;
 }
+
+export class ClusterBackups {
+  name: string;
+  destination: string;
+  cluster: string;
+  namespaces: string[];
+  schedule: string;
+  time: string;
+}
+
+export class ClusterRestores {
+  name: string;
+  namespaces: string[];
+  clusterName: string;
+  backupName: string;
+  restored: string;
+}

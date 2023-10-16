@@ -1,0 +1,62 @@
+<!--
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div>
+  <form [formGroup]="form">
+    <km-dialog-title>Restore {{data.backup.name}} Backup</km-dialog-title>
+    <mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [formControlName]="controls.Name"
+               matInput
+               required>
+        <mat-hint>The name of the created cluster backup.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
+        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
+        <mat-select [formControlName]="controls.Clusters"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let cluster of clusters"
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
+        </mat-select>
+        <mat-hint>The list of existing clusters for the selected project.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>chose Name Spaces</mat-label>
+        <mat-select [formControlName]="controls.NameSpaces"
+                    multiple
+                    panelClass="km-multiple-values-dropdown"
+                    disableOptionCentering>
+          <mat-option *ngFor="let nameSpace of data.backup.namespaces"
+                      [value]="nameSpace">
+            {{nameSpace}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-flat-button
+              [mat-dialog-close]="true"
+              id="km-delete-project-dialog-confirm-btn"
+              [disabled]="form.invalid"
+              (click)="createRestore()">
+        <i class="km-icon-mask km-icon-delete i-24"></i>
+        <span>Restore Backup</span>
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

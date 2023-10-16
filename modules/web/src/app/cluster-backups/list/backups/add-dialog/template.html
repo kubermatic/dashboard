@@ -1,0 +1,102 @@
+<!--
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div>
+  <km-dialog-title>Create Cluster Backups{{projectID}}</km-dialog-title>
+  <mat-dialog-content>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [formControlName]="Controls.Name"
+               matInput
+               required>
+        <mat-hint>The name of the created cluster backup.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
+        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
+        <mat-select [formControlName]="Controls.Clusters"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let cluster of clusters"
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
+        </mat-select>
+        <mat-hint>The list of existing clusters for the selected project.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label *ngIf="hasDestinations()">Destination</mat-label>
+        <mat-label *ngIf="!hasDestinations()">No destinations available</mat-label>
+        <mat-select [formControlName]="Controls.Destination"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let destination of destinations"
+                      [value]="destination">{{destination}}</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="isAdmin && !hasDestinations()">
+          <a class="km-pointer"
+             href="/settings/backupdestinations"
+             fxLayoutAlign=" center"
+             target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.</a>
+        </mat-hint>
+        <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
+        </mat-hint>
+        <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Name Spaces</mat-label>
+        <mat-select [formControlName]="Controls.NameSpaces"
+                    multiple
+                    panelClass="km-multiple-values-dropdown"
+                    disableOptionCentering>
+          <mat-option *ngFor="let nameSpace of nameSpaces"
+                      [value]="nameSpace">
+            {{nameSpace}}
+
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-radio-group fxLayoutGap="50px"
+                       [formControlName]="Controls.Schedule">
+        <mat-radio-button [value]="ScheduleOption.Now">{{ScheduleOption.Now}}</mat-radio-button>
+        <mat-radio-button [value]="ScheduleOption.Custom">{{ScheduleOption.Custom}}
+        </mat-radio-button>
+      </mat-radio-group>
+      <div *ngIf="isCustomBackup()">
+        <mat-form-field>
+          <mat-label>Schedule</mat-label>
+          <input [formControlName]="Controls.CronJob"
+                 matInput
+                 required>
+          <mat-hint>The cron expression defining when to perform the backup.</mat-hint>
+        </mat-form-field>
+      </div>
+      <km-label-form title="Labels"
+                     [labels]="labels"
+                     noValidators="true"
+                     (labelsChange)="onLabelsChange($event)"
+                     [formControlName]="Controls.Labels"></km-label-form>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-edit-cluster-dialog-edit-btn"
+            mat-flat-button
+            (click)="createBackup()"
+            [disabled]="form.invalid">
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Create</span>
+    </button>
+  </mat-dialog-actions>
+</div>

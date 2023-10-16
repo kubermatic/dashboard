@@ -1,13 +1,27 @@
+<!--
+Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <mat-card class="km-card">
   <mat-card-header>
     <mat-card-title>Cluster Backups</mat-card-title>
     <button mat-flat-button
             type="button"
             (click)="add()"
-            [disabled]="!canAdd"
             fxLayoutAlign="center center">
       <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Cluster Backup</span>
+      <span>Create Cluster Backup</span>
     </button>
   </mat-card-header>
 
@@ -15,67 +29,133 @@
     <table class="km-table"
            mat-table
            matSort
-
-           >
+           [dataSource]="dataSource">
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-25"
             mat-sort-header>Name
         </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.name}}</span>
+          </div>
+        </td>
       </ng-container>
+
+      <ng-container matColumnDef="labels">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Labels
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <ng-container *ngFor="let label of element.labels.labels; let isLast = last">
+            <ng-container *ngIf="!isLast">
+              <km-labels [labels]="label"></km-labels>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="cluster">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20">Cluster ID
+            class="km-header-cell p-10">Cluster ID
         </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.cluster}}</span>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="destination">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20">Destination
+            class="km-header-cell p-10">Destination
         </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.destination}}</span>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="schedule">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">
-          <div fxLayout="row"
-               fxLayoutGap="4px"
-               fxLayoutAlign=" center">
-            <div>Schedule</div>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Schedule is a cron expression defining when to perform the backup. If not set, the backup is performed exactly once, immediately."></div>
-          </div>
-        </th>
-      </ng-container>
-      <ng-container matColumnDef="keep">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-10">
           <div fxLayout="row"
                fxLayoutGap="4px"
                fxLayoutAlign=" center">
-            <div>Keep</div>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Keep is the total number of backups that are stored. Once the number is reached the oldest backup will be deleted to make room for the newest. If not set, it will be controlled by Kubermatic. Only used if Schedule is set."></div>
+            <div>Schedule</div>
           </div>
         </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.schedule}}</span>
+        </td>
       </ng-container>
+
+      <ng-container matColumnDef="namespaces">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5">
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <div>Namespaces</div>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Number of namespaces in the backup"></div>
+          </div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.namespaces.length}}</span>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="created">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-15">Created
         </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <km-relative-time [date]="element.time"></km-relative-time>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="actions">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell"></th>
+            class="km-header-cell p-10"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <button mat-icon-button
+                    matTooltip="Restore Backup"
+                    (click)="restoreBackup(element);">
+              <i class="km-icon-mask km-icon-restore"></i>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="Delete Backup"
+                    (click)="deleteBackup(element.name);">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
       </ng-container>
+
       <tr mat-header-row
           class="km-header-row"
           *matHeaderRowDef="columns"></tr>
+      <tr mat-row
+          *matRowDef="let element; columns: columns"></tr>
     </table>
   </mat-card-content>
 </mat-card>
