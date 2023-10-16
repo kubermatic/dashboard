@@ -44,18 +44,22 @@ limitations under the License.
     <div *option="let folder">{{folder.path}}</div>
   </km-combobox>
 
-  <km-combobox #baseFolderPathCombobox
-               [grouped]="false"
-               [isDisabled]="isPresetSelected"
-               [options]="folders"
-               [formControlName]="Controls.BaseFolderPath"
-               [hint]="getHint(Controls.BaseFolderPath)"
-               (changed)="onBaseFolderPathChange($event)"
-               [label]="folderLabel === FolderState.Ready ? 'Base Folder Path' : folderLabel"
-               inputLabel="Select base folder path..."
-               filterBy="path">
-    <div *option="let folder">{{folder.path}}</div>
-  </km-combobox>
+  <mat-form-field fxFlex
+                  class="km-long-subscript">
+    <mat-label>Base Folder Path</mat-label>
+    <input matInput
+           [formControlName]="Controls.BaseFolderPath"
+           [name]="Controls.BaseFolderPath"
+           type="text"
+           autocomplete="off" />
+    <mat-hint>
+      Base folder path configures a vCenter folder path where KKP will create an
+      individual cluster folder. If the value is a relative path, it’s appended
+      to root path (results in <code>/&lt;root path&gt;/&lt;base path&gt;/&lt;cluster
+      folder to be created&gt;</code>). If it’s an absolute path it ignores the root
+      path (<code>/&lt;base path&gt;/&lt;cluster folder to be created&gt;</code>).
+    </mat-hint>
+  </mat-form-field>
 
   <km-autocomplete label="Datastore"
                    [formControlName]="Controls.Datastore"
