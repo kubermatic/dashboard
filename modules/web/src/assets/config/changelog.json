@@ -14,6 +14,14 @@
       "description": "Update to OSM v1.3.3."
     },
     {
+      "category": "changed",
+      "description": "Update to nginx-ingress-controller v1.9.3 (fixes CVE-2023-44487, HTTP/2 rapid reset attack)."
+    },
+    {
+      "category": "changed",
+      "description": "Update web terminal to use latest curl version (8.4.0)."
+    },
+    {
       "category": "fixed",
       "description": "Operating system profile is configured correctly when updating a MachineDeployment now."
     },
