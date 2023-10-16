@@ -24,6 +24,10 @@
     {
       "category": "fixed",
       "description": "Fix the recreate nodes warning for kubevirt edit MD dialog."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix Hetzner API response validation for server type and networks."
     }
   ]
 }
