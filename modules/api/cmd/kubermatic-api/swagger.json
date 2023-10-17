@@ -24986,10 +24986,12 @@
       "type": "object",
       "properties": {
         "clientID": {
+          "description": "The service principal used to access Azure.",
           "type": "string",
           "x-go-name": "ClientID"
         },
         "clientSecret": {
+          "description": "The client secret corresponding to the given service principal.",
           "type": "string",
           "x-go-name": "ClientSecret"
         },
@@ -25004,10 +25006,12 @@
           "x-go-name": "Enabled"
         },
         "subscriptionID": {
+          "description": "The Azure Subscription used for the user cluster.",
           "type": "string",
           "x-go-name": "SubscriptionID"
         },
         "tenantID": {
+          "description": "The Azure Active Directory Tenant used for the user cluster.",
           "type": "string",
           "x-go-name": "TenantID"
         }
@@ -25349,15 +25353,17 @@
       "type": "object",
       "properties": {
         "accessKeyID": {
-          "description": "Access Key ID to authenticate against AWS.",
+          "description": "The Access key ID used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
         "assumeRoleARN": {
+          "description": "Defines the ARN for an IAM role that should be assumed when handling resources on AWS. It will be used\nto acquire temporary security credentials using an STS AssumeRole API operation whenever creating an AWS session.\n+optional",
           "type": "string",
           "x-go-name": "AssumeRoleARN"
         },
         "assumeRoleExternalID": {
+          "description": "An arbitrary string that may be needed when calling the STS AssumeRole API operation.\nUsing an external ID can help to prevent the \"confused deputy problem\".\n+optional",
           "type": "string",
           "x-go-name": "AssumeRoleExternalID"
         },
@@ -25387,7 +25393,7 @@
           "x-go-name": "RouteTableID"
         },
         "secretAccessKey": {
-          "description": "Secret Access Key to authenticate against AWS.",
+          "description": "The Secret Access Key used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "SecretAccessKey"
         },
@@ -25409,14 +25415,17 @@
       "title": "AWSCloudSpec specifies access data to Amazon Web Services.",
       "properties": {
         "accessKeyID": {
+          "description": "The Access key ID used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
         "assumeRoleARN": {
+          "description": "Defines the ARN for an IAM role that should be assumed when handling resources on AWS. It will be used\nto acquire temporary security credentials using an STS AssumeRole API operation whenever creating an AWS session.\n+optional",
           "type": "string",
           "x-go-name": "AssumeRoleARN"
         },
         "assumeRoleExternalID": {
+          "description": "An arbitrary string that may be needed when calling the STS AssumeRole API operation.\nUsing an external ID can help to prevent the \"confused deputy problem\".\n+optional",
           "type": "string",
           "x-go-name": "AssumeRoleExternalID"
         },
@@ -25450,6 +25459,7 @@
           "x-go-name": "RouteTableID"
         },
         "secretAccessKey": {
+          "description": "The Secret Access Key used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "SecretAccessKey"
         },
@@ -26194,12 +26204,12 @@
       "type": "object",
       "properties": {
         "accessKeyID": {
-          "description": "Access Key ID to authenticate against Alibaba.",
+          "description": "The Access Key ID used to authenticate against Alibaba.",
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
         "accessKeySecret": {
-          "description": "Access Key Secret to authenticate against Alibaba.",
+          "description": "The Access Key Secret used to authenticate against Alibaba.",
           "type": "string",
           "x-go-name": "AccessKeySecret"
         },
@@ -26221,10 +26231,12 @@
       "title": "AlibabaCloudSpec specifies the access data to Alibaba.",
       "properties": {
         "accessKeyID": {
+          "description": "The Access Key ID used to authenticate against Alibaba.",
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
         "accessKeySecret": {
+          "description": "The Access Key Secret used to authenticate against Alibaba.",
           "type": "string",
           "x-go-name": "AccessKeySecret"
         },
@@ -26411,6 +26423,7 @@
           "$ref": "#/definitions/GlobalSecretKeySelector"
         },
         "token": {
+          "description": "Token is used to authenticate with the Anexia API.",
           "type": "string",
           "x-go-name": "Token"
         }
@@ -27126,10 +27139,12 @@
       "type": "object",
       "properties": {
         "clientID": {
+          "description": "The service principal used to access Azure.",
           "type": "string",
           "x-go-name": "ClientID"
         },
         "clientSecret": {
+          "description": "The client secret corresponding to the given service principal.",
           "type": "string",
           "x-go-name": "ClientSecret"
         },
@@ -27147,34 +27162,42 @@
           "$ref": "#/definitions/LBSKU"
         },
         "resourceGroup": {
+          "description": "The resource group that will be used to look up and create resources for the cluster in.\nIf set to empty string at cluster creation, a new resource group will be created and this field will be updated to\nthe generated resource group's name.",
           "type": "string",
           "x-go-name": "ResourceGroup"
         },
         "routeTable": {
+          "description": "The name of a route table associated with the subnet referenced by `subnet`.\nIf set to empty string at cluster creation, a new route table will be created and this field will be updated to\nthe generated route table's name. If no subnet is defined at cluster creation, this field should be empty as well.",
           "type": "string",
           "x-go-name": "RouteTableName"
         },
         "securityGroup": {
+          "description": "The name of a security group associated with the subnet referenced by `subnet`.\nIf set to empty string at cluster creation, a new security group will be created and this field will be updated to\nthe generated security group's name. If no subnet is defined at cluster creation, this field should be empty as well.",
           "type": "string",
           "x-go-name": "SecurityGroup"
         },
         "subnet": {
+          "description": "The name of a subnet in the VNet referenced by `vnet`.\nIf set to empty string at cluster creation, a new subnet will be created and this field will be updated to\nthe generated subnet's name. If no VNet is defined at cluster creation, this field should be empty as well.",
           "type": "string",
           "x-go-name": "SubnetName"
         },
         "subscriptionID": {
+          "description": "The Azure Subscription used for the user cluster.",
           "type": "string",
           "x-go-name": "SubscriptionID"
         },
         "tenantID": {
+          "description": "The Azure Active Directory Tenant used for the user cluster.",
           "type": "string",
           "x-go-name": "TenantID"
         },
         "vnet": {
+          "description": "The name of the VNet resource used for setting up networking in.\nIf set to empty string at cluster creation, a new VNet will be created and this field will be updated to\nthe generated VNet's name.",
           "type": "string",
           "x-go-name": "VNetName"
         },
         "vnetResourceGroup": {
+          "description": "Optional: Defines a second resource group that will be used for VNet related resources instead.\nIf left empty, NO additional resource group will be created and all VNet related resources use the resource group defined by `resourceGroup`.",
           "type": "string",
           "x-go-name": "VNetResourceGroup"
         }
@@ -27210,12 +27233,12 @@
           "x-go-name": "AvailabilitySet"
         },
         "clientID": {
-          "description": "ClientID is the service principal used to access Azure.\nCan be read from `credentialsReference` instead.",
+          "description": "The service principal used to access Azure.\nCan be read from `credentialsReference` instead.",
           "type": "string",
           "x-go-name": "ClientID"
         },
         "clientSecret": {
-          "description": "ClientSecret is the client secret corresponding to the given service principal.\nCan be read from `credentialsReference` instead.",
+          "description": "The client secret corresponding to the given service principal.\nCan be read from `credentialsReference` instead.",
           "type": "string",
           "x-go-name": "ClientSecret"
         },
@@ -27254,12 +27277,12 @@
           "x-go-name": "SubnetName"
         },
         "subscriptionID": {
-          "description": "SubscriptionID is the Azure Subscription used for this cluster.\nCan be read from `credentialsReference` instead.",
+          "description": "The Azure Subscription used for this cluster.\nCan be read from `credentialsReference` instead.",
           "type": "string",
           "x-go-name": "SubscriptionID"
         },
         "tenantID": {
-          "description": "TenantID is the Azure Active Directory Tenant used for this cluster.\nCan be read from `credentialsReference` instead.",
+          "description": "The Azure Active Directory Tenant used for this cluster.\nCan be read from `credentialsReference` instead.",
           "type": "string",
           "x-go-name": "TenantID"
         },
@@ -27269,7 +27292,7 @@
           "x-go-name": "VNetName"
         },
         "vnetResourceGroup": {
-          "description": "Optional: VNetResourceGroup optionally defines a second resource group that will be used for VNet related resources instead.\nIf left empty, NO additional resource group will be created and all VNet related resources use the resource group defined by `resourceGroup`.",
+          "description": "Optional: Defines a second resource group that will be used for VNet related resources instead.\nIf left empty, NO additional resource group will be created and all VNet related resources use the resource group defined by `resourceGroup`.",
           "type": "string",
           "x-go-name": "VNetResourceGroup"
         }
@@ -29173,10 +29196,12 @@
       "title": "DatacenterSpecOpenstack describes an OpenStack datacenter.",
       "properties": {
         "authURL": {
+          "description": "Authentication URL",
           "type": "string",
           "x-go-name": "AuthURL"
         },
         "availabilityZone": {
+          "description": "Used to configure availability zone.",
           "type": "string",
           "x-go-name": "AvailabilityZone"
         },
@@ -29223,6 +29248,7 @@
           "$ref": "#/definitions/OpenstackNodeSizeRequirements"
         },
         "region": {
+          "description": "Authentication region name",
           "type": "string",
           "x-go-name": "Region"
         },
@@ -29394,6 +29420,7 @@
           "$ref": "#/definitions/GlobalSecretKeySelector"
         },
         "token": {
+          "description": "Token is used to authenticate with the DigitalOcean API.",
           "type": "string",
           "x-go-name": "Token"
         }
@@ -29520,14 +29547,17 @@
       "type": "object",
       "properties": {
         "accessKeyID": {
+          "description": "The Access key ID used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
         "assumeRoleARN": {
+          "description": "Defines the ARN for an IAM role that should be assumed when handling resources on AWS. It will be used\nto acquire temporary security credentials using an STS AssumeRole API operation whenever creating an AWS session.",
           "type": "string",
           "x-go-name": "AssumeRoleARN"
         },
         "assumeRoleExternalID": {
+          "description": "An arbitrary string that may be needed when calling the STS AssumeRole API operation.\nUsing an external ID can help to prevent the \"confused deputy problem\".",
           "type": "string",
           "x-go-name": "AssumeRoleExternalID"
         },
@@ -29542,6 +29572,7 @@
           "x-go-name": "Enabled"
         },
         "secretAccessKey": {
+          "description": "The Secret Access Key used to authenticate against AWS.",
           "type": "string",
           "x-go-name": "SecretAccessKey"
         }
@@ -30701,6 +30732,7 @@
           "x-go-name": "Network"
         },
         "serviceAccount": {
+          "description": "ServiceAccount is the Google Service Account (JSON format), encoded with base64.",
           "type": "string",
           "x-go-name": "ServiceAccount"
         },
@@ -32447,6 +32479,11 @@
         },
         "kubeconfig": {
           "$ref": "#/definitions/ObjectReference"
+        },
+        "nodeAddressType": {
+          "description": "NodeAddressType is used to configure the address type from node, used for load balancing.\nOptional: Defaults to ExternalIP.\n+kubebuilder:validation:Enum=InternalIP;ExternalIP\n+kubebuilder:default=ExternalIP",
+          "type": "string",
+          "x-go-name": "NodeAddressType"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -32869,6 +32906,7 @@
           "x-go-name": "Enabled"
         },
         "kubeconfig": {
+          "description": "Kubeconfig is the cluster's kubeconfig file, encoded with base64.",
           "type": "string",
           "x-go-name": "Kubeconfig"
         }
@@ -34306,28 +34344,28 @@
       "type": "object",
       "properties": {
         "clusterName": {
-          "description": "ClusterName is the Nutanix cluster to deploy resources and nodes to.",
+          "description": "The name of the Nutanix cluster to which the resources and nodes are deployed to.",
           "type": "string",
           "x-go-name": "ClusterName"
         },
         "csiEndpoint": {
-          "description": "CSIEndpoint to access Nutanix Prism Element for csi driver",
+          "description": "CSIEndpoint to access Nutanix Prism Element for CSI driver.",
           "type": "string",
           "x-go-name": "CSIEndpoint"
         },
         "csiPassword": {
-          "description": "Prism Element Password for csi driver",
+          "description": "Prism Element Password for CSI driver.",
           "type": "string",
           "x-go-name": "CSIPassword"
         },
         "csiPort": {
-          "description": "CSIPort to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440)",
+          "description": "CSIPort to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440).",
           "type": "integer",
           "format": "int32",
           "x-go-name": "CSIPort"
         },
         "csiUsername": {
-          "description": "Prism Element Username for csi driver",
+          "description": "Prism Element Username for CSI driver.",
           "type": "string",
           "x-go-name": "CSIUsername"
         },
@@ -34342,22 +34380,22 @@
           "x-go-name": "Enabled"
         },
         "password": {
-          "description": "Password is the password corresponding to the provided user.",
+          "description": "Password corresponding to the provided user.",
           "type": "string",
           "x-go-name": "Password"
         },
         "projectName": {
-          "description": "ProjectName is the optional Nutanix project to use. If none is given,\nno project will be used.",
+          "description": "Optional: Nutanix project to use. If none is given,\nno project will be used.",
           "type": "string",
           "x-go-name": "ProjectName"
         },
         "proxyURL": {
-          "description": "ProxyURL is used to optionally configure a HTTP proxy to access Nutanix Prism Central.",
+          "description": "Optional: To configure a HTTP proxy to access Nutanix Prism Central.",
           "type": "string",
           "x-go-name": "ProxyURL"
         },
         "username": {
-          "description": "Username is the username to access the Nutanix Prism Central API.",
+          "description": "Username that is used to access the Nutanix Prism Central API.",
           "type": "string",
           "x-go-name": "Username"
         }
@@ -34369,7 +34407,7 @@
       "title": "NutanixCSIConfig contains credentials and the endpoint for the Nutanix Prism Element to which the CSI driver connects.",
       "properties": {
         "endpoint": {
-          "description": "Prism Element Endpoint to access Nutanix Prism Element for csi driver",
+          "description": "Prism Element Endpoint to access Nutanix Prism Element for CSI driver.",
           "type": "string",
           "x-go-name": "Endpoint"
         },
@@ -34379,28 +34417,28 @@
           "x-go-name": "Fstype"
         },
         "password": {
-          "description": "Prism Element Password for csi driver",
+          "description": "Prism Element Password for CSI driver.",
           "type": "string",
           "x-go-name": "Password"
         },
         "port": {
-          "description": "Optional: Port to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440)\n+optional",
+          "description": "Optional: Port to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440).\n+optional",
           "type": "integer",
           "format": "int32",
           "x-go-name": "Port"
         },
         "ssSegmentedIscsiNetwork": {
-          "description": "Optional: defaults to \"false\"\n+optional",
+          "description": "Optional: defaults to \"false\".\n+optional",
           "type": "boolean",
           "x-go-name": "SsSegmentedIscsiNetwork"
         },
         "storageContainer": {
-          "description": "Optional: defaults to \"SelfServiceContainer\"\n+optional",
+          "description": "Optional: defaults to \"SelfServiceContainer\".\n+optional",
           "type": "string",
           "x-go-name": "StorageContainer"
         },
         "username": {
-          "description": "Prism Element Username for csi driver",
+          "description": "Prism Element Username for CSI driver.",
           "type": "string",
           "x-go-name": "Username"
         }
@@ -34469,19 +34507,22 @@
           "$ref": "#/definitions/NutanixCSIConfig"
         },
         "password": {
+          "description": "Password corresponding to the provided user.",
           "type": "string",
           "x-go-name": "Password"
         },
         "projectName": {
-          "description": "ProjectName is the project that this cluster is deployed into. If none is given, no project will be used.\n+optional",
+          "description": "The name of the project that this cluster is deployed into. If none is given, no project will be used.\n+optional",
           "type": "string",
           "x-go-name": "ProjectName"
         },
         "proxyURL": {
+          "description": "Optional: Used to configure a HTTP proxy to access Nutanix Prism Central.",
           "type": "string",
           "x-go-name": "ProxyURL"
         },
         "username": {
+          "description": "Username to access the Nutanix Prism Central API.",
           "type": "string",
           "x-go-name": "Username"
         }
@@ -34850,10 +34891,12 @@
           "x-go-name": "Enabled"
         },
         "floatingIPPool": {
+          "description": "FloatingIPPool holds the name of the public network The public network is reachable from the outside world and should provide the pool of IP addresses to choose from.",
           "type": "string",
           "x-go-name": "FloatingIPPool"
         },
         "network": {
+          "description": "Network holds the name of the internal network When specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.",
           "type": "string",
           "x-go-name": "Network"
         },
@@ -34862,10 +34905,12 @@
           "x-go-name": "Password"
         },
         "project": {
+          "description": "Project, formally known as tenant.",
           "type": "string",
           "x-go-name": "Project"
         },
         "projectID": {
+          "description": "ProjectID, formally known as tenantID.",
           "type": "string",
           "x-go-name": "ProjectID"
         },
@@ -34949,7 +34994,7 @@
           "x-go-name": "IPv6SubnetPool"
         },
         "network": {
-          "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created\n\nNote that the network is internal if the \"External\" field is set to false",
+          "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.\n\nNote that the network is internal if the \"External\" field is set to false",
           "type": "string",
           "x-go-name": "Network"
         },
@@ -37380,6 +37425,7 @@
       "type": "object",
       "properties": {
         "apiToken": {
+          "description": "The VMware Cloud Director API token.",
           "type": "string",
           "x-go-name": "APIToken"
         },
@@ -37394,22 +37440,27 @@
           "x-go-name": "Enabled"
         },
         "organization": {
+          "description": "The name of organization to use.",
           "type": "string",
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
         },
         "password": {
+          "description": "The VMware Cloud Director user password.",
           "type": "string",
           "x-go-name": "Password"
         },
         "username": {
+          "description": "The VMware Cloud Director user name.",
           "type": "string",
           "x-go-name": "Username"
         },
         "vdc": {
+          "description": "The organizational virtual data center.",
           "type": "string",
           "x-go-name": "VDC"
         }
@@ -37456,7 +37507,7 @@
       "title": "VMwareCloudDirectorCloudSpec specifies access data to VMware Cloud Director cloud.",
       "properties": {
         "apiToken": {
-          "description": "APIToken is the VMware Cloud Director API token.\n+optional",
+          "description": "The VMware Cloud Director API token.\n+optional",
           "type": "string",
           "x-go-name": "APIToken"
         },
@@ -37467,22 +37518,22 @@
           "$ref": "#/definitions/VMwareCloudDirectorCSIConfig"
         },
         "organization": {
-          "description": "Organization is the name of organization to use.\n+optional",
+          "description": "The name of organization to use.\n+optional",
           "type": "string",
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
-          "description": "Network is the name of organizational virtual data center network that will be associated with the VMs and vApp.",
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
         },
         "password": {
-          "description": "Password is the VMware Cloud Director user password.\n+optional",
+          "description": "The VMware Cloud Director user password.\n+optional",
           "type": "string",
           "x-go-name": "Password"
         },
         "username": {
-          "description": "Username is the VMware Cloud Director user name.\n+optional",
+          "description": "The VMware Cloud Director user name.\n+optional",
           "type": "string",
           "x-go-name": "Username"
         },
@@ -37492,7 +37543,7 @@
           "x-go-name": "VApp"
         },
         "vdc": {
-          "description": "VDC is the organizational virtual data center.\n+optional",
+          "description": "The organizational virtual data center.\n+optional",
           "type": "string",
           "x-go-name": "VDC"
         }
@@ -37672,10 +37723,12 @@
           "x-go-name": "Datacenter"
         },
         "datastore": {
+          "description": "Datastore to be used for storing virtual machines and as a default for dynamic volume provisioning, it is mutually exclusive with DatastoreCluster.",
           "type": "string",
           "x-go-name": "Datastore"
         },
         "datastoreCluster": {
+          "description": "DatastoreCluster to be used for storing virtual machines, it is mutually exclusive with Datastore.",
           "type": "string",
           "x-go-name": "DatastoreCluster"
         },
@@ -37685,6 +37738,7 @@
           "x-go-name": "Enabled"
         },
         "networks": {
+          "description": "List of vSphere networks.",
           "type": "array",
           "items": {
             "type": "string"
@@ -37692,14 +37746,17 @@
           "x-go-name": "Networks"
         },
         "password": {
+          "description": "The vSphere user password.",
           "type": "string",
           "x-go-name": "Password"
         },
         "resourcePool": {
+          "description": "ResourcePool is used to manage resources such as cpu and memory for vSphere virtual machines. The resource pool should be defined on vSphere cluster level.",
           "type": "string",
           "x-go-name": "ResourcePool"
         },
         "username": {
+          "description": "The vSphere user name.",
           "type": "string",
           "x-go-name": "Username"
         },
@@ -37734,7 +37791,7 @@
           "x-go-name": "DatastoreCluster"
         },
         "folder": {
-          "description": "Folder is the folder to be used to group the provisioned virtual\nmachines.\n+optional",
+          "description": "Folder to be used to group the provisioned virtual\nmachines.\n+optional",
           "type": "string",
           "x-go-name": "Folder"
         },
@@ -37742,7 +37799,7 @@
           "$ref": "#/definitions/VSphereCredentials"
         },
         "networks": {
-          "description": "Networks is the list of vSphere networks.\n+optional",
+          "description": "List of vSphere networks.\n+optional",
           "type": "array",
           "items": {
             "type": "string"
@@ -37750,7 +37807,7 @@
           "x-go-name": "Networks"
         },
         "password": {
-          "description": "Password is the vSphere user password.\n+optional",
+          "description": "The vSphere user password.\n+optional",
           "type": "string",
           "x-go-name": "Password"
         },
@@ -37768,12 +37825,12 @@
           "$ref": "#/definitions/VSphereTag"
         },
         "username": {
-          "description": "Username is the vSphere user name.\n+optional",
+          "description": "The vSphere user name.\n+optional",
           "type": "string",
           "x-go-name": "Username"
         },
         "vmNetName": {
-          "description": "VMNetName is the name of the vSphere network.\nDeprecated: Use networks instead.\n+optional",
+          "description": "The name of the vSphere network.\nDeprecated: Use networks instead.\n+optional",
           "type": "string",
           "x-go-name": "VMNetName"
         }

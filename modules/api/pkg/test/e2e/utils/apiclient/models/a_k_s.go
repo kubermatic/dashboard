@@ -17,10 +17,10 @@ import (
 // swagger:model AKS
 type AKS struct {
 
-	// client ID
+	// The service principal used to access Azure.
 	ClientID string `json:"clientID,omitempty"`
 
-	// client secret
+	// The client secret corresponding to the given service principal.
 	ClientSecret string `json:"clientSecret,omitempty"`
 
 	// If datacenter is set, this preset is only applicable to the
@@ -30,10 +30,10 @@ type AKS struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// subscription ID
+	// The Azure Subscription used for the user cluster.
 	SubscriptionID string `json:"subscriptionID,omitempty"`
 
-	// tenant ID
+	// The Azure Active Directory Tenant used for the user cluster.
 	TenantID string `json:"tenantID,omitempty"`
 }
 

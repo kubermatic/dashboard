@@ -18,13 +18,17 @@ import (
 // swagger:model AWSCloudSpec
 type AWSCloudSpec struct {
 
-	// access key ID
+	// The Access key ID used to authenticate against AWS.
 	AccessKeyID string `json:"accessKeyID,omitempty"`
 
-	// assume role a r n
+	// Defines the ARN for an IAM role that should be assumed when handling resources on AWS. It will be used
+	// to acquire temporary security credentials using an STS AssumeRole API operation whenever creating an AWS session.
+	// +optional
 	AssumeRoleARN string `json:"assumeRoleARN,omitempty"`
 
-	// assume role external ID
+	// An arbitrary string that may be needed when calling the STS AssumeRole API operation.
+	// Using an external ID can help to prevent the "confused deputy problem".
+	// +optional
 	AssumeRoleExternalID string `json:"assumeRoleExternalID,omitempty"`
 
 	// The IAM role, the control plane will use. The control plane will perform an assume-role
@@ -45,7 +49,7 @@ type AWSCloudSpec struct {
 	// route table ID
 	RouteTableID string `json:"routeTableID,omitempty"`
 
-	// secret access key
+	// The Secret Access Key used to authenticate against AWS.
 	SecretAccessKey string `json:"secretAccessKey,omitempty"`
 
 	// security group ID

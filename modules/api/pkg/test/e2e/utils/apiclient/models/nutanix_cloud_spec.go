@@ -21,17 +21,17 @@ type NutanixCloudSpec struct {
 	// ClusterName is the Nutanix cluster that this user cluster will be deployed to.
 	ClusterName string `json:"clusterName,omitempty"`
 
-	// password
+	// Password corresponding to the provided user.
 	Password string `json:"password,omitempty"`
 
-	// ProjectName is the project that this cluster is deployed into. If none is given, no project will be used.
+	// The name of the project that this cluster is deployed into. If none is given, no project will be used.
 	// +optional
 	ProjectName string `json:"projectName,omitempty"`
 
-	// proxy URL
+	// Optional: Used to configure a HTTP proxy to access Nutanix Prism Central.
 	ProxyURL string `json:"proxyURL,omitempty"`
 
-	// username
+	// Username to access the Nutanix Prism Central API.
 	Username string `json:"username,omitempty"`
 
 	// credentials reference
