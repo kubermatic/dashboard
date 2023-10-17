@@ -17,29 +17,29 @@ import (
 // swagger:model NutanixCSIConfig
 type NutanixCSIConfig struct {
 
-	// Prism Element Endpoint to access Nutanix Prism Element for csi driver
+	// Prism Element Endpoint to access Nutanix Prism Element for CSI driver.
 	Endpoint string `json:"endpoint,omitempty"`
 
 	// Optional: defaults to "xfs"
 	// +optional
 	Fstype string `json:"fstype,omitempty"`
 
-	// Prism Element Password for csi driver
+	// Prism Element Password for CSI driver.
 	Password string `json:"password,omitempty"`
 
-	// Optional: Port to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440)
+	// Optional: Port to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440).
 	// +optional
 	Port int32 `json:"port,omitempty"`
 
-	// Optional: defaults to "false"
+	// Optional: defaults to "false".
 	// +optional
 	SsSegmentedIscsiNetwork bool `json:"ssSegmentedIscsiNetwork,omitempty"`
 
-	// Optional: defaults to "SelfServiceContainer"
+	// Optional: defaults to "SelfServiceContainer".
 	// +optional
 	StorageContainer string `json:"storageContainer,omitempty"`
 
-	// Prism Element Username for csi driver
+	// Prism Element Username for CSI driver.
 	Username string `json:"username,omitempty"`
 }
 

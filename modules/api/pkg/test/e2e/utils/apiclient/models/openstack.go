@@ -33,19 +33,19 @@ type Openstack struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// floating IP pool
+	// FloatingIPPool holds the name of the public network The public network is reachable from the outside world and should provide the pool of IP addresses to choose from.
 	FloatingIPPool string `json:"floatingIPPool,omitempty"`
 
-	// network
+	// Network holds the name of the internal network When specified, all worker nodes will be attached to this network. If not specified, a network, subnet & router will be created.
 	Network string `json:"network,omitempty"`
 
 	// password
 	Password string `json:"password,omitempty"`
 
-	// project
+	// Project, formally known as tenant.
 	Project string `json:"project,omitempty"`
 
-	// project ID
+	// ProjectID, formally known as tenantID.
 	ProjectID string `json:"projectID,omitempty"`
 
 	// router ID

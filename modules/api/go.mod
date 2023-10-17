@@ -102,7 +102,7 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20231012231357-604ffa6a3d8f
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.23.1-0.20231016171957-5a54138762c9
 )
 
 require (

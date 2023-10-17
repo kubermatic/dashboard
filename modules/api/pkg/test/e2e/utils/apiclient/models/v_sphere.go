@@ -26,25 +26,25 @@ type VSphere struct {
 	// configured datacenter.
 	Datacenter string `json:"datacenter,omitempty"`
 
-	// datastore
+	// Datastore to be used for storing virtual machines and as a default for dynamic volume provisioning, it is mutually exclusive with DatastoreCluster.
 	Datastore string `json:"datastore,omitempty"`
 
-	// datastore cluster
+	// DatastoreCluster to be used for storing virtual machines, it is mutually exclusive with Datastore.
 	DatastoreCluster string `json:"datastoreCluster,omitempty"`
 
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// networks
+	// List of vSphere networks.
 	Networks []string `json:"networks"`
 
-	// password
+	// The vSphere user password.
 	Password string `json:"password,omitempty"`
 
-	// resource pool
+	// ResourcePool is used to manage resources such as cpu and memory for vSphere virtual machines. The resource pool should be defined on vSphere cluster level.
 	ResourcePool string `json:"resourcePool,omitempty"`
 
-	// username
+	// The vSphere user name.
 	Username string `json:"username,omitempty"`
 
 	// Deprecated: Use networks instead.

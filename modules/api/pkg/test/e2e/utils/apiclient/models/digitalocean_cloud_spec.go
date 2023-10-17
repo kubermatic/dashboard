@@ -18,7 +18,7 @@ import (
 // swagger:model DigitaloceanCloudSpec
 type DigitaloceanCloudSpec struct {
 
-	// token
+	// Token is used to authenticate with the DigitalOcean API.
 	Token string `json:"token,omitempty"`
 
 	// credentials reference
