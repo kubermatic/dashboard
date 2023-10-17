@@ -42,6 +42,9 @@ type ClusterHealth struct {
 	// gatekeeper controller
 	GatekeeperController HealthStatus `json:"gatekeeperController,omitempty"`
 
+	// kubelb
+	Kubelb HealthStatus `json:"kubelb,omitempty"`
+
 	// kubernetes dashboard
 	KubernetesDashboard HealthStatus `json:"kubernetesDashboard,omitempty"`
 
@@ -100,6 +103,10 @@ func (m *ClusterHealth) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateGatekeeperController(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKubelb(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -270,6 +277,23 @@ func (m *ClusterHealth) validateGatekeeperController(formats strfmt.Registry) er
 			return ve.ValidateName("gatekeeperController")
 		} else if ce, ok := err.(*errors.CompositeError); ok {
 			return ce.ValidateName("gatekeeperController")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *ClusterHealth) validateKubelb(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kubelb) { // not required
+		return nil
+	}
+
+	if err := m.Kubelb.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kubelb")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kubelb")
 		}
 		return err
 	}
@@ -449,6 +473,10 @@ func (m *ClusterHealth) ContextValidate(ctx context.Context, formats strfmt.Regi
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateKubelb(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateKubernetesDashboard(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -592,6 +620,20 @@ func (m *ClusterHealth) contextValidateGatekeeperController(ctx context.Context,
 			return ve.ValidateName("gatekeeperController")
 		} else if ce, ok := err.(*errors.CompositeError); ok {
 			return ce.ValidateName("gatekeeperController")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *ClusterHealth) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kubelb")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kubelb")
 		}
 		return err
 	}
