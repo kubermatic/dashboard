@@ -27877,6 +27877,9 @@
         "gatekeeperController": {
           "$ref": "#/definitions/HealthStatus"
         },
+        "kubelb": {
+          "$ref": "#/definitions/HealthStatus"
+        },
         "kubernetesDashboard": {
           "$ref": "#/definitions/HealthStatus"
         },

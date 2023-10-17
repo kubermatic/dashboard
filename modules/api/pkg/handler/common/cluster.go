@@ -697,6 +697,7 @@ func HealthEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
 		MLAGateway:                   existingCluster.Status.ExtendedHealth.MLAGateway,
 		OperatingSystemManager:       existingCluster.Status.ExtendedHealth.OperatingSystemManager,
 		KubernetesDashboard:          existingCluster.Status.ExtendedHealth.KubernetesDashboard,
+		KubeLB:                       existingCluster.Status.ExtendedHealth.KubeLB,
 	}, nil
 }
 
