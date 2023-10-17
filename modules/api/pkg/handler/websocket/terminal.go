@@ -65,7 +65,7 @@ const (
 	pingMessage                       = "PING"
 	pongMessage                       = "PONG"
 
-	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.6.0"
+	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.6.3"
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 

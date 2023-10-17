@@ -12,18 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM alpine:3.13
+FROM alpine:3.18
 LABEL maintainer="support@kubermatic.com"
 
-ENV KUBECTL_VERSION=v1.25.6 \
-  HELM_VERSION=v3.10.3
+ENV KUBECTL_VERSION=v1.25.14 \
+  HELM_VERSION=v3.12.3
 
 ARG ARCH=amd64
 
+# ensure that we install a curl version that fixes CVE-2023-38545 and CVE-2023-38546.
 RUN apk add --no-cache -U \
   bash \
   ca-certificates \
-  curl \
+  'curl>=8.4.0-r0' \
   git \
   jq \
   make \
