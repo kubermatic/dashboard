@@ -10,6 +10,10 @@
       "description": "Update to OSM v1.2.3."
     },
     {
+      "category": "changed",
+      "description": "Update web terminal to use latest curl version (8.4.0)."
+    },
+    {
       "category": "fixed",
       "description": "Fix vSphere cluster validation: If a Cluster uses a custom datastore, the Seed's default datastore should not be validated."
     },
