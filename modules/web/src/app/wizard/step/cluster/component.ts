@@ -489,7 +489,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? null
       ),
       [Controls.NodePortsAllowedIPRanges]: this._builder.control(
-        this.isAllowedIPRangeSupported() ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges : ''
+        this.isAllowedIPRangeSupported() ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges?.cidrBlocks : ''
       ),
       [Controls.IPv4PodsCIDR]: this._builder.control(NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? '', [
         IPV4_CIDR_PATTERN_VALIDATOR,
@@ -566,7 +566,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.APIServerAllowedIPRanges]:
             clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? this.controlValue(Controls.APIServerAllowedIPRanges),
           [Controls.NodePortsAllowedIPRanges]: this.isAllowedIPRangeSupported()
-            ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges ??
+            ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges?.cidrBlocks ??
               this.controlValue(Controls.NodePortsAllowedIPRanges)
             : this.controlValue(Controls.NodePortsAllowedIPRanges),
           [Controls.IPv4PodsCIDR]:
