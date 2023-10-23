@@ -102,12 +102,12 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 replace (
 	k8c.io/kubeone => k8c.io/kubeone v1.5.0-beta.0.0.20230216134849-7f23d49b8002
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.8-0.20231014142416-8295bc8819da
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.22.9-0.20231023125908-e11981a440f6
 )
 
 require (
 	github.com/pkg/errors v0.9.1
-	k8c.io/kubermatic/v2 v2.22.8-0.20231014142416-8295bc8819da
+	k8c.io/kubermatic/v2 v2.22.9-0.20231023125908-e11981a440f6
 )
 
 require (
