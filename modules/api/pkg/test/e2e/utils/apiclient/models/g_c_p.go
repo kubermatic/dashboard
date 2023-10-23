@@ -27,7 +27,7 @@ type GCP struct {
 	// network
 	Network string `json:"network,omitempty"`
 
-	// service account
+	// ServiceAccount is the Google Service Account (JSON format), encoded with base64.
 	ServiceAccount string `json:"serviceAccount,omitempty"`
 
 	// subnetwork

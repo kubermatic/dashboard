@@ -29,16 +29,16 @@ type VSphereCloudSpec struct {
 	// +optional
 	DatastoreCluster string `json:"datastoreCluster,omitempty"`
 
-	// Folder is the folder to be used to group the provisioned virtual
+	// Folder to be used to group the provisioned virtual
 	// machines.
 	// +optional
 	Folder string `json:"folder,omitempty"`
 
-	// Networks is the list of vSphere networks.
+	// List of vSphere networks.
 	// +optional
 	Networks []string `json:"networks"`
 
-	// Password is the vSphere user password.
+	// The vSphere user password.
 	// +optional
 	Password string `json:"password,omitempty"`
 
@@ -50,12 +50,12 @@ type VSphereCloudSpec struct {
 	// StoragePolicy to be used for storage provisioning
 	StoragePolicy string `json:"storagePolicy,omitempty"`
 
-	// Username is the vSphere user name.
+	// The vSphere user name.
 	// +optional
 	Username string `json:"username,omitempty"`
 
-	// VMNetName is the name of the vSphere network.
-	// VMNetName is going to be deprecated starting with KKP 2.24 and removed in KKP 2.26+. It's recommended to use Networks instead.
+	// The name of the vSphere network.
+	// Deprecated: Use networks instead.
 	// +optional
 	VMNetName string `json:"vmNetName,omitempty"`
 

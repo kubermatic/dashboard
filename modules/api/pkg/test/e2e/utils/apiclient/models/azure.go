@@ -18,10 +18,10 @@ import (
 // swagger:model Azure
 type Azure struct {
 
-	// client ID
+	// The service principal used to access Azure.
 	ClientID string `json:"clientID,omitempty"`
 
-	// client secret
+	// The client secret corresponding to the given service principal.
 	ClientSecret string `json:"clientSecret,omitempty"`
 
 	// If datacenter is set, this preset is only applicable to the
@@ -31,28 +31,39 @@ type Azure struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// resource group
+	// The resource group that will be used to look up and create resources for the cluster in.
+	// If set to empty string at cluster creation, a new resource group will be created and this field will be updated to
+	// the generated resource group's name.
 	ResourceGroup string `json:"resourceGroup,omitempty"`
 
-	// route table name
+	// The name of a route table associated with the subnet referenced by `subnet`.
+	// If set to empty string at cluster creation, a new route table will be created and this field will be updated to
+	// the generated route table's name. If no subnet is defined at cluster creation, this field should be empty as well.
 	RouteTableName string `json:"routeTable,omitempty"`
 
-	// security group
+	// The name of a security group associated with the subnet referenced by `subnet`.
+	// If set to empty string at cluster creation, a new security group will be created and this field will be updated to
+	// the generated security group's name. If no subnet is defined at cluster creation, this field should be empty as well.
 	SecurityGroup string `json:"securityGroup,omitempty"`
 
-	// subnet name
+	// The name of a subnet in the VNet referenced by `vnet`.
+	// If set to empty string at cluster creation, a new subnet will be created and this field will be updated to
+	// the generated subnet's name. If no VNet is defined at cluster creation, this field should be empty as well.
 	SubnetName string `json:"subnet,omitempty"`
 
-	// subscription ID
+	// The Azure Subscription used for the user cluster.
 	SubscriptionID string `json:"subscriptionID,omitempty"`
 
-	// tenant ID
+	// The Azure Active Directory Tenant used for the user cluster.
 	TenantID string `json:"tenantID,omitempty"`
 
-	// v net name
+	// The name of the VNet resource used for setting up networking in.
+	// If set to empty string at cluster creation, a new VNet will be created and this field will be updated to
+	// the generated VNet's name.
 	VNetName string `json:"vnet,omitempty"`
 
-	// v net resource group
+	// Optional: Defines a second resource group that will be used for VNet related resources instead.
+	// If left empty, NO additional resource group will be created and all VNet related resources use the resource group defined by `resourceGroup`.
 	VNetResourceGroup string `json:"vnetResourceGroup,omitempty"`
 
 	// load balancer s k u

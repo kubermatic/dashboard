@@ -17,19 +17,19 @@ import (
 // swagger:model Nutanix
 type Nutanix struct {
 
-	// CSIEndpoint to access Nutanix Prism Element for csi driver
+	// CSIEndpoint to access Nutanix Prism Element for CSI driver.
 	CSIEndpoint string `json:"csiEndpoint,omitempty"`
 
-	// Prism Element Password for csi driver
+	// Prism Element Password for CSI driver.
 	CSIPassword string `json:"csiPassword,omitempty"`
 
-	// CSIPort to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440)
+	// CSIPort to use when connecting to the Nutanix Prism Element endpoint (defaults to 9440).
 	CSIPort int32 `json:"csiPort,omitempty"`
 
-	// Prism Element Username for csi driver
+	// Prism Element Username for CSI driver.
 	CSIUsername string `json:"csiUsername,omitempty"`
 
-	// ClusterName is the Nutanix cluster to deploy resources and nodes to.
+	// The name of the Nutanix cluster to which the resources and nodes are deployed to.
 	ClusterName string `json:"clusterName,omitempty"`
 
 	// If datacenter is set, this preset is only applicable to the
@@ -39,17 +39,17 @@ type Nutanix struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// Password is the password corresponding to the provided user.
+	// Password corresponding to the provided user.
 	Password string `json:"password,omitempty"`
 
-	// ProjectName is the optional Nutanix project to use. If none is given,
+	// Optional: Nutanix project to use. If none is given,
 	// no project will be used.
 	ProjectName string `json:"projectName,omitempty"`
 
-	// ProxyURL is used to optionally configure a HTTP proxy to access Nutanix Prism Central.
+	// Optional: To configure a HTTP proxy to access Nutanix Prism Central.
 	ProxyURL string `json:"proxyURL,omitempty"`
 
-	// Username is the username to access the Nutanix Prism Central API.
+	// Username that is used to access the Nutanix Prism Central API.
 	Username string `json:"username,omitempty"`
 }
 

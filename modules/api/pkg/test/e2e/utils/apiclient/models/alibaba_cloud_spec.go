@@ -18,10 +18,10 @@ import (
 // swagger:model AlibabaCloudSpec
 type AlibabaCloudSpec struct {
 
-	// access key ID
+	// The Access Key ID used to authenticate against Alibaba.
 	AccessKeyID string `json:"accessKeyID,omitempty"`
 
-	// access key secret
+	// The Access Key Secret used to authenticate against Alibaba.
 	AccessKeySecret string `json:"accessKeySecret,omitempty"`
 
 	// credentials reference
