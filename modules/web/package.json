@@ -104,7 +104,7 @@
     "@angular/compiler-cli": "16.1.6",
     "@jest/globals": "29.6.4",
     "@types/jest": "29.5.5",
-    "@types/js-yaml": "4.0.5",
+    "@types/js-yaml": "4.0.8",
     "@types/lodash": "4.14.195",
     "@types/node": "20.6.2",
     "@typescript-eslint/eslint-plugin": "6.7.0",
