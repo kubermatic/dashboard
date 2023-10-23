@@ -17,16 +17,24 @@ limitations under the License.
      (keydown.enter)="onEnterKeyDown()">
   <km-dialog-title>Delete Restore</km-dialog-title>
   <mat-dialog-content>
-    <p>
+    <p *ngIf="restoreNames.length === 1">
       Delete
       <b ngxClipboard
-         [cbContent]="restoreName"
+         [cbContent]="restoreNames[0]"
          matTooltip="Click to copy"
-         class="km-copy">{{restoreName}}</b>
+         class="km-copy">{{restoreNames[0]}}</b>
       restore permanently?
     </p>
+    <p *ngIf="restoreNames.length > 1">
+      Type
+      <b ngxClipboard
+         [cbContent]="'yes'"
+         matTooltip="Click to copy"
+         class="km-copy">yes</b>
+      to delete all selected restores permanently?
+    </p>
     <mat-form-field>
-      <mat-label>Restore Name</mat-label>
+      <mat-label>{{restoreNames.length > 1 ? "Submit restores deletion" : "restore Name" }}</mat-label>
       <input id="km-delete-project-dialog-input"
              matInput
              type="text"

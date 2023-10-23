@@ -21,7 +21,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class DeleteBackupDialogComponent implements OnInit {
   verificationInput = '';
-  backupName = '';
+  backupNames: string[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteBackupDialogComponent,
@@ -29,7 +29,7 @@ export class DeleteBackupDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.backupName = this._config.backupName;
+    this.backupNames = this._config.backupNames;
   }
 
   onEnterKeyDown(): void {
@@ -40,6 +40,9 @@ export class DeleteBackupDialogComponent implements OnInit {
   }
 
   isNameVerified(): boolean {
-    return this.verificationInput === this.backupName;
+    if (this.backupNames.length > 1) {
+      return this.verificationInput === 'yes';
+    }
+    return this.verificationInput === this.backupNames[0];
   }
 }

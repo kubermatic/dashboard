@@ -17,16 +17,24 @@ limitations under the License.
      (keydown.enter)="onEnterKeyDown()">
   <km-dialog-title>Delete Backup</km-dialog-title>
   <mat-dialog-content>
-    <p>
+    <p  *ngIf="backupNames.length === 1">
       Delete
       <b ngxClipboard
-         [cbContent]="backupName"
+         [cbContent]="backupNames[0]"
          matTooltip="Click to copy"
-         class="km-copy">{{backupName}}</b>
+         class="km-copy">{{backupNames[0]}}</b>
       backup permanently?
     </p>
+    <p *ngIf="backupNames.length > 1">
+      Type
+      <b ngxClipboard
+         [cbContent]="'yes'"
+         matTooltip="Click to copy"
+         class="km-copy">yes</b>
+      to delete all selected backups permanently?
+    </p>
     <mat-form-field>
-      <mat-label>Backup Name</mat-label>
+      <mat-label>{{backupNames.length > 1 ? "Submit backups deletion" : "Backup Name" }}</mat-label>
       <input id="km-delete-project-dialog-input"
              matInput
              type="text"

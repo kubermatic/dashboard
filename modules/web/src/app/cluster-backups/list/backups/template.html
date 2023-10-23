@@ -14,22 +14,60 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <mat-card class="km-card">
-  <mat-card-header>
-    <mat-card-title>Cluster Backups</mat-card-title>
-    <button mat-flat-button
-            type="button"
-            (click)="add()"
-            fxLayoutAlign="center center">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Create Cluster Backup</span>
-    </button>
-  </mat-card-header>
+  <div fxLayout="column">
+    <mat-card-header>
+      <mat-card-title fxFlex
+                      fxLayoutAlign="start"
+                      fxLayoutGap="32px">
+        <div>Cluster Backups</div>
+      </mat-card-title>
+    </mat-card-header>
+    <div fxLayout="row"
+         class="header">
+      <div class="filter-title">Filter by</div>
+      <mat-form-field fxLayoutAlign="start ">
+        <mat-label>Labels</mat-label>
+        <input matInput
+               (change)="onFilterChange($event.target.value)">
+      </mat-form-field>
+      <div fxLayoutAlign="end ">
+        <button mat-flat-button
+                type="button"
+                (click)="add()">
+          <i class="km-icon-mask km-icon-add"></i>
+          <span>Create Cluster Backup</span>
+        </button>
+        <button mat-flat-button
+                type="button"
+                (click)="deleteBackups(selectedBackups)"
+                [disabled]="!selectedBackups.length">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
 
   <mat-card-content>
     <table class="km-table"
            mat-table
            matSort
            [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>
+          <mat-checkbox (change)="onSelectAll()"
+                        [checked]="selectAll" />
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            class="km-cell p-5">
+          <mat-checkbox (change)="onSelectedBackup(element?.name)"
+                        [checked]="selectAll" />
+        </td>
+      </ng-container>
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
@@ -37,7 +75,8 @@ limitations under the License.
             mat-sort-header>Name
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
@@ -52,7 +91,8 @@ limitations under the License.
             mat-sort-header>Labels
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <ng-container *ngFor="let label of element.labels.labels; let isLast = last">
             <ng-container *ngIf="!isLast">
               <km-labels [labels]="label"></km-labels>
@@ -67,7 +107,8 @@ limitations under the License.
             class="km-header-cell p-10">Cluster ID
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <span>{{element.cluster}}</span>
         </td>
       </ng-container>
@@ -78,7 +119,8 @@ limitations under the License.
             class="km-header-cell p-10">Destination
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <span>{{element.destination}}</span>
         </td>
       </ng-container>
@@ -94,7 +136,8 @@ limitations under the License.
           </div>
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <span>{{element.schedule}}</span>
         </td>
       </ng-container>
@@ -112,7 +155,8 @@ limitations under the License.
           </div>
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <span>{{element.namespaces.length}}</span>
         </td>
       </ng-container>
@@ -123,7 +167,8 @@ limitations under the License.
             class="km-header-cell p-15">Created
         </th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <km-relative-time [date]="element.time"></km-relative-time>
         </td>
       </ng-container>
@@ -133,7 +178,8 @@ limitations under the License.
             *matHeaderCellDef
             class="km-header-cell p-10"></th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="{'km-disabled': checkSelected(element.name)}">
           <div fxLayoutAlign="end"
                class="km-table-actions">
             <button mat-icon-button

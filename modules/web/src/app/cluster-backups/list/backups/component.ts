@@ -24,13 +24,14 @@ import {ProjectService} from '@core/services/project';
 import {Project} from '@shared/entity/project';
 import {CookieService} from 'ngx-cookie-service';
 import {MatTableDataSource} from '@angular/material/table';
-import {ClusterBackups} from '@app/shared/entity/backup';
+import {ClusterBackup} from '@app/shared/entity/backup';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
 import {AddRestoreDialogComponent} from '../restore/add-dialog/component';
 
 @Component({
   selector: 'km-cluster-backups-list',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
@@ -38,10 +39,12 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   selectedProject: Project;
   isAdmin = false;
-  dataSource = new MatTableDataSource<ClusterBackups>();
+  dataSource = new MatTableDataSource<ClusterBackup[]>();
+  selectedBackups: string[] = [];
+  selectAll: boolean = false;
 
   get columns(): string[] {
-    return ['name', 'labels', 'cluster', 'destination', 'schedule', 'namespaces', 'created', 'actions'];
+    return ['select', 'name', 'labels', 'cluster', 'destination', 'schedule', 'namespaces', 'created', 'actions'];
   }
 
   get canAdd(): boolean {
@@ -53,6 +56,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   get data(): any {
     return JSON.parse(this._cookieService.get('backup') || '[]');
   }
+
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
@@ -83,6 +87,32 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  onSelectedBackup(backupName: string): void {
+    if (this.selectedBackups.includes(backupName)) {
+      this.selectedBackups = this.selectedBackups.filter(name => name !== backupName);
+    } else {
+      this.selectedBackups.push(backupName);
+    }
+  }
+
+  onSelectAll(): void {
+    this.selectAll = !this.selectAll;
+    this.selectedBackups = this.selectAll ? this.dataSource.data.map((backup: any) => backup.name) : [];
+  }
+
+  checkSelected(backupName: string): boolean {
+    if (this.selectedBackups.includes(backupName) || !this.selectedBackups.length) {
+      return false;
+    }
+    return true;
+  }
+
+  onFilterChange(value: string): void {
+    this.dataSource.data = this.data.filter((backup: any) =>
+      backup.labels.labels.some((label: any) => label.value.includes(value) || label.key.includes(value))
+    );
+  }
+
   add(): void {
     const config: MatDialogConfig = {
       data: {
@@ -107,10 +137,16 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this._matDialog.open(AddRestoreDialogComponent, config);
   }
 
+  //
+  //
+  // note try to convert these two methods into one
+  //
+  //
+
   deleteBackup(backupName: string): void {
     const config: MatDialogConfig = {
       data: {
-        backupName,
+        backupNames: [backupName],
       },
     };
     this._matDialog
@@ -120,6 +156,26 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
         if (res) {
           const backups = JSON.parse(this._cookieService.get('backup') || '[]');
           const filteredBackups = backups.filter(backup => backup.name !== backupName);
+          this._cookieService.set('backup', JSON.stringify(filteredBackups));
+        }
+        this.dataSource.data = JSON.parse(this._cookieService.get('backup') || '[]');
+      });
+  }
+
+  deleteBackups(backupNames: string[]): void {
+    const config: MatDialogConfig = {
+      data: {
+        backupNames,
+      },
+    };
+    this._matDialog
+      .open(DeleteBackupDialogComponent, config)
+      .afterClosed()
+      .subscribe(res => {
+        this.selectedBackups = [];
+        if (res) {
+          const backups = JSON.parse(this._cookieService.get('backup') || '[]');
+          const filteredBackups = backups.filter((backup: ClusterBackup) => !backupNames.includes(backup.name));
           this._cookieService.set('backup', JSON.stringify(filteredBackups));
         }
         this.dataSource.data = JSON.parse(this._cookieService.get('backup') || '[]');

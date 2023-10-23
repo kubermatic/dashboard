@@ -133,7 +133,7 @@ export class S3BackupCredentials {
   secretAccessKey: string;
 }
 
-export class ClusterBackups {
+export class ClusterBackup {
   name: string;
   destination: string;
   cluster: string;
@@ -142,7 +142,7 @@ export class ClusterBackups {
   time: string;
 }
 
-export class ClusterRestores {
+export class ClusterRestore {
   name: string;
   namespaces: string[];
   clusterName: string;
