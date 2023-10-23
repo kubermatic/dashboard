@@ -1,21 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22113",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v22114",
   "entries": [
     {
-      "category": "fixed",
-      "description": "Fix vSphere cluster validation: If a Cluster uses a custom datastore, the Seed's default datastore should not be validated."
-    },
-    {
-      "category": "fixed",
-      "description": "Add operating system profile to the machine deployment patch object."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix the empty `id_token_hint` value when logout from keycloak."
+      "category": "changed",
+      "description": "Increase default CPU limits for KKP API/seed/master-controller-managers to prevent general slowness."
     },
     {
       "category": "changed",
-      "description": "Update to OSM v1.1.4."
+      "description": "Add support for Cilium 1.12.15, mitigating an high CVE-2023-44487."
     }
   ]
 }
