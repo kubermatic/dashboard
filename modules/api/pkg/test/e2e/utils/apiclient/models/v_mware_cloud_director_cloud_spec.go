@@ -18,22 +18,22 @@ import (
 // swagger:model VMwareCloudDirectorCloudSpec
 type VMwareCloudDirectorCloudSpec struct {
 
-	// APIToken is the VMware Cloud Director API token.
+	// The VMware Cloud Director API token.
 	// +optional
 	APIToken string `json:"apiToken,omitempty"`
 
-	// Network is the name of organizational virtual data center network that will be associated with the VMs and vApp.
+	// The name of organizational virtual data center network that will be associated with the VMs and vApp.
 	OVDCNetwork string `json:"ovdcNetwork,omitempty"`
 
-	// Organization is the name of organization to use.
+	// The name of organization to use.
 	// +optional
 	Organization string `json:"organization,omitempty"`
 
-	// Password is the VMware Cloud Director user password.
+	// The VMware Cloud Director user password.
 	// +optional
 	Password string `json:"password,omitempty"`
 
-	// Username is the VMware Cloud Director user name.
+	// The VMware Cloud Director user name.
 	// +optional
 	Username string `json:"username,omitempty"`
 
@@ -41,7 +41,7 @@ type VMwareCloudDirectorCloudSpec struct {
 	// +optional
 	VApp string `json:"vapp,omitempty"`
 
-	// VDC is the organizational virtual data center.
+	// The organizational virtual data center.
 	// +optional
 	VDC string `json:"vdc,omitempty"`
 

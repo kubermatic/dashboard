@@ -17,10 +17,10 @@ import (
 // swagger:model Alibaba
 type Alibaba struct {
 
-	// Access Key ID to authenticate against Alibaba.
+	// The Access Key ID used to authenticate against Alibaba.
 	AccessKeyID string `json:"accessKeyID,omitempty"`
 
-	// Access Key Secret to authenticate against Alibaba.
+	// The Access Key Secret used to authenticate against Alibaba.
 	AccessKeySecret string `json:"accessKeySecret,omitempty"`
 
 	// If datacenter is set, this preset is only applicable to the

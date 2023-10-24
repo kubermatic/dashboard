@@ -27,11 +27,11 @@ type AzureCloudSpec struct {
 	// will be updated to the generated availability set's name.
 	AvailabilitySet string `json:"availabilitySet,omitempty"`
 
-	// ClientID is the service principal used to access Azure.
+	// The service principal used to access Azure.
 	// Can be read from `credentialsReference` instead.
 	ClientID string `json:"clientID,omitempty"`
 
-	// ClientSecret is the client secret corresponding to the given service principal.
+	// The client secret corresponding to the given service principal.
 	// Can be read from `credentialsReference` instead.
 	ClientSecret string `json:"clientSecret,omitempty"`
 
@@ -60,11 +60,11 @@ type AzureCloudSpec struct {
 	// the generated subnet's name. If no VNet is defined at cluster creation, this field should be empty as well.
 	SubnetName string `json:"subnet,omitempty"`
 
-	// SubscriptionID is the Azure Subscription used for this cluster.
+	// The Azure Subscription used for this cluster.
 	// Can be read from `credentialsReference` instead.
 	SubscriptionID string `json:"subscriptionID,omitempty"`
 
-	// TenantID is the Azure Active Directory Tenant used for this cluster.
+	// The Azure Active Directory Tenant used for this cluster.
 	// Can be read from `credentialsReference` instead.
 	TenantID string `json:"tenantID,omitempty"`
 
@@ -73,7 +73,7 @@ type AzureCloudSpec struct {
 	// the generated VNet's name.
 	VNetName string `json:"vnet,omitempty"`
 
-	// Optional: VNetResourceGroup optionally defines a second resource group that will be used for VNet related resources instead.
+	// Optional: Defines a second resource group that will be used for VNet related resources instead.
 	// If left empty, NO additional resource group will be created and all VNet related resources use the resource group defined by `resourceGroup`.
 	VNetResourceGroup string `json:"vnetResourceGroup,omitempty"`
 

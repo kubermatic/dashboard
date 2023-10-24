@@ -79,6 +79,7 @@ issues:
   - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
   # govet
   - loop variable tc captured by func literal # TODO: fix tests and remove this exclude
+  - "credentials.VMNetName is deprecated: Use networks instead"
 
 linters-settings:
   depguard:

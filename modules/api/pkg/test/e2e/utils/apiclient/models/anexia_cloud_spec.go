@@ -18,7 +18,7 @@ import (
 // swagger:model AnexiaCloudSpec
 type AnexiaCloudSpec struct {
 
-	// token
+	// Token is used to authenticate with the Anexia API.
 	Token string `json:"token,omitempty"`
 
 	// credentials reference

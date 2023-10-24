@@ -24,7 +24,7 @@ type Kubevirt struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// kubeconfig
+	// Kubeconfig is the cluster's kubeconfig file, encoded with base64.
 	Kubeconfig string `json:"kubeconfig,omitempty"`
 }
 
