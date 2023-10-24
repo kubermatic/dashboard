@@ -159,11 +159,10 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .pipe(take(1))
       .subscribe((floatingIPPools: OpenstackFloatingIPPool[]) => {
         this.floatingIPPools = floatingIPPools;
-
-        if (!_.isEmpty(this.floatingIPPools)) {
-          this.floatingIPPoolsLabel = FloatingIPPoolState.Ready;
-          this._cdr.detectChanges();
-        }
+        this.floatingIPPoolsLabel = !_.isEmpty(this.floatingIPPools)
+          ? FloatingIPPoolState.Ready
+          : FloatingIPPoolState.Empty;
+        this._cdr.detectChanges();
       });
   }
 
