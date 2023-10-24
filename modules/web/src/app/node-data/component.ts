@@ -215,9 +215,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterSpecService.providerChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._setDefaultOS());
 
     this._clusterSpecService.providerChanges
       .pipe(filter(_ => !this.isCusterTemplateEditMode))
@@ -247,7 +245,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
       .pipe(tap(() => this._loadOperatingSystemProfiles()))
-      .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
+      .subscribe(_ => this._setDefaultOS());
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -282,10 +280,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this.allowedOperatingSystems = settings?.allowedOperatingSystems && settings.allowedOperatingSystems;
-      const defaultOS = this._getDefaultOS();
-      if (defaultOS !== this.form.get(Controls.OperatingSystem).value) {
-        this.form.get(Controls.OperatingSystem).setValue(defaultOS);
-      }
+      this._setDefaultOS();
 
       const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
       const replicas =
@@ -421,6 +416,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this.form.get(Controls.DisableAutoUpdate).setValue(!!disableAutoUpdate);
 
     this._cdr.detectChanges();
+  }
+
+  private _setDefaultOS() {
+    const defaultOS = this._getDefaultOS();
+    if (defaultOS !== this.form.get(Controls.OperatingSystem).value) {
+      this.form.get(Controls.OperatingSystem).setValue(defaultOS);
+    }
   }
 
   private _loadOperatingSystemProfiles() {
