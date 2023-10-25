@@ -65,11 +65,11 @@ limitations under the License.
              fxLayout="column">
           <mat-button-toggle-group group="cniPluginTypeGroup"
                                    [formControlName]="Controls.CNIPlugin">
-            <mat-button-toggle [value]="cniPlugin.Canal">
-              <i class="km-cni-image-canal"></i>
-            </mat-button-toggle>
             <mat-button-toggle [value]="cniPlugin.Cilium">
               <i class="km-cni-image-cilium"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.Canal">
+              <i class="km-cni-image-canal"></i>
             </mat-button-toggle>
             <mat-button-toggle [value]="cniPlugin.None"> None </mat-button-toggle>
           </mat-button-toggle-group>
