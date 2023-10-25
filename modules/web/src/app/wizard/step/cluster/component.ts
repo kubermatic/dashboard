@@ -477,7 +477,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(this._clusterSpecService?.sshKeys ?? ''),
       [Controls.IPFamily]: this._builder.control(clusterSpec?.clusterNetwork?.ipFamily ?? IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(clusterSpec?.clusterNetwork?.proxyMode ?? ''),
-      [Controls.CNIPlugin]: this._builder.control(clusterSpec?.cniPlugin?.type ?? CNIPlugin.Canal),
+      [Controls.CNIPlugin]: this._builder.control(clusterSpec?.cniPlugin?.type ?? CNIPlugin.Cilium),
       [Controls.CNIPluginVersion]: this._builder.control(clusterSpec?.cniPlugin?.version ?? ''),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv4 ?? null),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv6 ?? null),
