@@ -925,7 +925,7 @@ func ListEventsEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider 
 				events = append(events, nodeEvents...)
 			}
 		}
-		kubermaticEvents, err := common.GetEvents(ctx, privilegedClusterProvider.GetMasterClient(), cluster, metav1.NamespaceDefault)
+		kubermaticEvents, err := common.GetEvents(ctx, privilegedClusterProvider.GetMasterClient(), cluster, metav1.NamespaceAll)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
