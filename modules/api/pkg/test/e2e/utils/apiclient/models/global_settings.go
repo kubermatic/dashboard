@@ -25,7 +25,7 @@ type GlobalSettings struct {
 	DefaultNodeCount int8 `json:"defaultNodeCount,omitempty"`
 
 	// DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.
-	DisableAdminKubeconfig *bool `json:"disableAdminKubeconfig,omitempty"`
+	DisableAdminKubeconfig bool `json:"disableAdminKubeconfig,omitempty"`
 
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
@@ -52,7 +52,7 @@ type GlobalSettings struct {
 	EnableShareCluster *bool `json:"enableShareCluster,omitempty"`
 
 	// EnableWebTerminal enables the Web Terminal feature for the user clusters.
-	EnableWebTerminal *bool `json:"enableWebTerminal,omitempty"`
+	EnableWebTerminal bool `json:"enableWebTerminal,omitempty"`
 
 	// mla alertmanager prefix
 	MlaAlertmanagerPrefix string `json:"mlaAlertmanagerPrefix,omitempty"`
