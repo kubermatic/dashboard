@@ -120,6 +120,7 @@ func DecodePatchKubermaticSettingsReq(c context.Context, r *http.Request) (inter
 
 func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermaticv1.SettingSpec, error) {
 	s := kubermaticv1.SettingSpec{
+
 		CustomLinks:                      settings.CustomLinks,
 		DefaultNodeCount:                 settings.DefaultNodeCount,
 		DisplayDemoInfo:                  settings.DisplayDemoInfo,

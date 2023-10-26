@@ -2030,15 +2030,11 @@ type GlobalSettings struct {
 	// EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.
 	EnableDashboard bool `json:"enableDashboard"`
 
-	// +kubebuilder:default=false
-
 	// EnableWebTerminal enables the Web Terminal feature for the user clusters.
 	EnableWebTerminal bool `json:"enableWebTerminal,omitempty"`
 
-	// +kubebuilder:default=false
-
 	// EnableShareCluster enables the Share Cluster feature for the user clusters.
-	EnableShareCluster bool `json:"enableShareCluster,omitempty"`
+	EnableShareCluster *bool `json:"enableShareCluster,omitempty"`
 
 	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig"` //nolint:tagliatelle
 
