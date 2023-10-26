@@ -654,7 +654,7 @@ func GetClusterEventsEndpoint(ctx context.Context, userInfoGetter provider.UserI
 		eventTypeAPI = corev1.EventTypeNormal
 	}
 
-	events, err := common.GetEvents(ctx, client, cluster, "")
+	events, err := common.GetEvents(ctx, client, cluster, metav1.NamespaceAll)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
