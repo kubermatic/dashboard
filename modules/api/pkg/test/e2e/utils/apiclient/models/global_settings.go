@@ -49,7 +49,7 @@ type GlobalSettings struct {
 	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig,omitempty"`
 
 	// EnableShareCluster enables the Share Cluster feature for the user clusters.
-	EnableShareCluster *bool `json:"enableShareCluster,omitempty"`
+	EnableShareCluster bool `json:"enableShareCluster,omitempty"`
 
 	// EnableWebTerminal enables the Web Terminal feature for the user clusters.
 	EnableWebTerminal bool `json:"enableWebTerminal,omitempty"`
