@@ -33,6 +33,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/util/rand"
+	"k8s.io/utils/ptr"
 )
 
 func TestGetDefaultGlobalSettings(t *testing.T) {
@@ -55,7 +56,7 @@ func TestGetDefaultGlobalSettings(t *testing.T) {
 				DisplayTermsOfService:       false,
 				EnableDashboard:             true,
 				EnableWebTerminal:           false,
-				EnableShareCluster:          true,
+				EnableShareCluster:          ptr.To[bool](true),
 				EnableOIDCKubeconfig:        false,
 				UserProjectsLimit:           0,
 				RestrictProjectCreation:     false,
