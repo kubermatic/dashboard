@@ -71,9 +71,9 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
           if (machineDeployments.length > 0) {
             const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(', ');
             if (this.clusterProvider === ExternalClusterProvider.EKS) {
-              this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b> Please delete nodegroups before deleting the cluster.`;
+              this.warningMessage = `Cluster has nodegroups attached (<b>${nodegroupNames}</b>). Please delete nodegroups before deleting the cluster.`;
             } else {
-              this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b>`;
+              this.warningMessage = `Cluster has nodegroups attached (<b>${nodegroupNames}</b>).`;
             }
           } else {
             this.warningMessage = '';
