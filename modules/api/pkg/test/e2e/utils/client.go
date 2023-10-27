@@ -925,7 +925,7 @@ func (r *TestClient) AddProjectUser(projectID, email, name, group string) (*apiv
 	return user, nil
 }
 
-func (r *TestClient) GetGlobalSettings() (*models.GlobalSettings, error) {
+func (r *TestClient) GetGlobalSettings() (*apiv2.GlobalSettings, error) {
 	params := &admin.GetKubermaticSettingsParams{}
 	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
 
@@ -934,7 +934,7 @@ func (r *TestClient) GetGlobalSettings() (*models.GlobalSettings, error) {
 		return nil, err
 	}
 
-	return responseSettings.Payload, nil
+	return convertGlobalSettings(responseSettings.Payload), nil
 }
 
 func (r *TestClient) UpdateGlobalSettings(patch json.RawMessage) (*apiv2.GlobalSettings, error) {
@@ -975,7 +975,7 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv2.GlobalSettin
 		EnableOIDCKubeconfig:  gSettings.EnableOIDCKubeconfig,
 		EnableDashboard:       gSettings.EnableDashboard,
 		EnableWebTerminal:     gSettings.EnableWebTerminal,
-		EnableShareCluster:    ptr.To[bool](gSettings.EnableShareCluster),
+		EnableShareCluster:    gSettings.EnableShareCluster,
 		OpaOptions: kubermaticv1.OpaOptions{
 			Enabled:  gSettings.OpaOptions.Enabled,
 			Enforced: gSettings.OpaOptions.Enforced,
