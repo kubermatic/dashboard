@@ -107,4 +107,12 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
     this._notificationService.success(`Deleting the ${this.cluster.name} cluster`);
     this._clusterService.refreshExternalClusters();
   }
+
+  disableDeletion(): boolean {
+    return (
+      this.inputName !== this.cluster.name ||
+      this.isLoadingMachineDeployments ||
+      (this.machineDeployments.length && this.clusterProvider === ExternalClusterProvider.EKS)
+    );
+  }
 }
