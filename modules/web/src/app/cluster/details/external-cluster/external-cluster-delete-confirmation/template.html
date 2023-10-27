@@ -50,7 +50,7 @@ limitations under the License.
   <km-button id="km-delete-external-cluster-dialog-delete-btn"
              icon="km-icon-delete"
              label="Delete Cluster"
-             [disabled]="inputName !== cluster.name || isLoadingMachineDeployments"
+             [disabled]="disableDeletion()"
              [matTooltip]="isLoadingMachineDeployments ? 'Loading Machine Deployments': null"
              [observable]="getObservable()"
              (next)="onNext()">
