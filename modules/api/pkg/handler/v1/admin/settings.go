@@ -161,7 +161,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 }
 
 func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
-	var enableShareCluster bool
+	enableShareCluster := true
 	if settings.EnableShareCluster != nil {
 		enableShareCluster = *settings.EnableShareCluster
 	}
