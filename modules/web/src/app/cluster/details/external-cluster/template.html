@@ -117,10 +117,6 @@ limitations under the License.
             <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
           </km-property>
           <km-property>
-            <div key>Cluster Version</div>
-            <div value>{{cluster?.spec?.aksclusterSpec?.kubernetesVersion}}</div>
-          </km-property>
-          <km-property>
             <div key>Provisioning State</div>
             <div value>{{cluster?.status?.aks?.provisioningState}}</div>
           </km-property>
@@ -153,10 +149,6 @@ limitations under the License.
           <km-property>
             <div key>Region</div>
             <div value>{{cluster?.cloud?.eks?.region}}</div>
-          </km-property>
-          <km-property>
-            <div key>Cluster Version</div>
-            <div value>{{cluster?.spec?.eksclusterSpec?.version}}</div>
           </km-property>
           <km-property>
             <div key>VpcId</div>
@@ -199,10 +191,6 @@ limitations under the License.
           <km-property>
             <div key>Zone</div>
             <div value>{{cluster?.cloud?.gke?.zone}}</div>
-          </km-property>
-          <km-property>
-            <div key>Cluster Version</div>
-            <div value>{{cluster?.spec?.gkeclusterSpec?.initialClusterVersion}}</div>
           </km-property>
           <km-property>
             <div key>Cluster Ipv4 CIDR</div>
