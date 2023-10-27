@@ -25,13 +25,10 @@ limitations under the License.
               [name]="Controls.ServiceAccount"
               autocomplete="off"></textarea>
     <mat-hint *ngIf="form.get(Controls.ServiceAccount).pending">Validating...</mat-hint>
-    <mat-hint *ngIf="!form.get(Controls.ServiceAccount).pending">
-      Enter base64 encoded value for Service Account
-    </mat-hint>
     <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('required')">
       <strong>Required</strong>
     </mat-error>
-    <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('invalidServiceAccount')">
+    <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('invalidCredentials')">
       Service account is <strong>invalid</strong>.
     </mat-error>
   </mat-form-field>

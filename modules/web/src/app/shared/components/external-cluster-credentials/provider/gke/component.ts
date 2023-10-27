@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil} from 'rxjs/operators';
@@ -66,8 +66,8 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _serviceAccountValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    const serviceAccount = control.value.toString();
+  private _serviceAccountValidator(): Observable<ValidationErrors | null> {
+    const serviceAccount = this._serviceAccountValue;
     if (!serviceAccount) {
       return of(null);
     }
