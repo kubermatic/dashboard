@@ -24,6 +24,7 @@ import (
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
+	"k8s.io/utils/ptr"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -127,7 +128,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
 		EnableWebTerminal:                settings.EnableWebTerminal,
-		EnableShareCluster:               settings.EnableShareCluster,
+		EnableShareCluster:               ptr.To[bool](settings.EnableShareCluster),
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		DisableAdminKubeconfig:           settings.DisableAdminKubeconfig,
 		UserProjectsLimit:                settings.UserProjectsLimit,
@@ -167,7 +168,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
 		EnableWebTerminal:                settings.EnableWebTerminal,
-		EnableShareCluster:               settings.EnableShareCluster,
+		EnableShareCluster:               *settings.EnableShareCluster,
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		DisableAdminKubeconfig:           settings.DisableAdminKubeconfig,
 		UserProjectsLimit:                settings.UserProjectsLimit,
