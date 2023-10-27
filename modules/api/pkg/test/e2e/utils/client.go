@@ -925,7 +925,7 @@ func (r *TestClient) AddProjectUser(projectID, email, name, group string) (*apiv
 	return user, nil
 }
 
-func (r *TestClient) GetGlobalSettings() (*apiv2.GlobalSettings, error) {
+func (r *TestClient) GetGlobalSettings() (*models.GlobalSettings, error) {
 	params := &admin.GetKubermaticSettingsParams{}
 	SetupParams(r.test, params, 1*time.Second, 3*time.Minute)
 
@@ -934,7 +934,7 @@ func (r *TestClient) GetGlobalSettings() (*apiv2.GlobalSettings, error) {
 		return nil, err
 	}
 
-	return convertGlobalSettings(responseSettings.Payload), nil
+	return responseSettings.Payload, nil
 }
 
 func (r *TestClient) UpdateGlobalSettings(patch json.RawMessage) (*apiv2.GlobalSettings, error) {

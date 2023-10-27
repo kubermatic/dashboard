@@ -26,27 +26,25 @@ import (
 	"net/http"
 	"testing"
 
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/project"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/util/rand"
-	"k8s.io/utils/ptr"
 )
 
 func TestGetDefaultGlobalSettings(t *testing.T) {
 	tests := []struct {
 		name             string
-		expectedSettings *apiv2.GlobalSettings
+		expectedSettings *models.GlobalSettings
 	}{
 		{
 			name: "get default settings",
-			expectedSettings: &apiv2.GlobalSettings{
+			expectedSettings: &models.GlobalSettings{
 
-				CustomLinks: []kubermaticv1.CustomLink{},
-				CleanupOptions: kubermaticv1.CleanupOptions{
+				CustomLinks: models.CustomLinks{},
+				CleanupOptions: &models.CleanupOptions{
 					Enabled:  false,
 					Enforced: false,
 				},
@@ -56,7 +54,7 @@ func TestGetDefaultGlobalSettings(t *testing.T) {
 				DisplayTermsOfService:       false,
 				EnableDashboard:             true,
 				EnableWebTerminal:           false,
-				EnableShareCluster:          ptr.To[bool](true),
+				EnableShareCluster:          true,
 				EnableOIDCKubeconfig:        false,
 				UserProjectsLimit:           0,
 				RestrictProjectCreation:     false,
