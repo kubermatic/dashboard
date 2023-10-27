@@ -43,7 +43,7 @@ func TestGetGlobalSettings(t *testing.T) {
 		// scenario 1
 		{
 			name:                   "scenario 1: user gets settings first time",
-			expectedResponse:       `{"customLinks":[],"defaultNodeCount":2,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":false,"enableDashboard":true,"enableShareCluster":false,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"restrictProjectDeletion":false,"enableExternalClusterImport":true,"cleanupOptions":{},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false},"machineDeploymentOptions":{}}`,
+			expectedResponse:       `{"customLinks":[],"defaultNodeCount":2,"displayDemoInfo":false,"displayAPIDocs":false,"displayTermsOfService":false,"enableDashboard":true,"enableOIDCKubeconfig":false,"userProjectsLimit":0,"restrictProjectCreation":false,"restrictProjectDeletion":false,"enableExternalClusterImport":true,"cleanupOptions":{},"opaOptions":{},"mlaOptions":{},"mlaAlertmanagerPrefix":"","mlaGrafanaPrefix":"","notifications":{},"providerConfiguration":{"openStack":{}},"machineDeploymentVMResourceQuota":{"minCPU":2,"maxCPU":32,"minRAM":2,"maxRAM":128,"enableGPU":false},"machineDeploymentOptions":{}}`,
 			httpStatus:             http.StatusOK,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
 			existingAPIUser:        test.GenDefaultAPIUser(),

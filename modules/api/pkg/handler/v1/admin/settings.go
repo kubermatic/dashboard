@@ -161,6 +161,10 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 }
 
 func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
+	var enableShareCluster bool
+	if settings.EnableShareCluster != nil {
+		enableShareCluster = *settings.EnableShareCluster
+	}
 	s := apiv2.GlobalSettings{
 		CustomLinks:                      settings.CustomLinks,
 		DefaultNodeCount:                 settings.DefaultNodeCount,
@@ -169,7 +173,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
 		EnableWebTerminal:                settings.EnableWebTerminal,
-		EnableShareCluster:               *settings.EnableShareCluster,
+		EnableShareCluster:               enableShareCluster,
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		DisableAdminKubeconfig:           settings.DisableAdminKubeconfig,
 		UserProjectsLimit:                settings.UserProjectsLimit,
