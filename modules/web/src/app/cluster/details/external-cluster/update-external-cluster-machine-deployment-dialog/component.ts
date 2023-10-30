@@ -26,6 +26,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {Observable} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {MasterVersion} from '@shared/entity/cluster';
+import {minor, major} from 'semver';
 
 class UpdateExternalClusterMachineDeploymentDialogData {
   projectID: string;
@@ -74,8 +75,9 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
   }
 
   getObservable(): Observable<ExternalMachineDeployment> {
-    const patchModel = this._getExternalMachineDeploymentPatchModel();
     const {projectID, clusterID, machineDeployment} = this.data;
+    const patchModel = this._getExternalMachineDeploymentPatchModel(!!machineDeployment.cloud.eks);
+
     return this._externalMachineDeploymentService
       .patchExternalMachineDeployment(projectID, clusterID, machineDeployment.id, patchModel)
       .pipe(take(1));
@@ -137,16 +139,24 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     }
   }
 
-  private _getExternalMachineDeploymentPatchModel(): ExternalMachineDeploymentPatch {
-    return {
+  private _getExternalMachineDeploymentPatchModel(isEKSProvider: boolean): ExternalMachineDeploymentPatch {
+    const kubeletVersion = this.form.get(Controls.KubeletVersion).value;
+
+    const patchModel = {
       spec: {
         replicas: this.form.get(Controls.Replicas).value,
         template: {
           versions: {
-            kubelet: this.form.get(Controls.KubeletVersion).value,
+            kubelet: kubeletVersion,
           },
         },
       } as ExternalMachineDeploymentSpecPatch,
     };
+
+    // In EKS we shouldn't send the patch with the full version, only the major and minor versions.
+    if (isEKSProvider && kubeletVersion) {
+      patchModel.spec.template.versions.kubelet = `${major(kubeletVersion)}.${minor(kubeletVersion)}`;
+    }
+    return patchModel;
   }
 }
