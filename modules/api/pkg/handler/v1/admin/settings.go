@@ -24,6 +24,7 @@ import (
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
+	"k8s.io/utils/pointer"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -127,7 +128,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
 		EnableWebTerminal:                settings.EnableWebTerminal,
-		EnableShareCluster:               settings.EnableShareCluster,
+		EnableShareCluster:               pointer.Bool(settings.EnableShareCluster),
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		DisableAdminKubeconfig:           settings.DisableAdminKubeconfig,
 		UserProjectsLimit:                settings.UserProjectsLimit,
@@ -158,6 +159,10 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 }
 
 func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) apiv2.GlobalSettings {
+	enableShareCluster := true
+	if settings.EnableShareCluster != nil {
+		enableShareCluster = *settings.EnableShareCluster
+	}
 	s := apiv2.GlobalSettings{
 		CustomLinks:                      settings.CustomLinks,
 		DefaultNodeCount:                 settings.DefaultNodeCount,
@@ -166,7 +171,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		DisplayTermsOfService:            settings.DisplayTermsOfService,
 		EnableDashboard:                  settings.EnableDashboard,
 		EnableWebTerminal:                settings.EnableWebTerminal,
-		EnableShareCluster:               settings.EnableShareCluster,
+		EnableShareCluster:               enableShareCluster,
 		EnableOIDCKubeconfig:             settings.EnableOIDCKubeconfig,
 		DisableAdminKubeconfig:           settings.DisableAdminKubeconfig,
 		UserProjectsLimit:                settings.UserProjectsLimit,
