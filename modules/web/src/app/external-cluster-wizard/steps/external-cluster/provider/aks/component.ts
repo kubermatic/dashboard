@@ -269,7 +269,6 @@ export class AKSClusterSettingsComponent
       this.control(Controls.NodeResourceGroup).clearValidators();
 
       this.vmSizeLabel = VMSizeState.Loading;
-      this.control(Controls.VmSize).disable();
       this._getAKSVmSizesForMachineDeployment(this.cluster.cloud.aks.location).subscribe((vmSizes: AKSVMSize[]) => {
         this.vmSizes = vmSizes;
         const defaultValue = this.vmSizes.find((vmSize: AKSVMSize) => vmSize.name === this.DEFAULT_VMSIZE);
@@ -277,7 +276,6 @@ export class AKSClusterSettingsComponent
           this.control(Controls.VmSize).setValue(defaultValue.name);
         }
         this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
-        this.control(Controls.VmSize).enable();
       });
 
       this.nodePoolVersionsForMDLabel = NodePoolVersionState.Loading;
