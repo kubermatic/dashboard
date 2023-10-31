@@ -26,6 +26,7 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -82,7 +83,7 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 			DisplayTermsOfService:       false,
 			EnableDashboard:             true,
 			EnableWebTerminal:           false,
-			EnableShareCluster:          false,
+			EnableShareCluster:          pointer.Bool(false),
 			EnableOIDCKubeconfig:        false,
 			UserProjectsLimit:           0,
 			RestrictProjectCreation:     false,
