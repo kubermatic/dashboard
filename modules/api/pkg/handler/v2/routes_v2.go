@@ -36,6 +36,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
+	"k8c.io/dashboard/v2/pkg/handler/v2/clusterbackupconfig"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
 	constrainttemplate "k8c.io/dashboard/v2/pkg/handler/v2/constraint_template"
@@ -1285,6 +1286,27 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodPatch).
 		Path("/allowedregistries/{allowed_registry}").
 		Handler(r.patchAllowedRegistry())
+
+	// Defines a set of HTTP endpoints for managing cluster backup configs
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
+		Handler(r.createClusterBackupConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
+		Handler(r.listClusterBackupConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
+		Handler(r.getClusterBackupConfig())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
+		Handler(r.deleteClusterBackupConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterbackupconfigs").
+		Handler(r.listProjectClustersBackupConfig())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
 	mux.Methods(http.MethodPost).
@@ -7556,6 +7578,65 @@ func (r Routing) patchAllowedRegistry() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(allowedregistry.PatchEndpoint(r.userInfoGetter, r.privilegedAllowedRegistryProvider)),
 		allowedregistry.DecodePatchAllowedRegistryReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Cluster Backup
+func (r Routing) createClusterBackupConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterbackupconfig.CreateEndpoint()),
+		clusterbackupconfig.DecodeCreateClusterBackupConfigReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listClusterBackupConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackupconfig.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackupconfig.DecodeListClusterBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getClusterBackupConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterbackupconfig.GetEndpoint()),
+		clusterbackupconfig.DecodeGetClusterBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteClusterBackupConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterbackupconfig.DeleteEndpoint()),
+		clusterbackupconfig.DecodeGetClusterBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listProjectClustersBackupConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterbackupconfig.ProjectListEndpoint()),
+		clusterbackupconfig.DecodeListProjectClustersBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

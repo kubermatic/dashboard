@@ -264,6 +264,13 @@ type AllowedRegistry struct {
 	Spec kubermaticv1.AllowedRegistrySpec `json:"spec"`
 }
 
+type ClusterBackupConfigSpec struct {
+	Destination string            `json:"destination,omitempty"`
+	Cluster     string            `json:"cluster,omitempty"`
+	Namespaces  []string          `json:"namespaces,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
+}
+
 // EtcdBackupConfig represents an object holding the configuration for etcd backups
 // swagger:model EtcdBackupConfig
 type EtcdBackupConfig struct {
