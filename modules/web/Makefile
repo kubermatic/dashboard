@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
-KUBERMATIC_VERSION?=v2.24.0-beta.1
+KUBERMATIC_VERSION?=v2.24.0-rc.0
 CC=npm
 GOOS ?= $(shell go env GOOS)
 export GOOS
