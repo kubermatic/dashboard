@@ -266,9 +266,19 @@ type AllowedRegistry struct {
 
 type ClusterBackupConfigSpec struct {
 	Destination string            `json:"destination,omitempty"`
-	Cluster     string            `json:"cluster,omitempty"`
+	ClusterID   string            `json:"clusterid,omitempty"`
 	Namespaces  []string          `json:"namespaces,omitempty"`
 	Labels      map[string]string `json:"labels,omitempty"`
+	Schedule    string            `json:"schedule,omitempty"`
+	CreatedAt   time.Time         `json:"createdAt,omitempty"`
+}
+
+type ClusterRestoreConfigSpec struct {
+	Namespaces        []string  `json:"namespaces,omitempty"`
+	ClusterID         string    `json:"clusterid,omitempty"`
+	BackupName        string    `json:"backupName,omitempty"`
+	RestoredResources []string  `json:"restoredResources,omitempty"`
+	CreatedAt         time.Time `json:"createdAt,omitempty"`
 }
 
 // EtcdBackupConfig represents an object holding the configuration for etcd backups

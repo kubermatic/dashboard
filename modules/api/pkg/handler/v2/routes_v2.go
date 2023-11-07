@@ -37,6 +37,7 @@ import (
 	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/clusterbackupconfig"
+	"k8c.io/dashboard/v2/pkg/handler/v2/clusterrestoreconfig"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
 	constrainttemplate "k8c.io/dashboard/v2/pkg/handler/v2/constraint_template"
@@ -1297,16 +1298,37 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listClusterBackupConfig())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
 		Handler(r.getClusterBackupConfig())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
 		Handler(r.deleteClusterBackupConfig())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusterbackupconfigs").
 		Handler(r.listProjectClustersBackupConfig())
+
+	// Defines a set of HTTP endpoints for managing cluster restore configs
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Handler(r.createClusterRestoreConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Handler(r.listClusterRestoreConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Handler(r.getClusterRestoreConfig())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Handler(r.deleteClusterRestoreConfig())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterrestoreconfigs").
+		Handler(r.listProjectClustersRestoreConfig())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
 	mux.Methods(http.MethodPost).
@@ -7625,7 +7647,7 @@ func (r Routing) deleteClusterBackupConfig() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 		)(clusterbackupconfig.DeleteEndpoint()),
-		clusterbackupconfig.DecodeGetClusterBackupConfigReq,
+		clusterbackupconfig.DecodeDeleteClusterBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -7637,6 +7659,61 @@ func (r Routing) listProjectClustersBackupConfig() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 		)(clusterbackupconfig.ProjectListEndpoint()),
 		clusterbackupconfig.DecodeListProjectClustersBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Cluster Restore
+func (r Routing) createClusterRestoreConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider))(clusterrestoreconfig.CreateEndpoint()),
+		clusterrestoreconfig.DecodeCreateClusterRestoreConfigReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listClusterRestoreConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestoreconfig.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterrestoreconfig.DecodeListClusterRestoreConfigReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getClusterRestoreConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterrestoreconfig.GetEndpoint()),
+		clusterrestoreconfig.DecodeGetRestoreBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteClusterRestoreConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterrestoreconfig.DeleteEndpoint()),
+		clusterrestoreconfig.DecodeGetRestoreBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listProjectClustersRestoreConfig() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+		)(clusterrestoreconfig.ProjectListEndpoint()),
+		clusterrestoreconfig.DecodeListProjectClustersRestoreBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

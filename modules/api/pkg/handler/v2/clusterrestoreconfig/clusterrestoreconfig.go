@@ -1,4 +1,4 @@
-package clusterbackupconfig
+package clusterrestoreconfig
 
 import (
 	"context"
@@ -18,51 +18,52 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-type cbcBody struct {
+type rbcBody struct {
 	// Name of the cluster backup config
 	Name string `json:"name,omitempty"`
 	ID   string `json:"id,omitempty"`
-	// ClusterBackupConfigSpec Spec of the cluster backup config
-	Spec apiv2.ClusterBackupConfigSpec `json:"spec,omitempty"`
+	// ClusterRestoreConfigSpec Spec of the cluster backup config
+	Spec apiv2.ClusterRestoreConfigSpec `json:"spec,omitempty"`
 }
 
-var projectBackupObjectsArr []cbcBody
+var projectRestoreObjectsArr []rbcBody
 
 func CreateEndpoint() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(createClusterBackupConfigReq)
+		req := request.(createClusterRestoreConfigReq)
 
-		res := cbcBody{
+		res := rbcBody{
 			Name: req.Body.Name,
 			ID:   uuid.New().String(),
-			Spec: apiv2.ClusterBackupConfigSpec{
-				ClusterID:   req.Body.Spec.ClusterID,
-				Destination: req.Body.Spec.Destination,
-				Namespaces:  req.Body.Spec.Namespaces,
-				Labels:      req.Body.Spec.Labels,
-				Schedule:    req.Body.Spec.Schedule,
-				CreatedAt:   time.Now(),
+			Spec: apiv2.ClusterRestoreConfigSpec{
+				Namespaces:        req.Body.Spec.Namespaces,
+				ClusterID:         req.Body.Spec.ClusterID,
+				BackupName:        req.Body.Spec.BackupName,
+				RestoredResources: req.Body.Spec.RestoredResources,
+				CreatedAt:         time.Now(),
 			},
 		}
 
-		projectBackupObjectsArr = append(projectBackupObjectsArr, res)
+		projectRestoreObjectsArr = append(projectRestoreObjectsArr, res)
 
 		return res, nil
 	}
 }
 
-type createClusterBackupConfigReq struct {
+type createClusterRestoreConfigReq struct {
 	cluster.GetClusterReq
-	// in: body
-	Body cbcBody
+	//in: body
+	Body rbcBody
 }
 
-func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req createClusterBackupConfigReq
+func DecodeCreateClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req createClusterRestoreConfigReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
+
 	if err != nil {
 		return nil, err
 	}
+
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
 	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
@@ -71,32 +72,31 @@ func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (int
 	return req, nil
 }
 
-func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(listClusterBackupConfigReq)
-		var clusterBackupList []cbcBody
+		req := request.(listClusterRestoreConfigReq)
+		var clusterRestoreList []rbcBody
 
 		// c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		// if err != nil {
 		// 	return nil, err
 		// }
 
-		for _, item := range projectBackupObjectsArr {
+		for _, item := range projectRestoreObjectsArr {
 			if item.Spec.ClusterID == req.ClusterID {
-				clusterBackupList = append(clusterBackupList, item)
+				clusterRestoreList = append(clusterRestoreList, item)
 			}
 		}
-		return clusterBackupList, nil
+		return clusterRestoreList, nil
 	}
 }
 
-type listClusterBackupConfigReq struct {
+type listClusterRestoreConfigReq struct {
 	cluster.GetClusterReq
 }
 
-func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listClusterBackupConfigReq
+func DecodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req listClusterRestoreConfigReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -105,38 +105,38 @@ func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (inter
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 	return req, nil
+
 }
 
 func GetEndpoint() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(getClusterBackupConfigReq)
+		req := request.(getClusterRestoreConfigReq)
 
-		var responseItem cbcBody
+		var responseItem rbcBody
 
-		for _, item := range projectBackupObjectsArr {
-
-			if item.ID == req.ClusterBackupConfigID {
+		for _, item := range projectRestoreObjectsArr {
+			if item.ID == req.ClusterRestoreConfigID {
 				responseItem = item
 			}
 		}
 
 		if responseItem.ID == "" {
-			return nil, fmt.Errorf("'backup not found'")
+			return nil, fmt.Errorf("'restore not found'")
 		}
 
 		return responseItem, nil
 	}
 }
 
-type getClusterBackupConfigReq struct {
+type getClusterRestoreConfigReq struct {
 	cluster.GetClusterReq
-	// in: path
+	//in: path
 	// required: true
-	ClusterBackupConfigID string `json:"cbc_id"`
+	ClusterRestoreConfigID string `json:"rbc_id"`
 }
 
-func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req getClusterBackupConfigReq
+func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req getClusterRestoreConfigReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -145,41 +145,41 @@ func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interf
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackupConfigID = mux.Vars(r)["cbc_id"]
-	if req.ClusterBackupConfigID == "" {
-		return "", fmt.Errorf("'cbc_id' parameter is required but was not provided")
+	req.ClusterRestoreConfigID = mux.Vars(r)["rbc_id"]
+	if req.ClusterRestoreConfigID == "" {
+		return nil, fmt.Errorf("'rbc_id' parameter is required but was not provided")
 	}
-
 	return req, nil
+
 }
 
 func DeleteEndpoint() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(deleteClusterBackupConfigReq)
+		req := request.(deleteClusterRestoreConfigReq)
 		for _, item := range req.Body {
-			var filteredProjectBackupObjectsArr []cbcBody
+			var filteredProjectRestoreObjectsArr []rbcBody
 
-			for _, element := range projectBackupObjectsArr {
+			for _, element := range projectRestoreObjectsArr {
 				if element.ID != item {
-					filteredProjectBackupObjectsArr = append(filteredProjectBackupObjectsArr, element)
+					filteredProjectRestoreObjectsArr = append(filteredProjectRestoreObjectsArr, element)
 				}
 			}
 
-			projectBackupObjectsArr = filteredProjectBackupObjectsArr
+			projectRestoreObjectsArr = filteredProjectRestoreObjectsArr
 		}
 		return nil, nil
 
 	}
 }
 
-type deleteClusterBackupConfigReq struct {
+type deleteClusterRestoreConfigReq struct {
 	cluster.GetClusterReq
 	// in: body
 	Body []string
 }
 
 func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req deleteClusterBackupConfigReq
+	var req deleteClusterRestoreConfigReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
 		return nil, err
@@ -194,18 +194,16 @@ func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (int
 
 func ProjectListEndpoint() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-
-		return projectBackupObjectsArr, nil
-
+		return projectRestoreObjectsArr, nil
 	}
 }
 
-type listProjectClustersBackupConfigReq struct {
+type listProjectClustersRestoreConfigReq struct {
 	common.ProjectReq
 }
 
-func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listProjectClustersBackupConfigReq
+func DecodeListProjectClustersRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req listProjectClustersRestoreConfigReq
 
 	pr, err := common.DecodeProjectRequest(c, r)
 	if err != nil {
