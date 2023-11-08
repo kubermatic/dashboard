@@ -34,7 +34,7 @@ import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {UserService} from '@core/services/user';
 import {SettingsService} from '@core/services/settings';
-import {ClusterSpec, CNIPlugin, ProviderSettingsPatch, ProxyMode} from '@shared/entity/cluster';
+import {ClusterSpec, CNIPlugin, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {SharedModule} from '@shared/module';
 import {Subject} from 'rxjs';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/component';
@@ -154,12 +154,12 @@ describe('EditClusterComponent', () => {
       spec = component.cluster.spec;
     });
 
-    it('should be disabled when cluster uses Cilium CNI and ebpf proxy mode', () => {
+    it('should be disabled when initial Konnectivity value is true', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         clusterNetwork: {
           ...spec.clusterNetwork,
-          proxyMode: ProxyMode.ebpf,
+          konnectivityEnabled: true,
         },
         cniPlugin: {
           ...spec.cniPlugin,
@@ -170,56 +170,16 @@ describe('EditClusterComponent', () => {
       expect(component.form.get(component.Controls.Konnectivity).disabled).toBeTruthy();
     });
 
-    it('should not be disabled when cluster uses Cilium CNI and ipvs proxy mode', () => {
+    it('should not be disabled when initial Konnectivity value is false', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         clusterNetwork: {
           ...spec.clusterNetwork,
-          proxyMode: ProxyMode.ipvs,
+          konnectivityEnabled: false,
         },
         cniPlugin: {
           ...spec.cniPlugin,
           type: CNIPlugin.Cilium,
-        },
-      });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
-    });
-
-    it('should not be disabled when cluster uses Cilium CNI and iptables proxy mode', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        clusterNetwork: {
-          ...spec.clusterNetwork,
-          proxyMode: ProxyMode.iptables,
-        },
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.Cilium,
-        },
-      });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
-    });
-
-    it('should not be disabled when cluster uses Canal CNI', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.Canal,
-        },
-      });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
-    });
-
-    it('should not be disabled when cluster does not use any CNI', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.None,
         },
       });
 

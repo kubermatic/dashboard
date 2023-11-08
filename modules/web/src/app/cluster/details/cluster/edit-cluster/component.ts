@@ -22,7 +22,6 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {
   AuditPolicyPreset,
-  CNIPlugin,
   Cluster,
   ClusterPatch,
   ClusterSpecPatch,
@@ -31,7 +30,6 @@ import {
   ExposeStrategy,
   NetworkRanges,
   ProviderSettingsPatch,
-  ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -146,9 +144,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ),
       [Controls.Konnectivity]: new FormControl({
         value: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
-        disabled:
-          this.cluster.spec.clusterNetwork?.proxyMode === ProxyMode.ebpf &&
-          this.cluster.spec.cniPlugin?.type === CNIPlugin.Cilium,
+        disabled: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
       }),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),

@@ -137,6 +137,9 @@ limitations under the License.
                     [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
                     kmValueChangedIndicator>
         Konnectivity
+        <i *ngIf="!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled"
+           class="km-icon-info km-pointer"
+           matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
       </mat-checkbox>
 
       <div fxLayoutAlign=" center">

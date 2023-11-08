@@ -287,21 +287,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._updateAvailableProxyModes();
       });
 
-    combineLatest([this.control(Controls.ProxyMode).valueChanges, this.control(Controls.CNIPlugin).valueChanges])
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([proxyMode, cniPlugin]) => {
-        const konnectivityControl = this.control(Controls.Konnectivity);
-
-        if (proxyMode === ProxyMode.ebpf && cniPlugin === CNIPlugin.Cilium) {
-          if (!konnectivityControl.value) {
-            konnectivityControl.setValue(true);
-          }
-          konnectivityControl.disable();
-        } else if (konnectivityControl.disabled) {
-          konnectivityControl.enable();
-        }
-      });
-
     merge(this.control(Controls.IPFamily).valueChanges, this.control(Controls.NodePortsAllowedIPRanges).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -508,6 +493,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
       ),
     });
+
+    this.control(Controls.Konnectivity).disable();
   }
 
   private _loadClusterDefaults(): void {
