@@ -82,7 +82,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: Record<string, string>;
-  initialClusterDefaultNodeSelectorKey: string;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
   admissionPlugins: string[] = [];
@@ -208,7 +207,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         const selectedPlugins = this.form.get(Controls.AdmissionPlugins).value;
         if (
-          !selectedPlugins.includes(AdmissionPlugin.PodSecurityPolicy) &&
+          !selectedPlugins.includes(AdmissionPlugin.PodNodeSelector) &&
           !_.isEmpty(this.podNodeSelectorAdmissionPluginConfig)
         ) {
           this.form.get(Controls.PodNodeSelectorAdmissionPluginConfig).reset();
@@ -219,8 +218,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     const [initialClusterDefaultNodeSelectorKey] =
       this.podNodeSelectorAdmissionPluginConfig?.[this.CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
 
-    if (initialClusterDefaultNodeSelectorKey) {
-      this.initialClusterDefaultNodeSelectorKey = initialClusterDefaultNodeSelectorKey;
+    if (initialClusterDefaultNodeSelectorKey && this.labels?.[initialClusterDefaultNodeSelectorKey]) {
       this._handleClusterDefaultNodeSelector(this.podNodeSelectorAdmissionPluginConfig);
     }
   }
