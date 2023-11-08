@@ -92,7 +92,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    delete this._clusterSpecService.eventRateLimitConfig;
+    this._clusterSpecService.eventRateLimitConfig = null;
   }
 
   writeValue(eventRateLimitConfig: EventRateLimitConfig) {
