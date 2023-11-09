@@ -80,6 +80,7 @@ import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {NutanixService} from '@core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {DialogModeService} from '@core/services/dialog-mode';
+import {ClusterBackupService} from './services/cluster-backup';
 
 const components = [
   SidenavComponent,
@@ -122,7 +123,7 @@ const services = [
   ClusterTemplateService,
   BackupService,
   MeteringService,
-  BackupService,
+  ClusterBackupService,
   ServiceAccountService,
   MachineDeploymentService,
   ExternalMachineDeploymentService,

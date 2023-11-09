@@ -40,6 +40,7 @@ func CreateEndpoint() endpoint.Endpoint {
 				ClusterID:         req.Body.Spec.ClusterID,
 				BackupName:        req.Body.Spec.BackupName,
 				RestoredResources: req.Body.Spec.RestoredResources,
+				Resources:         req.Body.Spec.Resources,
 				CreatedAt:         time.Now(),
 			},
 		}

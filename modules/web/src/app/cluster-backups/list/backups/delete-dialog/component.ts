@@ -14,6 +14,7 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ClusterBackup} from '@app/shared/entity/backup';
 
 @Component({
   selector: 'km-delete-backup-dialog',
@@ -21,7 +22,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class DeleteBackupDialogComponent implements OnInit {
   verificationInput = '';
-  backupNames: string[] = [];
+  backups: ClusterBackup[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteBackupDialogComponent,
@@ -29,7 +30,7 @@ export class DeleteBackupDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.backupNames = this._config.backupNames;
+    this.backups = this._config.backups;
   }
 
   onEnterKeyDown(): void {
@@ -40,9 +41,9 @@ export class DeleteBackupDialogComponent implements OnInit {
   }
 
   isNameVerified(): boolean {
-    if (this.backupNames.length > 1) {
+    if (this.backups.length > 1) {
       return this.verificationInput === 'yes';
     }
-    return this.verificationInput === this.backupNames[0];
+    return this.verificationInput === this.backups[0]?.name;
   }
 }

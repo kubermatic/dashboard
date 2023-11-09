@@ -19,9 +19,11 @@ import {BackupService} from '@core/services/backup';
 import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterService} from '@core/services/cluster';
-import {Subject, takeUntil} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
-import {CookieService} from 'ngx-cookie-service';
+import {ClusterBackup} from '@app/shared/entity/backup';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {NotificationService} from '@app/core/services/notification';
 
 enum Controls {
   Name = 'name',
@@ -64,7 +66,8 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     private readonly _backupService: BackupService,
     private readonly _userService: UserService,
     private readonly _rbacService: RBACService,
-    private readonly _cookieService: CookieService
+    private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -132,22 +135,31 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     return res;
   }
 
-  createBackup(): void {
-    const backup = {
+  getObservable(): Observable<ClusterBackup> {
+    return this._clusterBackupService.create(this.projectID, this._getClusterBackupConfig());
+  }
+
+  onNext(backup: ClusterBackup): void {
+    this._dialogRef.close(true);
+    this._notificationService.success(`Created the ${backup.name} cluster backup`);
+  }
+
+  private _getClusterBackupConfig(): ClusterBackup {
+    const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
-      destination: this.form.get(Controls.Destination).value,
-      cluster: this.form.get(Controls.Clusters).value,
-      namespaces: this.form.get(Controls.NameSpaces).value,
-      time: new Date().toISOString(),
-      // fix the labels, add as a record<key,value> not as an array of <key,value>
-      labels: this.form.get(Controls.Labels).value,
+      spec: {
+        destination: this.form.get(Controls.Destination).value,
+        clusterid: this.form.get(Controls.Clusters).value,
+        namespaces: this.form.get(Controls.NameSpaces).value,
+        schedule: '',
+        labels: this.labels,
+      },
     };
+
     backup[Controls.Schedule] = this.isCustomBackup()
       ? this.form.get(Controls.CronJob).value
       : this.form.get(Controls.Schedule).value;
-    const backups = JSON.parse(this._cookieService.get('backup') || '[]');
-    backups.push(backup);
-    this._cookieService.set('backup', JSON.stringify(backups));
-    this._dialogRef.close(true);
+
+    return backup;
   }
 }

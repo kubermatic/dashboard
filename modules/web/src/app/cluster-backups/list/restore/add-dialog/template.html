@@ -41,7 +41,7 @@ limitations under the License.
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of data.backup.namespaces"
+          <mat-option *ngFor="let nameSpace of data.backup.spec.namespaces"
                       [value]="nameSpace">
             {{nameSpace}}
           </mat-option>
@@ -49,14 +49,12 @@ limitations under the License.
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-flat-button
-              [mat-dialog-close]="true"
-              id="km-delete-project-dialog-confirm-btn"
-              [disabled]="form.invalid"
-              (click)="createRestore()">
-        <i class="km-icon-mask km-icon-delete i-24"></i>
-        <span>Restore Backup</span>
-      </button>
+      <km-button icon="km-icon-add"
+                 label="Restore Cluster"
+                 [disabled]="form.invalid"
+                 [observable]="getObservable()"
+                 (next)="onNext($event)">
+      </km-button>
     </mat-dialog-actions>
   </form>
 </div>

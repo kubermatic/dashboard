@@ -83,6 +83,7 @@ limitations under the License.
           <mat-hint>The cron expression defining when to perform the backup.</mat-hint>
         </mat-form-field>
       </div>
+
       <km-label-form title="Labels"
                      [labels]="labels"
                      noValidators="true"
@@ -91,12 +92,11 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-edit-cluster-dialog-edit-btn"
-            mat-flat-button
-            (click)="createBackup()"
-            [disabled]="form.invalid">
-      <i class="km-icon-mask km-icon-save"></i>
-      <span>Create</span>
-    </button>
+    <km-button icon="km-icon-add"
+               label="Add Cluster Backup"
+               [disabled]="form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </div>

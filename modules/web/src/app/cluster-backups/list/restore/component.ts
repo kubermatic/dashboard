@@ -12,22 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {ClusterRestore} from '@app/shared/entity/backup';
-import {CookieService} from 'ngx-cookie-service';
 import {DeleteRestoreDialogComponent} from './delete-dialog/component';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {ProjectService} from '@app/core/services/project';
+import {Subject, filter, switchMap, take, takeUntil} from 'rxjs';
+import {Project} from '@app/shared/entity/project';
+import {ClusterService} from '@app/core/services/cluster';
+import {Cluster} from '@app/shared/entity/cluster';
 
 @Component({
   selector: 'km-cluster-restore-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ClustersRestoresListComponent implements OnInit {
+export class ClustersRestoresListComponent implements OnInit, OnDestroy {
+  private readonly _unsubscribe = new Subject<void>();
   dataSource = new MatTableDataSource<ClusterRestore>();
-  selectedRestores: string[] = [];
+  clusters: Cluster[];
+  allRestores: ClusterRestore[];
+  selectedRestores: ClusterRestore[] = [];
   selectAll: boolean = false;
+  selectedProject: Project;
+  currentFilter: string;
 
   get columns(): string[] {
     return ['select', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
@@ -37,82 +47,100 @@ export class ClustersRestoresListComponent implements OnInit {
     return true;
   }
 
-  get data(): any {
-    return JSON.parse(this._cookieService.get('restore') || '[]');
-  }
   constructor(
-    private readonly _cookieService: CookieService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _projectService: ProjectService,
+    private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.data;
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
+      this.selectedProject = project;
+      this._getClusters(project.id);
+      this._getRestoreList(project.id);
+    });
   }
 
-  onSelectedRestore(restoreName: string): void {
-    if (this.selectedRestores.includes(restoreName)) {
-      this.selectedRestores = this.selectedRestores.filter(name => name !== restoreName);
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  onSelectedRestore(restore: ClusterRestore): void {
+    const isRestoreSelected = this.selectedRestores.some(item => item.id === restore.id);
+    if (isRestoreSelected) {
+      this.selectedRestores = this.selectedRestores.filter(item => item.id !== restore.id);
     } else {
-      this.selectedRestores.push(restoreName);
+      this.selectedRestores.push(restore);
     }
   }
 
   onSelectAll(): void {
     this.selectAll = !this.selectAll;
-    this.selectedRestores = this.selectAll ? this.dataSource.data.map((backup: any) => backup.name) : [];
+    this.selectedRestores = this.selectAll ? this.dataSource.data : [];
   }
 
-  checkSelected(backupName: string): boolean {
-    if (this.selectedRestores.includes(backupName) || !this.selectedRestores.length) {
-      return false;
+  // check in the HTML file can i apply this method on the row instead of each element in the table
+  checkSelected(restoreID: string): boolean {
+    const isSelected = this.selectedRestores.some(restore => restore.id === restoreID);
+    if (isSelected && this.selectedRestores.length) {
+      return true;
     }
-    return true;
+    return false;
   }
 
-  onFilterChange(value: string): void {
-    this.dataSource.data = this.data.filter(restore => restore.name.includes(value));
+  onFilterChange(clusterID: string): void {
+    this.currentFilter = clusterID;
+    this.dataSource.data = clusterID
+      ? this.allRestores.filter(restore => restore.spec.clusterid === clusterID)
+      : this.allRestores;
   }
-  //
-  //
-  // note try to convert these two methods into one
-  //
-  //
-  deleteRestore(restoreName: string): void {
+
+  clusterDisplayFn(clusterID: string): string {
+    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+  }
+
+  deleteRestores(restores: ClusterRestore[]): void {
     const config: MatDialogConfig = {
       data: {
-        restoreNames: [restoreName],
+        restores,
       },
     };
     this._matDialog
       .open(DeleteRestoreDialogComponent, config)
       .afterClosed()
-      .subscribe(res => {
-        if (res) {
-          const backups = JSON.parse(this._cookieService.get('restore') || '[]');
-          const filteredBackups = backups.filter(restore => restore.name !== restoreName);
-          this._cookieService.set('restore', JSON.stringify(filteredBackups));
-        }
-        this.dataSource.data = JSON.parse(this._cookieService.get('restore') || '[]');
-      });
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .pipe(
+        switchMap(_ => {
+          const restoreIDs = restores.map(restore => restore.id);
+          return this._clusterBackupService.deleteRestore(
+            this.selectedProject.id,
+            restores[0].spec.clusterid,
+            restoreIDs
+          );
+        })
+      )
+      .subscribe();
   }
 
-  deleteRestores(restoreNames: string[]): void {
-    const config: MatDialogConfig = {
-      data: {
-        restoreNames,
-      },
-    };
-    this._matDialog
-      .open(DeleteRestoreDialogComponent, config)
-      .afterClosed()
-      .subscribe(res => {
-        this.selectedRestores = [];
-        if (res) {
-          const restores = JSON.parse(this._cookieService.get('restore') || '[]');
-          const filteredRestores = restores.filter(restore => !restoreNames.includes(restore.name));
-          this._cookieService.set('restore', JSON.stringify(filteredRestores));
-        }
-        this.dataSource.data = JSON.parse(this._cookieService.get('restore') || '[]');
+  private _getClusters(projectID: string): void {
+    this._clusterService
+      .clusters(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => (this.clusters = clusters));
+  }
+
+  private _getRestoreList(projectID: string): void {
+    this._clusterBackupService
+      .listRestore(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.allRestores = data;
+        this.dataSource.data = this.currentFilter
+          ? data.filter(restore => restore.spec.clusterid === this.currentFilter)
+          : data;
       });
   }
 }

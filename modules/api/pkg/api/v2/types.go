@@ -278,6 +278,7 @@ type ClusterRestoreConfigSpec struct {
 	ClusterID         string    `json:"clusterid,omitempty"`
 	BackupName        string    `json:"backupName,omitempty"`
 	RestoredResources []string  `json:"restoredResources,omitempty"`
+	Resources         []string  `json:"resources,omitempty"`
 	CreatedAt         time.Time `json:"createdAt,omitempty"`
 }
 

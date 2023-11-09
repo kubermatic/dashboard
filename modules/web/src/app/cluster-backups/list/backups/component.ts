@@ -16,17 +16,19 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddClustersBackupsDialogComponent} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
-import {Subject, switchMap, take, takeUntil} from 'rxjs';
+import {Subject, filter, switchMap, take, takeUntil} from 'rxjs';
 import {MemberUtils, Permission} from '@app/shared/utils/member';
 import {Member} from '@app/shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {ProjectService} from '@core/services/project';
 import {Project} from '@shared/entity/project';
-import {CookieService} from 'ngx-cookie-service';
 import {MatTableDataSource} from '@angular/material/table';
 import {ClusterBackup} from '@app/shared/entity/backup';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
 import {AddRestoreDialogComponent} from '../restore/add-dialog/component';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {Cluster} from '@app/shared/entity/cluster';
+import {ClusterService} from '@app/core/services/cluster';
 
 @Component({
   selector: 'km-cluster-backups-list',
@@ -39,9 +41,12 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   selectedProject: Project;
   isAdmin = false;
-  dataSource = new MatTableDataSource<ClusterBackup[]>();
-  selectedBackups: string[] = [];
+  dataSource = new MatTableDataSource<ClusterBackup>();
+  clusters: Cluster[];
+  allBackups: ClusterBackup[] = [];
+  selectedBackups: ClusterBackup[] = [];
   selectAll: boolean = false;
+  currentFilter: string;
 
   get columns(): string[] {
     return ['select', 'name', 'labels', 'cluster', 'destination', 'schedule', 'namespaces', 'created', 'actions'];
@@ -53,33 +58,24 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     return can;
   }
 
-  get data(): any {
-    return JSON.parse(this._cookieService.get('backup') || '[]');
-  }
-
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
-    private readonly _cookieService: CookieService
+    private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.data;
-
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
-    this._projectService.selectedProject
-      .pipe(
-        switchMap(project => {
-          this.selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
-        })
-      )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
+      this.selectedProject = project;
+      this._getBackupsList(this.selectedProject.id);
+      this._getClusters(this.selectedProject.id);
+    });
   }
 
   ngOnDestroy(): void {
@@ -87,98 +83,100 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onSelectedBackup(backupName: string): void {
-    if (this.selectedBackups.includes(backupName)) {
-      this.selectedBackups = this.selectedBackups.filter(name => name !== backupName);
+  onSelectedBackup(backup: ClusterBackup): void {
+    const isBackupSelected = this.selectedBackups.some(item => item.id === backup.id);
+    if (isBackupSelected) {
+      this.selectedBackups = this.selectedBackups.filter(item => item.id !== backup.id);
     } else {
-      this.selectedBackups.push(backupName);
+      this.selectedBackups.push(backup);
     }
   }
 
   onSelectAll(): void {
     this.selectAll = !this.selectAll;
-    this.selectedBackups = this.selectAll ? this.dataSource.data.map((backup: any) => backup.name) : [];
+    this.selectedBackups = this.selectAll ? this.dataSource.data : [];
   }
 
-  checkSelected(backupName: string): boolean {
-    if (this.selectedBackups.includes(backupName) || !this.selectedBackups.length) {
-      return false;
+  // check in the HTML file can i apply this method on the row instead of each element in the table
+  checkSelected(backupID: string): boolean {
+    const isSelected = !!this.selectedBackups.some(backup => backup.id === backupID);
+    if (isSelected && this.selectedBackups.length) {
+      return true;
     }
-    return true;
+    return false;
   }
 
-  onFilterChange(value: string): void {
-    this.dataSource.data = this.data.filter((backup: any) =>
-      backup.labels.labels.some((label: any) => label.value.includes(value) || label.key.includes(value))
-    );
+  onFilterChange(clusterID: string): void {
+    this.currentFilter = clusterID;
+    this.dataSource.data = clusterID
+      ? this.allBackups.filter(backup => backup.spec.clusterid === clusterID)
+      : this.allBackups;
+  }
+
+  clusterDisplayFn(clusterID: string): string {
+    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
   }
 
   add(): void {
     const config: MatDialogConfig = {
       data: {
-        projectID: this.selectedProject.id,
+        projectID: this.selectedProject?.id,
       },
     };
     this._matDialog
       .open(AddClustersBackupsDialogComponent, config)
       .afterClosed()
-      .subscribe(() => {
-        this.dataSource.data = JSON.parse(this._cookieService.get('backup') || '[]');
-      });
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => this._getBackupsList(this.selectedProject.id));
   }
 
-  restoreBackup(backup: any): void {
+  restoreBackup(backup: ClusterBackup): void {
     const config: MatDialogConfig = {
       data: {
         backup,
-        projectID: this.selectedProject.id,
+        projectID: this.selectedProject?.id,
       },
     };
     this._matDialog.open(AddRestoreDialogComponent, config);
   }
 
-  //
-  //
-  // note try to convert these two methods into one
-  //
-  //
-
-  deleteBackup(backupName: string): void {
+  deleteBackups(backups: ClusterBackup[]): void {
     const config: MatDialogConfig = {
       data: {
-        backupNames: [backupName],
+        backups,
       },
     };
     this._matDialog
       .open(DeleteBackupDialogComponent, config)
       .afterClosed()
-      .subscribe(res => {
-        if (res) {
-          const backups = JSON.parse(this._cookieService.get('backup') || '[]');
-          const filteredBackups = backups.filter(backup => backup.name !== backupName);
-          this._cookieService.set('backup', JSON.stringify(filteredBackups));
-        }
-        this.dataSource.data = JSON.parse(this._cookieService.get('backup') || '[]');
-      });
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .pipe(
+        switchMap(_ => {
+          const backupIDs = backups.map(backup => backup.id);
+          return this._clusterBackupService.delete(this.selectedProject.id, backups[0].spec.clusterid, backupIDs);
+        })
+      )
+      .subscribe();
   }
 
-  deleteBackups(backupNames: string[]): void {
-    const config: MatDialogConfig = {
-      data: {
-        backupNames,
-      },
-    };
-    this._matDialog
-      .open(DeleteBackupDialogComponent, config)
-      .afterClosed()
-      .subscribe(res => {
-        this.selectedBackups = [];
-        if (res) {
-          const backups = JSON.parse(this._cookieService.get('backup') || '[]');
-          const filteredBackups = backups.filter((backup: ClusterBackup) => !backupNames.includes(backup.name));
-          this._cookieService.set('backup', JSON.stringify(filteredBackups));
-        }
-        this.dataSource.data = JSON.parse(this._cookieService.get('backup') || '[]');
+  private _getClusters(projectID: string): void {
+    this._clusterService
+      .clusters(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => (this.clusters = clusters));
+  }
+
+  private _getBackupsList(projectID: string): void {
+    this._clusterBackupService
+      .list(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.allBackups = data;
+        this.dataSource.data = this.currentFilter
+          ? data.filter(backup => backup.spec.clusterid === this.currentFilter)
+          : data;
       });
   }
 }

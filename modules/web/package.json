@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
-    "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
+    "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ce}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
     "start:prod": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
     "start:prod:local": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
     "start:e2e": "npm run vi && ng s -c=e2e-\"${KUBERMATIC_EDITION:=ee}\"",

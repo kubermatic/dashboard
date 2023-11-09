@@ -16,9 +16,12 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '@app/core/services/cluster';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {NotificationService} from '@app/core/services/notification';
+import {ClusterRestore} from '@app/shared/entity/backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {CookieService} from 'ngx-cookie-service';
-import {Subject, takeUntil} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 enum Controls {
   Name = 'name',
@@ -41,7 +44,9 @@ export class AddRestoreDialogComponent implements OnInit {
     private readonly _dialogRef: MatDialogRef<AddRestoreDialogComponent>,
     private readonly _builder: FormBuilder,
     readonly _cookieService: CookieService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -58,23 +63,32 @@ export class AddRestoreDialogComponent implements OnInit {
       .subscribe(clusters => (this.clusters = clusters));
   }
 
+  getObservable(): Observable<ClusterRestore> {
+    return this._clusterBackupService.createRestore(this.data.projectID, this._getClusterRestoreConfig());
+  }
+
+  onNext(restore: ClusterRestore): void {
+    this._dialogRef.close(true);
+    const clusterName = this.clusters.find(cluster => cluster.id === restore.spec.clusterid).name;
+    this._notificationService.success(`Restore the ${restore.name} for cluster ${clusterName}`);
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
 
-  createRestore(): void {
-    const restore = {
+  private _getClusterRestoreConfig(): ClusterRestore {
+    const restore: ClusterRestore = {
       name: this.form.controls[Controls.Name].value,
-      namespaces: this.form.controls[Controls.NameSpaces].value,
-      clusterName: this.form.controls[Controls.Clusters].value,
-      backupName: this.data.backup.name,
-      restored: `${this.form.controls[Controls.NameSpaces].value.length}/${this.data.backup.namespaces.length}`,
-      created: new Date().toISOString(),
+      spec: {
+        namespaces: this.form.controls[Controls.NameSpaces].value,
+        clusterid: this.form.controls[Controls.Clusters].value,
+        backupName: this.data.backup.name,
+        restoredResources: this.form.controls[Controls.NameSpaces].value,
+        resources: this.data.backup.spec.namespaces,
+      },
     };
-    const restores = JSON.parse(this._cookieService.get('restore') || '[]');
-    restores.push(restore);
-    this._cookieService.set('restore', JSON.stringify(restores));
-    this._dialogRef.close(true);
+    return restore;
   }
 }
