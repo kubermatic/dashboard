@@ -1,17 +1,21 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v2229",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v22210",
   "entries": [
     {
-      "category": "changed",
-      "description": "Add Cilium 1.13.8 as supported CNI version, deprecate cilium version 1.13.0 as it's impacted by CVE-2023-34242."
-    },
-    {
-      "category": "changed",
-      "description": "Increase default CPU limits for KKP API/seed/master-controller-managers to prevent general slowness."
+      "category": "fixed",
+      "description": "Fix listing events for external clusters."
     },
     {
       "category": "fixed",
-      "description": "Fix node-labeller controller not applying the `x-kubernetes.io/distribution` label to RHEL nodes."
+      "description": "Fix an issue where 'clusterDefaultNodeSelector' label was being added back on opening of edit cluster dialog."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix CPU Utilization graph showing no data for User Cluster MLA dashboard 'Nodes Overview'."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix empty panels in Grafana dashboard 'Resource Usage per Namespace' for Master/Seed MLA."
     }
   ]
 }
