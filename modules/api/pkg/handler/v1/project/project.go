@@ -627,9 +627,10 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 		}
 		clusters, err := clusterProvider.List(ctx, project, nil)
 		if err != nil {
-			return clustersNumber, err
+			log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
+		} else {
+			clustersNumber += len(clusters.Items)
 		}
-		clustersNumber += len(clusters.Items)
 	}
 
 	return clustersNumber, nil
@@ -651,12 +652,13 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 		}
 		clusters, err := clusterProvider.ListAll(ctx, nil)
 		if err != nil {
-			return clustersNumber, err
-		}
-		for _, cluster := range clusters.Items {
-			projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
-			if ok {
-				clustersNumber[projectName]++
+			log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
+		} else {
+			for _, cluster := range clusters.Items {
+				projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
+				if ok {
+					clustersNumber[projectName]++
+				}
 			}
 		}
 	}

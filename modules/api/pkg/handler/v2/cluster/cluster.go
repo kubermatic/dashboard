@@ -97,7 +97,6 @@ func ListEndpoint(
 			seedClusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				kubermaticlog.Logger.Errorw("failed to create cluster provider", "seed", seed.Name, zap.Error(err))
-				brokenSeeds = append(brokenSeeds, seed.Name)
 				continue
 			}
 			seedClusters, err := handlercommon.GetClusters(
@@ -112,9 +111,11 @@ func ListEndpoint(
 				req.ShowDeploymentMachineCount,
 			)
 			if err != nil {
-				return nil, common.KubernetesErrorToHTTPError(err)
+				kubermaticlog.Logger.Errorw("failed to get clusters from seed ", "seed", seed.Name, zap.Error(err))
+				brokenSeeds = append(brokenSeeds, seed.Name)
+			} else {
+				allClusters = append(allClusters, seedClusters...)
 			}
-			allClusters = append(allClusters, seedClusters...)
 		}
 
 		clusterList := make(apiv1.ClusterList, len(allClusters))
