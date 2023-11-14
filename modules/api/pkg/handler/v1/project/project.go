@@ -633,7 +633,7 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 			continue
 		}
 
-		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
+		if err := wait.Poll(1*time.Second, 10*time.Second, func() (bool, error) {
 			clusters, err := clusterProvider.List(ctx, project, nil)
 			if err != nil {
 				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
@@ -669,7 +669,7 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 			continue
 		}
-		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
+		if err := wait.Poll(1*time.Second, 10*time.Second, func() (bool, error) {
 			clusters, err := clusterProvider.ListAll(ctx, nil)
 			if err != nil {
 				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
