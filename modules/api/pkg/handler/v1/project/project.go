@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -39,6 +40,7 @@ import (
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/apimachinery/pkg/util/wait"
 )
 
 // CreateEndpoint defines an HTTP endpoint that creates a new project in the system.
@@ -619,17 +621,30 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 	}
 
 	for seedName, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
 			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
 			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 			continue
 		}
-		clusters, err := clusterProvider.List(ctx, project, nil)
-		if err != nil {
-			return clustersNumber, err
+
+		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
+			clusters, err := clusterProvider.List(ctx, project, nil)
+			if err != nil {
+				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
+				return false, nil
+			} else {
+				clustersNumber += len(clusters.Items)
+			}
+			return true, nil
+		}); err != nil {
+			log.Logger.Warnw("timed out waiting to retrieve clusters", "seed", seedName, "error", err)
 		}
-		clustersNumber += len(clusters.Items)
 	}
 
 	return clustersNumber, nil
@@ -643,21 +658,33 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 	}
 
 	for seedName, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
 			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
 			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 			continue
 		}
-		clusters, err := clusterProvider.ListAll(ctx, nil)
-		if err != nil {
-			return clustersNumber, err
-		}
-		for _, cluster := range clusters.Items {
-			projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
-			if ok {
-				clustersNumber[projectName]++
+		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
+			clusters, err := clusterProvider.ListAll(ctx, nil)
+			if err != nil {
+				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
+				return false, nil
+			} else {
+				for _, cluster := range clusters.Items {
+					projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
+					if ok {
+						clustersNumber[projectName]++
+					}
+				}
 			}
+			return true, nil
+		}); err != nil {
+			log.Logger.Warnw("timed out waiting to retrieve clusters", "seed", seedName, "error", err)
 		}
 	}
 
