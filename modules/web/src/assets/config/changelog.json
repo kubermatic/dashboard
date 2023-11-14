@@ -2,6 +2,10 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2237",
   "entries": [
     {
+      "category": "changed",
+      "description": "Show warning when Seed is unavailable and list remaining clusters."
+    },
+    {
       "category": "fixed",
       "description": "Fix 'Enable Share Cluster' button in admin settings."
     },
