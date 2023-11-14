@@ -165,7 +165,8 @@ limitations under the License.
       </ng-container>
     </km-side-nav-field>
 
-    <km-side-nav-field [label]="projectSidenavSections.ClusterBackups"
+    <km-side-nav-field *ngIf="isEnterpriseEdition"
+    [label]="projectSidenavSections.ClusterBackups"
                        icon="km-icon-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
       <ng-container *ngIf="!isSidenavCollapsed">
