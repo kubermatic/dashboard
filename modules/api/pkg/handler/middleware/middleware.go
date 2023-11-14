@@ -348,6 +348,11 @@ func getAddonProvider(ctx context.Context, clusterProviderGetter provider.Cluste
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
@@ -429,6 +434,11 @@ func GetClusterProvider(ctx context.Context, request interface{}, seedsGetter pr
 
 func getClusterProviderByClusterID(ctx context.Context, seeds map[string]*kubermaticv1.Seed, clusterProviderGetter provider.ClusterProviderGetter, clusterID string) (provider.ClusterProvider, context.Context, error) {
 	for _, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
 			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
@@ -509,6 +519,11 @@ func getConstraintProvider(ctx context.Context, clusterProviderGetter provider.C
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
@@ -568,6 +583,11 @@ func getAlertmanagerProvider(ctx context.Context, clusterProviderGetter provider
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -627,6 +647,11 @@ func getRuleGroupProvider(ctx context.Context, clusterProviderGetter provider.Cl
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
@@ -688,6 +713,11 @@ func getEtcdBackupConfigProvider(ctx context.Context, clusterProviderGetter prov
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -747,6 +777,11 @@ func getEtcdRestoreProvider(ctx context.Context, clusterProviderGetter provider.
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -892,6 +927,11 @@ func getPrivilegedMLAAdminSettingProvider(ctx context.Context, clusterProviderGe
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -961,6 +1001,11 @@ func getPrivilegedOperatingSystemProfileProvider(ctx context.Context, clusterPro
 
 	if clusterID != "" {
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -1014,6 +1059,11 @@ func getOIDCIssuerVerifier(
 
 	var seedName string
 	for _, seed := range seeds {
+		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			continue
+		}
+
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
 			return nil, utilerrors.NewNotFound("cluster-provider", clusterID)
