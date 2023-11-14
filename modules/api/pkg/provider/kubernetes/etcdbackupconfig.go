@@ -181,6 +181,11 @@ func EtcdBackupConfigProjectProviderFactory(mapper meta.RESTMapper, seedKubeconf
 		createSeedImpersonationClients := make(map[string]ImpersonationClient)
 
 		for seedName, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			cfg, err := seedKubeconfigGetter(seed)
 			if err != nil {
 				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
