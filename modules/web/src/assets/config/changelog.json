@@ -87,6 +87,10 @@
     },
     {
       "category": "changed",
+      "description": "Show warning when Seed is unavailable and list remaining clusters."
+    },
+    {
+      "category": "changed",
       "description": "Create a NetworkPolicy for user cluster kube-apiserver to access the Seed Kubernetes API."
     },
     {
