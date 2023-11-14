@@ -435,7 +435,7 @@ func GetClusterProvider(ctx context.Context, request interface{}, seedsGetter pr
 func getClusterProviderByClusterID(ctx context.Context, seeds map[string]*kubermaticv1.Seed, clusterProviderGetter provider.ClusterProviderGetter, clusterID string) (provider.ClusterProvider, context.Context, error) {
 	for _, seed := range seeds {
 		if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
-			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+			log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seed.Name)
 			continue
 		}
 
