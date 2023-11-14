@@ -93,11 +93,16 @@ func ListEndpoint(
 
 		brokenSeeds := []string{}
 		for _, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				kubermaticlog.Logger.Warnf("skipping seed %s as it is in an invalid phase", seed.Name)
+				brokenSeeds = append(brokenSeeds, seed.Name)
+				continue
+			}
+
 			// if a Seed is bad, log error and put seed's name on the list of broken seeds.
 			seedClusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				kubermaticlog.Logger.Errorw("failed to create cluster provider", "seed", seed.Name, zap.Error(err))
-				brokenSeeds = append(brokenSeeds, seed.Name)
 				continue
 			}
 			seedClusters, err := handlercommon.GetClusters(
@@ -112,9 +117,11 @@ func ListEndpoint(
 				req.ShowDeploymentMachineCount,
 			)
 			if err != nil {
-				return nil, common.KubernetesErrorToHTTPError(err)
+				kubermaticlog.Logger.Errorw("failed to get clusters from seed ", "seed", seed.Name, zap.Error(err))
+				brokenSeeds = append(brokenSeeds, seed.Name)
+			} else {
+				allClusters = append(allClusters, seedClusters...)
 			}
-			allClusters = append(allClusters, seedClusters...)
 		}
 
 		clusterList := make(apiv1.ClusterList, len(allClusters))

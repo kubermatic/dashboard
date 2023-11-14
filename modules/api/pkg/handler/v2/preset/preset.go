@@ -860,6 +860,11 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 		}
 
 		for seedName, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
 				// if one or more Seeds are bad, continue with the request, log that a Seed is in error

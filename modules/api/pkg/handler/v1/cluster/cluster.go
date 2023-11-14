@@ -119,7 +119,12 @@ func ListAllEndpoint(
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		for _, seed := range seeds {
+		for seedName, seed := range seeds {
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				kubermaticlog.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
 			// if a Seed is bad, do not forward that error to the user, but only log
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {

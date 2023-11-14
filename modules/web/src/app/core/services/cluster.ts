@@ -341,7 +341,7 @@ export class ClusterService {
 
   restores(projectID: string): Observable<EtcdRestore[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/etcdrestores`;
-    return this._http.get<EtcdRestore[]>(url);
+    return this._http.get<EtcdRestore[]>(url).pipe(catchError(() => of<EtcdRestore[]>([])));
   }
 
   getMasterVersions(provider: NodeProvider): Observable<MasterVersion[]> {
