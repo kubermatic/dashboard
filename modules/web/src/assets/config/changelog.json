@@ -1,29 +1,9 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2237",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2238",
   "entries": [
     {
-      "category": "changed",
-      "description": "Show warning when Seed is unavailable and list remaining clusters."
-    },
-    {
       "category": "fixed",
-      "description": "Fix 'Enable Share Cluster' button in admin settings."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix listing events for external clusters."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix an issue where 'clusterDefaultNodeSelector' label was being added back on opening of edit cluster dialog."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix CPU Utilization graph showing no data for User Cluster MLA dashboard 'Nodes Overview'."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix empty panels in Grafana dashboard 'Resource Usage per Namespace' for Master/Seed MLA."
+      "description": "Fix a bug where the API call to list projects was failing due to slowness."
     }
   ]
 }
