@@ -24,7 +24,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -40,7 +39,6 @@ import (
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/apimachinery/pkg/util/wait"
 )
 
 // CreateEndpoint defines an HTTP endpoint that creates a new project in the system.
@@ -632,19 +630,11 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 			continue
 		}
-
-		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
-			clusters, err := clusterProvider.List(ctx, project, nil)
-			if err != nil {
-				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
-				return false, nil
-			} else {
-				clustersNumber += len(clusters.Items)
-			}
-			return true, nil
-		}); err != nil {
-			log.Logger.Warnw("timed out waiting to retrieve clusters", "seed", seedName, "error", err)
+		clusters, err := clusterProvider.List(ctx, project, nil)
+		if err != nil {
+			return clustersNumber, err
 		}
+		clustersNumber += len(clusters.Items)
 	}
 
 	return clustersNumber, nil
@@ -669,22 +659,15 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 			continue
 		}
-		if err := wait.PollUntilContextTimeout(ctx, time.Second, 10*time.Second, true, func(ctx context.Context) (bool, error) {
-			clusters, err := clusterProvider.ListAll(ctx, nil)
-			if err != nil {
-				log.Logger.Warnw("error getting clusters", "seed", seedName, "error", err)
-				return false, nil
-			} else {
-				for _, cluster := range clusters.Items {
-					projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
-					if ok {
-						clustersNumber[projectName]++
-					}
-				}
+		clusters, err := clusterProvider.ListAll(ctx, nil)
+		if err != nil {
+			return clustersNumber, err
+		}
+		for _, cluster := range clusters.Items {
+			projectName, ok := cluster.Labels[kubermaticv1.ProjectIDLabelKey]
+			if ok {
+				clustersNumber[projectName]++
 			}
-			return true, nil
-		}); err != nil {
-			log.Logger.Warnw("timed out waiting to retrieve clusters", "seed", seedName, "error", err)
 		}
 	}
 
