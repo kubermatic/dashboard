@@ -154,6 +154,10 @@
       "description": "Fix multiple empty panels in MLA dashboards."
     },
     {
+      "category": "fixed",
+      "description": "Fix a bug where the API call to list projects was failing due to slowness."
+    },
+    {
       "category": "removed",
       "description": "Support for Kubernetes 1.24 and Kubernetes 1.25."
     },
