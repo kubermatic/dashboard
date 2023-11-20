@@ -1298,7 +1298,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listClusterBackupConfig())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
 		Handler(r.getClusterBackupConfig())
 
 	mux.Methods(http.MethodDelete).
@@ -1319,7 +1319,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listClusterRestoreConfig())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs/{rbc_id}").
 		Handler(r.getClusterRestoreConfig())
 
 	mux.Methods(http.MethodDelete).
@@ -7702,7 +7702,7 @@ func (r Routing) deleteClusterRestoreConfig() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 		)(clusterrestoreconfig.DeleteEndpoint()),
-		clusterrestoreconfig.DecodeGetRestoreBackupConfigReq,
+		clusterrestoreconfig.DecodeDeleteClusterRestoreConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

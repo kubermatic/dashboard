@@ -14,6 +14,7 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { ClusterRestore } from '@app/shared/entity/backup';
 
 @Component({
   selector: 'km-delete-restore-dialog',
@@ -21,7 +22,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class DeleteRestoreDialogComponent implements OnInit {
   verificationInput = '';
-  restoreNames: string[] = [];
+  restores: ClusterRestore[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteRestoreDialogComponent,
@@ -29,7 +30,7 @@ export class DeleteRestoreDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.restoreNames = this._config.restoreNames;
+    this.restores = this._config.restores;
   }
 
   onEnterKeyDown(): void {
@@ -40,9 +41,9 @@ export class DeleteRestoreDialogComponent implements OnInit {
   }
 
   isNameVerified(): boolean {
-    if (this.restoreNames.length > 1) {
+    if (this.restores.length > 1) {
       return this.verificationInput === 'yes';
     }
-    return this.verificationInput === this.restoreNames[0];
+    return this.verificationInput === this.restores[0].name;
   }
 }
