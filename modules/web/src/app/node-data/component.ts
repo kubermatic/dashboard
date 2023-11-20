@@ -344,7 +344,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.EQUINIX,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
-          NodeProvider.VSPHERE
+          NodeProvider.VSPHERE,
+          NodeProvider.VMWARECLOUDDIRECTOR
         );
       case OperatingSystem.Ubuntu:
         return !this.isProvider(NodeProvider.ANEXIA);
