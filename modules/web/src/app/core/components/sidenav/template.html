@@ -166,8 +166,8 @@ limitations under the License.
     </km-side-nav-field>
 
     <km-side-nav-field *ngIf="isEnterpriseEdition"
-    [label]="projectSidenavSections.ClusterBackups"
-                       icon="km-icon-backup"
+                       [label]="projectSidenavSections.ClusterBackups"
+                       icon="km-icon-cluster-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
       <ng-container *ngIf="!isSidenavCollapsed">
         <div [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}"

@@ -53,7 +53,7 @@ export class AddRestoreDialogComponent implements OnInit {
     this.data = this._config;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Clusters]: this._builder.control('', Validators.required),
+      [Controls.Clusters]: this._builder.control(this.data.backup.spec.clusterid, Validators.required),
       [Controls.NameSpaces]: this._builder.control('', Validators.required),
     });
 

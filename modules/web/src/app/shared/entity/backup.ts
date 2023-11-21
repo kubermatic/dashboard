@@ -143,7 +143,8 @@ export class ClusterBackupConfigSpec {
   destination: string;
   clusterid: string;
   namespaces: string[];
-  schedule: string;
+  schedule?: string;
+  expiredAt?: string;
   labels?: Record<string, string>;
 }
 

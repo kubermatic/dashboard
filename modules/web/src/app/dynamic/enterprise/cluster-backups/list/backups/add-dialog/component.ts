@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
@@ -24,6 +24,7 @@ import {RBACService} from '@core/services/rbac';
 import {ClusterBackup} from '@app/shared/entity/backup';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
+import {KmValidators} from '@app/shared/validators/validators';
 
 enum Controls {
   Name = 'name',
@@ -32,6 +33,7 @@ enum Controls {
   NameSpaces = 'namespaces',
   Schedule = 'schedule',
   CronJob = 'cronjob',
+  ExpiredAt = 'expiredAt',
   Labels = 'labels',
 }
 
@@ -67,7 +69,8 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _rbacService: RBACService,
     private readonly _clusterBackupService: ClusterBackupService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -75,10 +78,11 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.Destination]: this._builder.control('', Validators.required),
       [Controls.Clusters]: this._builder.control('', Validators.required),
-      [Controls.NameSpaces]: this._builder.control('', Validators.required),
-      [Controls.Schedule]: this._builder.control('Now', Validators.required),
-      [Controls.Labels]: this._builder.control(''),
+      [Controls.NameSpaces]: this._builder.control([], Validators.required),
+      [Controls.Schedule]: this._builder.control(DefaultSchuleOption.Now, Validators.required),
       [Controls.CronJob]: this._builder.control(''),
+      [Controls.ExpiredAt]: this._builder.control(''),
+      [Controls.Labels]: this._builder.control(''),
     });
 
     this._clusterService
@@ -94,9 +98,22 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
         this.getClusterNamespaces(this.projectID, cluster);
       });
 
-    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
+    this.form
+      .get(Controls.Schedule)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        const cronJobControl = this.form.get(Controls.CronJob);
+        if (value === DefaultSchuleOption.Custom) {
+          cronJobControl.enable();
+          cronJobControl.setValidators([Validators.required, KmValidators.cronExpression()]);
+        } else {
+          cronJobControl.disable();
+          cronJobControl.clearValidators();
+        }
+        this._cdr.detectChanges();
+      });
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {});
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
   }
 
   ngOnDestroy(): void {
@@ -145,18 +162,19 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getClusterBackupConfig(): ClusterBackup {
+
     const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
       spec: {
         destination: this.form.get(Controls.Destination).value,
         clusterid: this.form.get(Controls.Clusters).value,
         namespaces: this.form.get(Controls.NameSpaces).value,
-        schedule: '',
+        expiredAt: this.form.get(Controls.ExpiredAt).value,
         labels: this.labels,
       },
     };
 
-    backup[Controls.Schedule] = this.isCustomBackup()
+    backup.spec[Controls.Schedule] = this.isCustomBackup()
       ? this.form.get(Controls.CronJob).value
       : this.form.get(Controls.Schedule).value;
 

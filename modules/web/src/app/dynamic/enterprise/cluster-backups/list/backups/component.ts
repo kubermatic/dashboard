@@ -29,6 +29,7 @@ import {AddRestoreDialogComponent} from '../restore/add-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {ClusterService} from '@app/core/services/cluster';
+import { View } from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-cluster-backups-list',
@@ -39,7 +40,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  selectedProject: Project;
+  private _selectedProject: Project;
   isAdmin = false;
   dataSource = new MatTableDataSource<ClusterBackup>();
   clusters: Cluster[];
@@ -53,9 +54,11 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   get canAdd(): boolean {
-    const can = MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'clusterbackups', Permission.Create);
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Create);
+  }
 
-    return can;
+  get canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Delete);
   }
 
   constructor(
@@ -71,11 +74,14 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
-      this.selectedProject = project;
-      this._getBackupsList(this.selectedProject.id);
-      this._getClusters(this.selectedProject.id);
-    });
+    this._projectService.selectedProject.pipe(switchMap(project => {
+      this._selectedProject = project;
+      this._getBackupsList(this._selectedProject.id);
+      this._getClusters(this._selectedProject.id);
+      return this._userService.getCurrentUserGroup(project.id);
+    }))
+    .pipe(takeUntil(this._unsubscribe))
+    .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
   ngOnDestroy(): void {
@@ -120,7 +126,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   add(): void {
     const config: MatDialogConfig = {
       data: {
-        projectID: this.selectedProject?.id,
+        projectID: this._selectedProject?.id,
       },
     };
     this._matDialog
@@ -128,14 +134,14 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._getBackupsList(this.selectedProject.id));
+      .subscribe(_ => this._getBackupsList(this._selectedProject.id));
   }
 
   restoreBackup(backup: ClusterBackup): void {
     const config: MatDialogConfig = {
       data: {
         backup,
-        projectID: this.selectedProject?.id,
+        projectID: this._selectedProject?.id,
       },
     };
     this._matDialog.open(AddRestoreDialogComponent, config);
@@ -155,7 +161,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(_ => {
           const backupIDs = backups.map(backup => backup.id);
-          return this._clusterBackupService.delete(this.selectedProject.id, backups[0].spec.clusterid, backupIDs);
+          return this._clusterBackupService.delete(this._selectedProject.id, backups[0].spec.clusterid, backupIDs);
         })
       )
       .subscribe();

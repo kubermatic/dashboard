@@ -26,7 +26,8 @@ limitations under the License.
          class="header">
       <div class="filter-title">Filter by</div>
       <km-combobox class="filter-field"
-                   filterBy="id"
+                   filterBy="name"
+                   selectBy="id"
                    [valueFormatter]="clusterDisplayFn.bind(this)"
                    (changed)="onFilterChange($event)"
                    label="Clusters"
@@ -39,7 +40,8 @@ limitations under the License.
       <div class="action-button">
         <button mat-flat-button
                 type="button"
-                (click)="add()">
+                (click)="add()"
+                [disabled]="!canAdd">
           <i class="km-icon-mask km-icon-add"></i>
           <span>Create Cluster Backup</span>
         </button>
@@ -186,13 +188,15 @@ limitations under the License.
                class="km-table-actions">
             <button mat-icon-button
                     matTooltip="Restore Backup"
-                    (click)="restoreBackup(element);">
+                    (click)="restoreBackup(element);"
+                    [disabled]="!canAdd">
               <i class="km-icon-mask km-icon-restore"></i>
             </button>
 
             <button mat-icon-button
                     matTooltip="Delete Backup"
-                    (click)="deleteBackups([element]);">
+                    (click)="deleteBackups([element]);"
+                    [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>
             </button>
           </div>

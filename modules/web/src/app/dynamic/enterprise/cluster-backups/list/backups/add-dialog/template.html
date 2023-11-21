@@ -61,6 +61,7 @@ limitations under the License.
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
+          <!-- <mat-option value="*">all</mat-option> -->
           <mat-option *ngFor="let nameSpace of nameSpaces"
                       [value]="nameSpace">
             {{nameSpace}}
@@ -74,21 +75,35 @@ limitations under the License.
         <mat-radio-button [value]="ScheduleOption.Custom">{{ScheduleOption.Custom}}
         </mat-radio-button>
       </mat-radio-group>
-      <div *ngIf="isCustomBackup()">
-        <mat-form-field>
-          <mat-label>Schedule</mat-label>
-          <input [formControlName]="Controls.CronJob"
-                 matInput
-                 required>
-          <mat-hint>The cron expression defining when to perform the backup.</mat-hint>
-        </mat-form-field>
+      <mat-form-field *ngIf="isCustomBackup()">
+        <mat-label>Schedule</mat-label>
+        <input [formControlName]="Controls.CronJob"
+               matInput
+               required>
+        <mat-hint>
+          Cron expression that describes how often a backup restore should be created. Must match the criteria specified
+          <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
+             target="_blank"
+             fxLayout="row inline"
+             fxLayoutAlign=" center"
+             rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>ExpiredAt</mat-label>
+        <input [formControlName]="Controls.ExpiredAt"
+               matInput>
+        <mat-hint>The amount of time before this backup is eligible for garbage collection. If not specified,
+          a default value of 30 days will be used.</mat-hint>
+      </mat-form-field>
+      <div class="labels">
+        <km-label-form title="Labels"
+                       [labels]="labels"
+                       noValidators="true"
+                       (labelsChange)="onLabelsChange($event)"
+                       [formControlName]="Controls.Labels"></km-label-form>
       </div>
 
-      <km-label-form title="Labels"
-                     [labels]="labels"
-                     noValidators="true"
-                     (labelsChange)="onLabelsChange($event)"
-                     [formControlName]="Controls.Labels"></km-label-form>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

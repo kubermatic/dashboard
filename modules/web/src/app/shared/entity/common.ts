@@ -58,8 +58,8 @@ export enum View {
   Backups = 'backups',
   Snapshots = 'snapshots',
   Restores = 'restores',
-  ClusterBackup = 'cluster-backups',
-  ClusterRestore = 'cluster-restores',
+  ClusterBackup = 'clusterbackups',
+  ClusterRestore = 'clusterrestores',
   Access = 'access',
 }
 
