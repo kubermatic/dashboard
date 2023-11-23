@@ -25,10 +25,14 @@ type MeteringConfiguration struct {
 	// ReportConfigurations is a map of report configuration definitions.
 	ReportConfigurations map[string]MeteringReportConfiguration `json:"reports,omitempty"`
 
-	// StorageClassName is the name of the storage class that the metering prometheus instance uses to store metric data for reporting.
+	// RetentionDays is the number of days for which data should be kept in Prometheus. Default value is 90.
+	RetentionDays int64 `json:"retentionDays,omitempty"`
+
+	// StorageClassName is the name of the storage class that the metering Prometheus instance uses to store metric data for reporting.
 	StorageClassName string `json:"storageClassName,omitempty"`
 
-	// StorageSize is the size of the storage class. Default value is 100Gi.
+	// StorageSize is the size of the storage class. Default value is 100Gi. Changing this value requires
+	// manual deletion of the existing Prometheus PVC (and thereby removing all metering data).
 	StorageSize string `json:"storageSize,omitempty"`
 }
 

@@ -25,6 +25,10 @@ type ClusterSpec struct {
 	// ContainerRuntime to use, i.e. Docker or containerd. By default containerd will be used.
 	ContainerRuntime string `json:"containerRuntime,omitempty"`
 
+	// Optional: DisableCSIDriver disables the installation of CSI driver on the cluster
+	// If this is true at the data center then it can't be over-written in the cluster configuration
+	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
+
 	// EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.
 	EnableOperatingSystemManager bool `json:"enableOperatingSystemManager,omitempty"`
 

@@ -557,6 +557,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
+	newInternalCluster.Spec.DisableCSIDriver = patchedCluster.Spec.DisableCSIDriver
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
@@ -1130,6 +1131,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			CNIPlugin:                            internalCluster.Spec.CNIPlugin,
 			ExposeStrategy:                       internalCluster.Spec.ExposeStrategy,
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
+			DisableCSIDriver: 									 internalCluster.Spec.DisableCSIDriver,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,

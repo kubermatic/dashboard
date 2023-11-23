@@ -112,6 +112,10 @@ type DatacenterSpec struct {
 	// MachineFlavorFilter is used to filter out allowed machine flavors based on the specified resource limits like CPU, Memory, and GPU etc.
 	MachineFlavorFilter *kubermaticv1.MachineFlavorFilter `json:"machineFlavorFilter,omitempty"`
 
+	// Optional: DisableCSIDriver disables the installation of CSI driver on every clusters within the DC
+	// If true it can't be over-written in the cluster configuration
+	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
+
 	// Optional: KubeLB holds the configuration for the kubeLB at the data center level.
 	// Only available in Enterprise Edition.
 	KubeLB *kubermaticv1.KubeLBDatacenterSettings `json:"kubelb,omitempty"`
@@ -1022,6 +1026,10 @@ type ClusterSpec struct {
 	// If not configured, access to the API server is unrestricted.
 	// +optional
 	APIServerAllowedIPRanges *kubermaticv1.NetworkRanges `json:"apiServerAllowedIPRanges"`
+
+	// Optional: DisableCSIDriver disables the installation of CSI driver on the cluster
+	// If this is true at the data center then it can't be over-written in the cluster configuration
+	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1052,6 +1060,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		CNIPlugin                            *kubermaticv1.CNIPluginSettings        `json:"cniPlugin,omitempty"`
 		ExposeStrategy                       kubermaticv1.ExposeStrategy            `json:"exposeStrategy,omitempty"`
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
+		DisableCSIDriver 									 bool                                   `json:"disableCsiDriver,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1094,6 +1103,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		CNIPlugin:                            cs.CNIPlugin,
 		ExposeStrategy:                       cs.ExposeStrategy,
 		APIServerAllowedIPRanges:             cs.APIServerAllowedIPRanges,
+		DisableCSIDriver:                     cs.DisableCSIDriver,
 	})
 
 	return ret, err

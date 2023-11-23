@@ -28190,6 +28190,11 @@
           "type": "string",
           "x-go-name": "ContainerRuntime"
         },
+        "disableCsiDriver": {
+          "description": "Optional: DisableCSIDriver disables the installation of CSI driver on the cluster\nIf this is true at the data center then it can't be over-written in the cluster configuration",
+          "type": "boolean",
+          "x-go-name": "DisableCSIDriver"
+        },
         "enableOperatingSystemManager": {
           "description": "EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.",
           "type": "boolean",
@@ -28920,6 +28925,11 @@
         },
         "digitalocean": {
           "$ref": "#/definitions/DatacenterSpecDigitalocean"
+        },
+        "disableCsiDriver": {
+          "description": "Optional: DisableCSIDriver disables the installation of CSI driver on every clusters within the DC\nIf true it can't be over-written in the cluster configuration",
+          "type": "boolean",
+          "x-go-name": "DisableCSIDriver"
         },
         "enforceAuditLogging": {
           "description": "EnforceAuditLogging enforces audit logging on every cluster within the DC,\nignoring cluster-specific settings.",
@@ -33453,13 +33463,19 @@
           },
           "x-go-name": "ReportConfigurations"
         },
+        "retentionDays": {
+          "description": "RetentionDays is the number of days for which data should be kept in Prometheus. Default value is 90.",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "RetentionDays"
+        },
         "storageClassName": {
-          "description": "StorageClassName is the name of the storage class that the metering prometheus instance uses to store metric data for reporting.",
+          "description": "StorageClassName is the name of the storage class that the metering Prometheus instance uses to store metric data for reporting.",
           "type": "string",
           "x-go-name": "StorageClassName"
         },
         "storageSize": {
-          "description": "StorageSize is the size of the storage class. Default value is 100Gi.",
+          "description": "StorageSize is the size of the storage class. Default value is 100Gi. Changing this value requires\nmanual deletion of the existing Prometheus PVC (and thereby removing all metering data).",
           "type": "string",
           "x-go-name": "StorageSize"
         }

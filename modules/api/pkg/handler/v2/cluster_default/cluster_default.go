@@ -244,6 +244,7 @@ func convertInternalDefaultClusterToExternal(internalCluster *kubermaticv1.Clust
 			CNIPlugin:                            internalCluster.Spec.CNIPlugin,
 			ExposeStrategy:                       internalCluster.Spec.ExposeStrategy,
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
+			DisableCSIDriver: 									 internalCluster.Spec.DisableCSIDriver,
 		},
 		Type: apiv1.KubernetesClusterType,
 	}

@@ -22,6 +22,10 @@ type DatacenterSpec struct {
 	// It is used for informational purposes.
 	Country string `json:"country,omitempty"`
 
+	// Optional: DisableCSIDriver disables the installation of CSI driver on every clusters within the DC
+	// If true it can't be over-written in the cluster configuration
+	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
+
 	// EnforceAuditLogging enforces audit logging on every cluster within the DC,
 	// ignoring cluster-specific settings.
 	EnforceAuditLogging bool `json:"enforceAuditLogging,omitempty"`
