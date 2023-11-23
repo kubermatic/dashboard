@@ -645,7 +645,7 @@ func ConvertInternalDCToExternalSpec(dc *kubermaticv1.Datacenter, seedName strin
 		KubeLB:                         dc.Spec.KubeLB,
 		IPv6Enabled:                    dc.IsIPv6Enabled(kubermaticv1.ProviderType(p)),
 		MachineFlavorFilter:            dc.Spec.MachineFlavorFilter,
-		DisableCSIDriver: 						 dc.Spec.DisableCSIDriver,
+		DisableCSIDriver:               dc.Spec.DisableCSIDriver,
 	}, nil
 }
 

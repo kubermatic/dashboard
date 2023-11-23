@@ -1060,7 +1060,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		CNIPlugin                            *kubermaticv1.CNIPluginSettings        `json:"cniPlugin,omitempty"`
 		ExposeStrategy                       kubermaticv1.ExposeStrategy            `json:"exposeStrategy,omitempty"`
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
-		DisableCSIDriver 									 bool                                   `json:"disableCsiDriver,omitempty"`
+		DisableCSIDriver                     bool                                   `json:"disableCsiDriver,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
