@@ -227,6 +227,8 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
     } else {
       this.form.get(Controls.StorageProfile).clearValidators();
       this.form.get(Controls.Filesystem).clearValidators();
+      this.form.get(Controls.StorageProfile).setValue(undefined);
+      this.form.get(Controls.Filesystem).setValue(undefined);
     }
   }
 
