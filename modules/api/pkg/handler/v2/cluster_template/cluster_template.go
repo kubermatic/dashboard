@@ -802,6 +802,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 				CNIPlugin:                            template.Spec.CNIPlugin,
 				ExposeStrategy:                       template.Spec.ExposeStrategy,
 				APIServerAllowedIPRanges:             template.Spec.APIServerAllowedIPRanges,
+				DisableCSIDriver:                     template.Spec.DisableCSIDriver,
 			},
 		},
 		NodeDeployment: &apiv2.ClusterTemplateNodeDeployment{

@@ -108,6 +108,7 @@ enum Controls {
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
   KubeLB = 'kubelb',
+  DisableCSIDriver = 'disableCSIDriver',
 }
 
 @Component({
@@ -144,6 +145,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isDualStackAllowed = false;
   isKubeLBEnabled = false;
   isKubeLBEnforced = false;
+  isCSIDriverDisabled = false;
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   clusterTemplateEditMode = false;
   loadingClusterDefaults = false;
@@ -224,8 +226,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+          this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+          this._enforceDisableCSIDriver(datacenter.spec.disableCsiDriver);
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -338,7 +342,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ExposeStrategy).valueChanges,
       this.form.get(Controls.APIServerAllowedIPRanges).valueChanges,
       this.form.get(Controls.NodePortsAllowedIPRanges).valueChanges,
-      this.form.get(Controls.KubeLB).valueChanges
+      this.form.get(Controls.KubeLB).valueChanges,
+      this.form.get(Controls.DisableCSIDriver).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -452,6 +457,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
       [Controls.KubeLB]: this._builder.control(clusterSpec?.kubelb?.enabled ?? false),
+      [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
       [Controls.EventRateLimitConfig]: this._builder.control(clusterSpec?.eventRateLimitConfig ?? ''),
@@ -567,6 +573,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ??
             this.controlValue(Controls.IPv6ServicesCIDR),
           [Controls.KubeLB]: clusterSpec?.kubelb?.enabled ?? this.controlValue(Controls.KubeLB),
+          [Controls.DisableCSIDriver]: clusterSpec?.disableCsiDriver ?? this.controlValue(Controls.DisableCSIDriver),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
@@ -670,6 +677,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         AdmissionPlugin.PodSecurityPolicy
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
+    }
+  }
+
+  private _enforceDisableCSIDriver(isEnforced: boolean): void {
+    if (isEnforced) {
+      this.form.get(Controls.DisableCSIDriver).setValue(true);
+      this.form.get(Controls.DisableCSIDriver).disable();
     }
   }
 
@@ -803,6 +817,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         kubelb: {
           enabled: this.controlValue(Controls.KubeLB),
         },
+        disableCsiDriver: this.controlValue(Controls.DisableCSIDriver),
         mla: {
           loggingEnabled: this.controlValue(Controls.MLALogging),
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),

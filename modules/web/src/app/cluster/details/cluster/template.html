@@ -323,8 +323,7 @@ limitations under the License.
           <div fxFlex="33"
                class="container-spacing">
             <div fxLayout="row"
-                 class="section-header">OPA
-            </div>
+                 class="section-header">OPA</div>
             <km-property-boolean *ngIf="!cluster?.spec?.opaIntegration?.enabled"
                                  label="Policy Control"
                                  [value]="cluster?.spec?.opaIntegration?.enabled"></km-property-boolean>
@@ -377,9 +376,12 @@ limitations under the License.
                    fxLayoutGap="10px">
                 <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
                 <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
-                <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}
+                <div>
+                  <span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}
                 </div>
-                <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
+                <div>
+                  <span class="km-text-muted">Cache Size:</span>
+                  {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
                 </div>
               </div>
             </km-property>
@@ -418,8 +420,13 @@ limitations under the License.
                                  *ngIf="cluster.spec.kubelb?.enabled">
             </km-property-boolean>
 
-            <km-property-boolean label="External CCM/CSI"
+            <km-property-boolean [label]="cluster.spec.disableCsiDriver ? 'External CCM' : 'External CCM/CSI'"
                                  [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
+            </km-property-boolean>
+
+            <km-property-boolean label="CSI Storage Driver"
+                                 [value]="!cluster.spec.disableCsiDriver"
+                                 *ngIf="cluster.spec.disableCsiDriver">
             </km-property-boolean>
 
             <km-property *ngIf="cluster?.status?.externalCCMMigration">
@@ -539,7 +546,5 @@ limitations under the License.
                  (activate)="onActivate($event)"></router-outlet>
 </ng-template>
 
-
 <km-overlay-terminal *ngIf="showTerminal"
-                     (close)="toggleTerminal()">
-</km-overlay-terminal>
+                     (close)="toggleTerminal()"> </km-overlay-terminal>
