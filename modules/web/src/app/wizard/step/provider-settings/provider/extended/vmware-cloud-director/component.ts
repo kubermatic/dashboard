@@ -104,6 +104,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
   selectedStorageProfile = '';
   storageProfileLabel = StorageProfileState.Empty;
   isPresetSelected = false;
+  isCSIDriverDisabled = false;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -161,6 +162,8 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
             this._clearStorageProfile();
             this._clearCredentials();
           }
+          this.isCSIDriverDisabled = this._clusterSpecService.cluster.spec.disableCsiDriver;
+          this.onCSIDriverDisabled();
         })
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
@@ -215,6 +218,16 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
       [Controls.StorageProfile]: this._builder.control('', Validators.required),
       [Controls.Filesystem]: this._builder.control(this._defaultFilesytsem, Validators.required),
     });
+  }
+
+  private onCSIDriverDisabled(): void {
+    if (!this.isCSIDriverDisabled) {
+      this.form.get(Controls.StorageProfile).setValidators(Validators.required);
+      this.form.get(Controls.Filesystem).setValidators(Validators.required);
+    } else {
+      this.form.get(Controls.StorageProfile).clearValidators();
+      this.form.get(Controls.Filesystem).clearValidators();
+    }
   }
 
   private _onNetworkLoading(): void {

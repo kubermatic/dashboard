@@ -230,6 +230,10 @@ limitations under the License.
                                  label="Operating System Manager"
                                  [value]="cluster.spec.enableOperatingSystemManager">
             </km-property-boolean>
+            <km-property-boolean *ngIf="cluster.spec.disableCsiDriver"
+                                 label="CSI Storage Driver"
+                                 [value]="!cluster.spec.disableCsiDriver">
+            </km-property-boolean>
           </div>
         </div>
 

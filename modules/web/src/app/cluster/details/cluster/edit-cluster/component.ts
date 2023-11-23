@@ -65,6 +65,7 @@ enum Controls {
   KubeLB = 'kubelb',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
+  DisableCSIDriver = 'disableCSIDriver',
 }
 
 @Component({
@@ -93,6 +94,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   editionVersion: string = getEditionVersion();
   isKubeLBEnforced = false;
   isKubeLBEnabled = false;
+  isCSIDriverDisabled = false;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -155,6 +157,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
+      [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -184,6 +187,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           this.datacenter = datacenter;
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+          this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
@@ -288,6 +292,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
+
+    if (this.datacenter.spec.disableCsiDriver) {
+      this.form.get(Controls.DisableCSIDriver).setValue(true);
+      this.form.get(Controls.DisableCSIDriver).disable();
+    }
   }
 
   getPluginName(name: string): string {
@@ -344,6 +353,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         kubernetesDashboard: {
           enabled: this.form.get(Controls.KubernetesDashboardEnabled).value,
         },
+        disableCsiDriver: this.form.get(Controls.DisableCSIDriver).value,
         enableOperatingSystemManager: this.form.get(Controls.OperatingSystemManager).value,
         kubelb: {
           enabled: this.form.get(Controls.KubeLB).value,

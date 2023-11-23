@@ -53,6 +53,7 @@ export class DatacenterSpec {
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
   operatingSystemProfiles?: DatacenterOperatingSystemOptions;
   machineFlavorFilter?: MachineFlavorFilter;
+  disableCsiDriver?: boolean;
 }
 
 export class MachineFlavorFilter {

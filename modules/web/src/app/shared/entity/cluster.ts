@@ -351,6 +351,7 @@ export class ClusterSpec {
   apiServerAllowedIPRanges?: NetworkRanges;
   exposeStrategy?: ExposeStrategy;
   kubelb?: KubeLB;
+  disableCsiDriver?: boolean;
 }
 
 export class KubeLB {
@@ -517,6 +518,7 @@ export class ClusterSpecPatch {
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;
   kubernetesDashboard?: KubernetesDashboard;
+  disableCsiDriver?: boolean;
   podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];

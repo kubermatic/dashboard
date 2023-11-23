@@ -220,6 +220,13 @@ limitations under the License.
            [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB.'"></i>
       </mat-checkbox>
 
+      <mat-checkbox [formControlName]="Controls.DisableCSIDriver"
+                    [disabled]="isCSIDriverDisabled">
+        Disable CSI Driver
+        <i class="km-icon-info km-pointer"
+           [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
+      </mat-checkbox>
+
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"
                      [labels]="labels"
