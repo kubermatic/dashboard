@@ -1,4 +1,4 @@
-package clusterbackupconfig
+package clusterbackup
 
 import (
 	"context"
@@ -16,8 +16,8 @@ func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 	}
 }
 
-func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeCreateClusterBackupConfigReq(c, r)
+func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeCreateClusterBackupReq(c, r)
 }
 
 func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -27,8 +27,8 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 	}
 }
 
-func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeListClusterBackupConfigReq(c, r)
+func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeListClusterBackupReq(c, r)
 }
 
 func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -38,8 +38,8 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 	}
 }
 
-func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeGetClusterBackupConfigReq(c, r)
+func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeGetClusterBackupReq(c, r)
 }
 
 func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -49,8 +49,8 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 	}
 }
 
-func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeDeleteClusterBackupConfigReq(c, r)
+func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeDeleteClusterBackupReq(c, r)
 }
 
 func ProjectListEndpoint() endpoint.Endpoint {

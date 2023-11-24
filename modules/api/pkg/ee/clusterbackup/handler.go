@@ -1,4 +1,4 @@
-package clusterbackupconfig
+package clusterbackup
 
 import (
 	"context"
@@ -23,10 +23,10 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type cbcBody struct {
+type clusterBackupBody struct {
 	// Name of the cluster backup config
 	Name string `json:"name,omitempty"`
-	// ClusterBackupConfigSpec Spec of a velero backup cluster backup config
+	// ClusterBackupSpec Spec of a velero backup cluster backup config
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 
@@ -34,11 +34,11 @@ const (
 	userClusterBackupNamespace = "velero"
 )
 
-var projectBackupObjectsArr []cbcBody
+var projectBackupObjectsArr []clusterBackupBody
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(createClusterBackupConfigReq)
+	req := request.(createClusterBackupReq)
 
 	clusterBackup := &velerov1.Backup{
 		ObjectMeta: metav1.ObjectMeta{
@@ -61,14 +61,14 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	}, nil
 }
 
-type createClusterBackupConfigReq struct {
+type createClusterBackupReq struct {
 	cluster.GetClusterReq
 	// in: body
-	Body cbcBody
+	Body clusterBackupBody
 }
 
-func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req createClusterBackupConfigReq
+func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req createClusterBackupReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (int
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(listClusterBackupConfigReq)
+	req := request.(listClusterBackupReq)
 
 	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -97,12 +97,12 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	return clusterBackupList, nil
 }
 
-type listClusterBackupConfigReq struct {
+type listClusterBackupReq struct {
 	cluster.GetClusterReq
 }
 
-func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listClusterBackupConfigReq
+func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req listClusterBackupReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -115,7 +115,7 @@ func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (inter
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(getClusterBackupConfigReq)
+	req := request.(getClusterBackupReq)
 
 	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -123,21 +123,21 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	}
 
 	clusterBackup := &velerov1.Backup{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupConfigID, Namespace: userClusterBackupNamespace}, clusterBackup); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackup, Namespace: userClusterBackupNamespace}, clusterBackup); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterBackup, nil
 }
 
-type getClusterBackupConfigReq struct {
+type getClusterBackupReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackupConfigID string `json:"cbc_id"`
+	ClusterBackup string `json:"clusterBackup"`
 }
 
-func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req getClusterBackupConfigReq
+func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req getClusterBackupReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -146,9 +146,9 @@ func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interf
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackupConfigID = mux.Vars(r)["cbc_id"]
-	if req.ClusterBackupConfigID == "" {
-		return "", fmt.Errorf("'cbc_id' parameter is required but was not provided")
+	req.ClusterBackup = mux.Vars(r)["clusterBackup"]
+	if req.ClusterBackup == "" {
+		return "", fmt.Errorf("'clusterBackup' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -156,36 +156,36 @@ func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interf
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(deleteClusterBackupConfigReq)
+	req := request.(deleteClusterBackupReq)
 	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := submitBackupDeleteRequest(ctx, client, req.ClusterBackupConfigID); err != nil {
+	if err := submitBackupDeleteRequest(ctx, client, req.ClusterBackup); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return nil, nil
 }
 
-type deleteClusterBackupConfigReq struct {
+type deleteClusterBackupReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackupConfigID string `json:"cbc_id"`
+	ClusterBackup string `json:"clusterBackup"`
 }
 
-func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req deleteClusterBackupConfigReq
+func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req deleteClusterBackupReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
 		return nil, err
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackupConfigID = mux.Vars(r)["cbc_id"]
-	if req.ClusterBackupConfigID == "" {
-		return "", fmt.Errorf("'cbc_id' parameter is required but was not provided")
+	req.ClusterBackup = mux.Vars(r)["clusterBackup"]
+	if req.ClusterBackup == "" {
+		return "", fmt.Errorf("'clusterBackup' parameter is required but was not provided")
 	}
 	return req, nil
 }
@@ -226,9 +226,9 @@ func getClusterClient(ctx context.Context, userInfoGetter provider.UserInfoGette
 	return client, nil
 }
 
-func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupConfigID string) error {
+func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) error {
 	backup := &velerov1.Backup{}
-	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupConfigID, Namespace: userClusterBackupNamespace}, backup); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: userClusterBackupNamespace}, backup); err != nil {
 		if apierrors.IsNotFound(err) {
 			return nil
 		}
