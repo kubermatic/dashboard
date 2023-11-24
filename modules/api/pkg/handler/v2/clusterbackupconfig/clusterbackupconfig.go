@@ -5,12 +5,14 @@ import (
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
+
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func CreateEndpoint() endpoint.Endpoint {
+func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return createEndpoint(ctx, request)
+		return createEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 
@@ -29,9 +31,10 @@ func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (inter
 	return decodeListClusterBackupConfigReq(c, r)
 }
 
-func GetEndpoint() endpoint.Endpoint {
+func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return getEndpoint(ctx, request)
+		return getEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 
@@ -39,9 +42,10 @@ func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interf
 	return decodeGetClusterBackupConfigReq(c, r)
 }
 
-func DeleteEndpoint() endpoint.Endpoint {
+func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return deleteEndpoint(ctx, request)
+		return deleteEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 

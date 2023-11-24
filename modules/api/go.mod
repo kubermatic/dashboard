@@ -105,7 +105,10 @@ replace (
 	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.0-beta.0.0.20231026110010-5bc40f617832
 )
 
-require github.com/google/uuid v1.3.1
+require (
+	github.com/google/uuid v1.3.1
+	github.com/vmware-tanzu/velero v1.12.1
+)
 
 require (
 	cloud.google.com/go/compute v1.23.0 // indirect

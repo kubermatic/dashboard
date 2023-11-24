@@ -1302,7 +1302,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.getClusterBackupConfig())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupconfigs/{cbc_id}").
 		Handler(r.deleteClusterBackupConfig())
 
 	mux.Methods(http.MethodGet).
@@ -7610,7 +7610,10 @@ func (r Routing) createClusterBackupConfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterbackupconfig.CreateEndpoint()),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackupconfig.CreateEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterbackupconfig.DecodeCreateClusterBackupConfigReq,
 		handler.SetStatusCreatedHeader(handler.EncodeJSON),
 		r.defaultServerOptions()...,
@@ -7635,7 +7638,10 @@ func (r Routing) getClusterBackupConfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterbackupconfig.GetEndpoint()),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackupconfig.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterbackupconfig.DecodeGetClusterBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -7646,7 +7652,10 @@ func (r Routing) deleteClusterBackupConfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterbackupconfig.DeleteEndpoint()),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackupconfig.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterbackupconfig.DecodeDeleteClusterBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

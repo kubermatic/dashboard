@@ -149,7 +149,6 @@ func NewRequestErrorHandler(log *zap.SugaredLogger, reqProvider RequestProvider)
 		if httpErr := AsHTTPError(err); httpErr != nil && httpErr.StatusCode() < http.StatusInternalServerError {
 			return
 		}
-
 		log.Errorw(err.Error(), "request", reqProvider().URL.String())
 	}
 }

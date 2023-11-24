@@ -5,46 +5,60 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+	veleroclient "github.com/vmware-tanzu/velero/pkg/client"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type cbcBody struct {
 	// Name of the cluster backup config
 	Name string `json:"name,omitempty"`
-	ID   string `json:"id,omitempty"`
-	// ClusterBackupConfigSpec Spec of the cluster backup config
-	Spec apiv2.ClusterBackupConfigSpec `json:"spec,omitempty"`
+	// ClusterBackupConfigSpec Spec of a velero backup cluster backup config
+	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
+
+const (
+	userClusterBackupNamespace = "velero"
+)
 
 var projectBackupObjectsArr []cbcBody
 
-func CreateEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
+func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	req := request.(createClusterBackupConfigReq)
 
-	res := cbcBody{
-		Name: req.Body.Name,
-		ID:   uuid.New().String(),
-		Spec: apiv2.ClusterBackupConfigSpec{
-			ClusterID:   req.Body.Spec.ClusterID,
-			Destination: req.Body.Spec.Destination,
-			Namespaces:  req.Body.Spec.Namespaces,
-			Labels:      req.Body.Spec.Labels,
-			Schedule:    req.Body.Spec.Schedule,
-			CreatedAt:   time.Now(),
+	clusterBackup := &velerov1.Backup{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      req.Body.Name,
+			Namespace: userClusterBackupNamespace,
 		},
+		Spec: *req.Body.Spec.DeepCopy(),
+	}
+	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	if err != nil {
+		return nil, err
 	}
 
-	projectBackupObjectsArr = append(projectBackupObjectsArr, res)
-
-	return res, nil
+	if err := client.Create(ctx, clusterBackup); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	return &apiv2.ClusterBackup{
+		Name: clusterBackup.Name,
+		Spec: *clusterBackup.Spec.DeepCopy(),
+	}, nil
 }
 
 type createClusterBackupConfigReq struct {
@@ -69,17 +83,18 @@ func DecodeCreateClusterBackupConfigReq(c context.Context, r *http.Request) (int
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-
 	req := request.(listClusterBackupConfigReq)
-	var clusterBackupList []cbcBody
 
-	for _, item := range projectBackupObjectsArr {
-		if item.Spec.ClusterID == req.ClusterID {
-			clusterBackupList = append(clusterBackupList, item)
-		}
+	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	clusterBackupList := &velerov1.BackupList{}
+	if err := client.List(ctx, clusterBackupList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterBackupList, nil
-
 }
 
 type listClusterBackupConfigReq struct {
@@ -98,23 +113,20 @@ func DecodeListClusterBackupConfigReq(c context.Context, r *http.Request) (inter
 	return req, nil
 }
 
-func GetEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
+func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	req := request.(getClusterBackupConfigReq)
 
-	var responseItem cbcBody
-
-	for _, item := range projectBackupObjectsArr {
-
-		if item.ID == req.ClusterBackupConfigID {
-			responseItem = item
-		}
+	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	if err != nil {
+		return nil, err
 	}
 
-	if responseItem.ID == "" {
-		return nil, fmt.Errorf("'backup not found'")
+	clusterBackup := &velerov1.Backup{}
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupConfigID, Namespace: userClusterBackupNamespace}, clusterBackup); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-
-	return responseItem, nil
+	return clusterBackup, nil
 }
 
 type getClusterBackupConfigReq struct {
@@ -142,28 +154,25 @@ func DecodeGetClusterBackupConfigReq(c context.Context, r *http.Request) (interf
 	return req, nil
 }
 
-func DeleteEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-
+func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	req := request.(deleteClusterBackupConfigReq)
-	for _, item := range req.Body {
-		var filteredProjectBackupObjectsArr []cbcBody
+	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	if err != nil {
+		return nil, err
+	}
 
-		for _, element := range projectBackupObjectsArr {
-			if element.ID != item {
-				filteredProjectBackupObjectsArr = append(filteredProjectBackupObjectsArr, element)
-			}
-		}
-
-		projectBackupObjectsArr = filteredProjectBackupObjectsArr
+	if err := submitBackupDeleteRequest(ctx, client, req.ClusterBackupConfigID); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return nil, nil
-
 }
 
 type deleteClusterBackupConfigReq struct {
 	cluster.GetClusterReq
-	// in: body
-	Body []string
+	// in: path
+	// required: true
+	ClusterBackupConfigID string `json:"cbc_id"`
 }
 
 func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -174,8 +183,9 @@ func DecodeDeleteClusterBackupConfigReq(c context.Context, r *http.Request) (int
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, err
+	req.ClusterBackupConfigID = mux.Vars(r)["cbc_id"]
+	if req.ClusterBackupConfigID == "" {
+		return "", fmt.Errorf("'cbc_id' parameter is required but was not provided")
 	}
 	return req, nil
 }
@@ -199,4 +209,49 @@ func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request
 	req.ProjectReq = pr.(common.ProjectReq)
 
 	return req, nil
+}
+
+func getClusterClient(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID string) (ctrlruntimeclient.Client, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := common.GetClusterClient(ctx, userInfoGetter, clusterProvider, cluster, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	return client, nil
+}
+
+func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupConfigID string) error {
+	backup := &velerov1.Backup{}
+	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupConfigID, Namespace: userClusterBackupNamespace}, backup); err != nil {
+		if apierrors.IsNotFound(err) {
+			return nil
+		}
+		return err
+	}
+
+	delReq := &velerov1.DeleteBackupRequest{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: velerov1.SchemeGroupVersion.String(),
+			Kind:       "DeleteBackupRequest",
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			GenerateName: fmt.Sprintf("%s-", backup.Name),
+			Namespace:    backup.Namespace,
+			Labels: map[string]string{
+				velerov1.BackupNameLabel: backup.Name,
+				velerov1.BackupUIDLabel:  string(backup.UID),
+			},
+		},
+		Spec: velerov1.DeleteBackupRequestSpec{
+			BackupName: backup.Name,
+		},
+	}
+	print(delReq)
+	return veleroclient.CreateRetryGenerateName(client, ctx, delReq)
 }

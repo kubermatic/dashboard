@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 )

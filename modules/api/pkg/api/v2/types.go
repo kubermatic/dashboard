@@ -20,6 +20,7 @@ import (
 	"time"
 
 	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -264,13 +265,11 @@ type AllowedRegistry struct {
 	Spec kubermaticv1.AllowedRegistrySpec `json:"spec"`
 }
 
-type ClusterBackupConfigSpec struct {
-	Destination string            `json:"destination,omitempty"`
-	ClusterID   string            `json:"clusterid,omitempty"`
-	Namespaces  []string          `json:"namespaces,omitempty"`
-	Labels      map[string]string `json:"labels,omitempty"`
-	Schedule    string            `json:"schedule,omitempty"`
-	CreatedAt   time.Time         `json:"createdAt,omitempty"`
+type ClusterBackup struct {
+	// Name of the cluster backup config
+	Name string `json:"name,omitempty"`
+	// ClusterBackupConfigSpec Spec of a velero backup cluster backup config
+	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 
 type ClusterRestoreConfigSpec struct {
