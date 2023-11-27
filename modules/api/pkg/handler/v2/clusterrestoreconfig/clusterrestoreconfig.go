@@ -6,24 +6,14 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-type rbcBody struct {
-	// Name of the cluster backup config
-	Name string `json:"name,omitempty"`
-	ID   string `json:"id,omitempty"`
-	// ClusterRestoreConfigSpec Spec of the cluster backup config
-	Spec apiv2.ClusterRestoreConfigSpec `json:"spec,omitempty"`
-}
-
-var projectRestoreObjectsArr []rbcBody
-
-func CreateEndpoint() endpoint.Endpoint {
+func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return createEndpoint(ctx, request)
+		return createEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 
@@ -42,9 +32,10 @@ func DecodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (inte
 	return decodeListClusterRestoreConfigReq(c, r)
 }
 
-func GetEndpoint() endpoint.Endpoint {
+func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return getEndpoint(ctx, request)
+		return getEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 
@@ -53,9 +44,10 @@ func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interf
 
 }
 
-func DeleteEndpoint() endpoint.Endpoint {
+func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return deleteEndpoint(ctx, request)
+		return deleteEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
 	}
 }
 

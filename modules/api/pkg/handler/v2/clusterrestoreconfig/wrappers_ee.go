@@ -10,8 +10,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func createEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-	return clusterrestoreconfig.CreateEndpoint(ctx, request)
+func createEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	return clusterrestoreconfig.CreateEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
 }
 
 func decodeCreateClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -27,16 +28,18 @@ func decodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (inte
 	return clusterrestoreconfig.DecodeListClusterRestoreConfigReq(c, r)
 }
 
-func getEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-	return clusterrestoreconfig.GetEndpoint(ctx, request)
+func getEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	return clusterrestoreconfig.GetEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
 }
 
 func decodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
 	return clusterrestoreconfig.DecodeGetRestoreBackupConfigReq(c, r)
 }
 
-func deleteEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-	return clusterrestoreconfig.DeleteEndpoint(ctx, request)
+func deleteEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	return clusterrestoreconfig.DeleteEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
 }
 
 func decodeDeleteClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {

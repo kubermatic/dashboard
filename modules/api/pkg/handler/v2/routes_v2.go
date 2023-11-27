@@ -1323,7 +1323,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.getClusterRestoreConfig())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreconfigs/{rbc_id}").
 		Handler(r.deleteClusterRestoreConfig())
 
 	mux.Methods(http.MethodGet).
@@ -7676,7 +7676,11 @@ func (r Routing) listProjectClustersBackup() http.Handler {
 // Cluster Restore
 func (r Routing) createClusterRestoreConfig() http.Handler {
 	return httptransport.NewServer(
-		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider))(clusterrestoreconfig.CreateEndpoint()),
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestoreconfig.CreateEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterrestoreconfig.DecodeCreateClusterRestoreConfigReq,
 		handler.SetStatusCreatedHeader(handler.EncodeJSON),
 		r.defaultServerOptions()...,
@@ -7699,7 +7703,9 @@ func (r Routing) getClusterRestoreConfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterrestoreconfig.GetEndpoint()),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestoreconfig.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterrestoreconfig.DecodeGetRestoreBackupConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -7710,7 +7716,9 @@ func (r Routing) deleteClusterRestoreConfig() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterrestoreconfig.DeleteEndpoint()),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestoreconfig.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		clusterrestoreconfig.DecodeDeleteClusterRestoreConfigReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

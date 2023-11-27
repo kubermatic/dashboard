@@ -272,13 +272,9 @@ type ClusterBackup struct {
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 
-type ClusterRestoreConfigSpec struct {
-	Namespaces        []string  `json:"namespaces,omitempty"`
-	ClusterID         string    `json:"clusterid,omitempty"`
-	BackupName        string    `json:"backupName,omitempty"`
-	RestoredResources []string  `json:"restoredResources,omitempty"`
-	Resources         []string  `json:"resources,omitempty"`
-	CreatedAt         time.Time `json:"createdAt,omitempty"`
+type ClusterRestore struct {
+	Name string               `json:"name,omitempty"`
+	Spec velerov1.RestoreSpec `json:"spec,omitempty"`
 }
 
 // EtcdBackupConfig represents an object holding the configuration for etcd backups
