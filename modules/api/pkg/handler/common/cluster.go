@@ -1263,3 +1263,18 @@ func convertInternalCCMStatusToExternal(cluster *kubermaticv1.Cluster, datacente
 		return apiv1.ExternalCCMMigrationUnsupported
 	}
 }
+
+func GetClusterClientWithClusterID(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID string) (ctrlruntimeclient.Client, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := common.GetClusterClient(ctx, userInfoGetter, clusterProvider, cluster, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	return client, nil
+}
