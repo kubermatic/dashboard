@@ -77,7 +77,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-flatcar",
 					OperatingSystem:         "flatcar",
-					SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
+					SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "gce", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
 				},
 				{
 					Name:                    "osp-rhel",
@@ -115,7 +115,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-flatcar",
 					OperatingSystem:         "flatcar",
-					SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
+					SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "gce", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
 				},
 				{
 					Name:                    "osp-rhel",
