@@ -125,7 +125,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.destination}}</span>
+          <span>{{element.spec.storageLocation}}</span>
         </td>
       </ng-container>
 
@@ -142,7 +142,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.schedule}}</span>
+          <span>{{element.spec.ttl}}</span>
         </td>
       </ng-container>
 
@@ -161,7 +161,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.namespaces.length}}</span>
+          <span>{{element.spec.includedNamespaces.length}}</span>
         </td>
       </ng-container>
 

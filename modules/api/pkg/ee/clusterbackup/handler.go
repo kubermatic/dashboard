@@ -10,6 +10,7 @@ import (
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 	veleroclient "github.com/vmware-tanzu/velero/pkg/client"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -34,7 +35,21 @@ const (
 	userClusterBackupNamespace = "velero"
 )
 
-var projectBackupObjectsArr []clusterBackupBody
+type clusterBackupUIConfig struct {
+	Name string                    `json:"name"`
+	ID   string                    `json:"id,omitempty"`
+	Spec clusterBackupUIConfigSpec `json:"spec,omitempty"`
+}
+
+type clusterBackupUIConfigSpec struct {
+	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
+	StorageLocation    string            `json:"storageLocation,omitempty"`
+	ClusterID          string            `json:"clusterid,omitempty"`
+	TTL                string            `json:"ttl,omitempty"`
+	Labels             map[string]string `json:"labels,omitempty"`
+	Status             string            `json:"status,omitempty"`
+	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
+}
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
@@ -44,9 +59,11 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Body.Name,
 			Namespace: userClusterBackupNamespace,
+			Labels:    req.Body.Spec.Labels,
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
 	}
+
 	client, err := getClusterClient(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -94,7 +111,26 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	if err := client.List(ctx, clusterBackupList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return clusterBackupList, nil
+
+	var uiClusterBackupList []clusterBackupUIConfig
+
+	for _, item := range clusterBackupList.Items {
+		uiClusterBackup := clusterBackupUIConfig{
+			Name: item.Name,
+			ID:   string(item.GetUID()),
+			Spec: clusterBackupUIConfigSpec{
+				IncludedNamespaces: item.Spec.IncludedNamespaces,
+				StorageLocation:    item.Spec.StorageLocation,
+				ClusterID:          req.ClusterID,
+				TTL:                item.Spec.TTL.OpenAPISchemaFormat(),
+				Labels:             item.GetObjectMeta().GetLabels(),
+				Status:             string(item.Status.Phase),
+				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
+			},
+		}
+		uiClusterBackupList = append(uiClusterBackupList, uiClusterBackup)
+	}
+	return uiClusterBackupList, nil
 }
 
 type listClusterBackupReq struct {
@@ -191,6 +227,8 @@ func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface
 }
 
 func ProjectListEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
+	var projectBackupObjectsArr []clusterBackupBody
+
 	return projectBackupObjectsArr, nil
 }
 
@@ -227,7 +265,9 @@ func getClusterClient(ctx context.Context, userInfoGetter provider.UserInfoGette
 }
 
 func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) error {
+
 	backup := &velerov1.Backup{}
+
 	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: userClusterBackupNamespace}, backup); err != nil {
 		if apierrors.IsNotFound(err) {
 			return nil

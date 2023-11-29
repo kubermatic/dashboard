@@ -136,17 +136,22 @@ export class S3BackupCredentials {
 export class ClusterBackup {
   name: string;
   id?: string;
-  spec: ClusterBackupConfigSpec;
+  spec: ClusterBackupSpec;
 }
 
-export class ClusterBackupConfigSpec {
-  destination: string;
+export class ClusterBackupSpec {
+  includedNamespaces: string[];
+  storageLocation: string;
   clusterid: string;
-  namespaces: string[];
-  schedule?: string;
-  expiredAt?: string;
-  labels?: Record<string, string>;
+  ttl?: string;
+  labelSelector?: {
+    matchLabels?: Record<string, string>
+  }
+  status?: string
+  createdAt?: string;
 }
+
+
 
 export class ClusterRestore {
   name: string;

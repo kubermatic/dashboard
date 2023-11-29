@@ -26,20 +26,20 @@ export class ClusterBackupService {
 
   // check the neeed of the clusterID in Endpoints
 
-  list(projectID: string): Observable<ClusterBackup[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupconfigs`;
+  listClusterBackups(projectID: string, clusterID: string): Observable<ClusterBackup[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup`;
     return this._http.get<ClusterBackup[]>(url).pipe(catchError(() => of<ClusterBackup[]>([])));
   }
 
   create(projectID: string, backup: ClusterBackup): Observable<ClusterBackup> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${backup.spec.clusterid}/clusterbackupconfigs`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${backup.spec.clusterid}/clusterbackup`;
 
     return this._http.post<ClusterBackup>(url, backup).pipe(catchError(() => of<ClusterBackup>({} as ClusterBackup)));
   }
 
-  delete(projectID: string, clusterID: string, backupNames: string[]): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupconfigs`;
-    return this._http.delete<void>(url, {body: backupNames}).pipe(catchError(() => of<void>()));
+  delete(projectID: string, clusterID: string, backupName: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup/${backupName}`;
+    return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
   }
 
   listRestore(projectID: string): Observable<ClusterRestore[]> {

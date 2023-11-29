@@ -30,6 +30,7 @@ import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {ClusterService} from '@app/core/services/cluster';
 import { View } from '@app/shared/entity/common';
+import { NotificationService } from '@app/core/services/notification';
 
 @Component({
   selector: 'km-cluster-backups-list',
@@ -66,7 +67,8 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +78,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
 
     this._projectService.selectedProject.pipe(switchMap(project => {
       this._selectedProject = project;
-      this._getBackupsList(this._selectedProject.id);
+      !this.allBackups.length && this._getBackupsList(this._selectedProject.id);
       this._getClusters(this._selectedProject.id);
       return this._userService.getCurrentUserGroup(project.id);
     }))
@@ -158,13 +160,16 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .pipe(
-        switchMap(_ => {
-          const backupIDs = backups.map(backup => backup.id);
-          return this._clusterBackupService.delete(this._selectedProject.id, backups[0].spec.clusterid, backupIDs);
-        })
-      )
-      .subscribe();
+      .pipe(switchMap(_ => backups.map(backup => this._clusterBackupService.delete(this._selectedProject.id, backup.spec.clusterid, backup.name))))
+      .subscribe(res => {
+        res.subscribe()
+        this.selectedBackups = []
+        if (backups.length > 1) {
+        this._notificationService.success(`Deleting the selected cluster backups`);
+        } else {
+          this._notificationService.success(`Deleting the ${backups[0].name} cluster backup`);
+        }
+      });
   }
 
   private _getClusters(projectID: string): void {
@@ -175,14 +180,18 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   private _getBackupsList(projectID: string): void {
-    this._clusterBackupService
-      .list(projectID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.allBackups = data;
-        this.dataSource.data = this.currentFilter
-          ? data.filter(backup => backup.spec.clusterid === this.currentFilter)
-          : data;
-      });
+    this.allBackups = []
+    this.clusters?.map(cluster => {
+      this._clusterBackupService
+        .listClusterBackups(projectID, cluster.id)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(data => {
+          this.allBackups = this.allBackups.concat(...data);
+          this.dataSource.data = this.currentFilter
+            ? this.allBackups.filter(backup => backup.spec.clusterid === this.currentFilter)
+            : this.allBackups;
+        });
+
+    })
   }
 }
