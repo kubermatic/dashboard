@@ -24,9 +24,9 @@ import (
 )
 
 type clusterBackupBody struct {
-	// Name of the cluster backup config
+	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
-	// ClusterBackupSpec Spec of a velero backup cluster backup config
+	// ClusterBackupSpec Spec of a velero backup cluster backup
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 
@@ -34,13 +34,13 @@ const (
 	userClusterBackupNamespace = "velero"
 )
 
-type clusterBackupUIConfig struct {
-	Name string                    `json:"name"`
-	ID   string                    `json:"id,omitempty"`
-	Spec clusterBackupUIConfigSpec `json:"spec,omitempty"`
+type clusterBackupUI struct {
+	Name string              `json:"name"`
+	ID   string              `json:"id,omitempty"`
+	Spec clusterBackupUISpec `json:"spec,omitempty"`
 }
 
-type clusterBackupUIConfigSpec struct {
+type clusterBackupUISpec struct {
 	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
 	StorageLocation    string            `json:"storageLocation,omitempty"`
 	ClusterID          string            `json:"clusterid,omitempty"`
@@ -110,13 +110,13 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	var uiClusterBackupList []clusterBackupUIConfig
+	var uiClusterBackupList []clusterBackupUI
 
 	for _, item := range clusterBackupList.Items {
-		uiClusterBackup := clusterBackupUIConfig{
+		uiClusterBackup := clusterBackupUI{
 			Name: item.Name,
 			ID:   string(item.GetUID()),
-			Spec: clusterBackupUIConfigSpec{
+			Spec: clusterBackupUISpec{
 				IncludedNamespaces: item.Spec.IncludedNamespaces,
 				StorageLocation:    item.Spec.StorageLocation,
 				ClusterID:          req.ClusterID,
@@ -190,7 +190,7 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(deleteClusterBackupConfigReq)
+	req := request.(deleteClusterBackupReq)
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -247,7 +247,7 @@ func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request
 	return req, nil
 }
 
-func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupConfigID string) error {
+func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) error {
 	backup := &velerov1.Backup{}
 
 	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: userClusterBackupNamespace}, backup); err != nil {

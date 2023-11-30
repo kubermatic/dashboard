@@ -22,9 +22,9 @@ limitations under the License.
         <input [formControlName]="controls.Name"
                matInput
                required>
-        <mat-hint>The name of the created cluster backup.</mat-hint>
+        <mat-hint>Chose a unique name for, name can't be changed.</mat-hint>
       </mat-form-field>
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
         <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
         <mat-select [formControlName]="controls.Clusters"
@@ -34,14 +34,14 @@ limitations under the License.
                       [value]="cluster.id">{{cluster.name}}</mat-option>
         </mat-select>
         <mat-hint>The list of existing clusters for the selected project.</mat-hint>
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-form-field>
         <mat-label>chose Name Spaces</mat-label>
         <mat-select [formControlName]="controls.NameSpaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of data.backup.spec.namespaces"
+          <mat-option *ngFor="let nameSpace of data.backup.spec.includedNamespaces"
                       [value]="nameSpace">
             {{nameSpace}}
           </mat-option>

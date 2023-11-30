@@ -24,7 +24,7 @@ limitations under the License.
     <km-combobox class="filter-field"
                  filterBy="id"
                  [valueFormatter]="clusterDisplayFn.bind(this)"
-                 (changed)="onFilterChange($event)"
+                 (changed)="onRestoreChange($event)"
                  label="Clusters"
                  [options]="clusters">
       <div *option="let cluster">
@@ -102,12 +102,12 @@ limitations under the License.
       <ng-container matColumnDef="restored">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-15">Restored
+            class="km-header-cell p-15">Name Spaces
         </th>
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.restoredResources.length}}/{{element.spec.resources.length}}</span>
+          <span>{{element.spec.includedNamespaces.length}}</span>
         </td>
       </ng-container>
       <ng-container matColumnDef="created">
@@ -118,7 +118,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <km-relative-time [date]="element.created"></km-relative-time>
+          <km-relative-time [date]="element.spec.createdAt"></km-relative-time>
         </td>
       </ng-container>
       <ng-container matColumnDef="actions">
@@ -145,6 +145,18 @@ limitations under the License.
       <tr mat-row
           *matRowDef="let element; columns: columns"></tr>
     </table>
+
+    <div class="km-row km-empty-list-msg"
+    *ngIf="!clusterRestores.length && !loadingRestores">
+ No restore available.
+</div>
+
+<div class="km-row"
+    *ngIf="loadingRestores && !clusterRestores.length">
+ <mat-spinner color="accent"
+              class="km-spinner km-with-spacing"
+              [diameter]="25"></mat-spinner>
+</div>
 
   </mat-card-content>
 </mat-card>

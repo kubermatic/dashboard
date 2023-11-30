@@ -24,12 +24,12 @@ limitations under the License.
     </mat-card-header>
     <div fxLayout="row"
          class="header">
-      <div class="filter-title">Filter by</div>
+      <div class="filter-title">Select cluster</div>
       <km-combobox class="filter-field"
                    filterBy="name"
                    selectBy="id"
                    [valueFormatter]="clusterDisplayFn.bind(this)"
-                   (changed)="onFilterChange($event)"
+                   (changed)="onClusterChange($event)"
                    label="Clusters"
                    [options]="clusters">
         <div *option="let cluster">
@@ -209,5 +209,18 @@ limitations under the License.
       <tr mat-row
           *matRowDef="let element; columns: columns"></tr>
     </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!clusterBackups.length && !loadingBackups">
+      No backups available.
+    </div>
+
+    <div class="km-row"
+         *ngIf="loadingBackups && !clusterBackups.length">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25"></mat-spinner>
+    </div>
+
   </mat-card-content>
 </mat-card>

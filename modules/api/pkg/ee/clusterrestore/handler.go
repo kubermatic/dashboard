@@ -1,4 +1,4 @@
-package clusterrestoreconfig
+package clusterrestore
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -21,21 +22,35 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type rbcBody struct {
-	// Name of the cluster backup config
+type clusterRestoreBody struct {
+	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
-	// ClusterRestoreConfigSpec Spec of the cluster backup config
+	// ClusterRestoreSpec Spec of the cluster restore spec
 	Spec velerov1.RestoreSpec `json:"spec,omitempty"`
 }
 
-var projectRestoreObjectsArr []rbcBody
+type clusterRestoreUI struct {
+	Name string               `json:"name"`
+	ID   string               `json:"id,omitempty"`
+	Spec clusterRestoreUISpec `json:"spec,omitempty"`
+}
+
+type clusterRestoreUISpec struct {
+	BackupName         string            `json:"backupName"`
+	ScheduleName       string            `json:"scheduleName,omitempty"`
+	ClusterID          string            `json:"clusterid,omitempty"`
+	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
+	Labels             map[string]string `json:"labels,omitempty"`
+	Status             string            `json:"status,omitempty"`
+	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
+}
 
 const (
 	userClusterBackupNamespace = "velero"
 )
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(createClusterRestoreConfigReq)
+	req := request.(createClusterRestoreReq)
 
 	restore := &velerov1.Restore{
 		ObjectMeta: metav1.ObjectMeta{
@@ -57,14 +72,14 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	}, nil
 }
 
-type createClusterRestoreConfigReq struct {
+type createClusterRestoreReq struct {
 	cluster.GetClusterReq
 	//in: body
-	Body rbcBody
+	Body clusterRestoreBody
 }
 
-func DecodeCreateClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req createClusterRestoreConfigReq
+func DecodeCreateClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req createClusterRestoreReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 
 	if err != nil {
@@ -80,7 +95,7 @@ func DecodeCreateClusterRestoreConfigReq(c context.Context, r *http.Request) (in
 }
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(listClusterRestoreConfigReq)
+	req := request.(listClusterRestoreReq)
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -91,16 +106,35 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	return clusterRestoreList, nil
+	var uiClusterRestoreList []clusterRestoreUI
+
+	for _, item := range clusterRestoreList.Items {
+		uiClusterRestore := clusterRestoreUI{
+			Name: item.Name,
+			ID:   string(item.GetUID()),
+			Spec: clusterRestoreUISpec{
+				BackupName:         item.Spec.BackupName,
+				IncludedNamespaces: item.Spec.IncludedNamespaces,
+				ClusterID:          req.ClusterID,
+				ScheduleName:       item.Spec.ScheduleName,
+				Labels:             item.GetObjectMeta().GetLabels(),
+				Status:             string(item.Status.Phase),
+				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
+			},
+		}
+		uiClusterRestoreList = append(uiClusterRestoreList, uiClusterRestore)
+	}
+
+	return uiClusterRestoreList, nil
 
 }
 
-type listClusterRestoreConfigReq struct {
+type listClusterRestoreReq struct {
 	cluster.GetClusterReq
 }
 
-func DecodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listClusterRestoreConfigReq
+func DecodeListClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req listClusterRestoreReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -113,7 +147,7 @@ func DecodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (inte
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(getClusterRestoreConfigReq)
+	req := request.(getClusterRestoreReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -121,22 +155,22 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	}
 
 	clusterRestore := &velerov1.Restore{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreConfigID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterRestore, nil
 
 }
 
-type getClusterRestoreConfigReq struct {
+type getClusterRestoreReq struct {
 	cluster.GetClusterReq
 	//in: path
 	// required: true
-	ClusterRestoreConfigID string `json:"rbc_id"`
+	ClusterRestoreID string `json:"clusterrestore"`
 }
 
-func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req getClusterRestoreConfigReq
+func DecodeGetRestoreBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req getClusterRestoreReq
 
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
@@ -145,25 +179,25 @@ func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interf
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterRestoreConfigID = mux.Vars(r)["rbc_id"]
-	if req.ClusterRestoreConfigID == "" {
-		return nil, fmt.Errorf("'rbc_id' parameter is required but was not provided")
+	req.ClusterRestoreID = mux.Vars(r)["clusterrestore"]
+	if req.ClusterRestoreID == "" {
+		return nil, fmt.Errorf("'clusterrestore' parameter is required but was not provided")
 	}
 	return req, nil
 
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
-	req := request.(deleteClusterRestoreConfigReq)
+	req := request.(deleteClusterRestoreReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
 	}
 	clusterRestore := &velerov1.Restore{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreConfigID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
 		if apierrors.IsNotFound(err) {
-			return nil, nil
+			// return nil, nil
 		}
 		return nil, err
 	}
@@ -174,44 +208,23 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 
 }
 
-type deleteClusterRestoreConfigReq struct {
+type deleteClusterRestoreReq struct {
 	cluster.GetClusterReq
 	// in: body
-	ClusterRestoreConfigID string `json:"rbc_id"`
+	ClusterRestoreID string `json:"clusterrestore"`
 }
 
-func DecodeDeleteClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req deleteClusterRestoreConfigReq
+func DecodeDeleteClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req deleteClusterRestoreReq
 	cr, err := cluster.DecodeGetClusterReq(c, r)
 	if err != nil {
 		return nil, err
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterRestoreConfigID = mux.Vars(r)["rbc_id"]
-	if req.ClusterRestoreConfigID == "" {
-		return nil, fmt.Errorf("'rbc_id' parameter is required but was not provided")
+	req.ClusterRestoreID = mux.Vars(r)["clusterrestore"]
+	if req.ClusterRestoreID == "" {
+		return nil, fmt.Errorf("'clusterrestore' parameter is required but was not provided")
 	}
-	return req, nil
-}
-
-func ProjectListEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-	return projectRestoreObjectsArr, nil
-}
-
-type listProjectClustersRestoreConfigReq struct {
-	common.ProjectReq
-}
-
-func DecodeListProjectClustersRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listProjectClustersRestoreConfigReq
-
-	pr, err := common.DecodeProjectRequest(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	req.ProjectReq = pr.(common.ProjectReq)
-
 	return req, nil
 }

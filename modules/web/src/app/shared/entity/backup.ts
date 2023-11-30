@@ -140,18 +140,16 @@ export class ClusterBackup {
 }
 
 export class ClusterBackupSpec {
-  includedNamespaces: string[];
+  includedNamespaces: string[] | string;
   storageLocation: string;
   clusterid: string;
   ttl?: string;
   labelSelector?: {
-    matchLabels?: Record<string, string>
-  }
-  status?: string
+    matchLabels?: Record<string, string>;
+  };
+  status?: string;
   createdAt?: string;
 }
-
-
 
 export class ClusterRestore {
   name: string;
@@ -160,9 +158,11 @@ export class ClusterRestore {
 }
 
 export class ClusterRestoreConfigSpec {
-  namespaces: string[];
-  clusterid: string;
   backupName: string;
-  restoredResources: string[];
-  resources: string[];
+  includedNamespaces: string[];
+  scheduleName?: string;
+  clusterid?: string;
+  labels?:  Record<string, string>;
+  status?: string;
+  createdAt?: string;
 }

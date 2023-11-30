@@ -23,6 +23,12 @@ import {Subject, filter, switchMap, take, takeUntil} from 'rxjs';
 import {Project} from '@app/shared/entity/project';
 import {ClusterService} from '@app/core/services/cluster';
 import {Cluster} from '@app/shared/entity/cluster';
+import { NotificationService } from '@app/core/services/notification';
+import { MemberUtils, Permission } from '@app/shared/utils/member';
+import { Member } from '@app/shared/entity/member';
+import { GroupConfig } from '@app/shared/model/Config';
+import { View } from '@app/shared/entity/common';
+import { UserService } from '@app/core/services/user';
 
 @Component({
   selector: 'km-cluster-restore-list',
@@ -31,35 +37,55 @@ import {Cluster} from '@app/shared/entity/cluster';
 })
 export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
+  private _selectedProject: Project;
+  isAdmin = false;
   dataSource = new MatTableDataSource<ClusterRestore>();
   clusters: Cluster[];
-  allRestores: ClusterRestore[];
+  clusterRestores: ClusterRestore[];
   selectedRestores: ClusterRestore[] = [];
   selectAll: boolean = false;
-  selectedProject: Project;
-  currentFilter: string;
+  selectedCluster: string;
+  loadingRestores: boolean = false
 
   get columns(): string[] {
     return ['select', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
   }
 
   get canAdd(): boolean {
-    return true;
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Create);
+  }
+
+  get canDelete(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Delete);
   }
 
   constructor(
     private readonly _matDialog: MatDialog,
+    private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => {
-      this.selectedProject = project;
-      this._getClusters(project.id);
-      this._getRestoreList(project.id);
-    });
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
+
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
+
+    this._projectService.selectedProject
+      .pipe(
+        switchMap(project => {
+          this._selectedProject = project;
+          this._getRestoreList(this._selectedProject.id);
+          this._getClusters(this._selectedProject.id);
+          return this._userService.getCurrentUserGroup(project.id);
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
   ngOnDestroy(): void {
@@ -90,11 +116,9 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  onFilterChange(clusterID: string): void {
-    this.currentFilter = clusterID;
-    this.dataSource.data = clusterID
-      ? this.allRestores.filter(restore => restore.spec.clusterid === clusterID)
-      : this.allRestores;
+  onRestoreChange(clusterID: string): void {
+    this.selectedCluster = clusterID;
+    this._getRestoreList(this._selectedProject.id);
   }
 
   clusterDisplayFn(clusterID: string): string {
@@ -113,16 +137,24 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .pipe(
-        switchMap(_ => {
-          const restoreIDs = restores.map(restore => restore.id);
-          return this._clusterBackupService.deleteRestore(
-            this.selectedProject.id,
-            restores[0].spec.clusterid,
-            restoreIDs
-          );
-        })
+        switchMap(_ =>
+          restores.map(restore =>
+            this._clusterBackupService.deleteRestore(
+             this._selectedProject.id,
+             restore.spec.clusterid,
+             restore.name
+           ))
+        )
       )
-      .subscribe();
+      .subscribe(res => {
+        res.subscribe();
+        this.selectedRestores = [];
+        if (restores.length > 1) {
+          this._notificationService.success('Deleting the selected restores')
+        } else {
+          this._notificationService.success(`Deleting the ${restores[0].name} restore`)
+        }
+      });
   }
 
   private _getClusters(projectID: string): void {
@@ -133,14 +165,20 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   }
 
   private _getRestoreList(projectID: string): void {
-    this._clusterBackupService
-      .listRestore(projectID)
+    if (this.selectedCluster) {
+      this.loadingRestores = true
+
+      this._clusterBackupService
+      .listRestore(projectID, this.selectedCluster)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(data => {
-        this.allRestores = data;
-        this.dataSource.data = this.currentFilter
-          ? data.filter(restore => restore.spec.clusterid === this.currentFilter)
-          : data;
+        this.clusterRestores = data
+        this.dataSource.data = data
+        this.loadingRestores = false
       });
+    } else {
+      this.clusterRestores = [];
+        this.dataSource.data = [];
+    }
   }
 }

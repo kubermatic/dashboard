@@ -162,25 +162,21 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getClusterBackupConfig(): ClusterBackup {
-    console.log(this.form.get(Controls.Destination).value);
-
     const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
       spec: {
         includedNamespaces: this.form.get(Controls.NameSpaces).value,
-        storageLocation: "default",
+        storageLocation: 'default',
         clusterid: this.form.get(Controls.Clusters).value,
         labelSelector: {
-          matchLabels: this.labels
-        }
+          matchLabels: this.labels,
+        },
       },
     };
 
     if (this.form.get(Controls.ExpiredAt).value) {
-      backup.spec[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value
-
+      backup.spec[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;
     }
-
 
     return backup;
   }

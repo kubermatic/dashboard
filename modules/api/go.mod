@@ -105,10 +105,7 @@ replace (
 	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.0-beta.0.0.20231026110010-5bc40f617832
 )
 
-require (
-	github.com/google/uuid v1.3.1
-	github.com/vmware-tanzu/velero v1.12.1
-)
+require github.com/vmware-tanzu/velero v1.12.1
 
 require (
 	cloud.google.com/go/compute v1.23.0 // indirect
@@ -174,6 +171,7 @@ require (
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.1-0.20210504230335-f78f29fc09ea // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.5 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect

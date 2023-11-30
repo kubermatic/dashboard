@@ -42,20 +42,20 @@ export class ClusterBackupService {
     return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
   }
 
-  listRestore(projectID: string): Observable<ClusterRestore[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusterrestoreconfigs`;
+  listRestore(projectID: string, clusterID: string): Observable<ClusterRestore[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore`;
     return this._http.get<ClusterRestore[]>(url).pipe(catchError(() => of<ClusterRestore[]>([])));
   }
 
-  createRestore(projectID: string, restore: ClusterRestore): Observable<ClusterRestore> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${restore.spec.clusterid}/clusterrestoreconfigs`;
+  createRestore(projectID: string, clusterID: string, restore: ClusterRestore): Observable<ClusterRestore> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore`;
     return this._http
       .post<ClusterRestore>(url, restore)
       .pipe(catchError(() => of<ClusterRestore>({} as ClusterRestore)));
   }
 
-  deleteRestore(projectID: string, clusterID: string, restoreNames: string[]): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestoreconfigs`;
-    return this._http.delete<void>(url, {body: restoreNames}).pipe(catchError(() => of<void>()));
+  deleteRestore(projectID: string, clusterID: string, restoreName: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore/${restoreName }`;
+    return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
   }
 }

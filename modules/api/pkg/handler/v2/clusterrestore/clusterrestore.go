@@ -1,4 +1,4 @@
-package clusterrestoreconfig
+package clusterrestore
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
@@ -17,8 +16,8 @@ func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 	}
 }
 
-func DecodeCreateClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeCreateClusterRestoreConfigReq(c, r)
+func DecodeCreateClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeCreateClusterRestoreReq(c, r)
 }
 
 func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -28,8 +27,8 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 	}
 }
 
-func DecodeListClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeListClusterRestoreConfigReq(c, r)
+func DecodeListClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeListClusterRestoreReq(c, r)
 }
 
 func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -39,8 +38,8 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 	}
 }
 
-func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeGetRestoreBackupConfigReq(c, r)
+func DecodeGetRestoreBackupReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeGetRestoreBackupReq(c, r)
 
 }
 
@@ -52,20 +51,6 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 }
 
 // check the name
-func DecodeDeleteClusterRestoreConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeDeleteClusterRestoreConfigReq(c, r)
-}
-
-func ProjectListEndpoint() endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return projectListEndpoint(ctx, request)
-	}
-}
-
-type listProjectClustersRestoreConfigReq struct {
-	common.ProjectReq
-}
-
-func DecodeListProjectClustersRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeListProjectClustersRestoreBackupConfigReq(c, r)
+func DecodeDeleteClusterRestoreReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeDeleteClusterRestoreReq(c, r)
 }

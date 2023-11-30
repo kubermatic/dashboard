@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div>
-  <km-dialog-title>Create Cluster Backups{{projectID}}</km-dialog-title>
+  <km-dialog-title>Create Cluster Backups {{projectID}}</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="form">
       <mat-form-field>
@@ -89,7 +89,7 @@ limitations under the License.
              rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
         </mat-hint>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="expired-field">
         <mat-label>ExpiredAt</mat-label>
         <input [formControlName]="Controls.ExpiredAt"
                matInput>

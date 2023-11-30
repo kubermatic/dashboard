@@ -53,7 +53,7 @@ export class AddRestoreDialogComponent implements OnInit {
     this.data = this._config;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Clusters]: this._builder.control(this.data.backup.spec.clusterid, Validators.required),
+      // [Controls.Clusters]: this._builder.control(this.data.backup.spec.clusterid, Validators.required),
       [Controls.NameSpaces]: this._builder.control('', Validators.required),
     });
 
@@ -64,13 +64,12 @@ export class AddRestoreDialogComponent implements OnInit {
   }
 
   getObservable(): Observable<ClusterRestore> {
-    return this._clusterBackupService.createRestore(this.data.projectID, this._getClusterRestoreConfig());
+    return this._clusterBackupService.createRestore(this.data.projectID, this.data.backup.spec.clusterid , this._getClusterRestoreConfig());
   }
 
   onNext(restore: ClusterRestore): void {
     this._dialogRef.close(true);
-    const clusterName = this.clusters.find(cluster => cluster.id === restore.spec.clusterid).name;
-    this._notificationService.success(`Restore the ${restore.name} for cluster ${clusterName}`);
+    this._notificationService.success(`Restoring the ${restore.name}`);
   }
 
   ngOnDestroy(): void {
@@ -82,11 +81,8 @@ export class AddRestoreDialogComponent implements OnInit {
     const restore: ClusterRestore = {
       name: this.form.controls[Controls.Name].value,
       spec: {
-        namespaces: this.form.controls[Controls.NameSpaces].value,
-        clusterid: this.form.controls[Controls.Clusters].value,
+        includedNamespaces: this.form.controls[Controls.NameSpaces].value,
         backupName: this.data.backup.name,
-        restoredResources: this.form.controls[Controls.NameSpaces].value,
-        resources: this.data.backup.spec.namespaces,
       },
     };
     return restore;
