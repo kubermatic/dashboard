@@ -162,7 +162,7 @@ export class ClusterRestoreConfigSpec {
   includedNamespaces: string[];
   scheduleName?: string;
   clusterid?: string;
-  labels?:  Record<string, string>;
+  labels?: Record<string, string>;
   status?: string;
   createdAt?: string;
 }

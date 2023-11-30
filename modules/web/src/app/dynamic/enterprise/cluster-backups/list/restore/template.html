@@ -147,16 +147,16 @@ limitations under the License.
     </table>
 
     <div class="km-row km-empty-list-msg"
-    *ngIf="!clusterRestores.length && !loadingRestores">
- No restore available.
-</div>
+         *ngIf="!clusterRestores.length && !loadingRestores">
+      No restore available.
+    </div>
 
-<div class="km-row"
-    *ngIf="loadingRestores && !clusterRestores.length">
- <mat-spinner color="accent"
-              class="km-spinner km-with-spacing"
-              [diameter]="25"></mat-spinner>
-</div>
+    <div class="km-row"
+         *ngIf="loadingRestores && !clusterRestores.length">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25"></mat-spinner>
+    </div>
 
   </mat-card-content>
 </mat-card>

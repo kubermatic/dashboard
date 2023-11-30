@@ -49,7 +49,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   selectedBackups: ClusterBackup[] = [];
   selectAll: boolean = false;
   selectedCluster: string;
-  loadingBackups: boolean = false
+  loadingBackups: boolean = false;
 
   get columns(): string[] {
     return ['select', 'name', 'labels', 'cluster', 'destination', 'schedule', 'namespaces', 'created', 'actions'];
@@ -120,7 +120,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
 
   onClusterChange(clusterID: string): void {
     this.selectedCluster = clusterID;
-    this._getBackupsList(this._selectedProject.id)
+    this._getBackupsList(this._selectedProject.id);
   }
 
   clusterDisplayFn(clusterID: string): string {
@@ -170,7 +170,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(res => {
-        res.subscribe()
+        res.subscribe();
         this.selectedBackups = [];
         if (backups.length > 1) {
           this._notificationService.success('Deleting the selected cluster backups');
@@ -188,17 +188,16 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   private _getBackupsList(projectID: string): void {
-
     if (this.selectedCluster) {
-      this.loadingBackups = true
+      this.loadingBackups = true;
       this._clusterBackupService
-      .listClusterBackups(projectID, this.selectedCluster)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        this.clusterBackups = data;
-        this.dataSource.data = data
-      this.loadingBackups = false
-      });
+        .listClusterBackups(projectID, this.selectedCluster)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(data => {
+          this.clusterBackups = data;
+          this.dataSource.data = data;
+          this.loadingBackups = false;
+        });
     } else {
       this.clusterBackups = [];
       this.dataSource.data = [];

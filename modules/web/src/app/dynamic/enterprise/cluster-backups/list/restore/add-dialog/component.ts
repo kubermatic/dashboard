@@ -64,7 +64,11 @@ export class AddRestoreDialogComponent implements OnInit {
   }
 
   getObservable(): Observable<ClusterRestore> {
-    return this._clusterBackupService.createRestore(this.data.projectID, this.data.backup.spec.clusterid , this._getClusterRestoreConfig());
+    return this._clusterBackupService.createRestore(
+      this.data.projectID,
+      this.data.backup.spec.clusterid,
+      this._getClusterRestoreConfig()
+    );
   }
 
   onNext(restore: ClusterRestore): void {

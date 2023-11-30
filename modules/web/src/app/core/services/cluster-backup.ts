@@ -55,7 +55,7 @@ export class ClusterBackupService {
   }
 
   deleteRestore(projectID: string, clusterID: string, restoreName: string): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore/${restoreName }`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore/${restoreName}`;
     return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
   }
 }

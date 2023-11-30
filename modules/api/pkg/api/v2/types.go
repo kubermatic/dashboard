@@ -266,15 +266,24 @@ type AllowedRegistry struct {
 }
 
 type ClusterBackup struct {
-	// Name of the cluster backup config
+	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
-	// ClusterBackupConfigSpec Spec of a velero backup cluster backup config
+	// Spec of a velero backup
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 
 type ClusterRestore struct {
-	Name string               `json:"name,omitempty"`
+	// Name of the cluster restore
+	Name string `json:"name,omitempty"`
+	// Spec of a velero backup restore
 	Spec velerov1.RestoreSpec `json:"spec,omitempty"`
+}
+
+type ClusterBackupSchedule struct {
+	// Name of the cluster backup schedule
+	Name string `json:"name,omitempty"`
+	// Spec of a velero backup schedule
+	Spec velerov1.ScheduleSpec `json:"spec,omitempty"`
 }
 
 // EtcdBackupConfig represents an object holding the configuration for etcd backups
