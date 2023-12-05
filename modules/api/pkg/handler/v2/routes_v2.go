@@ -1329,19 +1329,19 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 
 	// Defines a set of HTTP endpoints for managing cluster schedules
 	mux.Methods(http.MethodPost).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreschedules").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule").
 		Handler(r.createClusterBackupSchedule())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreschedules").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule").
 		Handler(r.listClusterBackupSchedule())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreschedules/{cbs_id}").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule/{clusterBackupSchedule}").
 		Handler(r.getClusterBackupSchedule())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestoreschedules/{cbs_id}").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule/{clusterBackupSchedule}").
 		Handler(r.deleteClusterBackupSchedule())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs

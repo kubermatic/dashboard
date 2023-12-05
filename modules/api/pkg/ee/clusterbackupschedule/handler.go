@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -25,6 +26,23 @@ type cbsBody struct {
 	// Name of the cluster backup schedule
 	Name string                `json:"name,omitempty"`
 	Spec velerov1.ScheduleSpec `json:"spec,omitempty"`
+}
+
+type clusterScheduleBackupUI struct {
+	Name string                      `json:"name"`
+	ID   string                      `json:"id,omitempty"`
+	Spec clusterScheduleBackupUISpec `json:"spec,omitempty"`
+}
+
+type clusterScheduleBackupUISpec struct {
+	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
+	StorageLocation    string            `json:"storageLocation,omitempty"`
+	ClusterID          string            `json:"clusterid,omitempty"`
+	TTL                string            `json:"ttl,omitempty"`
+	Schedule           string            `json:"schedule"`
+	Labels             map[string]string `json:"labels,omitempty"`
+	Status             string            `json:"status,omitempty"`
+	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
 }
 
 const (
@@ -89,7 +107,27 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	if err := client.List(ctx, scheduleList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return scheduleList, nil
+	var uiScheduleBackupList []clusterScheduleBackupUI
+
+	for _, item := range scheduleList.Items {
+		uiScheduleBackup := clusterScheduleBackupUI{
+			Name: item.Name,
+			ID:   string(item.GetUID()),
+			Spec: clusterScheduleBackupUISpec{
+				Schedule:           item.Spec.Schedule,
+				IncludedNamespaces: item.Spec.Template.IncludedNamespaces,
+				StorageLocation:    item.Spec.Template.StorageLocation,
+				ClusterID:          req.ClusterID,
+				TTL:                item.Spec.Template.TTL.OpenAPISchemaFormat(),
+				Labels:             item.GetObjectMeta().GetLabels(),
+				Status:             string(item.Status.Phase),
+				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
+			},
+		}
+		uiScheduleBackupList = append(uiScheduleBackupList, uiScheduleBackup)
+	}
+
+	return uiScheduleBackupList, nil
 }
 
 type listClusterBackupScheduleReq struct {
@@ -128,7 +166,7 @@ type getClusterBackupScheduleReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackupScheduleID string `json:"cbs_id"`
+	ClusterBackupScheduleID string `json:"clusterBackupSchedule"`
 }
 
 func DecodeGetClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -141,9 +179,9 @@ func DecodeGetClusterBackupScheduleReq(c context.Context, r *http.Request) (inte
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackupScheduleID = mux.Vars(r)["cbs_id"]
+	req.ClusterBackupScheduleID = mux.Vars(r)["clusterBackupSchedule"]
 	if req.ClusterBackupScheduleID == "" {
-		return "", fmt.Errorf("'cbs_id' parameter is required but was not provided")
+		return "", fmt.Errorf("'clusterBackupSchedule' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -173,7 +211,7 @@ type deleteClusterBackupScheduleReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackupScheduleID string `json:"cbs_id"`
+	ClusterBackupScheduleID string `json:"clusterBackupSchedule"`
 }
 
 func DecodeDeleteClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -184,9 +222,9 @@ func DecodeDeleteClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackupScheduleID = mux.Vars(r)["cbs_id"]
+	req.ClusterBackupScheduleID = mux.Vars(r)["clusterBackupSchedule"]
 	if req.ClusterBackupScheduleID == "" {
-		return "", fmt.Errorf("'cbs_id' parameter is required but was not provided")
+		return "", fmt.Errorf("'clusterBackupSchedule' parameter is required but was not provided")
 	}
 	return req, nil
 }

@@ -120,7 +120,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				IncludedNamespaces: item.Spec.IncludedNamespaces,
 				StorageLocation:    item.Spec.StorageLocation,
 				ClusterID:          req.ClusterID,
-				TTL:                item.Spec.TTL.OpenAPISchemaFormat(),
+				TTL:                item.Spec.TTL.Duration.String(),
 				Labels:             item.GetObjectMeta().GetLabels(),
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
