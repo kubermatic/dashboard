@@ -144,11 +144,23 @@ export class ClusterBackupSpec {
   storageLocation: string;
   clusterid: string;
   ttl?: string;
+  schedule?: string;
   labelSelector?: {
     matchLabels?: Record<string, string>;
   };
   status?: string;
   createdAt?: string;
+}
+
+export class ClusterBackupSchedule {
+  name: string;
+  id?: string;
+  spec: ClusterBackupScheduleSpec;
+}
+
+export class ClusterBackupScheduleSpec {
+  schedule: string;
+  template: ClusterBackupSpec;
 }
 
 export class ClusterRestore {

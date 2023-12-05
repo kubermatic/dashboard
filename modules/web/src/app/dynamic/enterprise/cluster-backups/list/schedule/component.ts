@@ -21,43 +21,56 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {ClusterRestore} from '@app/shared/entity/backup';
-import {DeleteRestoreDialogComponent} from './delete-dialog/component';
-import {ClusterBackupService} from '@app/core/services/cluster-backup';
-import {ProjectService} from '@app/core/services/project';
-import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
-import {Project} from '@app/shared/entity/project';
 import {ClusterService} from '@app/core/services/cluster';
-import {Cluster} from '@app/shared/entity/cluster';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
-import {MemberUtils, Permission} from '@app/shared/utils/member';
-import {Member} from '@app/shared/entity/member';
-import {GroupConfig} from '@app/shared/model/Config';
-import {View} from '@app/shared/entity/common';
+import {ProjectService} from '@app/core/services/project';
 import {UserService} from '@app/core/services/user';
-import { HealthStatus, getClusterBackupHealthStatus } from '@app/shared/utils/health-status';
+import {ClusterBackup} from '@app/shared/entity/backup';
+import {Cluster} from '@app/shared/entity/cluster';
+import {View} from '@app/shared/entity/common';
+import {Member} from '@app/shared/entity/member';
+import {Project} from '@app/shared/entity/project';
+import {GroupConfig} from '@app/shared/model/Config';
+import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {MemberUtils, Permission} from '@app/shared/utils/member';
+import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
+import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
+import {AddClustersBackupsDialogComponent, BackupType} from '../backups/add-dialog/component';
 
 @Component({
-  selector: 'km-cluster-restore-list',
+  selector: 'km-cluster-schedule-backups-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ClustersRestoresListComponent implements OnInit, OnDestroy {
+export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
   isAdmin = false;
-  dataSource = new MatTableDataSource<ClusterRestore>();
+  dataSource = new MatTableDataSource<ClusterBackup>();
   clusters: Cluster[];
-  clusterRestores: ClusterRestore[];
-  selectedRestores: ClusterRestore[] = [];
+  clusterScheduleBackups: ClusterBackup[] = [];
+  selectedScheduleBackups: ClusterBackup[] = [];
   selectAll: boolean = false;
   selectedCluster: string;
-  loadingRestores: boolean = false;
+  loadingBackups: boolean = false;
 
   get columns(): string[] {
-    return ['select', 'status', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
+    const columns = [
+      'select',
+      'status',
+      'name',
+      'labels',
+      'cluster',
+      'destination',
+      'schedule',
+      'namespaces',
+      'created',
+      'actions',
+    ];
+    return columns;
   }
 
   get canAdd(): boolean {
@@ -86,7 +99,6 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          this._getRestoreList(this._selectedProject.id);
           this._getClusters(this._selectedProject.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
@@ -100,68 +112,81 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onSelectedRestore(restore: ClusterRestore): void {
-    const isRestoreSelected = this.selectedRestores.some(item => item.id === restore.id);
-    if (isRestoreSelected) {
-      this.selectedRestores = this.selectedRestores.filter(item => item.id !== restore.id);
+  onSelectedScheduleBackup(backup: ClusterBackup): void {
+    const isBackupSelected = this.selectedScheduleBackups.some(item => item.id === backup.id);
+    if (isBackupSelected) {
+      this.selectedScheduleBackups = this.selectedScheduleBackups.filter(item => item.id !== backup.id);
     } else {
-      this.selectedRestores.push(restore);
+      this.selectedScheduleBackups.push(backup);
     }
   }
 
   onSelectAll(): void {
     this.selectAll = !this.selectAll;
-    this.selectedRestores = this.selectAll ? this.dataSource.data : [];
+    this.selectedScheduleBackups = this.selectAll ? this.dataSource.data : [];
   }
 
-  // check in the HTML file can i apply this method on the row instead of each element in the table
-  checkSelected(restoreID: string): boolean {
-    const isSelected = this.selectedRestores.some(restore => restore.id === restoreID);
-    if (isSelected && this.selectedRestores.length) {
+  checkSelected(backupID: string): boolean {
+    const isSelected = !!this.selectedScheduleBackups.some(backup => backup.id === backupID);
+    if (isSelected && this.selectedScheduleBackups.length) {
       return true;
     }
     return false;
   }
 
-  onRestoreChange(clusterID: string): void {
+  onClusterChange(clusterID: string): void {
     this.selectedCluster = clusterID;
-    this._getRestoreList(this._selectedProject.id);
-  }
-
-  clusterDisplayFn(clusterID: string): string {
-    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+    this._getScheduleBackupsList(this._selectedProject.id);
   }
 
   getStatus(phase: string): HealthStatus {
     return getClusterBackupHealthStatus(phase);
   }
 
-  deleteRestores(restores: ClusterRestore[]): void {
+  addScheduleBackup(): void {
     const config: MatDialogConfig = {
       data: {
-        restores,
+        projectID: this._selectedProject?.id,
+        type: BackupType.Schedule,
       },
     };
     this._matDialog
-      .open(DeleteRestoreDialogComponent, config)
+      .open(AddClustersBackupsDialogComponent, config)
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => this._getScheduleBackupsList(this._selectedProject.id));
+  }
+
+  deleteScheduleBackups(scheduleBackups: ClusterBackup[]): void {
+    const config: MatDialogConfig = {
+      data: {
+        backups: scheduleBackups,
+      },
+    };
+    this._matDialog
+      .open(DeleteBackupDialogComponent, config)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .pipe(
         switchMap(_ =>
           forkJoin(
-            restores.map(restore =>
-              this._clusterBackupService.deleteRestore(this._selectedProject.id, restore.spec.clusterid, restore.name)
-            )
+            scheduleBackups.map(schedule => {
+              return this._clusterBackupService.deleteSchedule(
+                this._selectedProject.id,
+                schedule.spec.clusterid,
+                schedule.name
+              );
+            })
           )
         )
       )
       .subscribe(_ => {
-        this.selectedRestores = [];
-        if (restores.length > 1) {
-          this._notificationService.success('Deleting the selected restores');
+        if (scheduleBackups.length > 1) {
+          this._notificationService.success('Deleting the selected schedule backups');
         } else {
-          this._notificationService.success(`Deleting the ${restores[0].name} restore`);
+          this._notificationService.success(`Deleting the ${scheduleBackups[0].name} schedule backup)}`);
         }
       });
   }
@@ -170,23 +195,28 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     this._clusterService
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
+      .subscribe(clusters => {
+        this.clusters = clusters;
+        if (!this.selectedCluster) {
+          this.selectedCluster = clusters[0].id;
+          this._getScheduleBackupsList(this._selectedProject.id);
+        }
+      });
   }
 
-  private _getRestoreList(projectID: string): void {
+  private _getScheduleBackupsList(projectID: string): void {
     if (this.selectedCluster) {
-      this.loadingRestores = true;
-
+      this.loadingBackups = true;
       this._clusterBackupService
-        .listRestore(projectID, this.selectedCluster)
+        .listClusterScheduleBackups(projectID, this.selectedCluster)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
-          this.clusterRestores = data;
+          this.clusterScheduleBackups = data;
           this.dataSource.data = data;
-          this.loadingRestores = false;
+          this.loadingBackups = false;
         });
     } else {
-      this.clusterRestores = [];
+      this.clusterScheduleBackups = [];
       this.dataSource.data = [];
     }
   }

@@ -84,7 +84,9 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
           this.checkUrl(View.ServiceAccounts)
         );
       case ProjectSidenavSection.ClusterBackups:
-        return this.checkUrl(View.ClusterBackup) || this.checkUrl(View.ClusterRestore);
+        return (
+          this.checkUrl(View.ClusterBackup) || this.checkUrl(View.ClusterRestore) || this.checkUrl(View.ClusterSchedule)
+        );
       default:
         return false;
     }

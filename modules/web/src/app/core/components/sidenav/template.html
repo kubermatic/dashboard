@@ -174,14 +174,21 @@ limitations under the License.
              class="sub-menu-item">
           <a fxLayoutAlign=" center"
              [routerLink]="getRouterLink(view.ClusterBackup)">
-            <span>Cluster Backups</span>
+            <span>Backups</span>
+          </a>
+        </div>
+        <div [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}"
+             class="sub-menu-item">
+          <a fxLayoutAlign=" center"
+             [routerLink]="getRouterLink(view.ClusterSchedule)">
+            <span>Schedule</span>
           </a>
         </div>
         <div [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
              class="sub-menu-item">
           <a fxLayoutAlign=" center"
              [routerLink]="getRouterLink(view.ClusterRestore)">
-            <span>Cluster Restore</span>
+            <span>Restore</span>
           </a>
         </div>
       </ng-container>
@@ -190,13 +197,19 @@ limitations under the License.
            [routerLink]="getRouterLink(view.ClusterBackup)"
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ClusterBackup), 'km-disabled': !isDisabledField(view.ClusterBackup)}">
-          <span>Cluster Backups</span>
+          <span>Backups</span>
+        </a>
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.ClusterSchedule)"
+           class="collapsed-sub-menu-item"
+           [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}">
+          <span>Schedule</span>
         </a>
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ClusterRestore)"
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
-          <span>Cluster Restore</span>
+          <span>Restore</span>
         </a>
       </ng-container>
     </km-side-nav-field>

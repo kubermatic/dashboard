@@ -59,6 +59,7 @@ export enum View {
   Snapshots = 'snapshots',
   Restores = 'restores',
   ClusterBackup = 'clusterbackups',
+  ClusterSchedule = 'ClusterSchedule',
   ClusterRestore = 'clusterrestores',
   Access = 'access',
 }

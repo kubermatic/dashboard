@@ -1,16 +1,22 @@
-// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+//                Kubermatic Enterprise Read-Only License
+//                       Version 1.0 ("KERO-1.0”)
+//                   Copyright © 2023 Kubermatic GmbH
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// 1. You may only view, read and display for studying purposes the source
+//    code of the software licensed under this license, and, to the extent
+//    explicitly provided under this license, the binary code.
+// 2. Any use of the software which exceeds the foregoing right, including,
+//    without limitation, its execution, compilation, copying, modification
+//    and distribution, is expressly prohibited.
+// 3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+//    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+//    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+//    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+//    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// END OF TERMS AND CONDITIONS
 
 import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -21,25 +27,24 @@ import {Cluster} from '@shared/entity/cluster';
 import {ClusterService} from '@core/services/cluster';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
-import {ClusterBackup} from '@app/shared/entity/backup';
+import {ClusterBackup, ClusterBackupSchedule} from '@app/shared/entity/backup';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {KmValidators} from '@app/shared/validators/validators';
+
+export enum BackupType {
+  Backup = 'Backup',
+  Schedule = 'Schedule',
+}
 
 enum Controls {
   Name = 'name',
   Clusters = 'clusters',
   Destination = 'destination',
   NameSpaces = 'namespaces',
-  Schedule = 'schedule',
   CronJob = 'cronjob',
   ExpiredAt = 'ttl',
   Labels = 'labels',
-}
-
-enum DefaultSchuleOption {
-  Now = 'Now',
-  Custom = 'Custom',
 }
 
 @Component({
@@ -49,7 +54,7 @@ enum DefaultSchuleOption {
 })
 export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
-  readonly ScheduleOption = DefaultSchuleOption;
+  readonly type: BackupType = this._config.type;
   projectID = this._config.projectID;
   clusters: Cluster[] = [];
   destinations: string[] = [];
@@ -59,6 +64,10 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
 
   readonly Controls = Controls;
   form: FormGroup;
+
+  get label(): string {
+    return `Create ${this.type}`;
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddClustersBackupsDialogComponent,
@@ -79,7 +88,6 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       [Controls.Destination]: this._builder.control('', Validators.required),
       [Controls.Clusters]: this._builder.control('', Validators.required),
       [Controls.NameSpaces]: this._builder.control([], Validators.required),
-      [Controls.Schedule]: this._builder.control(DefaultSchuleOption.Now, Validators.required),
       [Controls.CronJob]: this._builder.control(''),
       [Controls.ExpiredAt]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
@@ -98,20 +106,15 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
         this.getClusterNamespaces(this.projectID, cluster);
       });
 
-    this.form
-      .get(Controls.Schedule)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(value => {
-        const cronJobControl = this.form.get(Controls.CronJob);
-        if (value === DefaultSchuleOption.Custom) {
-          cronJobControl.enable();
-          cronJobControl.setValidators([Validators.required, KmValidators.cronExpression()]);
-        } else {
-          cronJobControl.disable();
-          cronJobControl.clearValidators();
-        }
-        this._cdr.detectChanges();
-      });
+    const cronJobControl = this.form.get(Controls.CronJob);
+    if (this.type === BackupType.Schedule) {
+      cronJobControl.enable();
+      cronJobControl.setValidators([Validators.required, KmValidators.cronExpression()]);
+    } else {
+      cronJobControl.disable();
+      cronJobControl.clearValidators();
+    }
+    this._cdr.detectChanges();
 
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
   }
@@ -147,18 +150,20 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     this.labels = labels;
   }
 
-  isCustomBackup(): boolean {
-    const res = this.form.get(Controls.Schedule).value === DefaultSchuleOption.Custom;
-    return res;
+  isScheduleBackup(): boolean {
+    return this.type === BackupType.Schedule;
   }
 
-  getObservable(): Observable<ClusterBackup> {
-    return this._clusterBackupService.create(this.projectID, this._getClusterBackupConfig());
+  getObservable(): Observable<ClusterBackup | ClusterBackupSchedule> {
+    if (this.type === BackupType.Backup) {
+      return this._clusterBackupService.create(this.projectID, this._getClusterBackupConfig());
+    }
+    return this._clusterBackupService.createSchedule(this.projectID, this._getClusterScheduleBackupConfig());
   }
 
   onNext(backup: ClusterBackup): void {
     this._dialogRef.close(true);
-    this._notificationService.success(`Created the ${backup.name} cluster backup`);
+    this._notificationService.success(`Created the ${backup.name} ${this.type}`);
   }
 
   private _getClusterBackupConfig(): ClusterBackup {
@@ -179,5 +184,26 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     }
 
     return backup;
+  }
+  private _getClusterScheduleBackupConfig(): ClusterBackupSchedule {
+    const scheduleBackup: ClusterBackupSchedule = {
+      name: this.form.get(Controls.Name).value,
+      spec: {
+        schedule: this.form.get(Controls.CronJob).value,
+        template: {
+          includedNamespaces: this.form.get(Controls.NameSpaces).value,
+          storageLocation: 'default',
+          clusterid: this.form.get(Controls.Clusters).value,
+          labelSelector: {
+            matchLabels: this.labels,
+          },
+        },
+      },
+    };
+
+    if (this.form.get(Controls.ExpiredAt).value) {
+      scheduleBackup.spec.template[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;
+    }
+    return scheduleBackup;
   }
 }

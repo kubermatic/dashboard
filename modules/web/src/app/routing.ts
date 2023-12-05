@@ -101,6 +101,10 @@ function createRouting(): Routes {
           loadChildren: () => DynamicModule.ClusterBackups,
         },
         {
+          path: `projects/:projectID/${View.ClusterSchedule}`,
+          loadChildren: () => DynamicModule.ClusterBackups,
+        },
+        {
           path: `projects/:projectID/${View.ClusterRestore}`,
           loadChildren: () => DynamicModule.ClusterBackups,
         },

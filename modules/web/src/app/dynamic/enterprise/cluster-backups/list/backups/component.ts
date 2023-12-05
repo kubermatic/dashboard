@@ -1,22 +1,28 @@
-// Copyright 2023 The Kubermatic Kubernetes Platform contributors.
+//                Kubermatic Enterprise Read-Only License
+//                       Version 1.0 ("KERO-1.0”)
+//                   Copyright © 2023 Kubermatic GmbH
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// 1. You may only view, read and display for studying purposes the source
+//    code of the software licensed under this license, and, to the extent
+//    explicitly provided under this license, the binary code.
+// 2. Any use of the software which exceeds the foregoing right, including,
+//    without limitation, its execution, compilation, copying, modification
+//    and distribution, is expressly prohibited.
+// 3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+//    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+//    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+//    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+//    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// END OF TERMS AND CONDITIONS
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {AddClustersBackupsDialogComponent} from './add-dialog/component';
+import {AddClustersBackupsDialogComponent, BackupType} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
-import {Subject, filter, switchMap, take, takeUntil} from 'rxjs';
+import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
 import {MemberUtils, Permission} from '@app/shared/utils/member';
 import {Member} from '@app/shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
@@ -31,6 +37,7 @@ import {Cluster} from '@app/shared/entity/cluster';
 import {ClusterService} from '@app/core/services/cluster';
 import {View} from '@app/shared/entity/common';
 import {NotificationService} from '@app/core/services/notification';
+import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-backups-list',
@@ -42,6 +49,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
+  readonly backupType = BackupType;
   isAdmin = false;
   dataSource = new MatTableDataSource<ClusterBackup>();
   clusters: Cluster[];
@@ -52,7 +60,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   loadingBackups: boolean = false;
 
   get columns(): string[] {
-    return ['select', 'name', 'labels', 'cluster', 'destination', 'schedule', 'namespaces', 'created', 'actions'];
+    return ['select', 'status', 'name', 'labels', 'cluster', 'destination', 'TTL', 'namespaces', 'created', 'actions'];
   }
 
   get canAdd(): boolean {
@@ -81,7 +89,6 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          this._getBackupsList(this._selectedProject.id);
           this._getClusters(this._selectedProject.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
@@ -109,7 +116,6 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this.selectedBackups = this.selectAll ? this.dataSource.data : [];
   }
 
-  // check in the HTML file can i apply this method on the row instead of each element in the table
   checkSelected(backupID: string): boolean {
     const isSelected = !!this.selectedBackups.some(backup => backup.id === backupID);
     if (isSelected && this.selectedBackups.length) {
@@ -123,14 +129,15 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this._getBackupsList(this._selectedProject.id);
   }
 
-  clusterDisplayFn(clusterID: string): string {
-    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+  getStatus(phase: string): HealthStatus {
+    return getClusterBackupHealthStatus(phase);
   }
 
-  add(): void {
+  addBackup(): void {
     const config: MatDialogConfig = {
       data: {
         projectID: this._selectedProject?.id,
+        type: BackupType.Backup,
       },
     };
     this._matDialog
@@ -164,18 +171,18 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .pipe(
         switchMap(_ =>
-          backups.map(backup =>
-            this._clusterBackupService.delete(this._selectedProject.id, backup.spec.clusterid, backup.name)
+          forkJoin(
+            backups.map(backup => {
+              return this._clusterBackupService.delete(this._selectedProject.id, backup.spec.clusterid, backup.name);
+            })
           )
         )
       )
-      .subscribe(res => {
-        res.subscribe();
-        this.selectedBackups = [];
+      .subscribe(_ => {
         if (backups.length > 1) {
-          this._notificationService.success('Deleting the selected cluster backups');
+          this._notificationService.success('Deleting the selected backups');
         } else {
-          this._notificationService.success(`Deleting the ${backups[0].name} cluster backup`);
+          this._notificationService.success(`Deleting the ${backups[0].name} backup`);
         }
       });
   }
@@ -184,7 +191,13 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this._clusterService
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
+      .subscribe(clusters => {
+        this.clusters = clusters;
+        if (!this.selectedCluster) {
+          this.selectedCluster = clusters[0].id;
+          this._getBackupsList(this._selectedProject.id);
+        }
+      });
   }
 
   private _getBackupsList(projectID: string): void {
