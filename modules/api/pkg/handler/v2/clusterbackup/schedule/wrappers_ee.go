@@ -6,7 +6,7 @@ import (
 	"context"
 	"net/http"
 
-	clusterbackupschedule "k8c.io/dashboard/v2/pkg/ee/clusterbackupschedule"
+	clusterbackupschedule "k8c.io/dashboard/v2/pkg/ee/clusterbackup/schedule"
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
