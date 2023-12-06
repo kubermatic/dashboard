@@ -25,7 +25,7 @@ import (
 type clusterRestoreBody struct {
 	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
-	// ClusterRestoreSpec Spec of the cluster restore spec
+	// Spec of a Velero restore spec
 	Spec velerov1.RestoreSpec `json:"spec,omitempty"`
 }
 

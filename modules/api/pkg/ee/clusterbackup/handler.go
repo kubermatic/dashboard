@@ -26,7 +26,7 @@ import (
 type clusterBackupBody struct {
 	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
-	// ClusterBackupSpec Spec of a velero backup cluster backup
+	// Spec of a Velero cluster backup
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
 }
 

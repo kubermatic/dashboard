@@ -24,7 +24,8 @@ import (
 
 type cbsBody struct {
 	// Name of the cluster backup schedule
-	Name string                `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+	// Spec of a Velero backup schedule
 	Spec velerov1.ScheduleSpec `json:"spec,omitempty"`
 }
 
