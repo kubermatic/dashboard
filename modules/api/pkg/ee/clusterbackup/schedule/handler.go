@@ -35,6 +35,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	clusterbackup "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backup"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -70,10 +71,6 @@ type clusterScheduleBackupUISpec struct {
 	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
 }
 
-const (
-	userClusterBackupNamespace = "velero"
-)
-
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	req := request.(createClusterBackupScheduleReq)
@@ -81,7 +78,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	backupSchedule := &velerov1.Schedule{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Body.Name,
-			Namespace: userClusterBackupNamespace,
+			Namespace: clusterbackup.UserClusterBackupNamespace,
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
 	}
@@ -129,7 +126,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 
 	scheduleList := &velerov1.ScheduleList{}
-	if err := client.List(ctx, scheduleList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
+	if err := client.List(ctx, scheduleList, ctrlruntimeclient.InNamespace(clusterbackup.UserClusterBackupNamespace)); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	var uiScheduleBackupList []clusterScheduleBackupUI
@@ -181,7 +178,7 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	}
 
 	backupSchedule := &velerov1.Schedule{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupScheduleID, Namespace: userClusterBackupNamespace}, backupSchedule); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupScheduleID, Namespace: clusterbackup.UserClusterBackupNamespace}, backupSchedule); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return backupSchedule, nil
@@ -220,7 +217,7 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, err
 	}
 	backupSchedule := &velerov1.Schedule{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupScheduleID, Namespace: userClusterBackupNamespace}, backupSchedule); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackupScheduleID, Namespace: clusterbackup.UserClusterBackupNamespace}, backupSchedule); err != nil {
 		if apierrors.IsNotFound(err) {
 			return nil, nil
 		}

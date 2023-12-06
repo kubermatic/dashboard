@@ -55,7 +55,7 @@ type clusterBackupBody struct {
 }
 
 const (
-	userClusterBackupNamespace = "velero"
+	UserClusterBackupNamespace = "velero"
 )
 
 type clusterBackupUI struct {
@@ -81,7 +81,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	clusterBackup := &velerov1.Backup{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Body.Name,
-			Namespace: userClusterBackupNamespace,
+			Namespace: UserClusterBackupNamespace,
 			Labels:    req.Body.Spec.Labels,
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
@@ -130,7 +130,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 
 	clusterBackupList := &velerov1.BackupList{}
-	if err := client.List(ctx, clusterBackupList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
+	if err := client.List(ctx, clusterBackupList, ctrlruntimeclient.InNamespace(UserClusterBackupNamespace)); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
@@ -181,7 +181,7 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	}
 
 	clusterBackup := &velerov1.Backup{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackup, Namespace: userClusterBackupNamespace}, clusterBackup); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackup, Namespace: UserClusterBackupNamespace}, clusterBackup); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterBackup, nil
@@ -274,7 +274,7 @@ func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request
 func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) error {
 	backup := &velerov1.Backup{}
 
-	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: userClusterBackupNamespace}, backup); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: UserClusterBackupNamespace}, backup); err != nil {
 		if apierrors.IsNotFound(err) {
 			return nil
 		}

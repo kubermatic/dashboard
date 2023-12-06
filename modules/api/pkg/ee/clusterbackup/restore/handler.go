@@ -35,6 +35,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	clusterbackup "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backup"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -69,17 +70,13 @@ type clusterRestoreUISpec struct {
 	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
 }
 
-const (
-	userClusterBackupNamespace = "velero"
-)
-
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
 	req := request.(createClusterRestoreReq)
 
 	restore := &velerov1.Restore{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Body.Name,
-			Namespace: userClusterBackupNamespace,
+			Namespace: clusterbackup.UserClusterBackupNamespace,
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
 	}
@@ -126,7 +123,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 	clusterRestoreList := &velerov1.RestoreList{}
 
-	if err := client.List(ctx, clusterRestoreList, ctrlruntimeclient.InNamespace(userClusterBackupNamespace)); err != nil {
+	if err := client.List(ctx, clusterRestoreList, ctrlruntimeclient.InNamespace(clusterbackup.UserClusterBackupNamespace)); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
@@ -179,7 +176,7 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	}
 
 	clusterRestore := &velerov1.Restore{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: clusterbackup.UserClusterBackupNamespace}, clusterRestore); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterRestore, nil
@@ -219,7 +216,7 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, err
 	}
 	clusterRestore := &velerov1.Restore{}
-	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: userClusterBackupNamespace}, clusterRestore); err != nil {
+	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: clusterbackup.UserClusterBackupNamespace}, clusterRestore); err != nil {
 		if apierrors.IsNotFound(err) {
 			// return nil, nil
 		}
