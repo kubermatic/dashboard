@@ -58,6 +58,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   selectAll: boolean = false;
   selectedCluster: string;
   loadingBackups: boolean = false;
+  currentSearchfield: string;
 
   get columns(): string[] {
     return ['select', 'status', 'name', 'labels', 'cluster', 'destination', 'TTL', 'namespaces', 'created', 'actions'];
@@ -90,6 +91,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
         switchMap(project => {
           this._selectedProject = project;
           this._getClusters(this._selectedProject.id);
+          this._getBackupsList(this._selectedProject.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
@@ -127,6 +129,17 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   onClusterChange(clusterID: string): void {
     this.selectedCluster = clusterID;
     this._getBackupsList(this._selectedProject.id);
+  }
+
+  clusterDisplayFn(clusterID: string): string {
+    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+  }
+
+  onSearch(query: string): void {
+    this.currentSearchfield = query;
+    this.dataSource.data = this.clusterBackups.filter(clusterbackup => clusterbackup.name.includes(query));
+    this.selectedBackups = [];
+    this.selectAll = false;
   }
 
   getStatus(phase: string): HealthStatus {
@@ -179,6 +192,8 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
+        this.selectedBackups = [];
+        this.selectAll = false;
         if (backups.length > 1) {
           this._notificationService.success('Deleting the selected backups');
         } else {
@@ -208,7 +223,11 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.clusterBackups = data;
-          this.dataSource.data = data;
+          if (this.currentSearchfield) {
+            this.dataSource.data = data.filter(clusterbackup => clusterbackup.name.includes(this.currentSearchfield));
+          } else {
+            this.dataSource.data = data;
+          }
           this.loadingBackups = false;
         });
     } else {

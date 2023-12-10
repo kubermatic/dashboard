@@ -24,8 +24,6 @@ export class ClusterBackupService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  // check the neeed of the clusterID in Endpoints
-
   listClusterBackups(projectID: string, clusterID: string): Observable<ClusterBackup[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup`;
     return this._http.get<ClusterBackup[]>(url).pipe(catchError(() => of<ClusterBackup[]>([])));

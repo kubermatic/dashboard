@@ -30,17 +30,19 @@ END OF TERMS AND CONDITIONS
     </mat-card-header>
     <div fxLayout="row"
          class="header">
-      <div class="filter-title">Select cluster</div>
-
-      <mat-form-field class="filter-field">
-        <mat-label>Clusters</mat-label>
-        <mat-select [(ngModel)]="selectedCluster"
-                    (selectionChange)="onClusterChange($event.value)"
-                    panelClass="km-add-dialog-dropdown">
-          <mat-option *ngFor="let cluster of clusters"
-                      [value]="cluster.id">{{cluster.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <km-combobox class="filter-field"
+                   [selected]="selectedCluster"
+                   filterBy="id"
+                   [valueFormatter]="clusterDisplayFn.bind(this)"
+                   (changed)="onClusterChange($event)"
+                   label="Clusters"
+                   [options]="clusters">
+        <div *option="let cluster">
+          {{cluster.name}}
+        </div>
+      </km-combobox>
+      <km-search-field class="search-field"
+                       (queryChange)="onSearch($event)"></km-search-field>
       <div fxFlex></div>
       <div class="action-button">
         <button mat-flat-button
@@ -77,7 +79,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element"
             class="km-cell p-5">
           <mat-checkbox (change)="onSelectedScheduleBackup(element)"
-                        [checked]="selectAll" />
+                        [checked]="checkSelected(element.id)" />
         </td>
       </ng-container>
       <ng-container matColumnDef="status">

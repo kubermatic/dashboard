@@ -173,11 +173,14 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
         includedNamespaces: this.form.get(Controls.NameSpaces).value,
         storageLocation: 'default',
         clusterid: this.form.get(Controls.Clusters).value,
-        labelSelector: {
-          matchLabels: this.labels,
-        },
       },
     };
+
+    if (this.labels) {
+      backup.spec.labelSelector = {
+        matchLabels: this.labels,
+      };
+    }
 
     if (this.form.get(Controls.ExpiredAt).value) {
       backup.spec[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;
@@ -194,12 +197,15 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
           includedNamespaces: this.form.get(Controls.NameSpaces).value,
           storageLocation: 'default',
           clusterid: this.form.get(Controls.Clusters).value,
-          labelSelector: {
-            matchLabels: this.labels,
-          },
         },
       },
     };
+
+    if (this.labels) {
+      scheduleBackup.spec.template.labelSelector = {
+        matchLabels: this.labels,
+      };
+    }
 
     if (this.form.get(Controls.ExpiredAt).value) {
       scheduleBackup.spec.template[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;

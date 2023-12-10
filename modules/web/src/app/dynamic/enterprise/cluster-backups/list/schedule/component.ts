@@ -56,9 +56,10 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   selectAll: boolean = false;
   selectedCluster: string;
   loadingBackups: boolean = false;
+  currentSearchfield: string;
 
   get columns(): string[] {
-    const columns = [
+    return [
       'select',
       'status',
       'name',
@@ -70,7 +71,6 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
       'created',
       'actions',
     ];
-    return columns;
   }
 
   get canAdd(): boolean {
@@ -100,6 +100,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
         switchMap(project => {
           this._selectedProject = project;
           this._getClusters(this._selectedProject.id);
+          this._getScheduleBackupsList(this._selectedProject.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
@@ -137,6 +138,17 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   onClusterChange(clusterID: string): void {
     this.selectedCluster = clusterID;
     this._getScheduleBackupsList(this._selectedProject.id);
+  }
+
+  clusterDisplayFn(clusterID: string): string {
+    return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+  }
+
+  onSearch(query: string): void {
+    this.currentSearchfield = query;
+    this.dataSource.data = this.clusterScheduleBackups.filter(clusterSchedule => clusterSchedule.name.includes(query));
+    this.selectedScheduleBackups = [];
+    this.selectAll = false;
   }
 
   getStatus(phase: string): HealthStatus {
@@ -183,6 +195,8 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
+        this.selectedScheduleBackups = [];
+        this.selectAll = false;
         if (scheduleBackups.length > 1) {
           this._notificationService.success('Deleting the selected schedule backups');
         } else {
@@ -212,7 +226,13 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.clusterScheduleBackups = data;
-          this.dataSource.data = data;
+          if (this.currentSearchfield) {
+            this.dataSource.data = data.filter(clusterSchedule =>
+              clusterSchedule.name.includes(this.currentSearchfield)
+            );
+          } else {
+            this.dataSource.data = data;
+          }
           this.loadingBackups = false;
         });
     } else {

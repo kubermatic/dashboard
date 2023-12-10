@@ -35,7 +35,7 @@ import {Member} from '@app/shared/entity/member';
 import {GroupConfig} from '@app/shared/model/Config';
 import {View} from '@app/shared/entity/common';
 import {UserService} from '@app/core/services/user';
-import { HealthStatus, getClusterBackupHealthStatus } from '@app/shared/utils/health-status';
+import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-restore-list',
@@ -55,6 +55,7 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   selectAll: boolean = false;
   selectedCluster: string;
   loadingRestores: boolean = false;
+  currentSearchfield: string;
 
   get columns(): string[] {
     return ['select', 'status', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
@@ -86,8 +87,8 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(project => {
           this._selectedProject = project;
-          this._getRestoreList(this._selectedProject.id);
           this._getClusters(this._selectedProject.id);
+          this._getRestoreList(this._selectedProject.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
@@ -114,7 +115,6 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     this.selectedRestores = this.selectAll ? this.dataSource.data : [];
   }
 
-  // check in the HTML file can i apply this method on the row instead of each element in the table
   checkSelected(restoreID: string): boolean {
     const isSelected = this.selectedRestores.some(restore => restore.id === restoreID);
     if (isSelected && this.selectedRestores.length) {
@@ -123,13 +123,20 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  onRestoreChange(clusterID: string): void {
+  onClusterChange(clusterID: string): void {
     this.selectedCluster = clusterID;
     this._getRestoreList(this._selectedProject.id);
   }
 
   clusterDisplayFn(clusterID: string): string {
     return this.clusters?.find(cluster => cluster.id === clusterID)?.name ?? '';
+  }
+
+  onSearch(query: string): void {
+    this.currentSearchfield = query;
+    this.dataSource.data = this.clusterRestores.filter(clusterbackup => clusterbackup.name.includes(query));
+    this.selectedRestores = [];
+    this.selectAll = false;
   }
 
   getStatus(phase: string): HealthStatus {
@@ -158,6 +165,7 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
       )
       .subscribe(_ => {
         this.selectedRestores = [];
+        this.selectAll = false;
         if (restores.length > 1) {
           this._notificationService.success('Deleting the selected restores');
         } else {
@@ -170,7 +178,13 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     this._clusterService
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
+      .subscribe(clusters => {
+        this.clusters = clusters;
+        if (!this.selectedCluster) {
+          this.selectedCluster = clusters[0].id;
+          this._getRestoreList(this._selectedProject.id);
+        }
+      });
   }
 
   private _getRestoreList(projectID: string): void {
@@ -182,7 +196,11 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.clusterRestores = data;
-          this.dataSource.data = data;
+          if (this.currentSearchfield) {
+            this.dataSource.data = data.filter(clusterbackup => clusterbackup.name.includes(this.currentSearchfield));
+          } else {
+            this.dataSource.data = data;
+          }
           this.loadingRestores = false;
         });
     } else {

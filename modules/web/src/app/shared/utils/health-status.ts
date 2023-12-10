@@ -108,10 +108,9 @@ export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdB
 
 export function getClusterBackupHealthStatus(phase: string): HealthStatus {
   const statusError: string[] = ['FailedValidation', 'Failed'];
-  const statusRuning = ['New', 'InProgress', 'Enabled'];
+  const statusRuning = ['New', 'Completed', 'Enabled'];
   const statusWarning = ['WaitingForPluginOperationsPartiallyFailed', 'PartiallyFailed', 'FinalizingPartiallyFailed'];
-  const statusPending = ['WaitingForPluginOperations', 'FinalizingafterPluginOperations'];
-  const statusStopped = ['Completed'];
+  const statusPending = ['WaitingForPluginOperations', 'FinalizingafterPluginOperations', 'InProgress'];
   if (statusError.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Error);
   } else if (statusPending.includes(phase)) {
@@ -120,8 +119,6 @@ export function getClusterBackupHealthStatus(phase: string): HealthStatus {
     return new HealthStatus(phase, StatusIcon.Running);
   } else if (statusWarning.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Warning);
-  } else if (statusStopped.includes(phase)) {
-    return new HealthStatus(phase, StatusIcon.Stopped);
   }
   return new HealthStatus(phase, StatusIcon.Unknown);
 }
