@@ -132,7 +132,7 @@
     "prettier": "^3.0.3",
     "start-server-and-test": "2.0.0",
     "stream": "0.0.2",
-    "stylelint": "15.10.3",
+    "stylelint": "16.0.2",
     "stylelint-config-standard-scss": "11.1.0",
     "stylelint-no-unsupported-browser-features": "7.0.0",
     "stylelint-order": "6.0.3",
