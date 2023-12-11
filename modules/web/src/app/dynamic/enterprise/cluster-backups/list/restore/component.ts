@@ -56,9 +56,14 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   selectedCluster: string;
   loadingRestores: boolean = false;
   currentSearchfield: string;
+  showRowDetails: Map<string, boolean> = new Map<string, boolean>();
 
   get columns(): string[] {
     return ['select', 'status', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
+  }
+
+  get toggleableColumn(): string[] {
+    return ['nameSpacesDetails'];
   }
 
   get canAdd(): boolean {
@@ -143,6 +148,14 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     return getClusterBackupHealthStatus(phase);
   }
 
+  toggelRestoreDetail(backupName: string): void {
+    this.showRowDetails?.set(backupName, !this.showRowDetails?.get(backupName));
+  }
+
+  isRestoreToggeled(backupName: string): boolean {
+    return this.showRowDetails?.get(backupName);
+  }
+
   deleteRestores(restores: ClusterRestore[]): void {
     const config: MatDialogConfig = {
       data: {
@@ -201,6 +214,11 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
           } else {
             this.dataSource.data = data;
           }
+          this.dataSource.data.map(restore => {
+            if (!this.showRowDetails?.get(restore.name)) {
+              this.showRowDetails?.set(restore.name, false);
+            }
+          });
           this.loadingRestores = false;
         });
     } else {

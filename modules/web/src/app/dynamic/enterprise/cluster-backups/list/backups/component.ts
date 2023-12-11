@@ -59,9 +59,14 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   selectedCluster: string;
   loadingBackups: boolean = false;
   currentSearchfield: string;
+  showRowDetails: Map<string, boolean> = new Map<string, boolean>();
 
   get columns(): string[] {
     return ['select', 'status', 'name', 'labels', 'cluster', 'destination', 'TTL', 'namespaces', 'created', 'actions'];
+  }
+
+  get toggleableColumn(): string[] {
+    return ['nameSpacesDetails'];
   }
 
   get canAdd(): boolean {
@@ -146,6 +151,14 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     return getClusterBackupHealthStatus(phase);
   }
 
+  toggelBackupDetail(backupName: string): void {
+    this.showRowDetails?.set(backupName, !this.showRowDetails?.get(backupName));
+  }
+
+  isBackupToggeled(backupName: string): boolean {
+    return this.showRowDetails?.get(backupName);
+  }
+
   addBackup(): void {
     const config: MatDialogConfig = {
       data: {
@@ -228,6 +241,11 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
           } else {
             this.dataSource.data = data;
           }
+          this.dataSource.data.map(backup => {
+            if (!this.showRowDetails?.get(backup.name)) {
+              this.showRowDetails?.set(backup.name, false);
+            }
+          });
           this.loadingBackups = false;
         });
     } else {

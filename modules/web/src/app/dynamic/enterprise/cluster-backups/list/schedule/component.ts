@@ -57,6 +57,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   selectedCluster: string;
   loadingBackups: boolean = false;
   currentSearchfield: string;
+  showRowDetails: Map<string, boolean> = new Map<string, boolean>();
 
   get columns(): string[] {
     return [
@@ -71,6 +72,10 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
       'created',
       'actions',
     ];
+  }
+
+  get toggleableColumn(): string[] {
+    return ['nameSpacesDetails'];
   }
 
   get canAdd(): boolean {
@@ -155,6 +160,14 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
     return getClusterBackupHealthStatus(phase);
   }
 
+  toggelScheduleDetail(scheduleName: string): void {
+    this.showRowDetails?.set(scheduleName, !this.showRowDetails?.get(scheduleName));
+  }
+
+  isScheduleToggeled(scheduleName: string): boolean {
+    return this.showRowDetails?.get(scheduleName);
+  }
+
   addScheduleBackup(): void {
     const config: MatDialogConfig = {
       data: {
@@ -233,6 +246,11 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
           } else {
             this.dataSource.data = data;
           }
+          this.dataSource.data.map(schedule => {
+            if (!this.showRowDetails?.get(schedule.name)) {
+              this.showRowDetails?.set(schedule.name, false);
+            }
+          });
           this.loadingBackups = false;
         });
     } else {
