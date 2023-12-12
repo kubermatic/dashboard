@@ -68,6 +68,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
         }
         return application;
       }) || [];
+    this._onApplicationsChanged();
   }
 
   onApplicationAdded(application: Application): void {
