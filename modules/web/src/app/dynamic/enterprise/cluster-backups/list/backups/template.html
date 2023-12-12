@@ -118,7 +118,7 @@ END OF TERMS AND CONDITIONS
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <km-labels [labels]="element.spec.labels"></km-labels>
+          <km-labels [labels]="element.spec?.labelSelector?.matchLabels"></km-labels>
         </td>
       </ng-container>
 
@@ -176,7 +176,7 @@ END OF TERMS AND CONDITIONS
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.includedNamespaces.length}}</span>
+          <span>{{element.spec.includedNamespaces?.length ?? 'all'}}</span>
         </td>
       </ng-container>
 
@@ -239,7 +239,7 @@ END OF TERMS AND CONDITIONS
           (click)="toggelBackupDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isBackupToggeled(element.name) ? '' : 'km-hidden'"
+          [ngClass]="isBackupToggeled(element.name) && element.spec.includedNamespaces?.length ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

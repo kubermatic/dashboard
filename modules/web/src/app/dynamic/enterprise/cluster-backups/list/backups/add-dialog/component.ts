@@ -27,15 +27,15 @@ import {Cluster} from '@shared/entity/cluster';
 import {ClusterService} from '@core/services/cluster';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
-import {ClusterBackup, ClusterBackupSchedule} from '@app/shared/entity/backup';
+import {
+  BackupType,
+  ClusterBackup,
+  CreateClusterBackupSchedule,
+  StorageLocationTempName,
+} from '@app/shared/entity/backup';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {KmValidators} from '@app/shared/validators/validators';
-
-export enum BackupType {
-  Backup = 'Backup',
-  Schedule = 'Schedule',
-}
 
 enum Controls {
   Name = 'name',
@@ -87,7 +87,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.Destination]: this._builder.control('', Validators.required),
       [Controls.Clusters]: this._builder.control('', Validators.required),
-      [Controls.NameSpaces]: this._builder.control([], Validators.required),
+      [Controls.NameSpaces]: this._builder.control([]),
       [Controls.CronJob]: this._builder.control(''),
       [Controls.ExpiredAt]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
@@ -154,7 +154,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     return this.type === BackupType.Schedule;
   }
 
-  getObservable(): Observable<ClusterBackup | ClusterBackupSchedule> {
+  getObservable(): Observable<ClusterBackup | CreateClusterBackupSchedule> {
     if (this.type === BackupType.Backup) {
       return this._clusterBackupService.create(this.projectID, this._getClusterBackupConfig());
     }
@@ -170,11 +170,14 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
       spec: {
-        includedNamespaces: this.form.get(Controls.NameSpaces).value,
-        storageLocation: 'default',
+        storageLocation: StorageLocationTempName,
         clusterid: this.form.get(Controls.Clusters).value,
       },
     };
+
+    if (this.form.get(Controls.NameSpaces).value.length) {
+      backup.spec.includedNamespaces = this.form.get(Controls.NameSpaces).value;
+    }
 
     if (this.labels) {
       backup.spec.labelSelector = {
@@ -188,14 +191,14 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
 
     return backup;
   }
-  private _getClusterScheduleBackupConfig(): ClusterBackupSchedule {
-    const scheduleBackup: ClusterBackupSchedule = {
+  private _getClusterScheduleBackupConfig(): CreateClusterBackupSchedule {
+    const scheduleBackup: CreateClusterBackupSchedule = {
       name: this.form.get(Controls.Name).value,
       spec: {
         schedule: this.form.get(Controls.CronJob).value,
         template: {
           includedNamespaces: this.form.get(Controls.NameSpaces).value,
-          storageLocation: 'default',
+          storageLocation: StorageLocationTempName,
           clusterid: this.form.get(Controls.Clusters).value,
         },
       },

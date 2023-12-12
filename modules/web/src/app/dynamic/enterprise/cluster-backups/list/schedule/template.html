@@ -117,7 +117,7 @@ END OF TERMS AND CONDITIONS
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <km-labels [labels]="element.spec.labels"></km-labels>
+          <km-labels [labels]="element.spec?.labelSelector?.matchLabels"></km-labels>
         </td>
       </ng-container>
 

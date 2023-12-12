@@ -26,7 +26,7 @@ import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {ProjectService} from '@app/core/services/project';
 import {UserService} from '@app/core/services/user';
-import {ClusterBackup} from '@app/shared/entity/backup';
+import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {View} from '@app/shared/entity/common';
 import {Member} from '@app/shared/entity/member';
@@ -36,7 +36,7 @@ import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/heal
 import {MemberUtils, Permission} from '@app/shared/utils/member';
 import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
 import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
-import {AddClustersBackupsDialogComponent, BackupType} from '../backups/add-dialog/component';
+import {AddClustersBackupsDialogComponent} from '../backups/add-dialog/component';
 
 @Component({
   selector: 'km-cluster-schedule-backups-list',

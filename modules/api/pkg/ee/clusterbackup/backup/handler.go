@@ -65,13 +65,13 @@ type clusterBackupUI struct {
 }
 
 type clusterBackupUISpec struct {
-	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
-	StorageLocation    string            `json:"storageLocation,omitempty"`
-	ClusterID          string            `json:"clusterid,omitempty"`
-	TTL                string            `json:"ttl,omitempty"`
-	Labels             map[string]string `json:"labels,omitempty"`
-	Status             string            `json:"status,omitempty"`
-	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
+	IncludedNamespaces []string              `json:"includedNamespaces,omitempty"`
+	StorageLocation    string                `json:"storageLocation,omitempty"`
+	ClusterID          string                `json:"clusterid,omitempty"`
+	TTL                string                `json:"ttl,omitempty"`
+	Labels             *metav1.LabelSelector `json:"labelSelector,omitempty"`
+	Status             string                `json:"status,omitempty"`
+	CreatedAt          apiv1.Time            `json:"createdAt,omitempty"`
 }
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -145,7 +145,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				StorageLocation:    item.Spec.StorageLocation,
 				ClusterID:          req.ClusterID,
 				TTL:                item.Spec.TTL.Duration.String(),
-				Labels:             item.GetObjectMeta().GetLabels(),
+				Labels:             item.Spec.LabelSelector,
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
 			},

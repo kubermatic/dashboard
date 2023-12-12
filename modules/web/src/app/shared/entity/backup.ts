@@ -133,6 +133,14 @@ export class S3BackupCredentials {
   secretAccessKey: string;
 }
 
+export enum BackupType {
+  Backup = 'Backup',
+  Schedule = 'Schedule',
+}
+
+// this variable is temporary, it will be removed after adding the storageLocation implementation
+export const StorageLocationTempName = 'default';
+
 export class ClusterBackup {
   name: string;
   id?: string;
@@ -140,7 +148,7 @@ export class ClusterBackup {
 }
 
 export class ClusterBackupSpec {
-  includedNamespaces: string[] | string;
+  includedNamespaces?: string[] | string;
   storageLocation: string;
   clusterid: string;
   ttl?: string;
@@ -152,7 +160,7 @@ export class ClusterBackupSpec {
   createdAt?: string;
 }
 
-export class ClusterBackupSchedule {
+export class CreateClusterBackupSchedule {
   name: string;
   id?: string;
   spec: ClusterBackupScheduleSpec;

@@ -20,7 +20,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {AddClustersBackupsDialogComponent, BackupType} from './add-dialog/component';
+import {AddClustersBackupsDialogComponent} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
 import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
 import {MemberUtils, Permission} from '@app/shared/utils/member';
@@ -29,7 +29,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {ProjectService} from '@core/services/project';
 import {Project} from '@shared/entity/project';
 import {MatTableDataSource} from '@angular/material/table';
-import {ClusterBackup} from '@app/shared/entity/backup';
+import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
 import {AddRestoreDialogComponent} from '../restore/add-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';

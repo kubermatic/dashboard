@@ -61,14 +61,14 @@ type clusterScheduleBackupUI struct {
 }
 
 type clusterScheduleBackupUISpec struct {
-	IncludedNamespaces []string          `json:"includedNamespaces,omitempty"`
-	StorageLocation    string            `json:"storageLocation,omitempty"`
-	ClusterID          string            `json:"clusterid,omitempty"`
-	TTL                string            `json:"ttl,omitempty"`
-	Schedule           string            `json:"schedule"`
-	Labels             map[string]string `json:"labels,omitempty"`
-	Status             string            `json:"status,omitempty"`
-	CreatedAt          apiv1.Time        `json:"createdAt,omitempty"`
+	IncludedNamespaces []string              `json:"includedNamespaces,omitempty"`
+	StorageLocation    string                `json:"storageLocation,omitempty"`
+	ClusterID          string                `json:"clusterid,omitempty"`
+	TTL                string                `json:"ttl,omitempty"`
+	Schedule           string                `json:"schedule"`
+	Labels             *metav1.LabelSelector `json:"labelSelector,omitempty"`
+	Status             string                `json:"status,omitempty"`
+	CreatedAt          apiv1.Time            `json:"createdAt,omitempty"`
 }
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -141,7 +141,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				StorageLocation:    item.Spec.Template.StorageLocation,
 				ClusterID:          req.ClusterID,
 				TTL:                item.Spec.Template.TTL.OpenAPISchemaFormat(),
-				Labels:             item.GetObjectMeta().GetLabels(),
+				Labels:             item.Spec.Template.LabelSelector,
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
 			},
