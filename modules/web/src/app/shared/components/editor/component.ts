@@ -50,8 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
    */
   options: any = {
     contextmenu: false,
-    fontFamily: 'Inconsolata, monospace',
-    fontSize: 14,
+    fontSize: 12,
     lineNumbersMinChars: 4,
     minimap: {enabled: false},
     scrollbar: {vertical: 'hidden'},
