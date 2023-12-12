@@ -48,7 +48,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   constructor(
     wizard: WizardService,
     private readonly _builder: FormBuilder,
-    private readonly applicationService: ApplicationService
+    private readonly _applicationService: ApplicationService
   ) {
     super(wizard, 'Applications');
   }
@@ -58,7 +58,16 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
       [Controls.Applications]: this._builder.control(''),
     });
 
-    this.applications = this.applicationService.applications;
+    this.applications =
+      this._applicationService.applications?.map(application => {
+        if (!application.id) {
+          application.id = `${application.name}/${application.spec.namespace.name}`;
+        }
+        if (application.creationTimestamp) {
+          delete application.creationTimestamp;
+        }
+        return application;
+      }) || [];
   }
 
   onApplicationAdded(application: Application): void {
@@ -85,6 +94,6 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   }
 
   private _onApplicationsChanged() {
-    this.applicationService.applications = this.applications.map(application => ({...application, id: null}));
+    this._applicationService.applications = this.applications.map(application => ({...application, id: null}));
   }
 }
