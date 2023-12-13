@@ -62,11 +62,3 @@ func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter,
 func decodeDeleteClusterBackupReq(_ context.Context, _ *http.Request) (interface{}, error) {
 	return nil, nil
 }
-
-func projectListEndpoint(_ context.Context, _ interface{}) (interface{}, error) {
-	return nil, nil
-}
-
-func decodeListProjectClustersBackupConfigReq(_ context.Context, _ *http.Request) (interface{}, error) {
-	return nil, nil
-}

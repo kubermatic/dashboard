@@ -175,7 +175,7 @@ END OF TERMS AND CONDITIONS
         <td mat-cell
             *matCellDef="let element"
             [ngClass]="{'km-disabled': checkSelected(element.id)}">
-          <span>{{element.spec.includedNamespaces.length}}</span>
+          <span>{{element.spec.includedNamespaces?.length ?? 'all'}}</span>
         </td>
       </ng-container>
 

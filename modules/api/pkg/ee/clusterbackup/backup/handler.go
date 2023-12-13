@@ -248,29 +248,6 @@ func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface
 	return req, nil
 }
 
-func ProjectListEndpoint(ctx context.Context, request interface{}) (interface{}, error) {
-	var projectBackupObjectsArr []clusterBackupBody
-
-	return projectBackupObjectsArr, nil
-}
-
-type listProjectClustersBackupConfigReq struct {
-	common.ProjectReq
-}
-
-func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req listProjectClustersBackupConfigReq
-
-	pr, err := common.DecodeProjectRequest(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	req.ProjectReq = pr.(common.ProjectReq)
-
-	return req, nil
-}
-
 func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) error {
 	backup := &velerov1.Backup{}
 

@@ -56,7 +56,6 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 
 func DecodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
 	return decodeGetRestoreBackupConfigReq(c, r)
-
 }
 
 func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
@@ -66,7 +65,6 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 	}
 }
 
-// check the name
 func DecodeDeleteClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
 	return decodeDeleteClusterBackupScheduleReq(c, r)
 }

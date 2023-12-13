@@ -147,7 +147,6 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 
 	return uiClusterRestoreList, nil
-
 }
 
 type listClusterRestoreReq struct {
@@ -164,7 +163,6 @@ func DecodeListClusterRestoreReq(c context.Context, r *http.Request) (interface{
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 	return req, nil
-
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
@@ -180,7 +178,6 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return clusterRestore, nil
-
 }
 
 type getClusterRestoreReq struct {
@@ -205,7 +202,6 @@ func DecodeGetRestoreBackupReq(c context.Context, r *http.Request) (interface{},
 		return nil, fmt.Errorf("'clusterrestore' parameter is required but was not provided")
 	}
 	return req, nil
-
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
@@ -218,7 +214,7 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	clusterRestore := &velerov1.Restore{}
 	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterRestoreID, Namespace: clusterbackup.UserClusterBackupNamespace}, clusterRestore); err != nil {
 		if apierrors.IsNotFound(err) {
-			// return nil, nil
+			return nil, nil
 		}
 		return nil, err
 	}
@@ -226,7 +222,6 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return nil, nil
-
 }
 
 type deleteClusterRestoreReq struct {

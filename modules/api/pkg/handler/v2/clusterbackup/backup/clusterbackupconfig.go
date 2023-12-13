@@ -68,13 +68,3 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
 	return decodeDeleteClusterBackupReq(c, r)
 }
-
-func ProjectListEndpoint() endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return projectListEndpoint(ctx, request)
-	}
-}
-
-func DecodeListProjectClustersBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
-	return decodeListProjectClustersBackupConfigReq(c, r)
-}

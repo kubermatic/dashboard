@@ -1306,10 +1306,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{clusterBackup}").
 		Handler(r.deleteClusterBackup())
 
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusterbackup").
-		Handler(r.listProjectClustersBackup())
-
 	// Defines a set of HTTP endpoints for managing cluster restore configs
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore").
@@ -7619,7 +7615,7 @@ func (r Routing) patchAllowedRegistry() http.Handler {
 	)
 }
 
-// Cluster Backup
+// Cluster Backup.
 func (r Routing) createClusterBackup() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -7676,18 +7672,7 @@ func (r Routing) deleteClusterBackup() http.Handler {
 	)
 }
 
-func (r Routing) listProjectClustersBackup() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-		)(clusterbackup.ProjectListEndpoint()),
-		clusterbackup.DecodeListProjectClustersBackupConfigReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// Cluster Restore
+// Cluster Restore.
 func (r Routing) createClusterRestore() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -7739,7 +7724,7 @@ func (r Routing) deleteClusterRestore() http.Handler {
 	)
 }
 
-// Cluster backup schedule
+// Cluster backup schedule.
 func (r Routing) createClusterBackupSchedule() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
