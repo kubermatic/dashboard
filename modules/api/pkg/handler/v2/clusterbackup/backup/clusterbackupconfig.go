@@ -26,9 +26,9 @@ import (
 )
 
 func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return createEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
+		return createEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 	}
 }
 
@@ -37,9 +37,9 @@ func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface
 }
 
 func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return listEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
+		return listEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 	}
 }
 
@@ -48,9 +48,9 @@ func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}
 }
 
 func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return getEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
+		return getEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 	}
 }
 
@@ -59,9 +59,9 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 }
 
 func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return deleteEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider)
+		return deleteEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 	}
 }
 

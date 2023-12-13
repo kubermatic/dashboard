@@ -70,7 +70,12 @@ type clusterRestoreUISpec struct {
 	CreatedAt          apiv1.Time            `json:"createdAt,omitempty"`
 }
 
-func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(createClusterRestoreReq)
 
 	restore := &velerov1.Restore{
@@ -115,7 +120,12 @@ func DecodeCreateClusterRestoreReq(c context.Context, r *http.Request) (interfac
 	return req, nil
 }
 
-func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(listClusterRestoreReq)
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -165,7 +175,12 @@ func DecodeListClusterRestoreReq(c context.Context, r *http.Request) (interface{
 	return req, nil
 }
 
-func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(getClusterRestoreReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -204,7 +219,12 @@ func DecodeGetRestoreBackupReq(c context.Context, r *http.Request) (interface{},
 	return req, nil
 }
 
-func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(deleteClusterRestoreReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -243,4 +263,18 @@ func DecodeDeleteClusterRestoreReq(c context.Context, r *http.Request) (interfac
 		return nil, fmt.Errorf("'clusterrestore' parameter is required but was not provided")
 	}
 	return req, nil
+}
+
+func isClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return common.KubernetesErrorToHTTPError(err)
+	}
+
+	if !*globalSettings.Spec.EnableClusterBackups {
+		return fmt.Errorf("cluster backup feature is disabled by the admin")
+	}
+
+	return nil
 }

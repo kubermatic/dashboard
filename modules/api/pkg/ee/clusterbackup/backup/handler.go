@@ -75,7 +75,11 @@ type clusterBackupUISpec struct {
 }
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
 	req := request.(createClusterBackupReq)
 
 	clusterBackup := &velerov1.Backup{
@@ -121,7 +125,12 @@ func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface
 }
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(listClusterBackupReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -172,7 +181,12 @@ func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(getClusterBackupReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -213,7 +227,12 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+
+	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(deleteClusterBackupReq)
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
@@ -277,4 +296,18 @@ func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Cli
 	}
 	print(delReq)
 	return veleroclient.CreateRetryGenerateName(client, ctx, delReq)
+}
+
+func isClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return common.KubernetesErrorToHTTPError(err)
+	}
+
+	if !*globalSettings.Spec.EnableClusterBackups {
+		return fmt.Errorf("cluster backup feature is disabled by the admin")
+	}
+
+	return nil
 }

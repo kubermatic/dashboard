@@ -26,52 +26,36 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func createEndpoint(
-	ctx context.Context, req interface{},
-	userInfoGetter provider.UserInfoGetter,
-	projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider,
-) (interface{}, error) {
-	return clusterbackupschedule.CreateEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
+func createEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	return clusterbackupschedule.CreateEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
 func decodeCreateClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
 	return clusterbackupschedule.DecodeCreateClusterBackupScheduleReq(c, r)
 }
 
-func listEndpoint(
-	ctx context.Context, req interface{},
-	userInfoGetter provider.UserInfoGetter,
-	projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider,
-) (interface{}, error) {
-	return clusterbackupschedule.ListEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
+func listEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	return clusterbackupschedule.ListEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
 func decodeListClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
 	return clusterbackupschedule.DecodeListClusterBackupScheduleReq(c, r)
 }
 
-func getEndpoint(
-	ctx context.Context, req interface{},
-	userInfoGetter provider.UserInfoGetter,
-	projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider,
-) (interface{}, error) {
-	return clusterbackupschedule.GetEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
+func getEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	return clusterbackupschedule.GetEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
 func decodeGetRestoreBackupConfigReq(c context.Context, r *http.Request) (interface{}, error) {
 	return clusterbackupschedule.DecodeGetClusterBackupScheduleReq(c, r)
 }
 
-func deleteEndpoint(
-	ctx context.Context, req interface{},
-	userInfoGetter provider.UserInfoGetter,
-	projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider,
-) (interface{}, error) {
-	return clusterbackupschedule.DeleteEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider)
+func deleteEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	return clusterbackupschedule.DeleteEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
 func decodeDeleteClusterBackupScheduleReq(c context.Context, r *http.Request) (interface{}, error) {
