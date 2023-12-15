@@ -47,6 +47,7 @@ export interface AdminSettings {
   mlaOptions: MLAOptions;
   mlaAlertmanagerPrefix: string;
   mlaGrafanaPrefix: string;
+  enableClusterBackup?: boolean;
   notifications?: NotificationOptions;
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
@@ -194,6 +195,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableShareCluster: false,
   disableAdminKubeconfig: false,
   enableOIDCKubeconfig: false,
+  enableClusterBackup: false,
   restrictProjectCreation: false,
   restrictProjectDeletion: false,
   enableExternalClusterImport: true,

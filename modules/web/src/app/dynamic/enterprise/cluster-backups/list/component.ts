@@ -18,22 +18,38 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {SettingsService} from '@app/core/services/settings';
 import {View} from '@app/shared/entity/common';
+import {AdminSettings} from '@app/shared/entity/settings';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'km-cluster-backups',
   templateUrl: './template.html',
 })
-export class ClusterBackupsComponent implements OnInit {
+export class ClusterBackupsComponent implements OnInit, OnDestroy {
   readonly view = View;
   clustersBackupView: string;
+  adminSettings: AdminSettings;
+  private _unsubscribe = new Subject<void>();
 
-  constructor(private _router: Router) {}
+  constructor(
+    private _router: Router,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.getClusterBackupsView();
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.adminSettings = settings;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getClusterBackupsView(): void {
