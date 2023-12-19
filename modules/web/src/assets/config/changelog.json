@@ -2,6 +2,14 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v22211",
   "entries": [
     {
+      "category": "fixed",
+      "description": "Fix issue in editing and updating applications of cluster template."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue with cursor position inside YAML editor."
+    },
+    {
       "category": "changed",
       "description": "Update machine-controller to v1.56.5."
     }
