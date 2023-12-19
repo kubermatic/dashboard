@@ -1,21 +1,9 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v22210",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.22.md#v22211",
   "entries": [
     {
-      "category": "fixed",
-      "description": "Fix listing events for external clusters."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix an issue where 'clusterDefaultNodeSelector' label was being added back on opening of edit cluster dialog."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix CPU Utilization graph showing no data for User Cluster MLA dashboard 'Nodes Overview'."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix empty panels in Grafana dashboard 'Resource Usage per Namespace' for Master/Seed MLA."
+      "category": "changed",
+      "description": "Update machine-controller to v1.56.5."
     }
   ]
 }
