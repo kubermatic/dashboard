@@ -10,6 +10,14 @@
       "description": "Fix cases where, when using dedicated infra- and ccm-credentials, infra-credentials were always overwritten by ccm-credentials."
     },
     {
+      "category": "fixed",
+      "description": "Fix issue in editing and updating applications of cluster template."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue with cursor position inside YAML editor."
+    },
+    {
       "category": "changed",
       "description": "Update machine-controller to v1.58.1."
     }
