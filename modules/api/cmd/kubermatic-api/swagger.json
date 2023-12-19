@@ -29205,6 +29205,11 @@
           "type": "string",
           "x-go-name": "AvailabilityZone"
         },
+        "csiCinderTopologyEnabled": {
+          "description": "Optional: configures enablement of topology support for the Cinder CSI Plugin.\nThis requires Nova and Cinder to have matching availability zones configured.",
+          "type": "boolean",
+          "x-go-name": "CSICinderTopologyEnabled"
+        },
         "dnsServers": {
           "description": "Used for automatic network creation",
           "type": "array",
@@ -34960,6 +34965,11 @@
         "applicationCredentialSecret": {
           "type": "string",
           "x-go-name": "ApplicationCredentialSecret"
+        },
+        "cinderTopologyEnabled": {
+          "description": "Flag to configure enablement of topology support for the Cinder CSI plugin.\nThis requires Nova and Cinder to have matching availability zones configured.\n+optional",
+          "type": "boolean",
+          "x-go-name": "CinderTopologyEnabled"
         },
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"

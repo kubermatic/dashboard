@@ -24,6 +24,10 @@ type DatacenterSpecOpenstack struct {
 	// Used to configure availability zone.
 	AvailabilityZone string `json:"availabilityZone,omitempty"`
 
+	// Optional: configures enablement of topology support for the Cinder CSI Plugin.
+	// This requires Nova and Cinder to have matching availability zones configured.
+	CSICinderTopologyEnabled bool `json:"csiCinderTopologyEnabled,omitempty"`
+
 	// Used for automatic network creation
 	DNSServers []string `json:"dnsServers"`
 
