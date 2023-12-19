@@ -1,9 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2238",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2239",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix a bug where the API call to list projects was failing due to slowness."
+      "description": "Fix cases where, when using dedicated infra- and ccm-credentials, infra-credentials were always overwritten by ccm-credentials."
+    },
+    {
+      "category": "changed",
+      "description": "Update machine-controller to v1.57.4."
     }
   ]
 }
