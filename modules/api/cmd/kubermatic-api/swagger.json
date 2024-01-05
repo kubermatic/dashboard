@@ -28867,6 +28867,20 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "DNSConfig": {
+      "type": "object",
+      "title": "DNSConfig contains a machine's DNS configuration.",
+      "properties": {
+        "servers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Servers"
+        }
+      },
+      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+    },
     "Datacenter": {
       "type": "object",
       "title": "Datacenter is the object representing a Kubernetes infra datacenter.",
@@ -33873,6 +33887,28 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "NetworkSpec": {
+      "description": "NetworkSpec machine static network configuration",
+      "type": "object",
+      "properties": {
+        "cidr": {
+          "type": "string",
+          "x-go-name": "CIDR"
+        },
+        "dns": {
+          "$ref": "#/definitions/DNSConfig"
+        },
+        "gateway": {
+          "type": "string",
+          "x-go-name": "Gateway"
+        },
+        "ipFamily": {
+          "type": "string",
+          "x-go-name": "IPFamily"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "Node": {
       "description": "Node represents a worker node that is part of a cluster",
       "type": "object",
@@ -34195,6 +34231,9 @@
             "type": "string"
           },
           "x-go-name": "Labels"
+        },
+        "network": {
+          "$ref": "#/definitions/NetworkSpec"
         },
         "operatingSystem": {
           "$ref": "#/definitions/OperatingSystemSpec"

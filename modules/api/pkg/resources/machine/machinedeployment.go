@@ -269,6 +269,15 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 	}
 	config.CloudProviderSpec = *cloudExt
 
+	if nd.Spec.Template.Network != nil {
+		config.Network = &providerconfig.NetworkConfig{
+			CIDR:     nd.Spec.Template.Network.CIDR,
+			Gateway:  nd.Spec.Template.Network.Gateway,
+			DNS:      nd.Spec.Template.Network.DNS,
+			IPFamily: util.IPFamily(nd.Spec.Template.Network.IPFamily),
+		}
+	}
+
 	if config.Network == nil {
 		config.Network = &providerconfig.NetworkConfig{}
 	}

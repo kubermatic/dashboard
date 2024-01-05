@@ -27,7 +27,11 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ResourceType} from '@app/shared/entity/common';
 import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 import {AsyncValidators} from '@app/shared/validators/async.validators';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {
+  IPV4_IPV6_CIDR_PATTERN,
+  IPV4_IPV6_PATTERN,
+  KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+} from '@app/shared/validators/others';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -42,7 +46,7 @@ import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota
 import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
 import {Datacenter} from '@shared/entity/datacenter';
-import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 import {ResourceQuotaCalculation, ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -66,6 +70,9 @@ enum Controls {
   OperatingSystemProfile = 'operatingSystemProfile',
   MaxReplicas = 'maxReplicas',
   MinReplicas = 'minReplicas',
+  StaticNetworkDNSServers = 'DNSServers',
+  StaticNetworkGateway = 'gateway',
+  StaticNetworkCIDR = 'CIDR',
 }
 
 @Component({
@@ -93,6 +100,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly OperatingSystem = OperatingSystem;
   readonly MinReplicasCount = 0;
   readonly MaxReplicasCount = 1000;
+  readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
   @Input() provider: NodeProvider;
   labels: object = {};
@@ -109,6 +117,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   wizardMode: WizardMode;
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
+  DNSServers: string[] = [];
 
   private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
@@ -184,6 +193,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhelSubscriptionManagerUser]: this._builder.control(''),
       [Controls.RhelSubscriptionManagerPassword]: this._builder.control(''),
       [Controls.RhelOfflineToken]: this._builder.control(''),
+      [Controls.StaticNetworkDNSServers]: this._builder.control(
+        this._nodeDataService.nodeData?.spec.network?.dns?.servers || []
+      ),
+      [Controls.StaticNetworkGateway]: this._builder.control(
+        this._nodeDataService.nodeData?.spec.network?.gateway || '',
+        [Validators.pattern(IPV4_IPV6_PATTERN)]
+      ),
+      [Controls.StaticNetworkCIDR]: this._builder.control(this._nodeDataService.nodeData?.spec.network?.cidr || '', [
+        Validators.pattern(IPV4_IPV6_CIDR_PATTERN),
+      ]),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
       [Controls.OperatingSystemProfile]: this._builder.control({
@@ -267,6 +286,15 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
+
+    merge(
+      this.form.get(Controls.OperatingSystem).valueChanges,
+      this.form.get(Controls.StaticNetworkDNSServers).valueChanges,
+      this.form.get(Controls.StaticNetworkGateway).valueChanges,
+      this.form.get(Controls.StaticNetworkCIDR).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.network = this.getStaticNetworkSpec()));
 
     merge(this.form.get(Controls.OperatingSystem).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -393,6 +421,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._nodeDataService.taints = this.taints;
   }
 
+  onDNSServerChange(ips: string[]): void {
+    this.DNSServers = ips;
+  }
+
   private _init(): void {
     let upgradeOnBoot = false;
     let disableAutoUpdate = false;
@@ -484,6 +516,20 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       default:
         return {ubuntu: {distUpgradeOnBoot: false}};
     }
+  }
+
+  private getStaticNetworkSpec(): NodeNetworkSpec {
+    if (this.form.get(Controls.OperatingSystem).value !== OperatingSystem.Flatcar) {
+      return null;
+    }
+
+    return {
+      cidr: this.form.get(Controls.StaticNetworkCIDR).value,
+      dns: {
+        servers: this.form.get(Controls.StaticNetworkDNSServers).value?.tags,
+      },
+      gateway: this.form.get(Controls.StaticNetworkGateway).value,
+    };
   }
 
   private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem | null {

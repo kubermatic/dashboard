@@ -34,6 +34,9 @@ type NodeSpec struct {
 	// Required: true
 	Cloud *NodeCloudSpec `json:"cloud"`
 
+	// network
+	Network *NetworkSpec `json:"network,omitempty"`
+
 	// operating system
 	// Required: true
 	OperatingSystem *OperatingSystemSpec `json:"operatingSystem"`
@@ -52,6 +55,10 @@ func (m *NodeSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCloud(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNetwork(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -115,6 +122,25 @@ func (m *NodeSpec) validateCloud(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *NodeSpec) validateNetwork(formats strfmt.Registry) error {
+	if swag.IsZero(m.Network) { // not required
+		return nil
+	}
+
+	if m.Network != nil {
+		if err := m.Network.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("network")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("network")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *NodeSpec) validateOperatingSystem(formats strfmt.Registry) error {
 
 	if err := validate.Required("operatingSystem", "body", m.OperatingSystem); err != nil {
@@ -167,6 +193,10 @@ func (m *NodeSpec) ContextValidate(ctx context.Context, formats strfmt.Registry)
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateNetwork(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateOperatingSystem(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -209,6 +239,22 @@ func (m *NodeSpec) contextValidateCloud(ctx context.Context, formats strfmt.Regi
 				return ve.ValidateName("cloud")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cloud")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NodeSpec) contextValidateNetwork(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Network != nil {
+		if err := m.Network.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("network")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("network")
 			}
 			return err
 		}

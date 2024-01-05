@@ -619,6 +619,21 @@ limitations under the License.
                                  [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate">
             </km-property-boolean>
 
+            <km-property *ngIf="machineDeployment.spec.template.network?.cidr">
+              <div key>CIDR</div>
+              <div value>{{machineDeployment.spec.template.network?.cidr}}</div>
+            </km-property>
+
+            <km-property *ngIf="machineDeployment.spec.template.network?.gateway">
+              <div key>Gateway</div>
+              <div value>{{machineDeployment.spec.template.network?.gateway}}</div>
+            </km-property>
+
+            <km-property *ngIf="machineDeployment.spec.template.network?.dns?.servers">
+              <div key>DNS Servers</div>
+              <div value>{{machineDeployment.spec.template.network?.dns?.servers}}</div>
+            </km-property>
+
             <km-property-boolean *ngIf="machineDeployment.spec.dynamicConfig"
                                  label="Dynamic kubelet Config"
                                  [value]="machineDeployment.spec.dynamicConfig">
