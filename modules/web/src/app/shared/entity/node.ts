@@ -33,10 +33,22 @@ export class Node {
 export class NodeSpec {
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
+  network?: NodeNetworkSpec;
   versions?: NodeVersionInfo;
   sshUserName?: string;
   labels?: object;
   taints?: Taint[];
+}
+
+export class NodeNetworkSpec {
+  cidr?: string;
+  gateway?: string;
+  dns?: DNSSpec;
+  ipFamily?: string;
+}
+
+export class DNSSpec {
+  servers: string[];
 }
 
 export class Taint {

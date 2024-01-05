@@ -35,7 +35,7 @@ limitations under the License.
              id="km-node-name-input"
              matInput
              type="text"
-             autocomplete="off">
+             autocomplete="off" />
       <button mat-icon-button
               type="button"
               matSuffix
@@ -74,8 +74,7 @@ limitations under the License.
 
     <ng-container *ngIf="isDialogView()">
       <km-basic-node-data [provider]="provider"
-                          [formControlName]="Controls.ProviderBasic">
-      </km-basic-node-data>
+                          [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
     </ng-container>
 
     <div fxLayout="column">
@@ -127,7 +126,7 @@ limitations under the License.
                  matInput
                  type="text"
                  autocomplete="off"
-                 kmValueChangedIndicator>
+                 kmValueChangedIndicator />
           <mat-hint>RHEL Subscription Manager User is required to register a machine.</mat-hint>
         </mat-form-field>
 
@@ -137,7 +136,7 @@ limitations under the License.
                  matInput
                  kmInputPassword
                  autocomplete="off"
-                 kmValueChangedIndicator>
+                 kmValueChangedIndicator />
           <mat-hint>RHEL Subscription Manager Password is required to register a machine.</mat-hint>
         </mat-form-field>
 
@@ -147,9 +146,54 @@ limitations under the License.
                  matInput
                  kmInputPassword
                  autocomplete="off"
-                 kmValueChangedIndicator>
+                 kmValueChangedIndicator />
           <mat-hint>Offline token is required to remove subscriptions.</mat-hint>
         </mat-form-field>
+      </div>
+
+      <!-- Options for Flatcar -->
+      <div *ngIf="isOperatingSystemSelected(OperatingSystem.Flatcar)"
+           class="os-options">
+        <mat-checkbox [id]="Controls.DisableAutoUpdate"
+                      [formControlName]="Controls.DisableAutoUpdate"
+                      kmValueChangedIndicator>Disable auto-update
+        </mat-checkbox>
+
+        <mat-card-header class="km-no-padding">
+          <mat-card-title>Static Network Configuration</mat-card-title>
+        </mat-card-header>
+        <mat-form-field>
+          <mat-label>CIDR</mat-label>
+          <input [formControlName]="Controls.StaticNetworkCIDR"
+                 matInput
+                 autocomplete="off"
+                 kmValueChangedIndicator />
+          <mat-hint>Address for the machine.</mat-hint>
+          <mat-error *ngIf="form.get(Controls.StaticNetworkCIDR).hasError('pattern')">
+            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Gateway</mat-label>
+          <input [formControlName]="Controls.StaticNetworkGateway"
+                 matInput
+                 autocomplete="off"
+                 kmValueChangedIndicator />
+          <mat-hint>Routing gateway address.</mat-hint>
+          <mat-error *ngIf="form.get(Controls.StaticNetworkGateway).hasError('pattern')">
+            Invalid pattern. Should be a valid IPv4 or IPv6 address.
+          </mat-error>
+        </mat-form-field>
+
+        <km-chip-list class="tag-list"
+                      label="DNS Servers"
+                      placeholder="DNS Servers..."
+                      [tags]="DNSServers"
+                      (onChange)="onDNSServerChange($event)"
+                      [formControlName]="Controls.StaticNetworkDNSServers"
+                      [kmPattern]="ipv4AndIPv6Regex"
+                      kmPatternError="Input has to be a valid IPv4 or IPv6 address"></km-chip-list>
       </div>
 
       <div fxLayout="row"
@@ -162,18 +206,8 @@ limitations under the License.
                         kmValueChangedIndicator>Upgrade system on first boot
           </mat-checkbox>
         </div>
-
-        <!-- Options for Flatcar -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Flatcar)"
-             class="os-options">
-          <mat-checkbox [id]="Controls.DisableAutoUpdate"
-                        [formControlName]="Controls.DisableAutoUpdate"
-                        kmValueChangedIndicator>Disable auto-update
-          </mat-checkbox>
-        </div>
       </div>
     </div>
-
 
     <km-autocomplete *ngIf="isOperatingSystemManagerEnabled && form.get(Controls.OperatingSystem).value"
                      label="Operating System Profile"
@@ -200,12 +234,10 @@ limitations under the License.
       </km-expansion-panel>
     </div>
 
-
     <div *ngIf="displayQuotaInWizard && isEnterpriseEdition && !isDialogView()"
          class="additional-margin">
       <ng-template #quotaWidgetContainer></ng-template>
     </div>
-
 
     <mat-card-header class="km-no-padding">
       <mat-card-title fxFlex
@@ -214,7 +246,7 @@ limitations under the License.
                       fxlayoutgap="5px">
         <div>Node Autoscaling</div>
         <i class="km-icon-info km-pointer"
-           matTooltip="Enable &quot;cluster-autoscaler&quot; addon to apply these changes."></i>
+           matTooltip='Enable "cluster-autoscaler" addon to apply these changes.'></i>
       </mat-card-title>
     </mat-card-header>
 
@@ -236,7 +268,7 @@ limitations under the License.
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
-                   [asyncKeyValidators]=asyncLabelValidators
+                   [asyncKeyValidators]="asyncLabelValidators"
                    [labels]="labels"
                    (labelsChange)="onLabelsChange($event)"></km-label-form>
 
@@ -254,8 +286,7 @@ limitations under the License.
     </mat-card-header>
 
     <km-basic-node-data [provider]="provider"
-                        [formControlName]="Controls.ProviderBasic">
-    </km-basic-node-data>
+                        [formControlName]="Controls.ProviderBasic"> </km-basic-node-data>
 
     <km-extended-node-data [provider]="provider"
                            [visible]="true"

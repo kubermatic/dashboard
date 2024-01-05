@@ -27,6 +27,8 @@ import (
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
+	machinecontrollerutil "github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
@@ -1519,6 +1521,8 @@ type NodeSpec struct {
 	// required: true
 	OperatingSystem OperatingSystemSpec `json:"operatingSystem"`
 	// required: false
+	Network *NetworkSpec `json:"network,omitempty"`
+	// required: false
 	SSHUserName string `json:"sshUserName,omitempty"`
 	// required: true
 	Versions NodeVersionInfo `json:"versions,omitempty"`
@@ -1528,6 +1532,20 @@ type NodeSpec struct {
 	Labels map[string]string `json:"labels,omitempty"`
 	// List of taints to set on new nodes
 	Taints []TaintSpec `json:"taints,omitempty"`
+}
+
+// DNSConfig contains a machine's DNS configuration.
+type DNSConfig struct {
+	Servers []string `json:"servers"`
+}
+
+// NetworkSpec machine static network configuration
+// swagger:model NetworkSpec
+type NetworkSpec struct {
+	CIDR     string                         `json:"cidr"`
+	Gateway  string                         `json:"gateway"`
+	DNS      providerconfig.DNSConfig       `json:"dns"`
+	IPFamily machinecontrollerutil.IPFamily `json:"ipFamily,omitempty"`
 }
 
 // DigitaloceanNodeSpec digitalocean node settings

@@ -16,12 +16,26 @@ import {Inject, Injectable} from '@angular/core';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
 import {NodeDataVMwareCloudDirectorProvider} from '@core/services/node-data/provider/vmware-cloud-director';
+import {NodeDataVSphereProvider} from '@core/services/node-data/provider/vsphere';
 import {ProjectService} from '@core/services/project';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {EquinixService} from '@core/services/provider/equinix';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {NutanixService} from '@core/services/provider/nutanix';
+import {OpenStackService} from '@core/services/provider/openstack';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {VSphereService} from '@core/services/provider/vsphere';
 import {PresetsService} from '@core/services/wizard/presets';
-import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import _ from 'lodash';
@@ -31,25 +45,11 @@ import {NodeDataAnexiaProvider} from './provider/anexia';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
+import {NodeDataEquinixProvider} from './provider/equinix';
 import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
-import {NodeDataOpenstackProvider} from './provider/openstack';
-import {NodeDataEquinixProvider} from './provider/equinix';
-import {AWSService} from '@core/services/provider/aws';
-import {AlibabaService} from '@core/services/provider/alibaba';
-import {AnexiaService} from '@core/services/provider/anexia';
-import {AzureService} from '@core/services/provider/azure';
-import {DigitalOceanService} from '@core/services/provider/digitalocean';
-import {EquinixService} from '@core/services/provider/equinix';
-import {GCPService} from '@core/services/provider/gcp';
-import {HetznerService} from '@core/services/provider/hetzner';
-import {OpenStackService} from '@core/services/provider/openstack';
 import {NodeDataNutanixProvider} from './provider/nutanix';
-import {NutanixService} from '@core/services/provider/nutanix';
-import {NodeDataVSphereProvider} from '@core/services/node-data/provider/vsphere';
-import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
-import {KubeVirtService} from '@core/services/provider/kubevirt';
-import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import {NodeDataOpenstackProvider} from './provider/openstack';
 
 @Injectable()
 export class NodeDataService {
@@ -107,6 +107,15 @@ export class NodeDataService {
 
   get operatingSystemSpec(): OperatingSystemSpec {
     return this._nodeData.spec.operatingSystem;
+  }
+
+  set network(spec: NodeNetworkSpec) {
+    delete this._nodeData.spec.network;
+    this._nodeData.spec.network = spec;
+  }
+
+  get network(): NodeNetworkSpec {
+    return this._nodeData.spec.network;
   }
 
   get operatingSystem(): OperatingSystem {
