@@ -129,12 +129,15 @@ func GetAPIV2NodeNetworkSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Ne
 		return nil, fmt.Errorf("failed to get machine providerConfig: %w", err)
 	}
 
-	return &apiv1.NetworkSpec{
-		CIDR:     decodedProviderSpec.Network.CIDR,
-		Gateway:  decodedProviderSpec.Network.Gateway,
-		DNS:      decodedProviderSpec.Network.DNS,
-		IPFamily: decodedProviderSpec.Network.IPFamily,
-	}, nil
+	if decodedProviderSpec.Network != nil {
+		return &apiv1.NetworkSpec{
+			CIDR:     decodedProviderSpec.Network.CIDR,
+			Gateway:  decodedProviderSpec.Network.Gateway,
+			DNS:      decodedProviderSpec.Network.DNS,
+			IPFamily: string(decodedProviderSpec.Network.IPFamily),
+		}, nil
+	}
+	return nil, nil
 }
 
 // GetAPIV2NodeCloudSpec returns the api compatible NodeCloudSpec for the given machine.

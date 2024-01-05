@@ -27,7 +27,6 @@ import (
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	machinecontrollerutil "github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -1542,10 +1541,10 @@ type DNSConfig struct {
 // NetworkSpec machine static network configuration
 // swagger:model NetworkSpec
 type NetworkSpec struct {
-	CIDR     string                         `json:"cidr"`
-	Gateway  string                         `json:"gateway"`
-	DNS      providerconfig.DNSConfig       `json:"dns"`
-	IPFamily machinecontrollerutil.IPFamily `json:"ipFamily,omitempty"`
+	CIDR     string                   `json:"cidr"`
+	Gateway  string                   `json:"gateway"`
+	DNS      providerconfig.DNSConfig `json:"dns"`
+	IPFamily string                   `json:"ipFamily,omitempty"`
 }
 
 // DigitaloceanNodeSpec digitalocean node settings

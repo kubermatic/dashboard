@@ -274,7 +274,7 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 			CIDR:     nd.Spec.Template.Network.CIDR,
 			Gateway:  nd.Spec.Template.Network.Gateway,
 			DNS:      nd.Spec.Template.Network.DNS,
-			IPFamily: nd.Spec.Template.Network.IPFamily,
+			IPFamily: util.IPFamily(nd.Spec.Template.Network.IPFamily),
 		}
 	}
 

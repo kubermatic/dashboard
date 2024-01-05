@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// IPFamily IPFamily IPv4 | IPv6 | IPv4+IPv6.
+// IPFamily +kubebuilder:validation:Enum="";IPv4;IPv4+IPv6
 //
 // swagger:model IPFamily
 type IPFamily string

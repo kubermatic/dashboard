@@ -24,11 +24,11 @@ type NetworkSpec struct {
 	// gateway
 	Gateway string `json:"gateway,omitempty"`
 
+	// IP family
+	IPFamily string `json:"ipFamily,omitempty"`
+
 	// dns
 	DNS *DNSConfig `json:"dns,omitempty"`
-
-	// ip family
-	IPFamily IPFamily `json:"ipFamily,omitempty"`
 }
 
 // Validate validates this network spec
@@ -36,10 +36,6 @@ func (m *NetworkSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateDNS(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIPFamily(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -68,32 +64,11 @@ func (m *NetworkSpec) validateDNS(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NetworkSpec) validateIPFamily(formats strfmt.Registry) error {
-	if swag.IsZero(m.IPFamily) { // not required
-		return nil
-	}
-
-	if err := m.IPFamily.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ipFamily")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("ipFamily")
-		}
-		return err
-	}
-
-	return nil
-}
-
 // ContextValidate validate this network spec based on the context it is used
 func (m *NetworkSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateDNS(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateIPFamily(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -114,20 +89,6 @@ func (m *NetworkSpec) contextValidateDNS(ctx context.Context, formats strfmt.Reg
 			}
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (m *NetworkSpec) contextValidateIPFamily(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.IPFamily.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("ipFamily")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("ipFamily")
-		}
-		return err
 	}
 
 	return nil

@@ -32090,9 +32090,9 @@
       "x-go-package": "k8s.io/api/networking/v1"
     },
     "IPFamily": {
+      "description": "+kubebuilder:validation:Enum=\"\";IPv4;IPv4+IPv6",
       "type": "string",
-      "title": "IPFamily IPv4 | IPv6 | IPv4+IPv6.",
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "IPVSConfiguration": {
       "type": "object",
@@ -33903,7 +33903,8 @@
           "x-go-name": "Gateway"
         },
         "ipFamily": {
-          "$ref": "#/definitions/IPFamily"
+          "type": "string",
+          "x-go-name": "IPFamily"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
