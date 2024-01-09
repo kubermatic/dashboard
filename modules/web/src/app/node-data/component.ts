@@ -24,31 +24,31 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ResourceType} from '@app/shared/entity/common';
+import {AsyncValidators} from '@app/shared/validators/async.validators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {OperatingSystemManagerService} from '@core/services/operating-system-manager';
+import {ParamsService, PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
+import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
+import {ResourceQuotaCalculation, ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ParamsService, PathParam} from '@core/services/params';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
-import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
-import {DynamicModule} from '@dynamic/module-registry';
-import {AsyncValidators} from '@app/shared/validators/async.validators';
-import {ResourceType} from '@app/shared/entity/common';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
-import {ResourceQuotaCalculationPayload, ResourceQuotaCalculation} from '@shared/entity/quota';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 enum Controls {
   Name = 'name',
@@ -512,14 +512,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private getSupportedOperatingSystemProfiles(): string[] {
+    let cloudProvider = this.provider.toString();
+    if (this.provider === NodeProvider.EQUINIX) {
+      // Packet was renamed to EquinixMetal for the machines.
+      cloudProvider = 'equinixmetal';
+    } else if (this.provider === NodeProvider.GCP) {
+      // For machines, GCP needs to be replaced with gce.
+      cloudProvider = 'gce';
+    }
+
     return this.operatingSystemProfiles
-      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value.toLowerCase())
-      .filter(
-        // Packet was renamed to EquinixMetal for the machines.
-        osp =>
-          osp.supportedCloudProviders.indexOf(this.provider === NodeProvider.EQUINIX ? 'equinixmetal' : this.provider) >
-          -1
-      )
+      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value?.toLowerCase())
+      .filter(osp => osp.supportedCloudProviders.indexOf(cloudProvider) > -1)
       .map(osp => osp.name);
   }
 
