@@ -498,14 +498,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private getSupportedOperatingSystemProfiles(): string[] {
+    let cloudProvider = this.provider.toString();
+    if (this.provider === NodeProvider.EQUINIX) {
+      // Packet was renamed to EquinixMetal for the machines.
+      cloudProvider = 'equinixmetal';
+    } else if (this.provider === NodeProvider.GCP) {
+      // For machines, GCP needs to be replaced with gce.
+      cloudProvider = 'gce';
+    }
+
     return this.operatingSystemProfiles
-      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value.toLowerCase())
-      .filter(
-        // Packet was renamed to EquinixMetal for the machines.
-        osp =>
-          osp.supportedCloudProviders.indexOf(this.provider === NodeProvider.EQUINIX ? 'equinixmetal' : this.provider) >
-          -1
-      )
+      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value?.toLowerCase())
+      .filter(osp => osp.supportedCloudProviders.indexOf(cloudProvider) > -1)
       .map(osp => osp.name);
   }
 
