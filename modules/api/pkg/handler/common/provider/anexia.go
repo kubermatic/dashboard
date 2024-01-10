@@ -73,7 +73,9 @@ func ListAnexiaTemplates(ctx context.Context, token, locationID string) (apiv1.A
 
 	for _, template := range templates {
 		apiTemplate := apiv1.AnexiaTemplate{
-			ID: template.ID,
+			ID:    template.ID,
+			Name:  template.Name,
+			Build: template.Build,
 		}
 		response = append(response, apiTemplate)
 	}

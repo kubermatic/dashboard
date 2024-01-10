@@ -885,7 +885,9 @@ type AnexiaTemplateList []AnexiaTemplate
 // AnexiaTemplate represents a object of Anexia template.
 // swagger:model AnexiaTemplate
 type AnexiaTemplate struct {
-	ID string `json:"id"`
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Build string `json:"build"`
 }
 
 // VersionList represents a list of versions
