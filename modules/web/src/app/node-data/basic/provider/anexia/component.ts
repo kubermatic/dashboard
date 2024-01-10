@@ -21,7 +21,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, filter, takeUntil} from 'rxjs/operators';
@@ -29,8 +29,8 @@ import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {AnexiaNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaNodeSpec, AnexiaNodeSpecDisk, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AnexiaDiskType, AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
@@ -41,7 +41,7 @@ enum Controls {
   Template = 'template',
   Cpus = 'cpus',
   Memory = 'memory',
-  DiskSize = 'diskSize',
+  Disks = 'disks',
 }
 
 @Component({
@@ -69,8 +69,10 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   vlans: string[] = [];
   templateIDs: string[] = [];
   templateNames: string[] = [];
+  diskTypes: string[] = [];
   isLoadingVlans = false;
   isLoadingTemplates = false;
+  isLoadingDiskTypes = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _quotaCalculationService: QuotaCalculationService;
@@ -82,6 +84,10 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private get _templatesObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.templates(this._clearTemplate.bind(this), this._onTemplateLoading.bind(this));
+  }
+
+  private get _diskTypesObservable(): Observable<AnexiaDiskType[]> {
+    return this._nodeDataService.anexia.diskTypes(this._clearDiskType.bind(this), this._onDiskTypeLoading.bind(this));
   }
 
   constructor(
@@ -96,13 +102,34 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     }
   }
 
+  get disks() {
+    return this.form.get(Controls.Disks) as FormArray;
+  }
+
+  _addDisk(disk: AnexiaNodeSpecDisk) {
+    this.disks.push(
+      this._builder.group({
+        size: this._builder.control(disk.size),
+        performanceType: this._builder.control({main: disk.performanceType || ''}),
+      })
+    );
+  }
+
+  deleteDisk(index: number) {
+    this.disks.removeAt(index);
+  }
+
+  isDiskRemovable(index: number): boolean {
+    return index < this.disks.length - 1;
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.VlanID]: this._builder.control('', Validators.required),
       [Controls.Template]: this._builder.control('', Validators.required),
       [Controls.Cpus]: this._builder.control(this._defaultCpus),
       [Controls.Memory]: this._builder.control(this._defaultMemory),
-      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize),
+      [Controls.Disks]: this._builder.array([]),
     });
 
     this._init();
@@ -110,12 +137,18 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
     this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
     this._templatesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
+    this._diskTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultDiskType.bind(this));
 
-    merge(
-      this.form.get(Controls.Cpus).valueChanges,
-      this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges
-    )
+    this.form
+      .get(Controls.Disks)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((disks: AnexiaNodeSpecDisk[]) => {
+        if (disks[disks.length - 1].size) {
+          this._addDisk({size: 0});
+        }
+      });
+
+    merge(this.form.get(Controls.Cpus).valueChanges, this.form.get(Controls.Memory).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
@@ -145,10 +178,22 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         }
       });
 
+    this.form
+      .get(Controls.Disks)
+      .valueChanges.pipe(
+        map(form =>
+          form
+            .filter((disk: AnexiaNodeSpecDisk) => disk.size)
+            .map((disk: any) => ({...disk, performanceType: disk.performanceType?.main}))
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(d => (this._nodeDataService.nodeData.spec.cloud.anexia.disks = d));
+
     merge(
       this.form.get(Controls.Cpus).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.Disks).valueChanges,
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.VlanID).valueChanges
     )
@@ -174,10 +219,14 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     if (this._nodeDataService.nodeData.spec.cloud.anexia) {
       this.form.get(Controls.Cpus).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.memory);
-      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.diskSize);
-
-      this._cdr.detectChanges();
+      const disks = this._nodeDataService.nodeData.spec.cloud.anexia.disks;
+      for (const disk of disks) {
+        this._addDisk(disk);
+      }
+    } else {
+      this._addDisk({size: this._defaultDiskSize});
     }
+    this._cdr.detectChanges();
   }
 
   private _onVlanLoading(): void {
@@ -190,6 +239,11 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
+  private _onDiskTypeLoading(): void {
+    this.isLoadingDiskTypes = true;
+    this._cdr.detectChanges();
+  }
+
   private _clearVlan(): void {
     this.vlans = [];
     this.form.get(Controls.VlanID).setValue(AutocompleteInitialState);
@@ -199,6 +253,10 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   private _clearTemplate(): void {
     this.vlans = [];
     this.form.get(Controls.Template).setValue(AutocompleteInitialState);
+    this._cdr.detectChanges();
+  }
+
+  private _clearDiskType(): void {
     this._cdr.detectChanges();
   }
 
@@ -231,6 +289,25 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
+  private _setDefaultDiskType(diskTypes: AnexiaDiskType[]): void {
+    this.isLoadingDiskTypes = false;
+    this.diskTypes = diskTypes.map(dt => dt.id);
+
+    for (let i = 0; i < this.disks.length; i++) {
+      if (
+        this._nodeDataService.nodeData.spec.cloud.anexia.disks.length > i &&
+        this._nodeDataService.nodeData.spec.cloud.anexia.disks[i].performanceType
+      ) {
+        this.disks
+          .at(i)
+          .get('performanceType')
+          .setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.disks[i].performanceType});
+      }
+    }
+
+    this._cdr.detectChanges();
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
@@ -238,7 +315,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
           anexia: {
             cpus: this.form.get(Controls.Cpus).value,
             memory: this.form.get(Controls.Memory).value,
-            diskSize: this.form.get(Controls.DiskSize).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,
@@ -251,7 +327,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       anexiaNodeSpec: {
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
         [Controls.Memory]: this.form.get(Controls.Memory).value,
-        [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
+        [Controls.Disks]: this.form.get(Controls.Disks).value,
         [Controls.Template]: this.form.get(Controls.Template).value?.[AutocompleteControls.Main],
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,

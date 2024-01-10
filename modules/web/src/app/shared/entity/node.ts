@@ -165,6 +165,12 @@ export class AnexiaNodeSpec {
   cpus: number;
   memory: number;
   diskSize: number;
+  disks: AnexiaNodeSpecDisk[];
+}
+
+export class AnexiaNodeSpecDisk {
+  size: number;
+  performanceType?: string;
 }
 
 export class AlibabaNodeSpec {
