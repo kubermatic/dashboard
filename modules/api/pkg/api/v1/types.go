@@ -890,6 +890,16 @@ type AnexiaTemplate struct {
 	Build string `json:"build"`
 }
 
+// AnexiaDiskTypeList represents an array of Anexia Disk Types.
+// swagger:model AnexiaDiskTypeList
+type AnexiaDiskTypeList []AnexiaDiskType
+
+// AnexiaDiskType represents a object of Anexia Disk Type.
+// swagger:model AnexiaDiskType
+type AnexiaDiskType struct {
+	ID string `json:"id"`
+}
+
 // VersionList represents a list of versions
 // swagger:model VersionList
 type VersionList []MasterVersion

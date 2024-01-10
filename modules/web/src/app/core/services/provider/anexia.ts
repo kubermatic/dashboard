@@ -16,7 +16,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaDiskType, AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 
 @Injectable()
 export class AnexiaService {
@@ -33,5 +33,11 @@ export class AnexiaService {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/anexia/templates`;
     const headers = new HttpHeaders().set('Location', location);
     return this._httpClient.get<AnexiaTemplate[]>(url, {headers});
+  }
+
+  getDiskTypes(projectID: string, clusterID: string, location: string): Observable<AnexiaDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/anexia/disk-types`;
+    const headers = new HttpHeaders().set('Location', location);
+    return this._httpClient.get<AnexiaDiskType[]>(url, {headers});
   }
 }

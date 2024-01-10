@@ -908,6 +908,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/anexia/templates").
 		Handler(r.listProjectAnexiaTemplates())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/anexia/disk-types").
+		Handler(r.listProjectAnexiaDiskTypes())
+
 	// Defines a set of HTTP endpoints for various cloud providers
 	// Note that these endpoints don't require credentials as opposed to the ones defined under
 	// /providers/* and /projects/{project_id}/providers/*.
@@ -1030,6 +1034,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/anexia/templates").
 		Handler(r.listAnexiaTemplatesNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/anexia/disk-types").
+		Handler(r.listAnexiaDiskTypesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes").
@@ -4640,6 +4648,30 @@ func (r Routing) listAnexiaTemplatesNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/anexia/disk-types anexia listAnexiaDiskTypesNoCredentialsV2
+//
+// Lists disk-types from Anexia
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaDiskTypeList
+func (r Routing) listAnexiaDiskTypesNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.AnexiaDiskTypesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeAnexiaNoCredentialReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes kubevirt listKubeVirtInstancetypesNoCredentials
 //
 // Lists available VirtualMachineInstancetype
@@ -6817,6 +6849,28 @@ func (r Routing) listProjectAnexiaTemplates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
 		provider.DecodeAnexiaProjectTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/anexia/disk-types anexia listProjectAnexiaDiskTypes
+//
+// Lists disk-types from Anexia.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaDiskTypeList
+func (r Routing) listProjectAnexiaDiskTypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AnexiaProjectDiskTypesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAnexiaProjectDiskTypeReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

@@ -18,7 +18,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaDiskType, AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
@@ -124,6 +124,68 @@ export class NodeDataAnexiaProvider {
           .pipe(
             switchMap(dc =>
               this._anexiaService.getTemplates(
+                selectedProject,
+                this._clusterSpecService.cluster.id,
+                dc.spec.anexia.locationID
+              )
+            )
+          )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  diskTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AnexiaDiskType[]> {
+    let cluster: Cluster;
+    let location = '';
+
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ANEXIA))
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(c => (cluster = c)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
+          .pipe(tap(dc => (location = dc?.spec.anexia.locationID)))
+          .pipe(filter(_ => location?.length > 0))
+          .pipe(
+            switchMap(_ =>
+              this._presetService
+                .provider(NodeProvider.ANEXIA)
+                .token(cluster.spec.cloud.anexia.token)
+                .location(location)
+                .credential(this._presetService.preset)
+                .diskTypes(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(dc =>
+              this._anexiaService.getDiskTypes(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
                 dc.spec.anexia.locationID

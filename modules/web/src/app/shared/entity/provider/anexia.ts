@@ -21,3 +21,7 @@ export class AnexiaTemplate {
   name: string;
   build: string;
 }
+
+export class AnexiaDiskType {
+  id: string;
+}
