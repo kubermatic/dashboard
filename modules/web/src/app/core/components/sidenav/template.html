@@ -181,14 +181,14 @@ limitations under the License.
              class="sub-menu-item">
           <a fxLayoutAlign=" center"
              [routerLink]="getRouterLink(view.ClusterSchedule)">
-            <span>Schedule</span>
+            <span>Schedules</span>
           </a>
         </div>
         <div [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}"
              class="sub-menu-item">
           <a fxLayoutAlign=" center"
              [routerLink]="getRouterLink(view.ClusterRestore)">
-            <span>Restore</span>
+            <span>Restores</span>
           </a>
         </div>
       </ng-container>
@@ -203,13 +203,13 @@ limitations under the License.
            [routerLink]="getRouterLink(view.ClusterSchedule)"
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ClusterSchedule), 'km-disabled': !isDisabledField(view.ClusterSchedule)}">
-          <span>Schedule</span>
+          <span>Schedules</span>
         </a>
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ClusterRestore)"
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
-          <span>Restore</span>
+          <span>Restores</span>
         </a>
       </ng-container>
     </km-side-nav-field>

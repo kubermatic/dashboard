@@ -18,11 +18,11 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {ClusterRestore} from '@app/shared/entity/backup';
-import {DeleteRestoreDialogComponent} from './delete-dialog/component';
+import {DeleteRestoreDialogComponent, DeleteRestoreDialogConfig} from './delete-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {ProjectService} from '@app/core/services/project';
 import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
@@ -36,6 +36,14 @@ import {GroupConfig} from '@app/shared/model/Config';
 import {View} from '@app/shared/entity/common';
 import {UserService} from '@app/core/services/user';
 import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+
+enum ClusterState {
+  Ready = 'Clusters',
+  Loading = 'Loading...',
+  Empty = 'No Clusters Available',
+}
 
 @Component({
   selector: 'km-cluster-restore-list',
@@ -57,14 +65,12 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   loadingRestores: boolean = false;
   currentSearchfield: string;
   showRowDetails: Map<string, boolean> = new Map<string, boolean>();
+  clusterLabel = ClusterState.Ready;
+  columns: string[] = ['select', 'status', 'name', 'cluster', 'backupName', 'namespaces', 'created', 'actions'];
+  toggleableColumn: string[] = ['nameSpacesDetails'];
 
-  get columns(): string[] {
-    return ['select', 'status', 'name', 'cluster', 'backupName', 'restored', 'created', 'actions'];
-  }
-
-  get toggleableColumn(): string[] {
-    return ['nameSpacesDetails'];
-  }
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   get canAdd(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Create);
@@ -84,9 +90,19 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.sort.direction = 'asc';
+    this.sort.active = 'name';
 
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => {
+      this.isAdmin = user.isAdmin;
+      this._user = user;
+    });
+
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+    });
 
     this._projectService.selectedProject
       .pipe(
@@ -160,7 +176,7 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         restores,
-      },
+      } as DeleteRestoreDialogConfig,
     };
     this._matDialog
       .open(DeleteRestoreDialogComponent, config)
@@ -188,15 +204,17 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   }
 
   private _getClusters(projectID: string): void {
+    this.clusterLabel = ClusterState.Loading;
     this._clusterService
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this.clusters = clusters;
         if (!this.selectedCluster) {
-          this.selectedCluster = clusters[0].id;
+          this.selectedCluster = clusters[0]?.id;
           this._getRestoreList(this._selectedProject.id);
         }
+        this.clusterLabel = clusters.length ? ClusterState.Ready : ClusterState.Empty;
       });
   }
 

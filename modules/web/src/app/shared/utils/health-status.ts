@@ -120,5 +120,5 @@ export function getClusterBackupHealthStatus(phase: string): HealthStatus {
   } else if (statusWarning.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Warning);
   }
-  return new HealthStatus(phase, StatusIcon.Unknown);
+  return new HealthStatus('Unknown', StatusIcon.Unknown);
 }

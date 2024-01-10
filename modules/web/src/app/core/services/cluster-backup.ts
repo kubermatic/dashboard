@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore} from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
-import {Observable, catchError, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class ClusterBackupService {
@@ -26,52 +26,51 @@ export class ClusterBackupService {
 
   listClusterBackups(projectID: string, clusterID: string): Observable<ClusterBackup[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup`;
-    return this._http.get<ClusterBackup[]>(url).pipe(catchError(() => of<ClusterBackup[]>([])));
+    return this._http.get<ClusterBackup[]>(url);
   }
 
-  create(projectID: string, backup: ClusterBackup): Observable<ClusterBackup> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${backup.spec.clusterid}/clusterbackup`;
-
-    return this._http.post<ClusterBackup>(url, backup).pipe(catchError(() => of<ClusterBackup>({} as ClusterBackup)));
+  create(projectID: string, clusterID: string, backup: ClusterBackup): Observable<ClusterBackup> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup`;
+    return this._http.post<ClusterBackup>(url, backup);
   }
 
   delete(projectID: string, clusterID: string, backupName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup/${backupName}`;
-    return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
+    return this._http.delete<void>(url);
   }
 
   listRestore(projectID: string, clusterID: string): Observable<ClusterRestore[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore`;
-    return this._http.get<ClusterRestore[]>(url).pipe(catchError(() => of<ClusterRestore[]>([])));
+    return this._http.get<ClusterRestore[]>(url);
   }
 
   createRestore(projectID: string, clusterID: string, restore: ClusterRestore): Observable<ClusterRestore> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore`;
-    return this._http
-      .post<ClusterRestore>(url, restore)
-      .pipe(catchError(() => of<ClusterRestore>({} as ClusterRestore)));
+    return this._http.post<ClusterRestore>(url, restore);
   }
 
   deleteRestore(projectID: string, clusterID: string, restoreName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterrestore/${restoreName}`;
-    return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
+    return this._http.delete<void>(url);
   }
 
-  createSchedule(projectID: string, schedule: CreateClusterBackupSchedule): Observable<CreateClusterBackupSchedule> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${schedule.spec.template.clusterid}/clusterbackupschedule`;
+  createSchedule(
+    projectID: string,
+    clusterID: string,
+    schedule: CreateClusterBackupSchedule
+  ): Observable<CreateClusterBackupSchedule> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupschedule`;
 
-    return this._http
-      .post<CreateClusterBackupSchedule>(url, schedule)
-      .pipe(catchError(() => of<CreateClusterBackupSchedule>({} as CreateClusterBackupSchedule)));
+    return this._http.post<CreateClusterBackupSchedule>(url, schedule);
   }
 
   listClusterScheduleBackups(projectID: string, clusterID: string): Observable<ClusterBackup[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupschedule`;
-    return this._http.get<ClusterBackup[]>(url).pipe(catchError(() => of<ClusterBackup[]>([])));
+    return this._http.get<ClusterBackup[]>(url);
   }
 
   deleteSchedule(projectID: string, clusterID: string, scheduleName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupschedule/${scheduleName}`;
-    return this._http.delete<void>(url).pipe(catchError(() => of<void>()));
+    return this._http.delete<void>(url);
   }
 }

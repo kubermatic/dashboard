@@ -23,8 +23,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {UserService} from '@core/services/user';
-import {Cluster} from '@shared/entity/cluster';
-import {ClusterService} from '@core/services/cluster';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
 import {
@@ -36,44 +34,63 @@ import {
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {KmValidators} from '@app/shared/validators/validators';
+import {Cluster} from '@app/shared/entity/cluster';
+
+export interface AddClustersBackupsDialogConfig {
+  projectID: string;
+  type: BackupType;
+  cluster: Cluster;
+}
 
 enum Controls {
   Name = 'name',
-  Clusters = 'clusters',
   Destination = 'destination',
   NameSpaces = 'namespaces',
   CronJob = 'cronjob',
-  ExpiredAt = 'ttl',
+  ExpiresIn = 'ttl',
   Labels = 'labels',
 }
 
+enum DestinationsState {
+  Ready = 'Destinations',
+  Loading = 'Loading...',
+  Empty = 'No Destinations Available',
+}
+
+enum NamespacesState {
+  Ready = 'Namespaces',
+  Loading = 'Loading...',
+  Empty = 'No Namespaces Available',
+}
+
 @Component({
-  selector: 'km-add-cluster-backups-dialog-list',
+  selector: 'km-add-cluster-backups-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
-  readonly type: BackupType = this._config.type;
+  type: BackupType = this._config.type;
   projectID = this._config.projectID;
-  clusters: Cluster[] = [];
+  cluster = this._config.cluster;
   destinations: string[] = [];
   isAdmin = false;
   nameSpaces: string[] = [];
   labels: Record<string, string>;
+  destinationsLabel = DestinationsState.Ready;
+  namespacesLabel = NamespacesState.Ready;
 
   readonly Controls = Controls;
   form: FormGroup;
 
-  get label(): string {
+  get btnLabel(): string {
     return `Create ${this.type}`;
   }
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _config: AddClustersBackupsDialogComponent,
+    @Inject(MAT_DIALOG_DATA) private readonly _config: AddClustersBackupsDialogConfig,
     private readonly _dialogRef: MatDialogRef<AddClustersBackupsDialogComponent>,
     private readonly _builder: FormBuilder,
-    private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
     private readonly _userService: UserService,
     private readonly _rbacService: RBACService,
@@ -86,25 +103,14 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.Destination]: this._builder.control('', Validators.required),
-      [Controls.Clusters]: this._builder.control('', Validators.required),
       [Controls.NameSpaces]: this._builder.control([]),
       [Controls.CronJob]: this._builder.control(''),
-      [Controls.ExpiredAt]: this._builder.control(''),
+      [Controls.ExpiresIn]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
     });
 
-    this._clusterService
-      .clusters(this.projectID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
-
-    this.form
-      .get(Controls.Clusters)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(cluster => {
-        this.getDestinations(this.projectID, cluster);
-        this.getClusterNamespaces(this.projectID, cluster);
-      });
+    this.getDestinations(this.projectID, this.cluster.id);
+    this.getClusterNamespaces(this.projectID, this.cluster.id);
 
     const cronJobControl = this.form.get(Controls.CronJob);
     if (this.type === BackupType.Schedule) {
@@ -125,11 +131,13 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   }
 
   getDestinations(projectID: string, clusterID: string): void {
+    this.destinationsLabel = DestinationsState.Loading;
     this._backupService
       .getDestinations(projectID, clusterID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(destinations => {
         this.destinations = destinations;
+        this.destinationsLabel = destinations.length ? DestinationsState.Ready : DestinationsState.Empty;
       });
   }
 
@@ -138,11 +146,13 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   }
 
   getClusterNamespaces(projectID: string, clusterID: string): void {
+    this.namespacesLabel = NamespacesState.Loading;
     this._rbacService
       .getClusterNamespaces(projectID, clusterID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(namespaces => {
         this.nameSpaces = namespaces;
+        this.namespacesLabel = namespaces.length ? NamespacesState.Ready : NamespacesState.Empty;
       });
   }
 
@@ -156,9 +166,13 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
 
   getObservable(): Observable<ClusterBackup | CreateClusterBackupSchedule> {
     if (this.type === BackupType.Backup) {
-      return this._clusterBackupService.create(this.projectID, this._getClusterBackupConfig());
+      return this._clusterBackupService.create(this.projectID, this.cluster.id, this._getClusterBackupConfig());
     }
-    return this._clusterBackupService.createSchedule(this.projectID, this._getClusterScheduleBackupConfig());
+    return this._clusterBackupService.createSchedule(
+      this.projectID,
+      this.cluster.id,
+      this._getClusterScheduleBackupConfig()
+    );
   }
 
   onNext(backup: ClusterBackup): void {
@@ -171,12 +185,14 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       name: this.form.get(Controls.Name).value,
       spec: {
         storageLocation: StorageLocationTempName,
-        clusterid: this.form.get(Controls.Clusters).value,
+        clusterid: this.cluster.id,
       },
     };
 
     if (this.form.get(Controls.NameSpaces).value.length) {
       backup.spec.includedNamespaces = this.form.get(Controls.NameSpaces).value;
+    } else {
+      backup.spec.includedNamespaces = this.nameSpaces;
     }
 
     if (this.labels) {
@@ -185,8 +201,8 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       };
     }
 
-    if (this.form.get(Controls.ExpiredAt).value) {
-      backup.spec[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;
+    if (this.form.get(Controls.ExpiresIn).value) {
+      backup.spec[Controls.ExpiresIn] = this.form.get(Controls.ExpiresIn).value;
     }
 
     return backup;
@@ -197,12 +213,17 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       spec: {
         schedule: this.form.get(Controls.CronJob).value,
         template: {
-          includedNamespaces: this.form.get(Controls.NameSpaces).value,
           storageLocation: StorageLocationTempName,
-          clusterid: this.form.get(Controls.Clusters).value,
+          clusterid: this.cluster.id,
         },
       },
     };
+
+    if (this.form.get(Controls.NameSpaces).value.length) {
+      scheduleBackup.spec.template.includedNamespaces = this.form.get(Controls.NameSpaces).value;
+    } else {
+      scheduleBackup.spec.template.includedNamespaces = this.nameSpaces;
+    }
 
     if (this.labels) {
       scheduleBackup.spec.template.labelSelector = {
@@ -210,8 +231,8 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       };
     }
 
-    if (this.form.get(Controls.ExpiredAt).value) {
-      scheduleBackup.spec.template[Controls.ExpiredAt] = this.form.get(Controls.ExpiredAt).value;
+    if (this.form.get(Controls.ExpiresIn).value) {
+      scheduleBackup.spec.template[Controls.ExpiresIn] = this.form.get(Controls.ExpiresIn).value;
     }
     return scheduleBackup;
   }

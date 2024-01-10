@@ -42,15 +42,5 @@ import {ClustersScheduleBackupsListComponent} from './list/schedule/component';
     AddRestoreDialogComponent,
     DeleteRestoreDialogComponent,
   ],
-  exports: [
-    ClusterBackupsComponent,
-    ClustersBackupsListComponent,
-    ClustersScheduleBackupsListComponent,
-    ClustersRestoresListComponent,
-    AddClustersBackupsDialogComponent,
-    DeleteBackupDialogComponent,
-    AddRestoreDialogComponent,
-    DeleteRestoreDialogComponent,
-  ],
 })
 export class ClusterBackupsModule {}

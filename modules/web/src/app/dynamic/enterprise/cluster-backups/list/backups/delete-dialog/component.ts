@@ -18,26 +18,28 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ClusterBackup} from '@app/shared/entity/backup';
+import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
+
+export interface DeleteBackupDialogConfig {
+  type: BackupType;
+  backups: ClusterBackup[];
+}
 
 @Component({
   selector: 'km-delete-backup-dialog',
   templateUrl: './template.html',
 })
-export class DeleteBackupDialogComponent implements OnInit {
+export class DeleteBackupDialogComponent {
+  type = this._config.type;
+  backups = this._config.backups;
   verificationInput = '';
-  backups: ClusterBackup[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteBackupDialogComponent,
+    @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteBackupDialogConfig,
     private readonly _dialogRef: MatDialogRef<DeleteBackupDialogComponent>
   ) {}
-
-  ngOnInit(): void {
-    this.backups = this._config.backups;
-  }
 
   onEnterKeyDown(): void {
     if (!this.isNameVerified()) {
@@ -51,5 +53,9 @@ export class DeleteBackupDialogComponent implements OnInit {
       return this.verificationInput === 'yes';
     }
     return this.verificationInput === this.backups[0]?.name;
+  }
+
+  inputLabel(): string {
+    return this.backups.length > 1 ? `Submit ${this.type}s deletion` : `${this.type} Name`;
   }
 }

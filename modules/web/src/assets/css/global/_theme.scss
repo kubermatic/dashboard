@@ -256,6 +256,15 @@
     background-color: map.get($colors, background-hover);
   }
 
+  .km-mat-row.km-pointer.km-selected {
+    background-color: map.get($colors, background-hover);
+
+    td {
+      color: map.get($colors, text-disabled);
+    }
+
+  }
+
   .km-mat-footer-row {
     border-color: map.get($colors, divider);
     color: map.get($colors, text-secondary);

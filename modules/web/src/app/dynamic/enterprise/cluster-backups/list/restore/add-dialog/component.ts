@@ -21,58 +21,54 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ClusterService} from '@app/core/services/cluster';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
-import {ClusterRestore} from '@app/shared/entity/backup';
+import {ClusterBackup, ClusterRestore} from '@app/shared/entity/backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {CookieService} from 'ngx-cookie-service';
-import {Observable, Subject, takeUntil} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
+
+export interface AddRestoreDialogConfig {
+  backup: ClusterBackup;
+  projectID: string;
+}
 
 enum Controls {
   Name = 'name',
-  Clusters = 'clusters',
   NameSpaces = 'namespaces',
 }
 
 @Component({
-  selector: 'km-add-dialog',
+  selector: 'km-add-restore-dialog',
   templateUrl: './template.html',
 })
 export class AddRestoreDialogComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
-  data: any;
+  projectID = this._config.projectID;
+  backup = this._config.backup;
   form: FormGroup;
   controls = Controls;
   clusters: Cluster[] = [];
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _config: AddRestoreDialogComponent,
+    @Inject(MAT_DIALOG_DATA) private readonly _config: AddRestoreDialogConfig,
     private readonly _dialogRef: MatDialogRef<AddRestoreDialogComponent>,
     private readonly _builder: FormBuilder,
     readonly _cookieService: CookieService,
-    private readonly _clusterService: ClusterService,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.data = this._config;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      // [Controls.Clusters]: this._builder.control(this.data.backup.spec.clusterid, Validators.required),
       [Controls.NameSpaces]: this._builder.control('', Validators.required),
     });
-
-    this._clusterService
-      .clusters(this.data.projectID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
   }
 
   getObservable(): Observable<ClusterRestore> {
     return this._clusterBackupService.createRestore(
-      this.data.projectID,
-      this.data.backup.spec.clusterid,
+      this.projectID,
+      this.backup.spec.clusterid,
       this._getClusterRestoreConfig()
     );
   }
@@ -92,7 +88,7 @@ export class AddRestoreDialogComponent implements OnInit {
       name: this.form.controls[Controls.Name].value,
       spec: {
         includedNamespaces: this.form.controls[Controls.NameSpaces].value,
-        backupName: this.data.backup.name,
+        backupName: this.backup.name,
       },
     };
     return restore;

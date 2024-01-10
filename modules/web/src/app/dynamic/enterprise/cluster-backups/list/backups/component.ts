@@ -18,9 +18,9 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {AddClustersBackupsDialogComponent} from './add-dialog/component';
+import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
 import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
 import {MemberUtils, Permission} from '@app/shared/utils/member';
@@ -31,13 +31,21 @@ import {Project} from '@shared/entity/project';
 import {MatTableDataSource} from '@angular/material/table';
 import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
-import {AddRestoreDialogComponent} from '../restore/add-dialog/component';
+import {AddRestoreDialogComponent, AddRestoreDialogConfig} from '../restore/add-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {Cluster} from '@app/shared/entity/cluster';
 import {ClusterService} from '@app/core/services/cluster';
 import {View} from '@app/shared/entity/common';
 import {NotificationService} from '@app/core/services/notification';
 import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+
+enum ClusterState {
+  Ready = 'Clusters',
+  Loading = 'Loading...',
+  Empty = 'No Clusters Available',
+}
 
 @Component({
   selector: 'km-cluster-backups-list',
@@ -60,14 +68,23 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   loadingBackups: boolean = false;
   currentSearchfield: string;
   showRowDetails: Map<string, boolean> = new Map<string, boolean>();
+  clusterLabel = ClusterState.Ready;
+  columns: string[] = [
+    'select',
+    'status',
+    'name',
+    'labels',
+    'cluster',
+    'destination',
+    'TTL',
+    'namespaces',
+    'created',
+    'actions',
+  ];
+  toggleableColumn: string[] = ['nameSpacesDetails'];
 
-  get columns(): string[] {
-    return ['select', 'status', 'name', 'labels', 'cluster', 'destination', 'TTL', 'namespaces', 'created', 'actions'];
-  }
-
-  get toggleableColumn(): string[] {
-    return ['nameSpacesDetails'];
-  }
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   get canAdd(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.ClusterBackup, Permission.Create);
@@ -87,9 +104,19 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.sort.direction = 'asc';
+    this.sort.active = 'name';
 
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => {
+      this.isAdmin = user.isAdmin;
+      this._user = user;
+    });
+
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.paginator.pageSize = settings.itemsPerPage;
+    });
 
     this._projectService.selectedProject
       .pipe(
@@ -124,11 +151,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   checkSelected(backupID: string): boolean {
-    const isSelected = !!this.selectedBackups.some(backup => backup.id === backupID);
-    if (isSelected && this.selectedBackups.length) {
-      return true;
-    }
-    return false;
+    return this.selectedBackups.some(backup => backup.id === backupID);
   }
 
   onClusterChange(clusterID: string): void {
@@ -160,11 +183,13 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   addBackup(): void {
+    const cluster = this.clusters.find(cluster => cluster.id === this.selectedCluster);
     const config: MatDialogConfig = {
       data: {
         projectID: this._selectedProject?.id,
         type: BackupType.Backup,
-      },
+        cluster,
+      } as AddClustersBackupsDialogConfig,
     };
     this._matDialog
       .open(AddClustersBackupsDialogComponent, config)
@@ -179,7 +204,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       data: {
         backup,
         projectID: this._selectedProject?.id,
-      },
+      } as AddRestoreDialogConfig,
     };
     this._matDialog.open(AddRestoreDialogComponent, config);
   }
@@ -188,6 +213,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         backups,
+        type: BackupType.Backup,
       },
     };
     this._matDialog
@@ -216,15 +242,17 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   }
 
   private _getClusters(projectID: string): void {
+    this.clusterLabel = ClusterState.Loading;
     this._clusterService
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this.clusters = clusters;
         if (!this.selectedCluster) {
-          this.selectedCluster = clusters[0].id;
+          this.selectedCluster = clusters[0]?.id;
           this._getBackupsList(this._selectedProject.id);
         }
+        this.clusterLabel = clusters.length ? ClusterState.Ready : ClusterState.Empty;
       });
   }
 

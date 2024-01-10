@@ -349,6 +349,13 @@ hr {
       transition: opacity 0.1s ease-out;
     }
   }
+
+  tr.km-selected {
+    button {
+      opacity: 30%;
+      pointer-events: none;
+    }
+  }
 }
 
 .km-version-picker {

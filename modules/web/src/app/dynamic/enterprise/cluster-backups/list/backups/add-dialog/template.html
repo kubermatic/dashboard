@@ -22,28 +22,17 @@ END OF TERMS AND CONDITIONS
 <div>
   <km-dialog-title>Create Cluster {{type}}</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Cluster name: <b>{{cluster.name}}</b></p>
     <form [formGroup]="form">
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input [formControlName]="Controls.Name"
                matInput
                required>
-        <mat-hint>The name of the created cluster {{type.toLocaleLowerCase()}}.</mat-hint>
+        <mat-hint>The name of the created cluster {{type.toLowerCase()}}.</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
-        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
-        <mat-select [formControlName]="Controls.Clusters"
-                    disableOptionCentering
-                    required>
-          <mat-option *ngFor="let cluster of clusters"
-                      [value]="cluster.id">{{cluster.name}}</mat-option>
-        </mat-select>
-        <mat-hint>The list of existing clusters for the selected project.</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label *ngIf="hasDestinations()">Destination</mat-label>
-        <mat-label *ngIf="!hasDestinations()">No destinations available</mat-label>
+        <mat-label>{{destinationsLabel}}</mat-label>
         <mat-select [formControlName]="Controls.Destination"
                     disableOptionCentering
                     required>
@@ -62,7 +51,7 @@ END OF TERMS AND CONDITIONS
         </mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Name Spaces</mat-label>
+        <mat-label>{{namespacesLabel}}</mat-label>
         <mat-select [formControlName]="Controls.NameSpaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
@@ -72,16 +61,17 @@ END OF TERMS AND CONDITIONS
             {{nameSpace}}
           </mat-option>
         </mat-select>
-        <mat-hint>namespaces to include in the backup. If unspecified, all namespaces are included.</mat-hint>
+        <mat-hint>Namespaces to include in the backup. If unspecified, all namespaces are included.</mat-hint>
       </mat-form-field>
 
-      <mat-form-field *ngIf="isScheduleBackup()">
+      <mat-form-field *ngIf="isScheduleBackup()"
+                      class="schedule-field">
         <mat-label>Schedule</mat-label>
         <input [formControlName]="Controls.CronJob"
                matInput
                required>
         <mat-hint>
-          Cron expression that describes how often a backup restore should be created. Must match the criteria specified
+          Cron expression that describes how often a backup should be created. Must match the criteria specified
           <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
              target="_blank"
              fxLayout="row inline"
@@ -89,11 +79,11 @@ END OF TERMS AND CONDITIONS
              rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
         </mat-hint>
       </mat-form-field>
-      <mat-form-field class="expired-field">
-        <mat-label>ExpiredAt</mat-label>
-        <input [formControlName]="Controls.ExpiredAt"
+      <mat-form-field>
+        <mat-label>Expires In</mat-label>
+        <input [formControlName]="Controls.ExpiresIn"
                matInput>
-        <mat-hint>The amount of time before this backup is eligible for garbage collection. If not specified,
+        <mat-hint>Enter time in the format HHhMMmSSs (e.g., 24h10m10s), The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
       </mat-form-field>
       <div class="labels">
@@ -107,7 +97,7 @@ END OF TERMS AND CONDITIONS
   </mat-dialog-content>
   <mat-dialog-actions>
     <km-button icon="km-icon-add"
-               [label]="label"
+               [label]="btnLabel"
                [disabled]="form.invalid"
                [observable]="getObservable()"
                (next)="onNext($event)">

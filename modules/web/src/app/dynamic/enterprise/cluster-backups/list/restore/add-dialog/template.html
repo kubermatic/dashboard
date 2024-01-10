@@ -21,22 +21,22 @@ END OF TERMS AND CONDITIONS
 -->
 <div>
   <form [formGroup]="form">
-    <km-dialog-title>Restore {{data.backup.name}} Backup</km-dialog-title>
+    <km-dialog-title>Restore {{backup.name}} Backup</km-dialog-title>
     <mat-dialog-content>
       <mat-form-field>
         <mat-label>Name</mat-label>
         <input [formControlName]="controls.Name"
                matInput
                required>
-        <mat-hint>Chose a unique name for, name can't be changed.</mat-hint>
+        <mat-hint>Choose a unique name for restore. Name can't be changed.</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>chose Name Spaces</mat-label>
+        <mat-label>Choose Namespaces</mat-label>
         <mat-select [formControlName]="controls.NameSpaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of data.backup.spec.includedNamespaces"
+          <mat-option *ngFor="let nameSpace of backup.spec.includedNamespaces"
                       [value]="nameSpace">
             {{nameSpace}}
           </mat-option>
@@ -44,7 +44,7 @@ END OF TERMS AND CONDITIONS
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <km-button icon="km-icon-add"
+      <km-button icon="km-icon-restore"
                  label="Restore Cluster"
                  [disabled]="form.invalid"
                  [observable]="getObservable()"

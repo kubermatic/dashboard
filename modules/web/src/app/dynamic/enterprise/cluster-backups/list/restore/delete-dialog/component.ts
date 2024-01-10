@@ -18,26 +18,26 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterRestore} from '@app/shared/entity/backup';
+
+export interface DeleteRestoreDialogConfig {
+  restores: ClusterRestore[];
+}
 
 @Component({
   selector: 'km-delete-restore-dialog',
   templateUrl: './template.html',
 })
-export class DeleteRestoreDialogComponent implements OnInit {
+export class DeleteRestoreDialogComponent {
   verificationInput = '';
-  restores: ClusterRestore[] = [];
+  restores = this._config.restores;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteRestoreDialogComponent,
+    @Inject(MAT_DIALOG_DATA) private readonly _config: DeleteRestoreDialogConfig,
     private readonly _dialogRef: MatDialogRef<DeleteRestoreDialogComponent>
   ) {}
-
-  ngOnInit(): void {
-    this.restores = this._config.restores;
-  }
 
   onEnterKeyDown(): void {
     if (!this.isNameVerified()) {

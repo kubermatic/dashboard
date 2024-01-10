@@ -19,9 +19,8 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<div id="km-delete-project-dialog"
-     (keydown.enter)="onEnterKeyDown()">
-  <km-dialog-title>Delete Backup</km-dialog-title>
+<div (keydown.enter)="onEnterKeyDown()">
+  <km-dialog-title>Delete {{type}}</km-dialog-title>
   <mat-dialog-content>
     <p *ngIf="backups.length === 1">
       Delete
@@ -29,7 +28,7 @@ END OF TERMS AND CONDITIONS
          [cbContent]="backups[0].name"
          matTooltip="Click to copy"
          class="km-copy">{{backups[0].name}}</b>
-      backup permanently?
+      {{type}} permanently?
     </p>
     <p *ngIf="backups.length > 1">
       Type
@@ -37,14 +36,13 @@ END OF TERMS AND CONDITIONS
          [cbContent]="'yes'"
          matTooltip="Click to copy"
          class="km-copy">yes</b>
-      to delete all selected backups permanently?
+      to delete all selected {{type}}s permanently?
     </p>
     <mat-form-field>
-      <mat-label>{{backups.length > 1 ? "Submit backups deletion" : "Backup Name" }}</mat-label>
-      <input id="km-delete-project-dialog-input"
-             matInput
+      <mat-label>{{inputLabel()}}</mat-label>
+      <input matInput
              type="text"
-             title="Project Name"
+             title="{{type}} Name"
              [(ngModel)]="verificationInput"
              cdkFocusInitial>
     </mat-form-field>
@@ -52,10 +50,9 @@ END OF TERMS AND CONDITIONS
   <mat-dialog-actions>
     <button mat-flat-button
             [mat-dialog-close]="true"
-            id="km-delete-project-dialog-confirm-btn"
             [disabled]="!isNameVerified()">
       <i class="km-icon-mask km-icon-delete i-24"></i>
-      <span>Delete Backup</span>
+      <span>Delete {{type}}</span>
     </button>
   </mat-dialog-actions>
 </div>
