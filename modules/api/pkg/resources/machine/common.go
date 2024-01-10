@@ -642,11 +642,13 @@ func getAlibabaProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 
 func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*anexia.RawConfig, error) {
 	config := &anexia.RawConfig{
-		VlanID:     providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.VlanID},
-		TemplateID: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.TemplateID},
-		CPUs:       nodeSpec.Cloud.Anexia.CPUs,
-		Memory:     int(nodeSpec.Cloud.Anexia.Memory),
-		LocationID: providerconfig.ConfigVarString{Value: dc.Spec.Anexia.LocationID},
+		VlanID:        providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.VlanID},
+		TemplateID:    providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.TemplateID},
+		Template:      providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.Template},
+		TemplateBuild: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Anexia.TemplateBuild},
+		CPUs:          nodeSpec.Cloud.Anexia.CPUs,
+		Memory:        int(nodeSpec.Cloud.Anexia.Memory),
+		LocationID:    providerconfig.ConfigVarString{Value: dc.Spec.Anexia.LocationID},
 	}
 
 	if nodeSpec.Cloud.Anexia.DiskSize != nil {

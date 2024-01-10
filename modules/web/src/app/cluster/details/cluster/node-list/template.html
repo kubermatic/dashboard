@@ -381,6 +381,10 @@ limitations under the License.
               <div key>Template ID</div>
               <div value>{{element.spec.cloud.anexia.templateID}}</div>
             </km-property>
+            <km-property *ngIf="element.spec.cloud.anexia?.template">
+              <div key>Template Name</div>
+              <div value>{{element.spec.cloud.anexia.template}}</div>
+            </km-property>
             <km-property *ngIf="element.spec.cloud.anexia?.vlanID">
               <div key>VLAN ID</div>
               <div value>{{element.spec.cloud.anexia.vlanID}}</div>

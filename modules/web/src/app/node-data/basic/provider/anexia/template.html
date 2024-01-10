@@ -37,11 +37,11 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <km-autocomplete label="Template ID"
-                   [formControlName]="Controls.TemplateID"
+  <km-autocomplete label="Template Name or ID"
+                   [formControlName]="Controls.Template"
                    [isLoading]="isLoadingTemplates"
-                   [id]="Controls.TemplateID"
-                   [options]="templates"
+                   [id]="Controls.Template"
+                   [options]="templateNames.concat(templateIDs)"
                    required>
   </km-autocomplete>
 

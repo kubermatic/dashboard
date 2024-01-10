@@ -161,6 +161,7 @@ export class NodeSystemInfo {
 export class AnexiaNodeSpec {
   vlanID: string;
   templateID: string;
+  template: string;
   cpus: number;
   memory: number;
   diskSize: number;

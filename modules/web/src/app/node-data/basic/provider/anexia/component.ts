@@ -38,7 +38,7 @@ import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   VlanID = 'vlanID',
-  TemplateID = 'templateID',
+  Template = 'template',
   Cpus = 'cpus',
   Memory = 'memory',
   DiskSize = 'diskSize',
@@ -67,7 +67,8 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   private readonly _defaultCpus = 1;
   private readonly _defaultMemory = 2048; // in MB
   vlans: string[] = [];
-  templates: string[] = [];
+  templateIDs: string[] = [];
+  templateNames: string[] = [];
   isLoadingVlans = false;
   isLoadingTemplates = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
@@ -79,7 +80,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
   }
 
-  private get _templateIdsObservable(): Observable<AnexiaVlan[]> {
+  private get _templatesObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.templates(this._clearTemplate.bind(this), this._onTemplateLoading.bind(this));
   }
 
@@ -98,7 +99,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.VlanID]: this._builder.control('', Validators.required),
-      [Controls.TemplateID]: this._builder.control('', Validators.required),
+      [Controls.Template]: this._builder.control('', Validators.required),
       [Controls.Cpus]: this._builder.control(this._defaultCpus),
       [Controls.Memory]: this._builder.control(this._defaultMemory),
       [Controls.DiskSize]: this._builder.control(this._defaultDiskSize),
@@ -108,7 +109,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
-    this._templateIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
+    this._templatesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
 
     merge(
       this.form.get(Controls.Cpus).valueChanges,
@@ -128,19 +129,27 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       .subscribe(v => (this._nodeDataService.nodeData.spec.cloud.anexia.vlanID = v));
 
     this.form
-      .get(Controls.TemplateID)
+      .get(Controls.Template)
       .valueChanges.pipe(
         filter(form => !!form),
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(t => (this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t));
+      .subscribe(t => {
+        if (!this.templateIDs.includes(t)) {
+          this._nodeDataService.nodeData.spec.cloud.anexia.template = t;
+          this._nodeDataService.nodeData.spec.cloud.anexia.templateID = '';
+        } else {
+          this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t;
+          this._nodeDataService.nodeData.spec.cloud.anexia.template = '';
+        }
+      });
 
     merge(
       this.form.get(Controls.Cpus).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
       this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.TemplateID).valueChanges,
+      this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.VlanID).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
@@ -189,7 +198,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _clearTemplate(): void {
     this.vlans = [];
-    this.form.get(Controls.TemplateID).setValue(AutocompleteInitialState);
+    this.form.get(Controls.Template).setValue(AutocompleteInitialState);
     this._cdr.detectChanges();
   }
 
@@ -208,14 +217,17 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _setDefaultTemplate(templates: AnexiaTemplate[]): void {
     this.isLoadingTemplates = false;
-    this.templates = _.sortBy(templates, t => t.id.toLowerCase()).map(t => t.id);
-    let selectedTemplate = this._nodeDataService.nodeData.spec.cloud.anexia.templateID;
-
-    if (!selectedTemplate && this.templates.length > 0) {
-      selectedTemplate = this.templates[0];
+    this.templateIDs = _.sortBy(templates, t => t.id.toLowerCase()).map(t => t.id);
+    this.templateNames = _.sortBy(templates, t => t.name.toLowerCase()).map(t => t.name);
+    let selectedTemplate =
+      this._nodeDataService.nodeData.spec.cloud.anexia.template ||
+      this._nodeDataService.nodeData.spec.cloud.anexia.templateID;
+    if (!selectedTemplate && this.templateNames.length > 0) {
+      selectedTemplate = this.templateNames[0];
     }
-
-    this.form.get(Controls.TemplateID).setValue({main: selectedTemplate});
+    if (selectedTemplate) {
+      this.form.get(Controls.Template).setValue({main: selectedTemplate});
+    }
     this._cdr.detectChanges();
   }
 
@@ -240,7 +252,7 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
         [Controls.Memory]: this.form.get(Controls.Memory).value,
         [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
-        [Controls.TemplateID]: this.form.get(Controls.TemplateID).value?.[AutocompleteControls.Main],
+        [Controls.Template]: this.form.get(Controls.Template).value?.[AutocompleteControls.Main],
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };

@@ -905,19 +905,26 @@ func TestAnexiaNodeSpec_MarshalJSON(t *testing.T) {
 		{
 			"case 1: should fail when required parameters are not provided",
 			&apiv1.AnexiaNodeSpec{},
-			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, templateID missing, disks missing",
+			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, neither templateID nor template is set, disks missing",
 		},
 		{
 			"case 2: should fail when only vlanID is provided",
 			&apiv1.AnexiaNodeSpec{
 				VlanID: "test-vlan",
 			},
-			"missing or invalid required parameter(s): cpus missing, memory missing, templateID missing, disks missing",
+			"missing or invalid required parameter(s): cpus missing, memory missing, neither templateID nor template is set, disks missing",
 		},
 		{
-			"case 3: should fail when only templateID is provided",
+			"case 3.1: should fail when only templateID is provided",
 			&apiv1.AnexiaNodeSpec{
-				TemplateID: "test-template",
+				TemplateID: "test-template-id",
+			},
+			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, disks missing",
+		},
+		{
+			"case 3.2: should fail when only template is provided",
+			&apiv1.AnexiaNodeSpec{
+				Template: "test-template-name",
 			},
 			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, disks missing",
 		},
@@ -926,21 +933,21 @@ func TestAnexiaNodeSpec_MarshalJSON(t *testing.T) {
 			&apiv1.AnexiaNodeSpec{
 				CPUs: 1,
 			},
-			"missing or invalid required parameter(s): vlanID missing, memory missing, templateID missing, disks missing",
+			"missing or invalid required parameter(s): vlanID missing, memory missing, neither templateID nor template is set, disks missing",
 		},
 		{
 			"case 5: should fail when only memory is provided",
 			&apiv1.AnexiaNodeSpec{
 				Memory: 1,
 			},
-			"missing or invalid required parameter(s): vlanID missing, cpus missing, templateID missing, disks missing",
+			"missing or invalid required parameter(s): vlanID missing, cpus missing, neither templateID nor template is set, disks missing",
 		},
 		{
 			"case 6: should fail when only diskSize is provided",
 			&apiv1.AnexiaNodeSpec{
 				DiskSize: &[]int64{1}[0],
 			},
-			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, templateID missing",
+			"missing or invalid required parameter(s): vlanID missing, cpus missing, memory missing, neither templateID nor template is set",
 		},
 		{
 			"case 7: should fail with diskSize and disks provided",
