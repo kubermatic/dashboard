@@ -391,10 +391,11 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			}
 
 			if config.DiskSize > 0 {
-				cloudSpec.Anexia.DiskSize = ptr.To[int64](int64(config.DiskSize))
-			}
-
-			if diskCount := len(config.Disks); diskCount > 0 {
+				// migrate deprecated diskSize to disks config
+				cloudSpec.Anexia.Disks = []apiv1.AnexiaDiskConfig{
+					{Size: int64(config.DiskSize)},
+				}
+			} else if diskCount := len(config.Disks); diskCount > 0 {
 				cloudSpec.Anexia.Disks = make([]apiv1.AnexiaDiskConfig, diskCount)
 
 				for diskIndex, diskConfig := range config.Disks {

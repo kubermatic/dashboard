@@ -652,10 +652,11 @@ func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 	}
 
 	if nodeSpec.Cloud.Anexia.DiskSize != nil {
-		config.DiskSize = int(*nodeSpec.Cloud.Anexia.DiskSize)
-	}
-
-	if diskcount := len(nodeSpec.Cloud.Anexia.Disks); diskcount > 0 {
+		// migrate deprecated diskSize to disks config
+		config.Disks = []anexia.RawDisk{
+			{Size: int(*nodeSpec.Cloud.Anexia.DiskSize)},
+		}
+	} else if diskcount := len(nodeSpec.Cloud.Anexia.Disks); diskcount > 0 {
 		config.Disks = make([]anexia.RawDisk, diskcount)
 
 		for diskIndex, diskConfig := range nodeSpec.Cloud.Anexia.Disks {
@@ -667,7 +668,7 @@ func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 		}
 	}
 
-	if config.DiskSize > 0 && len(config.Disks) > 0 {
+	if nodeSpec.Cloud.Anexia.DiskSize != nil && len(nodeSpec.Cloud.Anexia.Disks) > 0 {
 		return nil, anexiaProvider.ErrConfigDiskSizeAndDisks
 	}
 

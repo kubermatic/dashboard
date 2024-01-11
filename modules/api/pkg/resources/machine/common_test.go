@@ -45,7 +45,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 		wantErr        error
 	}{
 		{
-			name: "Anexia node spec with DiskSize attribute",
+			name: "Anexia node spec with DiskSize attribute migrates to Disks",
 			anexiaNodeSpec: apiv1.AnexiaNodeSpec{
 				VlanID:     vlanID,
 				TemplateID: templateID,
@@ -59,8 +59,9 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				LocationID: providerconfigtypes.ConfigVarString{Value: locationID},
 				CPUs:       4,
 				Memory:     4096,
-				DiskSize:   80,
-				Disks:      nil,
+				Disks: []anexiatypes.RawDisk{
+					{Size: 80},
+				},
 			},
 			wantErr: nil,
 		},
@@ -150,8 +151,10 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				assert.EqualValues(t, resultRawConfig.Memory, test.anexiaNodeSpec.Memory, "Memory should be set correctly")
 
 				if test.anexiaNodeSpec.DiskSize != nil {
-					assert.EqualValues(t, resultRawConfig.DiskSize, *test.anexiaNodeSpec.DiskSize, "DiskSize should be set correctly")
-					assert.Nil(t, resultRawConfig.Disks, "Disks attribute should be nil")
+					assert.Len(t, resultRawConfig.Disks, 1, "Disks attribute should have correct length")
+					assert.EqualValues(t, resultRawConfig.Disks[0].Size, *test.anexiaNodeSpec.DiskSize, "Disk entry should have correct size")
+					assert.Empty(t, resultRawConfig.Disks[0].PerformanceType, "Disk entry should have no performance type")
+					assert.EqualValues(t, resultRawConfig.DiskSize, 0, "DiskSize should be set to 0")
 				} else {
 					assert.EqualValues(t, resultRawConfig.DiskSize, 0, "DiskSize should be set to 0")
 					assert.Len(t, resultRawConfig.Disks, len(test.anexiaNodeSpec.Disks), "Disks attribute should have correct length")
