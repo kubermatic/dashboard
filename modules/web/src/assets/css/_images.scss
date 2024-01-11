@@ -246,6 +246,10 @@
   @include mixins.mask-image('/assets/images/icons/backups.svg', 24px);
 }
 
+.km-icon-cluster-backup {
+  @include mixins.mask-image('/assets/images/icons/cluster-backups.svg', 24px);
+}
+
 .km-icon-key {
   @include mixins.mask-image('/assets/images/icons/ssh-keys.svg', 24px);
 }

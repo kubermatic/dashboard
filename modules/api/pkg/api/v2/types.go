@@ -20,6 +20,7 @@ import (
 	"time"
 
 	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -262,6 +263,27 @@ type AllowedRegistry struct {
 	Name string `json:"name"`
 
 	Spec kubermaticv1.AllowedRegistrySpec `json:"spec"`
+}
+
+type ClusterBackup struct {
+	// Name of the cluster backup
+	Name string `json:"name,omitempty"`
+	// Spec of a velero backup
+	Spec velerov1.BackupSpec `json:"spec,omitempty"`
+}
+
+type ClusterRestore struct {
+	// Name of the cluster restore
+	Name string `json:"name,omitempty"`
+	// Spec of a velero backup restore
+	Spec velerov1.RestoreSpec `json:"spec,omitempty"`
+}
+
+type ClusterBackupSchedule struct {
+	// Name of the cluster backup schedule
+	Name string `json:"name,omitempty"`
+	// Spec of a velero backup schedule
+	Spec velerov1.ScheduleSpec `json:"spec,omitempty"`
 }
 
 // EtcdBackupConfig represents an object holding the configuration for etcd backups

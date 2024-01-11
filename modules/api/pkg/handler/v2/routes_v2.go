@@ -36,6 +36,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
+	clusterbackup "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/backup"
+	clusterrestore "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/restore"
+	clusterbackupschedule "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/schedule"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
 	constrainttemplate "k8c.io/dashboard/v2/pkg/handler/v2/constraint_template"
@@ -1285,6 +1288,57 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodPatch).
 		Path("/allowedregistries/{allowed_registry}").
 		Handler(r.patchAllowedRegistry())
+
+	// Defines a set of HTTP endpoints for managing cluster backup configs
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup").
+		Handler(r.createClusterBackup())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup").
+		Handler(r.listClusterBackup())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{clusterBackup}").
+		Handler(r.getClusterBackup())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{clusterBackup}").
+		Handler(r.deleteClusterBackup())
+
+	// Defines a set of HTTP endpoints for managing cluster restore configs
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore").
+		Handler(r.createClusterRestore())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore").
+		Handler(r.listClusterRestore())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore/{clusterrestore}").
+		Handler(r.getClusterRestore())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore/{clusterrestore}").
+		Handler(r.deleteClusterRestore())
+
+	// Defines a set of HTTP endpoints for managing cluster schedules
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule").
+		Handler(r.createClusterBackupSchedule())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule").
+		Handler(r.listClusterBackupSchedule())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule/{clusterBackupSchedule}").
+		Handler(r.getClusterBackupSchedule())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule/{clusterBackupSchedule}").
+		Handler(r.deleteClusterBackupSchedule())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
 	mux.Methods(http.MethodPost).
@@ -7556,6 +7610,167 @@ func (r Routing) patchAllowedRegistry() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(allowedregistry.PatchEndpoint(r.userInfoGetter, r.privilegedAllowedRegistryProvider)),
 		allowedregistry.DecodePatchAllowedRegistryReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Cluster Backup.
+func (r Routing) createClusterBackup() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackup.CreateEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackup.DecodeCreateClusterBackupReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listClusterBackup() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackup.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackup.DecodeListClusterBackupReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getClusterBackup() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackup.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackup.DecodeGetClusterBackupReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteClusterBackup() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackup.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackup.DecodeDeleteClusterBackupReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Cluster Restore.
+func (r Routing) createClusterRestore() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestore.CreateEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterrestore.DecodeCreateClusterRestoreReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listClusterRestore() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestore.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterrestore.DecodeListClusterRestoreReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getClusterRestore() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestore.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterrestore.DecodeGetRestoreBackupReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteClusterRestore() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterrestore.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterrestore.DecodeDeleteClusterRestoreReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Cluster backup schedule.
+func (r Routing) createClusterBackupSchedule() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterbackupschedule.CreateEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackupschedule.DecodeCreateClusterBackupScheduleReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listClusterBackupSchedule() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterbackupschedule.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackupschedule.DecodeListClusterBackupScheduleReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getClusterBackupSchedule() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterbackupschedule.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackupschedule.DecodeGetRestoreBackupConfigReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteClusterBackupSchedule() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(clusterbackupschedule.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		clusterbackupschedule.DecodeDeleteClusterBackupScheduleReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

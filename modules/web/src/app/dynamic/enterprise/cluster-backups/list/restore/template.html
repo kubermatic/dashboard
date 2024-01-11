@@ -1,0 +1,207 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2023 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+<mat-card class="km-card">
+  <mat-card-header>
+    <mat-card-title>Cluster Restores</mat-card-title>
+  </mat-card-header>
+  <div fxLayout="row"
+       class="header">
+    <km-combobox class="filter-field"
+                 filterBy="name"
+                 selectBy="id"
+                 inputLabel="Select cluster..."
+                 [label]="clusterLabel"
+                 [enableResetButton]="false"
+                 [selected]="selectedCluster"
+                 [valueFormatter]="clusterDisplayFn.bind(this)"
+                 [options]="clusters"
+                 (changed)="onClusterChange($event)">
+      <div *option="let cluster">
+        {{cluster.name}}
+      </div>
+    </km-combobox>
+    <km-search-field class="search-field"
+                     (queryChange)="onSearch($event)"></km-search-field>
+    <div fxFlex></div>
+    <div *ngIf="selectedRestores.length">
+      <button mat-flat-button
+              type="button"
+              matTooltip="Delete selected"
+              (click)="deleteRestores(selectedRestores)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </div>
+
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           multiTemplateDataRows
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5">
+          <mat-checkbox [checked]="selectAll"
+                        (change)="onSelectAll()" />
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            class="km-cell p-5">
+          <mat-checkbox [checked]="checkSelected(element.id)"
+                        (change)="onSelectedRestore(element)"
+                        (click)="$event.stopPropagation()" />
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i [matTooltip]="getStatus(element.spec.status).message"
+             [ngClass]="getStatus(element.spec.status).icon"
+             class="km-vertical-center"></i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="cluster">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">Cluster ID
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.spec.clusterid}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="backupName">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Backup Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.spec.backupName}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="namespaces">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Namespaces
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.spec.includedNamespaces?.length ?? 'all'}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="created">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Created
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <km-relative-time [date]="element.spec.createdAt"></km-relative-time>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <button mat-icon-button
+                    matTooltip="Delete Restore"
+                    (click)="deleteRestores([element]); $event.stopPropagation()">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="nameSpacesDetails">
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="columns.length">
+          <div class="namespaces-detail">Namespaces</div>
+          <div>
+            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
+                      class="namespaces-label">
+              <div>{{namespace}}</div>
+            </mat-chip>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="columns"></tr>
+      <tr mat-row
+          *matRowDef="let element; columns: columns"
+          class="km-mat-row km-pointer"
+          [ngClass]="{'km-selected': checkSelected(element.id)}"
+          (click)="toggelRestoreDetail(element.name)"></tr>
+      <tr mat-header-row
+          *matRowDef="let element; columns: toggleableColumn"
+          [ngClass]="isRestoreToggeled(element.name) ? '' : 'km-hidden'"
+          class="km-mat-row"></tr>
+    </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!clusterRestores?.length && !loadingRestores">
+      No restores available.
+    </div>
+
+    <div class="km-row"
+         *ngIf="loadingRestores && !clusterRestores?.length">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25"></mat-spinner>
+    </div>
+
+    <div [hidden]="!clusterRestores?.length"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>

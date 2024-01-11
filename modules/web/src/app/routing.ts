@@ -17,6 +17,8 @@ import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
 import {AdminGuard} from '@core/services/auth/guard';
 import {Observable, of} from 'rxjs';
 import {DashboardComponent} from './dashboard/component';
+import {DynamicModule} from './dynamic/module-registry';
+import {View} from './shared/entity/common';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
   preload(route: Route, load: Function): Observable<any> {
@@ -93,6 +95,18 @@ function createRouting(): Routes {
         {
           path: 'projects/:projectID/restores',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
+          path: `projects/:projectID/${View.ClusterBackup}`,
+          loadChildren: () => DynamicModule.ClusterBackups,
+        },
+        {
+          path: `projects/:projectID/${View.ClusterSchedule}`,
+          loadChildren: () => DynamicModule.ClusterBackups,
+        },
+        {
+          path: `projects/:projectID/${View.ClusterRestore}`,
+          loadChildren: () => DynamicModule.ClusterBackups,
         },
         {
           path: 'account',

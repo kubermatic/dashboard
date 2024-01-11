@@ -1,0 +1,106 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2023 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+<div>
+  <km-dialog-title>Create Cluster {{type}}</km-dialog-title>
+  <mat-dialog-content>
+    <p class="km-dialog-context-description">Cluster name: <b>{{cluster.name}}</b></p>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [formControlName]="Controls.Name"
+               matInput
+               required>
+        <mat-hint>The name of the created cluster {{type.toLowerCase()}}.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{destinationsLabel}}</mat-label>
+        <mat-select [formControlName]="Controls.Destination"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let destination of destinations"
+                      [value]="destination">{{destination}}</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="isAdmin && !hasDestinations()">
+          <a class="km-pointer"
+             href="/settings/backupdestinations"
+             fxLayoutAlign=" center"
+             target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.</a>
+        </mat-hint>
+        <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
+        </mat-hint>
+        <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{namespacesLabel}}</mat-label>
+        <mat-select [formControlName]="Controls.NameSpaces"
+                    multiple
+                    panelClass="km-multiple-values-dropdown"
+                    disableOptionCentering>
+          <mat-option *ngFor="let nameSpace of nameSpaces"
+                      [value]="nameSpace">
+            {{nameSpace}}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Namespaces to include in the backup. If unspecified, all namespaces are included.</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="isScheduleBackup()"
+                      class="schedule-field">
+        <mat-label>Schedule</mat-label>
+        <input [formControlName]="Controls.CronJob"
+               matInput
+               required>
+        <mat-hint>
+          Cron expression that describes how often a backup should be created. Must match the criteria specified
+          <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
+             target="_blank"
+             fxLayout="row inline"
+             fxLayoutAlign=" center"
+             rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
+        </mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Expires In</mat-label>
+        <input [formControlName]="Controls.ExpiresIn"
+               matInput>
+        <mat-hint>Enter time in the format HHhMMmSSs (e.g., 24h10m10s), The amount of time before this backup is eligible for garbage collection. If not specified,
+          a default value of 30 days will be used.</mat-hint>
+      </mat-form-field>
+      <div class="labels">
+        <km-label-form title="Labels"
+                       [labels]="labels"
+                       noValidators="true"
+                       (labelsChange)="onLabelsChange($event)"
+                       [formControlName]="Controls.Labels"></km-label-form>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <km-button icon="km-icon-add"
+               [label]="btnLabel"
+               [disabled]="form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
+  </mat-dialog-actions>
+</div>

@@ -61,6 +61,7 @@ import (
 	"github.com/gorilla/mux"
 	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
+	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 	"go.uber.org/zap"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
@@ -138,6 +139,9 @@ func main() {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", osmv1alpha1.SchemeGroupVersion), zap.Error(err))
 	}
 
+	if err := velerov1.AddToScheme(scheme.Scheme); err != nil {
+		log.Fatalw("failed to register scheme", zap.Stringer("api", velerov1.SchemeGroupVersion), zap.Error(err))
+	}
 	masterCfg, err := ctrlruntime.GetConfig()
 	if err != nil {
 		log.Fatalw("unable to build client configuration from kubeconfig", zap.Error(err))
