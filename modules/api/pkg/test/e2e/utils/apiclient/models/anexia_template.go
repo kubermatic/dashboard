@@ -17,8 +17,14 @@ import (
 // swagger:model AnexiaTemplate
 type AnexiaTemplate struct {
 
+	// build
+	Build string `json:"build,omitempty"`
+
 	// ID
 	ID string `json:"id,omitempty"`
+
+	// name
+	Name string `json:"name,omitempty"`
 }
 
 // Validate validates this anexia template

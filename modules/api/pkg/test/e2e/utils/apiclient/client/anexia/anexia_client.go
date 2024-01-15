@@ -28,15 +28,57 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ListAnexiaDiskTypesNoCredentialsV2(params *ListAnexiaDiskTypesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaDiskTypesNoCredentialsV2OK, error)
+
 	ListAnexiaTemplatesNoCredentialsV2(params *ListAnexiaTemplatesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaTemplatesNoCredentialsV2OK, error)
 
 	ListAnexiaVlansNoCredentialsV2(params *ListAnexiaVlansNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaVlansNoCredentialsV2OK, error)
+
+	ListProjectAnexiaDiskTypes(params *ListProjectAnexiaDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAnexiaDiskTypesOK, error)
 
 	ListProjectAnexiaTemplates(params *ListProjectAnexiaTemplatesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAnexiaTemplatesOK, error)
 
 	ListProjectAnexiaVlans(params *ListProjectAnexiaVlansParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAnexiaVlansOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+ListAnexiaDiskTypesNoCredentialsV2 Lists disk-types from Anexia
+*/
+func (a *Client) ListAnexiaDiskTypesNoCredentialsV2(params *ListAnexiaDiskTypesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAnexiaDiskTypesNoCredentialsV2OK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListAnexiaDiskTypesNoCredentialsV2Params()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listAnexiaDiskTypesNoCredentialsV2",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/anexia/disk-types",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListAnexiaDiskTypesNoCredentialsV2Reader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListAnexiaDiskTypesNoCredentialsV2OK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListAnexiaDiskTypesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -112,6 +154,44 @@ func (a *Client) ListAnexiaVlansNoCredentialsV2(params *ListAnexiaVlansNoCredent
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListAnexiaVlansNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAnexiaDiskTypes lists disk types from anexia
+*/
+func (a *Client) ListProjectAnexiaDiskTypes(params *ListProjectAnexiaDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAnexiaDiskTypesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAnexiaDiskTypesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAnexiaDiskTypes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/anexia/disk-types",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAnexiaDiskTypesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAnexiaDiskTypesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAnexiaDiskTypesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

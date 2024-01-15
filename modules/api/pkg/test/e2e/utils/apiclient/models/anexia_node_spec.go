@@ -35,9 +35,14 @@ type AnexiaNodeSpec struct {
 	// Required: true
 	Memory *int64 `json:"memory"`
 
+	// Template instance template
+	Template string `json:"template,omitempty"`
+
+	// TemplateBuild instance template
+	TemplateBuild string `json:"templateBuild,omitempty"`
+
 	// TemplateID instance template
-	// Required: true
-	TemplateID *string `json:"templateID"`
+	TemplateID string `json:"templateID,omitempty"`
 
 	// VlanID Instance vlanID
 	// Required: true
@@ -57,10 +62,6 @@ func (m *AnexiaNodeSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMemory(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateTemplateID(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -112,15 +113,6 @@ func (m *AnexiaNodeSpec) validateDisks(formats strfmt.Registry) error {
 func (m *AnexiaNodeSpec) validateMemory(formats strfmt.Registry) error {
 
 	if err := validate.Required("memory", "body", m.Memory); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *AnexiaNodeSpec) validateTemplateID(formats strfmt.Registry) error {
-
-	if err := validate.Required("templateID", "body", m.TemplateID); err != nil {
 		return err
 	}
 
