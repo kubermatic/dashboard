@@ -24,6 +24,11 @@ type OpenstackCloudSpec struct {
 	// application credential secret
 	ApplicationCredentialSecret string `json:"applicationCredentialSecret,omitempty"`
 
+	// Flag to configure enablement of topology support for the Cinder CSI plugin.
+	// This requires Nova and Cinder to have matching availability zones configured.
+	// +optional
+	CinderTopologyEnabled bool `json:"cinderTopologyEnabled,omitempty"`
+
 	// domain
 	Domain string `json:"domain,omitempty"`
 

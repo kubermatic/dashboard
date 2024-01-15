@@ -29,7 +29,7 @@ type Match struct {
 	// Namespaces is a list of namespace names. If defined, a constraint will only apply to resources in a listed namespace.
 	Namespaces []string `json:"namespaces"`
 
-	// Scope accepts *, Cluster, or Namespaced which determines if cluster-scoped and/or namesapced-scoped resources are selected. (defaults to *)
+	// Scope accepts *, Cluster, or Namespaced which determines if cluster-scoped and/or namespace-scoped resources are selected. (defaults to *)
 	Scope string `json:"scope,omitempty"`
 
 	// label selector
