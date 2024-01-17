@@ -373,9 +373,17 @@ limitations under the License.
               <div key>Memory in MB</div>
               <div value>{{element.spec.cloud.anexia.memory}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.anexia?.diskSize">
-              <div key>Disk Size in GB</div>
-              <div value>{{element.spec.cloud.anexia.diskSize}}</div>
+            <km-property *ngIf="element.spec.cloud.anexia?.disks?.length > 0">
+              <div key>Disks</div>
+              <div value>
+                <mat-chip-list selectable="false">
+                  <mat-chip *ngFor="let disk of element.spec.cloud.anexia.disks">
+                    <div>{{disk.size}}GB</div>
+                    <div class="km-chip-accent"
+                         *ngIf="disk.performanceType">{{disk.performanceType}}</div>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.anexia?.templateID">
               <div key>Template ID</div>

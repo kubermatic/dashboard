@@ -37,7 +37,7 @@ limitations under the License.
            fxLayout="row"
            fxLayoutGap="10px">
 
-        <km-number-stepper formControlName="size"
+        <km-number-stepper [formControlName]="DiskControls.Size"
                            mode="errors"
                            label="Disk Size in GB"
                            min="0"
@@ -46,7 +46,7 @@ limitations under the License.
 
         <km-autocomplete label="Disk Type"
                          fxFlex="40"
-                         formControlName="performanceType"
+                         [formControlName]="DiskControls.PerformanceType"
                          [isLoading]="isLoadingDiskTypes"
                          [options]="diskTypes">
         </km-autocomplete>

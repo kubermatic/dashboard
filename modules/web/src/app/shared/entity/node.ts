@@ -388,7 +388,6 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         templateID: '',
         cpus: 1,
         memory: 2048,
-        diskSize: 20,
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {

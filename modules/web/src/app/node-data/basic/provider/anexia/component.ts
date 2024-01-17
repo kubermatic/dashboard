@@ -44,6 +44,11 @@ enum Controls {
   Disks = 'disks',
 }
 
+enum DiskControls {
+  Size = 'size',
+  PerformanceType = 'performanceType',
+}
+
 @Component({
   selector: 'km-anexia-basic-node-data',
   templateUrl: './template.html',
@@ -63,6 +68,7 @@ enum Controls {
 })
 export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
   readonly Controls = Controls;
+  readonly DiskControls = DiskControls;
   private readonly _defaultDiskSize = 20; // in GiB
   private readonly _defaultCpus = 1;
   private readonly _defaultMemory = 2048; // in MB
@@ -104,23 +110,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   get disks() {
     return this.form.get(Controls.Disks) as FormArray;
-  }
-
-  _addDisk(disk: AnexiaNodeSpecDisk) {
-    this.disks.push(
-      this._builder.group({
-        size: this._builder.control(disk.size),
-        performanceType: this._builder.control({main: disk.performanceType || ''}),
-      })
-    );
-  }
-
-  deleteDisk(index: number) {
-    this.disks.removeAt(index);
-  }
-
-  isDiskRemovable(index: number): boolean {
-    return index < this.disks.length - 1;
   }
 
   ngOnInit(): void {
@@ -183,8 +172,8 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       .valueChanges.pipe(
         map(form =>
           form
-            .filter((disk: AnexiaNodeSpecDisk) => disk.size)
-            .map((disk: any) => ({...disk, performanceType: disk.performanceType?.main}))
+            .filter((disk: AnexiaNodeSpecDisk) => disk[DiskControls.Size])
+            .map((disk: any) => ({...disk, [DiskControls.PerformanceType]: disk[DiskControls.PerformanceType]?.main}))
         ),
         takeUntil(this._unsubscribe)
       )
@@ -215,15 +204,33 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._unsubscribe.complete();
   }
 
+  private _addDisk(disk: AnexiaNodeSpecDisk) {
+    this.disks.push(
+      this._builder.group({
+        [DiskControls.Size]: this._builder.control(disk.size),
+        [DiskControls.PerformanceType]: this._builder.control({main: disk.performanceType || ''}),
+      })
+    );
+  }
+
+  deleteDisk(index: number) {
+    this.disks.removeAt(index);
+  }
+
+  isDiskRemovable(index: number): boolean {
+    return index < this.disks.length - 1;
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.anexia) {
       this.form.get(Controls.Cpus).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.memory);
       const disks = this._nodeDataService.nodeData.spec.cloud.anexia.disks;
-      for (const disk of disks) {
+      disks?.forEach(disk => {
         this._addDisk(disk);
-      }
-    } else {
+      });
+    }
+    if (!this.disks.length) {
       this._addDisk({size: this._defaultDiskSize});
     }
     this._cdr.detectChanges();
@@ -292,19 +299,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
   private _setDefaultDiskType(diskTypes: AnexiaDiskType[]): void {
     this.isLoadingDiskTypes = false;
     this.diskTypes = diskTypes.map(dt => dt.id);
-
-    for (let i = 0; i < this.disks.length; i++) {
-      if (
-        this._nodeDataService.nodeData.spec.cloud.anexia.disks.length > i &&
-        this._nodeDataService.nodeData.spec.cloud.anexia.disks[i].performanceType
-      ) {
-        this.disks
-          .at(i)
-          .get('performanceType')
-          .setValue({main: this._nodeDataService.nodeData.spec.cloud.anexia.disks[i].performanceType});
-      }
-    }
-
     this._cdr.detectChanges();
   }
 
@@ -327,11 +321,21 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       anexiaNodeSpec: {
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
         [Controls.Memory]: this.form.get(Controls.Memory).value,
-        [Controls.Disks]: this.form.get(Controls.Disks).value,
-        [Controls.Template]: this.form.get(Controls.Template).value?.[AutocompleteControls.Main],
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };
+
+    const selectedTemplate = this.form.get(Controls.Template).value?.[AutocompleteControls.Main];
+    if (!this.templateIDs.includes(selectedTemplate)) {
+      payload.anexiaNodeSpec.template = selectedTemplate;
+    } else {
+      payload.anexiaNodeSpec.templateID = selectedTemplate;
+    }
+
+    payload.anexiaNodeSpec.disks = this.form
+      .get(Controls.Disks)
+      .value.filter((disk: any) => disk[DiskControls.Size])
+      .map((disk: any) => ({...disk, [DiskControls.PerformanceType]: disk[DiskControls.PerformanceType]?.main}));
 
     if (
       !this._nodeDataService.isInWizardMode() &&
