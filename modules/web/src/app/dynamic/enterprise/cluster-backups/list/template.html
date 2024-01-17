@@ -19,7 +19,7 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<ng-container *ngIf="adminSettings.enableClusterBackup">
+<ng-container *ngIf="adminSettings.enableClusterBackups">
   <ng-container [ngSwitch]="clustersBackupView">
     <km-cluster-restore-list *ngSwitchCase="view.ClusterRestore"></km-cluster-restore-list>
     <km-cluster-backups-list *ngSwitchCase="view.ClusterBackup"></km-cluster-backups-list>

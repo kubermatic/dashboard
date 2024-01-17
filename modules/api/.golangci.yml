@@ -79,6 +79,8 @@ issues:
     - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
     # govet
     - loop variable tc captured by func literal
+    # TODO (sig-api): fix the following issues
+    - cfg.EndpointResolverWithOptions is deprecated
 
 linters-settings:
   depguard:

@@ -31748,8 +31748,8 @@
           "type": "boolean",
           "x-go-name": "DisplayTermsOfService"
         },
-        "enableClusterBackup": {
-          "description": "EnableClusterBackup enables the Cluster Backup feature in the dashboard.",
+        "enableClusterBackups": {
+          "description": "EnableClusterBackups enables the Cluster Backup feature in the dashboard.",
           "type": "boolean",
           "x-go-name": "EnableClusterBackups"
         },

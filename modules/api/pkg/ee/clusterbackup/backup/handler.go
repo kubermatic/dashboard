@@ -76,8 +76,7 @@ type clusterBackupUISpec struct {
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 	req := request.(createClusterBackupReq)
@@ -126,8 +125,7 @@ func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -182,8 +180,7 @@ func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -228,8 +225,7 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -298,14 +294,14 @@ func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Cli
 	return veleroclient.CreateRetryGenerateName(client, ctx, delReq)
 }
 
-func isClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+func IsClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
 	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
 
 	if err != nil {
 		return common.KubernetesErrorToHTTPError(err)
 	}
 
-	if !*globalSettings.Spec.EnableClusterBackups {
+	if globalSettings.Spec.EnableClusterBackups == nil || !*globalSettings.Spec.EnableClusterBackups {
 		return fmt.Errorf("cluster backup feature is disabled by the admin")
 	}
 

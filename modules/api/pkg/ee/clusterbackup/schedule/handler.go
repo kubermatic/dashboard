@@ -73,8 +73,7 @@ type clusterScheduleBackupUISpec struct {
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -123,8 +122,7 @@ func DecodeCreateClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -180,8 +178,7 @@ func DecodeListClusterBackupScheduleReq(c context.Context, r *http.Request) (int
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -226,8 +223,7 @@ func DecodeGetClusterBackupScheduleReq(c context.Context, r *http.Request) (inte
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-
-	if err := isClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -269,18 +265,4 @@ func DecodeDeleteClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 		return "", fmt.Errorf("'clusterBackupSchedule' parameter is required but was not provided")
 	}
 	return req, nil
-}
-
-func isClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
-	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
-
-	if err != nil {
-		return common.KubernetesErrorToHTTPError(err)
-	}
-
-	if !*globalSettings.Spec.EnableClusterBackups {
-		return fmt.Errorf("cluster backup feature is disabled by the admin")
-	}
-
-	return nil
 }

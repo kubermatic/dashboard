@@ -1,6 +1,8 @@
 module k8c.io/dashboard/v2
 
-go 1.20
+go 1.21
+
+toolchain go1.21.6
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20230202191156-f8981083fae2
