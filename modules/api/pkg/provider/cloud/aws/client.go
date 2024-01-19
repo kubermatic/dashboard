@@ -78,20 +78,21 @@ func GetClientSet(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleA
 }
 
 func GetAWSConfig(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region, endpoint string) (aws.Config, error) {
-	cfg, err := awsconfig.LoadDefaultConfig(ctx,
+	opts := []func(*awsconfig.LoadOptions) error{
 		awsconfig.WithRegion(region),
 		awsconfig.WithCredentialsProvider(awscredentials.NewStaticCredentialsProvider(accessKeyID, secretAccessKey, "")),
 		awsconfig.WithRetryMaxAttempts(maxRetries),
-	)
-
-	if err != nil {
-		return aws.Config{}, err
 	}
 
 	if endpoint != "" {
-		resolver := endpointResolver{Url: endpoint}
-		//TODO: fix the following issues method cfg.EndpointResolverWithOptions is deprecated.
-		cfg.EndpointResolverWithOptions = &resolver
+		opts = append(opts,
+			awsconfig.WithEndpointResolverWithOptions(&endpointResolver{Url: endpoint}),
+		)
+	}
+
+	cfg, err := awsconfig.LoadDefaultConfig(ctx, opts...)
+	if err != nil {
+		return aws.Config{}, err
 	}
 
 	if assumeRoleARN != "" {
