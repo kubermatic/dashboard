@@ -115,7 +115,7 @@ func ListAKSVMSizes(ctx context.Context, cred resources.AKSCredentials, location
 }
 
 func AKSAzureSize(ctx context.Context, cred resources.AKSCredentials, location string) (apiv2.AKSVMSizeList, error) {
-	sizesClient, err := NewAzureClientSet(cred.SubscriptionID, cred.ClientID, cred.ClientSecret, cred.TenantID)
+	sizesClient, err := NewAzureClientSet(cred.SubscriptionID, cred.ClientID, cred.ClientSecret, cred.TenantID, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for size client: %w", err)
 	}

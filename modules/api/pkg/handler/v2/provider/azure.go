@@ -18,6 +18,7 @@ package provider
 
 import (
 	"context"
+	"crypto/x509"
 	"fmt"
 	"net/http"
 
@@ -34,21 +35,21 @@ import (
 	"k8s.io/utils/ptr"
 )
 
-func AzureSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+func AzureSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(azureSizeNoCredentialsReq)
-		return providercommon.AzureSizeWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, settingsProvider, req.ProjectID, req.ClusterID)
+		return providercommon.AzureSizeWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, settingsProvider, req.ProjectID, req.ClusterID, caBundle)
 	}
 }
 
-func AzureAvailabilityZonesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureAvailabilityZonesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(azureAvailabilityZonesNoCredentialsReq)
-		return providercommon.AzureAvailabilityZonesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, req.SKUName)
+		return providercommon.AzureAvailabilityZonesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID, req.SKUName, caBundle)
 	}
 }
 
-func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       azureSecurityGroupsReq
@@ -75,11 +76,11 @@ func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInf
 		if err != nil {
 			return nil, err
 		}
-		return providercommon.AzureSecurityGroupEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup)
+		return providercommon.AzureSecurityGroupEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup, caBundle)
 	}
 }
 
-func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       azureResourceGroupsReq
@@ -106,11 +107,11 @@ func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInf
 		if err != nil {
 			return nil, err
 		}
-		return providercommon.AzureResourceGroupEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location)
+		return providercommon.AzureResourceGroupEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, caBundle)
 	}
 }
 
-func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       azureRouteTablesReq
@@ -137,11 +138,11 @@ func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGe
 		if err != nil {
 			return nil, err
 		}
-		return providercommon.AzureRouteTableEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup)
+		return providercommon.AzureRouteTableEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup, caBundle)
 	}
 }
 
-func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       azureVirtualNetworksReq
@@ -168,11 +169,11 @@ func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userIn
 		if err != nil {
 			return nil, err
 		}
-		return providercommon.AzureVnetEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup)
+		return providercommon.AzureVnetEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.ResourceGroup, caBundle)
 	}
 }
 
-func AzureSubnetsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func AzureSubnetsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       azureSubnetsReq
@@ -199,11 +200,11 @@ func AzureSubnetsEndpoint(presetProvider provider.PresetProvider, userInfoGetter
 		if err != nil {
 			return nil, err
 		}
-		return providercommon.AzureSubnetEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.ResourceGroup, req.VirtualNetwork)
+		return providercommon.AzureSubnetEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.ResourceGroup, req.VirtualNetwork, caBundle)
 	}
 }
 
-func AzureSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+func AzureSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(azureProjectSizesReq)
 		if !ok {
@@ -235,11 +236,11 @@ func AzureSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
 		}
 
-		return providercommon.AzureSize(ctx, filter, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location)
+		return providercommon.AzureSize(ctx, filter, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, caBundle)
 	}
 }
 
-func AzureAvailabilityZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureAvailabilityZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(azureProjectAvailabilityZonesReq)
 		if !ok {
@@ -251,7 +252,7 @@ func AzureAvailabilityZonesEndpoint(presetProvider provider.PresetProvider, user
 			return nil, err
 		}
 
-		return providercommon.AzureSKUAvailabilityZones(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.SKUName)
+		return providercommon.AzureSKUAvailabilityZones(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.SKUName, caBundle)
 	}
 }
 

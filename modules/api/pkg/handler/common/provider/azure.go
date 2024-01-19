@@ -18,13 +18,20 @@ package provider
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"net"
 	"net/http"
+	"time"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armresources"
+	"golang.org/x/net/http2"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -46,43 +53,95 @@ var gpuInstanceFamilies = map[string]int32{"Standard_NC6": 1, "Standard_NC12": 2
 	"Standard_ND40rs_v2": 8, "Standard_NV6": 1, "Standard_NV12": 2, "Standard_NV24": 4, "Standard_NV12s_v3": 1, "Standard_NV24s_v3": 2, "Standard_NV48s_v3": 4,
 	"Standard_NV32as_v4": 1}
 
-var NewAzureClientSet = func(subscriptionID, clientID, clientSecret, tenantID string) (AzureClientSet, error) {
+func defaultTransportDialContext(dialer *net.Dialer) func(context.Context, string, string) (net.Conn, error) {
+	return dialer.DialContext
+}
+
+// Copied from: https://github.com/Azure/azure-sdk-for-go/blob/sdk/azcore/v1.9.1/sdk/azcore/runtime/transport_default_http_client.go#L20
+func getDefaultHTTPClient(caBundle *x509.CertPool) *http.Client {
+	defaultTransport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: defaultTransportDialContext(&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}),
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          100,
+		MaxIdleConnsPerHost:   10,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		TLSClientConfig: &tls.Config{
+			MinVersion:    tls.VersionTLS12,
+			Renegotiation: tls.RenegotiateFreelyAsClient,
+		},
+	}
+
+	if caBundle != nil {
+		defaultTransport.TLSClientConfig.RootCAs = caBundle
+	}
+
+	// TODO: evaluate removing this once https://github.com/golang/go/issues/59690 has been fixed
+	if http2Transport, err := http2.ConfigureTransports(defaultTransport); err == nil {
+		// if the connection has been idle for 10 seconds, send a ping frame for a health check
+		http2Transport.ReadIdleTimeout = 10 * time.Second
+		// if there's no response to the ping within the timeout, the connection will be closed
+		http2Transport.PingTimeout = 5 * time.Second
+	}
+	defaultHTTPClient := &http.Client{
+		Transport: defaultTransport,
+	}
+	return defaultHTTPClient
+}
+
+var NewAzureClientSet = func(subscriptionID, clientID, clientSecret, tenantID string, caBundle *x509.CertPool) (AzureClientSet, error) {
 	cred, err := azidentity.NewClientSecretCredential(tenantID, clientID, clientSecret, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	sizesClient, err := armcompute.NewVirtualMachineSizesClient(subscriptionID, cred, nil)
+	options := arm.ClientOptions{}
+	if caBundle != nil {
+		client := getDefaultHTTPClient(caBundle)
+
+		options = arm.ClientOptions{
+			ClientOptions: azcore.ClientOptions{
+				Transport: client,
+			},
+		}
+	}
+
+	sizesClient, err := armcompute.NewVirtualMachineSizesClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	skusClient, err := armcompute.NewResourceSKUsClient(subscriptionID, cred, nil)
+	skusClient, err := armcompute.NewResourceSKUsClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	securityGroupsClient, err := armnetwork.NewSecurityGroupsClient(subscriptionID, cred, nil)
+	securityGroupsClient, err := armnetwork.NewSecurityGroupsClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	resourceGroupsClient, err := armresources.NewResourceGroupsClient(subscriptionID, cred, nil)
+	resourceGroupsClient, err := armresources.NewResourceGroupsClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	routeTablesClient, err := armnetwork.NewRouteTablesClient(subscriptionID, cred, nil)
+	routeTablesClient, err := armnetwork.NewRouteTablesClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	subnetsClient, err := armnetwork.NewSubnetsClient(subscriptionID, cred, nil)
+	subnetsClient, err := armnetwork.NewSubnetsClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
 
-	vnetClient, err := armnetwork.NewVirtualNetworksClient(subscriptionID, cred, nil)
+	vnetClient, err := armnetwork.NewVirtualNetworksClient(subscriptionID, cred, &options)
 	if err != nil {
 		return nil, err
 	}
@@ -246,7 +305,7 @@ func (s *azureClientSetImpl) ListVnets(ctx context.Context, resourceGroupName st
 	return result, nil
 }
 
-func AzureSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, projectID, clusterID string) (interface{}, error) {
+func AzureSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, projectID, clusterID string, caBundle *x509.CertPool) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
@@ -287,10 +346,10 @@ func AzureSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter
 	}
 
 	filter := handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
-	return AzureSize(ctx, filter, creds.SubscriptionID, creds.ClientID, creds.ClientSecret, creds.TenantID, azureLocation)
+	return AzureSize(ctx, filter, creds.SubscriptionID, creds.ClientID, creds.ClientSecret, creds.TenantID, azureLocation, caBundle)
 }
 
-func AzureAvailabilityZonesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, projectID, clusterID, skuName string) (interface{}, error) {
+func AzureAvailabilityZonesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, projectID, clusterID, skuName string, caBundle *x509.CertPool) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
@@ -325,7 +384,7 @@ func AzureAvailabilityZonesWithClusterCredentialsEndpoint(ctx context.Context, u
 	if err != nil {
 		return nil, err
 	}
-	return AzureSKUAvailabilityZones(ctx, creds.SubscriptionID, creds.ClientID, creds.ClientSecret, creds.TenantID, azureLocation, skuName)
+	return AzureSKUAvailabilityZones(ctx, creds.SubscriptionID, creds.ClientID, creds.ClientSecret, creds.TenantID, azureLocation, skuName, caBundle)
 }
 
 func isVirtualMachinesType(sku armcompute.ResourceSKU) bool {
@@ -371,8 +430,8 @@ func isValidVM(sku armcompute.ResourceSKU, location string) bool {
 	return true
 }
 
-func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string) (apiv1.AzureSizeList, error) {
-	sizesClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string, caBundle *x509.CertPool) (apiv1.AzureSizeList, error) {
+	sizesClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for size client: %w", err)
 	}
@@ -458,8 +517,8 @@ func filterMachineFlavorsForAzure(instances apiv1.AzureSizeList, machineFilter k
 	return filteredRecords
 }
 
-func AzureSKUAvailabilityZones(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, skuName string) (*apiv1.AzureAvailabilityZonesList, error) {
-	azSKUClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureSKUAvailabilityZones(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, skuName string, caBundle *x509.CertPool) (*apiv1.AzureAvailabilityZonesList, error) {
+	azSKUClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for sku client: %w", err)
 	}
@@ -488,8 +547,8 @@ func AzureSKUAvailabilityZones(ctx context.Context, subscriptionID, clientID, cl
 	return nil, nil
 }
 
-func AzureSecurityGroupEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string) (*apiv1.AzureSecurityGroupsList, error) {
-	securityGroupsClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureSecurityGroupEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string, caBundle *x509.CertPool) (*apiv1.AzureSecurityGroupsList, error) {
+	securityGroupsClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for security groups client: %w", err)
 	}
@@ -509,8 +568,8 @@ func AzureSecurityGroupEndpoint(ctx context.Context, subscriptionID, clientID, c
 	return apiSecurityGroups, nil
 }
 
-func AzureResourceGroupEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location string) (*apiv1.AzureResourceGroupsList, error) {
-	securityGroupsClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureResourceGroupEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location string, caBundle *x509.CertPool) (*apiv1.AzureResourceGroupsList, error) {
+	securityGroupsClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for security groups client: %w", err)
 	}
@@ -530,8 +589,8 @@ func AzureResourceGroupEndpoint(ctx context.Context, subscriptionID, clientID, c
 	return apiResourceGroups, nil
 }
 
-func AzureRouteTableEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string) (*apiv1.AzureRouteTablesList, error) {
-	routeTableClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureRouteTableEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string, caBundle *x509.CertPool) (*apiv1.AzureRouteTablesList, error) {
+	routeTableClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for security groups client: %w", err)
 	}
@@ -551,8 +610,8 @@ func AzureRouteTableEndpoint(ctx context.Context, subscriptionID, clientID, clie
 	return apiRouteTables, nil
 }
 
-func AzureVnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string) (*apiv1.AzureVirtualNetworksList, error) {
-	vnetClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureVnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, location, resourceGroup string, caBundle *x509.CertPool) (*apiv1.AzureVirtualNetworksList, error) {
+	vnetClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for virtual network client: %w", err)
 	}
@@ -572,8 +631,8 @@ func AzureVnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecr
 	return vnets, nil
 }
 
-func AzureSubnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, resourceGroup, virtualNetwork string) (*apiv1.AzureSubnetsList, error) {
-	subnetClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
+func AzureSubnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecret, tenantID, resourceGroup, virtualNetwork string, caBundle *x509.CertPool) (*apiv1.AzureSubnetsList, error) {
+	subnetClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID, caBundle)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for subnet client: %w", err)
 	}

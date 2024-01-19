@@ -4407,7 +4407,7 @@ func (r Routing) listAzureSizesNoCredentials() http.Handler {
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.AzureSizeWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
+		)(provider.AzureSizeWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider, r.caBundle)),
 		provider.DecodeAzureSizesNoCredentialsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4431,7 +4431,7 @@ func (r Routing) listAzureAvailabilityZonesNoCredentials() http.Handler {
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.AzureAvailabilityZonesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.AzureAvailabilityZonesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.caBundle)),
 		provider.DecodeAzureAvailabilityZonesNoCredentialsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5005,7 +5005,7 @@ func (r Routing) listAzureSecurityGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, false, r.caBundle)),
 		provider.DecodeAzureSecurityGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5027,7 +5027,7 @@ func (r Routing) listAzureResourceGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, false, r.caBundle)),
 		provider.DecodeAzureResourceGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5049,7 +5049,7 @@ func (r Routing) listAzureRouteTables() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, false, r.caBundle)),
 		provider.DecodeAzureRouteTablesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5071,7 +5071,7 @@ func (r Routing) listAzureVnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, false, r.caBundle)),
 		provider.DecodeAzureVirtualNetworksReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5115,7 +5115,7 @@ func (r Routing) listAzureSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, false, r.caBundle)),
 		provider.DecodeAzureSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6175,7 +6175,7 @@ func (r Routing) listProjectAzureSizes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		)(provider.AzureSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, r.caBundle)),
 		provider.DecodeAzureProjectSizesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6197,7 +6197,7 @@ func (r Routing) listProjectAzureSKUAvailabilityZones() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureAvailabilityZonesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureAvailabilityZonesEndpoint(r.presetProvider, r.userInfoGetter, r.caBundle)),
 		provider.DecodeAzureProjectAvailabilityZonesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6219,7 +6219,7 @@ func (r Routing) listProjectAzureSecurityGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, true, r.caBundle)),
 		provider.DecodeAzureProjectSecurityGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6241,7 +6241,7 @@ func (r Routing) listProjectAzureResourceGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, true, r.caBundle)),
 		provider.DecodeAzureProjectResourceGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6263,7 +6263,7 @@ func (r Routing) listProjectAzureRouteTables() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, true, r.caBundle)),
 		provider.DecodeAzureProjectRouteTablesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6285,7 +6285,7 @@ func (r Routing) listProjectAzureVnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, true, r.caBundle)),
 		provider.DecodeAzureProjectVirtualNetworksReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6307,7 +6307,7 @@ func (r Routing) listProjectAzureSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true, r.caBundle)),
 		provider.DecodeAzureProjectSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
