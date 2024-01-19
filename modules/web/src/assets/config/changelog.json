@@ -1,25 +1,13 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2241",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2242",
   "entries": [
     {
-      "category": "added",
-      "description": "Allow configuration of Cinder CSI topology in clusters or seed configuration."
-    },
-    {
       "category": "fixed",
-      "description": "Fix cases where, when using dedicated infra- and ccm-credentials, infra-credentials were always overwritten by ccm-credentials."
+      "description": "Fix a bug where Operating System Profiles were not being listed for GCP/GCE."
     },
     {
-      "category": "fixed",
-      "description": "Fix issue in editing and updating applications of cluster template."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix issue with cursor position inside YAML editor."
-    },
-    {
-      "category": "changed",
-      "description": "Update machine-controller to v1.58.1."
+      "category": "removed",
+      "description": "Remove 1.25 from list of supported versions on AKS."
     }
   ]
 }
