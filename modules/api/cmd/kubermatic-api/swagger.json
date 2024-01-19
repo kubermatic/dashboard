@@ -29229,6 +29229,11 @@
           "type": "string",
           "x-go-name": "AvailabilityZone"
         },
+        "csiCinderTopologyEnabled": {
+          "description": "Optional: configures enablement of topology support for the Cinder CSI Plugin.\nThis requires Nova and Cinder to have matching availability zones configured.",
+          "type": "boolean",
+          "x-go-name": "CSICinderTopologyEnabled"
+        },
         "dnsServers": {
           "description": "Used for automatic network creation",
           "type": "array",
@@ -31743,6 +31748,11 @@
           "type": "boolean",
           "x-go-name": "DisplayTermsOfService"
         },
+        "enableClusterBackups": {
+          "description": "EnableClusterBackups enables the Cluster Backup feature in the dashboard.",
+          "type": "boolean",
+          "x-go-name": "EnableClusterBackups"
+        },
         "enableDashboard": {
           "description": "EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.",
           "type": "boolean",
@@ -33432,7 +33442,7 @@
           "x-go-name": "Namespaces"
         },
         "scope": {
-          "description": "Scope accepts *, Cluster, or Namespaced which determines if cluster-scoped and/or namesapced-scoped resources are selected. (defaults to *)",
+          "description": "Scope accepts *, Cluster, or Namespaced which determines if cluster-scoped and/or namespace-scoped resources are selected. (defaults to *)",
           "type": "string",
           "x-go-name": "Scope"
         }
@@ -35015,6 +35025,11 @@
         "applicationCredentialSecret": {
           "type": "string",
           "x-go-name": "ApplicationCredentialSecret"
+        },
+        "cinderTopologyEnabled": {
+          "description": "Flag to configure enablement of topology support for the Cinder CSI plugin.\nThis requires Nova and Cinder to have matching availability zones configured.\n+optional",
+          "type": "boolean",
+          "x-go-name": "CinderTopologyEnabled"
         },
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"

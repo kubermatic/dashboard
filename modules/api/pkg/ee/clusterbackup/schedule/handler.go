@@ -72,7 +72,11 @@ type clusterScheduleBackupUISpec struct {
 }
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(createClusterBackupScheduleReq)
 
 	backupSchedule := &velerov1.Schedule{
@@ -117,7 +121,11 @@ func DecodeCreateClusterBackupScheduleReq(c context.Context, r *http.Request) (i
 }
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(listClusterBackupScheduleReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -169,7 +177,11 @@ func DecodeListClusterBackupScheduleReq(c context.Context, r *http.Request) (int
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(getClusterBackupScheduleReq)
 
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
@@ -210,7 +222,11 @@ func DecodeGetClusterBackupScheduleReq(c context.Context, r *http.Request) (inte
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
 	req := request.(deleteClusterBackupScheduleReq)
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {

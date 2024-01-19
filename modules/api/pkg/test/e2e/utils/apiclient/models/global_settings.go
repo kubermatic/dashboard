@@ -39,6 +39,9 @@ type GlobalSettings struct {
 	// DisplayDemoInfo controls whether a a link to TOS is shown in the footer.
 	DisplayTermsOfService bool `json:"displayTermsOfService,omitempty"`
 
+	// EnableClusterBackups enables the Cluster Backup feature in the dashboard.
+	EnableClusterBackups bool `json:"enableClusterBackups,omitempty"`
+
 	// EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.
 	EnableDashboard bool `json:"enableDashboard,omitempty"`
 

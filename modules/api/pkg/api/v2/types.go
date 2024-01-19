@@ -2060,6 +2060,9 @@ type GlobalSettings struct {
 
 	EnableOIDCKubeconfig bool `json:"enableOIDCKubeconfig"` //nolint:tagliatelle
 
+	// EnableClusterBackups enables the Cluster Backup feature in the dashboard.
+	EnableClusterBackups *bool `json:"enableClusterBackups,omitempty"`
+
 	// DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.
 	DisableAdminKubeconfig bool `json:"disableAdminKubeconfig,omitempty"`
 

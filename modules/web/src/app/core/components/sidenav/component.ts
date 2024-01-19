@@ -22,7 +22,7 @@ import {environment} from '@environments/environment';
 import {getViewDisplayName, ProjectSidenavSection, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {CustomLink, UserSettings} from '@shared/entity/settings';
+import {AdminSettings, CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {sidenavCollapsibleWidth} from '@shared/constants/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
@@ -41,11 +41,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   readonly projectSidenavSections = ProjectSidenavSection;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;
-  customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
-  areExternalClustersEnabled = false;
   isSidenavCollapsed: boolean;
+  adminSettings: AdminSettings;
 
   private readonly _debounceTime = 500;
   private _selectedProject = {} as Project;
@@ -77,8 +76,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.areExternalClustersEnabled = settings.enableExternalClusterImport;
-      this.customLinks = settings.customLinks;
+      this.adminSettings = settings;
     });
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)

@@ -90,6 +90,7 @@ func GetAWSConfig(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleA
 
 	if endpoint != "" {
 		resolver := endpointResolver{Url: endpoint}
+		//TODO: fix the following issues method cfg.EndpointResolverWithOptions is deprecated.
 		cfg.EndpointResolverWithOptions = &resolver
 	}
 

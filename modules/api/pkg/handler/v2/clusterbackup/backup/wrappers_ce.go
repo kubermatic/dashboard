@@ -31,6 +31,7 @@ func listEndpoint(
 	_ provider.UserInfoGetter,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
+	_ provider.SettingsProvider,
 ) (interface{}, error) {
 	return nil, nil
 }
@@ -39,7 +40,7 @@ func decodeListClusterBackupReq(_ context.Context, _ *http.Request) (interface{}
 	return nil, nil
 }
 
-func createEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider) (interface{}, error) {
+func createEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider, _ provider.SettingsProvider) (interface{}, error) {
 	return nil, nil
 }
 
@@ -47,7 +48,7 @@ func decodeCreateClusterBackupReq(_ context.Context, _ *http.Request) (interface
 	return nil, nil
 }
 
-func getEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider) (interface{}, error) {
+func getEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider, _ provider.SettingsProvider) (interface{}, error) {
 	return nil, nil
 }
 
@@ -55,7 +56,7 @@ func decodeGetClusterBackupReq(_ context.Context, _ *http.Request) (interface{},
 	return nil, nil
 }
 
-func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider) (interface{}, error) {
+func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider, _ provider.SettingsProvider) (interface{}, error) {
 	return nil, nil
 }
 

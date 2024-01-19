@@ -44,7 +44,7 @@ limitations under the License.
           </a>
         </div>
 
-        <div *ngIf="areExternalClustersEnabled"
+        <div *ngIf="adminSettings.enableExternalClusterImport"
              class="sub-menu-item"
              [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
           <a id="km-nav-item-external-clusters"
@@ -54,7 +54,7 @@ limitations under the License.
           </a>
         </div>
 
-        <div *ngIf="areExternalClustersEnabled"
+        <div *ngIf="adminSettings.enableExternalClusterImport"
              class="sub-menu-item"
              [ngClass]="{'active': checkUrl(view.KubeOneClusters), 'km-disabled': !isDisabledField(view.KubeOneClusters)}">
           <a id="km-nav-item-kubeone-clusters"
@@ -76,7 +76,7 @@ limitations under the License.
           <span>Clusters</span>
         </a>
 
-        <a *ngIf="areExternalClustersEnabled"
+        <a *ngIf="adminSettings.enableExternalClusterImport"
            fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ExternalClusters)"
            class="collapsed-sub-menu-item"
@@ -84,7 +84,7 @@ limitations under the License.
           <span>External Clusters</span>
         </a>
 
-        <a *ngIf="areExternalClustersEnabled"
+        <a *ngIf="adminSettings.enableExternalClusterImport"
            fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.KubeOneClusters)"
            class="collapsed-sub-menu-item"
@@ -165,7 +165,7 @@ limitations under the License.
       </ng-container>
     </km-side-nav-field>
 
-    <km-side-nav-field *ngIf="isEnterpriseEdition"
+    <km-side-nav-field *ngIf="isEnterpriseEdition && adminSettings.enableClusterBackups"
                        [label]="projectSidenavSections.ClusterBackups"
                        icon="km-icon-cluster-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
@@ -286,7 +286,7 @@ limitations under the License.
       </ng-container>
     </km-side-nav-field>
 
-    <ng-container *ngIf="(customLinks | kmLinkLocation: 'Default') as filtered">
+    <ng-container *ngIf="(adminSettings.customLinks| kmLinkLocation: 'Default') as filtered">
       <mat-divider *ngIf="filtered.length > 0"></mat-divider>
 
       <div *ngFor="let link of filtered"

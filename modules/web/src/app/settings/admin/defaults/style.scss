@@ -29,7 +29,7 @@
     width: 204px;
   }
 
-  mat-checkbox {
+  mat-checkbox:not(.experimental-label) {
     margin-right: 48px;
   }
 

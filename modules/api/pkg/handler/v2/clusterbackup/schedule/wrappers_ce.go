@@ -31,6 +31,7 @@ func createEndpoint(
 	_ provider.UserInfoGetter,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
+	_ provider.SettingsProvider,
 ) (interface{}, error) {
 	return nil, nil
 }
@@ -45,6 +46,7 @@ func listEndpoint(
 	_ provider.UserInfoGetter,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
+	_ provider.SettingsProvider,
 ) (interface{}, error) {
 	return nil, nil
 }
@@ -59,6 +61,7 @@ func getEndpoint(
 	_ provider.UserInfoGetter,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
+	_ provider.SettingsProvider,
 ) (interface{}, error) {
 	return nil, nil
 }
@@ -73,6 +76,7 @@ func deleteEndpoint(
 	_ provider.UserInfoGetter,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
+	_ provider.SettingsProvider,
 ) (interface{}, error) {
 	return nil, nil
 }
