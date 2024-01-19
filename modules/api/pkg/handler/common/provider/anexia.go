@@ -23,6 +23,7 @@ import (
 
 	"go.anx.io/go-anxcloud/pkg/client"
 	"go.anx.io/go-anxcloud/pkg/vlan"
+	"go.anx.io/go-anxcloud/pkg/vsphere/provisioning"
 	"go.anx.io/go-anxcloud/pkg/vsphere/provisioning/templates"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -73,9 +74,33 @@ func ListAnexiaTemplates(ctx context.Context, token, locationID string) (apiv1.A
 
 	for _, template := range templates {
 		apiTemplate := apiv1.AnexiaTemplate{
-			ID: template.ID,
+			ID:    template.ID,
+			Name:  template.Name,
+			Build: template.Build,
 		}
 		response = append(response, apiTemplate)
+	}
+
+	return response, nil
+}
+
+func ListAnexiaDiskTypes(ctx context.Context, token, locationID string) (apiv1.AnexiaDiskTypeList, error) {
+	response := apiv1.AnexiaDiskTypeList{}
+
+	cli, err := getClient(token)
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+	}
+	diskTypes, err := provisioning.NewAPI(cli).DiskType().List(ctx, locationID, 1, 1000)
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+	}
+
+	for _, diskType := range diskTypes {
+		apiDiskType := apiv1.AnexiaDiskType{
+			ID: diskType.ID,
+		}
+		response = append(response, apiDiskType)
 	}
 
 	return response, nil
@@ -138,6 +163,41 @@ func AnexiaTemplatesWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 	}
 
 	return ListAnexiaTemplates(ctx, token, datacenter.Spec.Anexia.LocationID)
+}
+
+func AnexiaDiskTypesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, projectID, clusterID string) (interface{}, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return nil, err
+	}
+	if cluster.Spec.Cloud.Anexia == nil {
+		return nil, utilerrors.NewNotFound("cloud spec for %s", clusterID)
+	}
+
+	datacenterName := cluster.Spec.Cloud.DatacenterName
+
+	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
+	if !ok {
+		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
+	}
+
+	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
+	token, err := anexia.GetCredentialsForCluster(cluster.Spec.Cloud, secretKeySelector)
+	if err != nil {
+		return nil, err
+	}
+	userInfo, err := userInfoGetter(ctx, "")
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to find Datacenter %q: %v", datacenterName, err))
+	}
+
+	return ListAnexiaDiskTypes(ctx, token, datacenter.Spec.Anexia.LocationID)
 }
 
 func getClient(token string) (client.Client, error) {

@@ -981,13 +981,25 @@ limitations under the License.
                 <div key>Memory in MB</div>
                 <div value>{{machineDeployment.spec.template.cloud?.anexia?.memory}}</div>
               </km-property>
-              <km-property>
-                <div key>Disk Size in GB</div>
-                <div value>{{machineDeployment.spec.template.cloud?.anexia?.diskSize}}</div>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.anexia?.disks?.length > 0">
+                <div key>Disks</div>
+                <div value>
+                  <mat-chip-list selectable="false">
+                    <mat-chip *ngFor="let disk of machineDeployment.spec.template.cloud?.anexia?.disks">
+                      <div>{{disk.size}}GB</div>
+                      <div class="km-chip-accent"
+                           *ngIf="disk.performanceType">{{disk.performanceType}}</div>
+                    </mat-chip>
+                  </mat-chip-list>
+                </div>
               </km-property>
-              <km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.anexia?.templateID">
                 <div key>Template ID</div>
                 <div value>{{machineDeployment.spec.template.cloud?.anexia?.templateID}}</div>
+              </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.anexia?.template">
+                <div key>Template Name</div>
+                <div value>{{machineDeployment.spec.template.cloud?.anexia?.template}}</div>
               </km-property>
               <km-property>
                 <div key>VLAN ID</div>

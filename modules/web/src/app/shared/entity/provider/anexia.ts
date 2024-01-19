@@ -18,4 +18,10 @@ export class AnexiaVlan {
 
 export class AnexiaTemplate {
   id: string;
+  name: string;
+  build: string;
+}
+
+export class AnexiaDiskType {
+  id: string;
 }

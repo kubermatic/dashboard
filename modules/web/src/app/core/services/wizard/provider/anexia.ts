@@ -18,7 +18,7 @@ import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaDiskType, AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 
 export class Anexia extends Provider {
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
@@ -71,6 +71,20 @@ export class Anexia extends Provider {
 
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/templates`;
     return this._http.get<AnexiaTemplate[]>(url, {headers: this._headers});
+  }
+
+  diskTypes(onLoadingCb: () => void = null): Observable<AnexiaDiskType[]> {
+    this._setRequiredHeaders(Anexia.Header.Token, Anexia.Header.Location);
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/disk-types`;
+    return this._http.get<AnexiaDiskType[]>(url, {headers: this._headers});
   }
 }
 

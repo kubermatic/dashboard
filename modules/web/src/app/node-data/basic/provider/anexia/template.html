@@ -30,18 +30,42 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <km-number-stepper [formControlName]="Controls.DiskSize"
-                     mode="errors"
-                     label="Disk Size in GB"
-                     min="1"
-                     required>
-  </km-number-stepper>
+  <ng-container formArrayName="disks">
+    <ng-container *ngFor="let diskForm of disks.controls; let i = index">
+      <div [formGroup]="diskForm"
+           fxLayout="column"
+           fxLayout="row"
+           fxLayoutGap="10px">
 
-  <km-autocomplete label="Template ID"
-                   [formControlName]="Controls.TemplateID"
+        <km-number-stepper [formControlName]="DiskControls.Size"
+                           mode="errors"
+                           label="Disk Size in GB"
+                           min="0"
+                           fxFlex="45">
+        </km-number-stepper>
+
+        <km-autocomplete label="Disk Type"
+                         fxFlex="40"
+                         [formControlName]="DiskControls.PerformanceType"
+                         [isLoading]="isLoadingDiskTypes"
+                         [options]="diskTypes">
+        </km-autocomplete>
+
+        <button mat-icon-button
+                class="delete-button"
+                *ngIf="isDiskRemovable(i)"
+                (click)="deleteDisk(i)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <km-autocomplete label="Template Name or ID"
+                   [formControlName]="Controls.Template"
                    [isLoading]="isLoadingTemplates"
-                   [id]="Controls.TemplateID"
-                   [options]="templates"
+                   [id]="Controls.Template"
+                   [options]="templateNames.concat(templateIDs)"
                    required>
   </km-autocomplete>
 

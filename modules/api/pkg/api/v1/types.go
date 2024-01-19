@@ -885,6 +885,18 @@ type AnexiaTemplateList []AnexiaTemplate
 // AnexiaTemplate represents a object of Anexia template.
 // swagger:model AnexiaTemplate
 type AnexiaTemplate struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Build string `json:"build"`
+}
+
+// AnexiaDiskTypeList represents an array of Anexia Disk Types.
+// swagger:model AnexiaDiskTypeList
+type AnexiaDiskTypeList []AnexiaDiskType
+
+// AnexiaDiskType represents a object of Anexia Disk Type.
+// swagger:model AnexiaDiskType
+type AnexiaDiskType struct {
 	ID string `json:"id"`
 }
 
@@ -2274,8 +2286,14 @@ type AnexiaNodeSpec struct {
 	// required: true
 	VlanID string `json:"vlanID"`
 	// TemplateID instance template
-	// required: true
+	// required: false
 	TemplateID string `json:"templateID"`
+	// Template instance template
+	// required: false
+	Template string `json:"template"`
+	// TemplateBuild instance template
+	// required: false
+	TemplateBuild string `json:"templateBuild"`
 	// CPUs states how many cpus the node will have.
 	// required: true
 	CPUs int `json:"cpus"`
@@ -2308,8 +2326,8 @@ func (spec *AnexiaNodeSpec) MarshalJSON() ([]byte, error) {
 		errors = append(errors, "memory missing")
 	}
 
-	if len(spec.TemplateID) == 0 {
-		errors = append(errors, "templateID missing")
+	if len(spec.TemplateID) == 0 && len(spec.Template) == 0 {
+		errors = append(errors, "neither templateID nor template is set")
 	}
 
 	if len(spec.Disks) == 0 && spec.DiskSize == nil {
@@ -2323,19 +2341,23 @@ func (spec *AnexiaNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		VlanID     string `json:"vlanID"`
-		TemplateID string `json:"templateID"`
-		CPUs       int    `json:"cpus"`
-		Memory     int64  `json:"memory"`
-		DiskSize   *int64 `json:"diskSize,omitempty"`
+		VlanID        string `json:"vlanID"`
+		TemplateID    string `json:"templateID,omitempty"`
+		Template      string `json:"template,omitempty"`
+		TemplateBuild string `json:"templateBuild,omitempty"`
+		CPUs          int    `json:"cpus"`
+		Memory        int64  `json:"memory"`
+		DiskSize      *int64 `json:"diskSize,omitempty"`
 
 		// we can reuse this type here, as it does not have a MarshalJSON() method
 		Disks []AnexiaDiskConfig `json:"disks,omitempty"`
 	}{
-		VlanID:     spec.VlanID,
-		TemplateID: spec.TemplateID,
-		CPUs:       spec.CPUs,
-		Memory:     spec.Memory,
+		VlanID:        spec.VlanID,
+		TemplateID:    spec.TemplateID,
+		Template:      spec.Template,
+		TemplateBuild: spec.TemplateBuild,
+		CPUs:          spec.CPUs,
+		Memory:        spec.Memory,
 	}
 
 	if len(spec.Disks) != 0 {

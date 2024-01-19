@@ -161,9 +161,16 @@ export class NodeSystemInfo {
 export class AnexiaNodeSpec {
   vlanID: string;
   templateID: string;
+  template: string;
   cpus: number;
   memory: number;
   diskSize: number;
+  disks: AnexiaNodeSpecDisk[];
+}
+
+export class AnexiaNodeSpecDisk {
+  size: number;
+  performanceType?: string;
 }
 
 export class AlibabaNodeSpec {
@@ -381,7 +388,6 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         templateID: '',
         cpus: 1,
         memory: 2048,
-        diskSize: 20,
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {

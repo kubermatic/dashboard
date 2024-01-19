@@ -81,6 +81,30 @@ func AnexiaProjectTemplatesEndpoint(presetProvider provider.PresetProvider, user
 	}
 }
 
+func AnexiaProjectDiskTypesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(anexiaProjectDiskTypeReq)
+
+		token := req.Token
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.Anexia; credentials != nil {
+				token = credentials.Token
+			}
+		}
+
+		return providercommon.ListAnexiaDiskTypes(ctx, token, req.Location)
+	}
+}
+
 func AnexiaVlansWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(anexiaNoCredentialReq)
@@ -92,6 +116,13 @@ func AnexiaTemplatesWithClusterCredentialsEndpoint(projectProvider provider.Proj
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(anexiaNoCredentialReq)
 		return providercommon.AnexiaTemplatesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
+	}
+}
+
+func AnexiaDiskTypesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(anexiaNoCredentialReq)
+		return providercommon.AnexiaDiskTypesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
 }
 
@@ -143,8 +174,30 @@ func DecodeAnexiaProjectTemplateReq(c context.Context, r *http.Request) (interfa
 	}, nil
 }
 
+// anexiaProjectDiskTypeReq represent a request for Anexia disk-type resources
+// swagger:parameters listProjectAnexiaDiskTypes
+type anexiaProjectDiskTypeReq struct {
+	anexiaProjectReq
+
+	// in: header
+	// Location Anexia location ID
+	Location string
+}
+
+func DecodeAnexiaProjectDiskTypeReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := DecodeAnexiaProjectReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return anexiaProjectDiskTypeReq{
+		anexiaProjectReq: projectReq.(anexiaProjectReq),
+		Location:         r.Header.Get("Location"),
+	}, nil
+}
+
 // anexiaNoCredentialReq represent a request for Anexia resources
-// swagger:parameters listAnexiaVlansNoCredentialsV2 listAnexiaTemplatesNoCredentialsV2
+// swagger:parameters listAnexiaVlansNoCredentialsV2 listAnexiaTemplatesNoCredentialsV2 listAnexiaDiskTypesNoCredentialsV2
 type anexiaNoCredentialReq struct {
 	cluster.GetClusterReq
 }

@@ -21,7 +21,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, filter, takeUntil} from 'rxjs/operators';
@@ -29,8 +29,8 @@ import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {AnexiaNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
+import {AnexiaNodeSpec, AnexiaNodeSpecDisk, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {AnexiaDiskType, AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
@@ -38,10 +38,15 @@ import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 
 enum Controls {
   VlanID = 'vlanID',
-  TemplateID = 'templateID',
+  Template = 'template',
   Cpus = 'cpus',
   Memory = 'memory',
-  DiskSize = 'diskSize',
+  Disks = 'disks',
+}
+
+enum DiskControls {
+  Size = 'size',
+  PerformanceType = 'performanceType',
 }
 
 @Component({
@@ -63,13 +68,17 @@ enum Controls {
 })
 export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
   readonly Controls = Controls;
+  readonly DiskControls = DiskControls;
   private readonly _defaultDiskSize = 20; // in GiB
   private readonly _defaultCpus = 1;
   private readonly _defaultMemory = 2048; // in MB
   vlans: string[] = [];
-  templates: string[] = [];
+  templateIDs: string[] = [];
+  templateNames: string[] = [];
+  diskTypes: string[] = [];
   isLoadingVlans = false;
   isLoadingTemplates = false;
+  isLoadingDiskTypes = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _quotaCalculationService: QuotaCalculationService;
@@ -79,8 +88,12 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     return this._nodeDataService.anexia.vlans(this._clearVlan.bind(this), this._onVlanLoading.bind(this));
   }
 
-  private get _templateIdsObservable(): Observable<AnexiaVlan[]> {
+  private get _templatesObservable(): Observable<AnexiaVlan[]> {
     return this._nodeDataService.anexia.templates(this._clearTemplate.bind(this), this._onTemplateLoading.bind(this));
+  }
+
+  private get _diskTypesObservable(): Observable<AnexiaDiskType[]> {
+    return this._nodeDataService.anexia.diskTypes(this._clearDiskType.bind(this), this._onDiskTypeLoading.bind(this));
   }
 
   constructor(
@@ -95,26 +108,36 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     }
   }
 
+  get disks() {
+    return this.form.get(Controls.Disks) as FormArray;
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.VlanID]: this._builder.control('', Validators.required),
-      [Controls.TemplateID]: this._builder.control('', Validators.required),
+      [Controls.Template]: this._builder.control('', Validators.required),
       [Controls.Cpus]: this._builder.control(this._defaultCpus),
       [Controls.Memory]: this._builder.control(this._defaultMemory),
-      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize),
+      [Controls.Disks]: this._builder.array([]),
     });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._vlanIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVlan.bind(this));
-    this._templateIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
+    this._templatesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultTemplate.bind(this));
+    this._diskTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultDiskType.bind(this));
 
-    merge(
-      this.form.get(Controls.Cpus).valueChanges,
-      this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges
-    )
+    this.form
+      .get(Controls.Disks)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((disks: AnexiaNodeSpecDisk[]) => {
+        if (disks[disks.length - 1].size) {
+          this._addDisk({size: 0});
+        }
+      });
+
+    merge(this.form.get(Controls.Cpus).valueChanges, this.form.get(Controls.Memory).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
@@ -128,19 +151,39 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       .subscribe(v => (this._nodeDataService.nodeData.spec.cloud.anexia.vlanID = v));
 
     this.form
-      .get(Controls.TemplateID)
+      .get(Controls.Template)
       .valueChanges.pipe(
         filter(form => !!form),
         map(form => form[AutocompleteControls.Main]),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(t => (this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t));
+      .subscribe(t => {
+        if (!this.templateIDs.includes(t)) {
+          this._nodeDataService.nodeData.spec.cloud.anexia.template = t;
+          this._nodeDataService.nodeData.spec.cloud.anexia.templateID = '';
+        } else {
+          this._nodeDataService.nodeData.spec.cloud.anexia.templateID = t;
+          this._nodeDataService.nodeData.spec.cloud.anexia.template = '';
+        }
+      });
+
+    this.form
+      .get(Controls.Disks)
+      .valueChanges.pipe(
+        map(form =>
+          form
+            .filter((disk: AnexiaNodeSpecDisk) => disk[DiskControls.Size])
+            .map((disk: any) => ({...disk, [DiskControls.PerformanceType]: disk[DiskControls.PerformanceType]?.main}))
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(d => (this._nodeDataService.nodeData.spec.cloud.anexia.disks = d));
 
     merge(
       this.form.get(Controls.Cpus).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.DiskSize).valueChanges,
-      this.form.get(Controls.TemplateID).valueChanges,
+      this.form.get(Controls.Disks).valueChanges,
+      this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.VlanID).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
@@ -161,14 +204,36 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._unsubscribe.complete();
   }
 
+  private _addDisk(disk: AnexiaNodeSpecDisk) {
+    this.disks.push(
+      this._builder.group({
+        [DiskControls.Size]: this._builder.control(disk.size),
+        [DiskControls.PerformanceType]: this._builder.control({main: disk.performanceType || ''}),
+      })
+    );
+  }
+
+  deleteDisk(index: number) {
+    this.disks.removeAt(index);
+  }
+
+  isDiskRemovable(index: number): boolean {
+    return index < this.disks.length - 1;
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.anexia) {
       this.form.get(Controls.Cpus).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.memory);
-      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.anexia.diskSize);
-
-      this._cdr.detectChanges();
+      const disks = this._nodeDataService.nodeData.spec.cloud.anexia.disks;
+      disks?.forEach(disk => {
+        this._addDisk(disk);
+      });
     }
+    if (!this.disks.length) {
+      this._addDisk({size: this._defaultDiskSize});
+    }
+    this._cdr.detectChanges();
   }
 
   private _onVlanLoading(): void {
@@ -181,6 +246,11 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
+  private _onDiskTypeLoading(): void {
+    this.isLoadingDiskTypes = true;
+    this._cdr.detectChanges();
+  }
+
   private _clearVlan(): void {
     this.vlans = [];
     this.form.get(Controls.VlanID).setValue(AutocompleteInitialState);
@@ -189,7 +259,11 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _clearTemplate(): void {
     this.vlans = [];
-    this.form.get(Controls.TemplateID).setValue(AutocompleteInitialState);
+    this.form.get(Controls.Template).setValue(AutocompleteInitialState);
+    this._cdr.detectChanges();
+  }
+
+  private _clearDiskType(): void {
     this._cdr.detectChanges();
   }
 
@@ -208,14 +282,23 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _setDefaultTemplate(templates: AnexiaTemplate[]): void {
     this.isLoadingTemplates = false;
-    this.templates = _.sortBy(templates, t => t.id.toLowerCase()).map(t => t.id);
-    let selectedTemplate = this._nodeDataService.nodeData.spec.cloud.anexia.templateID;
-
-    if (!selectedTemplate && this.templates.length > 0) {
-      selectedTemplate = this.templates[0];
+    this.templateIDs = _.sortBy(templates, t => t.id.toLowerCase()).map(t => t.id);
+    this.templateNames = _.sortBy(templates, t => t.name.toLowerCase()).map(t => t.name);
+    let selectedTemplate =
+      this._nodeDataService.nodeData.spec.cloud.anexia.template ||
+      this._nodeDataService.nodeData.spec.cloud.anexia.templateID;
+    if (!selectedTemplate && this.templateNames.length > 0) {
+      selectedTemplate = this.templateNames[0];
     }
+    if (selectedTemplate) {
+      this.form.get(Controls.Template).setValue({main: selectedTemplate});
+    }
+    this._cdr.detectChanges();
+  }
 
-    this.form.get(Controls.TemplateID).setValue({main: selectedTemplate});
+  private _setDefaultDiskType(diskTypes: AnexiaDiskType[]): void {
+    this.isLoadingDiskTypes = false;
+    this.diskTypes = diskTypes.map(dt => dt.id);
     this._cdr.detectChanges();
   }
 
@@ -226,7 +309,6 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
           anexia: {
             cpus: this.form.get(Controls.Cpus).value,
             memory: this.form.get(Controls.Memory).value,
-            diskSize: this.form.get(Controls.DiskSize).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,
@@ -239,11 +321,21 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
       anexiaNodeSpec: {
         [Controls.Cpus]: this.form.get(Controls.Cpus).value,
         [Controls.Memory]: this.form.get(Controls.Memory).value,
-        [Controls.DiskSize]: this.form.get(Controls.DiskSize).value,
-        [Controls.TemplateID]: this.form.get(Controls.TemplateID).value?.[AutocompleteControls.Main],
         [Controls.VlanID]: this.form.get(Controls.VlanID).value?.[AutocompleteControls.Main],
       } as AnexiaNodeSpec,
     };
+
+    const selectedTemplate = this.form.get(Controls.Template).value?.[AutocompleteControls.Main];
+    if (!this.templateIDs.includes(selectedTemplate)) {
+      payload.anexiaNodeSpec.template = selectedTemplate;
+    } else {
+      payload.anexiaNodeSpec.templateID = selectedTemplate;
+    }
+
+    payload.anexiaNodeSpec.disks = this.form
+      .get(Controls.Disks)
+      .value.filter((disk: any) => disk[DiskControls.Size])
+      .map((disk: any) => ({...disk, [DiskControls.PerformanceType]: disk[DiskControls.PerformanceType]?.main}));
 
     if (
       !this._nodeDataService.isInWizardMode() &&
