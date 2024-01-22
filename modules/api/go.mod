@@ -69,7 +69,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.0
-	k8c.io/kubermatic/v2 v2.24.1-0.20240116091326-dbc07007022e
+	k8c.io/kubermatic/v2 v2.24.1-0.20240119123730-223a5c1053d1
 	k8c.io/operating-system-manager v1.4.1-0.20231210203405-28d391f034d8
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.28.4
@@ -104,7 +104,7 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.1-0.20240116091326-dbc07007022e
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.1-0.20240119123730-223a5c1053d1
 )
 
 require github.com/vmware-tanzu/velero v1.12.1
