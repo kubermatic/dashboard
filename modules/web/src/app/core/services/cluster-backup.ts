@@ -14,9 +14,9 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore} from '@app/shared/entity/backup';
+import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore, BackupStorageLocation} from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class ClusterBackupService {
@@ -72,5 +72,11 @@ export class ClusterBackupService {
   deleteSchedule(projectID: string, clusterID: string, scheduleName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupschedule/${scheduleName}`;
     return this._http.delete<void>(url);
+  }
+
+  createBackupStorageLocation(projectID: string, backupStorageLocation: BackupStorageLocation): Observable<BackupStorageLocation> {
+    console.log(projectID);
+
+    return of(backupStorageLocation)
   }
 }

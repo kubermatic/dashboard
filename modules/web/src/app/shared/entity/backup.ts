@@ -187,3 +187,22 @@ export class ClusterRestoreConfigSpec {
   status?: string;
   createdAt?: string;
 }
+
+export class BackupStorageLocation {
+  name: string;
+  spec: BackupStorageLocationSpec;
+}
+
+export class BackupStorageLocationSpec {
+  objectStorage: {
+    bucket: string;
+  }
+  config: BackupStorageLocationConfig;
+  createdAt?: string;
+  status?: string;
+}
+
+export class BackupStorageLocationConfig {
+  region: string;
+  profile: string;
+}

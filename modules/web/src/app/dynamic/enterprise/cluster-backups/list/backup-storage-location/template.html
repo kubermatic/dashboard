@@ -20,4 +20,98 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<h1>TBD</h1>
+<mat-card class="km-card">
+  <mat-card-header>
+    <mat-card-title>
+      Backup Storage Locations
+    </mat-card-title>
+    <button mat-flat-button
+            type="button"
+            (click)="addBackupStorageLocation()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Create Backup Storage Location</span>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
+    <table  class="km-table"
+            mat-table
+            matSort
+            [dataSource]="dataSource">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i [matTooltip]="getStatus(element.spec.status).message"
+             [ngClass]="getStatus(element.spec.status).icon"
+             class="km-vertical-center"></i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Name</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.name}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="bucket">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Bucket</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.objectStorage.bucket}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="region">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Region</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.config.region}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="created">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Created</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <km-relative-time [date]="element.spec.createdAt"></km-relative-time>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="columns"></tr>
+      <tr mat-row
+          *matRowDef="let element; columns: columns"></tr>
+    </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!backupStorageLocations.length">No storages available.</div>
+
+    <div [hidden]="!backupStorageLocations?.length"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
