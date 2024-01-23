@@ -2,20 +2,24 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v2239",
   "entries": [
     {
-      "category": "fixed",
-      "description": "Fix cases where, when using dedicated infra- and ccm-credentials, infra-credentials were always overwritten by ccm-credentials."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix issue in editing and updating applications of cluster template."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix issue with cursor position inside YAML editor."
+      "category": "added",
+      "description": "Add support for Kubernetes v1.24.17, v1.25.16, v1.26.13, v1.27.10."
     },
     {
       "category": "changed",
-      "description": "Update machine-controller to v1.57.4."
+      "description": "Set default Kubernetes version to v1.26.13."
+    },
+    {
+      "category": "changed",
+      "description": "Update EKS/AKS version matrix to only include Kubernetes versions supported by those managed offerings. For  AKS 1.26-1.28 are supported, for EKS 1.24 to 1.28. The default for newly created external clusters is now 1.28."
+    },
+    {
+      "category": "fixed",
+      "description": "Stop constantly re-deploying operating-system-manager when registry mirrors are configured."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where Operating System Profiles were not being listed for GCP/GCE."
     }
   ]
 }
