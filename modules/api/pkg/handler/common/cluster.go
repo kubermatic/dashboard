@@ -1130,6 +1130,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			ClusterNetwork:                       &internalCluster.Spec.ClusterNetwork,
 			CNIPlugin:                            internalCluster.Spec.CNIPlugin,
 			ExposeStrategy:                       internalCluster.Spec.ExposeStrategy,
+			Features:                             internalCluster.Spec.Features,
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 		},
