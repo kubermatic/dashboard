@@ -136,6 +136,7 @@ export class S3BackupCredentials {
 export enum BackupType {
   Backup = 'Backup',
   Schedule = 'Schedule',
+  BackupStorageLocation = 'Backup Storage Location'
 }
 
 // this variable is temporary, it will be removed after adding the storageLocation implementation
@@ -190,6 +191,7 @@ export class ClusterRestoreConfigSpec {
 
 export class BackupStorageLocation {
   name: string;
+  id?: string
   spec: BackupStorageLocationSpec;
 }
 
@@ -198,11 +200,16 @@ export class BackupStorageLocationSpec {
     bucket: string;
   }
   config: BackupStorageLocationConfig;
+  credential?: {
+    accessKeyId: string;
+    secretAccessKey: string;
+  };
   createdAt?: string;
   status?: string;
 }
 
 export class BackupStorageLocationConfig {
-  region: string;
-  profile: string;
+  region?: string;
+  profile?: string;
+  s3Url?: string;
 }

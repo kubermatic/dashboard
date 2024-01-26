@@ -28,13 +28,17 @@ import { Observable, Subject } from "rxjs";
 
 export interface AddBackupStorageLocationDialogConfig {
   projectID: string;
+  bslObject: BackupStorageLocation;
 }
 
 enum Controls {
   Name = 'name',
   Bucket = 'bucket',
+  AccessKeyId = 'accessKeyId',
+  SecretAccessKey = 'secretAccessKey',
   Region = 'region',
   Profile = 'profile',
+  Endpoints = 'endpoints'
 }
 
 @Component({
@@ -47,6 +51,14 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   readonly Controls = Controls;
   form: FormGroup
 
+  get label(): string {
+    return this._config.bslObject ? "Edit" : "Create";
+  }
+
+  get icon(): string {
+    return this._config.bslObject ? "km-icon-edit" : "km-icon-add";
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddBackupStorageLocationDialogConfig,
     private readonly _builder: FormBuilder,
@@ -57,11 +69,18 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   ngOnInit(): void {
 
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Bucket]: this._builder.control('', Validators.required),
-      [Controls.Region]: this._builder.control(''),
-      [Controls.Profile]: this._builder.control(''),
+      [Controls.Name]: this._builder.control(this._config.bslObject?.name ?? "", Validators.required),
+      [Controls.Bucket]: this._builder.control(this._config.bslObject?.spec.objectStorage.bucket ?? '', Validators.required),
+      [Controls.AccessKeyId]: this._builder.control(''),
+      [Controls.SecretAccessKey]: this._builder.control(''),
+      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
+      [Controls.Profile]: this._builder.control(this._config.bslObject?.spec.config.profile ?? ''),
+      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
     })
+
+    if (this._config.bslObject) {
+      this.form.get(Controls.Name).disable()
+    }
   }
 
   ngOnDestroy(): void {
@@ -70,6 +89,9 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   }
 
   getObservable(): Observable<BackupStorageLocation> {
+    if (this._config.bslObject) {
+      return this._clusterBackupService.patchBackupStorageLocation(this._config.projectID, this._getBackupStorageLocation().spec, this._config.bslObject.id)
+    }
     return this._clusterBackupService.createBackupStorageLocation(this._config.projectID, this._getBackupStorageLocation())
   }
 
@@ -87,7 +109,12 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         },
         config: {
           region: this.form.get(Controls.Region).value,
-          profile: this.form.get(Controls.Profile).value
+          profile: this.form.get(Controls.Profile).value,
+          s3Url: this.form.get(Controls.Endpoints).value
+        },
+        credential: {
+          accessKeyId: this.form.get(Controls.AccessKeyId).value,
+          secretAccessKey: this.form.get(Controls.SecretAccessKey).value
         }
       }
     }

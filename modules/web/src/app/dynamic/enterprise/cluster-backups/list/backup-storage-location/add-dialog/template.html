@@ -38,6 +38,16 @@ END OF TERMS AND CONDITIONS
       <mat-hint>The bucket in which to store backups.</mat-hint>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Access Key ID</mat-label>
+      <input [formControlName]="Controls.AccessKeyId"
+             matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Secret Access Key</mat-label>
+      <input [formControlName]="Controls.SecretAccessKey"
+             matInput>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Profile</mat-label>
       <input [formControlName]="Controls.Profile"
              matInput>
@@ -49,11 +59,17 @@ END OF TERMS AND CONDITIONS
              matInput>
       <mat-hint>The AWS region where the bucket is located.</mat-hint>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Endpoints</mat-label>
+      <input [formControlName]="Controls.Endpoints"
+             matInput>
+      <mat-hint>You can specify the AWS S3 URL here for explicitness.</mat-hint>
+    </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <km-button icon="km-icon-add"
-             label="create"
+  <km-button [icon]="icon"
+             [label]="label"
              [disabled]="form.invalid"
              [observable]="getObservable()"
              (next)="onNext($event)">

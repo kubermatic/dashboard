@@ -14,9 +14,9 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore, BackupStorageLocation} from '@app/shared/entity/backup';
+import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore, BackupStorageLocation, BackupStorageLocationSpec} from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class ClusterBackupService {
@@ -75,8 +75,29 @@ export class ClusterBackupService {
   }
 
   createBackupStorageLocation(projectID: string, backupStorageLocation: BackupStorageLocation): Observable<BackupStorageLocation> {
-    console.log(projectID);
-
-    return of(backupStorageLocation)
+    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation`
+    return this._http.post<BackupStorageLocation>(url,backupStorageLocation)
   }
+
+  listBackupStorageLocation(projectID: string): Observable<BackupStorageLocation[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation`
+    return this._http.get<BackupStorageLocation[]>(url)
+  }
+
+  getBackupStorageLocation(projectID: string, bslID: string): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`
+    return this._http.get<BackupStorageLocation>(url)
+  }
+
+  deleteBackupStorageLocation(projectID: string, bslID: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`
+    return this._http.delete<void>(url)
+  }
+
+  patchBackupStorageLocation(projectID: string, backupStorageLocation: BackupStorageLocationSpec, bslID: string): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`
+    return this._http.patch<BackupStorageLocation>(url,backupStorageLocation)
+  }
+
+
 }
