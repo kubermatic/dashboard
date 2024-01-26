@@ -23,6 +23,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {PresetsService} from '@app/core/services/wizard/presets';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -58,6 +59,7 @@ enum Controls {
   PlacementPolicy = 'placementPolicy',
   SizingPolicy = 'sizingPolicy',
   Template = 'template',
+  Network = 'network',
 }
 
 enum StorageProfileState {
@@ -88,6 +90,12 @@ enum SizingPolicyState {
   Ready = 'Sizing Policy',
   Loading = 'Loading...',
   Empty = 'No sizing policies available',
+}
+
+enum NetworkState {
+  Ready = 'Network',
+  Loading = 'Loading...',
+  Empty = 'No networks available',
 }
 
 @Component({
@@ -129,6 +137,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   catalogs: VMwareCloudDirectorCatalog[] = [];
   templates: VMwareCloudDirectorTemplate[] = [];
   computePolicies: VMwareCloudDirectorComputePolicy[] = [];
+  networks: string[] = [];
+
   selectedStorageProfile = '';
   selectedPlacementPolicy = '';
   selectedSizingPolicy = '';
@@ -140,6 +150,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   placementPolicyLabel = PlacementPolicyState.Empty;
   sizingPolicyLabel = SizingPolicyState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  networkLabel = NetworkState.Empty;
+  isPresetSelected = false;
 
   private _catalogChanges = new Subject<boolean>();
   private _datacenter: Datacenter;
@@ -151,6 +163,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _presets: PresetsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -184,7 +197,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.MemoryMB).valueChanges,
       this.form.get(Controls.DiskSizeGB).valueChanges,
       this.form.get(Controls.DiskIOPs).valueChanges,
-      this.form.get(Controls.IPAllocationMode).valueChanges
+      this.form.get(Controls.IPAllocationMode).valueChanges,
+      this.form.get(Controls.Network).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -199,7 +213,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.Template).valueChanges,
       this.form.get(Controls.Catalog).valueChanges,
       this.form.get(Controls.PlacementPolicy).valueChanges,
-      this.form.get(Controls.SizingPolicy).valueChanges
+      this.form.get(Controls.SizingPolicy).valueChanges,
+      this.form.get(Controls.Network).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -238,6 +253,39 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       .pipe(switchMap(_ => this._templatesObservable))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultTemplate.bind(this));
+
+    this._presets.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset => (this.isPresetSelected = !!preset));
+
+    this._presets.presetDetailedChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      const selectedPreset = preset?.providers.find(provider => provider.name === NodeProvider.VMWARECLOUDDIRECTOR);
+      if (selectedPreset) {
+        if (selectedPreset.vmwareCloudDirector?.ovdcNetwork) {
+          this.networks = [selectedPreset.vmwareCloudDirector.ovdcNetwork];
+        } else if (selectedPreset.vmwareCloudDirector?.ovdcNetworks) {
+          this.networks = selectedPreset.vmwareCloudDirector.ovdcNetworks;
+        }
+      }
+      this.networkLabel = this.networks?.length ? NetworkState.Ready : NetworkState.Empty;
+      this.updateSelectedNetwork();
+    });
+
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VMWARECLOUDDIRECTOR))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        if (this.isPresetSelected) {
+          return;
+        }
+        if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetworks) {
+          this.networks = this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetworks;
+        } else if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetwork) {
+          this.networks = [this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetwork];
+        }
+        this.networkLabel = this.networks?.length ? NetworkState.Ready : NetworkState.Empty;
+        this.updateSelectedNetwork();
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -280,6 +328,15 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
+  updateSelectedNetwork(): void {
+    const networkControl = this.form.get(Controls.Network);
+    if (networkControl.value && this.networks.includes(networkControl.value)) {
+      return;
+    }
+    networkControl.setValue(this.networks[0]);
+    this.form.updateValueAndValidity();
+  }
+
   private _initForm(): void {
     const values = this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector;
     const defaults = getDefaultNodeProviderSpec(NodeProvider.VMWARECLOUDDIRECTOR) as VMwareCloudDirectorNodeSpec;
@@ -299,6 +356,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
       [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
       [Controls.SizingPolicy]: this._builder.control(values ? values.sizingPolicy : defaults.sizingPolicy),
+      [Controls.Network]: this._builder.control(this.networks[0], [Validators.required]),
     });
   }
 

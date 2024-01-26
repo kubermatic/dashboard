@@ -14,31 +14,32 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
+import {ProjectService} from '@core/services/project';
+import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
+import {Nutanix} from '@core/services/wizard/provider/nutanix';
 import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-director';
 import {environment} from '@environments/environment';
 import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
-import {AWS} from './provider/aws';
 import {Anexia} from './provider/anexia';
+import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
 import {Digitalocean} from './provider/digitalocean';
+import {Equinix} from './provider/equinix';
 import {GCP} from './provider/gcp';
 import {Hetzner} from './provider/hetzner';
 import {Openstack} from './provider/openstack';
-import {Equinix} from './provider/equinix';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
-import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
-import {Nutanix} from '@core/services/wizard/provider/nutanix';
-import {ProjectService} from '@core/services/project';
 
 @Injectable()
 export class PresetsService {
   // True - enabled, false - disabled
   readonly presetStatusChanges = new EventEmitter<boolean>();
   readonly presetChanges = new EventEmitter<string>();
+  readonly presetDetailedChanges = new EventEmitter<Preset>();
 
   constructor(
     private readonly _http: HttpClient,
@@ -46,6 +47,7 @@ export class PresetsService {
   ) {}
 
   private _preset: string;
+  private _presetDetailed: Preset;
 
   get preset(): string {
     return this._preset;
@@ -54,6 +56,15 @@ export class PresetsService {
   set preset(preset: string) {
     this._preset = preset;
     this.presetChanges.next(preset);
+  }
+
+  get presetDetailed(): Preset {
+    return this._presetDetailed;
+  }
+
+  set presetDetailed(preset: Preset) {
+    this._presetDetailed = preset;
+    this.presetDetailedChanges.next(preset);
   }
 
   enablePresets(enable: boolean): void {

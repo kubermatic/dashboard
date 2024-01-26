@@ -11382,13 +11382,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11400,6 +11393,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -11916,11 +11916,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11932,6 +11927,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -35963,6 +35963,9 @@
         },
         "name": {
           "$ref": "#/definitions/ProviderType"
+        },
+        "vmwareCloudDirector": {
+          "$ref": "#/definitions/VMwareCloudDirectorAPIPreset"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -37643,9 +37646,17 @@
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
-          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.",
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
+        },
+        "ovdcNetworks": {
+          "description": "OVDCNetworks is the list of organizational virtual data center networks that will be attached to the vApp and can be consumed the VMs.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "OVDCNetworks"
         },
         "password": {
           "description": "The VMware Cloud Director user password.",
@@ -37664,6 +37675,24 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "VMwareCloudDirectorAPIPreset": {
+      "description": "VMwareCloudDirectorPreset represents a preset for VMware Cloud Director",
+      "type": "object",
+      "properties": {
+        "ovdcNetwork": {
+          "type": "string",
+          "x-go-name": "OVDCNetwork"
+        },
+        "ovdcNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "OVDCNetworks"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "VMwareCloudDirectorCSIConfig": {
       "type": "object",
@@ -37721,9 +37750,17 @@
           "x-go-name": "Organization"
         },
         "ovdcNetwork": {
-          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.",
+          "description": "The name of organizational virtual data center network that will be associated with the VMs and vApp.\nDeprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.",
           "type": "string",
           "x-go-name": "OVDCNetwork"
+        },
+        "ovdcNetworks": {
+          "description": "OVDCNetworks is the list of organizational virtual data center networks that will be attached to the vApp and can be consumed the VMs.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "OVDCNetworks"
         },
         "password": {
           "description": "The VMware Cloud Director user password.\n+optional",

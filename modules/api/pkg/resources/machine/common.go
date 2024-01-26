@@ -279,7 +279,6 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 		VApp:             providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.VApp},
 		Template:         providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VMwareCloudDirector.Template},
 		Catalog:          providerconfig.ConfigVarString{Value: catalogName},
-		Network:          providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork},
 		CPUs:             int64(nodeSpec.Cloud.VMwareCloudDirector.CPUs),
 		CPUCores:         int64(nodeSpec.Cloud.VMwareCloudDirector.CPUCores),
 		MemoryMB:         int64(nodeSpec.Cloud.VMwareCloudDirector.MemoryMB),
@@ -309,6 +308,12 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 
 	if nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy != nil {
 		config.PlacementPolicy = nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy
+	}
+
+	if c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork != "" {
+		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork}
+	} else if len(c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks) > 0 {
+		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks[0]}
 	}
 
 	return config, nil

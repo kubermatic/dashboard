@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, forwardRef} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -21,8 +21,8 @@ import {
   CloudSpec,
   Cluster,
   ClusterSpec,
-  VMwareCloudDirectorCloudSpec,
   VMwareCloudDirectorCSIConfig,
+  VMwareCloudDirectorCloudSpec,
 } from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {
@@ -32,7 +32,7 @@ import {
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {EMPTY, Observable, forkJoin, merge, of, onErrorResumeNext} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -46,7 +46,7 @@ import {
 } from 'rxjs/operators';
 
 enum Controls {
-  OvdcNetwork = 'ovdcNetwork',
+  OvdcNetworks = 'ovdcNetworks',
   StorageProfile = 'storageProfile',
   Filesystem = 'filesystem',
 }
@@ -57,7 +57,7 @@ enum Filesystem {
 }
 
 enum NetworkState {
-  Ready = 'Organization VDC Network',
+  Ready = 'Organization VDC Networks',
   Empty = 'No organization VDC networks available',
   Loading = 'Loading...',
 }
@@ -98,7 +98,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
   private _organization = '';
   private _vdc = '';
   networks: VMwareCloudDirectorNetwork[] = [];
-  selectedNetwork = '';
+  selectedNetworks: string[] = [];
   networkLabel = NetworkState.Empty;
   storageProfiles: VMwareCloudDirectorStorageProfile[] = [];
   selectedStorageProfile = '';
@@ -193,7 +193,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
 
   getHint(control: Controls): string {
     switch (control) {
-      case Controls.OvdcNetwork:
+      case Controls.OvdcNetworks:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
       case Controls.StorageProfile:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
@@ -202,9 +202,10 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
     }
   }
 
-  onNetworkChange(network: string): void {
-    this.selectedNetwork = network;
-    this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetwork = network;
+  onNetworkChange(networks: string[]): void {
+    this.selectedNetworks = networks;
+    this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetworks = networks;
+    this._clusterSpecService.clusterChanges.emit(this._clusterSpecService.cluster);
   }
 
   onStorageProfileChange(storageProfile: string): void {
@@ -214,7 +215,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
 
   private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.OvdcNetwork]: this._builder.control('', Validators.required),
+      [Controls.OvdcNetworks]: this._builder.control([], Validators.required),
       [Controls.StorageProfile]: this._builder.control('', Validators.required),
       [Controls.Filesystem]: this._builder.control(this._defaultFilesytsem, Validators.required),
     });
@@ -264,7 +265,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
 
   private _clearNetwork(): void {
     this.networks = [];
-    this.selectedNetwork = '';
+    this.selectedNetworks = [];
     this.networkLabel = NetworkState.Empty;
     this._cdr.detectChanges();
   }

@@ -44,6 +44,14 @@ export class Preset {
 export class PresetProvider {
   name: NodeProvider;
   enabled: boolean;
+
+  // Provider specific fields
+  vmwareCloudDirector?: VMwareCloudDirectorAPIPreset;
+}
+
+export class VMwareCloudDirectorAPIPreset {
+  ovdcNetwork?: string;
+  ovdcNetworks?: string[];
 }
 
 export class UpdatePresetStatusReq {
@@ -222,5 +230,6 @@ export class VMwareCloudDirectorPresetSpec extends PresetProviderSpec {
 
   organization: string;
   vdc: string;
-  ovdcNetwork: string;
+  ovdcNetwork?: string;
+  ovdcNetworks?: string[];
 }

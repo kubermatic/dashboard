@@ -27,7 +27,7 @@ export enum Controls {
   APIToken = 'apiToken',
   Organization = 'organization',
   Vdc = 'vdc',
-  OvdcNetwork = 'ovdcNetwork',
+  OvdcNetworks = 'ovdcNetworks',
 }
 
 export enum CredentialsType {
@@ -55,6 +55,7 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
   readonly Controls = Controls;
   readonly CredentialsType = CredentialsType;
   selectedCredentialsType = CredentialsType.Default;
+  networks: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -83,6 +84,11 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
     delete this._presetDialogService.preset.spec.vmwareclouddirector;
   }
 
+  onNetworksChange(networks: string[]): void {
+    this.networks = networks;
+    this.form.get(Controls.OvdcNetworks).updateValueAndValidity();
+  }
+
   changeView(value: CredentialsType): void {
     this.selectedCredentialsType = value;
 
@@ -106,7 +112,7 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
       [Controls.APIToken]: this._builder.control(''),
       [Controls.Organization]: this._builder.control('', Validators.required),
       [Controls.Vdc]: this._builder.control('', Validators.required),
-      [Controls.OvdcNetwork]: this._builder.control('', Validators.required),
+      [Controls.OvdcNetworks]: this._builder.control([], Validators.required),
     });
   }
 
@@ -117,7 +123,7 @@ export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator impl
       apiToken: this.form.get(Controls.APIToken).value,
       organization: this.form.get(Controls.Organization).value,
       vdc: this.form.get(Controls.Vdc).value,
-      ovdcNetwork: this.form.get(Controls.OvdcNetwork).value,
+      ovdcNetworks: this.form.get(Controls.OvdcNetworks).value?.tags,
     } as VMwareCloudDirectorPresetSpec;
   }
 }
