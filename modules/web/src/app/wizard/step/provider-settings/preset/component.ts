@@ -15,13 +15,13 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
-import {SimplePresetList} from '@shared/entity/preset';
+import {Preset, SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {map, switchMap, takeUntil} from 'rxjs/operators';
-import {ProjectService} from '@core/services/project';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Preset = 'name',
@@ -52,6 +52,7 @@ export enum PresetsState {
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();
+  presetDetailedList: Preset[] = [];
   presetsLoaded = false;
 
   readonly Controls = Controls;
@@ -82,6 +83,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     }
 
     this._presets.preset = preset;
+    this._presets.presetDetailed = this.presetDetailedList.find(p => p.name === preset);
     this._clusterSpecService.cluster = {credential: preset} as Cluster;
   }
 
@@ -104,13 +106,13 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
           )
         )
       )
-      .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
         this.reset();
-        this.presetsLoaded = presetList.names ? !_.isEmpty(presetList.names) : false;
+        this.presetDetailedList = presetList.items;
+        this.presetList = new SimplePresetList(...presetList.items.map(preset => preset.name));
+        this.presetsLoaded = this.presetList.names ? !_.isEmpty(this.presetList.names) : false;
         this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
-        this.presetList = presetList;
         this._enable(this._state !== PresetsState.Empty, Controls.Preset);
       });
 
@@ -119,6 +121,7 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => {
         this._presets.preset = preset;
+        this._presets.presetDetailed = this.presetDetailedList.find(p => p.name === preset);
         this._clusterSpecService.cluster = {credential: preset} as Cluster;
       });
 

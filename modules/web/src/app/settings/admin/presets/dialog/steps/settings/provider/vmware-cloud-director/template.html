@@ -16,7 +16,6 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-
   <mat-button-toggle-group class="km-button-toggle-group"
                            group="bindingType"
                            (change)="changeView($event.value)">
@@ -38,7 +37,7 @@ limitations under the License.
              [name]="Controls.Username"
              type="text"
              autocomplete="off"
-             kmValueChangedIndicator>
+             kmValueChangedIndicator />
       <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -51,7 +50,7 @@ limitations under the License.
              [name]="Controls.Password"
              kmInputPassword
              autocomplete="off"
-             kmValueChangedIndicator>
+             kmValueChangedIndicator />
       <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -66,7 +65,7 @@ limitations under the License.
              [name]="Controls.Password"
              kmInputPassword
              autocomplete="off"
-             kmValueChangedIndicator>
+             kmValueChangedIndicator />
       <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -80,7 +79,7 @@ limitations under the License.
            [name]="Controls.Organization"
            type="text"
            autocomplete="off"
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
     <mat-error *ngIf="form.get(Controls.Organization).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -94,22 +93,19 @@ limitations under the License.
            type="text"
            autocomplete="off"
            required
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
     <mat-error *ngIf="form.get(Controls.Vdc).hasError('required')">
       <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Organization VDC Network</mat-label>
-    <input matInput
-           [formControlName]="Controls.OvdcNetwork"
-           [name]="Controls.OvdcNetwork"
-           type="text"
-           autocomplete="off"
-           kmValueChangedIndicator>
-    <mat-error *ngIf="form.get(Controls.OvdcNetwork).hasError('required')">
-      <strong>Required</strong>
-    </mat-error>
-  </mat-form-field>
+  <km-chip-list label="Organization VDC Networks"
+                placeholder="OVDC Networks to attach to the vApps..."
+                description="Use commas, space or enter key as the separators."
+                [tags]="networks"
+                (onChange)="onNetworksChange($event)"
+                [formControlName]="Controls.OvdcNetworks"
+                kmRequired="true"
+                fxFlex>
+  </km-chip-list>
 </form>

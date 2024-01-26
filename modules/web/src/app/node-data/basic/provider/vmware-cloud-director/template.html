@@ -20,8 +20,7 @@ limitations under the License.
                      mode="errors"
                      label="CPUs"
                      min="1"
-                     required>
-  </km-number-stepper>
+                     required> </km-number-stepper>
 
   <km-number-stepper [formControlName]="Controls.CPUCores"
                      mode="errors"
@@ -43,6 +42,23 @@ limitations under the License.
                      min="1"
                      required>
   </km-number-stepper>
+
+  <km-number-stepper [formControlName]="Controls.DiskIOPs"
+                     hint="Leave empty or 0 to use default value for the selected template."
+                     mode="all"
+                     label="Disk IOPS"
+                     min="0">
+  </km-number-stepper>
+
+  <mat-form-field fxFlex>
+    <mat-label>IP Allocation Mode</mat-label>
+    <mat-select [formControlName]="Controls.IPAllocationMode"
+                disableOptionCentering
+                kmValueChangedIndicator>
+      <mat-option *ngFor="let mode of ipAllocationModes"
+                  [value]="mode"> {{mode}} </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <km-combobox #catalogCombobox
                [selected]="selectedCatalog"
@@ -67,6 +83,21 @@ limitations under the License.
                filterBy="name">
     <div *option="let template">{{template.name}}</div>
   </km-combobox>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Placement Settings</mat-card-title>
+  </mat-card-header>
+
+  <mat-form-field fxFlex>
+    <mat-label>Network</mat-label>
+    <mat-select [formControlName]="Controls.Network"
+                [disabled]="networks.length === 1"
+                disableOptionCentering
+                kmValueChangedIndicator>
+      <mat-option *ngFor="let network of networks"
+                  [value]="network"> {{network}} </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <km-combobox #placementPolicyCombobox
                [selected]="selectedPlacementPolicy"
@@ -101,23 +132,4 @@ limitations under the License.
                filterBy="name">
     <div *option="let storageProfile">{{storageProfile.name}}</div>
   </km-combobox>
-
-  <km-number-stepper [formControlName]="Controls.DiskIOPs"
-                     hint="Leave empty or 0 to use default value for the selected template."
-                     mode="all"
-                     label="Disk IOPS"
-                     min="0">
-  </km-number-stepper>
-
-  <mat-form-field fxFlex>
-    <mat-label>IP Allocation Mode</mat-label>
-    <mat-select [formControlName]="Controls.IPAllocationMode"
-                disableOptionCentering
-                kmValueChangedIndicator>
-      <mat-option *ngFor="let mode of ipAllocationModes"
-                  [value]="mode">
-        {{mode}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
 </form>

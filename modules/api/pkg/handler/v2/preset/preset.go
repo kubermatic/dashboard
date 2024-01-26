@@ -910,10 +910,23 @@ func newAPIPreset(preset *kubermaticv1.Preset, enabled bool) apiv2.Preset {
 	providers := make([]apiv2.PresetProvider, 0)
 	for _, providerType := range kubermaticv1.SupportedProviders {
 		if hasProvider, _ := kubermaticv1helper.HasProvider(preset, providerType); hasProvider {
-			providers = append(providers, apiv2.PresetProvider{
+			provider := apiv2.PresetProvider{
 				Name:    providerType,
 				Enabled: kubermaticv1helper.IsProviderEnabled(preset, providerType),
-			})
+			}
+			if providerType == kubermaticv1.VMwareCloudDirectorCloudProvider && preset.Spec.VMwareCloudDirector != nil {
+				if preset.Spec.VMwareCloudDirector.OVDCNetworks != nil {
+					provider.VMwareCloudDirector = &apiv2.VMwareCloudDirectorAPIPreset{
+						OVDCNetworks: preset.Spec.VMwareCloudDirector.OVDCNetworks,
+					}
+				} else {
+					provider.VMwareCloudDirector = &apiv2.VMwareCloudDirectorAPIPreset{
+						OVDCNetwork: preset.Spec.VMwareCloudDirector.OVDCNetwork,
+					}
+				}
+			}
+
+			providers = append(providers, provider)
 		}
 	}
 

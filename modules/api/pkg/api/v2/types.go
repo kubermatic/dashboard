@@ -157,8 +157,16 @@ type PresetBodyMetadata struct {
 // PresetProvider represents a preset provider
 // swagger:model PresetProvider
 type PresetProvider struct {
-	Name    kubermaticv1.ProviderType `json:"name"`
-	Enabled bool                      `json:"enabled"`
+	Name                kubermaticv1.ProviderType     `json:"name"`
+	Enabled             bool                          `json:"enabled"`
+	VMwareCloudDirector *VMwareCloudDirectorAPIPreset `json:"vmwareCloudDirector,omitempty"`
+}
+
+// VMwareCloudDirectorPreset represents a preset for VMware Cloud Director
+// swagger:model VMwareCloudDirectorAPIPreset
+type VMwareCloudDirectorAPIPreset struct {
+	OVDCNetwork  string   `json:"ovdcNetwork,omitempty"`
+	OVDCNetworks []string `json:"ovdcNetworks,omitempty"`
 }
 
 // PresetStats represents a preset statistics

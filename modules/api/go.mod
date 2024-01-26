@@ -19,14 +19,14 @@ require (
 	github.com/Azure/go-autorest/autorest/to v0.4.0
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.619
-	github.com/aws/aws-sdk-go-v2 v1.23.2
+	github.com/aws/aws-sdk-go-v2 v1.24.1
 	github.com/aws/aws-sdk-go-v2/config v1.25.8
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.6
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.137.3
 	github.com/aws/aws-sdk-go-v2/service/eks v1.34.2
 	github.com/aws/aws-sdk-go-v2/service/iam v1.27.5
 	github.com/aws/aws-sdk-go-v2/service/sts v1.25.6
-	github.com/aws/smithy-go v1.17.0
+	github.com/aws/smithy-go v1.19.0
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/cristim/ec2-instances-info v0.0.0-20221130144415-da4474e2a3d1
 	github.com/digitalocean/godo v1.106.0
@@ -69,7 +69,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.0
-	k8c.io/kubermatic/v2 v2.24.1-0.20240119123730-223a5c1053d1
+	k8c.io/kubermatic/v2 v2.24.1-0.20240126090244-52e6c76e3ce2
 	k8c.io/operating-system-manager v1.4.1-0.20231210203405-28d391f034d8
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.28.4
@@ -104,10 +104,10 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.1-0.20240119123730-223a5c1053d1
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.1-0.20240126090244-52e6c76e3ce2
 )
 
-require github.com/vmware-tanzu/velero v1.12.1
+require github.com/vmware-tanzu/velero v1.12.2
 
 require (
 	cloud.google.com/go/compute v1.23.3 // indirect
@@ -132,11 +132,11 @@ require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.14.6 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.2.5 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.5.5 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.2.10 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.5.10 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.7.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.10.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.10.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.10.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.10.10 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.17.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.20.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

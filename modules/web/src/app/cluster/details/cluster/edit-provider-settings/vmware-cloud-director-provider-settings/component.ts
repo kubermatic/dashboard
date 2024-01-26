@@ -27,7 +27,6 @@ export enum Controls {
   APIToken = 'APIToken',
   Organization = 'organization',
   VDC = 'vdc',
-  OvdcNetwork = 'ovdcNetwork',
 }
 
 @Component({
@@ -85,7 +84,6 @@ export class VMwareCloudDirectorProviderSettingsComponent implements OnInit, OnD
       [Controls.APIToken]: this._builder.control(''),
       [Controls.Organization]: this._builder.control('', Validators.required),
       [Controls.VDC]: this._builder.control('', Validators.required),
-      [Controls.OvdcNetwork]: this._builder.control('', Validators.required),
     });
   }
 
@@ -98,7 +96,6 @@ export class VMwareCloudDirectorProviderSettingsComponent implements OnInit, OnD
           apiToken: this.form.get(Controls.APIToken).value,
           organization: this.form.get(Controls.Organization).value,
           vdc: this.form.get(Controls.VDC).value,
-          ovdcNetwork: this.form.get(Controls.OvdcNetwork).value,
         } as VMwareCloudDirectorCloudSpecPatch,
       },
       isValid: this.form.valid,

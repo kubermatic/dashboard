@@ -18,15 +18,24 @@ limitations under the License.
       fxLayoutGap="8px">
   <km-combobox [isDisabled]="isPresetSelected"
                [options]="networks"
-               [selected]="selectedNetwork"
-               [hint]="getHint(Controls.OvdcNetwork)"
-               [formControlName]="Controls.OvdcNetwork"
+               [multiple]="true"
+               [selected]="selectedNetworks"
+               [hint]="getHint(Controls.OvdcNetworks)"
+               [formControlName]="Controls.OvdcNetworks"
                (changed)="onNetworkChange($event)"
                [label]="networkLabel"
-               inputLabel="Select organization VDC network..."
+               inputLabel="Select organization VDC networks..."
                filterBy="name"
                required>
     <div *option="let network">{{network.name}}</div>
+    <ng-container hint>
+      <span *ngIf="!isPresetSelected">
+        Select one or more organization VDC networks to be used for the cluster.
+      </span>
+      <span *ngIf="isPresetSelected">
+        The selected preset already contains a network.
+      </span>
+    </ng-container>
   </km-combobox>
 
   <ng-container *ngIf="!isCSIDriverDisabled">
