@@ -38525,7 +38525,8 @@
     },
     "ipAllocationMode": {
       "description": "+kubebuilder:validation:Enum=DHCP;POOL",
-      "$ref": "#/definitions/IPAllocationMode"
+      "type": "string",
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "wrBody": {
       "type": "object",
