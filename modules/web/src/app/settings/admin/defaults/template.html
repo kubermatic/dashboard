@@ -15,374 +15,382 @@ limitations under the License.
 -->
 <mat-card>
   <mat-card-header>
-    <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
+    <mat-card-title fxFlex fxLayout="row" fxLayoutAlign=" center">
       <div fxFlex>Defaults</div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div fxLayout="column"
-         fxLayoutGap="32px"
-         class="admin-settings">
-      <div fxFlex
-           fxLayout="column"
-           fxLayoutGap="16px">
+    <div fxLayout="column" fxLayoutGap="32px" class="admin-settings">
+      <div fxFlex fxLayout="column" fxLayoutGap="16px">
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Cleanup on Cluster Deletion</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Set "clean up connected load balancers" and "clean up connected volumes (PVs and PVCS)" checkboxes on Cluster Deletion to enabled by default. Enable "Enforce" to make users unable to edit the checkboxes.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Set "clean up connected load balancers" and "clean up connected volumes (PVs and PVCS)" checkboxes on Cluster Deletion to enabled by default. Enable "Enforce" to make users unable to edit the checkboxes.'></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.cleanupOptions.enabled"
-                          (change)="onSettingsChange()"
-                          id="km-cleanup-enable-setting"
-                          fxFlexAlign=" center">Enable by Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.cleanupOptions.enabled"
+              (change)="onSettingsChange()"
+              id="km-cleanup-enable-setting"
+              fxFlexAlign=" center"
+              >Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.cleanupOptions.enforced"
-                          (change)="onSettingsChange()"
-                          id="km-cleanup-enforce-setting"
-                          fxFlexAlign=" center">Enforce Default
+            <mat-checkbox
+              [(ngModel)]="settings.cleanupOptions.enforced"
+              (change)="onSettingsChange()"
+              id="km-cleanup-enforce-setting"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation
+              [isSaved]="isEqual(settings.cleanupOptions, apiSettings.cleanupOptions)"></km-spinner-with-confirmation>
           </div>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>OPA Integration</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Set "OPA Integration" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Set "OPA Integration" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.opaOptions.enabled"
-                          (change)="onSettingsChange()"
-                          id="km-opa-enable-setting"
-                          fxFlexAlign=" center">Enable by Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.opaOptions.enabled"
+              (change)="onSettingsChange()"
+              id="km-opa-enable-setting"
+              fxFlexAlign=" center"
+              >Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.opaOptions.enforced"
-                          (change)="onSettingsChange()"
-                          id="km-opa-enforce-setting"
-                          fxFlexAlign=" center">Enforce Default
+            <mat-checkbox
+              [(ngModel)]="settings.opaOptions.enforced"
+              (change)="onSettingsChange()"
+              id="km-opa-enforce-setting"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.opaOptions, apiSettings.opaOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation
+              [isSaved]="isEqual(settings.opaOptions, apiSettings.opaOptions)"></km-spinner-with-confirmation>
           </div>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>User Cluster Logging</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Set "User Cluster Logging" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Set "User Cluster Logging" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnabled"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enable by Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.mlaOptions.loggingEnabled"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnforced"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enforce Default
+            <mat-checkbox
+              [(ngModel)]="settings.mlaOptions.loggingEnforced"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()"></km-spinner-with-confirmation>
           </div>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>User Cluster Monitoring</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Set "User Cluster Monitoring" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Set "User Cluster Monitoring" checkbox on cluster creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnabled"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enable by Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.mlaOptions.monitoringEnabled"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnforced"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enforce Default
+            <mat-checkbox
+              [(ngModel)]="settings.mlaOptions.monitoringEnforced"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()"></km-spinner-with-confirmation>
           </div>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Auto Upgrades Machine Deployments</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Set "Auto Upgrades Machine Deployments" checkbox on machine deployments creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Set "Auto Upgrades Machine Deployments" checkbox on machine deployments creation to enabled by default. Enable "Enforce" to make users unable to edit the checkbox.'></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.machineDeploymentOptions.autoUpdatesEnabled"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enable by Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.machineDeploymentOptions.autoUpdatesEnabled"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.machineDeploymentOptions.autoUpdatesEnforced"
-                          (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enforce Default
+            <mat-checkbox
+              [(ngModel)]="settings.machineDeploymentOptions.autoUpdatesEnforced"
+              (change)="onSettingsChange()"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentOptions, apiSettings.machineDeploymentOptions)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation
+              [isSaved]="isEqual(settings.machineDeploymentOptions, apiSettings.machineDeploymentOptions)"></km-spinner-with-confirmation>
           </div>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable External Clusters</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Enables external clusters in the UI and allows access to them through the API."></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip="Enables external clusters in the UI and allows access to them through the API."></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
-                        (change)="onSettingsChange()"
-                        id="km-enable-external-clusters-setting"></mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
+          <mat-checkbox
+            [(ngModel)]="settings.enableExternalClusterImport"
+            (change)="onSettingsChange()"
+            id="km-enable-external-clusters-setting"></mat-checkbox>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable Kubernetes Dashboard</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Open Dashboard" button on cluster details and allow/block Kubernetes Dashboard access through the API.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Show/Hide "Open Dashboard" button on cluster details and allow/block Kubernetes Dashboard access through the API.'></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableDashboard"
-                        (change)="onSettingsChange()"
-                        [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
-                        id="km-enable-kubernetes-dashboard-setting">
+          <mat-checkbox
+            [(ngModel)]="settings.enableDashboard"
+            (change)="onSettingsChange()"
+            [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
+            id="km-enable-kubernetes-dashboard-setting">
             <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
-              <mat-hint>This feature is disabled. Visit the
-                <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   fxLayout="row inline"
-                   fxLayoutAlign=" center">
+              <mat-hint
+                >This feature is disabled. Visit the
+                <a
+                  href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fxLayout="row inline"
+                  fxLayoutAlign=" center">
                   documentation <i class="km-icon-external-link i-18"></i>
                 </a>
                 to learn more.
               </mat-hint>
             </ng-container>
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable OIDC Kubeconfig</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
-                        [disabled]="!isOIDCKubeCfgEndpointEnabled"
-                        (change)="onOIDCKubeconfigSettingsChange()"
-                        id="km-enable-oidc-setting">
-            <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 fxLayout="row inline"
-                 fxLayoutAlign=" center">
+          <mat-checkbox
+            [(ngModel)]="settings.enableOIDCKubeconfig"
+            [disabled]="!isOIDCKubeCfgEndpointEnabled"
+            (change)="onOIDCKubeconfigSettingsChange()"
+            id="km-enable-oidc-setting">
+            <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled"
+              >This feature is disabled. Visit the
+              <a
+                href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+                target="_blank"
+                rel="noopener noreferrer"
+                fxLayout="row inline"
+                fxLayoutAlign=" center">
                 documentation <i class="km-icon-external-link i-18"></i>
               </a>
               to learn more.
             </mat-hint>
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable Cluster Backups</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Enable the cluster backup feature."></div>
+            <div class="km-icon-info km-pointer" matTooltip="Enable the cluster backup feature."></div>
           </div>
-          <mat-checkbox class="experimental-label"
-                        [(ngModel)]="settings.enableClusterBackups"
-                        (change)="onSettingsChange()">
+          <mat-checkbox
+            class="experimental-label"
+            [(ngModel)]="settings.enableClusterBackups"
+            (change)="onSettingsChange()">
           </mat-checkbox>
           <mat-chip>
-            <div>
-              Experimental
-            </div>
+            <div>Experimental</div>
           </mat-chip>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Disable Admin Kubeconfig</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Disable the option to download admin kubeconfig and corresponding API endpoints."></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip="Disable the option to download admin kubeconfig and corresponding API endpoints."></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.disableAdminKubeconfig"
-                        [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()"
-                        id="km-disabled-admin-kubeconfig-setting">
-            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 fxLayout="row inline"
-                 fxLayoutAlign=" center">
+          <mat-checkbox
+            [(ngModel)]="settings.disableAdminKubeconfig"
+            [disabled]="!settings.enableOIDCKubeconfig"
+            (change)="onSettingsChange()"
+            id="km-disabled-admin-kubeconfig-setting">
+            <mat-hint *ngIf="!settings.enableOIDCKubeconfig"
+              >This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+              <a
+                href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+                target="_blank"
+                rel="noopener noreferrer"
+                fxLayout="row inline"
+                fxLayoutAlign=" center">
                 documentation <i class="km-icon-external-link i-18"></i>
               </a>
               to learn more.
             </mat-hint>
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.disableAdminKubeconfig, apiSettings.disableAdminKubeconfig)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable WebTerminal</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableWebTerminal"
-                        [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()">
+          <mat-checkbox
+            [(ngModel)]="settings.enableWebTerminal"
+            [disabled]="!settings.enableOIDCKubeconfig"
+            (change)="onSettingsChange()">
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableWebTerminal, apiSettings.enableWebTerminal)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableWebTerminal, apiSettings.enableWebTerminal)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Enable Share Cluster</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Share Cluster" button on cluster details and allow/block cluster sharing access with other users.'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Show/Hide "Share Cluster" button on cluster details and allow/block cluster sharing access with other users.'></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableShareCluster"
-                        [disabled]="!settings.enableOIDCKubeconfig"
-                        (change)="onSettingsChange()">
+          <mat-checkbox
+            [(ngModel)]="settings.enableShareCluster"
+            [disabled]="!settings.enableOIDCKubeconfig"
+            (change)="onSettingsChange()">
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableShareCluster, apiSettings.enableShareCluster)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.enableShareCluster, apiSettings.enableShareCluster)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>User Cluster Alertmanager Prefix</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "alertmanger" the final url would be "https://alertmanager.<seed-name>.<kkp-domain>"'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "alertmanger" the final url would be "https://alertmanager.<seed-name>.<kkp-domain>"'></div>
           </div>
-          <mat-form-field fxFlex="40"
-                          fxFlexAlign=" center">
+          <mat-form-field fxFlex="40" fxFlexAlign=" center">
             <mat-label>User Cluster Alertmanager Prefix</mat-label>
-            <input matInput
-                   (keyup)="onSettingsChange()"
-                   [(ngModel)]="settings.mlaAlertmanagerPrefix"
-                   type="text" />
+            <input matInput (keyup)="onSettingsChange()" [(ngModel)]="settings.mlaAlertmanagerPrefix" type="text" />
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>User Cluster Grafana Prefix</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip='Domain name prefix on which the User Cluster Grafana is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "grafana" the final url would be "https://grafana.<seed-name>.<kkp-domain>"'></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip='Domain name prefix on which the User Cluster Grafana is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix "grafana" the final url would be "https://grafana.<seed-name>.<kkp-domain>"'></div>
           </div>
-          <mat-form-field fxFlex="40"
-                          fxFlexAlign=" center">
+          <mat-form-field fxFlex="40" fxFlexAlign=" center">
             <mat-label>User Cluster Grafana Prefix</mat-label>
-            <input matInput
-                   (keyup)="onSettingsChange()"
-                   [(ngModel)]="settings.mlaGrafanaPrefix"
-                   type="text" />
+            <input matInput (keyup)="onSettingsChange()" [(ngModel)]="settings.mlaGrafanaPrefix" type="text" />
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaGrafanaPrefix, apiSettings.mlaGrafanaPrefix)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.mlaGrafanaPrefix, apiSettings.mlaGrafanaPrefix)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">Machine Deployment</div>
-          <km-number-stepper [(ngModel)]="settings.defaultNodeCount"
-                             (ngModelChange)="onSettingsChange()"
-                             id="km-initial-replicas-setting"
-                             label="Initial Replicas"
-                             min="0"
-                             max="50"
-                             required>
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">Machine Deployment</div>
+          <km-number-stepper
+            [(ngModel)]="settings.defaultNodeCount"
+            (ngModelChange)="onSettingsChange()"
+            id="km-initial-replicas-setting"
+            label="Initial Replicas"
+            min="0"
+            max="50"
+            required>
           </km-number-stepper>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation
+            [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>Allowed Operating System</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Allowed operating system shows if the operating system is allowed to be used with machine deployment,
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip="Allowed operating system shows if the operating system is allowed to be used with machine deployment,
                  and it is only applicable to the supported operating systems for a cloud provider."></div>
           </div>
 
-          <mat-button-toggle-group group="operatingSystemGroup"
-                                   [(ngModel)]="allowedOperatingSystems"
-                                   (change)="onOperatingSystemChange($event.value)"
-                                   multiple
-                                   fxLayout="row wrap"
-                                   kmValueChangedIndicator>
-            <mat-button-toggle [value]="OperatingSystem.Ubuntu"
-                               [disabled]="isLastEnabledOS(OperatingSystem.Ubuntu)">
+          <mat-button-toggle-group
+            group="operatingSystemGroup"
+            [(ngModel)]="allowedOperatingSystems"
+            (change)="onOperatingSystemChange($event.value)"
+            multiple
+            fxLayout="row wrap"
+            kmValueChangedIndicator>
+            <mat-button-toggle [value]="OperatingSystem.Ubuntu" [disabled]="isLastEnabledOS(OperatingSystem.Ubuntu)">
               <i class="km-os-image-ubuntu"></i>
               Ubuntu
             </mat-button-toggle>
-            <mat-button-toggle [value]="OperatingSystem.CentOS"
-                               [disabled]="isLastEnabledOS(OperatingSystem.CentOS)">
+            <mat-button-toggle [value]="OperatingSystem.CentOS" [disabled]="isLastEnabledOS(OperatingSystem.CentOS)">
               <i class="km-os-image-centos"></i>
               CentOS
             </mat-button-toggle>
-            <mat-button-toggle [value]="OperatingSystem.Flatcar"
-                               [disabled]="isLastEnabledOS(OperatingSystem.Flatcar)">
+            <mat-button-toggle [value]="OperatingSystem.Flatcar" [disabled]="isLastEnabledOS(OperatingSystem.Flatcar)">
               <i class="km-os-image-flatcar"></i>
               Flatcar
             </mat-button-toggle>
-            <mat-button-toggle [value]="OperatingSystem.AmazonLinux2"
-                               [disabled]="isLastEnabledOS(OperatingSystem.AmazonLinux2)">
+            <mat-button-toggle
+              [value]="OperatingSystem.AmazonLinux2"
+              [disabled]="isLastEnabledOS(OperatingSystem.AmazonLinux2)">
               <i class="km-os-image-amazon-linux-2"></i>
               Amazon Linux 2
             </mat-button-toggle>
-            <mat-button-toggle [value]="OperatingSystem.RHEL"
-                               [disabled]="isLastEnabledOS(OperatingSystem.RHEL)"
-                               #rhelToggle>
+            <mat-button-toggle
+              [value]="OperatingSystem.RHEL"
+              [disabled]="isLastEnabledOS(OperatingSystem.RHEL)"
+              #rhelToggle>
               <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
               RHEL
             </mat-button-toggle>
-            <mat-button-toggle [value]="OperatingSystem.RockyLinux"
-                               [disabled]="isLastEnabledOS(OperatingSystem.RockyLinux)">
+            <mat-button-toggle
+              [value]="OperatingSystem.RockyLinux"
+              [disabled]="isLastEnabledOS(OperatingSystem.RockyLinux)">
               <i class="km-os-image-rockylinux"></i>
               Rocky Linux
             </mat-button-toggle>
@@ -395,38 +403,53 @@ limitations under the License.
 
 <mat-card>
   <mat-card-header>
-    <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
+    <mat-card-title fxFlex fxLayout="row" fxLayoutAlign=" center">
       <div fxFlex>Provider Defaults</div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div fxLayout="column"
-         fxLayoutGap="32px"
-         class="admin-settings">
-      <div fxFlex
-           fxLayout="column"
-           fxLayoutGap="16px">
-        <div fxLayout="row"
-             fxLayoutAlign=" center">
-          <div fxFlex="16%"
-               fxLayoutAlign=" center"
-               class="entry-label">
+    <div fxLayout="column" fxLayoutGap="32px" class="admin-settings">
+      <div fxFlex fxLayout="column" fxLayoutGap="32px">
+        <div fxLayout="row" fxLayoutAlign=" center">
+          <div fxFlex="16%" fxLayoutAlign=" center" class="entry-label">
             <span>OpenStack - Custom Disk</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Used to enforce custom disks for OpenStack machines."></div>
+            <div
+              class="km-icon-info km-pointer"
+              matTooltip="Used to enforce custom disks for OpenStack machines."></div>
           </div>
-          <div fxFlexAlign=" center"
-               fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.providerConfiguration.openStack.enforceCustomDisk"
-                          (change)="onSettingsChange()"
-                          id="km-openstack-enforce-custom-disk"
-                          fxFlexAlign=" center">Enforce Default
+          <div fxFlexAlign=" center" fxLayout="row">
+            <mat-checkbox
+              [(ngModel)]="settings.providerConfiguration.openStack.enforceCustomDisk"
+              (change)="onSettingsChange()"
+              id="km-openstack-enforce-custom-disk"
+              fxFlexAlign=" center"
+              >Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, settings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation
+              [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, apiSettings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
           </div>
         </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign=" center">
+        <div class="entry-label-vcd">
+          <span>VMware Cloud Director - Allowed IP Allocation Modes</span>
+          <div
+            class="km-icon-info km-pointer"
+            matTooltip="Used to configure allowed IP address allocation modes for VMware Cloud Director VMs.  If not set, all modes are allowed."></div>
+        </div>
+        <mat-form-field fxFlex>
+          <mat-label>IP Allocation Mode</mat-label>
+          <mat-select
+            [(ngModel)]="settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes"
+            (selectionChange)="onIPAllocationModeChange($event.value)"
+            multiple
+            disableOptionCentering
+            kmValueChangedIndicator>
+            <mat-option *ngFor="let mode of ipAllocationModes" [value]="mode"> {{mode}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <km-spinner-with-confirmation
+          [isSaved]="isEqual(settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes, apiSettings.providerConfiguration.vmwareCloudDirector.ipAllocationModes)"></km-spinner-with-confirmation>
       </div>
     </div>
   </mat-card-content>

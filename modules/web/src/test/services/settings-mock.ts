@@ -68,6 +68,9 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     openStack: {
       enforceCustomDisk: false,
     },
+    vmwareCloudDirector: {
+      ipAllocationModes: ['DHCP', 'POOL'],
+    },
   },
 };
 
