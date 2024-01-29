@@ -11,17 +11,17 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// IPAllocationMode IP allocation mode
+// IPAllocationMode +kubebuilder:validation:Enum=DHCP;POOL
 //
-// swagger:model IPAllocationMode
+// swagger:model ipAllocationMode
 type IPAllocationMode string
 
-// Validate validates this IP allocation mode
+// Validate validates this ip allocation mode
 func (m IPAllocationMode) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this IP allocation mode based on context it is used
+// ContextValidate validates this ip allocation mode based on context it is used
 func (m IPAllocationMode) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

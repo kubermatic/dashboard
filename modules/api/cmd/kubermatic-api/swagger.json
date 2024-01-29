@@ -36177,6 +36177,9 @@
       "properties": {
         "openStack": {
           "$ref": "#/definitions/OpenStack"
+        },
+        "vmwareCloudDirector": {
+          "$ref": "#/definitions/VMwareCloudDirectorSettings"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -37906,6 +37909,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "VMwareCloudDirectorSettings": {
+      "type": "object",
+      "properties": {
+        "ipAllocationModes": {
+          "description": "IPAllocationModes are the allowed IP allocation modes for the VMware Cloud Director provider. If not set, all modes are allowed.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ipAllocationMode"
+          },
+          "x-go-name": "IPAllocationModes"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "VMwareCloudDirectorStorageProfile": {
       "type": "object",
       "title": "VMwareCloudDirectorStorageProfile represents a VMware Cloud Director storage profile.",
@@ -38505,6 +38522,11 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/group-project-binding/handler"
+    },
+    "ipAllocationMode": {
+      "description": "+kubebuilder:validation:Enum=DHCP;POOL",
+      "type": "string",
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "wrBody": {
       "type": "object",

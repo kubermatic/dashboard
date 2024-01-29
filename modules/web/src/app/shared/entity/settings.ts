@@ -96,7 +96,12 @@ export interface NotificationOptions {
 }
 
 export interface ProviderConfiguration {
-  openStack: OpenStack;
+  openStack?: OpenStack;
+  vmwareCloudDirector?: VMwareCloudDirector;
+}
+
+export interface VMwareCloudDirector {
+  ipAllocationModes: string[];
 }
 
 export interface OpenStack {
@@ -225,6 +230,9 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   providerConfiguration: {
     openStack: {
       enforceCustomDisk: false,
+    },
+    vmwareCloudDirector: {
+      ipAllocationModes: ['DHCP', 'POOL'],
     },
   },
   defaultQuota: {

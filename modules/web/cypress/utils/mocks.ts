@@ -83,6 +83,9 @@ export class Mocks {
       openStack: {
         enforceCustomDisk: false,
       },
+      vmwareCloudDirector: {
+        ipAllocationModes: ['DHCP', 'POOL'],
+      },
     },
   };
 

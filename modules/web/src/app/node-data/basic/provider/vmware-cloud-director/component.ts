@@ -23,6 +23,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {SettingsService} from '@app/core/services/settings';
 import {PresetsService} from '@app/core/services/wizard/presets';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -120,7 +121,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   implements OnInit, AfterViewChecked, OnDestroy
 {
   readonly Controls = Controls;
-  readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
+  ipAllocationModes: string[] = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
 
   @ViewChild('storageProfileCombobox')
   private readonly _storageProfileCombobox: FilteredComboboxComponent;
@@ -164,6 +165,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _presets: PresetsService,
+    private readonly _settingsService: SettingsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -286,6 +288,16 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         this.networkLabel = this.networks?.length ? NetworkState.Ready : NetworkState.Empty;
         this.updateSelectedNetwork();
       });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (settings.providerConfiguration?.vmwareCloudDirector?.ipAllocationModes?.length > 0) {
+        this.ipAllocationModes = settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes;
+        if (!this.ipAllocationModes.includes(this.form.get(Controls.IPAllocationMode).value)) {
+          this.form.get(Controls.IPAllocationMode).setValue(this.ipAllocationModes[0]);
+          this.form.updateValueAndValidity();
+        }
+      }
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -340,6 +352,9 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   private _initForm(): void {
     const values = this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector;
     const defaults = getDefaultNodeProviderSpec(NodeProvider.VMWARECLOUDDIRECTOR) as VMwareCloudDirectorNodeSpec;
+    const defaultIPAllocationMode =
+      this.ipAllocationModes?.length === 1 ? this.ipAllocationModes[0] : defaults.ipAllocationMode;
+
     this.form = this._builder.group({
       [Controls.CPUs]: this._builder.control(values ? values.cpus : defaults.cpus, [Validators.required]),
       [Controls.CPUCores]: this._builder.control(values ? values.cpuCores : defaults.cpuCores, [Validators.required]),
@@ -348,7 +363,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         Validators.required,
       ]),
       [Controls.DiskIOPs]: this._builder.control(values ? values.diskIOPS : defaults.diskIOPS),
-      [Controls.IPAllocationMode]: this._builder.control(values ? values.ipAllocationMode : defaults.ipAllocationMode),
+      [Controls.IPAllocationMode]: this._builder.control(values ? values.ipAllocationMode : defaultIPAllocationMode),
       [Controls.StorageProfile]: this._builder.control(values ? values.storageProfile : defaults.storageProfile, [
         Validators.required,
       ]),

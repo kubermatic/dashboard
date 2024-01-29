@@ -14,6 +14,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
+import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
@@ -40,6 +41,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
 
   readonly OperatingSystem = OperatingSystem;
+  readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -125,6 +127,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   isKubernetesDashboardFeatureGatesEnabled(): boolean {
     return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
+  }
+
+  onIPAllocationModeChange(val: string[]): void {
+    this.settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes = val;
+    this.onSettingsChange();
   }
 
   onOperatingSystemChange(val: string[]): void {

@@ -223,9 +223,7 @@ limitations under the License.
                         (change)="onSettingsChange()">
           </mat-checkbox>
           <mat-chip>
-            <div>
-              Experimental
-            </div>
+            <div>Experimental</div>
           </mat-chip>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
         </div>
@@ -407,7 +405,7 @@ limitations under the License.
          class="admin-settings">
       <div fxFlex
            fxLayout="column"
-           fxLayoutGap="16px">
+           fxLayoutGap="32px">
         <div fxLayout="row"
              fxLayoutAlign=" center">
           <div fxFlex="16%"
@@ -424,9 +422,29 @@ limitations under the License.
                           id="km-openstack-enforce-custom-disk"
                           fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, settings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, apiSettings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
           </div>
         </div>
+      </div>
+      <div fxLayout="row"
+           fxLayoutAlign=" center">
+        <div class="entry-label-vcd">
+          <span>VMware Cloud Director - Allowed IP Allocation Modes</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Used to configure allowed IP address allocation modes for VMware Cloud Director VMs.  If not set, all modes are allowed."></div>
+        </div>
+        <mat-form-field fxFlex>
+          <mat-label>IP Allocation Mode</mat-label>
+          <mat-select [(ngModel)]="settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes"
+                      (selectionChange)="onIPAllocationModeChange($event.value)"
+                      multiple
+                      disableOptionCentering
+                      kmValueChangedIndicator>
+            <mat-option *ngFor="let mode of ipAllocationModes"
+                        [value]="mode"> {{mode}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.vmwareCloudDirector.ipAllocationModes, apiSettings.providerConfiguration.vmwareCloudDirector.ipAllocationModes)"></km-spinner-with-confirmation>
       </div>
     </div>
   </mat-card-content>
