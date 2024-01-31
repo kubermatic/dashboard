@@ -32,23 +32,10 @@ END OF TERMS AND CONDITIONS
         <mat-hint>The name of the created cluster {{type.toLowerCase()}}.</mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>{{destinationsLabel}}</mat-label>
-        <mat-select [formControlName]="Controls.Destination"
-                    disableOptionCentering
-                    required>
-          <mat-option *ngFor="let destination of destinations"
-                      [value]="destination">{{destination}}</mat-option>
-        </mat-select>
-        <mat-hint *ngIf="isAdmin && !hasDestinations()">
-          <a class="km-pointer"
-             href="/settings/backupdestinations"
-             fxLayoutAlign=" center"
-             target="_blank">Configure a destination for this seed <i class="km-icon-external-link"></i>.</a>
-        </mat-hint>
-        <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
-        </mat-hint>
-        <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
-        </mat-hint>
+        <mat-label>Backup Storage Location</mat-label>
+        <input [formControlName]="Controls.Destination"
+               matInput
+               required>
       </mat-form-field>
       <mat-form-field>
         <mat-label>{{namespacesLabel}}</mat-label>
@@ -86,6 +73,14 @@ END OF TERMS AND CONDITIONS
         <mat-hint>Enter time in the format HHhMMmSSs (e.g., 24h10m10s), The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
       </mat-form-field>
+
+      <mat-checkbox class="default-volumes"
+                    [formControlName]="Controls.DefaultVolumesToFsBackup">
+        Default Volumes
+        <i class="km-icon-info km-pointer"
+           matTooltip="Whether pod volume file system backup should be used for all volumes by default."></i>
+      </mat-checkbox>
+
       <div class="labels">
         <km-label-form title="Labels"
                        [labels]="labels"
