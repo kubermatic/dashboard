@@ -21,7 +21,6 @@
 import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {BackupService} from '@core/services/backup';
 import {UserService} from '@core/services/user';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
@@ -46,15 +45,10 @@ enum Controls {
   Name = 'name',
   Destination = 'destination',
   NameSpaces = 'namespaces',
+  DefaultVolumesToFsBackup = 'defaultVolumesToFsBackup',
   CronJob = 'cronjob',
   ExpiresIn = 'ttl',
   Labels = 'labels',
-}
-
-enum DestinationsState {
-  Ready = 'Destinations',
-  Loading = 'Loading...',
-  Empty = 'No Destinations Available',
 }
 
 enum NamespacesState {
@@ -77,7 +71,6 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   isAdmin = false;
   nameSpaces: string[] = [];
   labels: Record<string, string>;
-  destinationsLabel = DestinationsState.Ready;
   namespacesLabel = NamespacesState.Ready;
 
   readonly Controls = Controls;
@@ -91,7 +84,6 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddClustersBackupsDialogConfig,
     private readonly _dialogRef: MatDialogRef<AddClustersBackupsDialogComponent>,
     private readonly _builder: FormBuilder,
-    private readonly _backupService: BackupService,
     private readonly _userService: UserService,
     private readonly _rbacService: RBACService,
     private readonly _clusterBackupService: ClusterBackupService,
@@ -102,14 +94,15 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Destination]: this._builder.control('', Validators.required),
+      [Controls.Destination]: this._builder.control(StorageLocationTempName, Validators.required),
       [Controls.NameSpaces]: this._builder.control([]),
+      [Controls.DefaultVolumesToFsBackup]: this._builder.control(true),
       [Controls.CronJob]: this._builder.control(''),
       [Controls.ExpiresIn]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
     });
 
-    this.getDestinations(this.projectID, this.cluster.id);
+    this.form.get(Controls.Destination).disable();
     this.getClusterNamespaces(this.projectID, this.cluster.id);
 
     const cronJobControl = this.form.get(Controls.CronJob);
@@ -128,21 +121,6 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getDestinations(projectID: string, clusterID: string): void {
-    this.destinationsLabel = DestinationsState.Loading;
-    this._backupService
-      .getDestinations(projectID, clusterID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(destinations => {
-        this.destinations = destinations;
-        this.destinationsLabel = destinations.length ? DestinationsState.Ready : DestinationsState.Empty;
-      });
-  }
-
-  hasDestinations(): boolean {
-    return this.destinations?.length > 0;
   }
 
   getClusterNamespaces(projectID: string, clusterID: string): void {
@@ -186,6 +164,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       spec: {
         storageLocation: StorageLocationTempName,
         clusterid: this.cluster.id,
+        defaultVolumesToFsBackup: this.form.get(Controls.DefaultVolumesToFsBackup).value,
       },
     };
 
@@ -213,8 +192,9 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       spec: {
         schedule: this.form.get(Controls.CronJob).value,
         template: {
-          storageLocation: StorageLocationTempName,
+          storageLocation: this.form.get(Controls.Destination).value,
           clusterid: this.cluster.id,
+          defaultVolumesToFsBackup: this.form.get(Controls.DefaultVolumesToFsBackup).value,
         },
       },
     };

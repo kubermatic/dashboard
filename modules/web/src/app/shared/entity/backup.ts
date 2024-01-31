@@ -139,7 +139,7 @@ export enum BackupType {
 }
 
 // this variable is temporary, it will be removed after adding the storageLocation implementation
-export const StorageLocationTempName = 'default';
+export const StorageLocationTempName = 'default-cluster-backup-bsl';
 
 export class ClusterBackup {
   name: string;
@@ -150,6 +150,7 @@ export class ClusterBackup {
 export class ClusterBackupSpec {
   includedNamespaces?: string[] | string;
   storageLocation: string;
+  defaultVolumesToFsBackup: boolean;
   clusterid: string;
   ttl?: string;
   schedule?: string;
