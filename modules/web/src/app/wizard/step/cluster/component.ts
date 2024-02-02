@@ -23,6 +23,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
+import {ApplicationService} from '@app/core/services/application';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {
   IPV4_CIDR_PATTERN_VALIDATOR,
@@ -109,6 +110,7 @@ enum Controls {
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
   KubeLB = 'kubelb',
   DisableCSIDriver = 'disableCSIDriver',
+  CiliumIngress = 'ciliumIngress',
 }
 
 @Component({
@@ -166,6 +168,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
+  private readonly _cniCiliumApplicationName = 'cilium';
 
   get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;
@@ -180,6 +183,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
+    private readonly _applicationService: ApplicationService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -348,6 +352,20 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
+    if (!this.cniApplicationValues) {
+      this._applicationService
+        .getApplicationDefinition(this._cniCiliumApplicationName)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(appDef => (this.cniApplicationValues = this.initializeCiliumValues(appDef.spec.defaultValues)));
+    }
+
+    this.control(Controls.CiliumIngress)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.updateCiliumCNIValues();
+        this._clusterSpecService.cluster = this._getClusterEntity();
+      });
+
     this._handleClusterSpecChanges();
     this._handleCNIPluginChanges();
     this._updateAvailableProxyModes();
@@ -388,7 +406,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
   }
-
   getPluginName(name: string): string {
     return AdmissionPluginUtils.getPluginName(name);
   }
@@ -403,6 +420,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   hasCNIPluginType(): boolean {
     return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
+  }
+
+  isCiliumSelected(): boolean {
+    return this.form.get(Controls.CNIPlugin).value === CNIPlugin.Cilium;
   }
 
   isAllowedIPRangeSupported(): boolean {
@@ -458,6 +479,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
       [Controls.KubeLB]: this._builder.control(clusterSpec?.kubelb?.enabled ?? false),
       [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
+      [Controls.CiliumIngress]: this._builder.control(false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
       [Controls.EventRateLimitConfig]: this._builder.control(clusterSpec?.eventRateLimitConfig ?? ''),
@@ -600,7 +622,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._updateAvailableProxyModes();
         this._fetchCNIPlugins();
         this._defaultProxyMode = clusterSpec?.clusterNetwork?.proxyMode;
-        this.cniApplicationValues = cluster.annotations?.[ClusterAnnotation.InitialCNIValuesRequest];
+
+        if (cluster.annotations?.[ClusterAnnotation.InitialCNIValuesRequest]) {
+          this.cniApplicationValues = cluster.annotations[ClusterAnnotation.InitialCNIValuesRequest];
+        }
         this.loadingClusterDefaults = false;
         this._cdr.detectChanges();
       });
@@ -742,6 +767,27 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private updateCiliumCNIValues(): void {
+    const ciliumIngress = this.controlValue(Controls.CiliumIngress);
+    if (ciliumIngress) {
+      let cniApplicationValues = JSON.parse(this.cniApplicationValues);
+      cniApplicationValues = {
+        ...cniApplicationValues,
+        ingressController: {
+          enabled: true,
+          loadbalancerMode: 'shared',
+          default: true,
+          enforceHttps: false,
+        },
+      };
+      this.cniApplicationValues = JSON.stringify(cniApplicationValues);
+    } else {
+      const cniApplicationValues = JSON.parse(this.cniApplicationValues);
+      delete cniApplicationValues.ingressController;
+      this.cniApplicationValues = JSON.stringify(cniApplicationValues);
+    }
+  }
+
   private _getExtraCloudSpecOptions(): ExtraCloudSpecOptions {
     return (
       this._clusterSpecService.cluster?.spec?.cloud[this._clusterSpecService.provider] || ({} as ExtraCloudSpecOptions)
@@ -831,5 +877,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
       } as ClusterSpec,
     } as Cluster;
+  }
+
+  private initializeCiliumValues(valuesConfig: string | object): string {
+    if (typeof valuesConfig === 'string') {
+      return valuesConfig;
+    }
+    if (!_.isEmpty(valuesConfig)) {
+      return JSON.stringify(valuesConfig);
+    }
+    return null;
   }
 }

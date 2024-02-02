@@ -131,6 +131,9 @@ limitations under the License.
                  href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/expose-strategies/#configure-the-expose-strategy">here <i class="km-icon-external-link"></i></a>.
             </mat-hint>
           </mat-form-field>
+          <mat-checkbox *ngIf="isCiliumSelected()"
+                        [formControlName]="Controls.CiliumIngress">Ingress <i class="km-icon-info km-pointer"
+               matTooltip="Enable Cilium kubernetes ingress supoort"></i></mat-checkbox>
           <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
                         class="tag-list"
                         label="Allowed IP Ranges for API server"
