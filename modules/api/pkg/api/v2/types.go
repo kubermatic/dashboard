@@ -2157,3 +2157,9 @@ type ProjectClusterList struct {
 	Clusters     apiv1.ClusterList `json:"clusters"`
 	ErrorMessage *string           `json:"errorMessage,omitempty"`
 }
+
+type ClusterBackupStorageLocation struct {
+	Name   string                               `json:"name,omitempty"`
+	Spec   velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
+	Status velerov1.BackupStorageLocationStatus `json:"status"`
+}

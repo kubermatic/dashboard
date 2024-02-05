@@ -35,7 +35,7 @@ export interface DeleteBackupDialogConfig {
 export class DeleteBackupDialogComponent {
   type = this._config.type;
   backups = this._config.backups;
-  bslName = this._config.bslName
+  bslName = this._config.bslName;
   verificationInput = '';
 
   constructor(
@@ -57,7 +57,7 @@ export class DeleteBackupDialogComponent {
       }
       return this.verificationInput === this.backups[0]?.name;
     }
-    return this.verificationInput === this.bslName
+    return this.verificationInput === this.bslName;
   }
 
   inputLabel(): string {
@@ -65,6 +65,6 @@ export class DeleteBackupDialogComponent {
   }
 
   getcbContent(): string {
-    return this._config.bslName ?? (this.backups.length > 1 ? 'yes' : this.backups[0].name)
+    return this._config.bslName ?? (this.backups.length > 1 ? 'yes' : this.backups[0].name);
   }
 }

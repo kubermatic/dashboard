@@ -1348,3 +1348,47 @@ type PrivilegedOperatingSystemProfileProvider interface {
 	// List returns a list of OperatingSystemProfiles for the KKP installation.
 	ListUnsecured(context.Context) (*osmv1alpha1.OperatingSystemProfileList, error)
 }
+
+type BackupStorageProvider interface {
+	// GetUnsecured returns a ClusterBackupStorageLocation based on object's name.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resource
+	GetUnsecured(ctx context.Context, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// ListUnsecured returns a ClusterBackupStorageLocation list.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resource
+	ListUnsecured(ctx context.Context, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
+
+	// CreateUnsecured creates a new ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	CreateUnsecured(ctx context.Context, cbsl *kubermaticv1.ClusterBackupStorageLocation) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// UpdateUnsecured updates givenClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	UpdateUnsecured(ctx context.Context, cbsl *kubermaticv1.ClusterBackupStorageLocation) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// DeleteUnsecured removes an existing ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to delete the resource
+	DeleteUnsecured(ctx context.Context, name string) error
+
+	// CreateCredentialsUnsecured creates a new  credentials secret for a ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	CreateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error
+
+	// UpdateCredentialsUnsecured updates credentials secret for a ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	UpdateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error
+}

@@ -19,23 +19,23 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ProjectService } from '@app/core/services/project';
-import { BackupStorageLocation, BackupType } from '@app/shared/entity/backup';
-import { Project } from '@app/shared/entity/project';
-import { Subject, filter, switchMap, take, takeUntil } from 'rxjs';
-import { AddBackupStorageLocationDialogComponent, AddBackupStorageLocationDialogConfig } from './add-dialog/component';
-import { ClusterBackupService } from '@app/core/services/cluster-backup';
-import { UserService } from '@app/core/services/user';
-import { Member } from '@app/shared/entity/member';
-import { MemberUtils, Permission } from '@app/shared/utils/member';
-import { View } from '@app/shared/entity/common';
-import { GroupConfig } from '@app/shared/model/Config';
-import { DeleteBackupDialogComponent } from '../backups/delete-dialog/component';
-import { NotificationService } from '@app/core/services/notification';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ProjectService} from '@app/core/services/project';
+import {BackupStorageLocation, BackupType} from '@app/shared/entity/backup';
+import {Project} from '@app/shared/entity/project';
+import {Subject, filter, switchMap, take, takeUntil} from 'rxjs';
+import {AddBackupStorageLocationDialogComponent, AddBackupStorageLocationDialogConfig} from './add-dialog/component';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {UserService} from '@app/core/services/user';
+import {Member} from '@app/shared/entity/member';
+import {MemberUtils, Permission} from '@app/shared/utils/member';
+import {View} from '@app/shared/entity/common';
+import {GroupConfig} from '@app/shared/model/Config';
+import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
+import {NotificationService} from '@app/core/services/notification';
 
 @Component({
   selector: 'km-backup-storage-locations-list',
@@ -67,7 +67,7 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService,
-    private readonly _notificationService: NotificationService,
+    private readonly _notificationService: NotificationService
   ) {}
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -87,14 +87,13 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
     this._projectService.selectedProject
       .pipe(
         switchMap(project => {
-          this._selectedProject = project
-          this._getBackupStorageLocationList(project.id)
+          this._selectedProject = project;
+          this._getBackupStorageLocationList(project.id);
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
-
   }
 
   ngOnDestroy(): void {
@@ -105,55 +104,65 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   addBackupStorageLocation(): void {
     const config: MatDialogConfig = {
       data: {
-        projectID: this._selectedProject.id
-      } as AddBackupStorageLocationDialogConfig
-    }
-    this._matDialog.open(AddBackupStorageLocationDialogComponent, config).afterClosed()
-    .pipe(filter(confirmed => confirmed))
-    .pipe(take(1))
-    .subscribe(_ => {
-      this._getBackupStorageLocationList(this._selectedProject.id)
-    })
+        projectID: this._selectedProject.id,
+      } as AddBackupStorageLocationDialogConfig,
+    };
+    this._matDialog
+      .open(AddBackupStorageLocationDialogComponent, config)
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._getBackupStorageLocationList(this._selectedProject.id);
+      });
   }
 
   editBSL(bsl: BackupStorageLocation): void {
     const config: MatDialogConfig = {
       data: {
         projectID: this._selectedProject.id,
-        bslObject: bsl
-      }as AddBackupStorageLocationDialogConfig
-    }
-    this._matDialog.open(AddBackupStorageLocationDialogComponent, config).afterClosed()
-    .pipe(filter(confirmed => confirmed))
-    .pipe(take(1))
-    .subscribe(_ => {
-      this._getBackupStorageLocationList(this._selectedProject.id)
-    })
+        bslObject: bsl,
+      } as AddBackupStorageLocationDialogConfig,
+    };
+    this._matDialog
+      .open(AddBackupStorageLocationDialogComponent, config)
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._getBackupStorageLocationList(this._selectedProject.id);
+      });
   }
 
   deleteBSL(bsl: BackupStorageLocation): void {
     const config: MatDialogConfig = {
       data: {
         bslName: bsl.name,
-        type: BackupType.BackupStorageLocation
+        type: BackupType.BackupStorageLocation,
       },
     };
-    this._matDialog.open(DeleteBackupDialogComponent, config)
+    this._matDialog
+      .open(DeleteBackupDialogComponent, config)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .pipe(switchMap(_ => {
-        return this._clusterBackupService.deleteBackupStorageLocation(this._selectedProject.id, bsl.id)
-      }))
+      .pipe(
+        switchMap(_ => {
+          return this._clusterBackupService.deleteBackupStorageLocation(this._selectedProject.id, bsl.id);
+        })
+      )
       .subscribe(_ => {
         this._notificationService.success(`Deleting the ${bsl.name} backup storage location`);
-      })
+      });
   }
 
   private _getBackupStorageLocationList(projectID: string): void {
-    this._clusterBackupService.listBackupStorageLocation(projectID).pipe(takeUntil(this._unsubscribe)).subscribe(data => {
-      this.backupStorageLocations = data;
-      this.dataSource.data = this.backupStorageLocations
-    })
+    this._clusterBackupService
+      .listBackupStorageLocation(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(data => {
+        this.backupStorageLocations = data;
+        this.dataSource.data = this.backupStorageLocations;
+      });
   }
 }

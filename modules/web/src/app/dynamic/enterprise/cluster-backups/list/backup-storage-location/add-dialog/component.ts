@@ -18,13 +18,13 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ClusterBackupService } from "@app/core/services/cluster-backup";
-import { NotificationService } from "@app/core/services/notification";
-import { BackupStorageLocation } from "@app/shared/entity/backup";
-import { Observable, Subject } from "rxjs";
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {NotificationService} from '@app/core/services/notification';
+import {BackupStorageLocation} from '@app/shared/entity/backup';
+import {Observable, Subject} from 'rxjs';
 
 export interface AddBackupStorageLocationDialogConfig {
   projectID: string;
@@ -38,7 +38,7 @@ enum Controls {
   SecretAccessKey = 'secretAccessKey',
   Region = 'region',
   Profile = 'profile',
-  Endpoints = 'endpoints'
+  Endpoints = 'endpoints',
 }
 
 @Component({
@@ -49,14 +49,14 @@ enum Controls {
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
-  form: FormGroup
+  form: FormGroup;
 
   get label(): string {
-    return this._config.bslObject ? "Edit" : "Create";
+    return this._config.bslObject ? 'Edit' : 'Create';
   }
 
   get icon(): string {
-    return this._config.bslObject ? "km-icon-edit" : "km-icon-add";
+    return this._config.bslObject ? 'km-icon-edit' : 'km-icon-add';
   }
 
   constructor(
@@ -64,35 +64,44 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
     private readonly _builder: FormBuilder,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _dialogRef: MatDialogRef<AddBackupStorageLocationDialogComponent>,
-    private readonly _notificationService: NotificationService,
+    private readonly _notificationService: NotificationService
   ) {}
   ngOnInit(): void {
-
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this._config.bslObject?.name ?? "", Validators.required),
-      [Controls.Bucket]: this._builder.control(this._config.bslObject?.spec.objectStorage.bucket ?? '', Validators.required),
+      [Controls.Name]: this._builder.control(this._config.bslObject?.name ?? '', Validators.required),
+      [Controls.Bucket]: this._builder.control(
+        this._config.bslObject?.spec.objectStorage.bucket ?? '',
+        Validators.required
+      ),
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
       [Controls.Profile]: this._builder.control(this._config.bslObject?.spec.config.profile ?? ''),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
-    })
+    });
 
     if (this._config.bslObject) {
-      this.form.get(Controls.Name).disable()
+      this.form.get(Controls.Name).disable();
     }
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
-    this._unsubscribe.complete()
+    this._unsubscribe.complete();
   }
 
   getObservable(): Observable<BackupStorageLocation> {
     if (this._config.bslObject) {
-      return this._clusterBackupService.patchBackupStorageLocation(this._config.projectID, this._getBackupStorageLocation().spec, this._config.bslObject.id)
+      return this._clusterBackupService.patchBackupStorageLocation(
+        this._config.projectID,
+        this._getBackupStorageLocation().spec,
+        this._config.bslObject.id
+      );
     }
-    return this._clusterBackupService.createBackupStorageLocation(this._config.projectID, this._getBackupStorageLocation())
+    return this._clusterBackupService.createBackupStorageLocation(
+      this._config.projectID,
+      this._getBackupStorageLocation()
+    );
   }
 
   onNext(backupStorageLocation: BackupStorageLocation): void {
@@ -105,18 +114,18 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       name: this.form.get(Controls.Name).value,
       spec: {
         objectStorage: {
-          bucket: this.form.get(Controls.Bucket).value
+          bucket: this.form.get(Controls.Bucket).value,
         },
         config: {
           region: this.form.get(Controls.Region).value,
           profile: this.form.get(Controls.Profile).value,
-          s3Url: this.form.get(Controls.Endpoints).value
+          s3Url: this.form.get(Controls.Endpoints).value,
         },
         credential: {
           accessKeyId: this.form.get(Controls.AccessKeyId).value,
-          secretAccessKey: this.form.get(Controls.SecretAccessKey).value
-        }
-      }
-    }
+          secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+        },
+      },
+    };
   }
 }

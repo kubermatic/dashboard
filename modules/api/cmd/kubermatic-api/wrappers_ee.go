@@ -48,3 +48,7 @@ func resourceQuotaProviderFactory(createMasterImpersonatedClient kubernetes.Impe
 func groupProjectBindingFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.GroupProjectBindingProvider {
 	return eeapi.GroupProjectBindingProviderFactory(createMasterImpersonatedClient, privilegedClient)
 }
+
+func backupStorageProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.BackupStorageProvider {
+	return eeapi.BackupStorageProviderFactory(createMasterImpersonatedClient, privilegedClient)
+}
