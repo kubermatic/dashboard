@@ -22,6 +22,20 @@ type ApplicationDefinitionSpec struct {
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
 
+	// DocumentationURL holds a link to official documentation of the Application
+	// Alternatively this can be a link to the Readme of a chart in a git repository
+	DocumentationURL string `json:"documentationURL,omitempty"`
+
+	// Logo of the Application as a base64 encoded svg
+	Logo string `json:"logo,omitempty"`
+
+	// LogoFormat contains logo format of the configured Application. Options are "svg+xml" and "png"
+	// +kubebuilder:validation:Enum=svg+xml;png
+	LogoFormat string `json:"logoFormat,omitempty"`
+
+	// SourceURL holds a link to the official source code mirror or git repository of the application
+	SourceURL string `json:"sourceURL,omitempty"`
+
 	// Available version for this application
 	Versions []*ApplicationVersion `json:"versions"`
 
