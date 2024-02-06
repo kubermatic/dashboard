@@ -134,7 +134,7 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprint("%s-", req.Body.Name),
+			GenerateName: fmt.Sprintf("%s-", req.Body.Name),
 			Namespace:    resources.KubermaticNamespace,
 		},
 		Data: map[string][]byte{
@@ -149,7 +149,12 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	// assign the generated name after creation
-	cbslSpec.Credential.Name = secret.Name
+	cbslSpec.Credential = &corev1.SecretKeySelector{
+		LocalObjectReference: corev1.LocalObjectReference{
+			Name: secret.Name,
+		},
+		Key: "cloud-credentials",
+	}
 
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		ObjectMeta: metav1.ObjectMeta{
