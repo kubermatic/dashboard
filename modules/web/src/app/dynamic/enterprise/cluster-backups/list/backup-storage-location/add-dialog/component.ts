@@ -23,7 +23,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
-import {BackupStorageLocation} from '@app/shared/entity/backup';
+import {BackupStorageLocation, CreateBackupStorageLocation, SuportedBSLProviders} from '@app/shared/entity/backup';
 import {Observable, Subject} from 'rxjs';
 
 export interface AddBackupStorageLocationDialogConfig {
@@ -36,8 +36,8 @@ enum Controls {
   Bucket = 'bucket',
   AccessKeyId = 'accessKeyId',
   SecretAccessKey = 'secretAccessKey',
+  BackupSyncPeriod = 'backupSyncPeriod',
   Region = 'region',
-  Profile = 'profile',
   Endpoints = 'endpoints',
 }
 
@@ -76,7 +76,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
-      [Controls.Profile]: this._builder.control(this._config.bslObject?.spec.config.profile ?? ''),
+      [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? ''),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
     });
 
@@ -92,10 +92,10 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
 
   getObservable(): Observable<BackupStorageLocation> {
     if (this._config.bslObject) {
-      return this._clusterBackupService.patchBackupStorageLocation(
+      return this._clusterBackupService.putBackupStorageLocation(
         this._config.projectID,
-        this._getBackupStorageLocation().spec,
-        this._config.bslObject.id
+        this._getBackupStorageLocation(),
+        this._config.bslObject.name
       );
     }
     return this._clusterBackupService.createBackupStorageLocation(
@@ -109,22 +109,23 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
     this._notificationService.success(`Created the ${backupStorageLocation.name} backup storage location`);
   }
 
-  private _getBackupStorageLocation(): BackupStorageLocation {
+  private _getBackupStorageLocation(): CreateBackupStorageLocation {
     return {
       name: this.form.get(Controls.Name).value,
-      spec: {
+      cbslSpec: {
         objectStorage: {
           bucket: this.form.get(Controls.Bucket).value,
         },
+        backupSyncPeriod: this.form.get(Controls.BackupSyncPeriod).value,
         config: {
           region: this.form.get(Controls.Region).value,
-          profile: this.form.get(Controls.Profile).value,
           s3Url: this.form.get(Controls.Endpoints).value,
         },
-        credential: {
-          accessKeyId: this.form.get(Controls.AccessKeyId).value,
-          secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
-        },
+        provider: SuportedBSLProviders.AWS,
+      },
+      credentials: {
+        accessKeyId: this.form.get(Controls.AccessKeyId).value,
+        secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
       },
     };
   }

@@ -36,6 +36,7 @@ import {View} from '@app/shared/entity/common';
 import {GroupConfig} from '@app/shared/model/Config';
 import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
+import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 
 @Component({
   selector: 'km-backup-storage-locations-list',
@@ -49,7 +50,7 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   isAdmin = false;
   dataSource = new MatTableDataSource<BackupStorageLocation>();
   backupStorageLocations: BackupStorageLocation[] = [];
-  columns = ['name', 'bucket', 'region', 'created', 'actions'];
+  columns = ['status', 'name', 'bucket', 'region', 'validation', 'actions'];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -101,6 +102,10 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  getStatus(phase: string): HealthStatus {
+    return getClusterBackupHealthStatus(phase);
+  }
+
   addBackupStorageLocation(): void {
     const config: MatDialogConfig = {
       data: {
@@ -148,7 +153,7 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .pipe(
         switchMap(_ => {
-          return this._clusterBackupService.deleteBackupStorageLocation(this._selectedProject.id, bsl.id);
+          return this._clusterBackupService.deleteBackupStorageLocation(this._selectedProject.id, bsl.name);
         })
       )
       .subscribe(_ => {

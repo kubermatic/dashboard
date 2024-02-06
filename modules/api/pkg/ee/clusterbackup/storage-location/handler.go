@@ -293,12 +293,10 @@ func DecodeUpdateCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-
 	req.ClusterBackupStorageLocationName = mux.Vars(r)["clusterBackupStorageLocation"]
 	if req.ClusterBackupStorageLocationName == "" {
 		return "", fmt.Errorf("'clusterBackupStorageLocation' parameter is required but was not provided")
 	}
-
 	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}

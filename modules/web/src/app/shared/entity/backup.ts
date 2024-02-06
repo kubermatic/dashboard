@@ -189,10 +189,23 @@ export class ClusterRestoreConfigSpec {
   createdAt?: string;
 }
 
+export enum SuportedBSLProviders {
+  AWS = 'aws',
+}
+export class CreateBackupStorageLocation {
+  name: string;
+  cbslSpec: BackupStorageLocationSpec;
+  credentials: {
+    accessKeyId: string;
+    secretAccessKey: string;
+  };
+}
+
 export class BackupStorageLocation {
   name: string;
   id?: string;
   spec: BackupStorageLocationSpec;
+  status?: BackupStorageLocationStatus;
 }
 
 export class BackupStorageLocationSpec {
@@ -200,16 +213,23 @@ export class BackupStorageLocationSpec {
     bucket: string;
   };
   config: BackupStorageLocationConfig;
+  backupSyncPeriod: string;
   credential?: {
     accessKeyId: string;
     secretAccessKey: string;
   };
-  createdAt?: string;
+  provider?: string;
+  lastValidationTime?: string;
   status?: string;
+}
+
+export class BackupStorageLocationStatus {
+  phase: string;
+  message: string;
+  lastValidationTime: string;
 }
 
 export class BackupStorageLocationConfig {
   region?: string;
-  profile?: string;
   s3Url?: string;
 }

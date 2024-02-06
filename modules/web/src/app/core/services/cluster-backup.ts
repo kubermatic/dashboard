@@ -19,7 +19,7 @@ import {
   CreateClusterBackupSchedule,
   ClusterRestore,
   BackupStorageLocation,
-  BackupStorageLocationSpec,
+  CreateBackupStorageLocation,
 } from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
@@ -82,33 +82,33 @@ export class ClusterBackupService {
 
   createBackupStorageLocation(
     projectID: string,
-    backupStorageLocation: BackupStorageLocation
+    backupStorageLocation: CreateBackupStorageLocation
   ): Observable<BackupStorageLocation> {
-    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation`;
     return this._http.post<BackupStorageLocation>(url, backupStorageLocation);
   }
 
   listBackupStorageLocation(projectID: string): Observable<BackupStorageLocation[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation`;
     return this._http.get<BackupStorageLocation[]>(url);
   }
 
-  getBackupStorageLocation(projectID: string, bslID: string): Observable<BackupStorageLocation> {
-    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`;
+  getBackupStorageLocation(projectID: string, bslName: string): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
     return this._http.get<BackupStorageLocation>(url);
   }
 
-  deleteBackupStorageLocation(projectID: string, bslID: string): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`;
+  deleteBackupStorageLocation(projectID: string, bslName: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
     return this._http.delete<void>(url);
   }
 
-  patchBackupStorageLocation(
+  putBackupStorageLocation(
     projectID: string,
-    backupStorageLocation: BackupStorageLocationSpec,
-    bslID: string
+    backupStorageLocation: CreateBackupStorageLocation,
+    bslName: string
   ): Observable<BackupStorageLocation> {
-    const url = `${this._newRestRoot}/projects/${projectID}/backupstoragelocation/${bslID}`;
-    return this._http.patch<BackupStorageLocation>(url, backupStorageLocation);
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
+    return this._http.put<BackupStorageLocation>(url, backupStorageLocation);
   }
 }

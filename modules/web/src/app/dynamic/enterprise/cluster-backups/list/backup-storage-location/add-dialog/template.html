@@ -40,20 +40,22 @@ END OF TERMS AND CONDITIONS
     <mat-form-field>
       <mat-label>Access Key ID</mat-label>
       <input [formControlName]="Controls.AccessKeyId"
-             matInput>
+             matInput
+             kmInputPassword>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Secret Access Key</mat-label>
       <input [formControlName]="Controls.SecretAccessKey"
-             matInput>
+             matInput
+             kmInputPassword>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Profile</mat-label>
-      <input [formControlName]="Controls.Profile"
+      <mat-label>Backup Sync Period</mat-label>
+      <input [formControlName]="Controls.BackupSyncPeriod"
              matInput>
-      <mat-hint>AWS profile within the credentials file to use for the backup storage location (if its empty the value is default).</mat-hint>
+      <mat-hint>Enter time in the format MMmSSs (e.g., 2m10s),BackupSyncPeriod defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.</mat-hint>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="region-field">
       <mat-label>Region</mat-label>
       <input [formControlName]="Controls.Region"
              matInput>
