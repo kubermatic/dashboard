@@ -28,12 +28,14 @@ import (
 	"context"
 	"fmt"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 
@@ -92,15 +94,6 @@ func (p *BackupStorageProvider) CreateCredentialsUnsecured(ctx context.Context, 
 	return p.privilegedClient.Create(ctx, credentials)
 }
 
-func (p *BackupStorageProvider) UpdateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error {
-	existing := &corev1.Secret{}
-	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: credentials.Name, Namespace: resources.KubermaticNamespace}, existing); err != nil {
-		return err
-	}
-	existing.Data = credentials.Data
-	return p.privilegedClient.Update(ctx, existing)
-}
-
 func (p *BackupStorageProvider) DeleteUnsecured(ctx context.Context, name string) error {
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{}
 	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: name, Namespace: resources.KubermaticNamespace}, cbsl); err != nil {
@@ -110,24 +103,72 @@ func (p *BackupStorageProvider) DeleteUnsecured(ctx context.Context, name string
 		return err
 	}
 
-	secretName := cbsl.Spec.Credential.Name
-	secret := &corev1.Secret{}
-	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: secretName, Namespace: resources.KubermaticNamespace}, secret); err != nil && !apierrors.IsNotFound(err) {
-		return err
-	}
-	if secret != nil {
-		if err := p.privilegedClient.Delete(ctx, secret); err != nil && !apierrors.IsNotFound(err) {
+	if cbsl.Spec.Credential != nil {
+		secretName := cbsl.Spec.Credential.Name
+		if err := p.deleteCredentials(ctx, secretName); err != nil {
 			return err
 		}
 	}
 	return p.privilegedClient.Delete(ctx, cbsl)
 }
 
-func (p *BackupStorageProvider) UpdateUnsecured(ctx context.Context, cbsl *kubermaticv1.ClusterBackupStorageLocation) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+func (p *BackupStorageProvider) deleteCredentials(ctx context.Context, secretName string) error {
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: resources.KubermaticNamespace,
+		},
+	}
+	if err := p.privilegedClient.Delete(ctx, secret); err != nil && !apierrors.IsNotFound(err) {
+		return err
+	}
+	return nil
+}
+
+func (p *BackupStorageProvider) UpdateUnsecured(ctx context.Context, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
 	existing := &kubermaticv1.ClusterBackupStorageLocation{}
-	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: cbsl.Name, Namespace: resources.KubermaticNamespace}, existing); err != nil {
+	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
 		return nil, err
 	}
+
+	if existing.Spec.Credential != nil && existing.Spec.Credential.Name == "" {
+		return nil, fmt.Errorf("ClusterBackupStorageLocation must have a credentials secret name set")
+	}
+
+	secretName := existing.Spec.Credential.Name
+	if err := p.updateCredentials(ctx, secretName, credentials); err != nil {
+		return nil, err
+	}
+
 	existing.Spec = *cbsl.Spec.DeepCopy()
+	existing.Spec.Credential = &corev1.SecretKeySelector{
+		LocalObjectReference: corev1.LocalObjectReference{
+			Name: secretName,
+		},
+		Key: "cloud-credentials",
+	}
+
 	return existing, p.privilegedClient.Update(ctx, existing)
+}
+
+func (p *BackupStorageProvider) updateCredentials(ctx context.Context, secretName string, credentials apiv2.S3BackupCredentials) error {
+	// if we get empty credentials than we don't need to update the secret
+	if credentials.AccessKeyID == "" || credentials.SecretAccessKey == "" {
+		return nil
+	}
+
+	existing := &corev1.Secret{}
+	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: secretName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
+		return err
+	}
+	// same credentials
+	if credentials.AccessKeyID == string(existing.Data["accessKeyId"]) &&
+		credentials.SecretAccessKey == string(existing.Data["secretAccessKey"]) {
+		return nil
+	}
+	existing.Data = map[string][]byte{
+		"accessKeyId":     []byte(credentials.AccessKeyID),
+		"secretAccessKey": []byte(credentials.SecretAccessKey),
+	}
+	return p.privilegedClient.Update(ctx, existing)
 }

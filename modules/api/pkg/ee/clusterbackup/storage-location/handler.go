@@ -56,7 +56,7 @@ type createCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	Body CbslBody `json:"clusterBackupStorageLocation"`
+	Body CbslBody
 }
 type CbslBody struct {
 	// Name of the cluster backup
@@ -77,7 +77,8 @@ type updateCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	Body CbslBody `json:"clusterBackupStorageLocation"`
+	ClusterBackupStorageLocationName string `json:"clusterBackupStorageLocation"`
+	Body                             CbslBody
 }
 
 func ListCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
@@ -198,23 +199,6 @@ func UpdateCBSL(ctx context.Context, request interface{}, provider provider.Back
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	secretName := req.Body.CBSLSpec.Credential.Name
-
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretName,
-			Namespace: resources.KubermaticNamespace,
-		},
-		Data: map[string][]byte{
-			"accessKeyId":     []byte(req.Body.Credentials.AccessKeyID),
-			"secretAccessKey": []byte(req.Body.Credentials.SecretAccessKey),
-		},
-	}
-	err := provider.UpdateCredentialsUnsecured(ctx, secret)
-	if err != nil {
-		return nil, err
-	}
-
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		ObjectMeta: metav1.ObjectMeta{
@@ -226,7 +210,7 @@ func UpdateCBSL(ctx context.Context, request interface{}, provider provider.Back
 		},
 		Spec: *cbslSpec,
 	}
-	updated, err := provider.UpdateUnsecured(ctx, cbsl)
+	updated, err := provider.UpdateUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -309,6 +293,12 @@ func DecodeUpdateCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
+
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["clusterBackupStorageLocation"]
+	if req.ClusterBackupStorageLocationName == "" {
+		return "", fmt.Errorf("'clusterBackupStorageLocation' parameter is required but was not provided")
+	}
+
 	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}

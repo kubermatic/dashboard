@@ -51,7 +51,7 @@ func deleteCBSL(ctx context.Context, request interface{}, provider provider.Back
 }
 
 func updateCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.DeleteCBSL(ctx, request, provider, projectProvider)
+	return storagelocation.UpdateCBSL(ctx, request, provider, projectProvider)
 }
 
 func DecodeListProjectCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {

@@ -1372,7 +1372,7 @@ type BackupStorageProvider interface {
 	//
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to update the resource
-	UpdateUnsecured(ctx context.Context, cbsl *kubermaticv1.ClusterBackupStorageLocation) (*kubermaticv1.ClusterBackupStorageLocation, error)
+	UpdateUnsecured(ctx context.Context, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
 	// DeleteUnsecured removes an existing ClusterBackupStorageLocation.
 	//
@@ -1385,10 +1385,4 @@ type BackupStorageProvider interface {
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to update the resource
 	CreateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error
-
-	// UpdateCredentialsUnsecured updates credentials secret for a ClusterBackupStorageLocation.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to update the resource
-	UpdateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error
 }
