@@ -79,6 +79,3 @@ RUN cp $USER_HOME/.bashrc /root/.bashrc
 
 USER ${USER}
 
-##SHELL ["/bin/bash", "-ic"]
-### tail to enable to run in backend
-##CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
