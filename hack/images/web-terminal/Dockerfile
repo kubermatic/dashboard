@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.io/alpine:3.19
+FROM --platform=$BUILDPLATFORM docker.io/alpine:3.19
+
+ARG BUILDPLATFORM
+ARG TARGETARCH
+
 LABEL maintainer="support@kubermatic.com"
 
 # Source: https://dl.k8s.io/release/stable-1.28.txt
@@ -23,8 +27,6 @@ ENV HELM_VERSION=v3.14.0
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
 ENV K8SGPT_VERSION=v0.3.26
-
-ARG ARCH=amd64
 
 ENV USER=webshell
 ENV GROUP=webshell
@@ -52,11 +54,11 @@ RUN apk add --no-cache -U \
   tar \
   wget
 
-RUN curl -Lo /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl && \
+RUN curl -Lo /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
   chmod +x /usr/bin/kubectl && \
   kubectl version --client
 
-RUN curl --fail -L https://get.helm.sh/helm-${HELM_VERSION}-linux-${ARCH}.tar.gz | tar -xzO linux-${ARCH}/helm > /usr/local/bin/helm && \
+RUN curl --fail -L https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO linux-${TARGETARCH}/helm > /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm && \
   helm version --short
 
@@ -67,9 +69,9 @@ RUN mkdir ${USER_HOME}/bin/
 RUN wget https://rawgit.com/kubermatic/fubectl/master/fubectl.source -O ${USER_HOME}/bin/fubectl.source
 
 USER 0
-RUN curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/${K8SGPT_VERSION}/k8sgpt_${ARCH}.apk
+RUN curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/${K8SGPT_VERSION}/k8sgpt_${TARGETARCH}.apk
 
-RUN apk add --allow-untrusted k8sgpt_${ARCH}.apk
+RUN apk add --allow-untrusted k8sgpt_${TARGETARCH}.apk
 
 USER ${USER}
 COPY .bashrc /tmp/
