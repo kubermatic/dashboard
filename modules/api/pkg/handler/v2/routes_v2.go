@@ -1367,9 +1367,9 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/clusterbackupstoragelocation/{clusterBackupStorageLocation}").
 		Handler(r.deleteCBSL())
 
-	mux.Methods(http.MethodPut).
+	mux.Methods(http.MethodPatch).
 		Path("/projects/{project_id}/clusterbackupstoragelocation/{clusterBackupStorageLocation}").
-		Handler(r.updateCBSL())
+		Handler(r.patchCBSL())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
 	mux.Methods(http.MethodPost).
@@ -7889,12 +7889,12 @@ func (r Routing) deleteCBSL() http.Handler {
 	)
 }
 
-func (r Routing) updateCBSL() http.Handler {
+func (r Routing) patchCBSL() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(storagelocation.UpdateCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeUpdateCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+		)(storagelocation.PatchCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodePatchCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
 	)
 }
 

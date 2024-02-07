@@ -125,7 +125,7 @@ func (p *BackupStorageProvider) deleteCredentials(ctx context.Context, secretNam
 	return nil
 }
 
-func (p *BackupStorageProvider) UpdateUnsecured(ctx context.Context, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+func (p *BackupStorageProvider) PatchUnsecured(ctx context.Context, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, updatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
 	existing := &kubermaticv1.ClusterBackupStorageLocation{}
 	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
 		return nil, err
@@ -136,22 +136,26 @@ func (p *BackupStorageProvider) UpdateUnsecured(ctx context.Context, cbslName st
 	}
 
 	secretName := existing.Spec.Credential.Name
-	if err := p.updateCredentials(ctx, secretName, credentials); err != nil {
+	if err := p.patchCredentials(ctx, secretName, updatedCreds); err != nil {
 		return nil, err
 	}
+	updated := existing.DeepCopy()
+	updated.Spec = *cbsl.Spec.DeepCopy()
 
-	existing.Spec = *cbsl.Spec.DeepCopy()
-	existing.Spec.Credential = &corev1.SecretKeySelector{
+	// The UI doesn't know about the secret, because we ask the user for credentials directly. So we have to reassign it again.
+	updated.Spec.Credential = &corev1.SecretKeySelector{
 		LocalObjectReference: corev1.LocalObjectReference{
 			Name: secretName,
 		},
 		Key: "cloud-credentials",
 	}
-
-	return existing, p.privilegedClient.Update(ctx, existing)
+	if err := p.privilegedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+		return nil, err
+	}
+	return updated, nil
 }
 
-func (p *BackupStorageProvider) updateCredentials(ctx context.Context, secretName string, credentials apiv2.S3BackupCredentials) error {
+func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName string, credentials apiv2.S3BackupCredentials) error {
 	// if we get empty credentials than we don't need to update the secret
 	if credentials.AccessKeyID == "" || credentials.SecretAccessKey == "" {
 		return nil
@@ -166,9 +170,11 @@ func (p *BackupStorageProvider) updateCredentials(ctx context.Context, secretNam
 		credentials.SecretAccessKey == string(existing.Data["secretAccessKey"]) {
 		return nil
 	}
-	existing.Data = map[string][]byte{
+
+	updated := existing.DeepCopy()
+	updated.Data = map[string][]byte{
 		"accessKeyId":     []byte(credentials.AccessKeyID),
 		"secretAccessKey": []byte(credentials.SecretAccessKey),
 	}
-	return p.privilegedClient.Update(ctx, existing)
+	return p.privilegedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing))
 }

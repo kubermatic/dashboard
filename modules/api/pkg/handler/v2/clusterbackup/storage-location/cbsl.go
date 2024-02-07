@@ -78,7 +78,7 @@ func DeleteCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provide
 	}
 }
 
-func UpdateCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
+func PatchCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
@@ -87,6 +87,6 @@ func UpdateCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provide
 		if !userInfo.IsAdmin {
 			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
 		}
-		return updateCBSL(ctx, req, provider, projectProvider)
+		return patchCBSL(ctx, req, provider, projectProvider)
 	}
 }

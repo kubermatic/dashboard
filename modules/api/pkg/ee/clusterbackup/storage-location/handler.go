@@ -73,7 +73,7 @@ type deleteCbslReq struct {
 	ClusterBackupStorageLocationName string `json:"clusterBackupStorageLocation"`
 }
 
-type updateCbslReq struct {
+type patchCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
@@ -193,8 +193,8 @@ func DeleteCBSL(ctx context.Context, request interface{}, provider provider.Back
 	return nil, nil
 }
 
-func UpdateCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	req, ok := request.(updateCbslReq)
+func PatchCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+	req, ok := request.(patchCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
@@ -210,15 +210,15 @@ func UpdateCBSL(ctx context.Context, request interface{}, provider provider.Back
 		},
 		Spec: *cbslSpec,
 	}
-	updated, err := provider.UpdateUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
+	patched, err := provider.PatchUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
 	if err != nil {
 		return nil, err
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
-		Name:   updated.Name,
-		Spec:   *updated.Spec.DeepCopy(),
-		Status: *updated.Status.DeepCopy(),
+		Name:   patched.Name,
+		Spec:   *patched.Spec.DeepCopy(),
+		Status: *patched.Status.DeepCopy(),
 	}, nil
 }
 
@@ -284,8 +284,8 @@ func DecodeDeleteCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	return req, nil
 }
 
-func DecodeUpdateCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {
-	var req updateCbslReq
+func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	var req patchCbslReq
 
 	pr, err := common.DecodeProjectRequest(ctx, r)
 	if err != nil {
