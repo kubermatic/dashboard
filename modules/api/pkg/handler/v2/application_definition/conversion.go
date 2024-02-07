@@ -28,8 +28,12 @@ func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.A
 	return &apiv2.ApplicationDefinitionListItem{
 		Name: appDef.Name,
 		Spec: apiv2.ApplicationDefinitionListItemSpec{
-			Labels:      appDef.Labels,
-			Description: appDef.Spec.Description,
+			Labels:           appDef.Labels,
+			Description:      appDef.Spec.Description,
+			DocumentationURL: appDef.Spec.DocumentationURL,
+			SourceURL:        appDef.Spec.SourceURL,
+			Logo:             appDef.Spec.Logo,
+			LogoFormat:       appDef.Spec.LogoFormat,
 		},
 	}
 }
@@ -56,10 +60,14 @@ func convertAPItoInternalApplicationDefinitionBody(appDef *apiv2.ApplicationDefi
 			Labels: appDef.Labels,
 		},
 		Spec: appskubermaticv1.ApplicationDefinitionSpec{
-			Description:   appDef.Spec.Description,
-			Method:        appDef.Spec.Method,
-			DefaultValues: appDef.Spec.DefaultValues,
-			Versions:      appDef.Spec.Versions,
+			Description:      appDef.Spec.Description,
+			Method:           appDef.Spec.Method,
+			DefaultValues:    appDef.Spec.DefaultValues,
+			Versions:         appDef.Spec.Versions,
+			DocumentationURL: appDef.Spec.DocumentationURL,
+			SourceURL:        appDef.Spec.SourceURL,
+			Logo:             appDef.Spec.Logo,
+			LogoFormat:       appDef.Spec.LogoFormat,
 		},
 	}
 }

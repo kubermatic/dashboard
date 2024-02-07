@@ -14,9 +14,10 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {Application, ApplicationDefinition} from '@shared/entity/application';
+import {Application, ApplicationDefinition, getApplicationLogoData} from '@shared/entity/application';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap, tap} from 'rxjs/operators';
 import _ from 'lodash';
@@ -33,7 +34,8 @@ export class ApplicationService {
 
   constructor(
     private readonly _appConfigService: AppConfigService,
-    private readonly _httpClient: HttpClient
+    private readonly _httpClient: HttpClient,
+    private readonly _domSanitizer: DomSanitizer
   ) {}
 
   get applications(): Application[] {
@@ -56,6 +58,10 @@ export class ApplicationService {
               .pipe(
                 map(appDefs => {
                   this._applicationDefinitions = appDefs.map(appDef => {
+                    const logoData = getApplicationLogoData(appDef);
+                    if (logoData) {
+                      appDef.spec.logoData = this._domSanitizer.bypassSecurityTrustUrl(logoData);
+                    }
                     const oldAppDef = this._applicationDefinitions.find(item => item.name === appDef.name);
                     if (oldAppDef) {
                       return _.merge(oldAppDef, appDef);
@@ -77,6 +83,10 @@ export class ApplicationService {
     const url = `${this._restRoot}/applicationdefinitions/${name}`;
     return this._httpClient.get<ApplicationDefinition>(url).pipe(
       tap(appDef => {
+        const logoData = getApplicationLogoData(appDef);
+        if (logoData) {
+          appDef.spec.logoData = this._domSanitizer.bypassSecurityTrustUrl(logoData);
+        }
         this._applicationDefinitions = this._applicationDefinitions.map(item => {
           if (item.name === name) {
             return _.merge(item, appDef);

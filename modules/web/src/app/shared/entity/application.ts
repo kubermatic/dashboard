@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {SafeUrl} from '@angular/platform-browser';
+
 export class Application {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -62,10 +64,15 @@ export class ApplicationDefinition {
 }
 
 export class ApplicationDefinitionSpec {
+  defaultValues?: string | object;
   description: string;
+  documentationURL?: string;
+  sourceURL?: string;
   method: ApplicationMethod;
   versions: ApplicationVersion[];
-  defaultValues?: string | object;
+  logo?: string;
+  logoFormat?: string;
+  logoData?: SafeUrl; // to be used as "src" value of image
   labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
 }
 
@@ -132,4 +139,11 @@ export enum ApplicationLabel {
 
 export enum ApplicationLabelValue {
   KKP = 'kkp',
+}
+
+// Before using it in HTML it has to be go through DomSanitizer.bypassSecurityTrustUrl() method.
+export function getApplicationLogoData(applicationDefinition: ApplicationDefinition): string {
+  return applicationDefinition?.spec?.logo && applicationDefinition.spec.logoFormat
+    ? `data:image/${applicationDefinition.spec.logoFormat};base64,${applicationDefinition.spec.logo}`
+    : '';
 }

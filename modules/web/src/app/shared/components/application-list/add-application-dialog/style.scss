@@ -15,6 +15,11 @@
 @use 'variables';
 
 .add-application-dialog-content {
+  .km-application-logo {
+    max-height: 100px;
+    max-width: 80%;
+  }
+
   .applications-search {
     margin-bottom: 20px;
 

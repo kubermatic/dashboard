@@ -48,9 +48,7 @@ limitations under the License.
                class="application-option"
                fxFlex="49%"
                [ngClass]="{'selected': selectedApplication?.name === installableApplication.name}">
-            <div class="option-title">
-              {{installableApplication.name}}
-            </div>
+            <ng-container *ngTemplateOutlet="applicationLogo; context: {application: installableApplication, titleClass: 'option-title'}"></ng-container>
             <div *ngIf="installableApplication.spec?.description"
                  class="option-desc">
               {{installableApplication.spec?.description}}
@@ -71,11 +69,27 @@ limitations under the License.
     </mat-step>
     <mat-step [label]="StepRegistry.Settings">
       <ng-container *ngIf="selectedApplication">
-        <div class="application-settings-title">{{selectedApplication.name}}</div>
-        <p *ngIf="selectedApplication.spec?.description"
-           class="application-settings-desc">
-          {{selectedApplication.spec?.description}}
-        </p>
+        <ng-container *ngTemplateOutlet="applicationLogo; context: {application: selectedApplication, titleClass: 'application-settings-title'}"></ng-container>
+        <div class="application-settings-desc">
+          <p *ngIf="selectedApplication.spec?.description">
+            {{selectedApplication.spec?.description}}
+          </p>
+          <div fxLayout="row"
+               fxLayoutGap="10px">
+            <a *ngIf="selectedApplication.spec.documentationURL"
+               class="km-pointer"
+               [href]="selectedApplication.spec.documentationURL"
+               fxLayoutAlign=" center"
+               target="_blank"
+               rel="noreferrer noopener">Documentation <i class="km-icon-external-link i-18"></i></a>
+            <a *ngIf="selectedApplication.spec.sourceURL"
+               class="km-pointer"
+               [href]="selectedApplication.spec.sourceURL"
+               fxLayoutAlign=" center"
+               target="_blank"
+               rel="noreferrer noopener">Source <i class="km-icon-external-link i-18"></i></a>
+          </div>
+        </div>
         <form *ngIf="form && !isLoadingDetails"
               [formGroup]="form">
           <div fxFlex
@@ -185,6 +199,21 @@ limitations under the License.
       </ng-container>
     </mat-step>
   </mat-horizontal-stepper>
+  <ng-template #applicationLogo
+               let-application="application"
+               let-titleClass="titleClass">
+    <ng-container *ngIf="application.spec.logoData; else applicationName">
+      <img class="km-application-logo"
+           [src]="application.spec.logoData"
+           [alt]="application.name"
+           [matTooltip]="application.name">
+    </ng-container>
+    <ng-template #applicationName>
+      <div [ngClass]="titleClass">
+        {{application.name}}
+      </div>
+    </ng-template>
+  </ng-template>
 </div>
 <mat-dialog-actions *ngIf="stepper.selectedIndex > 0">
   <button mat-flat-button
