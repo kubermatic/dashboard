@@ -46,7 +46,7 @@ func createCBSL(ctx context.Context, request interface{}, provider provider.Back
 	return storagelocation.CreateCBSL(ctx, request, provider, projectProvider)
 }
 
-func deleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func deleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
 	return storagelocation.DeleteCBSL(ctx, request, provider, projectProvider)
 }
 

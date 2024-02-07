@@ -2159,7 +2159,8 @@ type ProjectClusterList struct {
 }
 
 type ClusterBackupStorageLocation struct {
-	Name   string                               `json:"name,omitempty"`
-	Spec   velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
-	Status velerov1.BackupStorageLocationStatus `json:"status"`
+	Name        string                               `json:"name,omitempty"`
+	DisplayName string                               `json:"displayName,omitempty`
+	Spec        velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
+	Status      velerov1.BackupStorageLocationStatus `json:"status"`
 }

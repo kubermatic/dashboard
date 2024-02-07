@@ -40,6 +40,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apiserver/pkg/storage/names"
 )
 
 type listCbslLReq struct {
@@ -81,6 +82,10 @@ type patchCbslReq struct {
 	Body                             CbslBody
 }
 
+const (
+	displayNameLabelKey = "csbl-display-name"
+)
+
 func ListCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(listCbslLReq)
 	if !ok {
@@ -98,9 +103,10 @@ func ListCBSL(ctx context.Context, request interface{}, provider provider.Backup
 	resp := []*apiv2.ClusterBackupStorageLocation{}
 	for _, cbsl := range cbslList.Items {
 		resp = append(resp, &apiv2.ClusterBackupStorageLocation{
-			Name:   cbsl.Name,
-			Spec:   *cbsl.Spec.DeepCopy(),
-			Status: *cbsl.Status.DeepCopy(),
+			Name:        cbsl.Name,
+			DisplayName: cbsl.Labels[displayNameLabelKey],
+			Spec:        *cbsl.Spec.DeepCopy(),
+			Status:      *cbsl.Status.DeepCopy(),
 		})
 	}
 	return resp, nil
@@ -121,9 +127,10 @@ func GetCSBL(ctx context.Context, request interface{}, provider provider.BackupS
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
-		Name:   cbsl.Name,
-		Spec:   *cbsl.Spec.DeepCopy(),
-		Status: *cbsl.Status.DeepCopy(),
+		Name:        cbsl.Name,
+		DisplayName: cbsl.Labels[displayNameLabelKey],
+		Spec:        *cbsl.Spec.DeepCopy(),
+		Status:      *cbsl.Status.DeepCopy(),
 	}, nil
 }
 
@@ -132,11 +139,14 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
+	cbslDisplayName := req.Body.Name
+	cbslGeneratedName := names.SimpleNameGenerator.GenerateName(fmt.Sprintf("%s-%s-", cbslDisplayName, req.ProjectID))
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-", req.Body.Name),
+			GenerateName: fmt.Sprintf("%s-", cbslGeneratedName),
 			Namespace:    resources.KubermaticNamespace,
+			Labels:       getCSBLLabels(cbslDisplayName, req.ProjectID),
 		},
 		Data: map[string][]byte{
 			"accessKeyId":     []byte(req.Body.Credentials.AccessKeyID),
@@ -159,11 +169,9 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      req.Body.Name,
+			Name:      cbslGeneratedName,
 			Namespace: resources.KubermaticNamespace,
-			Labels: map[string]string{
-				kubermaticv1.ProjectIDLabelKey: req.ProjectID,
-			},
+			Labels:    getCSBLLabels(cbslDisplayName, req.ProjectID),
 		},
 		Spec: *cbslSpec,
 	}
@@ -173,24 +181,25 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
-		Name:   created.Name,
-		Spec:   *created.Spec.DeepCopy(),
-		Status: *created.Status.DeepCopy(),
+		Name:        created.Name,
+		DisplayName: cbsl.Labels[displayNameLabelKey],
+		Spec:        *created.Spec.DeepCopy(),
+		Status:      *created.Status.DeepCopy(),
 	}, nil
 }
 
-func DeleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func DeleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
 	req, ok := request.(deleteCbslReq)
 	if !ok {
-		return nil, utilerrors.NewBadRequest("invalid request")
+		return utilerrors.NewBadRequest("invalid request")
 	}
 
 	err := provider.DeleteUnsecured(ctx, req.ClusterBackupStorageLocationName)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 func PatchCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
@@ -201,13 +210,6 @@ func PatchCBSL(ctx context.Context, request interface{}, provider provider.Backu
 
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      req.Body.Name,
-			Namespace: resources.KubermaticNamespace,
-			Labels: map[string]string{
-				kubermaticv1.ProjectIDLabelKey: req.ProjectID,
-			},
-		},
 		Spec: *cbslSpec,
 	}
 	patched, err := provider.PatchUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
@@ -216,9 +218,10 @@ func PatchCBSL(ctx context.Context, request interface{}, provider provider.Backu
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
-		Name:   patched.Name,
-		Spec:   *patched.Spec.DeepCopy(),
-		Status: *patched.Status.DeepCopy(),
+		Name:        patched.Name,
+		DisplayName: patched.Labels[displayNameLabelKey],
+		Spec:        *patched.Spec.DeepCopy(),
+		Status:      *patched.Status.DeepCopy(),
 	}, nil
 }
 
@@ -302,4 +305,11 @@ func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, erro
 	}
 
 	return req, nil
+}
+
+func getCSBLLabels(displayName, projectID string) map[string]string {
+	return map[string]string{
+		kubermaticv1.ProjectIDLabelKey: projectID,
+		displayNameLabelKey:            displayName,
+	}
 }
