@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.io/alpine:3.18
+FROM docker.io/alpine:3.19
 LABEL maintainer="support@kubermatic.com"
 
 # Source: https://dl.k8s.io/release/stable-1.27.txt
