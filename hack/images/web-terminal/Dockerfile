@@ -54,7 +54,7 @@ RUN apk add --no-cache -U \
   tar \
   wget
 
-RUN curl -Lo /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
+RUN curl -Lo /usr/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
   chmod +x /usr/bin/kubectl && \
   kubectl version --client
 
