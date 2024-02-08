@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.io/alpine:3.17
+FROM docker.io/alpine:3.19
 LABEL maintainer="support@kubermatic.com"
 
 RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*

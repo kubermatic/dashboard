@@ -80,4 +80,3 @@ USER 0
 RUN cp $USER_HOME/.bashrc /root/.bashrc
 
 USER ${USER}
-
