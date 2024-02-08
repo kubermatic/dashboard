@@ -38,6 +38,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apiserver/pkg/storage/names"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -86,12 +87,39 @@ func (p *BackupStorageProvider) GetUnsecured(ctx context.Context, name string, l
 	return nil, nil
 }
 
-func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbsl *kubermaticv1.ClusterBackupStorageLocation) (*kubermaticv1.ClusterBackupStorageLocation, error) {
-	return cbsl, p.privilegedClient.Create(ctx, cbsl)
-}
+func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+	cbslGeneratedName := names.SimpleNameGenerator.GenerateName(fmt.Sprintf("%s-%s-", cbslName, projectID))
 
-func (p *BackupStorageProvider) CreateCredentialsUnsecured(ctx context.Context, credentials *corev1.Secret) error {
-	return p.privilegedClient.Create(ctx, credentials)
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			GenerateName: fmt.Sprintf("%s-", cbslGeneratedName),
+			Namespace:    resources.KubermaticNamespace,
+			Labels:       getCSBLLabels(cbslName, projectID),
+		},
+		Data: map[string][]byte{
+			"accessKeyId":     []byte(credentials.AccessKeyID),
+			"secretAccessKey": []byte(credentials.SecretAccessKey),
+		},
+	}
+	if err := p.privilegedClient.Create(ctx, secret); err != nil {
+		return nil, err
+	}
+
+	cbsl.ObjectMeta = metav1.ObjectMeta{
+		Name:      cbslGeneratedName,
+		Namespace: resources.KubermaticNamespace,
+		Labels:    getCSBLLabels(cbslName, projectID),
+	}
+	cbsl.Spec.Credential = &corev1.SecretKeySelector{
+		LocalObjectReference: corev1.LocalObjectReference{
+			Name: secret.Name,
+		},
+		Key: "cloud-credentials",
+	}
+	if err := p.privilegedClient.Create(ctx, cbsl); err != nil {
+		return nil, err
+	}
+	return cbsl, nil
 }
 
 func (p *BackupStorageProvider) DeleteUnsecured(ctx context.Context, name string) error {

@@ -58,11 +58,11 @@ func deleteCBSL(
 	_ interface{},
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
-) (*apiv2.ClusterBackupStorageLocation, error) {
-	return nil, nil
+) error {
+	return nil
 }
 
-func updateCBSL(
+func patchCBSL(
 	_ context.Context,
 	_ interface{},
 	_ provider.BackupStorageProvider,
@@ -99,7 +99,7 @@ func DecodeDeleteCBSLReq(
 	return nil, nil
 }
 
-func DecodeUpdateCBSLReq(
+func DecodePatchCBSLReq(
 	_ context.Context,
 	_ *http.Request,
 ) (interface{}, error) {

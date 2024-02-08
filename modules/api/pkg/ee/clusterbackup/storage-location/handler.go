@@ -36,11 +36,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apiserver/pkg/storage/names"
 )
 
 type listCbslLReq struct {
@@ -139,43 +135,13 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
-	cbslDisplayName := req.Body.Name
-	cbslGeneratedName := names.SimpleNameGenerator.GenerateName(fmt.Sprintf("%s-%s-", cbslDisplayName, req.ProjectID))
-
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-", cbslGeneratedName),
-			Namespace:    resources.KubermaticNamespace,
-			Labels:       getCSBLLabels(cbslDisplayName, req.ProjectID),
-		},
-		Data: map[string][]byte{
-			"accessKeyId":     []byte(req.Body.Credentials.AccessKeyID),
-			"secretAccessKey": []byte(req.Body.Credentials.SecretAccessKey),
-		},
-	}
-	err := provider.CreateCredentialsUnsecured(ctx, secret)
-	if err != nil {
-		return nil, err
-	}
-
+	cbslName := req.Body.Name
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
-	// assign the generated name after creation
-	cbslSpec.Credential = &corev1.SecretKeySelector{
-		LocalObjectReference: corev1.LocalObjectReference{
-			Name: secret.Name,
-		},
-		Key: "cloud-credentials",
-	}
-
+	creds := req.Body.Credentials
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      cbslGeneratedName,
-			Namespace: resources.KubermaticNamespace,
-			Labels:    getCSBLLabels(cbslDisplayName, req.ProjectID),
-		},
 		Spec: *cbslSpec,
 	}
-	created, err := provider.CreateUnsecured(ctx, cbsl)
+	created, err := provider.CreateUnsecured(ctx, cbslName, req.ProjectID, cbsl, creds)
 	if err != nil {
 		return nil, err
 	}
