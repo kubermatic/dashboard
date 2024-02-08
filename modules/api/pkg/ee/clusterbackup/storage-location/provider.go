@@ -38,7 +38,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apiserver/pkg/storage/names"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -88,11 +87,11 @@ func (p *BackupStorageProvider) GetUnsecured(ctx context.Context, name string, l
 }
 
 func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
-	cbslGeneratedName := names.SimpleNameGenerator.GenerateName(fmt.Sprintf("%s-%s-", cbslName, projectID))
+	cbslFullName := fmt.Sprintf("%s-%s-", cbslName, projectID)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-", cbslGeneratedName),
+			GenerateName: fmt.Sprintf("%s-", cbslFullName),
 			Namespace:    resources.KubermaticNamespace,
 			Labels:       getCSBLLabels(cbslName, projectID),
 		},
@@ -106,7 +105,7 @@ func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, p
 	}
 
 	cbsl.ObjectMeta = metav1.ObjectMeta{
-		Name:      cbslGeneratedName,
+		Name:      cbslFullName,
 		Namespace: resources.KubermaticNamespace,
 		Labels:    getCSBLLabels(cbslName, projectID),
 	}
