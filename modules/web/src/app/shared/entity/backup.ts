@@ -203,7 +203,7 @@ export class CreateBackupStorageLocation {
 
 export class BackupStorageLocation {
   name: string;
-  id?: string;
+  displayName: string;
   spec: BackupStorageLocationSpec;
   status?: BackupStorageLocationStatus;
 }

@@ -1,7 +1,7 @@
 <!--
                Kubermatic Enterprise Read-Only License
                       Version 1.0 ("KERO-1.0”)
-                  Copyright © 2023 Kubermatic GmbH
+                  Copyright © 2024 Kubermatic GmbH
 
 1. You may only view, read and display for studying purposes the source
    code of the software licensed under this license, and, to the extent
@@ -58,7 +58,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            <span>{{element.name}}</span>
+            <span>{{element.displayName}}</span>
           </div>
         </td>
       </ng-container>
@@ -111,7 +111,7 @@ END OF TERMS AND CONDITIONS
             </button>
 
             <button mat-icon-button
-                    matTooltip="Delete Backup"
+                    matTooltip="Delete Backup Storage Location"
                     (click)="deleteBSL(element); $event.stopPropagation()"
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>

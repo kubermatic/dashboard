@@ -1,6 +1,6 @@
 //                Kubermatic Enterprise Read-Only License
 //                       Version 1.0 ("KERO-1.0”)
-//                   Copyright © 2023 Kubermatic GmbH
+//                   Copyright © 2024 Kubermatic GmbH
 //
 // 1. You may only view, read and display for studying purposes the source
 //    code of the software licensed under this license, and, to the extent
@@ -52,11 +52,11 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   form: FormGroup;
 
   get label(): string {
-    return this._config.bslObject ? 'Edit' : 'Create';
+    return this._config.bslObject ? 'Save Changes' : 'Create';
   }
 
   get icon(): string {
-    return this._config.bslObject ? 'km-icon-edit' : 'km-icon-add';
+    return this._config.bslObject ? 'km-icon-save' : 'km-icon-add';
   }
 
   constructor(
@@ -76,7 +76,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
-      [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? ''),
+      [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? '0'),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
     });
 
@@ -92,7 +92,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
 
   getObservable(): Observable<BackupStorageLocation> {
     if (this._config.bslObject) {
-      return this._clusterBackupService.putBackupStorageLocation(
+      return this._clusterBackupService.patchBackupStorageLocation(
         this._config.projectID,
         this._getBackupStorageLocation(),
         this._config.bslObject.name

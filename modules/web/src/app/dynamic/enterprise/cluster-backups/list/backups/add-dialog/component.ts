@@ -102,11 +102,9 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       [Controls.Labels]: this._builder.control(''),
     });
 
-    this.form.get(Controls.Destination).disable();
-    this.getClusterNamespaces(this.projectID, this.cluster.id);
-
     // this feild for now will be disable untill we have a list of BSL
     this.form.get(Controls.Destination).disable();
+    this.getClusterNamespaces(this.projectID, this.cluster.id);
 
     const cronJobControl = this.form.get(Controls.CronJob);
     if (this.type === BackupType.Schedule) {

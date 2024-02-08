@@ -103,12 +103,12 @@ export class ClusterBackupService {
     return this._http.delete<void>(url);
   }
 
-  putBackupStorageLocation(
+  patchBackupStorageLocation(
     projectID: string,
     backupStorageLocation: CreateBackupStorageLocation,
     bslName: string
   ): Observable<BackupStorageLocation> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
-    return this._http.put<BackupStorageLocation>(url, backupStorageLocation);
+    return this._http.patch<BackupStorageLocation>(url, backupStorageLocation);
   }
 }

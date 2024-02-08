@@ -32,6 +32,7 @@ import (
 
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -59,7 +60,7 @@ type CbslBody struct {
 	// Name of the cluster backup
 	Name string `json:"name,omitempty"`
 	// Spec of a Velero cluster backup
-	Credentials apiv2.S3BackupCredentials          `json:"credentials,omitempty`
+	Credentials apiv2.S3BackupCredentials          `json:"credentials,omitempty"`
 	CBSLSpec    velerov1.BackupStorageLocationSpec `json:"cbslSpec,omitempty"`
 }
 

@@ -39,6 +39,12 @@ type ClusterSpec struct {
 	// it cannot be changed after the cluster is being created.
 	EnableUserSSHKeyAgent bool `json:"enableUserSSHKeyAgent,omitempty"`
 
+	// A map of optional or early-stage features that can be enabled for the user cluster.
+	// Some feature gates cannot be disabled after being enabled.
+	// The available feature gates vary based on KKP version, Kubernetes version and Seed configuration.
+	// Please consult the KKP documentation for specific feature gates.
+	Features map[string]bool `json:"features,omitempty"`
+
 	// MachineNetworks optionally specifies the parameters for IPAM.
 	MachineNetworks []*MachineNetworkingConfig `json:"machineNetworks"`
 
