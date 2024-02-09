@@ -76,7 +76,6 @@ func TestListIPAMPools(t *testing.T) {
 				},
 			},
 			expectedResponse: &kubermaticv1.IPAMPoolList{
-				TypeMeta: metav1.TypeMeta{Kind: "IPAMPoolList", APIVersion: "kubermatic.k8c.io/v1"},
 				Items: []kubermaticv1.IPAMPool{
 					{
 						ObjectMeta: metav1.ObjectMeta{
@@ -117,11 +116,9 @@ func TestListIPAMPools(t *testing.T) {
 			},
 		},
 		{
-			name:            "empty list",
-			existingObjects: []ctrlruntimeclient.Object{},
-			expectedResponse: &kubermaticv1.IPAMPoolList{
-				TypeMeta: metav1.TypeMeta{Kind: "IPAMPoolList", APIVersion: "kubermatic.k8c.io/v1"},
-			},
+			name:             "empty list",
+			existingObjects:  []ctrlruntimeclient.Object{},
+			expectedResponse: &kubermaticv1.IPAMPoolList{},
 		},
 	}
 
@@ -188,7 +185,6 @@ func TestGetIPAMPool(t *testing.T) {
 			},
 			ipamPoolName: "test-pool-1",
 			expectedResponse: &kubermaticv1.IPAMPool{
-				TypeMeta: metav1.TypeMeta{Kind: "IPAMPool", APIVersion: "kubermatic.k8c.io/v1"},
 				ObjectMeta: metav1.ObjectMeta{
 					Name:            "test-pool-1",
 					ResourceVersion: "999",

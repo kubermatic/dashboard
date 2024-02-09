@@ -392,7 +392,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "disabled-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Enabled: boolPtr(true),
 				},
@@ -414,7 +413,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "enabled-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Enabled: boolPtr(false),
 				},
@@ -434,7 +432,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "enabled-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Enabled: boolPtr(false),
 				},
@@ -459,7 +456,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "disabled-do-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{
 						ProviderPreset: kubermaticv1.ProviderPreset{Enabled: boolPtr(true)},
@@ -486,7 +482,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "enabled-do-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{
 						ProviderPreset: kubermaticv1.ProviderPreset{Enabled: boolPtr(false)},
@@ -511,7 +506,6 @@ func TestUpdatePresetStatus(t *testing.T) {
 			},
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "enabled-do-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{
 						ProviderPreset: kubermaticv1.ProviderPreset{Enabled: boolPtr(false)},
@@ -616,7 +610,6 @@ func TestCreatePreset(t *testing.T) {
 			}`,
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "do-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{Token: "test"},
 				},
@@ -643,7 +636,6 @@ func TestCreatePreset(t *testing.T) {
 			}`,
 			ExpectedPreset: &kubermaticv1.Preset{
 				ObjectMeta: metav1.ObjectMeta{Name: "do-preset", ResourceVersion: "1"},
-				TypeMeta:   metav1.TypeMeta{Kind: "Preset", APIVersion: "kubermatic.k8c.io/v1"},
 				Spec: kubermaticv1.PresetSpec{
 					Digitalocean: &kubermaticv1.Digitalocean{
 						ProviderPreset: kubermaticv1.ProviderPreset{Enabled: boolPtr(false)},

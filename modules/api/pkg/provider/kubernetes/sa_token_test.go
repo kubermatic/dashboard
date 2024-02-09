@@ -229,8 +229,6 @@ func TestGetToken(t *testing.T) {
 			tokenToGet: "sa-token-3",
 			expectedToken: func() *corev1.Secret {
 				secret := genSecret("my-first-project-ID", "1", "test-token-3", "3")
-				secret.APIVersion = "v1"
-				secret.Kind = "Secret"
 				return rmTokenPrefix(secret)
 			}(),
 		},
@@ -303,8 +301,6 @@ func TestUpdateToken(t *testing.T) {
 			tokenNewName:  "new-updated-name",
 			expectedToken: func() *corev1.Secret {
 				secret := genSecret("my-first-project-ID", "1", "new-updated-name", "3")
-				secret.APIVersion = "v1"
-				secret.Kind = "Secret"
 				secret.ResourceVersion = "1"
 				return rmTokenPrefix(secret)
 			}(),

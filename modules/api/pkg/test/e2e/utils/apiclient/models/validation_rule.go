@@ -46,6 +46,24 @@ type ValidationRule struct {
 	// messageExpression has access to all the same variables as the rule; the only difference is the return type.
 	MessageExpression string `json:"messageExpression,omitempty"`
 
+	// optionalOldSelf is used to opt a transition rule into evaluation
+	// even when the object is first created, or if the old object is
+	// missing the value.
+	//
+	// When enabled `oldSelf` will be a CEL optional whose value will be
+	// `None` if there is no old value, or when the object is initially created.
+	//
+	// You may check for presence of oldSelf using `oldSelf.hasValue()` and
+	// unwrap it after checking using `oldSelf.value()`. Check the CEL
+	// documentation for Optional types for more information:
+	// https://pkg.go.dev/github.com/google/cel-go/cel#OptionalTypes
+	//
+	// May not be set unless `oldSelf` is used in `rule`.
+	//
+	// +featureGate=CRDValidationRatcheting
+	// +optional
+	OptionalOldSelf bool `json:"optionalOldSelf,omitempty"`
+
 	// Rule represents the expression which will be evaluated by CEL.
 	// ref: https://github.com/google/cel-spec
 	// The Rule is scoped to the location of the x-kubernetes-validations extension in the schema.

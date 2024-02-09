@@ -192,8 +192,8 @@ func TestCreateMeteringReportConfigEndpoint(t *testing.T) {
 			}`,
 			existingKubermaticObjs: []ctrlruntimeclient.Object{testSeed},
 			existingAPIUser:        test.GenDefaultAdminAPIUser(),
-			httpStatus:             http.StatusMethodNotAllowed,
-			expectedResponse:       ``,
+			httpStatus:             http.StatusNotFound,
+			expectedResponse:       `404 page not found`,
 		},
 		// scenario 3
 		{
