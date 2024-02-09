@@ -20,30 +20,20 @@ cd $(dirname $0)/../../..
 source hack/lib.sh
 
 REPOSITORY=quay.io/kubermatic/web-terminal
-VERSION=0.7.0
+VERSION=0.8.0
 SUFFIX=""
-ARCHITECTURES=${ARCHITECTURES:-amd64 arm64}
-IMAGE="${REPOSITORY}:${VERSION}${SUFFIX}"
-MANIFEST=${MANIFEST:-${IMAGE}}
+ARCHITECTURES="${ARCHITECTURES:-linux/amd64,linux/arm64/v8}"
+IMAGE="$REPOSITORY:$VERSION$SUFFIX"
+MANIFEST="${MANIFEST:-$IMAGE}"
 
 # build multi-arch images
-buildah manifest create ${MANIFEST}
-for ARCH in ${ARCHITECTURES}; do
-  echodate "Building image for $ARCH..."
+#  start_docker_daemon_ci
+docker buildx create --use
 
-  time buildah bud \
-    --tag "${REPOSITORY}-${ARCH}:${VERSION}${SUFFIX}" \
-    --build-arg "ARCH=${ARCH}" \
-    --arch "$ARCH" \
-    --override-arch "$ARCH" \
-    --format=docker \
-    --file hack/images/web-terminal/Dockerfile \
-    .
-  buildah manifest add $MANIFEST "${REPOSITORY}-${ARCH}:${VERSION}${SUFFIX}"
+echodate "Building $IMAGE for $ARCHITECTURES…"
+docker buildx build ./hack/images/web-terminal \
+  --platform "$ARCHITECTURES" \
+  --push \
+  --tag "$IMAGE"
 
-done
-echodate "Successfully built for all architectures."
-
-buildah manifest push --all ${MANIFEST} "docker://${IMAGE}"
-
-echodate "Successfully pushed images for all architectures."
+echodate "Successfully build and pushed image for all architectures."
