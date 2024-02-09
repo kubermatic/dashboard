@@ -62,10 +62,6 @@ func TestCreateOrUpdateKubeconfigSecretForCluster(t *testing.T) {
 			externalCluster: genExternalCluster(defaultClusterName, defaultProjectID),
 			kubeconfig:      defaultKubeconfig,
 			expectedSecret: &corev1.Secret{
-				TypeMeta: metav1.TypeMeta{
-					Kind:       "Secret",
-					APIVersion: "v1",
-				},
 				ObjectMeta: metav1.ObjectMeta{
 					ResourceVersion: "1",
 					Name:            genExternalCluster(defaultClusterName, defaultProjectID).GetKubeconfigSecretName(),
@@ -79,10 +75,6 @@ func TestCreateOrUpdateKubeconfigSecretForCluster(t *testing.T) {
 			kubeconfig: defaultKubeconfig,
 			existingObjects: []ctrlruntimeclient.Object{
 				&corev1.Secret{
-					TypeMeta: metav1.TypeMeta{
-						Kind:       "Secret",
-						APIVersion: "v1",
-					},
 					ObjectMeta: metav1.ObjectMeta{
 						ResourceVersion: "1",
 						Name:            genExternalCluster(defaultClusterName, defaultProjectID).GetKubeconfigSecretName(),
@@ -93,10 +85,6 @@ func TestCreateOrUpdateKubeconfigSecretForCluster(t *testing.T) {
 			},
 			externalCluster: genExternalCluster(defaultClusterName, defaultProjectID),
 			expectedSecret: &corev1.Secret{
-				TypeMeta: metav1.TypeMeta{
-					Kind:       "Secret",
-					APIVersion: "v1",
-				},
 				ObjectMeta: metav1.ObjectMeta{
 					ResourceVersion: "2",
 					Name:            genExternalCluster(defaultClusterName, defaultProjectID).GetKubeconfigSecretName(),
@@ -170,10 +158,6 @@ func TestCreateOrUpdateCloudSecretForCluster(t *testing.T) {
 			},
 			externalCluster: genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.AWSCloudProvider),
 			expectedSecret: &corev1.Secret{
-				TypeMeta: metav1.TypeMeta{
-					Kind:       "Secret",
-					APIVersion: "v1",
-				},
 				ObjectMeta: metav1.ObjectMeta{
 					ResourceVersion: "1",
 					Name:            genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.AWSCloudProvider).GetSecretName(),
@@ -197,10 +181,6 @@ func TestCreateOrUpdateCloudSecretForCluster(t *testing.T) {
 			},
 			externalCluster: genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.GCPCloudProvider),
 			expectedSecret: &corev1.Secret{
-				TypeMeta: metav1.TypeMeta{
-					Kind:       "Secret",
-					APIVersion: "v1",
-				},
 				ObjectMeta: metav1.ObjectMeta{
 					ResourceVersion: "1",
 					Name:            genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.GCPCloudProvider).GetSecretName(),
@@ -227,10 +207,6 @@ func TestCreateOrUpdateCloudSecretForCluster(t *testing.T) {
 			},
 			externalCluster: genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.AzureCloudProvider),
 			expectedSecret: &corev1.Secret{
-				TypeMeta: metav1.TypeMeta{
-					Kind:       "Secret",
-					APIVersion: "v1",
-				},
 				ObjectMeta: metav1.ObjectMeta{
 					ResourceVersion: "1",
 					Name:            genCloudCluster(defaultClusterName, defaultRegion, defaultProjectID, kubermaticv1.AzureCloudProvider).GetSecretName(),

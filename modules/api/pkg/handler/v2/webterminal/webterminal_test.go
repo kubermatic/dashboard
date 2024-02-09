@@ -88,7 +88,7 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    test.GenDefaultUser().Name,
 			Nonce:                     "abc", // incorrect length
-			HTTPStatusInitPhase:       http.StatusSeeOther,
+			HTTPStatusInitPhase:       http.StatusInternalServerError,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExpectedRedirectURI:       testExpectedRedirectURI,
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
@@ -102,7 +102,7 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			ClusterID:                 test.ClusterID,
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    test.GenDefaultUser().Name,
-			HTTPStatusInitPhase:       http.StatusSeeOther,
+			HTTPStatusInitPhase:       http.StatusInternalServerError,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExistingObjects: []ctrlruntimeclient.Object{
 				&corev1.Secret{
@@ -127,7 +127,7 @@ func TestCreateOIDCKubeconfig(t *testing.T) {
 			ClusterID:                 test.ClusterID,
 			ProjectID:                 test.GenDefaultProject().Name,
 			UserID:                    test.GenAdminUser("john", "john@acme.com", true).Name,
-			HTTPStatusInitPhase:       http.StatusSeeOther,
+			HTTPStatusInitPhase:       http.StatusInternalServerError,
 			ExistingKubermaticObjects: genTestKubeconfigKubermaticObjects(),
 			ExistingObjects: []ctrlruntimeclient.Object{
 				&corev1.Secret{

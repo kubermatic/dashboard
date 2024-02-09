@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -42,15 +43,67 @@ type PreferenceMatcher struct {
 	//
 	// +optional
 	RevisionName string `json:"revisionName,omitempty"`
+
+	// infer from volume failure policy
+	InferFromVolumeFailurePolicy InferFromVolumeFailurePolicy `json:"inferFromVolumeFailurePolicy,omitempty"`
 }
 
 // Validate validates this preference matcher
 func (m *PreferenceMatcher) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateInferFromVolumeFailurePolicy(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this preference matcher based on context it is used
+func (m *PreferenceMatcher) validateInferFromVolumeFailurePolicy(formats strfmt.Registry) error {
+	if swag.IsZero(m.InferFromVolumeFailurePolicy) { // not required
+		return nil
+	}
+
+	if err := m.InferFromVolumeFailurePolicy.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("inferFromVolumeFailurePolicy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("inferFromVolumeFailurePolicy")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this preference matcher based on the context it is used
 func (m *PreferenceMatcher) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateInferFromVolumeFailurePolicy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PreferenceMatcher) contextValidateInferFromVolumeFailurePolicy(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.InferFromVolumeFailurePolicy.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("inferFromVolumeFailurePolicy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("inferFromVolumeFailurePolicy")
+		}
+		return err
+	}
+
 	return nil
 }
 
