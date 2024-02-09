@@ -20,29 +20,57 @@ limitations under the License.
     <p class="km-dialog-context-description">Edit <b>{{application.name}}</b> application
       <ng-container *ngIf="cluster"> of <b>{{cluster.name}}</b> cluster</ng-container>
     </p>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <a *ngIf="applicationDefinition?.spec?.documentationURL"
+         class="km-pointer"
+         [href]="applicationDefinition?.spec?.documentationURL"
+         fxLayoutAlign=" center"
+         target="_blank"
+         rel="noreferrer noopener">Documentation <i class="km-icon-external-link i-18"></i></a>
+      <a *ngIf="applicationDefinition?.spec?.sourceURL"
+         class="km-pointer"
+         [href]="applicationDefinition?.spec?.sourceURL"
+         fxLayoutAlign=" center"
+         target="_blank"
+         rel="noreferrer noopener">Source <i class="km-icon-external-link i-18"></i></a>
+    </div>
     <form *ngIf="form && !isLoadingDetails"
           [formGroup]="form">
       <div fxLayout="column"
            fxLayoutGap="10px">
         <ng-container *ngIf="application.creationTimestamp; else editableFields">
           <div fxLayout="row"
-               fxLayoutGap="10px">
+               fxLayoutGap="10px"
+               fxLayoutAlign=" flex-start">
             <km-property>
               <div key>Application</div>
-              <div value>{{application.spec.applicationRef?.name}}</div>
+              <div value>
+                <img *ngIf="applicationDefinition?.spec?.logoData; else applicationDefName"
+                     class="km-application-logo"
+                     [src]="applicationDefinition.spec.logoData"
+                     [alt]="application.spec.applicationRef?.name"
+                     [matTooltip]="application.spec.applicationRef?.name">
+                <ng-template #applicationDefName>
+                  {{application.spec.applicationRef?.name}}
+                </ng-template>
+              </div>
             </km-property>
-            <km-property>
-              <div key>Version</div>
-              <div value>{{application.spec.applicationRef?.version}}</div>
-            </km-property>
-            <km-property>
-              <div key>Namespace</div>
-              <div value>{{application.spec.namespace?.name}}</div>
-            </km-property>
-            <km-property>
-              <div key>Name</div>
-              <div value>{{application.name}}</div>
-            </km-property>
+            <div fxLayout="row"
+                 fxLayoutGap="10px">
+              <km-property>
+                <div key>Version</div>
+                <div value>{{application.spec.applicationRef?.version}}</div>
+              </km-property>
+              <km-property>
+                <div key>Namespace</div>
+                <div value>{{application.spec.namespace?.name}}</div>
+              </km-property>
+              <km-property>
+                <div key>Name</div>
+                <div value>{{application.name}}</div>
+              </km-property>
+            </div>
           </div>
           <ng-container *ngTemplateOutlet="versions"></ng-container>
         </ng-container>

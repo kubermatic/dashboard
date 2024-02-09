@@ -13,6 +13,11 @@
 // limitations under the License.
 
 .edit-application-dialog-content {
+  .km-application-logo {
+    max-height: 50px;
+    max-width: 100px;
+  }
+
   form {
     margin: 16px 0;
   }

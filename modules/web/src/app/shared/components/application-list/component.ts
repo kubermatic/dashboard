@@ -16,6 +16,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {SafeUrl} from '@angular/platform-browser';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {ApplicationService} from '@core/services/application';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
@@ -181,6 +182,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   canAdd(): boolean {
     return this.isClusterReady && this.canEdit && !_.isEmpty(this.applicationDefinitions);
+  }
+
+  getApplicationLogo(name: string): SafeUrl {
+    return this.applicationDefinitionsMap.get(name).spec?.logoData;
   }
 
   onAddApplication(): void {

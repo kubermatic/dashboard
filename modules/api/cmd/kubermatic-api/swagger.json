@@ -26828,6 +26828,11 @@
           "type": "string",
           "x-go-name": "Description"
         },
+        "documentationURL": {
+          "description": "DocumentationURL holds a link to official documentation of the Application\nAlternatively this can be a link to the Readme of a chart in a git repository",
+          "type": "string",
+          "x-go-name": "DocumentationURL"
+        },
         "labels": {
           "description": "Labels can contain metadata about the application, such as the owner who manages it.",
           "type": "object",
@@ -26835,6 +26840,21 @@
             "type": "string"
           },
           "x-go-name": "Labels"
+        },
+        "logo": {
+          "description": "Logo of the Application as a base64 encoded svg",
+          "type": "string",
+          "x-go-name": "Logo"
+        },
+        "logoFormat": {
+          "description": "LogoFormat contains logo format of the configured Application. Options are \"svg+xml\" and \"png\"\n+kubebuilder:validation:Enum=svg+xml;png",
+          "type": "string",
+          "x-go-name": "LogoFormat"
+        },
+        "sourceURL": {
+          "description": "SourceURL holds a link to the official source code mirror or git repository of the application",
+          "type": "string",
+          "x-go-name": "SourceURL"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"

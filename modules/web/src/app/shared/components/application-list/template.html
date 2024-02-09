@@ -101,7 +101,14 @@ limitations under the License.
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-application"
                  matTooltip="Application"></i>
-              <span>{{application.spec.applicationRef.name}}</span>
+              <img *ngIf="getApplicationLogo(application.spec.applicationRef.name) as logo; else applicationDefName"
+                   class="km-application-logo"
+                   [src]="logo"
+                   [alt]="application.spec.applicationRef.name"
+                   [matTooltip]="application.spec.applicationRef.name">
+              <ng-template #applicationDefName>
+                <span>{{application.spec.applicationRef.name}}</span>
+              </ng-template>
             </div>
             <div fxLayout="row"
                  fxLayoutGap="10px"
@@ -185,7 +192,16 @@ limitations under the License.
             mat-sort-header="application">Application
         </th>
         <td mat-cell
-            *matCellDef="let element">{{element.spec.applicationRef.name}}</td>
+            *matCellDef="let element">
+          <img *ngIf="getApplicationLogo(element.spec.applicationRef.name) as logo; else applicationDefName"
+               class="km-application-logo"
+               [src]="logo"
+               [alt]="element.spec.applicationRef.name"
+               [matTooltip]="element.spec.applicationRef.name">
+          <ng-template #applicationDefName>
+            {{element.spec.applicationRef.name}}
+          </ng-template>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Version">
