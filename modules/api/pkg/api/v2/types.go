@@ -2158,6 +2158,8 @@ type ProjectClusterList struct {
 	ErrorMessage *string           `json:"errorMessage,omitempty"`
 }
 
+// ClusterBackupStorageLocation is the object representing a Cluster Backup Storage Location.
+// swagger:model ClusterBackupStorageLocation
 type ClusterBackupStorageLocation struct {
 	Name        string                               `json:"name,omitempty"`
 	DisplayName string                               `json:"displayName,omitempty"`

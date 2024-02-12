@@ -410,7 +410,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	featureGatesProvider := kubernetesprovider.NewFeatureGatesProvider(options.featureGates)
 
-	backupStorageProvider := backupStorageProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
+	backupStorageProvider := backupStorageProviderFactory(client)
 
 	return providers{
 		sshKey:                                         sshKeyProvider,

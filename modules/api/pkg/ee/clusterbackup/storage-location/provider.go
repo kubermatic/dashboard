@@ -30,7 +30,6 @@ import (
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
-	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
@@ -43,18 +42,14 @@ import (
 )
 
 type BackupStorageProvider struct {
-	// createMasterImpersonatedClient is used as a ground for impersonation
-	// whenever a connection to Seed API server is required
-	createMasterImpersonatedClient kubernetes.ImpersonationClient
-	privilegedClient               ctrlruntimeclient.Client
+	privilegedClient ctrlruntimeclient.Client
 }
 
 var _ provider.BackupStorageProvider = &BackupStorageProvider{}
 
-func NewBackupStorageProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
+func NewBackupStorageProvider(privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
 	return &BackupStorageProvider{
-		createMasterImpersonatedClient: createMasterImpersonatedClient,
-		privilegedClient:               privilegedClient,
+		privilegedClient: privilegedClient,
 	}
 }
 
@@ -87,7 +82,7 @@ func (p *BackupStorageProvider) GetUnsecured(ctx context.Context, name string, l
 }
 
 func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
-	cbslFullName := fmt.Sprintf("%s-%s-", cbslName, projectID)
+	cbslFullName := fmt.Sprintf("%s-%s", cbslName, projectID)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{

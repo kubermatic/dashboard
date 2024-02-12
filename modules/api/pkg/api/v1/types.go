@@ -1019,12 +1019,6 @@ type ClusterSpec struct {
 	// By default it is disabled.
 	OPAIntegration *kubermaticv1.OPAIntegrationSettings `json:"opaIntegration,omitempty"`
 
-	// A map of optional or early-stage features that can be enabled for the user cluster.
-	// Some feature gates cannot be disabled after being enabled.
-	// The available feature gates vary based on KKP version, Kubernetes version and Seed configuration.
-	// Please consult the KKP documentation for specific feature gates.
-	Features map[string]bool `json:"features,omitempty"`
-
 	// MLA contains monitoring, logging and alerting related settings for the user cluster.
 	MLA *kubermaticv1.MLASettings `json:"mla,omitempty"`
 

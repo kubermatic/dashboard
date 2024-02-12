@@ -40,19 +40,26 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
-type listCbslLReq struct {
+// listCbslReq defines HTTP request for listCbsl
+// swagger:parameters listClusterBackupStorageLocation
+type listCbslReq struct {
 	common.ProjectReq
 }
+
+// getCbslReq defines HTTP request for getCbsl
+// swagger:parameters getClusterBackupStorageLocation
 type getCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"clusterBackupStorageLocation"`
+	ClusterBackupStorageLocationName string `json:"cbs_name"`
 }
 
+// createCbslReq defines HTTP request for createCbsl
+// swagger:parameters createClusterBackupStorageLocation
 type createCbslReq struct {
 	common.ProjectReq
-	// in: path
+	// in: body
 	// required: true
 	Body CbslBody
 }
@@ -64,19 +71,25 @@ type CbslBody struct {
 	CBSLSpec    velerov1.BackupStorageLocationSpec `json:"cbslSpec,omitempty"`
 }
 
+// deleteCbslReq defines HTTP request for deleteCbsl
+// swagger:parameters deleteClusterBackupStorageLocation
 type deleteCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"clusterBackupStorageLocation"`
+	ClusterBackupStorageLocationName string `json:"cbs_name"`
 }
 
+// patchCbslReq defines HTTP request for patchCbsl
+// swagger:parameters patchClusterBackupStorageLocation
 type patchCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"clusterBackupStorageLocation"`
-	Body                             CbslBody
+	ClusterBackupStorageLocationName string `json:"cbs_name"`
+	// in: body
+	// required: true
+	Body CbslBody
 }
 
 const (
@@ -84,7 +97,7 @@ const (
 )
 
 func ListCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
-	req, ok := request.(listCbslLReq)
+	req, ok := request.(listCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
@@ -193,7 +206,7 @@ func PatchCBSL(ctx context.Context, request interface{}, provider provider.Backu
 }
 
 func DecodeListProjectCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {
-	var req listCbslLReq
+	var req listCbslReq
 
 	pr, err := common.DecodeProjectRequest(ctx, r)
 	if err != nil {
@@ -213,9 +226,9 @@ func DecodeGetCBSLReq(ctx context.Context, r *http.Request) (interface{}, error)
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["clusterBackupStorageLocation"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'clusterBackupStorageLocation' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -246,9 +259,9 @@ func DecodeDeleteCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["clusterBackupStorageLocation"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'clusterBackupStorageLocation' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -263,9 +276,9 @@ func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, erro
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["clusterBackupStorageLocation"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'clusterBackupStorageLocation' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
 	}
 	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err

@@ -44,6 +44,8 @@ type ClientService interface {
 
 	CreateCluster(params *CreateClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterCreated, error)
 
+	CreateClusterBackupStorageLocation(params *CreateClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterBackupStorageLocationCreated, error)
+
 	CreateClusterRole(params *CreateClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterRoleCreated, error)
 
 	CreateClusterServiceAccount(params *CreateClusterServiceAccountParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterServiceAccountCreated, error)
@@ -75,6 +77,8 @@ type ClientService interface {
 	CreateSSHKey(params *CreateSSHKeyParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSSHKeyCreated, error)
 
 	DeleteCluster(params *DeleteClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterOK, error)
+
+	DeleteClusterBackupStorageLocation(params *DeleteClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterBackupStorageLocationOK, error)
 
 	DeleteClusterRole(params *DeleteClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterRoleOK, error)
 
@@ -117,6 +121,8 @@ type ClientService interface {
 	GetBackupDestinationNames(params *GetBackupDestinationNamesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBackupDestinationNamesOK, error)
 
 	GetCluster(params *GetClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterOK, error)
+
+	GetClusterBackupStorageLocation(params *GetClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterBackupStorageLocationOK, error)
 
 	GetClusterEvents(params *GetClusterEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterEventsOK, error)
 
@@ -189,6 +195,8 @@ type ClientService interface {
 	ListAKSClusters(params *ListAKSClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAKSClustersOK, error)
 
 	ListCNIPluginVersionsForCluster(params *ListCNIPluginVersionsForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListCNIPluginVersionsForClusterOK, error)
+
+	ListClusterBackupStorageLocation(params *ListClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterBackupStorageLocationOK, error)
 
 	ListClusterRole(params *ListClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleOK, error)
 
@@ -283,6 +291,8 @@ type ClientService interface {
 	ListSSHKeysAssignedToClusterV2(params *ListSSHKeysAssignedToClusterV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSSHKeysAssignedToClusterV2OK, error)
 
 	PatchCluster(params *PatchClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchClusterOK, error)
+
+	PatchClusterBackupStorageLocation(params *PatchClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchClusterBackupStorageLocationOK, error)
 
 	PatchClusterRole(params *PatchClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchClusterRoleOK, error)
 
@@ -638,6 +648,44 @@ func (a *Client) CreateCluster(params *CreateClusterParams, authInfo runtime.Cli
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreateClusterBackupStorageLocation Creates a cluster backup storage location that will belong to the given project
+*/
+func (a *Client) CreateClusterBackupStorageLocation(params *CreateClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterBackupStorageLocationCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateClusterBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "createClusterBackupStorageLocation",
+		Method:             "POST",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateClusterBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateClusterBackupStorageLocationCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateClusterBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -1248,6 +1296,44 @@ func (a *Client) DeleteCluster(params *DeleteClusterParams, authInfo runtime.Cli
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteClusterBackupStorageLocation Deletes a cluster backup storage location for a given project based on its name
+*/
+func (a *Client) DeleteClusterBackupStorageLocation(params *DeleteClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteClusterBackupStorageLocationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteClusterBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "deleteClusterBackupStorageLocation",
+		Method:             "DELETE",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteClusterBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteClusterBackupStorageLocationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteClusterBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -2046,6 +2132,44 @@ func (a *Client) GetCluster(params *GetClusterParams, authInfo runtime.ClientAut
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetClusterBackupStorageLocation Gets a cluster backup storage location for a given project based on its name
+*/
+func (a *Client) GetClusterBackupStorageLocation(params *GetClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterBackupStorageLocationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetClusterBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getClusterBackupStorageLocation",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetClusterBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetClusterBackupStorageLocationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetClusterBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3414,6 +3538,44 @@ func (a *Client) ListCNIPluginVersionsForCluster(params *ListCNIPluginVersionsFo
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListCNIPluginVersionsForClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListClusterBackupStorageLocation List cluster backup storage location for a given project
+*/
+func (a *Client) ListClusterBackupStorageLocation(params *ListClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterBackupStorageLocationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListClusterBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listClusterBackupStorageLocation",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListClusterBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListClusterBackupStorageLocationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListClusterBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5210,6 +5372,44 @@ func (a *Client) PatchCluster(params *PatchClusterParams, authInfo runtime.Clien
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PatchClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PatchClusterBackupStorageLocation Patches a cluster backup storage location for a given project based on its name
+*/
+func (a *Client) PatchClusterBackupStorageLocation(params *PatchClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchClusterBackupStorageLocationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchClusterBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "patchClusterBackupStorageLocation",
+		Method:             "PATCH",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PatchClusterBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PatchClusterBackupStorageLocationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PatchClusterBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
