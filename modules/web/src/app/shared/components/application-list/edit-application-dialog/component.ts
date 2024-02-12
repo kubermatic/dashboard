@@ -118,7 +118,9 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   }
 
   private _initForm(): void {
-    if (!_.isEmpty(this.application.spec.values)) {
+    if (!_.isEmpty(this.application.spec.valuesBlock)) {
+      this.valuesConfig = this.application.spec.valuesBlock;
+    } else if (!_.isEmpty(this.application.spec.values)) {
       this.valuesConfig = y.dump(this.application.spec.values);
     }
     this.form = this._builder.group({
@@ -178,7 +180,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       ...this.application,
       spec: {
         ...this.application.spec,
-        values: this._getValueConfig(),
+        valuesBlock: this.form.get(Controls.Values).value,
       } as ApplicationSpec,
     } as Application;
 
@@ -201,10 +203,5 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       } as Application;
     }
     return patch;
-  }
-
-  private _getValueConfig(): any {
-    const raw = y.load(this.form.get(Controls.Values).value);
-    return !_.isEmpty(raw) ? raw : {};
   }
 }

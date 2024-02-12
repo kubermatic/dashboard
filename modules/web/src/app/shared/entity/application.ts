@@ -28,7 +28,8 @@ export class Application {
 export class ApplicationSpec {
   applicationRef: ApplicationRef;
   namespace: ApplicationNamespace;
-  values: string | object;
+  values?: string | object;
+  valuesBlock?: string;
 }
 
 export class ApplicationRef {
@@ -65,6 +66,7 @@ export class ApplicationDefinition {
 
 export class ApplicationDefinitionSpec {
   defaultValues?: string | object;
+  defaultValuesBlock?: string;
   description: string;
   documentationURL?: string;
   sourceURL?: string;

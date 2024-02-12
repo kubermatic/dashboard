@@ -162,7 +162,9 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   }
 
   private _initForm(): void {
-    if (!_.isEmpty(this.selectedApplication.spec.defaultValues)) {
+    if (!_.isEmpty(this.selectedApplication.spec.defaultValuesBlock)) {
+      this.valuesConfig = this.selectedApplication.spec.defaultValuesBlock;
+    } else if (!_.isEmpty(this.selectedApplication.spec.defaultValues)) {
       try {
         this.valuesConfig = y.dump(this.selectedApplication.spec.defaultValues);
       } catch (e) {
@@ -226,7 +228,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
           name: this.form.get(Controls.Namespace).value,
           create: true,
         } as ApplicationNamespace,
-        values: this._getValueConfig(),
+        valuesBlock: this.form.get(Controls.Values).value,
       } as ApplicationSpec,
     } as Application;
   }
@@ -237,10 +239,5 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       applicationDefinition.name.toLowerCase().includes(query) ||
       applicationDefinition.spec.description?.toLowerCase().includes(query)
     );
-  }
-
-  private _getValueConfig(): any {
-    const raw = y.load(this.form.get(Controls.Values).value);
-    return !_.isEmpty(raw) ? raw : {};
   }
 }
