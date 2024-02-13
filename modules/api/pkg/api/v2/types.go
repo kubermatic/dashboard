@@ -2171,3 +2171,12 @@ type ProjectClusterList struct {
 	Clusters     apiv1.ClusterList `json:"clusters"`
 	ErrorMessage *string           `json:"errorMessage,omitempty"`
 }
+
+// ClusterBackupStorageLocation is the object representing a Cluster Backup Storage Location.
+// swagger:model ClusterBackupStorageLocation
+type ClusterBackupStorageLocation struct {
+	Name        string                               `json:"name,omitempty"`
+	DisplayName string                               `json:"displayName,omitempty"`
+	Spec        velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
+	Status      velerov1.BackupStorageLocationStatus `json:"status"`
+}

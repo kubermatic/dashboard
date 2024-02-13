@@ -191,6 +191,13 @@ limitations under the License.
             <span>Restores</span>
           </a>
         </div>
+        <div [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}"
+             class="sub-menu-item">
+          <a fxLayoutAlign=" center"
+             [routerLink]="getRouterLink(view.BackupStorageLocation)">
+            <span>Storage Locations</span>
+          </a>
+        </div>
       </ng-container>
       <ng-container *ngIf="isSidenavCollapsed">
         <a fxLayoutAlign=" center"
@@ -210,6 +217,12 @@ limitations under the License.
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ClusterRestore), 'km-disabled': !isDisabledField(view.ClusterRestore)}">
           <span>Restores</span>
+        </a>
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.BackupStorageLocation)"
+           class="collapsed-sub-menu-item"
+           [ngClass]="{'active': checkUrl(view.BackupStorageLocation), 'km-disabled': !isDisabledField(view.BackupStorageLocation)}">
+          <span>Storage Locations</span>
         </a>
       </ng-container>
     </km-side-nav-field>

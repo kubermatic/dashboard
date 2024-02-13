@@ -410,6 +410,8 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	featureGatesProvider := kubernetesprovider.NewFeatureGatesProvider(options.featureGates)
 
+	backupStorageProvider := backupStorageProviderFactory(client)
+
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,
@@ -452,6 +454,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		etcdRestoreProviderGetter:                      etcdRestoreProviderGetter,
 		etcdBackupConfigProjectProviderGetter:          etcdBackupConfigProjectProviderGetter,
 		etcdRestoreProjectProviderGetter:               etcdRestoreProjectProviderGetter,
+		backupStorageProvider:                          backupStorageProvider,
 		backupCredentialsProviderGetter:                backupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        privilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   seedProvider,
@@ -575,6 +578,7 @@ func createAPIHandler(
 		EtcdRestoreProviderGetter:                      prov.etcdRestoreProviderGetter,
 		EtcdBackupConfigProjectProviderGetter:          prov.etcdBackupConfigProjectProviderGetter,
 		EtcdRestoreProjectProviderGetter:               prov.etcdRestoreProjectProviderGetter,
+		BackupStorageProvider:                          prov.backupStorageProvider,
 		BackupCredentialsProviderGetter:                prov.backupCredentialsProviderGetter,
 		PrivilegedMLAAdminSettingProviderGetter:        prov.privilegedMLAAdminSettingProviderGetter,
 		SeedProvider:                                   prov.seedProvider,

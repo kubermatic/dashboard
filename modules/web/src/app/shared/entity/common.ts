@@ -61,6 +61,7 @@ export enum View {
   ClusterBackup = 'clusterbackups',
   ClusterSchedule = 'clusterschedules',
   ClusterRestore = 'clusterrestores',
+  BackupStorageLocation = 'backupstoragelocations',
   Access = 'access',
 }
 
@@ -86,6 +87,7 @@ export enum ViewDisplayName {
   ClusterBackup = 'Cluster Backups',
   ClusterSchedule = 'Cluster Schedules',
   ClusterRestore = 'Cluster Restores',
+  BackupStorageLocation = 'Backup Storage Locations',
   Access = 'Access',
 }
 

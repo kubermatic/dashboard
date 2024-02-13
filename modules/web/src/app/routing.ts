@@ -109,6 +109,10 @@ function createRouting(): Routes {
           loadChildren: () => DynamicModule.ClusterBackups,
         },
         {
+          path: `projects/:projectID/${View.BackupStorageLocation}`,
+          loadChildren: () => DynamicModule.ClusterBackups,
+        },
+        {
           path: 'account',
           loadChildren: () => import('./settings/user/module').then(m => m.UserSettingsModule),
           data: {preload: true},

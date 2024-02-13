@@ -1,0 +1,142 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2024 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<mat-card class="km-card">
+  <mat-card-header>
+    <mat-card-title>
+      Backup Storage Locations
+    </mat-card-title>
+    <button mat-flat-button
+            type="button"
+            (click)="addBackupStorageLocation()"
+            [disabled]="!canAdd">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Create Backup Storage Location</span>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i [matTooltip]="getStatus(element.status.phase).message"
+             [ngClass]="getStatus(element.status.phase).icon"
+             class="km-vertical-center"></i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25"
+            mat-sort-header>Name</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.displayName}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="bucket">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Bucket</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.objectStorage.bucket}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="region">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Region</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.config.region}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="validation">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Last Validation Time</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <km-relative-time [date]="element.status.lastValidationTime"></km-relative-time>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-10"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <button mat-icon-button
+                    matTooltip="Edit"
+                    (click)="editBSL(element); $event.stopPropagation()"
+                    [disabled]="!canAdd">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="Delete Backup Storage Location"
+                    (click)="deleteBSL(element); $event.stopPropagation()"
+                    [disabled]="!canDelete">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="columns"></tr>
+      <tr mat-row
+          *matRowDef="let element; columns: columns"></tr>
+    </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!backupStorageLocations.length">No storages available.</div>
+
+    <div [hidden]="!backupStorageLocations?.length"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

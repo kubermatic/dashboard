@@ -14,7 +14,13 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ClusterBackup, CreateClusterBackupSchedule, ClusterRestore} from '@app/shared/entity/backup';
+import {
+  ClusterBackup,
+  CreateClusterBackupSchedule,
+  ClusterRestore,
+  BackupStorageLocation,
+  CreateBackupStorageLocation,
+} from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
 
@@ -72,5 +78,37 @@ export class ClusterBackupService {
   deleteSchedule(projectID: string, clusterID: string, scheduleName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackupschedule/${scheduleName}`;
     return this._http.delete<void>(url);
+  }
+
+  createBackupStorageLocation(
+    projectID: string,
+    backupStorageLocation: CreateBackupStorageLocation
+  ): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation`;
+    return this._http.post<BackupStorageLocation>(url, backupStorageLocation);
+  }
+
+  listBackupStorageLocation(projectID: string): Observable<BackupStorageLocation[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation`;
+    return this._http.get<BackupStorageLocation[]>(url);
+  }
+
+  getBackupStorageLocation(projectID: string, bslName: string): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
+    return this._http.get<BackupStorageLocation>(url);
+  }
+
+  deleteBackupStorageLocation(projectID: string, bslName: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
+    return this._http.delete<void>(url);
+  }
+
+  patchBackupStorageLocation(
+    projectID: string,
+    backupStorageLocation: CreateBackupStorageLocation,
+    bslName: string
+  ): Observable<BackupStorageLocation> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
+    return this._http.patch<BackupStorageLocation>(url, backupStorageLocation);
   }
 }

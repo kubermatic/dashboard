@@ -39,6 +39,7 @@ import (
 	clusterbackup "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/backup"
 	clusterrestore "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/restore"
 	clusterbackupschedule "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/schedule"
+	storagelocation "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/storage-location"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
 	constrainttemplate "k8c.io/dashboard/v2/pkg/handler/v2/constraint_template"
@@ -1347,6 +1348,27 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodDelete).
 		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackupschedule/{clusterBackupSchedule}").
 		Handler(r.deleteClusterBackupSchedule())
+
+	// Defines a set of HTTP endpoints for managing cluster backup storage locations
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterbackupstoragelocation").
+		Handler(r.listProjectCBSL())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Handler(r.getCBSL())
+
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusterbackupstoragelocation").
+		Handler(r.createCBSL())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Handler(r.deleteCBSL())
+
+	mux.Methods(http.MethodPatch).
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Handler(r.patchCBSL())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
 	mux.Methods(http.MethodPost).
@@ -7827,6 +7849,114 @@ func (r Routing) deleteClusterBackupSchedule() http.Handler {
 		clusterbackupschedule.DecodeDeleteClusterBackupScheduleReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation project listClusterBackupStorageLocation
+//
+//	List cluster backup storage location for a given project
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []ClusterBackupStorageLocation
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectCBSL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.ListCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeListProjectCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project getClusterBackupStorageLocation
+//
+//	Gets a cluster backup storage location for a given project based on its name
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: ClusterBackupStorageLocation
+//	  401: empty
+//	  403: empty
+func (r Routing) getCBSL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.GetCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeGetCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/projects/{project_id}/clusterbackupstoragelocation project createClusterBackupStorageLocation
+//
+//	Creates a cluster backup storage location that will belong to the given project
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: ClusterBackupStorageLocation
+//	  401: empty
+//	  403: empty
+func (r Routing) createCBSL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.CreateCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeCreateCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project deleteClusterBackupStorageLocation
+//
+//	Deletes a cluster backup storage location for a given project based on its name
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+//	  401: empty
+//	  403: empty
+func (r Routing) deleteCBSL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.DeleteCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeDeleteCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project patchClusterBackupStorageLocation
+//
+//	Patches a cluster backup storage location for a given project based on its name
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: ClusterBackupStorageLocation
+//	  401: empty
+//	  403: empty
+func (r Routing) patchCBSL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.PatchCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodePatchCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
 	)
 }
 

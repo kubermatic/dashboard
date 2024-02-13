@@ -7371,6 +7371,245 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusterbackupstoragelocation": {
+      "get": {
+        "description": "List cluster backup storage location for a given project",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listClusterBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ClusterBackupStorageLocation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ClusterBackupStorageLocation"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a cluster backup storage location that will belong to the given project",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "createClusterBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CbslBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "ClusterBackupStorageLocation",
+            "schema": {
+              "$ref": "#/definitions/ClusterBackupStorageLocation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}": {
+      "get": {
+        "description": "Gets a cluster backup storage location for a given project based on its name",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "getClusterBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterBackupStorageLocationName",
+            "name": "cbs_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ClusterBackupStorageLocation",
+            "schema": {
+              "$ref": "#/definitions/ClusterBackupStorageLocation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes a cluster backup storage location for a given project based on its name",
+        "tags": [
+          "project"
+        ],
+        "operationId": "deleteClusterBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterBackupStorageLocationName",
+            "name": "cbs_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/empty"
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Patches a cluster backup storage location for a given project based on its name",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "patchClusterBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterBackupStorageLocationName",
+            "name": "cbs_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CbslBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ClusterBackupStorageLocation",
+            "schema": {
+              "$ref": "#/definitions/ClusterBackupStorageLocation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters": {
       "get": {
         "produces": [
@@ -27778,6 +28017,89 @@
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "BackupStorageLocationAccessMode": {
+      "description": "+kubebuilder:validation:Enum=ReadOnly;ReadWrite",
+      "type": "string",
+      "title": "BackupStorageLocationAccessMode represents the permissions for a BackupStorageLocation.",
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+    },
+    "BackupStorageLocationPhase": {
+      "description": "+kubebuilder:validation:Enum=Available;Unavailable\n+kubebuilder:default=Unavailable",
+      "type": "string",
+      "title": "BackupStorageLocationPhase is the lifecycle phase of a Velero BackupStorageLocation.",
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+    },
+    "BackupStorageLocationSpec": {
+      "description": "BackupStorageLocationSpec defines the desired state of a Velero BackupStorageLocation",
+      "type": "object",
+      "properties": {
+        "accessMode": {
+          "$ref": "#/definitions/BackupStorageLocationAccessMode"
+        },
+        "backupSyncPeriod": {
+          "$ref": "#/definitions/Duration"
+        },
+        "config": {
+          "description": "Config is for provider-specific configuration fields.\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Config"
+        },
+        "credential": {
+          "$ref": "#/definitions/SecretKeySelector"
+        },
+        "default": {
+          "description": "Default indicates this location is the default backup storage location.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
+        "objectStorage": {
+          "$ref": "#/definitions/ObjectStorageLocation"
+        },
+        "provider": {
+          "description": "Provider is the provider of the backup storage.",
+          "type": "string",
+          "x-go-name": "Provider"
+        },
+        "validationFrequency": {
+          "$ref": "#/definitions/Duration"
+        }
+      },
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+    },
+    "BackupStorageLocationStatus": {
+      "description": "BackupStorageLocationStatus defines the observed state of BackupStorageLocation",
+      "type": "object",
+      "properties": {
+        "accessMode": {
+          "$ref": "#/definitions/BackupStorageLocationAccessMode"
+        },
+        "lastSyncedRevision": {
+          "$ref": "#/definitions/UID"
+        },
+        "lastSyncedTime": {
+          "description": "LastSyncedTime is the last time the contents of the location were synced into\nthe cluster.\n+optional\n+nullable",
+          "type": "string",
+          "x-go-name": "LastSyncedTime"
+        },
+        "lastValidationTime": {
+          "description": "LastValidationTime is the last time the backup store location was validated\nthe cluster.\n+optional\n+nullable",
+          "type": "string",
+          "x-go-name": "LastValidationTime"
+        },
+        "message": {
+          "description": "Message is a message about the backup storage location's status.\n+optional",
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "phase": {
+          "$ref": "#/definitions/BackupStorageLocationPhase"
+        }
+      },
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+    },
     "BringYourOwnCloudSpec": {
       "type": "object",
       "title": "BringYourOwnCloudSpec specifies access data for a bring your own cluster.",
@@ -27877,6 +28199,23 @@
         }
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+    },
+    "CbslBody": {
+      "type": "object",
+      "properties": {
+        "cbslSpec": {
+          "$ref": "#/definitions/BackupStorageLocationSpec"
+        },
+        "credentials": {
+          "$ref": "#/definitions/S3BackupCredentials"
+        },
+        "name": {
+          "description": "Name of the cluster backup",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/ee/clusterbackup/storage-location"
     },
     "CentOSSpec": {
       "type": "object",
@@ -28042,6 +28381,27 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "ClusterBackupStorageLocation": {
+      "type": "object",
+      "title": "ClusterBackupStorageLocation is the object representing a Cluster Backup Storage Location.",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/BackupStorageLocationSpec"
+        },
+        "status": {
+          "$ref": "#/definitions/BackupStorageLocationStatus"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "ClusterHealth": {
       "type": "object",
@@ -35088,6 +35448,32 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ObjectStorageLocation": {
+      "type": "object",
+      "title": "ObjectStorageLocation specifies the settings necessary to connect to a provider's object storage.",
+      "properties": {
+        "bucket": {
+          "description": "Bucket is the bucket to use for object storage.",
+          "type": "string",
+          "x-go-name": "Bucket"
+        },
+        "caCert": {
+          "description": "CACert defines a CA bundle to use when verifying TLS connections to the provider.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "x-go-name": "CACert"
+        },
+        "prefix": {
+          "description": "Prefix is the path inside a bucket to use for Velero storage. Optional.\n+optional",
+          "type": "string",
+          "x-go-name": "Prefix"
+        }
+      },
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+    },
     "OpaOptions": {
       "type": "object",
       "properties": {
@@ -37387,6 +37773,17 @@
         "$ref": "#/definitions/StorageClass"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "StorageType": {
+      "description": "ObjectStorage must be non-nil, since it is currently the only supported StorageType.",
+      "type": "object",
+      "title": "StorageType represents the type of storage that a backup location uses.",
+      "properties": {
+        "objectStorage": {
+          "$ref": "#/definitions/ObjectStorageLocation"
+        }
+      },
+      "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
     },
     "Subject": {
       "description": "or a value for non-objects such as user and group names.\n+structType=atomic",

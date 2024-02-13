@@ -22,18 +22,18 @@ END OF TERMS AND CONDITIONS
 <div (keydown.enter)="onEnterKeyDown()">
   <km-dialog-title>Delete {{type}}</km-dialog-title>
   <mat-dialog-content>
-    <p *ngIf="backups.length === 1">
+    <p *ngIf="(backups?.length === 1) || !!bslName">
       Delete
       <b ngxClipboard
-         [cbContent]="backups[0].name"
+         [cbContent]="getcbContent()"
          matTooltip="Click to copy"
-         class="km-copy">{{backups[0].name}}</b>
+         class="km-copy">{{getcbContent()}}</b>
       {{type}} permanently?
     </p>
-    <p *ngIf="backups.length > 1">
+    <p *ngIf="(backups?.length > 1) && !!bslName">
       Type
       <b ngxClipboard
-         [cbContent]="'yes'"
+         [cbContent]="getcbContent()"
          matTooltip="Click to copy"
          class="km-copy">yes</b>
       to delete all selected {{type}}s permanently?

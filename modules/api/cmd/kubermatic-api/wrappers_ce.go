@@ -47,3 +47,7 @@ func resourceQuotaProviderFactory(_ kubernetes.ImpersonationClient, _ ctrlruntim
 func groupProjectBindingFactory(_ kubernetes.ImpersonationClient, _ ctrlruntimeclient.Client) provider.GroupProjectBindingProvider {
 	return nil
 }
+
+func backupStorageProviderFactory(_ ctrlruntimeclient.Client) provider.BackupStorageProvider {
+	return nil
+}

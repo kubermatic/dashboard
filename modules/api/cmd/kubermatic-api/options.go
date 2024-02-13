@@ -203,6 +203,7 @@ type providers struct {
 	etcdRestoreProviderGetter                      provider.EtcdRestoreProviderGetter
 	etcdBackupConfigProjectProviderGetter          provider.EtcdBackupConfigProjectProviderGetter
 	etcdRestoreProjectProviderGetter               provider.EtcdRestoreProjectProviderGetter
+	backupStorageProvider                          provider.BackupStorageProvider
 	backupCredentialsProviderGetter                provider.BackupCredentialsProviderGetter
 	privilegedMLAAdminSettingProviderGetter        provider.PrivilegedMLAAdminSettingProviderGetter
 	seedProvider                                   provider.SeedProvider

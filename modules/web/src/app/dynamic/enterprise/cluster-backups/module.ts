@@ -29,6 +29,8 @@ import {DeleteBackupDialogComponent} from './list/backups/delete-dialog/componen
 import {AddRestoreDialogComponent} from './list/restore/add-dialog/component';
 import {DeleteRestoreDialogComponent} from './list/restore/delete-dialog/component';
 import {ClustersScheduleBackupsListComponent} from './list/schedule/component';
+import {BackupStorageLocationsListComponent} from './list/backup-storage-location/component';
+import {AddBackupStorageLocationDialogComponent} from './list/backup-storage-location/add-dialog/component';
 
 @NgModule({
   imports: [SharedModule, ClusterBackupsRoutingModule],
@@ -37,10 +39,12 @@ import {ClustersScheduleBackupsListComponent} from './list/schedule/component';
     ClustersBackupsListComponent,
     ClustersScheduleBackupsListComponent,
     ClustersRestoresListComponent,
+    BackupStorageLocationsListComponent,
     AddClustersBackupsDialogComponent,
     DeleteBackupDialogComponent,
     AddRestoreDialogComponent,
     DeleteRestoreDialogComponent,
+    AddBackupStorageLocationDialogComponent,
   ],
 })
 export class ClusterBackupsModule {}

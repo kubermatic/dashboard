@@ -24,6 +24,7 @@ import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
 
 export interface DeleteBackupDialogConfig {
   type: BackupType;
+  bslName: string;
   backups: ClusterBackup[];
 }
 
@@ -34,6 +35,7 @@ export interface DeleteBackupDialogConfig {
 export class DeleteBackupDialogComponent {
   type = this._config.type;
   backups = this._config.backups;
+  bslName = this._config.bslName;
   verificationInput = '';
 
   constructor(
@@ -49,13 +51,20 @@ export class DeleteBackupDialogComponent {
   }
 
   isNameVerified(): boolean {
-    if (this.backups.length > 1) {
-      return this.verificationInput === 'yes';
+    if (this.backups) {
+      if (this.backups.length > 1) {
+        return this.verificationInput === 'yes';
+      }
+      return this.verificationInput === this.backups[0]?.name;
     }
-    return this.verificationInput === this.backups[0]?.name;
+    return this.verificationInput === this.bslName;
   }
 
   inputLabel(): string {
-    return this.backups.length > 1 ? `Submit ${this.type}s deletion` : `${this.type} Name`;
+    return this.backups?.length > 1 ? `Submit ${this.type}s deletion` : `${this.type} Name`;
+  }
+
+  getcbContent(): string {
+    return this._config.bslName ?? (this.backups.length > 1 ? 'yes' : this.backups[0].name);
   }
 }

@@ -1348,3 +1348,35 @@ type PrivilegedOperatingSystemProfileProvider interface {
 	// List returns a list of OperatingSystemProfiles for the KKP installation.
 	ListUnsecured(context.Context) (*osmv1alpha1.OperatingSystemProfileList, error)
 }
+
+type BackupStorageProvider interface {
+	// GetUnsecured returns a ClusterBackupStorageLocation based on object's name.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resource
+	GetUnsecured(ctx context.Context, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// ListUnsecured returns a ClusterBackupStorageLocation list.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resource
+	ListUnsecured(ctx context.Context, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
+
+	// CreateUnsecured creates a new ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// PatchUnsecured updates givenClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to update the resource
+	PatchUnsecured(ctx context.Context, cbslName string, updatedCBSL *kubermaticv1.ClusterBackupStorageLocation, UpdatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	// DeleteUnsecured removes an existing ClusterBackupStorageLocation.
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to delete the resource
+	DeleteUnsecured(ctx context.Context, name string) error
+}
