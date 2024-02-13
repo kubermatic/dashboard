@@ -357,6 +357,7 @@ func (m *PresetProvider) setAzureCredentials(preset *kubermaticv1.Preset, cloud 
 	cloud.Azure.SecurityGroup = credentials.SecurityGroup
 	cloud.Azure.SubnetName = credentials.SubnetName
 	cloud.Azure.VNetName = credentials.VNetName
+	cloud.Azure.LoadBalancerSKU = credentials.LoadBalancerSKU
 
 	return &cloud, nil
 }
