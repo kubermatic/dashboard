@@ -68,3 +68,14 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 func DecodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
 	return decodeDeleteClusterBackupReq(c, r)
 }
+
+func DownloadURLEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		return downloadURLEndpoint(ctx, request, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
+	}
+}
+
+func DecodeDownloadURLReq(c context.Context, r *http.Request) (interface{}, error) {
+	return decodeDownloadURLReq(c, r)
+}

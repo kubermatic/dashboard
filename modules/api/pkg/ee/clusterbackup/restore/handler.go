@@ -71,7 +71,7 @@ type clusterRestoreUISpec struct {
 }
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -120,7 +120,7 @@ func DecodeCreateClusterRestoreReq(c context.Context, r *http.Request) (interfac
 }
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -174,7 +174,7 @@ func DecodeListClusterRestoreReq(c context.Context, r *http.Request) (interface{
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -217,7 +217,7 @@ func DecodeGetRestoreBackupReq(c context.Context, r *http.Request) (interface{},
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := clusterbackup.IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
