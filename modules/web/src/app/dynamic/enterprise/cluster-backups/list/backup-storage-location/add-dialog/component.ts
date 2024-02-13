@@ -75,8 +75,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       ),
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
-      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
       [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? '0'),
+      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
     });
 

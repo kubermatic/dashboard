@@ -66,6 +66,11 @@ limitations under the License.
               <div value>{{cluster.spec.containerRuntime}}</div>
             </km-property>
 
+            <km-property *ngIf="cluster.spec.backupConfig?.backupStorageLocation?.name">
+              <div key>Cluster Backup</div>
+              <div value>{{cluster.spec.backupConfig.backupStorageLocation.name}}</div>
+            </km-property>
+
             <km-property>
               <div key>SSH Keys</div>
               <div value>
@@ -233,6 +238,10 @@ limitations under the License.
             <km-property-boolean *ngIf="cluster.spec.disableCsiDriver"
                                  label="CSI Storage Driver"
                                  [value]="!cluster.spec.disableCsiDriver">
+            </km-property-boolean>
+            <km-property-boolean *ngIf="cluster.spec.backupConfig"
+                                 label="Cluster Backup"
+                                 [value]="cluster.spec.backupConfig">
             </km-property-boolean>
           </div>
         </div>

@@ -1043,6 +1043,9 @@ type ClusterSpec struct {
 	// Optional: DisableCSIDriver disables the installation of CSI driver on the cluster
 	// If this is true at the data center then it can't be over-written in the cluster configuration
 	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
+
+	// Optional: BackupConfig contains the configuration options for managing the Cluster Backup Velero integration feature.
+	BackupConfig *kubermaticv1.BackupConfig `json:"backupConfig,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1060,6 +1063,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		EnableUserSSHKeyAgent                *bool                                  `json:"enableUserSSHKeyAgent,omitempty"`
 		EnableOperatingSystemManager         *bool                                  `json:"enableOperatingSystemManager,omitempty"`
 		KubeLB                               *kubermaticv1.KubeLB                   `json:"kubelb,omitempty"`
+		BackupConfig                         *kubermaticv1.BackupConfig             `json:"backupConfig,omitempty"`
 		KubernetesDashboard                  *kubermaticv1.KubernetesDashboard      `json:"kubernetesDashboard,omitempty"`
 		AuditLogging                         *kubermaticv1.AuditLoggingSettings     `json:"auditLogging,omitempty"`
 		AdmissionPlugins                     []string                               `json:"admissionPlugins,omitempty"`
@@ -1103,6 +1107,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		EnableUserSSHKeyAgent:                cs.EnableUserSSHKeyAgent,
 		EnableOperatingSystemManager:         cs.EnableOperatingSystemManager,
 		KubeLB:                               cs.KubeLB,
+		BackupConfig:                         cs.BackupConfig,
 		KubernetesDashboard:                  cs.KubernetesDashboard,
 		AuditLogging:                         cs.AuditLogging,
 		AdmissionPlugins:                     cs.AdmissionPlugins,

@@ -345,6 +345,7 @@ export class ClusterSpec {
   enableUserSSHKeyAgent?: boolean;
   enableOperatingSystemManager?: boolean;
   podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
+  backupConfig?: BackupConfig;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
@@ -462,6 +463,12 @@ export class MLASettings {
   monitoringEnabled?: boolean;
 }
 
+export class BackupConfig {
+  backupStorageLocation: {
+    name: string;
+  };
+}
+
 export class Status {
   url: string;
   version: string;
@@ -520,6 +527,7 @@ export class ClusterSpecPatch {
   clusterNetwork?: ClusterNetwork;
   kubernetesDashboard?: KubernetesDashboard;
   disableCsiDriver?: boolean;
+  backupConfig?: BackupConfig;
   podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];

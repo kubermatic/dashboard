@@ -27912,6 +27912,15 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "BackupConfig": {
+      "type": "object",
+      "properties": {
+        "backupStorageLocation": {
+          "$ref": "#/definitions/LocalObjectReference"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "BackupCredentials": {
       "description": "BackupCredentials contains credentials for etcd backups",
       "type": "object",
@@ -28706,6 +28715,9 @@
         },
         "auditLogging": {
           "$ref": "#/definitions/AuditLoggingSettings"
+        },
+        "backupConfig": {
+          "$ref": "#/definitions/BackupConfig"
         },
         "cloud": {
           "$ref": "#/definitions/CloudSpec"

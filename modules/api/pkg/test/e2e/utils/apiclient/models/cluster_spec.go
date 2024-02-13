@@ -67,6 +67,9 @@ type ClusterSpec struct {
 	// audit logging
 	AuditLogging *AuditLoggingSettings `json:"auditLogging,omitempty"`
 
+	// backup config
+	BackupConfig *BackupConfig `json:"backupConfig,omitempty"`
+
 	// cloud
 	Cloud *CloudSpec `json:"cloud,omitempty"`
 
@@ -120,6 +123,10 @@ func (m *ClusterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateAuditLogging(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateBackupConfig(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -237,6 +244,25 @@ func (m *ClusterSpec) validateAuditLogging(formats strfmt.Registry) error {
 				return ve.ValidateName("auditLogging")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("auditLogging")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) validateBackupConfig(formats strfmt.Registry) error {
+	if swag.IsZero(m.BackupConfig) { // not required
+		return nil
+	}
+
+	if m.BackupConfig != nil {
+		if err := m.BackupConfig.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("backupConfig")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("backupConfig")
 			}
 			return err
 		}
@@ -504,6 +530,10 @@ func (m *ClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateBackupConfig(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCloud(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -606,6 +636,22 @@ func (m *ClusterSpec) contextValidateAuditLogging(ctx context.Context, formats s
 				return ve.ValidateName("auditLogging")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("auditLogging")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) contextValidateBackupConfig(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.BackupConfig != nil {
+		if err := m.BackupConfig.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("backupConfig")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("backupConfig")
 			}
 			return err
 		}
