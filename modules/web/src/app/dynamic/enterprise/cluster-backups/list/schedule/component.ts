@@ -243,9 +243,9 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
       .clusters(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
-        this.clusters = clusters;
+        this.clusters = clusters.filter(cluster => cluster.spec.backupConfig);
         if (!this.selectedCluster) {
-          this.selectedCluster = clusters[0]?.id;
+          this.selectedCluster = this.clusters[0]?.id;
           this._getScheduleBackupsList(this._selectedProject.id);
         }
         this.clusterLabel = clusters.length ? ClusterState.Ready : ClusterState.Empty;

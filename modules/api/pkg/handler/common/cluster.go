@@ -309,6 +309,10 @@ func GenerateCluster(
 		partialCluster.Spec.EnableOperatingSystemManager = body.Cluster.Spec.EnableOperatingSystemManager
 	}
 
+	// add the cluster backup storage location if exist
+	if body.Cluster.Spec.BackupConfig != nil {
+		partialCluster.Spec.BackupConfig = body.Cluster.Spec.BackupConfig
+	}
 	return partialCluster, nil
 }
 
@@ -554,6 +558,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.CNIPlugin = patchedCluster.Spec.CNIPlugin
 	newInternalCluster.Spec.ExposeStrategy = patchedCluster.Spec.ExposeStrategy
 	newInternalCluster.Spec.EnableOperatingSystemManager = patchedCluster.Spec.EnableOperatingSystemManager
+	newInternalCluster.Spec.BackupConfig = patchedCluster.Spec.BackupConfig
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
@@ -1118,6 +1123,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			UseEventRateLimitAdmissionPlugin:     internalCluster.Spec.UseEventRateLimitAdmissionPlugin,
 			EnableUserSSHKeyAgent:                internalCluster.Spec.EnableUserSSHKeyAgent,
 			EnableOperatingSystemManager:         internalCluster.Spec.EnableOperatingSystemManager,
+			BackupConfig:                         internalCluster.Spec.BackupConfig,
 			KubeLB:                               internalCluster.Spec.KubeLB,
 			KubernetesDashboard:                  internalCluster.Spec.KubernetesDashboard,
 			AdmissionPlugins:                     internalCluster.Spec.AdmissionPlugins,

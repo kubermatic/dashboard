@@ -53,6 +53,8 @@ import {EditClusterComponent} from './component';
 import {FeatureGateService} from '@core/services/feature-gate';
 import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {asyncData} from '@test/services/cluster-mock';
+import {ProjectService} from '@app/core/services/project';
+import {ProjectMockService} from '@test/services/project-mock';
 
 describe('EditClusterComponent', () => {
   let fixture: ComponentFixture<EditClusterComponent>;
@@ -96,6 +98,7 @@ describe('EditClusterComponent', () => {
         {provide: SettingsService, useClass: SettingsMockService},
         {provide: FeatureGateService, useClass: FeatureGatesMockService},
         {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();

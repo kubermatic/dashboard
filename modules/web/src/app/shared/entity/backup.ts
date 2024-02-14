@@ -139,8 +139,8 @@ export enum BackupType {
   BackupStorageLocation = 'Backup Storage Location',
 }
 
-// this variable is temporary, it will be removed after adding the storageLocation implementation
-export const StorageLocationTempName = 'default-cluster-backup-bsl';
+// this variable is temporary, it will be removed after adding the functionalty for cluster backup storage location.
+export const BackupStorageLocationTempName = 'default-cluster-backup-bsl';
 
 export class ClusterBackup {
   name: string;
@@ -213,11 +213,11 @@ export class BackupStorageLocationSpec {
     bucket: string;
   };
   config: BackupStorageLocationConfig;
-  backupSyncPeriod: string;
   credential?: {
     accessKeyId: string;
     secretAccessKey: string;
   };
+  backupSyncPeriod?: string;
   provider?: string;
   lastValidationTime?: string;
   status?: string;

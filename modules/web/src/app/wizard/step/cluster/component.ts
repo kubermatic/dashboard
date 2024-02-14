@@ -74,6 +74,14 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {ProjectService} from '@app/core/services/project';
+
+export enum BSLListState {
+  Ready = 'Backup Storage Location',
+  Loading = 'Loading...',
+  Empty = 'No Backups Available',
+}
 
 enum Controls {
   Name = 'name',
@@ -84,6 +92,8 @@ enum Controls {
   AuditPolicyPreset = 'auditPolicyPreset',
   UserSSHKeyAgent = 'userSSHKeyAgent',
   OperatingSystemManager = 'enableOperatingSystemManager',
+  ClusterBackup = 'clusterBackup',
+  BackupStorageLocation = 'backupStorageLocation',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
@@ -153,6 +163,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   loadingClusterDefaults = false;
   canEditCNIValues: boolean;
   cniApplicationValues: string;
+  backupStorageLocationsList: string[];
+  backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -184,6 +196,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
     private readonly _applicationService: ApplicationService,
+    private readonly _projectService: ProjectService,
+    private readonly _clusterBackupService: ClusterBackupService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -219,6 +233,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       }
       this.form.updateValueAndValidity();
     });
+
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(project => this._getCBSL(project.id));
 
     this._fetchCNIPlugins();
 
@@ -279,6 +297,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
+    this.control(Controls.ClusterBackup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (value) {
+          this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
+        } else {
+          this.form.removeControl(Controls.BackupStorageLocation);
+        }
+      });
+
     merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.IPFamily).valueChanges)
       .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
       .pipe(takeUntil(this._unsubscribe))
@@ -326,6 +354,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OperatingSystemManager).valueChanges,
+      this.form.get(Controls.ClusterBackup).valueChanges,
       this.form.get(Controls.KubernetesDashboardEnabled).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.Konnectivity).valueChanges,
@@ -351,6 +380,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    if (this.control(Controls.BackupStorageLocation).status) {
+      this.control(Controls.BackupStorageLocation)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+    }
 
     if (!this.cniApplicationValues) {
       this._applicationService
@@ -473,6 +508,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
       [Controls.OperatingSystemManager]: this._builder.control(clusterSpec?.enableOperatingSystemManager ?? true),
+      [Controls.ClusterBackup]: this._builder.control(!!clusterSpec?.backupConfig ?? false),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
@@ -523,6 +559,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     });
 
     this.control(Controls.Konnectivity).disable();
+
+    if (this.control(Controls.ClusterBackup).value) {
+      this.form.addControl(
+        Controls.BackupStorageLocation,
+        this._builder.control(clusterSpec?.backupConfig?.backupStorageLocation?.name, Validators.required)
+      );
+    }
   }
 
   private _loadClusterDefaults(): void {
@@ -554,6 +597,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
           [Controls.OperatingSystemManager]:
             clusterSpec?.enableOperatingSystemManager ?? this.controlValue(Controls.OperatingSystemManager),
+          [Controls.ClusterBackup]: !!clusterSpec.backupConfig ?? false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
           [Controls.Konnectivity]:
             clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),
@@ -806,6 +850,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     };
   }
 
+  private _getCBSL(projectID: string): void {
+    this.backupStorageLocationLabel = BSLListState.Loading;
+    this._clusterBackupService
+      .listBackupStorageLocation(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cbslList => {
+        this.backupStorageLocationsList = cbslList.map(cbsl => cbsl.name);
+        this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
+      });
+  }
+
   private _getClusterEntity(): Cluster {
     const ipv4Pods = this.controlValue(Controls.IPv4PodsCIDR);
     const ipv4Services = this.controlValue(Controls.IPv4ServicesCIDR);
@@ -845,7 +900,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       clusterNetwork.nodeCidrMaskSizeIPv6 = null;
     }
 
-    return {
+    const clusterObject = {
       name: this.controlValue(Controls.Name),
       annotations,
       spec: {
@@ -877,6 +932,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
       } as ClusterSpec,
     } as Cluster;
+
+    if (this.controlValue(Controls.ClusterBackup)) {
+      clusterObject.spec.backupConfig = {
+        backupStorageLocation: {
+          name: this.control(Controls.BackupStorageLocation).value,
+        },
+      };
+    } else {
+      clusterObject.spec.backupConfig = null;
+    }
+    return clusterObject;
   }
 
   private initializeCiliumValues(valuesConfig: string | object): string {

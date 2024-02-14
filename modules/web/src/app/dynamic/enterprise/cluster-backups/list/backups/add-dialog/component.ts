@@ -28,7 +28,7 @@ import {
   BackupType,
   ClusterBackup,
   CreateClusterBackupSchedule,
-  StorageLocationTempName,
+  BackupStorageLocationTempName,
 } from '@app/shared/entity/backup';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
@@ -94,7 +94,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Destination]: this._builder.control(StorageLocationTempName, Validators.required),
+      [Controls.Destination]: this._builder.control(BackupStorageLocationTempName, Validators.required),
       [Controls.NameSpaces]: this._builder.control([]),
       [Controls.DefaultVolumesToFsBackup]: this._builder.control(true),
       [Controls.CronJob]: this._builder.control(''),
@@ -163,7 +163,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
       spec: {
-        storageLocation: StorageLocationTempName,
+        storageLocation: this.form.get(Controls.Destination).value,
         clusterid: this.cluster.id,
         defaultVolumesToFsBackup: this.form.get(Controls.DefaultVolumesToFsBackup).value,
       },
@@ -184,7 +184,6 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     if (this.form.get(Controls.ExpiresIn).value) {
       backup.spec[Controls.ExpiresIn] = this.form.get(Controls.ExpiresIn).value;
     }
-
     return backup;
   }
   private _getClusterScheduleBackupConfig(): CreateClusterBackupSchedule {

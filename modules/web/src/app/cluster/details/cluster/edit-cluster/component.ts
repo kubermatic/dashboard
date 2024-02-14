@@ -15,7 +15,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {BSLListState} from '@app/wizard/step/cluster/component';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -66,6 +69,8 @@ enum Controls {
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   DisableCSIDriver = 'disableCSIDriver',
+  ClusterBackup = 'clusterBackup',
+  BackupStorageLocation = 'backupStorageLocation',
 }
 
 @Component({
@@ -95,6 +100,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isKubeLBEnforced = false;
   isKubeLBEnabled = false;
   isCSIDriverDisabled = false;
+  backupStorageLocationsList: string[];
+  backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -117,7 +124,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _projectService: ProjectService,
+    private readonly _clusterBackupService: ClusterBackupService
   ) {}
 
   ngOnInit(): void {
@@ -158,7 +167,26 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Labels]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
+      [Controls.ClusterBackup]: new FormControl(!!this.cluster.spec.backupConfig),
     });
+
+    if (this.form.get(Controls.ClusterBackup).value) {
+      this.form.addControl(
+        Controls.BackupStorageLocation,
+        this._builder.control(this.cluster.spec?.backupConfig?.backupStorageLocation?.name, Validators.required)
+      );
+    }
+
+    this.form
+      .get(Controls.ClusterBackup)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (value) {
+          this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
+        } else {
+          this.form.removeControl(Controls.BackupStorageLocation);
+        }
+      });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
@@ -198,6 +226,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .getAdmissionPlugins(this.cluster.spec.version)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.admissionPlugins = plugins));
+
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(project => this._getCBSL(project.id));
 
     this.checkForLegacyAdmissionPlugins();
 
@@ -334,6 +366,17 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
   }
 
+  private _getCBSL(projectID: string): void {
+    this.backupStorageLocationLabel = BSLListState.Loading;
+    this._clusterBackupService
+      .listBackupStorageLocation(projectID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cbslList => {
+        this.backupStorageLocationsList = cbslList.map(cbsl => cbsl.name);
+        this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
+      });
+  }
+
   getObservable(): Observable<Cluster> {
     const patch: ClusterPatch = {
       name: this.form.get(Controls.Name).value,
@@ -380,6 +423,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     if (this.isExposeStrategyLoadBalancer()) {
       patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
+    }
+
+    if (this.form.get(Controls.ClusterBackup).value) {
+      patch.spec.backupConfig = {
+        backupStorageLocation: {
+          name: this.form.get(Controls.BackupStorageLocation).value,
+        },
+      };
+    } else {
+      patch.spec.backupConfig = null;
     }
 
     return this._clusterService.patch(this.projectID, this.cluster.id, patch, true).pipe(take(1));
