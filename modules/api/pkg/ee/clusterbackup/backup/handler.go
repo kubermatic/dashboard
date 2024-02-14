@@ -219,9 +219,9 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackup = mux.Vars(r)["cluster_backup"]
+	req.ClusterBackup = mux.Vars(r)["clusterBackup"]
 	if req.ClusterBackup == "" {
-		return "", fmt.Errorf("'cluster_backup' parameter is required but was not provided")
+		return "", fmt.Errorf("'clusterBackup' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -327,7 +327,7 @@ func DownloadURLEndpoint(ctx context.Context, request interface{}, userInfoGette
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return *apiv2.BackupDownloadUrl{
+	return apiv2.BackupDownloadUrl{
 		DownloadURL: downloadURL,
 	}, nil
 }
@@ -340,9 +340,9 @@ func DecodeDownloadURLReq(c context.Context, r *http.Request) (interface{}, erro
 	}
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackup = mux.Vars(r)["clusterBackup"]
+	req.ClusterBackup = mux.Vars(r)["cluster_backup"]
 	if req.ClusterBackup == "" {
-		return "", fmt.Errorf("'clusterBackup' parameter is required but was not provided")
+		return "", fmt.Errorf("'cluster_backup' parameter is required but was not provided")
 	}
 	return req, nil
 }

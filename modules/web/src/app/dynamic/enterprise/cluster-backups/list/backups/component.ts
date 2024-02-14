@@ -22,14 +22,14 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
-import {Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
+import {Observable, Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
 import {MemberUtils, Permission} from '@app/shared/utils/member';
 import {Member} from '@app/shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {ProjectService} from '@core/services/project';
 import {Project} from '@shared/entity/project';
 import {MatTableDataSource} from '@angular/material/table';
-import {BackupType, ClusterBackup} from '@app/shared/entity/backup';
+import {BackupDownloadUrl, BackupType, ClusterBackup} from '@app/shared/entity/backup';
 import {DeleteBackupDialogComponent} from './delete-dialog/component';
 import {AddRestoreDialogComponent, AddRestoreDialogConfig} from '../restore/add-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
@@ -239,6 +239,16 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
           this._notificationService.success(`Deleting the ${backups[0].name} backup`);
         }
       });
+  }
+
+  getObservable(backup: ClusterBackup): Observable<BackupDownloadUrl> {
+    return this._clusterBackupService
+      .postBackupDownloadUrl(this._selectedProject.id, backup.spec.clusterid, backup.name)
+      .pipe(take(1));
+  }
+
+  onNext(url: BackupDownloadUrl) {
+    window.open(url.downloadURL, '_blank');
   }
 
   private _getClusters(projectID: string): void {
