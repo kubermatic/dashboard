@@ -1316,7 +1316,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.deleteClusterBackup())
 
 	mux.Methods(http.MethodPost).
-		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{clusterBackup}/downloadurl").
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl").
 		Handler(r.clusterBackupDownloadURL())
 
 	// Defines a set of HTTP endpoints for managing cluster restore configs
@@ -7752,6 +7752,18 @@ func (r Routing) deleteClusterBackup() http.Handler {
 	)
 }
 
+// swagger:route POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl project postBackupDownloadUrl
+//
+//	Creates and get download url for a backup that belong to the given cluster
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: BackupDownloadUrl
+//	  401: empty
+//	  403: empty
 func (r Routing) clusterBackupDownloadURL() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(

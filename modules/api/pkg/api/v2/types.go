@@ -2180,3 +2180,9 @@ type ClusterBackupStorageLocation struct {
 	Spec        velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
 	Status      velerov1.BackupStorageLocationStatus `json:"status"`
 }
+
+// BackupDownloadUrl is the object representing a Backup Download URL.
+// swagger:model BackupDownloadUrl
+type BackupDownloadUrl struct {
+	DownloadURL string `json:"downloadURL,omitempty"`
+}

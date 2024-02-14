@@ -201,11 +201,12 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	return clusterBackup, nil
 }
 
+// swagger:parameters postBackupDownloadUrl
 type getClusterBackupReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackup string `json:"clusterBackup"`
+	ClusterBackup string `json:"cluster_backup"`
 }
 
 func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -218,9 +219,9 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 
 	req.GetClusterReq = cr.(cluster.GetClusterReq)
 
-	req.ClusterBackup = mux.Vars(r)["clusterBackup"]
+	req.ClusterBackup = mux.Vars(r)["cluster_backup"]
 	if req.ClusterBackup == "" {
-		return "", fmt.Errorf("'clusterBackup' parameter is required but was not provided")
+		return "", fmt.Errorf("'cluster_backup' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -326,7 +327,9 @@ func DownloadURLEndpoint(ctx context.Context, request interface{}, userInfoGette
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return map[string]string{"downloadURL": downloadURL}, nil
+	return *apiv2.BackupDownloadUrl{
+		DownloadURL: downloadURL,
+	}, nil
 }
 
 func DecodeDownloadURLReq(c context.Context, r *http.Request) (interface{}, error) {
