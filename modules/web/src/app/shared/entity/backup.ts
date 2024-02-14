@@ -233,3 +233,7 @@ export class BackupStorageLocationConfig {
   region?: string;
   s3Url?: string;
 }
+
+export class BackupDownloadUrl {
+  downloadURL: string;
+}

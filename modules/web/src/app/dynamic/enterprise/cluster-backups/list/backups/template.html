@@ -209,6 +209,15 @@ END OF TERMS AND CONDITIONS
                     [disabled]="!canDelete">
               <i class="km-icon-mask km-icon-delete"></i>
             </button>
+
+            <km-button iconButton="true"
+                       icon="km-icon-download"
+                       matTooltip="Download Backup"
+                       [disabled]="!canAdd"
+                       [observable]="getObservable(element)"
+                       (next)="onNext($event)"
+                       (click)="$event.stopPropagation()">
+            </km-button>
           </div>
         </td>
       </ng-container>

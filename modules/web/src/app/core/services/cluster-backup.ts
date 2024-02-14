@@ -20,6 +20,7 @@ import {
   ClusterRestore,
   BackupStorageLocation,
   CreateBackupStorageLocation,
+  BackupDownloadUrl,
 } from '@app/shared/entity/backup';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
@@ -110,5 +111,10 @@ export class ClusterBackupService {
   ): Observable<BackupStorageLocation> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusterbackupstoragelocation/${bslName}`;
     return this._http.patch<BackupStorageLocation>(url, backupStorageLocation);
+  }
+
+  postBackupDownloadUrl(projectID: string, clusterID: string, backupName: string): Observable<BackupDownloadUrl> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterbackup/${backupName}/downloadurl`;
+    return this._http.post<BackupDownloadUrl>(url, null);
   }
 }

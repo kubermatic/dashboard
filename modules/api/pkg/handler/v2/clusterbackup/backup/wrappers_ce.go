@@ -63,3 +63,11 @@ func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter,
 func decodeDeleteClusterBackupReq(_ context.Context, _ *http.Request) (interface{}, error) {
 	return nil, nil
 }
+
+func downloadURLEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.ProjectProvider, _ provider.PrivilegedProjectProvider, _ provider.SettingsProvider) (interface{}, error) {
+	return nil, nil
+}
+
+func decodeDownloadURLReq(_ context.Context, _ *http.Request) (interface{}, error) {
+	return nil, nil
+}

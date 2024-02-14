@@ -8686,6 +8686,61 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl": {
+      "post": {
+        "description": "Creates and get download url for a backup that belong to the given cluster",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "postBackupDownloadUrl",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterBackup",
+            "name": "cluster_backup",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "BackupDownloadUrl",
+            "schema": {
+              "$ref": "#/definitions/BackupDownloadUrl"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings": {
       "get": {
         "description": "List cluster role binding",
@@ -27961,6 +28016,17 @@
       "title": "BackupDestinationNames represents an list of backup destination names.",
       "items": {
         "type": "string"
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "BackupDownloadUrl": {
+      "type": "object",
+      "title": "BackupDownloadUrl is the object representing a Backup Download URL.",
+      "properties": {
+        "downloadURL": {
+          "type": "string",
+          "x-go-name": "DownloadURL"
+        }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },

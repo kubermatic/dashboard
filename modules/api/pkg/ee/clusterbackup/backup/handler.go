@@ -29,6 +29,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
@@ -40,9 +41,11 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/kubermatic/v2/pkg/util/wait"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -76,7 +79,7 @@ type clusterBackupUISpec struct {
 
 func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 	req := request.(createClusterBackupReq)
@@ -125,7 +128,7 @@ func DecodeCreateClusterBackupReq(c context.Context, r *http.Request) (interface
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -180,7 +183,7 @@ func DecodeListClusterBackupReq(c context.Context, r *http.Request) (interface{}
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -198,11 +201,12 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	return clusterBackup, nil
 }
 
+// swagger:parameters postBackupDownloadUrl
 type getClusterBackupReq struct {
 	cluster.GetClusterReq
 	// in: path
 	// required: true
-	ClusterBackup string `json:"clusterBackup"`
+	ClusterBackup string `json:"cluster_backup"`
 }
 
 func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -225,7 +229,7 @@ func DecodeGetClusterBackupReq(c context.Context, r *http.Request) (interface{},
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	if err := IsClusterbackupEnabled(ctx, settingsProvider); err != nil {
+	if err := IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -290,11 +294,10 @@ func submitBackupDeleteRequest(ctx context.Context, client ctrlruntimeclient.Cli
 			BackupName: backup.Name,
 		},
 	}
-	print(delReq)
 	return veleroclient.CreateRetryGenerateName(client, ctx, delReq)
 }
 
-func IsClusterbackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+func IsClusterBackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
 	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
 
 	if err != nil {
@@ -306,4 +309,123 @@ func IsClusterbackupEnabled(ctx context.Context, settingsProvider provider.Setti
 	}
 
 	return nil
+}
+
+func DownloadURLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
+		return nil, err
+	}
+
+	req := request.(getClusterBackupReq)
+	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	downloadURL, err := generateDownloadURL(ctx, client, req.ClusterBackup)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	return apiv2.BackupDownloadUrl{
+		DownloadURL: downloadURL,
+	}, nil
+}
+
+func DecodeDownloadURLReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req getClusterBackupReq
+	cr, err := cluster.DecodeGetClusterReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GetClusterReq = cr.(cluster.GetClusterReq)
+
+	req.ClusterBackup = mux.Vars(r)["cluster_backup"]
+	if req.ClusterBackup == "" {
+		return "", fmt.Errorf("'cluster_backup' parameter is required but was not provided")
+	}
+	return req, nil
+}
+
+func generateDownloadURL(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) (string, error) {
+	backup := &velerov1.Backup{}
+
+	if err := client.Get(ctx, types.NamespacedName{Name: clusterBackupID, Namespace: UserClusterBackupNamespace}, backup); err != nil {
+		if apierrors.IsNotFound(err) {
+			return "", nil
+		}
+		return "", err
+	}
+
+	if existingReq, err := getLastDownloadRequest(ctx, client, clusterBackupID); err != nil {
+		return "", err
+	} else if existingReq != nil {
+		return existingReq.Status.DownloadURL, nil
+	}
+
+	if err := submitBackupDownloadRequest(ctx, client, backup); err != nil {
+		return "", nil
+	}
+
+	createdReq := &velerov1.DownloadRequest{}
+	if err := wait.PollImmediate(ctx, 25*time.Millisecond, 1*time.Second, func(ctx context.Context) (error, error) {
+		var err error
+		createdReq, err = getLastDownloadRequest(ctx, client, clusterBackupID)
+		if err != nil {
+			return nil, err // terminal error
+		}
+		if createdReq == nil || createdReq.Status.DownloadURL == "" {
+			return fmt.Errorf("can't find download request or empty download URL. retrying.."), nil // transient error
+		}
+		return nil, nil
+	}); err != nil {
+		return "", err
+	}
+	return createdReq.Status.DownloadURL, nil
+}
+
+func submitBackupDownloadRequest(ctx context.Context, client ctrlruntimeclient.Client, backup *velerov1.Backup) error {
+	newReq := &velerov1.DownloadRequest{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: velerov1.SchemeGroupVersion.String(),
+			Kind:       "DownloadRequest",
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			GenerateName: fmt.Sprintf("%s-", backup.Name),
+			Namespace:    backup.Namespace,
+			Labels: map[string]string{
+				velerov1.BackupNameLabel: backup.Name,
+				velerov1.BackupUIDLabel:  string(backup.UID),
+			},
+		},
+		Spec: velerov1.DownloadRequestSpec{
+			Target: velerov1.DownloadTarget{
+				Kind: velerov1.DownloadTargetKindBackupContents,
+				Name: backup.Name,
+			},
+		},
+	}
+	return veleroclient.CreateRetryGenerateName(client, ctx, newReq)
+}
+
+func getLastDownloadRequest(ctx context.Context, client ctrlruntimeclient.Client, clusterBackupID string) (*velerov1.DownloadRequest, error) {
+	reqList := &velerov1.DownloadRequestList{}
+
+	if err := client.List(ctx, reqList,
+		&ctrlruntimeclient.ListOptions{
+			LabelSelector: labels.SelectorFromSet(map[string]string{velerov1.BackupNameLabel: clusterBackupID}),
+			Namespace:     UserClusterBackupNamespace,
+		}); err != nil {
+		return nil, err
+	}
+	if len(reqList.Items) == 0 {
+		return nil, nil
+	}
+	lastReq := reqList.Items[0]
+	for _, req := range reqList.Items[1:] {
+		if req.CreationTimestamp.After(lastReq.CreationTimestamp.Time) {
+			lastReq = req
+		}
+	}
+	return &lastReq, nil
 }

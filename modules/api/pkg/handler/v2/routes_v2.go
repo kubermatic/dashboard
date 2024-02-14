@@ -1315,6 +1315,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{clusterBackup}").
 		Handler(r.deleteClusterBackup())
 
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl").
+		Handler(r.clusterBackupDownloadURL())
+
 	// Defines a set of HTTP endpoints for managing cluster restore configs
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clusters/{cluster_id}/clusterrestore").
@@ -7743,6 +7747,32 @@ func (r Routing) deleteClusterBackup() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(clusterbackup.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
 		clusterbackup.DecodeDeleteClusterBackupReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl project postBackupDownloadUrl
+//
+//	Creates and get download url for a backup that belong to the given cluster
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: BackupDownloadUrl
+//	  401: empty
+//	  403: empty
+func (r Routing) clusterBackupDownloadURL() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterbackup.DownloadURLEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
+		clusterbackup.DecodeDownloadURLReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

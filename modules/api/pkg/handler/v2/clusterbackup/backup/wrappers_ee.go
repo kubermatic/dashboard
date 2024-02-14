@@ -61,3 +61,12 @@ func deleteEndpoint(ctx context.Context, req interface{}, userInfoGetter provide
 func decodeDeleteClusterBackupReq(c context.Context, r *http.Request) (interface{}, error) {
 	return clusterbackup.DecodeDeleteClusterBackupReq(c, r)
 }
+
+func downloadURLEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	return clusterbackup.DownloadURLEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
+}
+
+func decodeDownloadURLReq(c context.Context, r *http.Request) (interface{}, error) {
+	return clusterbackup.DecodeDownloadURLReq(c, r)
+}

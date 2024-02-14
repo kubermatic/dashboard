@@ -314,6 +314,8 @@ type ClientService interface {
 
 	PatchRole(params *PatchRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchRoleOK, error)
 
+	PostBackupDownloadURL(params *PostBackupDownloadURLParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PostBackupDownloadURLCreated, error)
+
 	ResetAlertmanager(params *ResetAlertmanagerParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ResetAlertmanagerOK, error)
 
 	RestartMachineDeployment(params *RestartMachineDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*RestartMachineDeploymentOK, error)
@@ -5794,6 +5796,44 @@ func (a *Client) PatchRole(params *PatchRoleParams, authInfo runtime.ClientAuthI
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PatchRoleDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PostBackupDownloadURL Creates and get download url for a backup that belong to the given cluster
+*/
+func (a *Client) PostBackupDownloadURL(params *PostBackupDownloadURLParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PostBackupDownloadURLCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPostBackupDownloadURLParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "postBackupDownloadUrl",
+		Method:             "POST",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PostBackupDownloadURLReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PostBackupDownloadURLCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PostBackupDownloadURLDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
