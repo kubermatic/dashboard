@@ -322,6 +322,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.getMachineDeployment())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript").
+		Handler(r.getMachineDeploymentJoinScript())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes").
 		Handler(r.listMachineDeploymentNodes())
 
@@ -3289,6 +3293,32 @@ func (r Routing) getMachineDeployment() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(machine.GetMachineDeployment(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
+		machine.DecodeGetMachineDeployment,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript project getMachineDeploymentJoinScript
+//
+//	Gets a machine deployment joining script for the edge provider.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: String
+//	  401: empty
+//	  403: empty
+func (r Routing) getMachineDeploymentJoinScript() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(machine.GetMachineDeploymentJoiningScript(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
 		machine.DecodeGetMachineDeployment,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
