@@ -267,7 +267,7 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	helm.sh/helm/v3 v3.14.0 // indirect
+	helm.sh/helm/v3 v3.14.1 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.0.0 // indirect
 	k8s.io/component-base v0.29.1 // indirect
 	k8s.io/gengo v0.0.0-20240129211411-f967bbeff4b4 // indirect
