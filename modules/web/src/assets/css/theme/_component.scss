@@ -28,7 +28,7 @@
 @import 'src/app/shared/components/addon-list/install-addon-dialog/theme';
 @import 'src/app/shared/components/addon-list/theme';
 @import 'src/app/shared/components/application-list/theme';
-@import 'src/app/shared/components/application-list/add-application-dialog/theme';
+@import 'src/app/shared/components/application-list/application-definition-card/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
 @import 'src/app/shared/components/number-stepper/theme';
@@ -67,7 +67,7 @@
   @include theme-quota-widget-component($colors);
   @include theme-install-addon-dialog-component($colors);
   @include theme-applications-list-component($colors);
-  @include theme-add-application-dialog-component($colors);
+  @include theme-application-definition-card-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-sidenav-field-component($colors);
   @include theme-version-picker-component($colors);

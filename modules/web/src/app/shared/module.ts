@@ -59,6 +59,7 @@ import {EKSClusterSelectComponent} from '@shared/components/add-external-cluster
 import {GKEClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
+import {ApplicationDefinitionCardComponent} from '@shared/components/application-list/application-definition-card/component';
 import {ApplicationMethodIconComponent} from '@shared/components/application-list/application-method-icon/component';
 import {ApplicationListComponent} from '@shared/components/application-list/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
@@ -256,6 +257,7 @@ const components = [
   AddApplicationDialogComponent,
   EditApplicationDialogComponent,
   ApplicationMethodIconComponent,
+  ApplicationDefinitionCardComponent,
   SelectComponent,
   TerminalComponent,
   TerminalToolBarComponent,

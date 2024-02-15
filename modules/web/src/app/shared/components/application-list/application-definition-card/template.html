@@ -1,0 +1,74 @@
+<!--
+Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="application-card"
+     fxLayout="row"
+     [ngClass]="{'selected': selected, 'selectable': isSelectable}">
+  <div class="application-logo-wrapper"
+       fxLayout="row"
+       fxLayoutAlign="center center">
+    <ng-container *ngIf="applicationDefinition.spec.logoData; else logoPlaceholder">
+      <img class="km-application-logo"
+           [src]="applicationDefinition.spec.logoData"
+           [alt]="applicationDefinition.name"
+           [matTooltip]="applicationDefinition.name">
+    </ng-container>
+    <ng-template #logoPlaceholder>
+      <i class="km-icon-application i-40"></i>
+    </ng-template>
+  </div>
+  <div fxLayout="column"
+       fxLayoutGap="10px"
+       class="application-details-wrapper">
+    <div class="application-title">
+      {{applicationDefinition.name}}
+    </div>
+    <div fxFlex
+         fxLayout="column"
+         fxLayoutAlign="space-between"
+         fxLayoutGap="10px">
+      <div *ngIf="applicationDefinition.spec?.description"
+           class="application-description">
+        {{applicationDefinition.spec?.description}}
+      </div>
+      <div *ngIf="displayLinks"
+           fxLayout="row"
+           fxLayoutGap="10px">
+        <a *ngIf="applicationDefinition.spec.documentationURL"
+           class="km-pointer"
+           [href]="applicationDefinition.spec.documentationURL"
+           target="_blank"
+           rel="noreferrer noopener"
+           fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="5px">
+          <i class="km-icon-docs"></i><span>Documentation</span>
+        </a>
+        <span *ngIf="applicationDefinition.spec.documentationURL && applicationDefinition.spec.sourceURL">-</span>
+        <a *ngIf="applicationDefinition.spec.sourceURL"
+           class="km-pointer"
+           [href]="applicationDefinition.spec.sourceURL"
+           target="_blank"
+           rel="noreferrer noopener"
+           fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="5px">
+          <i class="km-icon-code"></i><span>Source</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

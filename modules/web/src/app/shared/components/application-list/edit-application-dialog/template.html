@@ -20,21 +20,9 @@ limitations under the License.
     <p class="km-dialog-context-description">Edit <b>{{application.name}}</b> application
       <ng-container *ngIf="cluster"> of <b>{{cluster.name}}</b> cluster</ng-container>
     </p>
-    <div fxLayout="row"
-         fxLayoutGap="10px">
-      <a *ngIf="applicationDefinition?.spec?.documentationURL"
-         class="km-pointer"
-         [href]="applicationDefinition?.spec?.documentationURL"
-         fxLayoutAlign=" center"
-         target="_blank"
-         rel="noreferrer noopener">Documentation <i class="km-icon-external-link i-18"></i></a>
-      <a *ngIf="applicationDefinition?.spec?.sourceURL"
-         class="km-pointer"
-         [href]="applicationDefinition?.spec?.sourceURL"
-         fxLayoutAlign=" center"
-         target="_blank"
-         rel="noreferrer noopener">Source <i class="km-icon-external-link i-18"></i></a>
-    </div>
+    <km-application-definition-card *ngIf="applicationDefinition"
+                                    [applicationDefinition]="applicationDefinition"
+                                    [displayLinks]="true"></km-application-definition-card>
     <form *ngIf="form && !isLoadingDetails"
           [formGroup]="form">
       <div fxLayout="column"
@@ -43,17 +31,10 @@ limitations under the License.
           <div fxLayout="row"
                fxLayoutGap="10px"
                fxLayoutAlign=" flex-start">
-            <km-property>
+            <km-property *ngIf="!applicationDefinition">
               <div key>Application</div>
               <div value>
-                <img *ngIf="applicationDefinition?.spec?.logoData; else applicationDefName"
-                     class="km-application-logo"
-                     [src]="applicationDefinition.spec.logoData"
-                     [alt]="application.spec.applicationRef?.name"
-                     [matTooltip]="application.spec.applicationRef?.name">
-                <ng-template #applicationDefName>
-                  {{application.spec.applicationRef?.name}}
-                </ng-template>
+                {{application.spec.applicationRef?.name}}
               </div>
             </km-property>
             <div fxLayout="row"

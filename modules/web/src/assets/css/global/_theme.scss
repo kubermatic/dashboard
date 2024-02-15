@@ -20,14 +20,14 @@
     &:not(.mat-button-base) {
       color: map.get($colors, primary);
 
-      i.km-icon-external-link {
+      i[class*='km-icon-'] {
         background-color: map.get($colors, primary);
       }
 
       &:hover {
         color: map.get($colors, primary-hover);
 
-        i.km-icon-external-link {
+        i[class*='km-icon-'] {
           background-color: map.get($colors, primary-hover);
         }
       }
