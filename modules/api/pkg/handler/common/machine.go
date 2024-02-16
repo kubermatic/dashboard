@@ -293,7 +293,7 @@ func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provi
 	}
 
 	joiningScript := joiningScriptSecret.Data["fetch-bootstrap-script"]
-	if joiningScriptSecret == nil {
+	if len(joiningScript) == 0 {
 		return nil, errors.New("machine joining script is not found")
 	}
 
