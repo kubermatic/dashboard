@@ -1,4 +1,4 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'sass:map';
+import {Component, Input} from '@angular/core';
+import {ApplicationDefinition} from '@shared/entity/application';
 
-@mixin theme-add-application-dialog-component($colors) {
-  .application-option {
-    box-shadow: 0 0 0 1px map.get($colors, divider);
+@Component({
+  selector: 'km-application-definition-card',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+})
+export class ApplicationDefinitionCardComponent {
+  @Input() applicationDefinition: ApplicationDefinition;
+  @Input() isSelectable: boolean;
+  @Input() selected: boolean;
+  @Input() displayLinks: boolean;
 
-    &:hover {
-      box-shadow: 0 0 0 2px map.get($colors, secondary);
-    }
-
-    &.selected {
-      box-shadow: 0 0 0 2px map.get($colors, secondary);
-    }
-
-    .option-desc {
-      color: map.get($colors, text);
-    }
-  }
+  constructor() {}
 }

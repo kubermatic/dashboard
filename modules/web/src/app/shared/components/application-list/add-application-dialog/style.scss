@@ -15,44 +15,12 @@
 @use 'variables';
 
 .add-application-dialog-content {
-  .km-application-logo {
-    max-height: 100px;
-    max-width: 80%;
-  }
-
   .applications-search {
     margin-bottom: 20px;
 
     .km-search-input.mat-form-field {
       width: 100%;
     }
-  }
-
-  .application-option {
-    border-radius: variables.$border-radius;
-    cursor: pointer;
-    margin: 5px 0;
-    min-height: 100px;
-    padding: 14px;
-
-    &:hover {
-      transition: all 0.5s ease;
-    }
-
-    .option-title {
-      font-size: variables.$font-size-subhead;
-    }
-
-    .option-desc {
-      font-size: variables.$font-size-body;
-      line-height: 16px;
-      margin-top: 16px;
-    }
-  }
-
-  .application-settings-title {
-    font-size: variables.$font-size-card-title;
-    margin-bottom: 10px;
   }
 
   .application-settings-desc {

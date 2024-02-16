@@ -468,6 +468,18 @@
 
 .km-icon-application {
   @include mixins.mask-image('/assets/images/icons/application.svg', 24px);
+
+  &.i-40 {
+    @include mixins.size(40px, 40px, true);
+  }
+}
+
+.km-icon-code {
+  @include mixins.mask-image('/assets/images/icons/code.svg', 18px);
+}
+
+.km-icon-docs {
+  @include mixins.mask-image('/assets/images/icons/docs.svg', 18px);
 }
 
 .km-provider-logo-alibaba {

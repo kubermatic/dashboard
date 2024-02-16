@@ -41,19 +41,14 @@ limitations under the License.
           <km-search-field (queryChange)="onSearchQueryChanged($event)"></km-search-field>
         </div>
         <div fxFlex
-             fxLayout="row wrap"
+             fxLayout="column"
              fxLayoutAlign="space-between">
-          <div *ngFor="let installableApplication of applicationDefsDataSource.filteredData"
-               (click)="select(installableApplication)"
-               class="application-option"
-               fxFlex="49%"
-               [ngClass]="{'selected': selectedApplication?.name === installableApplication.name}">
-            <ng-container *ngTemplateOutlet="applicationLogo; context: {application: installableApplication, titleClass: 'option-title'}"></ng-container>
-            <div *ngIf="installableApplication.spec?.description"
-                 class="option-desc">
-              {{installableApplication.spec?.description}}
-            </div>
-          </div>
+          <ng-container *ngFor="let installableApplication of applicationDefsDataSource.filteredData">
+            <km-application-definition-card [applicationDefinition]="installableApplication"
+                                            [isSelectable]="true"
+                                            [selected]="selectedApplication?.name === installableApplication.name"
+                                            (click)="select(installableApplication)"></km-application-definition-card>
+          </ng-container>
         </div>
         <div *ngIf="!applicationDefsDataSource.filteredData?.length"
              class="km-no-data-message"
@@ -69,27 +64,8 @@ limitations under the License.
     </mat-step>
     <mat-step [label]="StepRegistry.Settings">
       <ng-container *ngIf="selectedApplication">
-        <ng-container *ngTemplateOutlet="applicationLogo; context: {application: selectedApplication, titleClass: 'application-settings-title'}"></ng-container>
-        <div class="application-settings-desc">
-          <p *ngIf="selectedApplication.spec?.description">
-            {{selectedApplication.spec?.description}}
-          </p>
-          <div fxLayout="row"
-               fxLayoutGap="10px">
-            <a *ngIf="selectedApplication.spec.documentationURL"
-               class="km-pointer"
-               [href]="selectedApplication.spec.documentationURL"
-               fxLayoutAlign=" center"
-               target="_blank"
-               rel="noreferrer noopener">Documentation <i class="km-icon-external-link i-18"></i></a>
-            <a *ngIf="selectedApplication.spec.sourceURL"
-               class="km-pointer"
-               [href]="selectedApplication.spec.sourceURL"
-               fxLayoutAlign=" center"
-               target="_blank"
-               rel="noreferrer noopener">Source <i class="km-icon-external-link i-18"></i></a>
-          </div>
-        </div>
+        <km-application-definition-card [applicationDefinition]="selectedApplication"
+                                        [displayLinks]="true"></km-application-definition-card>
         <form *ngIf="form && !isLoadingDetails"
               [formGroup]="form">
           <div fxFlex
@@ -200,18 +176,15 @@ limitations under the License.
     </mat-step>
   </mat-horizontal-stepper>
   <ng-template #applicationLogo
-               let-application="application"
-               let-titleClass="titleClass">
-    <ng-container *ngIf="application.spec.logoData; else applicationName">
+               let-application="application">
+    <ng-container *ngIf="application.spec.logoData; else logoPlaceholder">
       <img class="km-application-logo"
            [src]="application.spec.logoData"
            [alt]="application.name"
            [matTooltip]="application.name">
     </ng-container>
-    <ng-template #applicationName>
-      <div [ngClass]="titleClass">
-        {{application.name}}
-      </div>
+    <ng-template #logoPlaceholder>
+      <i class="km-icon-application i-40"></i>
     </ng-template>
   </ng-template>
 </div>
