@@ -202,7 +202,7 @@ func (req machineDeploymentReq) GetSeedCluster() apiv1.SeedCluster {
 }
 
 // machineDeploymentReq defines HTTP request for getMachineDeployment
-// swagger:parameters getMachineDeployment restartMachineDeployment
+// swagger:parameters getMachineDeployment restartMachineDeployment getMachineDeploymentJoinScript
 type machineDeploymentReq struct {
 	common.ProjectReq
 	// in: path

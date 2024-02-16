@@ -10652,6 +10652,61 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Gets a machine deployment joining script for the edge provider.",
+        "operationId": "getMachineDeploymentJoinScript",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "MachineDeploymentID",
+            "name": "machinedeployment_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JoiningScript",
+            "schema": {
+              "$ref": "#/definitions/JoiningScript"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes": {
       "get": {
         "produces": [
@@ -33082,6 +33137,11 @@
       "type": "string",
       "title": "JSONSchemaURL represents a schema url.",
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+    },
+    "JoiningScript": {
+      "description": "JoiningScript represent an encoded joining script for machines",
+      "type": "string",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Kind": {
       "type": "object",

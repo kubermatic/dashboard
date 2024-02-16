@@ -3308,7 +3308,7 @@ func (r Routing) getMachineDeployment() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: String
+//	  200: JoiningScript
 //	  401: empty
 //	  403: empty
 func (r Routing) getMachineDeploymentJoinScript() http.Handler {
