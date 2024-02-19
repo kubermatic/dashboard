@@ -99,7 +99,7 @@ limitations under the License.
             <button mat-menu-item
                     [ngClass]="{'remove-hover': !isClusterRunning || !isEditEnabled()}"
                     (click)="editProviderSettings()"
-                    *ngIf="!cluster.spec.cloud.bringyourown"
+                    *ngIf="!cluster.spec.cloud.bringyourown && !cluster.spec.cloud.edge"
                     [disabled]="!isClusterRunning || !isEditEnabled()">
               <span>Edit Provider</span>
             </button>

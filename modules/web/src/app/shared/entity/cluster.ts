@@ -24,6 +24,7 @@ export enum Provider {
   Azure = 'azure',
   kubeAdm = 'bringyourown',
   Digitalocean = 'digitalocean',
+  Edge = 'edge',
   GCP = 'gcp',
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
@@ -41,6 +42,7 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.Azure, 'Azure'],
   [Provider.kubeAdm, 'kubeAdm'],
   [Provider.Digitalocean, 'DigitalOcean'],
+  [Provider.Edge, 'Edge'],
   [Provider.GCP, 'Google Cloud'],
   [Provider.Hetzner, 'Hetzner'],
   [Provider.KubeVirt, 'KubeVirt'],
@@ -123,6 +125,7 @@ export class CloudSpec {
   alibaba?: AlibabaCloudSpec;
   anexia?: AnexiaCloudSpec;
   vmwareclouddirector?: VMwareCloudDirectorCloudSpec;
+  edge?: EdgeCloudSpec;
 }
 
 export class ExtraCloudSpecOptions {
@@ -329,6 +332,8 @@ export class VMwareCloudDirectorCSIConfig {
   storageProfile: string;
   filesystem: string;
 }
+
+export class EdgeCloudSpec {}
 
 export class ClusterSpec {
   cloud: CloudSpec;

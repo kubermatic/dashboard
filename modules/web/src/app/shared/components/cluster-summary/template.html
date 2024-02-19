@@ -280,7 +280,7 @@ limitations under the License.
       </div>
     </div>
 
-    <div *ngIf="!cluster.spec.cloud?.bringyourown && (cluster.credential || displaySettings())"
+    <div *ngIf="!cluster.spec.cloud?.bringyourown && !cluster.spec.cloud?.edge && (cluster.credential || displaySettings())"
          class="step">
       <div class="header"
            [ngClass]="clusterTemplateEditMode ? 'counter-2' : 'counter-3'">Settings</div>
@@ -563,7 +563,7 @@ limitations under the License.
     <div *ngIf="!cluster.spec.cloud?.bringyourown"
          class="step">
       <div class="header"
-           [ngClass]="clusterTemplateEditMode ? 'counter-3' : 'counter-4'">Initial Nodes</div>
+           [ngClass]="clusterTemplateEditMode || cluster.spec.cloud?.edge ? 'counter-3' : 'counter-4'">Initial Nodes</div>
       <div class="info-container">
         <div class="container-spacing">
           <div class="section-header">GENERAL</div>

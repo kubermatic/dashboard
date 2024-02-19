@@ -48,4 +48,6 @@ limitations under the License.
                              [formControl]="form.get(Control.ProviderBasic)"></km-anexia-basic-node-data>
   <km-vmware-cloud-director-basic-node-data *ngSwitchCase="Provider.VMWARECLOUDDIRECTOR"
                                             [formControl]="form.get(Control.ProviderBasic)"></km-vmware-cloud-director-basic-node-data>
+  <km-edge-basic-node-data *ngSwitchCase="Provider.EDGE"
+                           [formControl]="form.get(Control.ProviderBasic)"></km-edge-basic-node-data>
 </form>

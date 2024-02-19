@@ -374,7 +374,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Ubuntu:
         return !this.isProvider(NodeProvider.ANEXIA);
       case OperatingSystem.CentOS:
-        return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP, NodeProvider.VMWARECLOUDDIRECTOR);
+        return !this.isProvider(
+          NodeProvider.ANEXIA,
+          NodeProvider.GCP,
+          NodeProvider.VMWARECLOUDDIRECTOR,
+          NodeProvider.EDGE
+        );
       case OperatingSystem.RockyLinux:
         return this.isProvider(
           NodeProvider.AWS,
@@ -574,14 +579,22 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getNodeData(): NodeData {
-    return {
-      count: this.form.get(Controls.Count).value,
-      maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
-      minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
+    let data: NodeData = {
       name: this.form.get(Controls.Name).value,
       dynamicConfig: false,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
+
+    if (!this.isProvider(NodeProvider.EDGE)) {
+      data = {
+        ...data,
+        count: this.form.get(Controls.Count).value,
+        maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
+        minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
+      };
+    }
+
+    return data;
   }
 
   private getSupportedOperatingSystemProfiles(): string[] {

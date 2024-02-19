@@ -140,7 +140,7 @@ export class ClusterSummaryComponent {
       counter = bringyourownStepsCount;
     }
 
-    if (this.clusterTemplateEditMode) {
+    if (this.clusterTemplateEditMode || this.cluster.spec.cloud?.edge) {
       counter--;
     }
 

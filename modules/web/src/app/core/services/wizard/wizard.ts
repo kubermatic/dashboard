@@ -14,13 +14,13 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {StepRegistry, WizardStep, steps} from '@app/wizard/config';
+import {StepRegistry, steps, WizardStep} from '@app/wizard/config';
+import {ApplicationService} from '@core/services/application';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
-import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ApplicationService} from '@core/services/application';
 
 @Injectable()
 export class WizardService {
@@ -38,6 +38,9 @@ export class WizardService {
         case NodeProvider.BRINGYOUROWN:
           this._hideStep(StepRegistry.ProviderSettings);
           this._hideStep(StepRegistry.NodeSettings);
+          break;
+        case NodeProvider.EDGE:
+          this._hideStep(StepRegistry.ProviderSettings);
           break;
         default:
           this._showStep(StepRegistry.ProviderSettings);

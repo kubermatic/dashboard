@@ -79,4 +79,5 @@ export class ResourceQuotaCalculationPayload {
   openstackSize?: OpenstackFlavor;
   vmDirectorNodeSpec?: any;
   vSphereNodeSpec?: any;
+  edgeNodeSpec?: any;
 }

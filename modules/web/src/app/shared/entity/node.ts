@@ -79,6 +79,7 @@ export class NodeCloudSpec {
   alibaba?: AlibabaNodeSpec;
   anexia?: AnexiaNodeSpec;
   vmwareclouddirector?: VMwareCloudDirectorNodeSpec;
+  edge?: EdgeNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -312,6 +313,8 @@ export class VMwareCloudDirectorNodeSpec {
   sizingPolicy?: string;
 }
 
+export class EdgeNodeSpec {}
+
 export function getDefaultNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
@@ -415,6 +418,8 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         catalog: '',
         template: '',
       } as VMwareCloudDirectorNodeSpec;
+    case NodeProvider.EDGE:
+      return {} as EdgeNodeSpec;
   }
   return {};
 }

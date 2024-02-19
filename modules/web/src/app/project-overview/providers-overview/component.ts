@@ -47,6 +47,7 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
     {name: getProviderDisplayName(Provider.Azure), value: '#008ad7'},
     {name: getProviderDisplayName(Provider.kubeAdm), value: '#326ce5'},
     {name: getProviderDisplayName(Provider.Digitalocean), value: '#008bcf'},
+    {name: getProviderDisplayName(Provider.Edge), value: '#59f2f9'},
     {name: getProviderDisplayName(Provider.GCP), value: '#32a350'},
     {name: getProviderDisplayName(Provider.Hetzner), value: '#d50c2dff'},
     {name: getProviderDisplayName(Provider.KubeVirt), value: '#00aab2'},
