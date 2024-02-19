@@ -553,15 +553,6 @@ func genWebTerminalPod(userAppName, userEmailID string) *corev1.Pod {
 		},
 	}
 
-	pod.Spec.SecurityContext = &corev1.PodSecurityContext{
-		RunAsUser:  resources.Int64(12345),
-		RunAsGroup: resources.Int64(23456),
-		FSGroup:    resources.Int64(2000),
-		SeccompProfile: &corev1.SeccompProfile{
-			Type: corev1.SeccompProfileTypeRuntimeDefault,
-		},
-	}
-
 	return pod
 }
 
@@ -639,14 +630,6 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 						},
 					},
 					RestartPolicy: corev1.RestartPolicyOnFailure,
-					SecurityContext: &corev1.PodSecurityContext{
-						RunAsUser:  resources.Int64(1000),
-						RunAsGroup: resources.Int64(3000),
-						FSGroup:    resources.Int64(2000),
-						SeccompProfile: &corev1.SeccompProfile{
-							Type: corev1.SeccompProfileTypeRuntimeDefault,
-						},
-					},
 				},
 			},
 		},
