@@ -1,25 +1,4 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2242",
-  "entries": [
-    {
-      "category": "added",
-      "description": "Add support for Kubernetes v1.26.13, v1.27.10 and v1.28.6."
-    },
-    {
-      "category": "changed",
-      "description": "Set default Kubernetes version to v1.27.10."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug where Operating System Profiles were not being listed for GCP/GCE."
-    },
-    {
-      "category": "fixed",
-      "description": "Stop constantly re-deploying operating-system-manager when registry mirrors are configured."
-    },
-    {
-      "category": "removed",
-      "description": "Remove 1.25 from list of supported versions on AKS."
-    }
-  ]
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2243",
+  "entries": []
 }
