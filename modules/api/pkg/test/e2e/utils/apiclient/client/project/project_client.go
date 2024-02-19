@@ -178,6 +178,8 @@ type ClientService interface {
 
 	GetMachineDeployment(params *GetMachineDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetMachineDeploymentOK, error)
 
+	GetMachineDeploymentJoinScript(params *GetMachineDeploymentJoinScriptParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetMachineDeploymentJoinScriptOK, error)
+
 	GetNodeDeployment(params *GetNodeDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetNodeDeploymentOK, error)
 
 	GetOidcClusterKubeconfig(params *GetOidcClusterKubeconfigParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOidcClusterKubeconfigOK, error)
@@ -3198,6 +3200,44 @@ func (a *Client) GetMachineDeployment(params *GetMachineDeploymentParams, authIn
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetMachineDeploymentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetMachineDeploymentJoinScript gets a machine deployment joining script for the edge provider
+*/
+func (a *Client) GetMachineDeploymentJoinScript(params *GetMachineDeploymentJoinScriptParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetMachineDeploymentJoinScriptOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetMachineDeploymentJoinScriptParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getMachineDeploymentJoinScript",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetMachineDeploymentJoinScriptReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetMachineDeploymentJoinScriptOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetMachineDeploymentJoinScriptDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

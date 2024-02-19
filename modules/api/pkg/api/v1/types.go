@@ -2962,3 +2962,7 @@ type MeteringReportConfiguration struct {
 // ReportURL represent an S3 pre signed URL to download a report
 // swagger:model MeteringReportURL
 type ReportURL string
+
+// JoiningScript represent an encoded joining script for machines
+// swagger:model JoiningScript
+type JoiningScript string

@@ -187,6 +187,13 @@ func GetMachineDeployment(projectProvider provider.ProjectProvider, privilegedPr
 	}
 }
 
+func GetMachineDeploymentJoiningScript(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(machineDeploymentReq)
+		return handlercommon.GetMachineDeploymentJoiningScript(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID, req.MachineDeploymentID)
+	}
+}
+
 // GetSeedCluster returns the SeedCluster object.
 func (req machineDeploymentReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
@@ -195,7 +202,7 @@ func (req machineDeploymentReq) GetSeedCluster() apiv1.SeedCluster {
 }
 
 // machineDeploymentReq defines HTTP request for getMachineDeployment
-// swagger:parameters getMachineDeployment restartMachineDeployment
+// swagger:parameters getMachineDeployment restartMachineDeployment getMachineDeploymentJoinScript
 type machineDeploymentReq struct {
 	common.ProjectReq
 	// in: path

@@ -18,7 +18,9 @@ package common
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -28,6 +30,7 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	"github.com/kubermatic/machine-controller/pkg/bootstrap"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -264,6 +267,40 @@ func GetMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoG
 	}
 
 	return OutputMachineDeployment(machineDeployment)
+}
+
+func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string) (interface{}, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	cluster, err := GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := common.GetClusterClient(ctx, userInfoGetter, clusterProvider, cluster, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	machineDeployment := &clusterv1alpha1.MachineDeployment{}
+	if err := client.Get(ctx, types.NamespacedName{Namespace: metav1.NamespaceSystem, Name: machineDeploymentID}, machineDeployment); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	scriptSecretName := fmt.Sprintf("edge-provider-script-%s-%s", machineDeployment.Name, bootstrap.CloudInitSettingsNamespace)
+	joiningScriptSecret := &corev1.Secret{}
+	if err := client.Get(ctx, types.NamespacedName{Name: scriptSecretName, Namespace: bootstrap.CloudInitSettingsNamespace}, joiningScriptSecret); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	joiningScript := joiningScriptSecret.Data["fetch-bootstrap-script"]
+	if len(joiningScript) == 0 {
+		return nil, errors.New("machine joining script is not found")
+	}
+
+	encodedJoiningScript := []byte{}
+	base64.StdEncoding.Encode(encodedJoiningScript, joiningScript)
+
+	return string(encodedJoiningScript), nil
 }
 
 func ListMachineDeploymentNodes(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string, hideInitialConditions bool) (interface{}, error) {
