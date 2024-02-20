@@ -18,6 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {BSLListState} from '@app/wizard/step/cluster/component';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -100,7 +101,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isKubeLBEnforced = false;
   isKubeLBEnabled = false;
   isCSIDriverDisabled = false;
-  backupStorageLocationsList: string[];
+  backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
@@ -372,7 +373,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList.map(cbsl => cbsl.name);
+        this.backupStorageLocationsList = cbslList;
         this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
       });
   }
