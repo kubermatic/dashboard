@@ -1447,6 +1447,7 @@ type NodeCloudSpec struct {
 	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
 	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
 	Packet              *PacketNodeSpec              `json:"packet,omitempty"`
+	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
 	VSphere             *VSphereNodeSpec             `json:"vsphere,omitempty"`
 	GCP                 *GCPNodeSpec                 `json:"gcp,omitempty"`
@@ -1977,6 +1978,15 @@ func (spec *PacketNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(&res)
+}
+
+// EdgeNodeSpec specifies edge specific node settings
+// swagger:model EdgeNodeSpec
+type EdgeNodeSpec struct{}
+
+func (spec *EdgeNodeSpec) MarshalJSON() ([]byte, error) {
+	// currently there are no specs for the edge provider MD.
+	return nil, nil
 }
 
 // GCPNodeSpec gcp specific node settings

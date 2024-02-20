@@ -30692,6 +30692,11 @@
       "title": "EdgeCloudSpec specifies access data for an edge cluster.",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "EdgeNodeSpec": {
+      "description": "EdgeNodeSpec specifies edge specific node settings",
+      "type": "object",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "ErrorDetails": {
       "type": "object",
       "title": "ErrorDetails contains details about the error.",
@@ -34696,6 +34701,9 @@
         },
         "digitalocean": {
           "$ref": "#/definitions/DigitaloceanNodeSpec"
+        },
+        "edge": {
+          "$ref": "#/definitions/EdgeNodeSpec"
         },
         "gcp": {
           "$ref": "#/definitions/GCPNodeSpec"
