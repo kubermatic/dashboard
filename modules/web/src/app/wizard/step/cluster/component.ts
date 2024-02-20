@@ -76,6 +76,7 @@ import {
 } from './cilium-application-values-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {ProjectService} from '@app/core/services/project';
+import {BackupStorageLocation} from '@app/shared/entity/backup';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -163,7 +164,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   loadingClusterDefaults = false;
   canEditCNIValues: boolean;
   cniApplicationValues: string;
-  backupStorageLocationsList: string[];
+  backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
@@ -302,6 +303,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((value: boolean) => {
         if (value) {
           this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
+          this._handelClusterBackupChange();
         } else {
           this.form.removeControl(Controls.BackupStorageLocation);
         }
@@ -380,12 +382,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
-
-    if (this.control(Controls.BackupStorageLocation).status) {
-      this.control(Controls.BackupStorageLocation)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
-    }
 
     if (!this.cniApplicationValues) {
       this._applicationService
@@ -856,9 +852,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .listBackupStorageLocation(projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cbslList => {
-        this.backupStorageLocationsList = cbslList.map(cbsl => cbsl.name);
+        this.backupStorageLocationsList = cbslList;
         this.backupStorageLocationLabel = cbslList.length ? BSLListState.Ready : BSLListState.Empty;
       });
+  }
+
+  private _handelClusterBackupChange(): void {
+    this.form
+      .get(Controls.BackupStorageLocation)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   private _getClusterEntity(): Cluster {
@@ -936,7 +939,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (this.controlValue(Controls.ClusterBackup)) {
       clusterObject.spec.backupConfig = {
         backupStorageLocation: {
-          name: this.control(Controls.BackupStorageLocation).value,
+          name: this.controlValue(Controls.BackupStorageLocation),
         },
       };
     } else {

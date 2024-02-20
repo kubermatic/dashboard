@@ -30,7 +30,7 @@ END OF TERMS AND CONDITIONS
          class="km-copy">{{getcbContent()}}</b>
       {{type}} permanently?
     </p>
-    <p *ngIf="(backups?.length > 1) && !!bslName">
+    <p *ngIf="(backups?.length > 1)">
       Type
       <b ngxClipboard
          [cbContent]="getcbContent()"

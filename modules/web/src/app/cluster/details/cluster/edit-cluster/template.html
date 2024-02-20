@@ -244,7 +244,7 @@ limitations under the License.
         <mat-select [formControlName]="Controls.BackupStorageLocation"
                     disableOptionCentering>
           <mat-option *ngFor="let bsl of backupStorageLocationsList"
-                      [value]="bsl">{{bsl}}
+                      [value]="bsl.name">{{bsl.displayName}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="form.get(Controls.BackupStorageLocation).hasError('required')">
