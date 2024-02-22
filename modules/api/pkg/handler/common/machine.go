@@ -286,7 +286,7 @@ func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provi
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	scriptSecretName := fmt.Sprintf("edge-provider-script-%s-%s", machineDeployment.Name, bootstrap.CloudInitSettingsNamespace)
+	scriptSecretName := fmt.Sprintf("edge-provider-script-%s-%s", machineDeployment.Name, machineDeployment.Namespace)
 	joiningScriptSecret := &corev1.Secret{}
 	if err := client.Get(ctx, types.NamespacedName{Name: scriptSecretName, Namespace: bootstrap.CloudInitSettingsNamespace}, joiningScriptSecret); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -297,10 +297,7 @@ func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provi
 		return nil, errors.New("machine joining script is not found")
 	}
 
-	encodedJoiningScript := []byte{}
-	base64.StdEncoding.Encode(encodedJoiningScript, joiningScript)
-
-	return string(encodedJoiningScript), nil
+	return base64.StdEncoding.EncodeToString(joiningScript), nil
 }
 
 func ListMachineDeploymentNodes(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string, hideInitialConditions bool) (interface{}, error) {

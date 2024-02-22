@@ -1986,7 +1986,12 @@ type EdgeNodeSpec struct{}
 
 func (spec *EdgeNodeSpec) MarshalJSON() ([]byte, error) {
 	// currently there are no specs for the edge provider MD.
-	return nil, nil
+	res := struct {
+		Description string `json:"description"`
+	}{
+		Description: "External Node",
+	}
+	return json.Marshal(&res)
 }
 
 // GCPNodeSpec gcp specific node settings
