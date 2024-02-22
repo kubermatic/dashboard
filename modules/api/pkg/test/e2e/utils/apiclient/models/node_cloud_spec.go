@@ -33,6 +33,9 @@ type NodeCloudSpec struct {
 	// digitalocean
 	Digitalocean *DigitaloceanNodeSpec `json:"digitalocean,omitempty"`
 
+	// edge
+	Edge EdgeNodeSpec `json:"edge,omitempty"`
+
 	// gcp
 	Gcp *GCPNodeSpec `json:"gcp,omitempty"`
 

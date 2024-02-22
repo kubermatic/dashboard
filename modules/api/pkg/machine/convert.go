@@ -301,6 +301,8 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		for _, v := range config.Tags {
 			cloudSpec.Packet.Tags = append(cloudSpec.Packet.Tags, v.Value)
 		}
+	case providerconfig.CloudProviderEdge:
+		cloudSpec.Edge = &apiv1.EdgeNodeSpec{}
 	case providerconfig.CloudProviderGoogle:
 		config := &gce.CloudProviderSpec{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {

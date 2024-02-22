@@ -228,6 +228,9 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 		if err != nil {
 			return nil, err
 		}
+	case nd.Spec.Template.Cloud.Edge != nil && dc.Spec.Edge != nil:
+		config.CloudProvider = providerconfig.CloudProviderEdge
+		cloudExt = &runtime.RawExtension{}
 	case nd.Spec.Template.Cloud.GCP != nil && dc.Spec.GCP != nil:
 		config.CloudProvider = providerconfig.CloudProviderGoogle
 		cloudExt, err = getGCPProviderSpec(c, nd.Spec.Template, dc)
@@ -387,6 +390,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 		nd.Spec.Template.Cloud.Alibaba == nil &&
 		nd.Spec.Template.Cloud.Anexia == nil &&
 		nd.Spec.Template.Cloud.Nutanix == nil &&
+		nd.Spec.Template.Cloud.Edge == nil &&
 		nd.Spec.Template.Cloud.VMwareCloudDirector == nil {
 		return nil, fmt.Errorf("node deployment needs to have cloud provider data")
 	}
