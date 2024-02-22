@@ -297,10 +297,7 @@ func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provi
 		return nil, errors.New("machine joining script is not found")
 	}
 
-	encodedJoiningScript := []byte{}
-	base64.StdEncoding.Encode(encodedJoiningScript, joiningScript)
-
-	return string(encodedJoiningScript), nil
+	return base64.StdEncoding.EncodeToString(joiningScript), nil
 }
 
 func ListMachineDeploymentNodes(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string, hideInitialConditions bool) (interface{}, error) {
