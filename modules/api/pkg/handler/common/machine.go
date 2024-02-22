@@ -286,7 +286,7 @@ func GetMachineDeploymentJoiningScript(ctx context.Context, userInfoGetter provi
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	scriptSecretName := fmt.Sprintf("edge-provider-script-%s-%s", machineDeployment.Name, bootstrap.CloudInitSettingsNamespace)
+	scriptSecretName := fmt.Sprintf("edge-provider-script-%s-%s", machineDeployment.Name, machineDeployment.Namespace)
 	joiningScriptSecret := &corev1.Secret{}
 	if err := client.Get(ctx, types.NamespacedName{Name: scriptSecretName, Namespace: bootstrap.CloudInitSettingsNamespace}, joiningScriptSecret); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
