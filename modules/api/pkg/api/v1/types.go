@@ -1084,6 +1084,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 			Fake:                newPublicFakeCloudSpec(cs.Cloud.Fake),
 			Digitalocean:        newPublicDigitaloceanCloudSpec(cs.Cloud.Digitalocean),
 			BringYourOwn:        newPublicBringYourOwnCloudSpec(cs.Cloud.BringYourOwn),
+			Edge:                newPublicEdgeCloudSpec(cs.Cloud.Edge),
 			AWS:                 newPublicAWSCloudSpec(cs.Cloud.AWS),
 			Azure:               newPublicAzureCloudSpec(cs.Cloud.Azure),
 			Openstack:           newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
@@ -1134,6 +1135,7 @@ type PublicCloudSpec struct {
 	Fake                *PublicFakeCloudSpec                `json:"fake,omitempty"`
 	Digitalocean        *PublicDigitaloceanCloudSpec        `json:"digitalocean,omitempty"`
 	BringYourOwn        *PublicBringYourOwnCloudSpec        `json:"bringyourown,omitempty"`
+	Edge                *PublicEdgeCloudSpec                `json:"edge,omitempty"`
 	AWS                 *PublicAWSCloudSpec                 `json:"aws,omitempty"`
 	Azure               *PublicAzureCloudSpec               `json:"azure,omitempty"`
 	Openstack           *PublicOpenstackCloudSpec           `json:"openstack,omitempty"`
@@ -1218,6 +1220,17 @@ func newPublicBringYourOwnCloudSpec(internal *kubermaticv1.BringYourOwnCloudSpec
 	}
 
 	return &PublicBringYourOwnCloudSpec{}
+}
+
+// PublicEdgeCloudSpec is a public counterpart of apiv1.EdgeCloudSpec.
+type PublicEdgeCloudSpec struct{}
+
+func newPublicEdgeCloudSpec(internal *kubermaticv1.EdgeCloudSpec) (public *PublicEdgeCloudSpec) {
+	if internal == nil {
+		return nil
+	}
+
+	return &PublicEdgeCloudSpec{}
 }
 
 // PublicAWSCloudSpec is a public counterpart of apiv1.AWSCloudSpec.
