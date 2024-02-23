@@ -27218,6 +27218,11 @@
         "defaultValues": {
           "$ref": "#/definitions/RawExtension"
         },
+        "defaultValuesBlock": {
+          "description": "DefaultValuesBlock specify values overrides for manifest-rendering in UI when creating an application. Comments not preserved.\nPreserves yaml comments.",
+          "type": "string",
+          "x-go-name": "DefaultValuesBlock"
+        },
         "description": {
           "description": "Description of the application. what is its purpose",
           "type": "string",
