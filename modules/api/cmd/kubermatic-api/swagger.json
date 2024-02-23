@@ -36882,6 +36882,9 @@
         "digitalocean": {
           "$ref": "#/definitions/PublicDigitaloceanCloudSpec"
         },
+        "edge": {
+          "$ref": "#/definitions/PublicEdgeCloudSpec"
+        },
         "fake": {
           "$ref": "#/definitions/PublicFakeCloudSpec"
         },
@@ -36915,6 +36918,11 @@
     "PublicDigitaloceanCloudSpec": {
       "type": "object",
       "title": "PublicDigitaloceanCloudSpec is a public counterpart of apiv1.DigitaloceanCloudSpec.",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "PublicEdgeCloudSpec": {
+      "type": "object",
+      "title": "PublicEdgeCloudSpec is a public counterpart of apiv1.EdgeCloudSpec.",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicFakeCloudSpec": {

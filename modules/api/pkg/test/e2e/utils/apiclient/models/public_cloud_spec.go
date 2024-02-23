@@ -39,6 +39,9 @@ type PublicCloudSpec struct {
 	// digitalocean
 	Digitalocean PublicDigitaloceanCloudSpec `json:"digitalocean,omitempty"`
 
+	// edge
+	Edge PublicEdgeCloudSpec `json:"edge,omitempty"`
+
 	// fake
 	Fake PublicFakeCloudSpec `json:"fake,omitempty"`
 
