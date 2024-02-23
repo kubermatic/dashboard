@@ -19,6 +19,10 @@ import (
 // swagger:model ApplicationDefinitionSpec
 type ApplicationDefinitionSpec struct {
 
+	// DefaultValuesBlock specify values overrides for manifest-rendering in UI when creating an application. Comments not preserved.
+	// Preserves yaml comments.
+	DefaultValuesBlock string `json:"defaultValuesBlock,omitempty"`
+
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
 
