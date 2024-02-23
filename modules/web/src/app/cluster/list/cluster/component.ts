@@ -353,7 +353,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _loadMachineDeployments(cluster: Cluster): void {
-    if (Health.allHealthy(this.health[cluster.id]) && !cluster.deletionTimestamp) {
+    if (Health.allHealthy(this.health[cluster.id], Cluster.getProvider(cluster)) && !cluster.deletionTimestamp) {
       this._machineDeploymentService
         .list(cluster.id, this._selectedProject.id)
         .pipe(takeUntil(this._unsubscribe))

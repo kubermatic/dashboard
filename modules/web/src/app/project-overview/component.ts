@@ -244,7 +244,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadClusterMachineDeployments(cluster: Cluster): void {
-    if (Health.allHealthy(this.clusterHealth[cluster.id]) && !cluster.deletionTimestamp) {
+    if (Health.allHealthy(this.clusterHealth[cluster.id], Cluster.getProvider(cluster)) && !cluster.deletionTimestamp) {
       this._machineDeploymentService
         .list(cluster.id, this.project.id)
         .pipe(takeUntil(this._unsubscribe))

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Provider} from '@shared/entity/cluster';
+
 export class Health {
   apiserver: HealthState;
   controller: HealthState;
@@ -29,16 +31,18 @@ export class Health {
   kubernetesDashboard?: HealthState;
   operatingSystemManager?: HealthState;
 
-  static allHealthy(health: Health): boolean {
+  static allHealthy(health: Health, provider: Provider): boolean {
     const supported = [
       health.apiserver,
       health.controller,
       health.etcd,
-      health.machineController,
       health.scheduler,
       health.cloudProviderInfrastructure,
       health.userClusterControllerManager,
     ];
+    if (provider !== Provider.Edge) {
+      supported.push(health.machineController);
+    }
 
     return supported.every(status => HealthState.isUp(status));
   }

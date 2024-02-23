@@ -58,7 +58,7 @@ export function getClusterHealthStatus(c: Cluster, h: Health): HealthStatus {
 }
 
 export function isClusterRunning(c: Cluster, h: Health): boolean {
-  return !!c && !!h && Health.allHealthy(h) && !c.deletionTimestamp;
+  return !!c && !!h && Health.allHealthy(h, Cluster.getProvider(c)) && !c.deletionTimestamp;
 }
 
 export function isClusterAPIRunning(c: Cluster, h: Health): boolean {
