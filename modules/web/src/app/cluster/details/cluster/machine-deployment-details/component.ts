@@ -52,16 +52,16 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   system: string;
   systemLogoClass: string;
   projectID: string;
+  machineDeploymentID: string;
+  clusterName: string;
 
   private readonly _refreshTime = 10;
-  private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
   private _areNodesLoaded = false;
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
-  private _clusterName: string;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
 
@@ -78,8 +78,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterName = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
-    this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
+    this.clusterName = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this.machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
@@ -103,7 +103,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadMachineDeployment(): void {
     this._machineDeploymentService
-      .get(this._machineDeploymentID, this._clusterName, this.projectID)
+      .get(this.machineDeploymentID, this.clusterName, this.projectID)
       .pipe(take(1))
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;
@@ -116,7 +116,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodes(): void {
     this._machineDeploymentService
-      .getNodes(this._machineDeploymentID, this._clusterName, this.projectID)
+      .getNodes(this.machineDeploymentID, this.clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(n => {
         this.nodes = n;
@@ -126,7 +126,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._machineDeploymentService
-      .getNodesEvents(this._machineDeploymentID, this._clusterName, this.projectID)
+      .getNodesEvents(this.machineDeploymentID, this.clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(e => {
         this.events = e;
@@ -136,14 +136,14 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesMetrics(): void {
     this._machineDeploymentService
-      .getNodesMetrics(this._machineDeploymentID, this._clusterName, this.projectID)
+      .getNodesMetrics(this.machineDeploymentID, this.clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(metrics => this._storeNodeMetrics(metrics));
   }
 
   loadCluster(): void {
     this._clusterService
-      .cluster(this.projectID, this._clusterName)
+      .cluster(this.projectID, this.clusterName)
       .pipe(take(1))
       .subscribe(c => {
         this.cluster = c;
@@ -178,7 +178,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this._clusterName]);
+    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.clusterName]);
   }
 
   isEditEnabled(): boolean {

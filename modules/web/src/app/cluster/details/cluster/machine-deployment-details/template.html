@@ -32,6 +32,10 @@ limitations under the License.
       </mat-card-title>
       <div fxFlex></div>
       <div fxLayout="row">
+        <km-copy-joining-script-button *ngIf="machineDeployment.spec?.template.cloud?.edge"
+                                       [machineDeploymentID]="machineDeploymentID"
+                                       [clusterName]="clusterName"
+                                       [projectID]="projectID"></km-copy-joining-script-button>
         <button mat-icon-button
                 color="tertiary"
                 (click)="showRestartDialog()"

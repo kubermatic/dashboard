@@ -82,4 +82,9 @@ export class MachineDeploymentService {
     const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
     return this._httpClient.get<Event[]>(url);
   }
+
+  getJoiningScript(mdId: string, cluster: string, projectID: string): Observable<string> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/joiningscript`;
+    return this._httpClient.get<string>(url);
+  }
 }

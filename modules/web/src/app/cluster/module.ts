@@ -15,6 +15,7 @@
 import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/details/cluster/add-machine-network/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/anexia-provider-settings/component';
+import {CopyJoiningScriptButtonComponent} from '@app/cluster/details/cluster/machine-deployment-details/copy-joining-script-button/component';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
@@ -153,6 +154,7 @@ const components: any[] = [
   RBACServiceAccountComponent,
   RBACServiceAccountDetailsComponent,
   RBACUsersOrGroupsComponent,
+  CopyJoiningScriptButtonComponent,
 ];
 
 @NgModule({
