@@ -282,6 +282,8 @@ func (p *ClusterProvider) Get(ctx context.Context, userInfo *provider.UserInfo, 
 	}
 	if options.CheckInitStatus {
 		healthCheck := cluster.Status.ExtendedHealth
+		// If the edge provider is used, machine controller is not deployed as part of the cluster control plane which means
+		// the health checks for machine controller is not needed thus we skip it.
 		if cluster.Spec.Cloud.ProviderName == string(kubermaticv1.EdgeCloudProvider) {
 			if !healthCheck.ControlPlaneHealthy() ||
 				healthCheck.CloudProviderInfrastructure != kubermaticv1.HealthStatusUp ||
@@ -480,6 +482,8 @@ func (p *ClusterProvider) GetUnsecured(ctx context.Context, project *kubermaticv
 	if cluster.Labels[kubermaticv1.ProjectIDLabelKey] == project.Name {
 		if options.CheckInitStatus {
 			healthCheck := cluster.Status.ExtendedHealth
+			// If the edge provider is used, machine controller is not deployed as part of the cluster control plane which means
+			// the health checks for machine controller is not needed thus we skip it.
 			if cluster.Spec.Cloud.ProviderName == string(kubermaticv1.EdgeCloudProvider) {
 				if !healthCheck.ControlPlaneHealthy() ||
 					healthCheck.CloudProviderInfrastructure != kubermaticv1.HealthStatusUp ||
