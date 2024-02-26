@@ -393,7 +393,8 @@ limitations under the License.
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
             </div>
 
-            <mat-checkbox [formControlName]="Controls.ClusterBackup">
+            <mat-checkbox [formControlName]="Controls.ClusterBackup"
+                          *ngIf="isclusterBackupEnabled">
               Cluster Backup
               <i class="km-icon-info km-pointer"
                  matTooltip="Enable create backups from this cluster"></i>
@@ -402,7 +403,7 @@ limitations under the License.
               </mat-chip>
             </mat-checkbox>
 
-            <mat-form-field *ngIf="!!controlValue(Controls.ClusterBackup)">
+            <mat-form-field *ngIf="!!controlValue(Controls.ClusterBackup) && isclusterBackupEnabled">
               <mat-label>{{backupStorageLocationLabel}}</mat-label>
               <mat-select [formControlName]="Controls.BackupStorageLocation"
                           disableOptionCentering>

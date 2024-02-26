@@ -81,7 +81,7 @@ import {BackupStorageLocation} from '@app/shared/entity/backup';
 export enum BSLListState {
   Ready = 'Backup Storage Location',
   Loading = 'Loading...',
-  Empty = 'No Backups Available',
+  Empty = 'No Backup Storage Locations Available',
 }
 
 enum Controls {
@@ -185,6 +185,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;
+  }
+
+  get isclusterBackupEnabled(): boolean {
+    return this._settings.enableClusterBackups;
   }
 
   constructor(

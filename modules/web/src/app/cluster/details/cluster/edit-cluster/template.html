@@ -227,7 +227,9 @@ limitations under the License.
            [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.ClusterBackup">
+      <mat-checkbox [formControlName]="Controls.ClusterBackup"
+                    *ngIf="isclusterBackupEnabled"
+                    kmValueChangedIndicator>
         Cluster Backup
         <i class="km-icon-info km-pointer"
            matTooltip="Enable create backups from this cluster"></i>
@@ -238,11 +240,12 @@ limitations under the License.
         </mat-chip>
       </mat-checkbox>
 
-      <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value"
+      <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled"
                       class="bsl-field">
-        <mat-label>{{backupStorageLocationLabel}}"</mat-label>
+        <mat-label>{{backupStorageLocationLabel}}</mat-label>
         <mat-select [formControlName]="Controls.BackupStorageLocation"
-                    disableOptionCentering>
+                    disableOptionCentering
+                    kmValueChangedIndicator>
           <mat-option *ngFor="let bsl of backupStorageLocationsList"
                       [value]="bsl.name">{{bsl.displayName}}
           </mat-option>
