@@ -32,6 +32,7 @@ export enum NodeProvider {
   NUTANIX = 'nutanix',
   VSPHERE = 'vsphere',
   VMWARECLOUDDIRECTOR = 'vmwareclouddirector',
+  EDGE = 'edge',
   NONE = '',
 }
 
@@ -68,6 +69,7 @@ export namespace NodeProviderConstants {
     [NodeProvider.VSPHERE, 'VSphere'],
     [NodeProvider.NUTANIX, 'Nutanix'],
     [NodeProvider.VMWARECLOUDDIRECTOR, 'VMware Cloud Director'],
+    [NodeProvider.EDGE, 'Edge'],
   ]);
 
   export function displayName(provider: NodeProvider): string {

@@ -24,6 +24,7 @@ import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-i
 import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
 import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
 import {AnexiaBasicNodeDataComponent} from '@app/node-data/basic/provider/anexia/component';
+import {EdgeBasicNodeDataComponent} from '@app/node-data/basic/provider/edge/component';
 import {VSphereTagsComponent} from '@app/node-data/extended/provider/vsphere/tag-categories/component';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SharedModule} from '@shared/module';
@@ -86,6 +87,7 @@ const components = [
   VMwareCloudDirectorBasicNodeDataComponent,
   TopologySpreadConstraintFormComponent,
   VSphereTagsComponent,
+  EdgeBasicNodeDataComponent,
 ];
 
 // component NodeDataComponent is added to routing module so we can use our dynamic component here

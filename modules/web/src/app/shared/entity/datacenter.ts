@@ -51,6 +51,7 @@ export class DatacenterSpec {
   alibaba?: AlibabaDatacenterSpec;
   anexia?: AnexiaDatacenterSpec;
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
+  edge?: EdgeDatacenterSpec;
   operatingSystemProfiles?: DatacenterOperatingSystemOptions;
   machineFlavorFilter?: MachineFlavorFilter;
   disableCsiDriver?: boolean;
@@ -148,6 +149,8 @@ export class VMwareCloudDirectorDatacenterSpec {
   storageProfile?: string;
   templates: DatacenterOperatingSystemOptions;
 }
+
+export class EdgeDatacenterSpec {}
 
 export class SeedSettings {
   mla: MLA;
