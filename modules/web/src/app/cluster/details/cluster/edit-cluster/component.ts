@@ -16,7 +16,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
-import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {BSLListState} from '@app/wizard/step/cluster/component';
@@ -119,6 +118,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     return this._settings.enableDashboard;
   }
 
+  get isclusterBackupEnabled(): boolean {
+    return this._settings.enableClusterBackups;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _clusterService: ClusterService,
@@ -126,7 +129,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
-    private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService
   ) {}
 
@@ -177,6 +179,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this._builder.control(this.cluster.spec?.backupConfig?.backupStorageLocation?.name, Validators.required)
       );
     }
+    this._getCBSL(this.projectID);
 
     this.form
       .get(Controls.ClusterBackup)
@@ -227,10 +230,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .getAdmissionPlugins(this.cluster.spec.version)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.admissionPlugins = plugins));
-
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => this._getCBSL(project.id));
 
     this.checkForLegacyAdmissionPlugins();
 
