@@ -393,10 +393,46 @@ limitations under the License.
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
             </div>
 
-            <mat-checkbox [formControlName]="Controls.UserSSHKeyAgent">
-              User SSH Key Agent
+            <mat-checkbox [formControlName]="Controls.ClusterBackup">
+              Cluster Backup
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>
+                 matTooltip="Enable create backups from this cluster"></i>
+              <mat-chip>
+                <div>Experimental</div>
+              </mat-chip>
+            </mat-checkbox>
+
+            <mat-form-field *ngIf="!!controlValue(Controls.ClusterBackup)">
+              <mat-label>{{backupStorageLocationLabel}}</mat-label>
+              <mat-select [formControlName]="Controls.BackupStorageLocation"
+                          disableOptionCentering>
+                <mat-option *ngFor="let bsl of backupStorageLocationsList"
+                            [value]="bsl.name">{{bsl.displayName}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get(Controls.BackupStorageLocation).hasError('required')">
+                <strong>Required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox [formControlName]="Controls.DisableCSIDriver"
+                          [disabled]="isCSIDriverDisabled">
+              Disable CSI Driver
+              <i class="km-icon-info km-pointer"
+                 [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.KubeLB"
+                          *ngIf="isEnterpriseEdition && isKubeLBEnabled"
+                          [disabled]="isKubeLBEnforced">
+              Kubermatic KubeLB
+              <i class="km-icon-info km-pointer"
+                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB, responsible for provisioning and managing load balancers.'"></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
+                          *ngIf="isKubernetesDashboardEnabled">
+              Kubernetes Dashboard
             </mat-checkbox>
 
             <mat-checkbox [formControlName]="Controls.OPAIntegration"
@@ -405,6 +441,12 @@ limitations under the License.
               <i *ngIf="isEnforced(Controls.OPAIntegration)"
                  class="km-icon-info km-pointer"
                  matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+              Operating System Manager
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
             </mat-checkbox>
 
             <ng-container *ngIf="isMLAEnabled">
@@ -423,54 +465,10 @@ limitations under the License.
               </mat-checkbox>
             </ng-container>
 
-            <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
-                          *ngIf="isKubernetesDashboardEnabled">
-              Kubernetes Dashboard
-            </mat-checkbox>
-
-            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
-              Operating System Manager
+            <mat-checkbox [formControlName]="Controls.UserSSHKeyAgent">
+              User SSH Key Agent
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
-            </mat-checkbox>
-
-            <mat-checkbox [formControlName]="Controls.ClusterBackup">
-              Cluster Backup
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Enable create backups from this cluster"></i>
-              <mat-chip>
-                <div>
-                  Experimental
-                </div>
-              </mat-chip>
-            </mat-checkbox>
-
-            <mat-form-field *ngIf="!!controlValue(Controls.ClusterBackup)">
-              <mat-label>{{backupStorageLocationLabel}}</mat-label>
-              <mat-select [formControlName]="Controls.BackupStorageLocation"
-                          disableOptionCentering>
-                <mat-option *ngFor="let bsl of backupStorageLocationsList"
-                            [value]="bsl.name">{{bsl.displayName}}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="form.get(Controls.BackupStorageLocation).hasError('required')">
-                <strong>Required</strong>
-              </mat-error>
-            </mat-form-field>
-
-            <mat-checkbox [formControlName]="Controls.KubeLB"
-                          *ngIf="isEnterpriseEdition && isKubeLBEnabled"
-                          [disabled]="isKubeLBEnforced">
-              Kubermatic KubeLB
-              <i class="km-icon-info km-pointer"
-                 [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB, responsible for provisioning and managing load balancers.'"></i>
-            </mat-checkbox>
-
-            <mat-checkbox [formControlName]="Controls.DisableCSIDriver"
-                          [disabled]="isCSIDriverDisabled">
-              Disable CSI Driver
-              <i class="km-icon-info km-pointer"
-                 [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
+                 matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>
             </mat-checkbox>
 
             <km-label-form [title]="'Labels'"
