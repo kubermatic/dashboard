@@ -67,7 +67,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.0
-	k8c.io/kubermatic/v2 v2.24.3-0.20240215164744-1f6910f1e3a1
+	k8c.io/kubermatic/v2 v2.24.4-0.20240226075556-2f688feae54f
 	k8c.io/operating-system-manager v1.4.1
 	k8c.io/reconciler v0.4.0
 	k8s.io/api v0.28.2
@@ -102,7 +102,7 @@ replace (
 
 replace (
 	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.3-0.20240215164744-1f6910f1e3a1
+	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.24.4-0.20240226075556-2f688feae54f
 )
 
 require (
