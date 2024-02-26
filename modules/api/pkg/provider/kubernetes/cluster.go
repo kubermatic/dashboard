@@ -281,8 +281,19 @@ func (p *ClusterProvider) Get(ctx context.Context, userInfo *provider.UserInfo, 
 		return nil, err
 	}
 	if options.CheckInitStatus {
-		if !cluster.Status.ExtendedHealth.AllHealthy() {
-			return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+		healthCheck := cluster.Status.ExtendedHealth
+		// If the edge provider is used, machine controller is not deployed as part of the cluster control plane which means
+		// the health checks for machine controller is not needed thus we skip it.
+		if cluster.Spec.Cloud.ProviderName == string(kubermaticv1.EdgeCloudProvider) {
+			if !healthCheck.ControlPlaneHealthy() ||
+				healthCheck.CloudProviderInfrastructure != kubermaticv1.HealthStatusUp ||
+				healthCheck.UserClusterControllerManager != kubermaticv1.HealthStatusUp {
+				return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+			}
+		} else {
+			if !healthCheck.AllHealthy() {
+				return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+			}
 		}
 	}
 
@@ -470,10 +481,22 @@ func (p *ClusterProvider) GetUnsecured(ctx context.Context, project *kubermaticv
 	}
 	if cluster.Labels[kubermaticv1.ProjectIDLabelKey] == project.Name {
 		if options.CheckInitStatus {
-			if !cluster.Status.ExtendedHealth.AllHealthy() {
-				return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+			healthCheck := cluster.Status.ExtendedHealth
+			// If the edge provider is used, machine controller is not deployed as part of the cluster control plane which means
+			// the health checks for machine controller is not needed thus we skip it.
+			if cluster.Spec.Cloud.ProviderName == string(kubermaticv1.EdgeCloudProvider) {
+				if !healthCheck.ControlPlaneHealthy() ||
+					healthCheck.CloudProviderInfrastructure != kubermaticv1.HealthStatusUp ||
+					healthCheck.UserClusterControllerManager != kubermaticv1.HealthStatusUp {
+					return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+				}
+			} else {
+				if !healthCheck.AllHealthy() {
+					return nil, apierrors.NewServiceUnavailable("Cluster components are not ready yet")
+				}
 			}
 		}
+
 		return cluster, nil
 	}
 
