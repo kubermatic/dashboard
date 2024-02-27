@@ -27490,6 +27490,11 @@
         },
         "values": {
           "$ref": "#/definitions/RawExtension"
+        },
+        "valuesBlock": {
+          "description": "ValuesBlock specifies values overrides that are passed to helm templating. Comments are preserved.",
+          "type": "string",
+          "x-go-name": "ValuesBlock"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
