@@ -60,14 +60,15 @@ func convertAPItoInternalApplicationDefinitionBody(appDef *apiv2.ApplicationDefi
 			Labels: appDef.Labels,
 		},
 		Spec: appskubermaticv1.ApplicationDefinitionSpec{
-			Description:      appDef.Spec.Description,
-			Method:           appDef.Spec.Method,
-			DefaultValues:    appDef.Spec.DefaultValues,
-			Versions:         appDef.Spec.Versions,
-			DocumentationURL: appDef.Spec.DocumentationURL,
-			SourceURL:        appDef.Spec.SourceURL,
-			Logo:             appDef.Spec.Logo,
-			LogoFormat:       appDef.Spec.LogoFormat,
+			Description:        appDef.Spec.Description,
+			Method:             appDef.Spec.Method,
+			DefaultValues:      appDef.Spec.DefaultValues,
+			DefaultValuesBlock: appDef.Spec.DefaultValuesBlock,
+			Versions:           appDef.Spec.Versions,
+			DocumentationURL:   appDef.Spec.DocumentationURL,
+			SourceURL:          appDef.Spec.SourceURL,
+			Logo:               appDef.Spec.Logo,
+			LogoFormat:         appDef.Spec.LogoFormat,
 		},
 	}
 }
