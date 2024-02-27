@@ -59,6 +59,10 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
     return this._config.bslObject ? 'km-icon-save' : 'km-icon-add';
   }
 
+  get title(): string {
+    return this._config.bslObject ? 'Edit Backup Storage Location' : 'Create Backup Storage Location';
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddBackupStorageLocationDialogConfig,
     private readonly _builder: FormBuilder,
