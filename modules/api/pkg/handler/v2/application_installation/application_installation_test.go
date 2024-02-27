@@ -205,6 +205,24 @@ func TestCreateApplicationInstallation(t *testing.T) {
 				Status: &apiv2.ApplicationInstallationStatus{},
 			},
 		},
+		{
+			Name:      "values are converted to valuesBlock",
+			ProjectID: test.GenDefaultProject().Name,
+			ClusterID: test.GenDefaultCluster().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			ExistingAPIUser:         test.GenDefaultAPIUser(),
+			ApplicationInstallation: test.GenApiApplicationInstallationWithValues("app1", test.GenDefaultCluster().Name, app1TargetNamespace),
+			ExpectedHTTPStatusCode:  http.StatusCreated,
+			ExpectedNamespaces:      []string{app1TargetNamespace},
+			ExpectedResponse: func() *apiv2.ApplicationInstallation {
+				ai := test.GenApiApplicationInstallationWithValuesBlock("app1", test.GenDefaultCluster().Name, app1TargetNamespace)
+				ai.ID = ""
+				return ai
+			}(),
+		},
 	}
 
 	for _, tc := range testcases {
@@ -500,7 +518,7 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
-					Values: *test.CreateRawVariables(t, map[string]interface{}{"key": "val"}),
+					ValuesBlock: "key: val\n", // we expect ValuesBlock to be filled since Values are being converted
 				},
 				Status: &apiv2.ApplicationInstallationStatus{},
 			},

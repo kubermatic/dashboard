@@ -2252,6 +2252,18 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 	}
 }
 
+func GenApiApplicationInstallationWithValues(name, clusterName, targetnamespace string) *apiv2.ApplicationInstallation {
+	ai := GenApiApplicationInstallation(name, clusterName, targetnamespace)
+	ai.Spec.Values = runtime.RawExtension{Raw: []byte(`{"key": "value"}`)}
+	return ai
+}
+
+func GenApiApplicationInstallationWithValuesBlock(name, clusterName, targetnamespace string) *apiv2.ApplicationInstallation {
+	ai := GenApiApplicationInstallation(name, clusterName, targetnamespace)
+	ai.Spec.ValuesBlock = "key: value\n"
+	return ai
+}
+
 func GenApplicationDefinition(name string) *appskubermaticv1.ApplicationDefinition {
 	return &appskubermaticv1.ApplicationDefinition{
 		ObjectMeta: metav1.ObjectMeta{
