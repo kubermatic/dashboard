@@ -2336,6 +2336,17 @@ func GenApiApplicationDefinition(name string) apiv2.ApplicationDefinition {
 	}
 }
 
+func GenApiApplicationDefinitionWithDefaultValues(name string) apiv2.ApplicationDefinition {
+	ad := GenApiApplicationDefinition(name)
+	ad.Spec.DefaultValues = &runtime.RawExtension{Raw: []byte(`{"key": "value"}`)}
+	return ad
+}
+
+func GenApiApplicationDefinitionWithDefaultValuesBlock(name string) apiv2.ApplicationDefinition {
+	ad := GenApiApplicationDefinition(name)
+	ad.Spec.DefaultValuesBlock = "key: value"
+	return ad
+}
 func GenApiApplicationDefinitionListItem(name string) apiv2.ApplicationDefinitionListItem {
 	return apiv2.ApplicationDefinitionListItem{
 		Name: name,

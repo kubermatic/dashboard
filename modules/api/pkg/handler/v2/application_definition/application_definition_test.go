@@ -188,6 +188,14 @@ func TestCreateApplicationDefinition(t *testing.T) {
 			ExpectedHTTPStatusCode: http.StatusCreated,
 		},
 		{
+			Name:                   "defaultValues are converted to defaultValuesBlock",
+			ApplicationDefinition:  test.GenApiApplicationDefinitionWithDefaultValues(appname),
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExistingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
+			ExpectedResponse:       test.GenApiApplicationDefinitionWithDefaultValuesBlock(appname),
+			ExpectedHTTPStatusCode: http.StatusCreated,
+		},
+		{
 			Name:                   "user cannot create an applicationdefinition",
 			ApplicationDefinition:  test.GenApiApplicationDefinition(appname),
 			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
@@ -292,6 +300,14 @@ func TestUpdateApplicationDefinitions(t *testing.T) {
 					},
 				},
 			},
+		},
+		{
+			Name:                   "defaultValues are converted to defaultValuesBlock",
+			ApplicationDefinition:  test.GenApiApplicationDefinitionWithDefaultValuesBlock(appname),
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExistingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), test.GenApplicationDefinition(appname)},
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse:       test.GenApiApplicationDefinitionWithDefaultValuesBlock(appname),
 		},
 		{
 			Name:                   "user cannot update an applicationdefinition",

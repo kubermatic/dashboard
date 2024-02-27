@@ -159,7 +159,7 @@ func DeleteApplicationDefinition(userInfoGetter provider.UserInfoGetter, applica
 }
 
 func migrateDefaultValuesToDefaultValuesBlock(ads *appskubermaticv1.ApplicationDefinitionSpec) error {
-	if len(ads.DefaultValues.Raw) > 0 {
+	if ads.DefaultValues != nil && len(ads.DefaultValues.Raw) > 0 {
 		y, err := yaml.JSONToYAML(ads.DefaultValues.Raw)
 		if err != nil {
 			return err
