@@ -185,7 +185,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   }
 
   getApplicationLogo(name: string): SafeUrl {
-    return this.applicationDefinitionsMap.get(name).spec?.logoData;
+    return this.applicationDefinitionsMap.get(name)?.spec?.logoData;
   }
 
   onAddApplication(): void {
