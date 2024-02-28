@@ -18,6 +18,9 @@ import (
 // swagger:model ApplicationInstallationSpec
 type ApplicationInstallationSpec struct {
 
+	// ValuesBlock specifies values overrides that are passed to helm templating. Comments are preserved.
+	ValuesBlock string `json:"valuesBlock,omitempty"`
+
 	// application ref
 	ApplicationRef *ApplicationRef `json:"applicationRef,omitempty"`
 

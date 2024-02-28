@@ -1908,10 +1908,14 @@ type ApplicationInstallationSpec struct {
 	// DeployOptions holds the settings specific to the templating method used to deploy the application.
 	DeployOptions *appskubermaticv1.DeployOptions `json:"deployOptions,omitempty"`
 
-	// Values describe overrides for manifest-rendering. It's a free yaml field.
+	// Values specify values overrides that are passed to helm templating. Comments are not preserved.
 	// +kubebuilder:pruning:PreserveUnknownFields
+	// Deprecated: Use ValuesBlock instead.
 	Values runtime.RawExtension `json:"values,omitempty"`
 	// As kubebuilder does not support interface{} as a type, deferring json decoding, seems to be our best option (see https://github.com/kubernetes-sigs/controller-tools/issues/294#issuecomment-518379253)
+
+	// ValuesBlock specifies values overrides that are passed to helm templating. Comments are preserved.
+	ValuesBlock string `json:"valuesBlock,omitempty"`
 }
 
 // ApplicationInstallationStatus is the object representing the status of an Application.
