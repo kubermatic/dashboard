@@ -37067,6 +37067,19 @@
     "PublicVMwareCloudDirectorCloudSpec": {
       "type": "object",
       "title": "PublicVMwareCloudDirectorCloudSpec is a public counterpart of apiv1.VMwareCloudDirectorCloudSpec.",
+      "properties": {
+        "ovdcNetwork": {
+          "type": "string",
+          "x-go-name": "OVDCNetwork"
+        },
+        "ovdcNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "OVDCNetworks"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicVSphereCloudSpec": {

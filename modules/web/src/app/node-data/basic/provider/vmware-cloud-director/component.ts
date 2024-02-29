@@ -280,11 +280,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         if (this.isPresetSelected) {
           return;
         }
-        if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetworks) {
-          this.networks = this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetworks;
-        } else if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetwork) {
-          this.networks = [this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetwork];
-        }
+        this.setNetworksFromClusterSpec();
         this.networkLabel = this.networks?.length ? NetworkState.Ready : NetworkState.Empty;
         this.updateSelectedNetwork();
       });
@@ -334,6 +330,11 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._catalogChanges.next(!!catalog);
   }
 
+  onNetworkChanged(network: string): void {
+    this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.network = network;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
   onTemplateChanged(template: string): void {
     this.selectedTemplate = template;
     this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.template = template;
@@ -354,6 +355,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     const defaults = getDefaultNodeProviderSpec(NodeProvider.VMWARECLOUDDIRECTOR) as VMwareCloudDirectorNodeSpec;
     const defaultIPAllocationMode =
       this.ipAllocationModes?.length === 1 ? this.ipAllocationModes[0] : defaults.ipAllocationMode;
+    this.setNetworksFromClusterSpec();
 
     this.form = this._builder.group({
       [Controls.CPUs]: this._builder.control(values ? values.cpus : defaults.cpus, [Validators.required]),
@@ -371,7 +373,9 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
       [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
       [Controls.SizingPolicy]: this._builder.control(values ? values.sizingPolicy : defaults.sizingPolicy),
-      [Controls.Network]: this._builder.control(this.networks[0], [Validators.required]),
+      [Controls.Network]: this._builder.control(values && values.network ? values.network : this.networks[0], [
+        Validators.required,
+      ]),
     });
   }
 
@@ -540,6 +544,14 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
+  private setNetworksFromClusterSpec(): void {
+    if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetworks) {
+      this.networks = this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetworks;
+    } else if (this._clusterSpecService.cluster.spec.cloud?.vmwareclouddirector?.ovdcNetwork) {
+      this.networks = [this._clusterSpecService.cluster.spec.cloud.vmwareclouddirector.ovdcNetwork];
+    }
+  }
+
   private _getNodeData(): NodeData {
     return {
       spec: {
@@ -551,6 +563,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
             diskSizeGB: this.form.get(Controls.DiskSizeGB).value,
             diskIOPS: this.form.get(Controls.DiskIOPs).value,
             ipAllocationMode: this.form.get(Controls.IPAllocationMode).value,
+            network: this.form.get(Controls.Network).value,
           } as VMwareCloudDirectorNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
@@ -572,6 +585,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.Catalog]: this.form.get(Controls.Catalog).value?.[ComboboxControls.Select],
         [Controls.PlacementPolicy]: this.form.get(Controls.PlacementPolicy).value?.[ComboboxControls.Select],
         [Controls.SizingPolicy]: this.form.get(Controls.SizingPolicy).value?.[ComboboxControls.Select],
+        [Controls.Network]: this.form.get(Controls.Network).value,
       } as VMwareCloudDirectorNodeSpec,
     };
 

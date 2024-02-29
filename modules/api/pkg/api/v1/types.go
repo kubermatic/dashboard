@@ -1354,14 +1354,20 @@ func newPublicNutanixCloudSpec(internal *kubermaticv1.NutanixCloudSpec) (public 
 }
 
 // PublicVMwareCloudDirectorCloudSpec is a public counterpart of apiv1.VMwareCloudDirectorCloudSpec.
-type PublicVMwareCloudDirectorCloudSpec struct{}
+type PublicVMwareCloudDirectorCloudSpec struct {
+	OVDCNetwork  string   `json:"ovdcNetwork,omitempty"`
+	OVDCNetworks []string `json:"ovdcNetworks,omitempty"`
+}
 
 func newPublicVMwareCloudDirectorCloudSpec(internal *kubermaticv1.VMwareCloudDirectorCloudSpec) (public *PublicVMwareCloudDirectorCloudSpec) {
 	if internal == nil {
 		return nil
 	}
 
-	return &PublicVMwareCloudDirectorCloudSpec{}
+	return &PublicVMwareCloudDirectorCloudSpec{
+		OVDCNetwork:  internal.OVDCNetwork,
+		OVDCNetworks: internal.OVDCNetworks,
+	}
 }
 
 // ClusterStatus defines the cluster status.
