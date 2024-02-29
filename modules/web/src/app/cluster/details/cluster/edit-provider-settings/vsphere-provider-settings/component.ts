@@ -16,12 +16,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {merge, Subject} from 'rxjs';
+import {Subject, merge} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
   InfraManagementUsername = 'infraManagementUsername',
   InfraManagementPassword = 'infraManagementPassword',
+  UseCustomCloudCredentials = 'useCustomCloudCredentials',
   Username = 'username',
   Password = 'password',
 }
@@ -40,19 +41,30 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
     private readonly _builder: FormBuilder
   ) {}
 
+  get useCustomCloudCredentials(): boolean {
+    return this.form.get(Control.UseCustomCloudCredentials).value;
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Control.Username]: this._builder.control('', Validators.required),
       [Control.Password]: this._builder.control('', Validators.required),
       [Control.InfraManagementUsername]: this._builder.control(''),
       [Control.InfraManagementPassword]: this._builder.control(''),
+      [Control.UseCustomCloudCredentials]: this._builder.control(false),
     });
+
+    this.form
+      .get(Control.UseCustomCloudCredentials)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._handleCloudCredentials.bind(this));
 
     merge(
       this.form.get(Control.InfraManagementUsername).valueChanges,
       this.form.get(Control.InfraManagementPassword).valueChanges,
       this.form.get(Control.Username).valueChanges,
-      this.form.get(Control.Password).valueChanges
+      this.form.get(Control.Password).valueChanges,
+      this.form.get(Control.UseCustomCloudCredentials).valueChanges
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
@@ -64,16 +76,34 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  private _handleCloudCredentials(selected: boolean): void {
+    if (!selected) {
+      this.form.get(Control.InfraManagementUsername).clearValidators();
+      this.form.get(Control.InfraManagementPassword).clearValidators();
+    } else {
+      this.form.get(Control.InfraManagementUsername).setValidators(Validators.required);
+      this.form.get(Control.InfraManagementPassword).setValidators(Validators.required);
+    }
+
+    this.form.get(Control.InfraManagementUsername).setValue('');
+    this.form.get(Control.InfraManagementPassword).setValue('');
+  }
+
   private _getProviderSettingsPatch(): ProviderSettingsPatch {
+    let infraManagementUser = null;
+    if (this.useCustomCloudCredentials) {
+      infraManagementUser = {
+        username: this.form.get(Control.InfraManagementUsername).value,
+        password: this.form.get(Control.InfraManagementPassword).value,
+      };
+    }
+
     return {
       cloudSpecPatch: {
         vsphere: {
           password: this.form.get(Control.Password).value,
           username: this.form.get(Control.Username).value,
-          infraManagementUser: {
-            username: this.form.get(Control.InfraManagementUsername).value,
-            password: this.form.get(Control.InfraManagementPassword).value,
-          },
+          infraManagementUser: infraManagementUser,
         },
       },
       isValid: this.form.valid,
