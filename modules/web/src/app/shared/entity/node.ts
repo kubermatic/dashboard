@@ -308,6 +308,7 @@ export class VMwareCloudDirectorNodeSpec {
   ipAllocationMode: string;
   vapp?: string;
   catalog: string;
+  network?: string;
   template: string;
   placementPolicy?: string;
   sizingPolicy?: string;

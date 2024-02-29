@@ -310,9 +310,12 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 		config.PlacementPolicy = nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy
 	}
 
-	if c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork != "" {
+	switch {
+	case nodeSpec.Cloud.VMwareCloudDirector.Network != "":
+		config.Network = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VMwareCloudDirector.Network}
+	case c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork != "":
 		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork}
-	} else if len(c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks) > 0 {
+	case len(c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks) > 0:
 		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks[0]}
 	}
 

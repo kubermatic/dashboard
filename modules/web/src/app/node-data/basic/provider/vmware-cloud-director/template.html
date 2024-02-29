@@ -92,6 +92,7 @@ limitations under the License.
     <mat-label>Network</mat-label>
     <mat-select [formControlName]="Controls.Network"
                 [disabled]="networks.length === 1"
+                (selectionChange)="onNetworkChanged($event.value)"
                 disableOptionCentering
                 kmValueChangedIndicator>
       <mat-option *ngFor="let network of networks"

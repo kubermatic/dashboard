@@ -64,7 +64,7 @@ type PublicCloudSpec struct {
 	Packet PublicPacketCloudSpec `json:"packet,omitempty"`
 
 	// vmwareclouddirector
-	Vmwareclouddirector PublicVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
+	Vmwareclouddirector *PublicVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
 
 	// vsphere
 	Vsphere PublicVSphereCloudSpec `json:"vsphere,omitempty"`
@@ -91,6 +91,10 @@ func (m *PublicCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOpenstack(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVmwareclouddirector(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -195,6 +199,25 @@ func (m *PublicCloudSpec) validateOpenstack(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *PublicCloudSpec) validateVmwareclouddirector(formats strfmt.Registry) error {
+	if swag.IsZero(m.Vmwareclouddirector) { // not required
+		return nil
+	}
+
+	if m.Vmwareclouddirector != nil {
+		if err := m.Vmwareclouddirector.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("vmwareclouddirector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("vmwareclouddirector")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this public cloud spec based on the context it is used
 func (m *PublicCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -216,6 +239,10 @@ func (m *PublicCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Re
 	}
 
 	if err := m.contextValidateOpenstack(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVmwareclouddirector(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -297,6 +324,22 @@ func (m *PublicCloudSpec) contextValidateOpenstack(ctx context.Context, formats 
 				return ve.ValidateName("openstack")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("openstack")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PublicCloudSpec) contextValidateVmwareclouddirector(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Vmwareclouddirector != nil {
+		if err := m.Vmwareclouddirector.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("vmwareclouddirector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("vmwareclouddirector")
 			}
 			return err
 		}
