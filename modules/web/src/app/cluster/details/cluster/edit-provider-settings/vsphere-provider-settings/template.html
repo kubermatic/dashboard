@@ -41,23 +41,38 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>VSphere Cloud Provider Username</mat-label>
-    <input matInput
-           [formControlName]="Control.InfraManagementUsername"
-           type="text"
-           autocomplete="off"
-           required
-           kmValueChangedIndicator />
-  </mat-form-field>
+  <mat-checkbox [formControlName]="Control.UseCustomCloudCredentials"
+                [name]="Control.UseCustomCloudCredentials">
+    <div fxLayoutAlign=" center"
+         fxLayoutGap="5px">
+      <span>Use dedicated credentials to provision vSphere resources</span>
+      <i class="km-icon-info km-pointer"
+         matTooltip="These credentials will be used for managing resources like tags, folders, networks etc. For cloud provider functionality i.e. external CCM and CSI drivers, the credentials specified above will be used."></i>
+    </div>
+  </mat-checkbox>
 
-  <mat-form-field fxFlex>
-    <mat-label>VSphere Cloud Provider Password</mat-label>
-    <input matInput
-           [formControlName]="Control.InfraManagementPassword"
-           kmInputPassword
-           autocomplete="off"
-           required
-           kmValueChangedIndicator />
-  </mat-form-field>
+  <mat-card-header class="km-no-padding"
+                   *ngIf="useCustomCloudCredentials">
+    <mat-card-title>Credentials for provisioning vSphere resources</mat-card-title>
+  </mat-card-header>
+
+  <ng-container *ngIf="useCustomCloudCredentials">
+    <mat-form-field fxFlex>
+      <mat-label>VSphere Cloud Provider Username</mat-label>
+      <input matInput
+             [formControlName]="Control.InfraManagementUsername"
+             type="text"
+             autocomplete="off"
+             kmValueChangedIndicator />
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>VSphere Cloud Provider Password</mat-label>
+      <input matInput
+             [formControlName]="Control.InfraManagementPassword"
+             kmInputPassword
+             autocomplete="off"
+             kmValueChangedIndicator />
+    </mat-form-field>
+  </ng-container>
 </form>
