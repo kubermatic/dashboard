@@ -27219,7 +27219,7 @@
           "$ref": "#/definitions/RawExtension"
         },
         "defaultValuesBlock": {
-          "description": "DefaultValuesBlock specify values overrides for manifest-rendering in UI when creating an application. Comments not preserved.\nPreserves yaml comments.",
+          "description": "DefaultValuesBlock specifies default values for the UI which are passed to helm templating when creating an application. Comments are preserved.",
           "type": "string",
           "x-go-name": "DefaultValuesBlock"
         },

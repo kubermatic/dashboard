@@ -19,8 +19,7 @@ import (
 // swagger:model ApplicationDefinitionSpec
 type ApplicationDefinitionSpec struct {
 
-	// DefaultValuesBlock specify values overrides for manifest-rendering in UI when creating an application. Comments not preserved.
-	// Preserves yaml comments.
+	// DefaultValuesBlock specifies default values for the UI which are passed to helm templating when creating an application. Comments are preserved.
 	DefaultValuesBlock string `json:"defaultValuesBlock,omitempty"`
 
 	// Description of the application. what is its purpose
