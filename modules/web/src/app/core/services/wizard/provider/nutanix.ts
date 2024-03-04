@@ -71,7 +71,7 @@ export class Nutanix extends Provider {
     return this;
   }
 
-  clusters(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixCluster[]> {
+  clusters(seed: string, onLoadingCb: () => void = null): Observable<NutanixCluster[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -80,11 +80,11 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/clusters`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/clusters`;
     return this._http.get<NutanixCluster[]>(url, {headers: this._headers});
   }
 
-  projects(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
+  projects(seed: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -93,7 +93,7 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/projects`;
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/${seed}/projects`;
     return this._http.get<NutanixProject[]>(url, {headers: this._headers});
   }
 
