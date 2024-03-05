@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	semverlib "github.com/Masterminds/semver/v3"
+	"github.com/aws/smithy-go/ptr"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	"github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
@@ -151,6 +152,10 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	config, err := getProviderConfig(c, nd, dc, keys)
 	if err != nil {
 		return nil, err
+	}
+
+	if string(config.CloudProvider) == string(kubermaticv1.EdgeCloudProvider) {
+		md.Spec.Replicas = ptr.Int32(0)
 	}
 
 	err = getProviderOS(config, nd)
