@@ -661,7 +661,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.cluster &&
       this.health &&
       HealthState.isUp(this.health.apiserver) &&
-      HealthState.isUp(this.health.machineController)
+      (Cluster.getProvider(this.cluster) === Provider.Edge || HealthState.isUp(this.health.machineController))
     );
   }
 }

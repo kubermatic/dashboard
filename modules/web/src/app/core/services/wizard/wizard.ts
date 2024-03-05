@@ -41,6 +41,7 @@ export class WizardService {
           break;
         case NodeProvider.EDGE:
           this._hideStep(StepRegistry.ProviderSettings);
+          this._showStep(StepRegistry.NodeSettings);
           break;
         default:
           this._showStep(StepRegistry.ProviderSettings);
