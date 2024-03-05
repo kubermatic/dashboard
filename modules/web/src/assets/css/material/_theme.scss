@@ -360,6 +360,8 @@
       border-color: map.get($colors, divider);
 
       &.mat-button-toggle-checked {
+        --mat-standard-button-toggle-divider-color: #{map.get($colors, primary)};
+
         background-color: transparent;
         border-color: map.get($colors, primary);
       }
