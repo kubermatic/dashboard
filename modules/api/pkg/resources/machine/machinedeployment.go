@@ -155,7 +155,15 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	}
 
 	if string(config.CloudProvider) == string(kubermaticv1.EdgeCloudProvider) {
-		md.Spec.Replicas = ptr.Int32(0)
+		md.Spec.Replicas = ptr.Int32(1)
+
+		md.Status = clusterv1alpha1.MachineDeploymentStatus{
+			ObservedGeneration: 1,
+			Replicas:           1,
+			UpdatedReplicas:    1,
+			ReadyReplicas:      1,
+			AvailableReplicas:  1,
+		}
 	}
 
 	err = getProviderOS(config, nd)
