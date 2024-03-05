@@ -362,7 +362,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           };
           if (status) {
             let icon = StatusIcon.Pending;
-            let message = '';
+            let message = 'No status available';
             if (application.deletionTimestamp) {
               icon = StatusIcon.Error;
               message = 'Deleting';
@@ -373,15 +373,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
               if (failingCondition) {
                 icon = StatusIcon.Error;
                 const error = failingCondition.message;
-                message = `${error} ${
-                  error || !error.endsWith('.') ? '.' : ''
+                message = `${error}${
+                  error && !error.endsWith('.') ? '.' : ''
                 } Please check your configuration or contact your KKP Administrator.`;
               } else if (unknownCondition) {
                 icon = StatusIcon.Warning;
                 const warning = unknownCondition.message;
-                message = `${warning} ${
-                  warning || !warning.endsWith('.') ? '.' : ''
-                } Application is in an unknown state.`;
+                message = `Application is in an unknown state: ${warning}${
+                  warning && !warning.endsWith('.') ? '.' : ''
+                }`;
               } else {
                 icon = StatusIcon.Running;
                 message = 'Ready';
