@@ -1,4 +1,189 @@
 {
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md",
-  "entries": []
+  "entries": [
+    {
+      "category": "action-required",
+      "description": "Support for attaching multiple networks to a vApp on VMware Cloud Director."
+    },
+    {
+      "category": "action-required",
+      "description": "User Cluster MLA: If you had copied `values.yaml` of loki-distributed chart to further customize it, then please cleanup your copy of `values.yaml` for user-mla to retain your customization only."
+    },
+    {
+      "category": "action-required",
+      "description": "User Cluster MLA: Cortex chart upgraded to resolve issues for cortex-compactor and improve stability of user-cluster MLA feature. Few actions are required to be taken to use new upgraded charts"
+    },
+    {
+      "category": "added",
+      "description": "Add Support for Kubernetes 1.29."
+    },
+    {
+      "category": "added",
+      "description": "Add support for Edge provider."
+    },
+    {
+      "category": "added",
+      "description": "Edge provider support in the node deployment spec."
+    },
+    {
+      "category": "added",
+      "description": "EE: Add KubeVirt to the Default Applications Catalog."
+    },
+    {
+      "category": "added",
+      "description": "EE: Add k8sgpt operator to the Default Applications Catalog."
+    },
+    {
+      "category": "added",
+      "description": "EE: Add nvidia-gpu-operator to the Default Applications Catalog."
+    },
+    {
+      "category": "added",
+      "description": "EE: Update default application definitions with latest helm chart version."
+    },
+    {
+      "category": "added",
+      "description": "Add logo, upstream documentlink and sourcecodelink fields to the applications."
+    },
+    {
+      "category": "added",
+      "description": "ValuesBlock and defaultValuesBlock fields are now available via the API."
+    },
+    {
+      "category": "added",
+      "description": "Comments are now persisted in the values section of ApplicationDefinitions and ApplicationInstallations when using the new defaultValuesBlock and valuesBlock fields respectively."
+    },
+    {
+      "category": "added",
+      "description": "Add K8sGPT to the Webshell."
+    },
+    {
+      "category": "added",
+      "description": "Add an option to enable/disable the cluster backup feature for user clusters."
+    },
+    {
+      "category": "added",
+      "description": "Add new feature to create, restore and schedule backups for user cluster namespaces."
+    },
+    {
+      "category": "added",
+      "description": "Add new page to manage backup storage location for the cluster backup feature."
+    },
+    {
+      "category": "added",
+      "description": "Support for configuring static network for flatcar machines."
+    },
+    {
+      "category": "added",
+      "description": "Support to enable/disable the cluster backup feature from the admin panel."
+    },
+    {
+      "category": "added",
+      "description": "Support for downloading backups from the UI."
+    },
+    {
+      "category": "added",
+      "description": "Support for disabling CSI driver for user clusters."
+    },
+    {
+      "category": "added",
+      "description": "Option to enable Cilium Ingress capabilities for user clusters."
+    },
+    {
+      "category": "added",
+      "description": "Flatcar is now supported on GCE."
+    },
+    {
+      "category": "added",
+      "description": "Added Flatcar as supported OS on VMware Cloud Director."
+    },
+    {
+      "category": "added",
+      "description": "Add support for configuring allowed IP allocation modes for VMware Cloud Director."
+    },
+    {
+      "category": "added",
+      "description": "Examples now include command to generate secrets that works on vanilla macOS."
+    },
+    {
+      "category": "added",
+      "description": "Deploy all Velero components on the user cluster, when backup is enabled."
+    },
+    {
+      "category": "added",
+      "description": "Add `ClusterBackupStorageLocation` and related user cluster configurations."
+    },
+    {
+      "category": "changed",
+      "description": "User Cluster MLA: Grafana has been updated to v10.2.2"
+    },
+    {
+      "category": "changed",
+      "description": "User Cluster MLA: Minio has been updated to RELEASE.2023-04-28T18-11-17Z."
+    },
+    {
+      "category": "changed",
+      "description": "API change: Update MachineDeployment form for Anexia provider. Add configuration support for named templates and multiple disks."
+    },
+    {
+      "category": "changed",
+      "description": "Update to alpine 3.19(latest available) version for container images."
+    },
+    {
+      "category": "fixed",
+      "description": "Set LoadBalancerSKU on Azure clusters if the field is set in the preset."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where Operating System Profiles were not being listed for GCP."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where dedicated credentials were incorrectly being required as mandatory input when editing provider settings for a cluster."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix invalid project ID in API requests for Nutanix provider."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue in editing and updating applications of cluster template."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue with cursor position inside YAML editor."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where dedicated credentials were incorrectly being required as mandatory input when editing provider settings for a cluster."
+    },
+    {
+      "category": "fixed",
+      "description": "No longer fail constructing vSphere endpoint when a `/` suffix is present in the datacenter configuration."
+    },
+    {
+      "category": "fixed",
+      "description": "Resolved an issue where logs were duplicated when multiple pods from the same service were deployed on the same Kubernetes node."
+    },
+    {
+      "category": "fixed",
+      "description": "Stop constantly re-deploying operating-system-manager when registry mirrors are configured."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix OIDC network policy, by allowing to set NamespaceOverride to specify where the ingress controller is deployed."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix missing image registry override for hubble-ui components if Cilium is deployed as System Application."
+    },
+    {
+      "category": "deprecated",
+      "description": "Deprecate v1.11 and v1.12 Cilium and Hubble KKP Addons, as Cilium CNI is managed by Applications from version 1.13."
+    },
+    {
+      "category": "removed",
+      "description": "Some of high cardinality metrics were dropped from the User Cluster MLA prometheus. If your KKP installation was using some of those metrics for the custom Grafana dashboards for the user clusters, your dashboards might stop showing some of the charts."
+    }
+  ]
 }
