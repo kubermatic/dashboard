@@ -15,16 +15,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {HealthStatus, getBackupHealthStatus} from '@app/shared/utils/health-status';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
-import {
-  ConditionStatus,
-  EtcdBackupConfig,
-  EtcdBackupConfigCondition,
-  EtcdBackupConfigConditionType,
-} from '@shared/entity/backup';
+import {EtcdBackupConfig, EtcdBackupConfigCondition, EtcdBackupConfigConditionType} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
@@ -121,15 +117,12 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .subscribe(_ => this._router.navigate([`/projects/${this.selectedProject.id}/backups`]));
   }
 
-  isEnabled(backup: EtcdBackupConfig): boolean {
+  getStatus(backup: EtcdBackupConfig): HealthStatus {
     const condition =
-      backup.status?.conditions?.find(
+      backup.status.conditions?.find(
         condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
-    return (
-      condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
-      condition.status === ConditionStatus.ConditionTrue
-    );
+    return getBackupHealthStatus(backup, condition);
   }
 }
