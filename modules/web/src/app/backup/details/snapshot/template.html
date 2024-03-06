@@ -39,7 +39,9 @@ limitations under the License.
                       fxLayout="row"
                       fxLayoutAlign=" center"
                       class="title">
-        <i class="health-state km-icon-circle {{isEnabled(backup) ? 'km-success-bg' : 'km-unknown-bg'}}"></i>
+        <i [matTooltip]="getStatus(backup).message"
+           [ngClass]="getStatus(backup).icon"
+           class="km-vertical-center"></i>
         <div>{{backup.name}}</div>
       </mat-card-title>
     </mat-card-header>
@@ -62,5 +64,6 @@ limitations under the License.
   <km-backup-list [backups]="backup.status.lastBackups"
                   [projectID]="selectedProject.id"
                   [clusterID]="backup.spec.clusterId"
-                  [destination]="backup.spec.destination"></km-backup-list>
+                  [destination]="backup.spec.destination"
+                  [backupHealth]="getStatus(backup).message"></km-backup-list>
 </ng-container>

@@ -22,12 +22,7 @@ import {
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {
-  ConditionStatus,
-  EtcdBackupConfig,
-  EtcdBackupConfigCondition,
-  EtcdBackupConfigConditionType,
-} from '@shared/entity/backup';
+import {EtcdBackupConfig, EtcdBackupConfigCondition, EtcdBackupConfigConditionType} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
@@ -126,17 +121,5 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .subscribe(_ => this._router.navigate([`/projects/${this.selectedProject.id}/${View.Snapshots}`]));
-  }
-
-  isEnabled(backup: EtcdBackupConfig): boolean {
-    const condition =
-      backup.status?.conditions?.find(
-        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
-      ) || ({} as EtcdBackupConfigCondition);
-
-    return (
-      condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
-      condition.status === ConditionStatus.ConditionTrue
-    );
   }
 }

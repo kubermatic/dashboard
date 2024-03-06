@@ -31,6 +31,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {StatusMassage} from '@app/shared/utils/health-status';
 
 @Component({
   selector: 'km-backup-list',
@@ -45,6 +46,7 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   @Input('projectID') private readonly _projectID: string;
   @Input('clusterID') private readonly _clusterID: string;
   @Input('destination') private readonly _destination: string;
+  @Input('backupHealth') private readonly _backupHealth: string;
   dataSource = new MatTableDataSource<BackupStatus>();
 
   get columns(): string[] {
@@ -62,7 +64,8 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   canRestore(backup: BackupStatus): boolean {
     return (
       MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create) &&
-      backup.backupPhase === BackupStatusPhaseCompleted
+      backup.backupPhase === BackupStatusPhaseCompleted &&
+      this._backupHealth !== StatusMassage.Deleting
     );
   }
 
