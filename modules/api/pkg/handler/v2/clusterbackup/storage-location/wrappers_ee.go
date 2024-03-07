@@ -27,24 +27,24 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func listCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.ListCBSL(ctx, request, provider, projectProvider)
+func listCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
+	return storagelocation.ListCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
-func getCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.GetCSBL(ctx, request, provider, projectProvider)
+func getCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+	return storagelocation.GetCSBL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
-func createCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.CreateCBSL(ctx, request, provider, projectProvider)
+func createCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+	return storagelocation.CreateCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
-func deleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
-	return storagelocation.DeleteCBSL(ctx, request, provider, projectProvider)
+func deleteCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
+	return storagelocation.DeleteCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
-func patchCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.PatchCBSL(ctx, request, provider, projectProvider)
+func patchCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+	return storagelocation.PatchCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
 func DecodeListProjectCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {

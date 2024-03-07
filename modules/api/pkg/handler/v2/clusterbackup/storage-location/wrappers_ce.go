@@ -29,6 +29,7 @@ import (
 func listCBSL(
 	_ context.Context,
 	_ interface{},
+	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 ) ([]*apiv2.ClusterBackupStorageLocation, error) {
@@ -38,6 +39,7 @@ func listCBSL(
 func getCBSL(
 	_ context.Context,
 	_ interface{},
+	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 ) (*apiv2.ClusterBackupStorageLocation, error) {
@@ -47,6 +49,7 @@ func getCBSL(
 func createCBSL(
 	_ context.Context,
 	_ interface{},
+	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 ) (*apiv2.ClusterBackupStorageLocation, error) {
@@ -56,6 +59,7 @@ func createCBSL(
 func deleteCBSL(
 	_ context.Context,
 	_ interface{},
+	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 ) error {
@@ -65,6 +69,7 @@ func deleteCBSL(
 func patchCBSL(
 	_ context.Context,
 	_ interface{},
+	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 ) (*apiv2.ClusterBackupStorageLocation, error) {
