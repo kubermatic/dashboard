@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	semverlib "github.com/Masterminds/semver/v3"
-	"github.com/aws/smithy-go/ptr"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	"github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
@@ -40,6 +39,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/ptr"
 )
 
 const (
@@ -155,7 +155,7 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	}
 
 	if string(config.CloudProvider) == string(kubermaticv1.EdgeCloudProvider) {
-		md.Spec.Replicas = ptr.Int32(1)
+		md.Spec.Replicas = ptr.To(int32(1))
 
 		md.Status = clusterv1alpha1.MachineDeploymentStatus{
 			ObservedGeneration: 1,
