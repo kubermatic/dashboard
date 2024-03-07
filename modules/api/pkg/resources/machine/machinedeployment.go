@@ -17,6 +17,7 @@ limitations under the License.
 package machine
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -29,6 +30,8 @@ import (
 	"github.com/kubermatic/machine-controller/pkg/cloudprovider/util"
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
@@ -47,7 +50,12 @@ const (
 )
 
 // Deployment returns a Machine Deployment object for the given Node Deployment spec.
-func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey) (*clusterv1alpha1.MachineDeployment, error) {
+func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey, settingsProvider provider.SettingsProvider) (*clusterv1alpha1.MachineDeployment, error) {
+	validationErr := validateAutoUpdateMDEnforcement(ctx, nd, settingsProvider)
+	if validationErr != nil {
+		return nil, validationErr
+	}
+
 	md := &clusterv1alpha1.MachineDeployment{}
 
 	if nd.Name != "" {
@@ -443,4 +451,52 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 	}
 
 	return nd, nil
+}
+
+// validateAutoUpdateMDEnforcement validates if auto-update settings of node deployment are aligned with the
+// admin settings of machine deployment auto updates.
+func validateAutoUpdateMDEnforcement(ctx context.Context, nd *apiv1.NodeDeployment, settingsProvider provider.SettingsProvider) error {
+	settings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return common.KubernetesErrorToHTTPError(err)
+	}
+
+	mdOptions := settings.Spec.MachineDeploymentOptions
+
+	if mdOptions.AutoUpdatesEnabled && mdOptions.AutoUpdatesEnforced {
+		errorMessage := errors.New("auto update cannot be disabled because it has been enforced by the admin")
+		osSpec := nd.Spec.Template.OperatingSystem
+		// OS specifics
+		switch {
+		case osSpec.Ubuntu != nil:
+			if !osSpec.Ubuntu.DistUpgradeOnBoot {
+				return errorMessage
+			}
+		case osSpec.CentOS != nil:
+			if !osSpec.CentOS.DistUpgradeOnBoot {
+				return errorMessage
+			}
+		case osSpec.RHEL != nil:
+			if !osSpec.RHEL.DistUpgradeOnBoot {
+				return errorMessage
+			}
+		case osSpec.Flatcar != nil:
+			if osSpec.Flatcar.DisableAutoUpdate {
+				return errorMessage
+			}
+		case osSpec.RockyLinux != nil:
+			if !osSpec.RockyLinux.DistUpgradeOnBoot {
+				return errorMessage
+			}
+		case osSpec.AmazonLinux != nil:
+			if !osSpec.AmazonLinux.DistUpgradeOnBoot {
+				return errorMessage
+			}
+		default:
+			return errors.New("no machine os was provided")
+		}
+	}
+
+	return nil
 }

@@ -63,7 +63,7 @@ const (
 	MachineDeploymentEventNormalType  = "normal"
 )
 
-func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, seedsGetter provider.SeedsGetter, machineDeployment apiv1.NodeDeployment, projectID, clusterID string) (interface{}, error) {
+func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, seedsGetter provider.SeedsGetter, machineDeployment apiv1.NodeDeployment, projectID, clusterID string, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
 	project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, projectID, nil)
@@ -108,7 +108,7 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, utilerrors.NewBadRequest(fmt.Sprintf("node deployment validation failed: %s", err.Error()))
 	}
 
-	md, err := machineresource.Deployment(cluster, nd, dc, keys)
+	md, err := machineresource.Deployment(ctx, cluster, nd, dc, keys, settingsProvider)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -459,7 +459,7 @@ func ListMachineDeploymentMetrics(ctx context.Context, userInfoGetter provider.U
 	return ConvertNodeMetrics(nodeDeploymentNodesMetrics, availableResources)
 }
 
-func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, seedsGetter provider.SeedsGetter, projectID, clusterID, machineDeploymentID string, patch json.RawMessage) (interface{}, error) {
+func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, seedsGetter provider.SeedsGetter, projectID, clusterID, machineDeploymentID string, patch json.RawMessage, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	userInfo, err := userInfoGetter(ctx, "")
 	if err != nil {
@@ -550,7 +550,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	patchedMachineDeployment, err := machineresource.Deployment(cluster, patchedNodeDeployment, dc, keys)
+	patchedMachineDeployment, err := machineresource.Deployment(ctx, cluster, patchedNodeDeployment, dc, keys, settingsProvider)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
