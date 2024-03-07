@@ -42,6 +42,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/ptr"
 )
 
 const (
@@ -159,6 +160,18 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	config, err := getProviderConfig(c, nd, dc, keys)
 	if err != nil {
 		return nil, err
+	}
+
+	if string(config.CloudProvider) == string(kubermaticv1.EdgeCloudProvider) {
+		md.Spec.Replicas = ptr.To(int32(1))
+
+		md.Status = clusterv1alpha1.MachineDeploymentStatus{
+			ObservedGeneration: 1,
+			Replicas:           1,
+			UpdatedReplicas:    1,
+			ReadyReplicas:      1,
+			AvailableReplicas:  1,
+		}
 	}
 
 	err = getProviderOS(config, nd)
