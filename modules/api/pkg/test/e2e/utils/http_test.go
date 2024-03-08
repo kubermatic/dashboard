@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"sync"
 	"testing"
 	"time"
 )
@@ -68,6 +67,7 @@ func TestHttpClientWithRetries(t *testing.T) {
 			retryInterval:     1 * time.Millisecond,
 			numRetries:        3,
 			allowedErrorCodes: []int{http.StatusNotFound},
+			requestTimeout:    10 * time.Millisecond,
 			expStatus:         http.StatusOK,
 		},
 		{
@@ -82,9 +82,10 @@ func TestHttpClientWithRetries(t *testing.T) {
 					fmt.Fprintln(w, "failed")
 				},
 			},
-			retryInterval: 1 * time.Millisecond,
-			numRetries:    2,
-			expStatus:     http.StatusOK,
+			retryInterval:  1 * time.Millisecond,
+			numRetries:     2,
+			requestTimeout: 10 * time.Millisecond,
+			expStatus:      http.StatusOK,
 		},
 		{
 			name: "do not retry after 501",
@@ -94,7 +95,8 @@ func TestHttpClientWithRetries(t *testing.T) {
 					fmt.Fprintln(w, "not implemented")
 				},
 			},
-			expStatus: http.StatusNotImplemented,
+			expStatus:      http.StatusNotImplemented,
+			requestTimeout: 10 * time.Millisecond,
 		},
 		{
 			name: "Error after retry timeout",
@@ -108,22 +110,19 @@ func TestHttpClientWithRetries(t *testing.T) {
 					fmt.Fprintln(w, "temporary server error")
 				},
 			},
-			retryInterval: 1 * time.Millisecond,
-			numRetries:    3,
-			expErr:        true,
+			retryInterval:  1 * time.Millisecond,
+			numRetries:     3,
+			requestTimeout: 10 * time.Millisecond,
+			expErr:         true,
 		},
 		{
 			name: "Success after initial request timeout",
 			handlerFuncs: []http.HandlerFunc{
 				func(w http.ResponseWriter, r *http.Request) {
-					time.AfterFunc(20*time.Millisecond, func() {
-						fmt.Fprintln(w, "success")
-					})
+					time.Sleep(20 * time.Millisecond)
 				},
 				func(w http.ResponseWriter, r *http.Request) {
-					time.AfterFunc(20*time.Millisecond, func() {
-						fmt.Fprintln(w, "success")
-					})
+					time.Sleep(20 * time.Millisecond)
 				},
 				func(w http.ResponseWriter, r *http.Request) {
 					fmt.Fprintln(w, "success")
@@ -138,14 +137,11 @@ func TestHttpClientWithRetries(t *testing.T) {
 			name: "Failed due to request timeout",
 			handlerFuncs: []http.HandlerFunc{
 				func(w http.ResponseWriter, r *http.Request) {
-					time.AfterFunc(20*time.Millisecond, func() {
-						w.WriteHeader(http.StatusOK)
-						fmt.Fprintln(w, "success")
-					})
+					time.Sleep(20 * time.Millisecond)
 				},
 			},
 			retryInterval:  1 * time.Millisecond,
-			numRetries:     3,
+			numRetries:     2,
 			requestTimeout: 10 * time.Microsecond,
 			expErr:         true,
 		},
@@ -182,32 +178,26 @@ func TestHttpClientWithRetries(t *testing.T) {
 }
 
 func iterateHandlerFuncs(funcs ...http.HandlerFunc) http.HandlerFunc {
-	// use a buffered channel for thread safety
+	if len(funcs) == 0 {
+		panic("Must give at least one handler func.")
+	}
+
+	// The resulting HandlerFunc will be called in individual goroutines,
+	// so fill the funcs into a channel to allow to safely get the next
+	// one for each incoming request.
 	handlersChan := make(chan http.HandlerFunc, len(funcs))
-	// fill the buffered channel with the given functions, this won't block as
-	// the size of the buffered channel corresponds to the number of
-	// functions
 	for _, f := range funcs {
 		handlersChan <- f
 	}
 	close(handlersChan)
 
-	var wg sync.WaitGroup
-	wg.Add(len(funcs))
 	return func(w http.ResponseWriter, r *http.Request) {
-		select {
-		case h, ok := <-handlersChan:
-			if ok {
-				h(w, r)
-				wg.Done()
-			} else {
-				// once exhausted the channel just run the latest func
-				funcs[len(funcs)-1](w, r)
-			}
-		default:
+		h, ok := <-handlersChan
+		if !ok {
 			// once exhausted the channel just run the latest func
-			funcs[len(funcs)-1](w, r)
+			h = funcs[len(funcs)-1]
 		}
-		wg.Wait()
+
+		h(w, r)
 	}
 }
