@@ -614,6 +614,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     } else if (this.provider === NodeProvider.GCP) {
       // For machines, GCP needs to be replaced with gce.
       cloudProvider = 'gce';
+    } else if (this.provider === NodeProvider.VMWARECLOUDDIRECTOR) {
+      // For machines, vmwareclouddirector needs to be replaced with vmware-cloud-director.
+      cloudProvider = 'vmware-cloud-director';
     }
 
     return this.operatingSystemProfiles
