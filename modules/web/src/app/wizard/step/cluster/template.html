@@ -65,7 +65,8 @@ limitations under the License.
              fxLayout="column">
           <mat-button-toggle-group group="cniPluginTypeGroup"
                                    [formControlName]="Controls.CNIPlugin">
-            <mat-button-toggle [value]="cniPlugin.Cilium">
+            <mat-button-toggle *ngIf="provider !== NodeProvider.EDGE"
+                               [value]="cniPlugin.Cilium">
               <i class="km-cni-image-cilium"></i>
             </mat-button-toggle>
             <mat-button-toggle [value]="cniPlugin.Canal">

@@ -38,6 +38,23 @@ limitations under the License.
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
+      <div *ngIf="!!cluster.spec.cloud.edge" class="kubeadm-manual">
+        To interact with cluster pods (reading logs, exec into containers, etc…), cluster CSRs must be approved manually per worker node:
+        <div class="km-code-block km-copy"
+             fxLayoutAlign=" center"
+             matTooltip="Click to copy"
+             ngxClipboard
+             [cbContent]="'kubectl get csr'">
+          <i class="km-icon-mask km-icon-terminal i-16"></i>&nbsp;kubectl get csr
+        </div>
+        <div class="km-code-block km-copy"
+             fxLayoutAlign=" center"
+             matTooltip="Click to copy"
+             ngxClipboard
+             [cbContent]="'kubectl certificate approve [csr-name]'">
+          <i class="km-icon-mask km-icon-terminal i-16"></i>&nbsp;kubectl certificate approve [csr-name]
+        </div>
+      </div>
       <table class="km-table"
              mat-table
              matSort
