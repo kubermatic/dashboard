@@ -61,7 +61,6 @@ import {
   HealthStatus,
   StatusMassage,
   getClusterHealthStatus,
-  getMachineDeploymentHealthStatus,
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
@@ -626,7 +625,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     if (this.machineDeployments?.length) {
       return (
         this.machineDeployments.some(
-          (md: MachineDeployment) => getMachineDeploymentHealthStatus(md)?.message === StatusMassage.Running
+          (md: MachineDeployment) => !md.deletionTimestamp && md.status.availableReplicas > 0
         ) && !this.isDeletingState
       );
     }
