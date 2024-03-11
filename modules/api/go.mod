@@ -90,19 +90,6 @@ require (
 	sigs.k8s.io/yaml v1.4.0
 )
 
-replace (
-	k8s.io/api => k8s.io/api v0.29.1
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.29.1
-	k8s.io/apimachinery => k8s.io/apimachinery v0.29.1
-	k8s.io/client-go => k8s.io/client-go v0.29.1
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.29.1
-	k8s.io/code-generator => k8s.io/code-generator v0.29.1
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.29.1
-	k8s.io/kubectl => k8s.io/kubectl v0.29.1
-	k8s.io/kubelet => k8s.io/kubelet v0.29.1
-	k8s.io/metrics => k8s.io/metrics v0.29.1
-)
-
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
 require (
