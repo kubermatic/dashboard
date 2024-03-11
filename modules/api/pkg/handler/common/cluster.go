@@ -92,6 +92,7 @@ func CreateEndpoint(
 	caBundle *x509.CertPool,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	settingsProvider provider.SettingsProvider,
 ) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
@@ -106,7 +107,7 @@ func CreateEndpoint(
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	partialCluster, err := GenerateCluster(ctx, projectID, body, seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features)
+	partialCluster, err := GenerateCluster(ctx, projectID, body, seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features, settingsProvider)
 	if err != nil {
 		return nil, err
 	}
@@ -166,6 +167,7 @@ func GenerateCluster(
 	caBundle *x509.CertPool,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	settingsProvider provider.SettingsProvider,
 ) (*kubermaticv1.Cluster, error) {
 	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
 	adminUserInfo, err := userInfoGetter(ctx, "")
@@ -253,7 +255,7 @@ func GenerateCluster(
 			// controller in KKP will apply the currently assigned keys automatically when processing
 			// this annotation.
 			partialCluster.Spec = *spec
-			md, err := machine.Deployment(partialCluster, body.NodeDeployment, dc, nil)
+			md, err := machine.Deployment(ctx, partialCluster, body.NodeDeployment, dc, nil, settingsProvider)
 			if err != nil {
 				return nil, fmt.Errorf("cannot create machine deployment data: %w", err)
 			}

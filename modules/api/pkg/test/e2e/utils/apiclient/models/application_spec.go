@@ -18,8 +18,12 @@ import (
 // swagger:model ApplicationSpec
 type ApplicationSpec struct {
 
-	// Values describe overrides for manifest-rendering
+	// Values specify values overrides that are passed to helm templating. Comments are not preserved.
+	// Deprecated: Use ValuesBlock instead.
 	Values interface{} `json:"values,omitempty"`
+
+	// ValuesBlock specifies values overrides that are passed to helm templating. Comments are preserved.
+	ValuesBlock string `json:"valuesBlock,omitempty"`
 
 	// application ref
 	ApplicationRef *ApplicationRef `json:"applicationRef,omitempty"`

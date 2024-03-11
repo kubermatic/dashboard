@@ -69,7 +69,7 @@ func CreateEndpoint(
 		}
 
 		return handlercommon.CreateEndpoint(ctx, req.ProjectID, req.Body, projectProvider, privilegedProjectProvider,
-			seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features)
+			seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features, settingsProvider)
 	}
 }
 

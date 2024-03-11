@@ -440,6 +440,10 @@
 
 .km-icon-terminal {
   @include mixins.mask-image('/assets/images/icons/terminal.svg', 28px);
+
+  &.i-16 {
+    @include mixins.size(16px, 16px, true);
+  }
 }
 
 .km-icon-terminal-placeholder {

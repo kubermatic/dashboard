@@ -2,28 +2,12 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md",
   "entries": [
     {
-      "category": "action-required",
-      "description": "Support for attaching multiple networks to a vApp on VMware Cloud Director."
-    },
-    {
-      "category": "action-required",
-      "description": "User Cluster MLA: If you had copied `values.yaml` of loki-distributed chart to further customize it, then please cleanup your copy of `values.yaml` for user-mla to retain your customization only."
-    },
-    {
-      "category": "action-required",
-      "description": "User Cluster MLA: Cortex chart upgraded to resolve issues for cortex-compactor and improve stability of user-cluster MLA feature. Few actions are required to be taken to use new upgraded charts"
-    },
-    {
       "category": "added",
-      "description": "Add Support for Kubernetes 1.29."
+      "description": "Add support for Kubernetes 1.29."
     },
     {
       "category": "added",
       "description": "Add support for Edge provider."
-    },
-    {
-      "category": "added",
-      "description": "Edge provider support in the node deployment spec."
     },
     {
       "category": "added",
@@ -43,11 +27,7 @@
     },
     {
       "category": "added",
-      "description": "Add logo, upstream documentlink and sourcecodelink fields to the applications."
-    },
-    {
-      "category": "added",
-      "description": "ValuesBlock and defaultValuesBlock fields are now available via the API."
+      "description": "Add logo, upstream documentation and source code link fields to the applications."
     },
     {
       "category": "added",
@@ -59,27 +39,11 @@
     },
     {
       "category": "added",
-      "description": "Add an option to enable/disable the cluster backup feature for user clusters."
-    },
-    {
-      "category": "added",
-      "description": "Add new feature to create, restore and schedule backups for user cluster namespaces."
-    },
-    {
-      "category": "added",
-      "description": "Add new page to manage backup storage location for the cluster backup feature."
+      "description": "EE: Add new feature to create, restore and schedule backups for user cluster namespaces."
     },
     {
       "category": "added",
       "description": "Support for configuring static network for flatcar machines."
-    },
-    {
-      "category": "added",
-      "description": "Support to enable/disable the cluster backup feature from the admin panel."
-    },
-    {
-      "category": "added",
-      "description": "Support for downloading backups from the UI."
     },
     {
       "category": "added",
@@ -103,11 +67,7 @@
     },
     {
       "category": "added",
-      "description": "Examples now include command to generate secrets that works on vanilla macOS."
-    },
-    {
-      "category": "added",
-      "description": "Deploy all Velero components on the user cluster, when backup is enabled."
+      "description": "Support for attaching multiple networks to a vApp on VMware Cloud Director."
     },
     {
       "category": "added",
@@ -119,15 +79,7 @@
     },
     {
       "category": "changed",
-      "description": "User Cluster MLA: Minio has been updated to RELEASE.2023-04-28T18-11-17Z."
-    },
-    {
-      "category": "changed",
       "description": "API change: Update MachineDeployment form for Anexia provider. Add configuration support for named templates and multiple disks."
-    },
-    {
-      "category": "changed",
-      "description": "Update to alpine 3.19(latest available) version for container images."
     },
     {
       "category": "fixed",
@@ -144,6 +96,10 @@
     {
       "category": "fixed",
       "description": "Fix invalid project ID in API requests for Nutanix provider."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where OSPs were not being listed for VMware Cloud Director."
     },
     {
       "category": "fixed",
@@ -178,12 +134,16 @@
       "description": "Fix missing image registry override for hubble-ui components if Cilium is deployed as System Application."
     },
     {
+      "category": "fixed",
+      "description": "Enable web terminal button when at least one MD replica is ready."
+    },
+    {
       "category": "deprecated",
       "description": "Deprecate v1.11 and v1.12 Cilium and Hubble KKP Addons, as Cilium CNI is managed by Applications from version 1.13."
     },
     {
       "category": "removed",
-      "description": "Some of high cardinality metrics were dropped from the User Cluster MLA prometheus. If your KKP installation was using some of those metrics for the custom Grafana dashboards for the user clusters, your dashboards might stop showing some of the charts."
+      "description": "Some of high cardinality metrics were dropped from the User Cluster MLA Prometheus. If your KKP installation was using some of those metrics for the custom Grafana dashboards for the user clusters, your dashboards might stop showing some of the charts."
     }
   ]
 }

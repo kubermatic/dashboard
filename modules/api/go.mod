@@ -70,14 +70,14 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.2
-	k8c.io/kubermatic/v2 v2.25.0-beta.2.0.20240306100743-d8a441a54f49
+	k8c.io/kubermatic/v2 v2.25.0-beta.4.0.20240311124948-1a75e6c0ca0b
 	k8c.io/operating-system-manager v1.4.1-0.20231210203405-28d391f034d8
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.29.1
 	k8s.io/apiextensions-apiserver v0.29.1
 	k8s.io/apimachinery v0.29.1
 	k8s.io/apiserver v0.29.1
-	k8s.io/client-go v12.0.0+incompatible
+	k8s.io/client-go v0.29.1
 	k8s.io/code-generator v0.29.1
 	k8s.io/klog/v2 v2.120.1
 	k8s.io/kubectl v0.29.1
@@ -90,24 +90,7 @@ require (
 	sigs.k8s.io/yaml v1.4.0
 )
 
-replace (
-	k8s.io/api => k8s.io/api v0.29.1
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.29.1
-	k8s.io/apimachinery => k8s.io/apimachinery v0.29.1
-	k8s.io/client-go => k8s.io/client-go v0.29.1
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.29.1
-	k8s.io/code-generator => k8s.io/code-generator v0.29.1
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.29.1
-	k8s.io/kubectl => k8s.io/kubectl v0.29.1
-	k8s.io/kubelet => k8s.io/kubelet v0.29.1
-	k8s.io/metrics => k8s.io/metrics v0.29.1
-)
-
-replace (
-	github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
-	github.com/google/cel-go => github.com/google/cel-go v0.17.7
-	k8c.io/kubermatic/v2 => k8c.io/kubermatic/v2 v2.25.0-beta.2.0.20240306100743-d8a441a54f49
-)
+replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
 require (
 	cloud.google.com/go/compute v1.23.4 // indirect
@@ -170,7 +153,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/google/cel-go v0.19.0 // indirect
+	github.com/google/cel-go v0.17.7 // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.1-0.20210504230335-f78f29fc09ea // indirect

@@ -317,13 +317,22 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           : settings.defaultNodeCount;
 
       this.form.get(Controls.Count).setValue(replicas);
-      if (!this.dialogEditMode) {
+      if (this.dialogEditMode) {
+        if (autoUpdatesEnabled && settings.machineDeploymentOptions.autoUpdatesEnforced) {
+          if (!this.form.get(Controls.UpgradeOnBoot).value) {
+            this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
+          }
+          if (this.form.get(Controls.DisableAutoUpdate).value) {
+            this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
+          }
+        }
+      } else {
         this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
         this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
-        if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
-          this.form.get(Controls.UpgradeOnBoot).disable();
-          this.form.get(Controls.DisableAutoUpdate).disable();
-        }
+      }
+      if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
+        this.form.get(Controls.UpgradeOnBoot).disable();
+        this.form.get(Controls.DisableAutoUpdate).disable();
       }
     });
 
@@ -605,6 +614,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     } else if (this.provider === NodeProvider.GCP) {
       // For machines, GCP needs to be replaced with gce.
       cloudProvider = 'gce';
+    } else if (this.provider === NodeProvider.VMWARECLOUDDIRECTOR) {
+      // For machines, vmwareclouddirector needs to be replaced with vmware-cloud-director.
+      cloudProvider = 'vmware-cloud-director';
     }
 
     return this.operatingSystemProfiles

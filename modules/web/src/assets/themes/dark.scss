@@ -113,7 +113,7 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 .km-footer i,
 *[class*='km-os-image-'] {
   /* stylelint-disable */
-  filter: invert(1) brightness(100) contrast(100);
+  filter: invert(0.25) brightness(100) contrast(100);
   /* stylelint-enable */
 
   opacity: 85%;

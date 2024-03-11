@@ -44,7 +44,7 @@ RUN apk add --no-cache -U \
   bash \
   bash-completion \
   ca-certificates \
-   'curl>=8.4.0-r0' \
+  'curl>=8.4.0-r0' \
   fzf-bash-plugin \
   git \
   jq \

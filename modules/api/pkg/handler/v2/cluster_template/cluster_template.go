@@ -72,6 +72,7 @@ func CreateEndpoint(
 	sshKeyProvider provider.SSHKeyProvider,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	settingsProvider provider.SettingsProvider,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createClusterTemplateReq)
@@ -86,7 +87,7 @@ func CreateEndpoint(
 			return nil, apierrors.NewBadRequest(err.Error())
 		}
 
-		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, req.Body.CreateClusterSpec, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, "")
+		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, req.Body.CreateClusterSpec, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, "", settingsProvider)
 	}
 }
 
@@ -231,6 +232,7 @@ func UpdateEndpoint(
 	sshKeyProvider provider.SSHKeyProvider,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	settingsProvider provider.SettingsProvider,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(updateClusterTemplateReq)
@@ -245,7 +247,7 @@ func UpdateEndpoint(
 			return nil, apierrors.NewBadRequest(err.Error())
 		}
 
-		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, req.Body.CreateClusterSpec, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, req.ClusterTemplateID)
+		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, req.Body.CreateClusterSpec, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, req.ClusterTemplateID, settingsProvider)
 	}
 }
 
@@ -384,6 +386,7 @@ func ImportEndpoint(
 	sshKeyProvider provider.SSHKeyProvider,
 	configGetter provider.KubermaticConfigurationGetter,
 	features features.FeatureGate,
+	settingsProvider provider.SettingsProvider,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(importClusterTemplateReq)
@@ -422,11 +425,11 @@ func ImportEndpoint(
 			Applications:   apps,
 		}
 
-		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, createCluster, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, "")
+		return createOrUpdateClusterTemplate(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, credentialManager, exposeStrategy, caBundle, configGetter, features, clusterTemplateProvider, createCluster, req.ProjectID, req.Body.Name, req.Body.Scope, req.Body.UserSSHKeys, "", settingsProvider)
 	}
 }
 
-func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, credentialManager provider.PresetProvider, exposeStrategy kubermaticv1.ExposeStrategy, caBundle *x509.CertPool, configGetter provider.KubermaticConfigurationGetter, features features.FeatureGate, clusterTemplateProvider provider.ClusterTemplateProvider, createCluster apiv1.CreateClusterSpec, projectID, name, scope string, userSSHKeys []apiv2.ClusterTemplateSSHKey, clusterTemplateID string) (*apiv2.ClusterTemplate, error) {
+func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, sshKeyProvider provider.SSHKeyProvider, credentialManager provider.PresetProvider, exposeStrategy kubermaticv1.ExposeStrategy, caBundle *x509.CertPool, configGetter provider.KubermaticConfigurationGetter, features features.FeatureGate, clusterTemplateProvider provider.ClusterTemplateProvider, createCluster apiv1.CreateClusterSpec, projectID, name, scope string, userSSHKeys []apiv2.ClusterTemplateSSHKey, clusterTemplateID string, settingsProvider provider.SettingsProvider) (*apiv2.ClusterTemplate, error) {
 	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
 
 	project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, projectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -438,7 +441,7 @@ func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	partialCluster, err := handlercommon.GenerateCluster(ctx, projectID, createCluster, seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features)
+	partialCluster, err := handlercommon.GenerateCluster(ctx, projectID, createCluster, seedsGetter, credentialManager, exposeStrategy, userInfoGetter, caBundle, configGetter, features, settingsProvider)
 	if err != nil {
 		return nil, err
 	}

@@ -24,7 +24,10 @@ import {
 } from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {ApplicationService} from '@app/core/services/application';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {BackupStorageLocation} from '@app/shared/entity/backup';
 import {
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
@@ -74,9 +77,6 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {ClusterBackupService} from '@app/core/services/cluster-backup';
-import {ProjectService} from '@app/core/services/project';
-import {BackupStorageLocation} from '@app/shared/entity/backup';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -166,6 +166,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniApplicationValues: string;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
+  provider: NodeProvider;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -174,6 +175,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly IPFamily = IPFamily;
+  readonly NodeProvider = NodeProvider;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -209,6 +211,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   ngOnInit(): void {
+    this.provider = this._clusterSpecService.provider;
     this._initForm();
 
     this.clusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
@@ -264,6 +267,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
+      .pipe(
+        tap(provider => {
+          this.provider = provider;
+          if (provider === NodeProvider.EDGE) {
+            if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
+              this.control(Controls.CNIPlugin).setValue(CNIPlugin.Canal);
+            }
+          } else if (this.controlValue(Controls.CNIPlugin) !== CNIPlugin.Cilium) {
+            this.control(Controls.CNIPlugin).setValue(CNIPlugin.Cilium);
+          }
+        })
+      )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
@@ -526,7 +541,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(this._clusterSpecService?.sshKeys ?? ''),
       [Controls.IPFamily]: this._builder.control(clusterSpec?.clusterNetwork?.ipFamily ?? IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(clusterSpec?.clusterNetwork?.proxyMode ?? ''),
-      [Controls.CNIPlugin]: this._builder.control(clusterSpec?.cniPlugin?.type ?? CNIPlugin.Cilium),
+      [Controls.CNIPlugin]: this._builder.control(
+        this.provider === this.NodeProvider.EDGE
+          ? clusterSpec?.cniPlugin?.type === CNIPlugin.Cilium
+            ? CNIPlugin.Canal
+            : clusterSpec?.cniPlugin?.type ?? CNIPlugin.Canal
+          : clusterSpec?.cniPlugin?.type ?? CNIPlugin.Cilium
+      ),
       [Controls.CNIPluginVersion]: this._builder.control(clusterSpec?.cniPlugin?.version ?? ''),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv4 ?? null),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv6 ?? null),
@@ -647,7 +668,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this.form.patchValue(
           {
             [Controls.IPFamily]: clusterSpec?.clusterNetwork?.ipFamily ?? this.controlValue(Controls.IPFamily),
-            [Controls.CNIPlugin]: clusterSpec?.cniPlugin?.type ?? this.controlValue(Controls.CNIPlugin),
+            [Controls.CNIPlugin]:
+              this.provider === this.NodeProvider.EDGE && clusterSpec?.cniPlugin?.type === CNIPlugin.Cilium
+                ? CNIPlugin.Canal
+                : clusterSpec?.cniPlugin?.type ?? this.controlValue(Controls.CNIPlugin),
           },
           {emitEvent: false}
         );
