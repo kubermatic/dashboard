@@ -1350,33 +1350,19 @@ type PrivilegedOperatingSystemProfileProvider interface {
 }
 
 type BackupStorageProvider interface {
-	// GetUnsecured returns a ClusterBackupStorageLocation based on object's name.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resource
-	GetUnsecured(ctx context.Context, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
-	// ListUnsecured returns a ClusterBackupStorageLocation list.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to get the resource
-	ListUnsecured(ctx context.Context, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
+	// List returns a list of BackupStorageLocation for a given project.
+	List(ctx context.Context, userInfo *UserInfo, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
 
-	// CreateUnsecured creates a new ClusterBackupStorageLocation.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to update the resource
-	CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
+	// Get returns a BackupStorageLocation of a given name.
+	Get(ctx context.Context, userInfo *UserInfo, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
-	// PatchUnsecured updates givenClusterBackupStorageLocation.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to update the resource
-	PatchUnsecured(ctx context.Context, cbslName string, updatedCBSL *kubermaticv1.ClusterBackupStorageLocation, UpdatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
+	// Create creates a new BackupStorageLocation.
+	Create(ctx context.Context, userInfo *UserInfo, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
-	// DeleteUnsecured removes an existing ClusterBackupStorageLocation.
-	//
-	// Note that this function:
-	// is unsafe in a sense that it uses privileged account to delete the resource
-	DeleteUnsecured(ctx context.Context, name string) error
+	// Delete removes an existing BackupStorageLocation.
+	Delete(ctx context.Context, userInfo *UserInfo, name string) error
+
+	// Patch patches an existing GroupProjectBinding.
+	Patch(ctx context.Context, userInfo *UserInfo, cbslName string, updatedCBSL *kubermaticv1.ClusterBackupStorageLocation, UpdatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
 }

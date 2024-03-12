@@ -102,7 +102,7 @@ func ListCBSL(ctx context.Context, request interface{}, userInfoGetter provider.
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	_, err := userInfoGetter(ctx, req.ProjectID)
+	user, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func ListCBSL(ctx context.Context, request interface{}, userInfoGetter provider.
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbslList, err := provider.ListUnsecured(ctx, labelSet)
+	cbslList, err := provider.List(ctx, user, labelSet)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.U
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	_, err := userInfoGetter(ctx, req.ProjectID)
+	user, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
@@ -145,9 +145,13 @@ func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.U
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbsl, err := provider.GetUnsecured(ctx, req.ClusterBackupStorageLocationName, labelSet)
+	cbsl, err := provider.Get(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 	if err != nil {
 		return nil, err
+	}
+
+	if cbsl == nil {
+		return nil, nil
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
@@ -170,17 +174,13 @@ func CreateCBSL(ctx context.Context, request interface{}, userInfoGetter provide
 		return nil, err
 	}
 
-	if user.Roles.Has("viewers") {
-		return nil, fmt.Errorf("user with a viewer role is not permitted to create storage locations.")
-	}
-
 	cbslName := req.Body.Name
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	creds := req.Body.Credentials
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		Spec: *cbslSpec,
 	}
-	created, err := provider.CreateUnsecured(ctx, cbslName, req.ProjectID, cbsl, creds)
+	created, err := provider.Create(ctx, user, cbslName, req.ProjectID, cbsl, creds)
 	if err != nil {
 		return nil, err
 	}
@@ -205,11 +205,7 @@ func DeleteCBSL(ctx context.Context, request interface{}, userInfoGetter provide
 		return err
 	}
 
-	if user.Roles.Has("viewers") {
-		return fmt.Errorf("user with a viewer role is not permitted to delete storage locations.")
-	}
-
-	err = provider.DeleteUnsecured(ctx, req.ClusterBackupStorageLocationName)
+	err = provider.Delete(ctx, user, req.ClusterBackupStorageLocationName)
 	if err != nil {
 		return err
 	}
@@ -223,23 +219,23 @@ func PatchCBSL(ctx context.Context, request interface{}, userInfoGetter provider
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	cbslSpec := req.Body.CBSLSpec.DeepCopy()
-	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
-		Spec: *cbslSpec,
-	}
-	patched, err := provider.PatchUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
-	if err != nil {
-		return nil, err
-	}
-
 	user, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if user.Roles.Has("viewers") {
-		return nil, fmt.Errorf("user with a viewer role is not permitted to edit storage locations.")
+	cbslSpec := req.Body.CBSLSpec.DeepCopy()
+	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
+		Spec: *cbslSpec,
+	}
+	patched, err := provider.Patch(ctx, user, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
+	if err != nil {
+		return nil, err
+	}
+
+	if err != nil {
+		return nil, err
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{

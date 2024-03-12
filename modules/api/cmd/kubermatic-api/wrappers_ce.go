@@ -48,6 +48,6 @@ func groupProjectBindingFactory(_ kubernetes.ImpersonationClient, _ ctrlruntimec
 	return nil
 }
 
-func backupStorageProviderFactory(_ ctrlruntimeclient.Client) provider.BackupStorageProvider {
+func backupStorageProviderFactory(_ kubernetes.ImpersonationClient, _ ctrlruntimeclient.Client) provider.BackupStorageProvider {
 	return nil
 }
