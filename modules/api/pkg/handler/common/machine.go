@@ -117,10 +117,6 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, fmt.Errorf("failed to create machine deployment: %w", err)
 	}
 
-	if err := client.Status().Patch(ctx, md, ctrlruntimeclient.Merge); err != nil {
-		return nil, fmt.Errorf("failed to update machine deployment status: %w", err)
-	}
-
 	return OutputMachineDeployment(md)
 }
 
@@ -565,10 +561,6 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 	machineDeployment.Spec.Template.Spec = patchedMachineDeployment.Spec.Template.Spec
 	machineDeployment.Spec.Replicas = patchedMachineDeployment.Spec.Replicas
 	machineDeployment.Spec.Paused = patchedMachineDeployment.Spec.Paused
-
-	if err := client.Status().Patch(ctx, machineDeployment, ctrlruntimeclient.Merge); err != nil {
-		return nil, fmt.Errorf("failed to update machine deployment status: %w", err)
-	}
 
 	if err := client.Update(ctx, machineDeployment); err != nil {
 		return nil, fmt.Errorf("failed to update machine deployment: %w", err)
