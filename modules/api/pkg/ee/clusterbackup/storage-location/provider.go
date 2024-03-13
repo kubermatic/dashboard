@@ -40,6 +40,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apiserver/pkg/storage/names"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -50,6 +51,11 @@ type BackupStorageProvider struct {
 }
 
 var _ provider.BackupStorageProvider = &BackupStorageProvider{}
+
+const (
+	ownerReferenceApi  = "kubermatic.k8s.io/v1"
+	ownerReferenceKind = "ClusterBackupStorageLocation"
+)
 
 func NewBackupStorageProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
 	return &BackupStorageProvider{
@@ -99,12 +105,13 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		return nil, errors.New("a user is missing but required")
 	}
 	cbslFullName := fmt.Sprintf("%s-%s", cbslName, projectID)
+	secretName := fmt.Sprintf("credential-%s-", cbslFullName)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-", cbslFullName),
-			Namespace:    resources.KubermaticNamespace,
-			Labels:       getCSBLLabels(cbslName, projectID),
+			Name:      names.SimpleNameGenerator.GenerateName(secretName),
+			Namespace: resources.KubermaticNamespace,
+			Labels:    getCSBLLabels(cbslName, projectID),
 		},
 		Data: map[string][]byte{
 			"accessKeyId":     []byte(credentials.AccessKeyID),
@@ -121,10 +128,6 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		}
 	}
 
-	if err := client.Create(ctx, secret); err != nil {
-		return nil, err
-	}
-
 	cbsl.ObjectMeta = metav1.ObjectMeta{
 		Name:      cbslFullName,
 		Namespace: resources.KubermaticNamespace,
@@ -137,6 +140,18 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		Key: "cloud-credentials",
 	}
 	if err := client.Create(ctx, cbsl); err != nil {
+		return nil, err
+	}
+	ownerReference := metav1.OwnerReference{
+		APIVersion: ownerReferenceApi,
+		Kind:       ownerReferenceKind,
+		Name:       cbslFullName,
+		UID:        cbsl.UID,
+	}
+
+	secret.ObjectMeta.OwnerReferences = append(secret.ObjectMeta.OwnerReferences, ownerReference)
+
+	if err := p.privilegedClient.Create(ctx, secret); err != nil {
 		return nil, err
 	}
 	return cbsl, nil
@@ -165,13 +180,17 @@ func (p *BackupStorageProvider) Delete(ctx context.Context, userInfo *provider.U
 		}
 	}
 
+	if err := client.Delete(ctx, cbsl); err != nil {
+		return err
+	}
+
 	if cbsl.Spec.Credential != nil {
 		secretName := cbsl.Spec.Credential.Name
 		if err := p.deleteCredentials(ctx, secretName); err != nil {
 			return err
 		}
 	}
-	return client.Delete(ctx, cbsl)
+	return nil
 }
 
 func (p *BackupStorageProvider) deleteCredentials(ctx context.Context, secretName string) error {
@@ -194,6 +213,11 @@ func (p *BackupStorageProvider) Patch(ctx context.Context, userInfo *provider.Us
 
 	client := p.privilegedClient
 
+	existing := &kubermaticv1.ClusterBackupStorageLocation{}
+	if err := client.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
+		return nil, err
+	}
+
 	if !userInfo.IsAdmin {
 		var err error
 		client, err = p.getImpersonatedClient(userInfo)
@@ -202,19 +226,11 @@ func (p *BackupStorageProvider) Patch(ctx context.Context, userInfo *provider.Us
 		}
 	}
 
-	existing := &kubermaticv1.ClusterBackupStorageLocation{}
-	if err := client.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
-		return nil, err
-	}
-
 	if existing.Spec.Credential != nil && existing.Spec.Credential.Name == "" {
 		return nil, fmt.Errorf("ClusterBackupStorageLocation must have a credentials secret name set")
 	}
 
 	secretName := existing.Spec.Credential.Name
-	if err := p.patchCredentials(ctx, secretName, updatedCreds); err != nil {
-		return nil, err
-	}
 	updated := existing.DeepCopy()
 	updated.Spec = *cbsl.Spec.DeepCopy()
 
@@ -226,6 +242,10 @@ func (p *BackupStorageProvider) Patch(ctx context.Context, userInfo *provider.Us
 		Key: "cloud-credentials",
 	}
 	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+		return nil, err
+	}
+
+	if err := p.patchCredentials(ctx, secretName, updatedCreds); err != nil {
 		return nil, err
 	}
 	return updated, nil
