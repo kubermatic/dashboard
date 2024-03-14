@@ -30,10 +30,12 @@ import (
 	"fmt"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -97,7 +99,7 @@ func (p *BackupStorageProvider) Get(ctx context.Context, userInfo *provider.User
 			return &cbsl, nil
 		}
 	}
-	return nil, nil
+	return nil, utilerrors.NewNotFound("ClusterBackupStorageLocation", name)
 }
 
 func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.UserInfo, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
@@ -140,7 +142,7 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		Key: "cloud-credentials",
 	}
 	if err := client.Create(ctx, cbsl); err != nil {
-		return nil, err
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	ownerReference := metav1.OwnerReference{
 		APIVersion: ownerReferenceApi,
@@ -181,26 +183,6 @@ func (p *BackupStorageProvider) Delete(ctx context.Context, userInfo *provider.U
 	}
 
 	if err := client.Delete(ctx, cbsl); err != nil {
-		return err
-	}
-
-	if cbsl.Spec.Credential != nil {
-		secretName := cbsl.Spec.Credential.Name
-		if err := p.deleteCredentials(ctx, secretName); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (p *BackupStorageProvider) deleteCredentials(ctx context.Context, secretName string) error {
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretName,
-			Namespace: resources.KubermaticNamespace,
-		},
-	}
-	if err := p.privilegedClient.Delete(ctx, secret); err != nil && !apierrors.IsNotFound(err) {
 		return err
 	}
 	return nil
