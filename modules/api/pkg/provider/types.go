@@ -1351,11 +1351,11 @@ type PrivilegedOperatingSystemProfileProvider interface {
 
 type BackupStorageProvider interface {
 
-	// List returns a list of BackupStorageLocation for a given project.
-	List(ctx context.Context, userInfo *UserInfo, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
+	// ListUnsecured returns a list of BackupStorageLocation for a given project.
+	ListUnsecured(ctx context.Context, userInfo *UserInfo, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error)
 
 	// Get returns a BackupStorageLocation of a given name.
-	Get(ctx context.Context, userInfo *UserInfo, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
+	GetUnsecured(ctx context.Context, userInfo *UserInfo, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
 	// Create creates a new BackupStorageLocation.
 	Create(ctx context.Context, userInfo *UserInfo, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)

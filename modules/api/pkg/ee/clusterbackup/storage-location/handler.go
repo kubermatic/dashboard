@@ -112,7 +112,7 @@ func ListCBSL(ctx context.Context, request interface{}, userInfoGetter provider.
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbslList, err := provider.List(ctx, user, labelSet)
+	cbslList, err := provider.ListUnsecured(ctx, user, labelSet)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +145,7 @@ func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.U
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbsl, err := provider.Get(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
+	cbsl, err := provider.GetUnsecured(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 	if err != nil {
 		return nil, err
 	}
