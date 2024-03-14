@@ -96,16 +96,23 @@ const (
 	displayNameLabelKey = "csbl-display-name"
 )
 
-func ListCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
+func ListCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(listCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
+	}
+
 	labelSet := map[string]string{
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbslList, err := provider.ListUnsecured(ctx, labelSet)
+	cbslList, err := provider.ListUnsecured(ctx, user, labelSet)
 	if err != nil {
 		return nil, err
 	}
@@ -122,18 +129,29 @@ func ListCBSL(ctx context.Context, request interface{}, provider provider.Backup
 	return resp, nil
 }
 
-func GetCSBL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(getCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
+	}
+
 	labelSet := map[string]string{
 		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
 	}
 
-	cbsl, err := provider.GetUnsecured(ctx, req.ClusterBackupStorageLocationName, labelSet)
+	cbsl, err := provider.GetUnsecured(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 	if err != nil {
 		return nil, err
+	}
+
+	if cbsl == nil {
+		return nil, nil
 	}
 
 	return &apiv2.ClusterBackupStorageLocation{
@@ -144,18 +162,25 @@ func GetCSBL(ctx context.Context, request interface{}, provider provider.BackupS
 	}, nil
 }
 
-func CreateCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func CreateCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(createCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
+	}
+
 	cbslName := req.Body.Name
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	creds := req.Body.Credentials
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		Spec: *cbslSpec,
 	}
-	created, err := provider.CreateUnsecured(ctx, cbslName, req.ProjectID, cbsl, creds)
+	created, err := provider.Create(ctx, user, cbslName, req.ProjectID, cbsl, creds)
 	if err != nil {
 		return nil, err
 	}
@@ -168,13 +193,19 @@ func CreateCBSL(ctx context.Context, request interface{}, provider provider.Back
 	}, nil
 }
 
-func DeleteCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
+func DeleteCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {
 	req, ok := request.(deleteCbslReq)
 	if !ok {
 		return utilerrors.NewBadRequest("invalid request")
 	}
 
-	err := provider.DeleteUnsecured(ctx, req.ClusterBackupStorageLocationName)
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return err
+	}
+
+	err = provider.Delete(ctx, user, req.ClusterBackupStorageLocationName)
 	if err != nil {
 		return err
 	}
@@ -182,17 +213,27 @@ func DeleteCBSL(ctx context.Context, request interface{}, provider provider.Back
 	return nil
 }
 
-func PatchCBSL(ctx context.Context, request interface{}, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func PatchCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(patchCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
 	}
 
 	cbslSpec := req.Body.CBSLSpec.DeepCopy()
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		Spec: *cbslSpec,
 	}
-	patched, err := provider.PatchUnsecured(ctx, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
+	patched, err := provider.Patch(ctx, user, req.ClusterBackupStorageLocationName, cbsl, req.Body.Credentials)
+	if err != nil {
+		return nil, err
+	}
+
 	if err != nil {
 		return nil, err
 	}

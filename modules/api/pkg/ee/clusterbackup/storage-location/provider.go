@@ -26,77 +26,108 @@ package storagelocation
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apiserver/pkg/storage/names"
+	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type BackupStorageProvider struct {
-	privilegedClient ctrlruntimeclient.Client
+	createMasterImpersonatedClient kubernetes.ImpersonationClient
+	privilegedClient               ctrlruntimeclient.Client
 }
 
 var _ provider.BackupStorageProvider = &BackupStorageProvider{}
 
-func NewBackupStorageProvider(privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
+const (
+	ownerReferenceApi        = "kubermatic.k8s.io/v1"
+	ownerReferenceKind       = "ClusterBackupStorageLocation"
+	credentialsSecretKeyName = "cloud-credentials"
+)
+
+func NewBackupStorageProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
 	return &BackupStorageProvider{
-		privilegedClient: privilegedClient,
+		createMasterImpersonatedClient: createMasterImpersonatedClient,
+		privilegedClient:               privilegedClient,
 	}
 }
 
-func (p *BackupStorageProvider) ListUnsecured(ctx context.Context, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error) {
+func (p *BackupStorageProvider) ListUnsecured(ctx context.Context, userInfo *provider.UserInfo, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocationList, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
+
 	listOpts := &ctrlruntimeclient.ListOptions{
 		LabelSelector: labels.SelectorFromSet(labelSet),
 		Namespace:     resources.KubermaticNamespace,
 	}
 
 	cbslList := &kubermaticv1.ClusterBackupStorageLocationList{}
+
 	if err := p.privilegedClient.List(ctx, cbslList, listOpts); err != nil {
 		return nil, fmt.Errorf("failed to list ClusterBackupStorageLocations: %w", err)
 	}
 	return cbslList, nil
 }
 
-// func (p *BackupStorageProvider) Get(ctx context.Context, userInfo *provider.UserInfo, name string) (*kubermaticv1.ClusterBackupStorageLocation, error).
-func (p *BackupStorageProvider) GetUnsecured(ctx context.Context, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error) {
-	// we use List() to filter CBSLs with labels easily, to keep scoped into the owner project.
-	cbslList, err := p.ListUnsecured(ctx, labelSet)
+func (p *BackupStorageProvider) GetUnsecured(ctx context.Context, userInfo *provider.UserInfo, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
+
+	cbslList, err := p.ListUnsecured(ctx, userInfo, labelSet)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list ClusterBackupStorageLocations: %w", err)
+		return nil, err
 	}
 	for _, cbsl := range cbslList.Items {
 		if cbsl.Name == name {
 			return &cbsl, nil
 		}
 	}
-	return nil, nil
+	return nil, utilerrors.NewNotFound("ClusterBackupStorageLocation", name)
 }
 
-func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.UserInfo, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
 	cbslFullName := fmt.Sprintf("%s-%s", cbslName, projectID)
+	secretName := fmt.Sprintf("credential-%s-", cbslFullName)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-", cbslFullName),
-			Namespace:    resources.KubermaticNamespace,
-			Labels:       getCSBLLabels(cbslName, projectID),
+			Name:      names.SimpleNameGenerator.GenerateName(secretName),
+			Namespace: resources.KubermaticNamespace,
+			Labels:    getCSBLLabels(cbslName, projectID),
 		},
 		Data: map[string][]byte{
 			"accessKeyId":     []byte(credentials.AccessKeyID),
 			"secretAccessKey": []byte(credentials.SecretAccessKey),
 		},
 	}
-	if err := p.privilegedClient.Create(ctx, secret); err != nil {
-		return nil, err
+	client := p.privilegedClient
+
+	if !userInfo.IsAdmin {
+		var err error
+		client, err = p.getImpersonatedClient(userInfo)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	cbsl.ObjectMeta = metav1.ObjectMeta{
@@ -108,49 +139,70 @@ func (p *BackupStorageProvider) CreateUnsecured(ctx context.Context, cbslName, p
 		LocalObjectReference: corev1.LocalObjectReference{
 			Name: secret.Name,
 		},
-		Key: "cloud-credentials",
+		Key: credentialsSecretKeyName,
 	}
-	if err := p.privilegedClient.Create(ctx, cbsl); err != nil {
+	if err := client.Create(ctx, cbsl); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+	ownerReference := metav1.OwnerReference{
+		APIVersion: ownerReferenceApi,
+		Kind:       ownerReferenceKind,
+		Name:       cbslFullName,
+		UID:        cbsl.UID,
+	}
+
+	secret.ObjectMeta.OwnerReferences = append(secret.ObjectMeta.OwnerReferences, ownerReference)
+
+	if err := p.privilegedClient.Create(ctx, secret); err != nil {
 		return nil, err
 	}
 	return cbsl, nil
 }
 
-func (p *BackupStorageProvider) DeleteUnsecured(ctx context.Context, name string) error {
-	cbsl := &kubermaticv1.ClusterBackupStorageLocation{}
-	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: name, Namespace: resources.KubermaticNamespace}, cbsl); err != nil {
-		if apierrors.IsNotFound(err) {
-			return nil
-		}
-		return err
+func (p *BackupStorageProvider) Delete(ctx context.Context, userInfo *provider.UserInfo, name string) error {
+	if userInfo == nil {
+		return errors.New("a user is missing but required")
 	}
 
-	if cbsl.Spec.Credential != nil {
-		secretName := cbsl.Spec.Credential.Name
-		if err := p.deleteCredentials(ctx, secretName); err != nil {
+	client := p.privilegedClient
+	if !userInfo.IsAdmin {
+		var err error
+		client, err = p.getImpersonatedClient(userInfo)
+		if err != nil {
 			return err
 		}
 	}
-	return p.privilegedClient.Delete(ctx, cbsl)
-}
 
-func (p *BackupStorageProvider) deleteCredentials(ctx context.Context, secretName string) error {
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretName,
-			Namespace: resources.KubermaticNamespace,
-		},
+	cbsl := &kubermaticv1.ClusterBackupStorageLocation{}
+	if err := client.Get(ctx, types.NamespacedName{Name: name, Namespace: resources.KubermaticNamespace}, cbsl); err != nil {
+		if apierrors.IsNotFound(err) {
+			return nil
+		}
+		return common.KubernetesErrorToHTTPError(err)
 	}
-	if err := p.privilegedClient.Delete(ctx, secret); err != nil && !apierrors.IsNotFound(err) {
-		return err
+	if err := client.Delete(ctx, cbsl); err != nil {
+		return common.KubernetesErrorToHTTPError(err)
 	}
 	return nil
 }
 
-func (p *BackupStorageProvider) PatchUnsecured(ctx context.Context, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, updatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+func (p *BackupStorageProvider) Patch(ctx context.Context, userInfo *provider.UserInfo, cbslName string, cbsl *kubermaticv1.ClusterBackupStorageLocation, updatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
+
+	client := p.privilegedClient
+	if !userInfo.IsAdmin {
+		var err error
+		client, err = p.getImpersonatedClient(userInfo)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	existing := &kubermaticv1.ClusterBackupStorageLocation{}
-	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
-		return nil, err
+	if err := client.Get(ctx, types.NamespacedName{Name: cbslName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if existing.Spec.Credential != nil && existing.Spec.Credential.Name == "" {
@@ -158,9 +210,6 @@ func (p *BackupStorageProvider) PatchUnsecured(ctx context.Context, cbslName str
 	}
 
 	secretName := existing.Spec.Credential.Name
-	if err := p.patchCredentials(ctx, secretName, updatedCreds); err != nil {
-		return nil, err
-	}
 	updated := existing.DeepCopy()
 	updated.Spec = *cbsl.Spec.DeepCopy()
 
@@ -169,10 +218,14 @@ func (p *BackupStorageProvider) PatchUnsecured(ctx context.Context, cbslName str
 		LocalObjectReference: corev1.LocalObjectReference{
 			Name: secretName,
 		},
-		Key: "cloud-credentials",
+		Key: credentialsSecretKeyName,
 	}
-	if err := p.privilegedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
-		return nil, err
+	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	if err := p.patchCredentials(ctx, secretName, updatedCreds); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return updated, nil
 }
@@ -185,7 +238,7 @@ func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName
 
 	existing := &corev1.Secret{}
 	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: secretName, Namespace: resources.KubermaticNamespace}, existing); err != nil {
-		return err
+		return common.KubernetesErrorToHTTPError(err)
 	}
 	// same credentials
 	if credentials.AccessKeyID == string(existing.Data["accessKeyId"]) &&
@@ -199,4 +252,12 @@ func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName
 		"secretAccessKey": []byte(credentials.SecretAccessKey),
 	}
 	return p.privilegedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing))
+}
+
+func (p *BackupStorageProvider) getImpersonatedClient(userInfo *provider.UserInfo) (ctrlruntimeclient.Client, error) {
+	impersonationCfg := restclient.ImpersonationConfig{
+		UserName: userInfo.Email,
+		Groups:   userInfo.Groups,
+	}
+	return p.createMasterImpersonatedClient(impersonationCfg)
 }

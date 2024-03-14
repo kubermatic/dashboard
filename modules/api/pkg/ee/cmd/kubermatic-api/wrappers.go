@@ -53,6 +53,6 @@ func GroupProjectBindingProviderFactory(createMasterImpersonatedClient kubernete
 	return groupprojectbinding.NewGroupProjectBindingProvider(createMasterImpersonatedClient, privilegedClient)
 }
 
-func BackupStorageProviderFactory(privilegedClient ctrlruntimeclient.Client) provider.BackupStorageProvider {
-	return backupstorage.NewBackupStorageProvider(privilegedClient)
+func BackupStorageProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.BackupStorageProvider {
+	return backupstorage.NewBackupStorageProvider(createMasterImpersonatedClient, privilegedClient)
 }
