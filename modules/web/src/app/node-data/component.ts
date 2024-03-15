@@ -590,6 +590,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getNodeData(): NodeData {
     let data: NodeData = {
       name: this.form.get(Controls.Name).value,
+      count: this.isProvider(NodeProvider.EDGE) ? 0 : this.form.get(Controls.Count).value,
       dynamicConfig: false,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
@@ -597,7 +598,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     if (!this.isProvider(NodeProvider.EDGE)) {
       data = {
         ...data,
-        count: this.form.get(Controls.Count).value,
         maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
         minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       };

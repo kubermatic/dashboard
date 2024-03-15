@@ -18,76 +18,38 @@ package storagelocation
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 func ListCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
-		}
-		return listCBSL(ctx, req, provider, projectProvider)
+		return listCBSL(ctx, req, userInfoGetter, provider, projectProvider)
 	}
 }
 
 func GetCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
-		}
-		return getCBSL(ctx, req, provider, projectProvider)
+		return getCBSL(ctx, req, userInfoGetter, provider, projectProvider)
 	}
 }
 
 func CreateCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
-		}
-		return createCBSL(ctx, req, provider, projectProvider)
+		return createCBSL(ctx, req, userInfoGetter, provider, projectProvider)
 	}
 }
 
 func DeleteCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
-		}
-		return nil, deleteCBSL(ctx, req, provider, projectProvider)
+		return nil, deleteCBSL(ctx, req, userInfoGetter, provider, projectProvider)
 	}
 }
 
 func PatchCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, err
-		}
-		if !userInfo.IsAdmin {
-			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
-		}
-		return patchCBSL(ctx, req, provider, projectProvider)
+		return patchCBSL(ctx, req, userInfoGetter, provider, projectProvider)
 	}
 }
