@@ -100,8 +100,9 @@ export class VersionPickerComponent implements OnInit, OnChanges {
       const modal = this._matDialog.open(VersionChangeDialogComponent);
       modal.componentInstance.cluster = this.cluster;
       modal.componentInstance.isClusterExternal = this.isClusterExternal;
-      modal.componentInstance.versions = this.versionsList;
+      modal.componentInstance.versions = this.versionsList.reverse();
       modal.componentInstance.hasVersionOptions = this.hasUpgradeOptions;
+      modal.componentInstance.hasAvailableUpdates = this.hasAvailableUpdates();
       modal
         .afterClosed()
         .pipe(take(1))
