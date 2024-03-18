@@ -781,7 +781,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _setDefaultVersion(versions: MasterVersion[]): void {
-    this.masterVersions = versions;
+    this.masterVersions = versions.reverse();
 
     if (this._clusterSpecService.cluster.spec.version) {
       this.control(Controls.Version).setValue(this._clusterSpecService.cluster.spec.version);

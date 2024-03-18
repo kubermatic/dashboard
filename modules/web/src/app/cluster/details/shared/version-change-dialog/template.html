@@ -17,7 +17,7 @@ limitations under the License.
   <div fxLayout="row inline"
        fxLayoutAlign=" center">
     <span>Change Control Plane Version</span>
-    <div *ngIf="!isClusterDeprecated() && hasVersionOptions"
+    <div *ngIf="hasAvailableUpdates && hasVersionOptions"
          class="km-update-available-badge">
       <i class="km-icon-update-available-arrow"></i>
       <span>Update Available</span>

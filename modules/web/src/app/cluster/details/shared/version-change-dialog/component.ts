@@ -17,7 +17,6 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {Cluster, ClusterPatch, END_OF_POD_SECURITY_POLICY_SUPPORT_VERSION} from '@shared/entity/cluster';
@@ -37,6 +36,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() versions: string[] = [];
   @Input() hasVersionOptions = true;
   @Input() isClusterExternal = false;
+  @Input() hasAvailableUpdates = false;
 
   private readonly _PSPAdmissionPlugin = 'PodSecurityPolicy';
 
@@ -67,13 +67,12 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _dialogRef: MatDialogRef<VersionChangeDialogComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _eolService: EndOfLifeService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
 
   ngOnInit(): void {
     if (this.versions.length > 0) {
-      this.selectedVersion = this.versions[this.versions.length - 1];
+      this.selectedVersion = this.versions[0];
     }
 
     this._projectService.selectedProject
@@ -155,12 +154,5 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
           `Updating the machine deployments version to the ${this.selectedVersion} for the ${this.cluster.name} cluster`
         );
       });
-  }
-
-  isClusterDeprecated(): boolean {
-    return (
-      this._eolService.cluster.isAfter(this.cluster.spec.version) ||
-      this._eolService.cluster.isBefore(this.cluster.spec.version)
-    );
   }
 }
