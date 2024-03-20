@@ -29,6 +29,8 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 import {AddonService} from '@core/services/addon';
+import {ProjectService} from '@app/core/services/project';
+import {ProjectAnnotation} from '@app/shared/entity/project';
 
 export enum Type {
   Alertmanager = 'Alertmanager',
@@ -54,7 +56,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() addons: Addon[] = [];
 
   accessibleAddons: string[] = [];
-
+  private _grafanaOrgId: string;
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
   private _seed: string;
@@ -67,10 +69,14 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _datacenterService: DatacenterService,
     private readonly _addonService: AddonService,
+    private readonly _projectService: ProjectService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
+    this._projectService.selectedProject
+      .pipe(take(1))
+      .subscribe(project => (this._grafanaOrgId = project.annotations[ProjectAnnotation.GrafanaOrgId]));
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => (this._settings = settings));
@@ -110,20 +116,9 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
 
     switch (type) {
       case Type.Alertmanager:
-        return (
-          'https://' +
-          this._settings.mlaAlertmanagerPrefix +
-          '.' +
-          seed +
-          '.' +
-          this._document.defaultView.location.hostname +
-          '/' +
-          this.cluster.id
-        );
+        return `https://${this._settings.mlaAlertmanagerPrefix}.${seed}.${this._document.defaultView.location.hostname}/${this.cluster.id}`;
       case Type.Grafana:
-        return (
-          'https://' + this._settings.mlaGrafanaPrefix + '.' + seed + '.' + this._document.defaultView.location.hostname
-        );
+        return `https://${this._settings.mlaGrafanaPrefix}.${seed}.${this._document.defaultView.location.hostname}/?orgId=${this._grafanaOrgId}`;
       default:
         return '';
     }
