@@ -1,9 +1,4 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2244",
-  "entries": [
-    {
-      "category": "fixed",
-      "description": "Fix a seed-level component panic when user clusters had persistent volumes migrated from in-tree provisioner to CSI in the past."
-    }
-  ]
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2245",
+  "entries": []
 }
