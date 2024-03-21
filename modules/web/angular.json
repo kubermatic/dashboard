@@ -317,7 +317,6 @@
       }
     }
   },
-  "defaultProject": "kubermatic",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "km"
