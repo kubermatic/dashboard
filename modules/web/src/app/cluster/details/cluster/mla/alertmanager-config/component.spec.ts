@@ -38,6 +38,8 @@ import {UserService} from '@core/services/user';
 import {UserMockService} from '@test/services/user-mock';
 import {AddonService} from '@core/services/addon';
 import {AddonServiceMock} from '@test/services/addon-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ProjectService} from '@app/core/services/project';
 
 describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
@@ -61,6 +63,7 @@ describe('AlertmanagerConfigComponent', () => {
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
         {provide: UserService, useClass: UserMockService},
         {provide: AddonService, useClass: AddonServiceMock},
         MatDialog,

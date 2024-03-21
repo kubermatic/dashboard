@@ -84,6 +84,7 @@ func ConvertInternalProjectToExternal(kubermaticProject *kubermaticv1.Project, p
 		ObjectMeta: apiv1.ObjectMeta{
 			ID:                kubermaticProject.Name,
 			Name:              kubermaticProject.Spec.Name,
+			Annotations:       kubermaticProject.Annotations,
 			CreationTimestamp: apiv1.NewTime(kubermaticProject.CreationTimestamp.Time),
 			DeletionTimestamp: func() *apiv1.Time {
 				if kubermaticProject.DeletionTimestamp != nil {

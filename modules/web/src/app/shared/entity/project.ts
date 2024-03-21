@@ -20,11 +20,16 @@ export enum ProjectStatus {
   Terminating = 'Terminating',
 }
 
+export enum ProjectAnnotation {
+  GrafanaOrgId = 'mla.k8c.io/organization',
+}
+
 export class Project {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   id: string;
   name: string;
+  annotations: Record<ProjectAnnotation, string>;
   status: ProjectStatus;
   labels?: object;
   owners: ProjectOwner[];

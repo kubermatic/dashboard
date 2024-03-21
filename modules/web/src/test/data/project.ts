@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Project, ProjectStatus} from '@shared/entity/project';
+import {Project, ProjectAnnotation, ProjectStatus} from '@shared/entity/project';
 
 export function fakeProjects(): Project[] {
   return [
     {
       creationTimestamp: new Date(),
+      annotations: {[ProjectAnnotation.GrafanaOrgId]: '1'},
       id: '123ab4cd5e',
       name: 'new-project-1',
       status: ProjectStatus.Active,
@@ -31,6 +32,7 @@ export function fakeProjects(): Project[] {
     },
     {
       creationTimestamp: new Date(),
+      annotations: {[ProjectAnnotation.GrafanaOrgId]: '2'},
       id: '234ab5cd6e',
       name: 'new-project-2',
       status: ProjectStatus.Active,
