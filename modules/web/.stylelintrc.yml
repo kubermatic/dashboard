@@ -21,6 +21,7 @@ rules:
   alpha-value-notation: percentage
   no-descending-specificity:
   selector-pseudo-element-no-unknown: true
+  selector-class-pattern: null
   order/order:
     - dollar-variables
     - type: at-rule
@@ -40,4 +41,3 @@ rules:
   scss/comment-no-empty:
   string-quotes: single
   selector-not-notation: simple
-

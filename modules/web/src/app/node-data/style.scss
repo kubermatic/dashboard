@@ -19,14 +19,18 @@ div.os-options {
   margin: 0 0 10px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+// TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+// TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+// TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 mat-button-toggle-group[group='operatingSystemGroup'] {
   flex-wrap: wrap;
   margin-bottom: 8px;
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle {
     border-radius: variables.$border-radius;
     max-height: 45px;
@@ -44,7 +48,8 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
         filter: grayscale(100%);
       }
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     &.mat-button-toggle-checked {
       i {
         filter: none;

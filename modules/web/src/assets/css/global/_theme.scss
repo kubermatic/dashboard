@@ -32,7 +32,8 @@
         }
       }
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     &.mat-button-disabled {
       .km-icon-mask {
         background-color: map.get($colors, text);
@@ -262,7 +263,6 @@
     td {
       color: map.get($colors, text-disabled);
     }
-
   }
 
   .km-mat-footer-row {
@@ -291,10 +291,11 @@
   .km-search-input {
     &.mat-mdc-form-field {
       &.mat-form-field-appearance-outline {
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+
+        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         &.mat-form-field-should-float {
-          /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+          // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
           .mat-form-field-outline-start,
           .mat-form-field-outline-gap,
           .mat-form-field-outline-end {
@@ -302,7 +303,8 @@
             color: map.get($colors, primary);
           }
         }
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+
+        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         .mat-form-field-outline {
           color: map.get($colors, search-outline);
         }
@@ -346,23 +348,25 @@
   // style for kmValueChangedIndicator directive
 
   .km-value-changed {
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     &:not(.mat-button-toggle-group)::after {
       background-color: map.get($colors, primary);
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle-checked::after {
       background-color: map.get($colors, primary);
     }
   }
 
   .radio-group-column {
-    /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
+    // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
     .mat-radio-checked::after {
       background-color: map.get($colors, primary);
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-infix:has(> .km-value-changed) {
     &::after {
       background-color: map.get($colors, primary);

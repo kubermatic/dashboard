@@ -75,8 +75,7 @@
   }
 
   .notification-list {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 
     .notification {
       margin: 8px 20px 20px 8px;

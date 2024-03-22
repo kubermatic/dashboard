@@ -227,7 +227,7 @@ $theme-dark: map.merge(
 }
 
 // Make selected option text light blue.
-/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
+// TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
 .mat-mdc-option.mat-mdc-option-multiple.mat-selected .mat-option-text {
   color: map.get($colors-dark, primary-dark);
 }
@@ -238,7 +238,7 @@ $theme-dark: map.merge(
 }
 
 // Make checkbox marks white.
-/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+// TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-mdc-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
   stroke: rgb(255 255 255 / 85%) !important;
 }
@@ -246,7 +246,8 @@ $theme-dark: map.merge(
 // Change background color of steppers in dialogs
 .mat-stepper-horizontal.km-stepper-in-dialog {
   background-color: map.get($colors-dark, option-background);
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   .mat-button-toggle-group .mat-button-toggle {
     background-color: map.get($colors-dark, option-background);
   }

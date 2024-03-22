@@ -40,7 +40,8 @@ limitations under the License.
     <ng-container *ngIf="!isProjectsLoading; else spinner">
       <!-- Table View -->
       <div *ngIf="!showCards">
-        <mat-card appearance="outlined" class="km-project-view">
+        <mat-card appearance="outlined"
+                  class="km-project-view">
           <mat-card-content>
             <table class="km-table"
                    mat-table
@@ -230,7 +231,8 @@ limitations under the License.
              fxLayout="row"
              fxLayoutGap="20px">
 
-          <mat-card appearance="outlined" *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
+          <mat-card appearance="outlined"
+                    *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
                     (click)="selectProject(project)"
                     [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-extended': isEnterpriseEdition && hasQuota}">
             <mat-card-header>

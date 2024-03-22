@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-chip-listbox *ngIf="taints && taints.length > 0" selectable="false">
+<mat-chip-listbox *ngIf="taints && taints.length > 0"
+                  selectable="false">
   <mat-chip-option *ngFor="let taint of taints">
     <div>{{taint.key}}</div>
     <div class="km-chip-accent">{{taint.value}}</div>

@@ -13,27 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout="row" fxLayoutGap="8px">
-  <mat-chip-listbox [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}" *ngIf="labelKeys.length > 0">
-    <div #chipListLabels *ngFor="let labelKey of labelKeys; let i = index">
+<div fxLayout="row"
+     fxLayoutGap="8px">
+  <mat-chip-listbox [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
+                    *ngIf="labelKeys.length > 0">
+    <div #chipListLabels
+         *ngFor="let labelKey of labelKeys; let i = index">
       <mat-chip-option *ngIf="!limit || i < limit">
         <div>{{labelKey}}</div>
-        <div class="km-chip-accent" *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
+        <div class="km-chip-accent"
+             *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
       </mat-chip-option>
     </div>
   </mat-chip-listbox>
 
-  <span
-    *ngIf="checkLabelsHeight()"
-    fxLayoutAlign=" start"
-    fxLayoutGap="8px"
-    class="show-all-button km-text-muted"
-    (click)="toggleHiddenLabels()"
-    >{{showHiddenLabels ? 'SHOW LESS' : 'SHOW MORE'}}
+  <span *ngIf="checkLabelsHeight()"
+        fxLayoutAlign=" start"
+        fxLayoutGap="8px"
+        class="show-all-button km-text-muted"
+        (click)="toggleHiddenLabels()">{{showHiddenLabels ? 'SHOW LESS' : 'SHOW MORE'}}
     <i class="km-icon-mask km-icon-arrow-{{showHiddenLabels ? 'up' : 'down'}}"></i>
   </span>
 
-  <span *ngIf="limit && labelKeys.length > limit" [matTooltip]="getHiddenLabels()" class="km-text">
+  <span *ngIf="limit && labelKeys.length > limit"
+        [matTooltip]="getHiddenLabels()"
+        class="km-text">
     +{{labelKeys.length - limit}}
   </span>
   <div *ngIf="labelKeys.length === 0">{{emptyMessage}}</div>

@@ -28,7 +28,8 @@
     margin: 0 16px 0 0;
     width: 204px;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   mat-checkbox:not(.experimental-label) {
     margin-right: 48px;
   }
@@ -39,14 +40,19 @@
 
     margin-left: 4px;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   mat-button-toggle-group[group='operatingSystemGroup'] {
     flex-wrap: wrap;
     margin-bottom: 8px;
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle {
       border-radius: variables.$border-radius;
       max-height: 45px;
@@ -64,7 +70,8 @@
           filter: grayscale(100%);
         }
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &.mat-button-toggle-checked {
         i {
           filter: none;
@@ -73,7 +80,6 @@
     }
   }
 }
-
 
 .entry-label-vcd {
   max-height: 46px;

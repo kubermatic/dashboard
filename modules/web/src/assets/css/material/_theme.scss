@@ -131,10 +131,12 @@
     &.mat-mdc-form-field {
       color: map.get($colors, text);
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+
+    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     &.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) {
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       div.mat-form-field-flex:hover {
         label {
           color: map.get($colors, secondary-dark);
@@ -145,7 +147,7 @@
     &.mat-focused {
       &:not(.ng-invalid),
       &.ng-pristine:not(.ng-touched) {
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
         label.mat-form-field-label {
           color: map.get($colors, primary-dark);
         }
@@ -154,34 +156,37 @@
   }
 
   .mat-form-field-appearance-outline {
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-outline {
       color: map.get($colors, divider);
     }
 
     &.mat-focused {
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-thick {
         color: map.get($colors, primary);
       }
     }
 
     &.mat-form-field-disabled {
-      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline {
         color: map.get($colors, divider-disabled);
       }
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-empty.mat-form-field-label .mat-form-field-required-marker {
     color: map.get($colors, secondary);
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   div.mat-form-field-outline.mat-form-field-outline-thick {
     color: map.get($colors, secondary);
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
   .mat-select-arrow {
     background-color: map.get($colors, text);
   }
@@ -271,7 +276,8 @@
       }
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-focus-overlay {
     background-color: transparent;
   }
@@ -313,17 +319,19 @@
 
   .mat-mdc-radio-button {
     &.mat-accent {
-      /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
       .mat-radio-ripple {
         .mat-ripple-element {
           background-color: map.get($colors, primary);
         }
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
       .mat-radio-inner-circle {
         background-color: map.get($colors, primary);
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
       &.mat-radio-checked .mat-radio-outer-circle {
         border-color: map.get($colors, primary);
       }
@@ -359,59 +367,75 @@
       --mdc-switch-selected-pressed-state-layer-color: var(--mdc-switch-selected-track-color);
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle-group {
     background-color: transparent;
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+
+    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle {
       border-color: map.get($colors, divider);
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &.mat-button-toggle-checked {
         --mat-standard-button-toggle-divider-color: #{map.get($colors, primary)};
 
         background-color: transparent;
         border-color: map.get($colors, primary);
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       .mat-button-toggle-label-content {
         color: map.get($colors, text);
       }
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   .mat-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
     background-color: map.get($colors, primary);
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   .mat-checkbox-disabled {
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+
+    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     &:not(.mat-checkbox-checked) {
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-inner-container .mat-checkbox-frame {
         background-color: map.get($colors, checkbox-disabled);
         border-color: map.get($colors, checkbox-disabled-border);
       }
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+
+    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     &.mat-checkbox-checked {
-      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+      // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-inner-container .mat-checkbox-background {
         background-color: map.get($colors, checkbox-disabled-checked);
       }
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
     .mat-checkbox-label {
       color: map.get($colors, text-secondary);
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+
+  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
   .mat-checkbox-frame {
     border: 2px solid map.get($colors, divider);
   }
@@ -426,7 +450,8 @@
       &::after {
         background: transparent;
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
       div:not(.mat-chip-ripple) {
         background: map.get($colors, divider);
       }
@@ -434,7 +459,8 @@
       div.km-chip-accent {
         background: transparent;
       }
-      /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
+
+      // TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
       .mat-chip-remove {
         background-color: map.get($colors, text);
       }
@@ -465,9 +491,12 @@
   }
 
   // Progress bar
-  .mat-mdc-progress-bar, .mat-mdc-progress-bar.mat-accent {
+  .mat-mdc-progress-bar,
+  .mat-mdc-progress-bar.mat-accent {
     /* stylelint-disable-next-line selector-class-pattern */
-    .mdc-linear-progress__buffer-bar, .mdc-linear-progress__buffer-dots {
+    .mdc-linear-progress__buffer-bar,
+    /* stylelint-disable-next-line selector-class-pattern */
+    .mdc-linear-progress__buffer-dots {
       background-color: map.get($colors, divider);
       transition: none;
     }

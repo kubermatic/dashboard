@@ -19,7 +19,8 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<mat-card appearance="outlined" class="km-card">
+<mat-card appearance="outlined"
+          class="km-card">
   <div fxLayout="column">
     <mat-card-header>
       <mat-card-title fxFlex
@@ -228,7 +229,7 @@ END OF TERMS AND CONDITIONS
           <div class="namespaces-detail">Namespaces</div>
           <div>
             <mat-chip-option *ngFor="let namespace of element.spec.includedNamespaces"
-                      class="namespaces-label">
+                             class="namespaces-label">
               <div>{{namespace}}</div>
             </mat-chip-option>
           </div>

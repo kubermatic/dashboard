@@ -15,12 +15,11 @@ limitations under the License.
 -->
 <ng-container *ngIf="cluster">
   <div class="cluster-detail-actions">
-    <button
-      mat-flat-button
-      color="tertiary"
-      (click)="goBack()"
-      fxLayoutAlign="center center"
-      matTooltip="Go back to the cluster list">
+    <button mat-flat-button
+            color="tertiary"
+            (click)="goBack()"
+            fxLayoutAlign="center center"
+            matTooltip="Go back to the cluster list">
       <i class="km-icon-mask km-icon-arrow-left"></i>
     </button>
     <div fxFlex></div>
@@ -28,44 +27,53 @@ limitations under the License.
 
   <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title fxFlex fxLayout="row" fxLayoutAlign=" center" class="cluster-name" fxLayoutGap="20px">
-        <i [matTooltip]="getStatus()" [ngClass]="getStatusColor()" class="cluster-health km-pointer"></i>
-        <span ngxClipboard [cbContent]="cluster.name" matTooltip="Click to copy" class="cluster-name km-copy"
-          >{{cluster.name}}</span
-        >
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      fxLayoutAlign=" center"
+                      class="cluster-name"
+                      fxLayoutGap="20px">
+        <i [matTooltip]="getStatus()"
+           [ngClass]="getStatusColor()"
+           class="cluster-health km-pointer"></i>
+        <span ngxClipboard
+              [cbContent]="cluster.name"
+              matTooltip="Click to copy"
+              class="cluster-name km-copy">{{cluster.name}}</span>
         <span class="km-label-primary">External</span>
-        <span *ngIf="isImportedCluster" class="km-label-primary">Imported</span>
+        <span *ngIf="isImportedCluster"
+              class="km-label-primary">Imported</span>
       </mat-card-title>
 
-      <button
-        color="alternative"
-        fxLayoutAlign="center center"
-        mat-flat-button
-        type="button"
-        kmThrottleClick
-        (throttleClick)="downloadKubeconfig()"
-        [disabled]="isKubeConfigButtonDisabled()">
+      <button color="alternative"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              kmThrottleClick
+              (throttleClick)="downloadKubeconfig()"
+              [disabled]="isKubeConfigButtonDisabled()">
         <i class="km-icon-mask km-icon-download"></i>
         <span>Get Kubeconfig</span>
       </button>
       <div class="provider-menu">
-        <button mat-icon-button color="tertiary" class="provider-menu-btn" [matMenuTriggerFor]="menu">
+        <button mat-icon-button
+                color="tertiary"
+                class="provider-menu-btn"
+                [matMenuTriggerFor]="menu">
           <i class="km-icon-mask km-icon-points-menu"></i>
         </button>
-        <mat-menu #menu="matMenu" class="km-provider-edit-settings">
-          <button
-            id="km-disconnect-external-cluster-btn"
-            mat-menu-item
-            (click)="disconnectCluster()"
-            [disabled]="!canDisconnect()">
+        <mat-menu #menu="matMenu"
+                  class="km-provider-edit-settings">
+          <button id="km-disconnect-external-cluster-btn"
+                  mat-menu-item
+                  (click)="disconnectCluster()"
+                  [disabled]="!canDisconnect()">
             Disconnect Cluster
           </button>
-          <button
-            *ngIf="(!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)"
-            mat-menu-item
-            id="km-delete-external-cluster-btn"
-            [disabled]="!canDisconnect()"
-            (click)="deleteClusterDialog()">
+          <button *ngIf="(!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)"
+                  mat-menu-item
+                  id="km-delete-external-cluster-btn"
+                  [disabled]="!canDisconnect()"
+                  (click)="deleteClusterDialog()">
             Delete Cluster
           </button>
         </mat-menu>
@@ -74,24 +82,26 @@ limitations under the License.
 
     <mat-card-content class="km-row">
       <div class="km-content-wrap">
-        <km-version-picker
-          [cluster]="cluster"
-          [isClusterRunning]="isRunning()"
-          [upgrades]="canEdit() ? upgrades : []"
-          [hasUpgradeOptions]="isRunning()"
-          [isClusterExternal]="true"
-          *ngIf="cluster?.spec?.version"></km-version-picker>
+        <km-version-picker [cluster]="cluster"
+                           [isClusterRunning]="isRunning()"
+                           [upgrades]="canEdit() ? upgrades : []"
+                           [hasUpgradeOptions]="isRunning()"
+                           [isClusterExternal]="true"
+                           *ngIf="cluster?.spec?.version"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
-          <div value ngxClipboard [cbContent]="cluster?.id" matTooltip="Click to copy" class="km-copy">
+          <div value
+               ngxClipboard
+               [cbContent]="cluster?.id"
+               matTooltip="Click to copy"
+               class="km-copy">
             {{cluster?.id}}
           </div>
         </km-property>
         <km-property>
           <div key>Provider</div>
           <div value>
-            <span
-              [ngClass]="provider === Provider.Custom ?
+            <span [ngClass]="provider === Provider.Custom ?
                   'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+provider"></span>
           </div>
         </km-property>
@@ -204,10 +214,12 @@ limitations under the License.
         </km-property>
         <km-property *ngIf="provider !== Provider.AKS">
           <div key>Created</div>
-          <div *ngIf="provider === Provider.GKE" value>
+          <div *ngIf="provider === Provider.GKE"
+               value>
             <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime"></km-relative-time>
           </div>
-          <div *ngIf="provider === Provider.EKS" value>
+          <div *ngIf="provider === Provider.EKS"
+               value>
             <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt"></km-relative-time>
           </div>
         </km-property>
@@ -223,23 +235,24 @@ limitations under the License.
     </mat-card-content>
   </mat-card>
 
-  <km-external-machine-deployment-list
-    *ngIf="provider !== Provider.Custom && provider !== Provider.KubeOne"
-    [cluster]="cluster"
-    [machineDeployments]="machineDeployments"
-    [projectID]="projectID"
-    [isClusterRunning]="isRunning()"
-    [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
+  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom && provider !== Provider.KubeOne"
+                                       [cluster]="cluster"
+                                       [machineDeployments]="machineDeployments"
+                                       [projectID]="projectID"
+                                       [isClusterRunning]="isRunning()"
+                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
 
-  <km-external-node-list
-    *ngIf="provider === Provider.Custom || provider === Provider.KubeOne"
-    [cluster]="cluster"
-    [nodes]="nodes"
-    [nodesMetrics]="nodesMetrics"
-    [projectID]="projectID"
-    [isInitialized]="areNodesInitialized"></km-external-node-list>
+  <km-external-node-list *ngIf="provider === Provider.Custom || provider === Provider.KubeOne"
+                         [cluster]="cluster"
+                         [nodes]="nodes"
+                         [nodesMetrics]="nodesMetrics"
+                         [projectID]="projectID"
+                         [isInitialized]="areNodesInitialized"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 </ng-container>
 
-<mat-spinner [diameter]="25" *ngIf="!cluster" color="accent" class="km-spinner"></mat-spinner>
+<mat-spinner [diameter]="25"
+             *ngIf="!cluster"
+             color="accent"
+             class="km-spinner"></mat-spinner>
