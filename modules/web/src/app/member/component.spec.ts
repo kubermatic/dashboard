@@ -14,27 +14,27 @@
 
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
-import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeMembers} from '@test/data/member';
-import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
+import {MemberService} from '@core/services/member';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {MemberComponent} from './component';
-import {MemberService} from '@core/services/member';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeMembers} from '@test/data/member';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 import {MemberServiceMock} from '@test/services/member-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {MemberComponent} from './component';
 
 describe('MemberComponent', () => {
   let fixture: ComponentFixture<MemberComponent>;

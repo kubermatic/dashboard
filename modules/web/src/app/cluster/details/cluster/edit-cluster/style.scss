@@ -22,21 +22,26 @@ km-label-form:not(.pod-node-selector-config) {
   margin-top: 30px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 mat-checkbox {
   i {
     margin: 4px 8px;
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 mat-button-toggle-group[group='auditLogging'] {
   margin: 0 10px;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   mat-button-toggle {
     margin: 0 0 0 -1px;
     max-height: 28px;
     min-height: 28px;
     min-width: unset;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
     &.mat-button-toggle-checked {
       z-index: 1;
     }

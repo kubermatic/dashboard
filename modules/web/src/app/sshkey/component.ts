@@ -16,24 +16,24 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {SSHKeyService} from '@core/services/ssh-key';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {Project} from '@shared/entity/project';
+import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
-import {SSHKeyService} from '@core/services/ssh-key';
 
 @Component({
   selector: 'km-sshkey',

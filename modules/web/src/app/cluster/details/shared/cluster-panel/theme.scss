@@ -19,7 +19,7 @@
   .cluster-panel {
     color: map.get($colors, text);
 
-    .mat-icon-button {
+    .mat-mdc-icon-button {
       &:hover {
         background-color: color.adjust(map.get($colors, text), $alpha: -0.75);
       }

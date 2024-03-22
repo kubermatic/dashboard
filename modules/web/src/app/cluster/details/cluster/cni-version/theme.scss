@@ -17,6 +17,7 @@
 @mixin theme-cni-version-component($colors) {
   .cni-version-container {
     .cni-version {
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-form-field-outline {
         color: map.get($colors, divider);
       }
@@ -25,11 +26,12 @@
         border-color: map.get($colors, divider);
       }
 
-      .mat-form-field {
+      .mat-mdc-form-field {
+        /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
         .mat-select-value-text {
           color: map.get($colors, text);
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
         div.mat-form-field-flex label {
           color: map.get($colors, text-secondary);
         }
@@ -40,11 +42,11 @@
       .cni-version-type {
         border-color: map.get($colors, secondary);
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-form-field-outline-thick {
         color: map.get($colors, secondary);
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       div.mat-form-field-flex label {
         color: map.get($colors, secondary-dark);
       }

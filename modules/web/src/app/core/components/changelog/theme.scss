@@ -16,8 +16,8 @@
 
 @mixin theme-changelog-component($colors) {
   .changelog-category {
-    .mat-chip {
-      &.mat-standard-chip {
+    .mat-mdc-chip {
+      &.mat-mdc-standard-chip {
         color: white;
       }
 

@@ -25,7 +25,7 @@ import {
   Validator,
   ValidatorFn,
 } from '@angular/forms';
-import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Subject} from 'rxjs';

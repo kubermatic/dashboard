@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
+import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
-import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import {DialogActionMode} from '@shared/types/common';
@@ -27,7 +28,6 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-constraint-templates-list',

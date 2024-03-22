@@ -55,7 +55,11 @@ $colors-dark: (
   search-outline: #464647,
   tab-divider: #464647,
   shadow: 0 4px 4px rgb(0 0 0 / 8%),
-  shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
+  shadow-dark: (
+    0 2px 4px -1px rgb(0 0 0 / 20%),
+    0 4px 5px 0 rgb(0 0 0 / 14%),
+    0 1px 10px 0 rgb(0 0 0 / 12%),
+  ),
   dropdown-hover: #464646,
   swagger-ui-input-text-color: #4d555c,
   terminal-toolbar-hover: #4d555b,
@@ -73,33 +77,116 @@ $colors-dark: (
   slide-toggle-handle-color: #bdbdbd,
 );
 $colors-dark-palette: mat.$blue-palette;
-$colors-dark-palette: map.merge($colors-dark-palette, (500: #0072b0));
+$colors-dark-palette: map.merge(
+  $colors-dark-palette,
+  (
+    500: #0072b0,
+  )
+);
 $theme-dark: mat.define-dark-theme(
   mat.define-palette($colors-dark-palette),
   mat.define-palette(mat.$light-blue-palette),
-  mat.define-palette(mat.$pink-palette),
+  mat.define-palette(mat.$pink-palette)
 );
 $background: map.get($theme-dark, background);
-$background: map.merge($background, (background: #000));
-$background: map.merge($background, (hover: #2d2d2e));
-$background: map.merge($background, (app-bar: #2b2b2c));
-$background: map.merge($background, (card: #202021));
-$background: map.merge($background, (dialog: #2b2b2c));
-$theme-dark: map.merge($theme-dark, (background: $background));
+$background: map.merge(
+  $background,
+  (
+    background: #000,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    hover: #2d2d2e,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    app-bar: #2b2b2c,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    card: #202021,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    dialog: #2b2b2c,
+  )
+);
+$theme-dark: map.merge(
+  $theme-dark,
+  (
+    background: $background,
+  )
+);
 $foreground: map.get($theme-dark, foreground);
-$foreground: map.merge($foreground, (text: rgb(255 255 255 / 85%)));
-$foreground: map.merge($foreground, (secondary-text: #b8b8b8));
-$foreground: map.merge($foreground, (disabled-text: #636363));
-$foreground: map.merge($foreground, (disabled-checkbox: #656d75));
-$foreground: map.merge($foreground, (disabled-checkbox-checked: #7e868f));
-$foreground: map.merge($foreground, (disabled-checkbox-border: #b6b6b6));
-$foreground: map.merge($foreground, (disabled: #7c7c7c));
-$foreground: map.merge($foreground, (divider: #464647));
-$foreground: map.merge($foreground, (disabled-divider: #313132));
-$theme-dark: map.merge($theme-dark, (foreground: $foreground));
+$foreground: map.merge(
+  $foreground,
+  (
+    text: rgb(255 255 255 / 85%),
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    secondary-text: #b8b8b8,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-text: #636363,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox: #656d75,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox-checked: #7e868f,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox-border: #b6b6b6,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled: #7c7c7c,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    divider: #464647,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-divider: #313132,
+  )
+);
+$theme-dark: map.merge(
+  $theme-dark,
+  (
+    foreground: $foreground,
+  )
+);
 
-/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated */
-@include mat.all-legacy-component-themes($theme-dark);
 @include mat.all-component-themes($theme-dark);
 @include main.theme($theme-dark, $colors-dark);
 
@@ -140,24 +227,26 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 }
 
 // Make selected option text light blue.
-.mat-option.mat-option-multiple.mat-selected .mat-option-text {
+/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
+.mat-mdc-option.mat-mdc-option-multiple.mat-selected .mat-option-text {
   color: map.get($colors-dark, primary-dark);
 }
 
-.mat-option:hover:not(.mat-option-disabled),
+.mat-mdc-option:hover:not(.mat-option-disabled),
 .mat-option:focus:not(.mat-option-disabled) {
   background-color: map.get($colors-dark, dropdown-hover);
 }
 
 // Make checkbox marks white.
-.mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+.mat-mdc-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
   stroke: rgb(255 255 255 / 85%) !important;
 }
 
 // Change background color of steppers in dialogs
 .mat-stepper-horizontal.km-stepper-in-dialog {
   background-color: map.get($colors-dark, option-background);
-
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   .mat-button-toggle-group .mat-button-toggle {
     background-color: map.get($colors-dark, option-background);
   }

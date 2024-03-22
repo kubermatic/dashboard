@@ -13,109 +13,90 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>Nodes</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <table class="km-table"
-           mat-table
-           multiTemplateDataRows
-           matSort
-           (matSortChange)="onSortChange($event)"
-           [dataSource]="dataSource">
-
+    <table
+      class="km-table"
+      mat-table
+      multiTemplateDataRows
+      matSort
+      (matSortChange)="onSortChange($event)"
+      [dataSource]="dataSource">
       <ng-container [matColumnDef]="column.stateArrow">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <i [ngClass]="isShowNodeItem[element.id] ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
+        <td mat-cell *matCellDef="let element">
+          <i
+            [ngClass]="isShowNodeItem[element.id] ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
         </td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <i [matTooltip]="getNodeHealthStatus(element).message"
-             [ngClass]="getNodeHealthStatus(element).icon"
-             class="health-status"></i>
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
+        <td mat-cell *matCellDef="let element">
+          <i
+            [matTooltip]="getNodeHealthStatus(element).message"
+            [ngClass]="getNodeHealthStatus(element).icon"
+            class="health-status"></i>
         </td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-35"
-            mat-sort-header>Name
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <div fxLayout="row"
-               fxLayoutAlign=" center">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-35" mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let element">
+          <div fxLayout="row" fxLayoutAlign=" center">
             <span>{{element.spec.cloud.aws ? getNodeName(element) : element.name}}</span>
             <ng-container *ngIf="element.status.errorMessage as errorMessage; else infoIcon">
-              <i [matTooltip]="errorMessage"
-                 class="km-icon-warning"></i>
+              <i [matTooltip]="errorMessage" class="km-icon-warning"></i>
             </ng-container>
             <ng-template #infoIcon>
-              <i *ngIf="showInfo(element)"
-                 class="km-icon-info km-pointer"
-                 matTooltip="{{getInfo(element)}}"></i>
+              <i *ngIf="showInfo(element)" class="km-icon-info km-pointer" matTooltip="{{getInfo(element)}}"></i>
             </ng-template>
           </div>
         </td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.kubeletVersion">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15"
-            mat-sort-header>kubelet Version
-        </th>
-        <td mat-cell
-            *matCellDef="let element">{{element.status.nodeInfo.kubeletVersion}}</td>
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15" mat-sort-header>kubelet Version</th>
+        <td mat-cell *matCellDef="let element">{{element.status.nodeInfo.kubeletVersion}}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.ipAddresses">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-30">IP Addresses
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-30">IP Addresses</th>
+        <td mat-cell *matCellDef="let element">
           <ng-container *ngIf="element.status.addresses && getAddresses(element) as addresses">
-            <div fxLayout="column"
-                 fxLayoutGap="5px"
-                 [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIPs.length && addresses.internalIPs.length) || addresses.internalIPs.length > 1 || addresses.externalIPs.length > 1}">
-              <div *ngIf="!!addresses.internalIPs.length"
-                   fxLayout="row"
-                   fxLayoutGap="5px">
+            <div
+              fxLayout="column"
+              fxLayoutGap="5px"
+              [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIPs.length && addresses.internalIPs.length) || addresses.internalIPs.length > 1 || addresses.externalIPs.length > 1}">
+              <div *ngIf="!!addresses.internalIPs.length" fxLayout="row" fxLayoutGap="5px">
                 <span>Int. IP:</span>
                 <div fxLayout="column">
-                  <span *ngFor="let internalIP of addresses.internalIPs"
-                        class="km-copy"
-                        [cbContent]="internalIP"
-                        (click)="$event.stopPropagation()"
-                        ngxClipboard
-                        matTooltip="click to copy">{{internalIP}}</span>
+                  <span
+                    *ngFor="let internalIP of addresses.internalIPs"
+                    class="km-copy"
+                    [cbContent]="internalIP"
+                    (click)="$event.stopPropagation()"
+                    ngxClipboard
+                    matTooltip="click to copy"
+                    >{{internalIP}}</span
+                  >
                 </div>
               </div>
-              <div *ngIf="!!addresses.externalIPs.length"
-                   fxLayout="row"
-                   fxLayoutGap="5px">
+              <div *ngIf="!!addresses.externalIPs.length" fxLayout="row" fxLayoutGap="5px">
                 <span>Ext. IP:</span>
                 <div fxLayout="column">
-                  <span *ngFor="let externalIP of addresses.externalIPs"
-                        class="km-copy"
-                        [cbContent]="externalIP"
-                        (click)="$event.stopPropagation()"
-                        ngxClipboard
-                        matTooltip="click to copy">{{externalIP}}</span>
+                  <span
+                    *ngFor="let externalIP of addresses.externalIPs"
+                    class="km-copy"
+                    [cbContent]="externalIP"
+                    (click)="$event.stopPropagation()"
+                    ngxClipboard
+                    matTooltip="click to copy"
+                    >{{externalIP}}</span
+                  >
                 </div>
               </div>
             </div>
@@ -124,38 +105,28 @@ limitations under the License.
       </ng-container>
 
       <ng-container [matColumnDef]="column.creationDate">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15"
-            mat-sort-header>Created
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15" mat-sort-header>Created</th>
+        <td mat-cell *matCellDef="let element">
           <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
         </td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
-            *matCellDef="let element">
-          <div fxLayoutAlign="end"
-               class="km-table-actions">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
+        <td mat-cell *matCellDef="let element">
+          <div fxLayoutAlign="end" class="km-table-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent"></mat-spinner>
+                <mat-spinner [diameter]="25" class="km-spinner" color="accent"></mat-spinner>
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        [attr.id]="'km-delete-node-' + element.name"
-                        matTooltip="Delete Node"
-                        (click)="deleteNodeDialog(element); $event.stopPropagation()"
-                        [disabled]="!canDelete()">
+                <button
+                  mat-icon-button
+                  [attr.id]="'km-delete-node-' + element.name"
+                  matTooltip="Delete Node"
+                  (click)="deleteNodeDialog(element); $event.stopPropagation()"
+                  [disabled]="!canDelete()">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>
               </ng-container>
@@ -165,12 +136,8 @@ limitations under the License.
       </ng-container>
 
       <ng-container [matColumnDef]="toggleableColumn.nodeDetails">
-        <td mat-cell
-            *matCellDef="let element"
-            class="node-details"
-            [attr.colspan]="displayedColumns.length">
-          <mat-card-content fxLayout="row wrap"
-                            class="km-row">
+        <td mat-cell *matCellDef="let element" class="node-details" [attr.colspan]="displayedColumns.length">
+          <mat-card-content fxLayout="row wrap" class="km-row">
             <km-property *ngIf="!!element.status.nodeInfo.kernelVersion">
               <div key>Kernel Version</div>
               <div value>{{element.status.nodeInfo.kernelVersion}}</div>
@@ -214,28 +181,26 @@ limitations under the License.
 
             <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
               <div key>Node Capacity</div>
-              <div value>{{element.status.capacity.cpu}}
-                CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
+              <div value>
+                {{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}
+              </div>
             </km-property>
 
             <km-property>
-              <div value
-                   fxLayout="row"
-                   fxLayoutGap="10px">
+              <div value fxLayout="row" fxLayoutGap="10px">
                 <div class="km-os-image-{{getSystemLogoClass(element)}}"></div>
                 <span>{{getSystem(element)}}</span>
-                <km-chip *ngIf="getSystem(element) === 'Container Linux'"
-                         text="EOL"
-                         type="error"
-                         matTooltip="Container Linux has reached its end of life and is no longer maintained or updated.">
+                <km-chip
+                  *ngIf="getSystem(element) === 'Container Linux'"
+                  text="EOL"
+                  type="error"
+                  matTooltip="Container Linux has reached its end of life and is no longer maintained or updated.">
                 </km-chip>
               </div>
             </km-property>
 
             <km-property *ngIf="element.spec.sshUserName">
-              <div key
-                   class="node-info"
-                   matTooltip="Use this username if you need to connect to your nodes via SSH.">
+              <div key class="node-info" matTooltip="Use this username if you need to connect to your nodes via SSH.">
                 SSH Key Username
                 <i class="km-icon-info km-pointer"></i>
               </div>
@@ -290,19 +255,19 @@ limitations under the License.
               <km-property *ngIf="element.spec.cloud.kubevirt.instancetype as instanceType">
                 <div key>Instance Type</div>
                 <div value>
-                  <mat-chip>
+                  <mat-chip-option>
                     <div>{{getKubeVirtInstanceTypeCategory(instanceType)}}</div>
                     <div class="km-chip-accent">{{instanceType.name}}</div>
-                  </mat-chip>
+                  </mat-chip-option>
                 </div>
               </km-property>
               <km-property *ngIf="element.spec.cloud.kubevirt.preference as preference">
                 <div key>Preference</div>
                 <div value>
-                  <mat-chip>
+                  <mat-chip-option>
                     <div>{{getKubeVirtPreferenceCategory(preference)}}</div>
                     <div class="km-chip-accent">{{preference.name}}</div>
-                  </mat-chip>
+                  </mat-chip-option>
                 </div>
               </km-property>
               <km-property>
@@ -334,13 +299,13 @@ limitations under the License.
               <km-property *ngIf="element.spec.cloud.kubevirt.topologySpreadConstraints?.length > 0">
                 <div key>Topology Spread Constraints</div>
                 <div value>
-                  <mat-chip-list selectable="false">
-                    <mat-chip *ngFor="let constraint of element.spec.cloud.kubevirt.topologySpreadConstraints">
+                  <mat-chip-listbox selectable="false">
+                    <mat-chip-option *ngFor="let constraint of element.spec.cloud.kubevirt.topologySpreadConstraints">
                       <div>{{constraint.topologyKey}}</div>
                       <div class="km-chip-accent">{{constraint.maxSkew}}</div>
                       <div>{{constraint.whenUnsatisfiable}}</div>
-                    </mat-chip>
-                  </mat-chip-list>
+                    </mat-chip-option>
+                  </mat-chip-listbox>
                 </div>
               </km-property>
             </ng-container>
@@ -361,8 +326,7 @@ limitations under the License.
               <div key>VM Template</div>
               <div value>{{element.spec.cloud.vsphere.template}}</div>
             </km-property>
-            <km-property-boolean label="VM Anti Affinity"
-                                 [value]="element.spec.cloud.vsphere?.vmAntiAffinity">
+            <km-property-boolean label="VM Anti Affinity" [value]="element.spec.cloud.vsphere?.vmAntiAffinity">
             </km-property-boolean>
 
             <km-property *ngIf="element.spec.cloud.anexia?.cpus">
@@ -376,13 +340,12 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.anexia?.disks?.length > 0">
               <div key>Disks</div>
               <div value>
-                <mat-chip-list selectable="false">
-                  <mat-chip *ngFor="let disk of element.spec.cloud.anexia.disks">
+                <mat-chip-listbox selectable="false">
+                  <mat-chip-option *ngFor="let disk of element.spec.cloud.anexia.disks">
                     <div>{{disk.size}}GB</div>
-                    <div class="km-chip-accent"
-                         *ngIf="disk.performanceType">{{disk.performanceType}}</div>
-                  </mat-chip>
-                </mat-chip-list>
+                    <div class="km-chip-accent" *ngIf="disk.performanceType">{{disk.performanceType}}</div>
+                  </mat-chip-option>
+                </mat-chip-listbox>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.anexia?.templateID">
@@ -408,23 +371,16 @@ limitations under the License.
             </km-property>
             <km-property *ngIf="element.spec.cloud.azure">
               <div key>Data Disk Size</div>
-              <div *ngIf="element.spec.cloud.azure.dataDiskSize === 0"
-                   value>
-                Default
-              </div>
-              <div value
-                   *ngIf="element.spec.cloud.azure.dataDiskSize !== 0">
+              <div *ngIf="element.spec.cloud.azure.dataDiskSize === 0" value>Default</div>
+              <div value *ngIf="element.spec.cloud.azure.dataDiskSize !== 0">
                 {{element.spec.cloud.azure.dataDiskSize}} GB
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.azure">
               <div key>OS Disk Size</div>
-              <div *ngIf="element.spec.cloud.azure.osDiskSize === 0"
-                   value>
-                Default
-              </div>
-              <div *ngIf="element.spec.cloud.azure.osDiskSize !== 0"
-                   value>{{element.spec.cloud.azure.osDiskSize}} GB
+              <div *ngIf="element.spec.cloud.azure.osDiskSize === 0" value>Default</div>
+              <div *ngIf="element.spec.cloud.azure.osDiskSize !== 0" value>
+                {{element.spec.cloud.azure.osDiskSize}} GB
               </div>
             </km-property>
             <!-- End of other properties. -->
@@ -433,142 +389,146 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.aws && hasTags(element.spec.cloud.aws.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.aws.tags"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.aws.tags" emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.azure && hasTags(element.spec.cloud.azure.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.azure.tags"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.azure.tags" emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.digitalocean && element.spec.cloud.digitalocean.tags.length > 0">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.digitalocean.tags"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.digitalocean.tags" emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.packet && element.spec.cloud.packet.tags.length > 0">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.packet.tags"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.packet.tags" emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.openstack && hasTags(element.spec.cloud.openstack.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="element.spec.cloud.openstack.tags"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels [labels]="element.spec.cloud.openstack.tags" emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
 
             <km-property *ngIf="element.spec.cloud.vsphere && hasTags(element.spec.cloud.vsphere.tags)">
               <div key>Tags</div>
               <div value>
-                <km-labels [labels]="convertVSphereTagsIntoObject(element.spec.cloud.vsphere.tags)"
-                           emptyMessage="No assigned tags"></km-labels>
+                <km-labels
+                  [labels]="convertVSphereTagsIntoObject(element.spec.cloud.vsphere.tags)"
+                  emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
             <!-- End of tags.-->
 
             <!-- Boolean properties. -->
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.ubuntu"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.ubuntu"
+              label="Upgrade system on first boot"
+              [value]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.centos"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.centos.distUpgradeOnBoot">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.centos"
+              label="Upgrade system on first boot"
+              [value]="element.spec.operatingSystem.centos.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.flatcar"
-                                 label="Disable auto-update"
-                                 [value]="element.spec.operatingSystem.flatcar.disableAutoUpdate">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.flatcar"
+              label="Disable auto-update"
+              [value]="element.spec.operatingSystem.flatcar.disableAutoUpdate">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.amzn2"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.amzn2.distUpgradeOnBoot">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.amzn2"
+              label="Upgrade system on first boot"
+              [value]="element.spec.operatingSystem.amzn2.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.rhel"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.rhel.distUpgradeOnBoot">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.rhel"
+              label="Upgrade system on first boot"
+              [value]="element.spec.operatingSystem.rhel.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.rockylinux"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.rockylinux.distUpgradeOnBoot">
+            <km-property-boolean
+              *ngIf="!!element.spec.operatingSystem.rockylinux"
+              label="Upgrade system on first boot"
+              [value]="element.spec.operatingSystem.rockylinux.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.digitalocean"
-                                 label="Backups"
-                                 [value]="element.spec.cloud.digitalocean.backups">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.digitalocean"
+              label="Backups"
+              [value]="element.spec.cloud.digitalocean.backups">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.digitalocean"
-                                 label="Monitoring"
-                                 [value]="element.spec.cloud.digitalocean.monitoring">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.digitalocean"
+              label="Monitoring"
+              [value]="element.spec.cloud.digitalocean.monitoring">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.azure"
-                                 label="Assign Public IP"
-                                 [value]="element.spec.cloud.azure.assignPublicIP">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.azure"
+              label="Assign Public IP"
+              [value]="element.spec.cloud.azure.assignPublicIP">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.azure"
-                                 label="Assign Availability Set"
-                                 [value]="element.spec.cloud.azure.assignAvailabilitySet">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.azure"
+              label="Assign Availability Set"
+              [value]="element.spec.cloud.azure.assignAvailabilitySet">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.aws"
-                                 label="Spot Instance"
-                                 [value]="element.spec.cloud.aws.isSpotInstance">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.aws"
+              label="Spot Instance"
+              [value]="element.spec.cloud.aws.isSpotInstance">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.aws"
-                                 label="Spot Instance Persistent Request"
-                                 [value]="element.spec.cloud.aws.spotInstancePersistentRequest">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.aws"
+              label="Spot Instance Persistent Request"
+              [value]="element.spec.cloud.aws.spotInstancePersistentRequest">
             </km-property-boolean>
-            <km-property-boolean *ngIf="element.spec.cloud.aws"
-                                 label="EBS Volume Encryption"
-                                 [value]="element.spec.cloud.aws.ebsVolumeEncrypted">
+            <km-property-boolean
+              *ngIf="element.spec.cloud.aws"
+              label="EBS Volume Encryption"
+              [value]="element.spec.cloud.aws.ebsVolumeEncrypted">
             </km-property-boolean>
             <!-- End of boolean properties. -->
 
-            <div *ngIf="getMetrics(element.name)"
-                 fxLayout="row">
-              <km-property-usage name="Nodes CPU Usage"
-                                 unit="millicores"
-                                 [used]="getMetrics(element.name)?.cpuTotalMillicores"
-                                 [total]="getMetrics(element.name)?.cpuAvailableMillicores"></km-property-usage>
+            <div *ngIf="getMetrics(element.name)" fxLayout="row">
+              <km-property-usage
+                name="Nodes CPU Usage"
+                unit="millicores"
+                [used]="getMetrics(element.name)?.cpuTotalMillicores"
+                [total]="getMetrics(element.name)?.cpuAvailableMillicores"></km-property-usage>
 
-              <km-property-usage name="Nodes Memory Usage"
-                                 unit="MiB"
-                                 [used]="getMetrics(element.name)?.memoryTotalBytes"
-                                 [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
+              <km-property-usage
+                name="Nodes Memory Usage"
+                unit="MiB"
+                [used]="getMetrics(element.name)?.memoryTotalBytes"
+                [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
             </div>
-
           </mat-card-content>
         </td>
       </ng-container>
 
-      <tr mat-header-row
-          class="km-header-row"
-          *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns;"
-          class="km-mat-row km-pointer"
-          (click)="toggleNodeItem(row)"></tr>
-      <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggleableColumns;"
-          [ngClass]="isShowNodeItem[row.id] ? '' : 'km-hidden'"
-          class="km-mat-row"></tr>
+      <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns;"
+        class="km-mat-row km-pointer"
+        (click)="toggleNodeItem(row)"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; let i=index; columns: toggleableColumns;"
+        [ngClass]="isShowNodeItem[row.id] ? '' : 'km-hidden'"
+        class="km-mat-row"></tr>
     </table>
 
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!nodes || nodes.length === 0">
-      No nodes available.
-    </div>
+    <div class="km-row km-empty-list-msg" *ngIf="!nodes || nodes.length === 0">No nodes available.</div>
 
-    <div [hidden]="!isPaginatorVisible()"
-         class="km-paginator-container">
-      <div fxLayout="row"
-           fxLayoutAlign="flex-end center">
+    <div [hidden]="!isPaginatorVisible()" class="km-paginator-container">
+      <div fxLayout="row" fxLayoutAlign="flex-end center">
         <km-pagination-page-size></km-pagination-page-size>
         <mat-paginator showFirstLastButtons></mat-paginator>
       </div>

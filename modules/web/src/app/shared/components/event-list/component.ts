@@ -15,12 +15,12 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Event} from '@shared/entity/event';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {SettingsService} from '@core/services/settings';
 
 @Component({
   selector: 'km-event-list',

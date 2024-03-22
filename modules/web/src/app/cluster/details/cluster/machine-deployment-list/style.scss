@@ -14,14 +14,14 @@
 
 @use 'variables';
 
-.mat-card {
-  .mat-card-header {
-    .mat-card-title {
+.mat-mdc-card {
+  .mat-mdc-card-header {
+    .mat-mdc-card-title {
       padding-left: 30px;
     }
   }
 
-  .mat-cell {
+  .mat-mdc-cell {
     padding: 4px 0;
   }
 }

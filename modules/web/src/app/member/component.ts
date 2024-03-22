@@ -16,28 +16,28 @@ import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnIni
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {UserSettings} from '@app/shared/entity/settings';
+import {MemberService} from '@core/services/member';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
+import {EMPTY, Subject, merge, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
-import {MemberService} from '@core/services/member';
-import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
-import {UserSettings} from '@app/shared/entity/settings';
-import {Router} from '@angular/router';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-member',

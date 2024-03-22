@@ -14,7 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Cluster, MachineNetwork} from '@shared/entity/cluster';
 import {AddMachineNetworkComponent} from '../add-machine-network/component';
 

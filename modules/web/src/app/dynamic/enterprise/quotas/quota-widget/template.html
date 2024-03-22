@@ -26,7 +26,7 @@ END OF TERMS AND CONDITIONS
 </div>
 
 <ng-template #quotaWidget>
-  <mat-card *ngIf="showAsCard; else quotaWidgetWithoutCard">
+  <mat-card appearance="outlined" *ngIf="showAsCard; else quotaWidgetWithoutCard">
     <mat-card-content>
       <ng-container *ngTemplateOutlet="quotaWidgetWithoutCard"></ng-container>
     </mat-card-content>
@@ -73,7 +73,7 @@ END OF TERMS AND CONDITIONS
       </ng-template>
     </div>
 
-    <mat-card class="km-quota-details {{classForQuotaDetailInSelectProjectView}}"
+    <mat-card appearance="outlined" class="km-quota-details {{classForQuotaDetailInSelectProjectView}}"
               [ngClass]="{'collapsed': isCollapsed}"
               *ngIf="showDetails$ | async">
 

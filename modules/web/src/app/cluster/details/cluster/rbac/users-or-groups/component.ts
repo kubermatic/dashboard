@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 import {RBACService} from '@core/services/rbac';
-import {Subject, combineLatest} from 'rxjs';
-import {takeUntil, map} from 'rxjs/operators';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterBinding, NamespaceBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
+import {ClusterBinding, Kind, NamespaceBinding, SimpleClusterBinding} from '@shared/entity/rbac';
+import {Subject, combineLatest} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 
 enum BindingMode {
   Cluster = 'Cluster',

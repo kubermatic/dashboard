@@ -13,25 +13,25 @@
 // limitations under the License.
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
+import {View} from '@app/shared/entity/common';
+import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {Member} from '@shared/entity/member';
 import {getOperatingSystem} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {HealthStatus} from '@shared/utils/health-status';
+import {MemberUtils, Permission} from '@shared/utils/member';
+import {NotificationService} from 'app/core/services/notification';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {Member} from '@shared/entity/member';
-import {GroupConfig} from '@shared/model/Config';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
-import {MemberUtils, Permission} from '@shared/utils/member';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
-import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
-import {HealthStatus} from '@shared/utils/health-status';
-import {View} from '@app/shared/entity/common';
-import {NotificationService} from 'app/core/services/notification';
 
 enum AKSNodePoolState {
   ProvisioningState = 'provisioningState',

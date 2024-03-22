@@ -43,6 +43,7 @@ $project-card-width: 330px;
 }
 
 .project-view-switch {
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   .mat-button-toggle {
     @include mixins.size($view-switch-width, $view-switch-height, true);
 
@@ -72,7 +73,7 @@ $project-card-width: 330px;
     @include mixins.size(24px);
   }
 
-  .mat-card {
+  .mat-mdc-card {
     @include mixins.size($project-card-width, $project-card-height-default, true);
 
     box-shadow: variables.$border-box-shadow;
@@ -84,7 +85,7 @@ $project-card-width: 330px;
     }
 
     button {
-      &.mat-icon-button {
+      &.mat-mdc-icon-button {
         @include mixins.size(40px);
       }
     }
@@ -102,11 +103,11 @@ $project-card-width: 330px;
     }
   }
 
-  .mat-card-header {
+  .mat-mdc-card-header {
     padding: 20px;
   }
 
-  .mat-card-title {
+  .mat-mdc-card-title {
     line-height: 23px;
     margin: 0 5px 0 0;
     overflow: hidden;
@@ -116,7 +117,7 @@ $project-card-width: 330px;
     width: 175px;
   }
 
-  .mat-card-subtitle {
+  .mat-mdc-card-subtitle {
     line-height: 16px;
     margin: 0;
     padding: 5px 0 0;
@@ -135,7 +136,7 @@ $project-card-width: 330px;
     margin-right: 12px;
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     padding: 30px 20px 20px;
   }
 }

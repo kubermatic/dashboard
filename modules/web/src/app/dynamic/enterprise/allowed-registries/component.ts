@@ -18,23 +18,23 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {DynamicTab} from '@shared/model/dynamic-tab';
-import {AllowedRegistriesService} from './service';
-import {UserService} from '@core/services/user';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {AllowedRegistry} from './entity';
+import {DynamicTab} from '@shared/model/dynamic-tab';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AllowedRegistryDialog} from './allowed-registry-dialog/component';
-import {DialogActionMode} from '@shared/types/common';
-import {DialogModeService} from '@app/core/services/dialog-mode';
+import {AllowedRegistry} from './entity';
+import {AllowedRegistriesService} from './service';
 
 @Component({
   selector: 'km-allowed-registries-list',

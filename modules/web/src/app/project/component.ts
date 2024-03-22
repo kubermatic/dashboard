@@ -26,10 +26,13 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
+import {COOKIE_DI_TOKEN, Cookie} from '@app/config';
+import {DialogModeService} from '@app/core/services/dialog-mode';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {GlobalModule} from '@core/services/global/module';
 import {NotificationService} from '@core/services/notification';
 import {PreviousRouteService} from '@core/services/previous-route';
 import {ProjectService} from '@core/services/project';
@@ -46,13 +49,10 @@ import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {DeleteProjectConfirmationComponent} from './delete-project/component';
-import {EditProjectComponent} from './edit-project/component';
-import {DynamicModule} from '@app/dynamic/module-registry';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {QuotaService} from '../dynamic/enterprise/quotas/service';
-import {GlobalModule} from '@core/services/global/module';
-import {DialogModeService} from '@app/core/services/dialog-mode';
+import {DeleteProjectConfirmationComponent} from './delete-project/component';
+import {EditProjectComponent} from './edit-project/component';
 
 @Component({
   selector: 'km-project',

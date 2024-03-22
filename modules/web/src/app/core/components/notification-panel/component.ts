@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatLegacyButton} from '@angular/material/legacy-button';
+import {MatButton} from '@angular/material/button';
 import {NavigationStart, Router} from '@angular/router';
 import {NotificationType} from '@core/components/notification/component';
 import {Notification, NotificationService} from '@core/services/notification';
@@ -33,7 +33,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _filter: NotificationType = undefined;
   private _isAnimating = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
-  @ViewChild('toggleButton') toggleButton: MatLegacyButton;
+  @ViewChild('toggleButton') toggleButton: MatButton;
   notifications: Notification[] = [];
   unseenNotificationsCount = 0;
   readonly NotificationType = NotificationType;

@@ -13,20 +13,20 @@
 // limitations under the License.
 
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {finalize, takeUntil} from 'rxjs/operators';
 import {MatSort} from '@angular/material/sort';
-import {SeedOverview} from '@shared/entity/datacenter';
-import {DatacenterService} from '@core/services/datacenter';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   DatacenterDetail,
   ProviderDetail,
   SeedOverviewDatasource,
 } from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {DatacenterService} from '@core/services/datacenter';
+import {SeedOverview} from '@shared/entity/datacenter';
+import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
 import _ from 'lodash';
+import {Subject} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
 
 enum Column {
   StateArrow = 'stateArrow',

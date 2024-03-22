@@ -16,7 +16,7 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Vi
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -25,17 +25,17 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node, NodeIPAddress, VSphereTag} from '@shared/entity/node';
+import {Node, NodeIPAddress, VSphereTag, getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {KubeVirtNodeInstanceType, KubeVirtNodePreference} from '@shared/entity/provider/kubevirt';
 import {GroupConfig} from '@shared/model/Config';
+import {convertArrayToObject} from '@shared/utils/common';
+import {HealthStatus, getNodeHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {NodeUtils} from '@shared/utils/node';
 import _ from 'lodash';
-import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
-import {convertArrayToObject} from '@shared/utils/common';
+import * as semver from 'semver';
 
 enum Column {
   stateArrow = 'stateArrow',

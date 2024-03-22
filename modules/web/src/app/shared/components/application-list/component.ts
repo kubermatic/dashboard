@@ -15,7 +15,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {SafeUrl} from '@angular/platform-browser';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {ApplicationService} from '@core/services/application';
@@ -27,7 +27,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
-import {forkJoin, of, Subject} from 'rxjs';
+import {Subject, forkJoin, of} from 'rxjs';
 import {finalize, map, take, takeUntil} from 'rxjs/operators';
 
 export enum ApplicationsListView {

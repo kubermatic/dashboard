@@ -13,11 +13,8 @@
 // limitations under the License.
 
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {
-  MAT_LEGACY_FORM_FIELD_DEFAULT_OPTIONS as MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatLegacyFormFieldDefaultOptions as MatFormFieldDefaultOptions,
-} from '@angular/material/legacy-form-field';
-import {MAT_LEGACY_TOOLTIP_DEFAULT_OPTIONS as MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/legacy-tooltip';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
+import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
@@ -27,8 +24,8 @@ import {DatacenterService} from '@core/services/datacenter';
 import {HistoryService} from '@core/services/history';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
 import {environment} from '@environments/environment';
+import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {kmTooltipDefaultOptions} from '../app-config';

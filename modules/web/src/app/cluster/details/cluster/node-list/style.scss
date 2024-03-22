@@ -14,9 +14,9 @@
 
 @use 'variables';
 
-.mat-card {
-  .mat-card-header {
-    .mat-card-title {
+.mat-mdc-card {
+  .mat-mdc-card-header {
+    .mat-mdc-card-title {
       padding-left: 30px;
     }
   }
@@ -39,14 +39,14 @@ i.km-icon-warning {
 .node-details {
   box-shadow: variables.$border-box-shadow-inset;
   padding: variables.$item-details-padding;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-content {
     border: none;
     margin-top: 15px;
   }
 }
 
-.mat-card-content {
+.mat-mdc-card-content {
   .km-row {
     border-top: none;
     padding: 0 30px;

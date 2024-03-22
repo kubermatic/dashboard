@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
@@ -21,7 +21,7 @@ import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@s
 import {Health} from '@shared/entity/health';
 import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Project} from '@shared/entity/project';
-import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
+import {HealthStatus, StatusIcon, getClusterHealthStatus} from '@shared/utils/health-status';
 import _ from 'lodash';
 
 @Component({

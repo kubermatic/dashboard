@@ -12,17 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {Router, ActivatedRoute} from '@angular/router';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  AddClusterFromTemplateDialogComponent,
+  AddClusterFromTemplateDialogData,
+} from '@app/shared/components/add-cluster-from-template-dialog/component';
+import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
+import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
@@ -35,13 +42,6 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {PathParam} from '@core/services/params';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
-import {
-  AddClusterFromTemplateDialogComponent,
-  AddClusterFromTemplateDialogData,
-} from '@app/shared/components/add-cluster-from-template-dialog/component';
-import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 @Component({
   selector: 'km-cluster-template',

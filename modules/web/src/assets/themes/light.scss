@@ -52,7 +52,11 @@ $colors-light: (
   search-outline: #e0e3e5,
   tab-divider: #cad1d9,
   shadow: 0 4px 4px rgb(0 0 0 / 8%),
-  shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
+  shadow-dark: (
+    0 2px 4px -1px rgb(0 0 0 / 20%),
+    0 4px 5px 0 rgb(0 0 0 / 14%),
+    0 1px 10px 0 rgb(0 0 0 / 12%),
+  ),
   swagger-ui-input-text-color: #4d555c,
   terminal-toolbar-hover: #4d555b,
   terminal-toolbar-color: #edeff0,
@@ -69,29 +73,97 @@ $colors-light: (
   slide-toggle-handle-color: #fafafa,
 );
 $colors-light-palette: mat.$blue-palette;
-$colors-light-palette: map.merge($colors-light-palette, (500: #00517d));
+$colors-light-palette: map.merge(
+  $colors-light-palette,
+  (
+    500: #00517d,
+  )
+);
 $theme-light: mat.define-light-theme(
   mat.define-palette($colors-light-palette),
   mat.define-palette(mat.$light-blue-palette),
-  mat.define-palette(mat.$pink-palette),
+  mat.define-palette(mat.$pink-palette)
 );
 $background: map.get($theme-light, background);
-$background: map.merge($background, (background: #edeff0));
-$background: map.merge($background, (app-bar: #fff));
-$theme-light: map.merge($theme-light, (background: $background));
+$background: map.merge(
+  $background,
+  (
+    background: #edeff0,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    app-bar: #fff,
+  )
+);
+$theme-light: map.merge(
+  $theme-light,
+  (
+    background: $background,
+  )
+);
 $foreground: map.get($theme-light, foreground);
-$foreground: map.merge($foreground, (text: #4d555c));
-$foreground: map.merge($foreground, (secondary-text: #7e868f));
-$foreground: map.merge($foreground, (disabled-text: #d2d7db));
-$foreground: map.merge($foreground, (disabled-checkbox: #e5e5e5));
-$foreground: map.merge($foreground, (disabled-checkbox-checked: #cad1c9));
-$foreground: map.merge($foreground, (disabled-checkbox-border: #d5d5d5));
-$foreground: map.merge($foreground, (disabled: #eff1f2));
-$foreground: map.merge($foreground, (divider: #e0e3e5));
-$foreground: map.merge($foreground, (disabled-divider: #eff1f2));
-$theme-light: map.merge($theme-light, (foreground: $foreground));
+$foreground: map.merge(
+  $foreground,
+  (
+    text: #4d555c,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    secondary-text: #7e868f,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-text: #d2d7db,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox: #e5e5e5,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox-checked: #cad1c9,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-checkbox-border: #d5d5d5,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled: #eff1f2,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    divider: #e0e3e5,
+  )
+);
+$foreground: map.merge(
+  $foreground,
+  (
+    disabled-divider: #eff1f2,
+  )
+);
+$theme-light: map.merge(
+  $theme-light,
+  (
+    foreground: $foreground,
+  )
+);
 
-/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated */
-@include mat.all-legacy-component-themes($theme-light);
 @include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);

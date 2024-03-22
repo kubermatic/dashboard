@@ -233,11 +233,11 @@ limitations under the License.
         Cluster Backup
         <i class="km-icon-info km-pointer"
            matTooltip="Enable create backups from this cluster"></i>
-        <mat-chip>
+        <mat-chip-option>
           <div>
             Experimental
           </div>
-        </mat-chip>
+        </mat-chip-option>
       </mat-checkbox>
 
       <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled"

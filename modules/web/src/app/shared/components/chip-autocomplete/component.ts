@@ -37,8 +37,8 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent} from '@angular/material/legacy-autocomplete';
-import {MatLegacyChipInputEvent as MatChipInputEvent} from '@angular/material/legacy-chips';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {KmValidators} from '@shared/validators/validators';
 import {Subject} from 'rxjs';
 import {debounceTime, map, takeUntil} from 'rxjs/operators';

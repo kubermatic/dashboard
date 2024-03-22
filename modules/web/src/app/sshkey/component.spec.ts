@@ -14,28 +14,28 @@
 
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
-import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeProject} from '@test/data/project';
-import {fakeSSHKeys} from '@test/data/sshkey';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
+import {SSHKeyService} from '@core/services/ssh-key';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {SSHKeyComponent} from './component';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeProject} from '@test/data/project';
+import {fakeSSHKeys} from '@test/data/sshkey';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {SSHKeyComponent} from './component';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;

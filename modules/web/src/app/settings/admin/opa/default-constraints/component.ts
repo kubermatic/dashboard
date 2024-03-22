@@ -16,7 +16,8 @@ import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from 
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {isEnterpriseEdition} from '@app/dynamic/common';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -29,7 +30,6 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DefaultConstraintDialog} from './default-constraint-dialog/component';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-default-constraint-list',

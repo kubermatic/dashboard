@@ -19,17 +19,17 @@
 // END OF TERMS AND CONDITIONS
 
 import {DOCUMENT} from '@angular/common';
-import {Component, OnInit, ViewChild, Inject, Input, OnDestroy} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {Report} from '@shared/entity/metering';
-import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@app/core/services/notification';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
+import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
+import {Report} from '@shared/entity/metering';
 import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Column {
   name = 'name',

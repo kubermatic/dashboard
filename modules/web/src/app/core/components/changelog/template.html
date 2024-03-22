@@ -13,8 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxFlex
-     fxLayout="column">
+<div fxFlex fxLayout="column">
   <km-dialog-title>What's New</km-dialog-title>
   <div class="header-info">
     Version {{version}}
@@ -22,31 +21,26 @@ limitations under the License.
   </div>
 
   <mat-dialog-content class="km-changelog-content-container">
-    <div *ngFor="let category of categories"
-         class="changelog-category">
-      <mat-chip-list>
-        <mat-chip [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip>
-      </mat-chip-list>
+    <div *ngFor="let category of categories" class="changelog-category">
+      <mat-chip-listbox>
+        <mat-chip-option [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip-option>
+      </mat-chip-listbox>
 
       <ul>
-        <div *ngFor="let entry of entries(category)"
-             fxLayout="column">
+        <div *ngFor="let entry of entries(category)" fxLayout="column">
           <li>{{entry.description}}</li>
           <div fxLayout="row wrap">
-            <a *ngFor="let link of entry.links"
-               [href]="link.url"
-               target="_blank"
-               rel="noopener"
-               fxLayout="row"
-               class="changelog-link-card">
-              <span class="changelog-external-link-icon"
-                    fxFlex="0 0 auto"
-                    fxLayoutAlign=" center">
+            <a
+              *ngFor="let link of entry.links"
+              [href]="link.url"
+              target="_blank"
+              rel="noopener"
+              fxLayout="row"
+              class="changelog-link-card">
+              <span class="changelog-external-link-icon" fxFlex="0 0 auto" fxLayoutAlign=" center">
                 <i class="km-icon-external-link"></i>
               </span>
-              <span class="changelog-link-caption"
-                    fxFlex
-                    fxLayoutAlign=" center">
+              <span class="changelog-link-caption" fxFlex fxLayoutAlign=" center">
                 <span>{{link.caption}}</span>
               </span>
             </a>
@@ -56,31 +50,22 @@ limitations under the License.
     </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions fxLayout="row"
-                      fxLayoutAlign="end center"
-                      class="actions">
-
-    <a *ngIf="changelogURL"
-       [href]="changelogURL"
-       mat-flat-button
-       class="changelog-link-button"
-       color="alternative"
-       target="_blank"
-       rel="noopener">
-      <span fxFlex="0 0 auto"
-            fxLayoutAlign=" center">
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" class="actions">
+    <a
+      *ngIf="changelogURL"
+      [href]="changelogURL"
+      mat-flat-button
+      class="changelog-link-button"
+      color="alternative"
+      target="_blank"
+      rel="noopener">
+      <span fxFlex="0 0 auto" fxLayoutAlign=" center">
         <i class="km-icon-external-link"></i>
       </span>
       Full Changelog
     </a>
-    <mat-spinner *ngIf="saving"
-                 [diameter]="25"
-                 @pushToSide
-                 color="accent"
-                 class="spinner"></mat-spinner>
-    <button mat-flat-button
-            [disabled]="saving"
-            (click)="remember()">
+    <mat-spinner *ngIf="saving" [diameter]="25" @pushToSide color="accent" class="spinner"></mat-spinner>
+    <button mat-flat-button [disabled]="saving" (click)="remember()">
       <i class="km-icon-mask km-icon-check i-24"></i>
       <span>Got It</span>
     </button>

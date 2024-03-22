@@ -29,7 +29,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';

@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-number-stepper-component($colors) {
-  .mat-icon-button.stepper-button {
+  .mat-mdc-icon-button.stepper-button {
     background-color: map.get($colors, divider);
 
     &:hover {

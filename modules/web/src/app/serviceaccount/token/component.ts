@@ -15,7 +15,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {
   ServiceAccountTokenDialog,
@@ -24,13 +24,13 @@ import {
 } from '@app/serviceaccount/token/add/component';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {ServiceAccountService} from '@core/services/service-account';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {filter, switchMap, take} from 'rxjs/operators';
-import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
   selector: 'km-serviceaccount-token',

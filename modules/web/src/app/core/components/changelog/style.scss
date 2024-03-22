@@ -48,8 +48,8 @@ ul {
   padding-top: 20px;
 }
 
-.mat-chip {
-  &.mat-standard-chip {
+.mat-mdc-chip {
+  &.mat-mdc-standard-chip {
     border: none;
     border-radius: 4px;
     font-size: variables.$font-size-body;

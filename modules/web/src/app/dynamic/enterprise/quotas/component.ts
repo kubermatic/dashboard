@@ -20,21 +20,21 @@
 
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {takeUntil, filter, switchMap, tap, take} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {QuotaService} from './service';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
+import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
+import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {QuotaDetails} from '@shared/entity/quota';
 import _ from 'lodash';
+import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
-import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
-import {NotificationService} from '@core/services/notification';
+import {QuotaService} from './service';
 import {getProgressBarAccent} from './utils/common';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 enum Column {
   ProjectId = 'ProjectId',

@@ -19,29 +19,29 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {AppConfigService} from '@app/config.service';
+import {Group} from '@app/dynamic/enterprise/group/entity';
+import {GroupService} from '@app/dynamic/enterprise/group/service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {Project} from '@shared/entity/project';
-import _ from 'lodash';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {DynamicTab} from '@shared/model/dynamic-tab';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {GroupService} from '@app/dynamic/enterprise/group/service';
-import {Group} from '@app/dynamic/enterprise/group/entity';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {AddGroupDialogComponent} from './add-group-dialog/component';
-import {EditGroupDialogComponent} from './edit-group-dialog/component';
-import {AppConfigService} from '@app/config.service';
-import {MemberUtils, Permission} from '@shared/utils/member';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
+import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
+import {DynamicTab} from '@shared/model/dynamic-tab';
+import {MemberUtils, Permission} from '@shared/utils/member';
+import _ from 'lodash';
+import {EMPTY, Subject, merge, timer} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {AddGroupDialogComponent} from './add-group-dialog/component';
+import {EditGroupDialogComponent} from './edit-group-dialog/component';
 
 enum Column {
   Group = 'group',

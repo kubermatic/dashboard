@@ -15,16 +15,16 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {BackupService} from '@core/services/backup';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {DestinationDialog, Mode} from './destination-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
-import {filter, switchMap, take} from 'rxjs/operators';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-destinations',

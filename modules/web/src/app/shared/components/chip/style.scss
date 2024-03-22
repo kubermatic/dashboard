@@ -14,8 +14,8 @@
 
 @use 'variables';
 
-.mat-chip {
-  &.mat-standard-chip {
+.mat-mdc-chip {
+  &.mat-mdc-standard-chip {
     border: none;
     border-radius: 12px;
     min-height: 18px;
@@ -26,8 +26,8 @@
 :host {
   align-self: center;
 
-  .mat-chip {
-    &.mat-standard-chip {
+  .mat-mdc-chip {
+    &.mat-mdc-standard-chip {
       font-size: variables.$font-size-body;
       font-weight: bold;
       vertical-align: middle;
