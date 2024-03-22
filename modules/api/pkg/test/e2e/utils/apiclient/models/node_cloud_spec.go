@@ -48,6 +48,9 @@ type NodeCloudSpec struct {
 	// nutanix
 	Nutanix *NutanixNodeSpec `json:"nutanix,omitempty"`
 
+	// opennebula
+	Opennebula *OpenNebulaNodeSpec `json:"opennebula,omitempty"`
+
 	// openstack
 	Openstack *OpenstackNodeSpec `json:"openstack,omitempty"`
 
@@ -98,6 +101,10 @@ func (m *NodeCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateNutanix(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOpennebula(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -294,6 +301,25 @@ func (m *NodeCloudSpec) validateNutanix(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *NodeCloudSpec) validateOpennebula(formats strfmt.Registry) error {
+	if swag.IsZero(m.Opennebula) { // not required
+		return nil
+	}
+
+	if m.Opennebula != nil {
+		if err := m.Opennebula.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("opennebula")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("opennebula")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *NodeCloudSpec) validateOpenstack(formats strfmt.Registry) error {
 	if swag.IsZero(m.Openstack) { // not required
 		return nil
@@ -407,6 +433,10 @@ func (m *NodeCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Regi
 	}
 
 	if err := m.contextValidateNutanix(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateOpennebula(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -568,6 +598,22 @@ func (m *NodeCloudSpec) contextValidateNutanix(ctx context.Context, formats strf
 				return ve.ValidateName("nutanix")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("nutanix")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NodeCloudSpec) contextValidateOpennebula(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Opennebula != nil {
+		if err := m.Opennebula.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("opennebula")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("opennebula")
 			}
 			return err
 		}

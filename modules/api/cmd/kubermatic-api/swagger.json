@@ -11731,13 +11731,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11749,6 +11742,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -12265,11 +12265,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12281,6 +12276,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -34732,6 +34732,9 @@
         "nutanix": {
           "$ref": "#/definitions/NutanixNodeSpec"
         },
+        "opennebula": {
+          "$ref": "#/definitions/OpenNebulaNodeSpec"
+        },
         "openstack": {
           "$ref": "#/definitions/OpenstackNodeSpec"
         },
@@ -35648,6 +35651,56 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "OpenNebulaNodeSpec": {
+      "description": "OpenNebulaNodeSpec OpenNebula specific node settings",
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "number",
+          "format": "double",
+          "x-go-name": "CPU"
+        },
+        "datastore": {
+          "type": "string",
+          "x-go-name": "Datastore"
+        },
+        "diskSize": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "DiskSize"
+        },
+        "enableVNC": {
+          "type": "boolean",
+          "x-go-name": "EnableVNC"
+        },
+        "image": {
+          "type": "string",
+          "x-go-name": "Image"
+        },
+        "memory": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Memory"
+        },
+        "network": {
+          "type": "string",
+          "x-go-name": "Network"
+        },
+        "vcpu": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "VCPU"
+        },
+        "vmTemplateExtra": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "VMTemplateExtra"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "OpenStack": {
       "type": "object",

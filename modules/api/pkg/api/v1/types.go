@@ -1474,6 +1474,7 @@ type NodeCloudSpec struct {
 	Alibaba             *AlibabaNodeSpec             `json:"alibaba,omitempty"`
 	Anexia              *AnexiaNodeSpec              `json:"anexia,omitempty"`
 	Nutanix             *NutanixNodeSpec             `json:"nutanix,omitempty"`
+	OpenNebula          *OpenNebulaNodeSpec          `json:"opennebula,omitempty"`
 	VMwareCloudDirector *VMwareCloudDirectorNodeSpec `json:"vmwareclouddirector,omitempty"`
 }
 
@@ -2440,6 +2441,46 @@ func (spec *NutanixNodeSpec) MarshalJSON() ([]byte, error) {
 		CPUPassthrough: spec.CPUPassthrough,
 		MemoryMB:       spec.MemoryMB,
 		DiskSize:       spec.DiskSize,
+	}
+
+	return json.Marshal(&res)
+}
+
+// OpenNebulaNodeSpec OpenNebula specific node settings
+// swagger:model OpenNebulaNodeSpec
+type OpenNebulaNodeSpec struct {
+	CPU             *float64          `json:"cpu"`
+	VCPU            *int              `json:"vcpu"`
+	Memory          *int              `json:"memory"`
+	Image           string            `json:"image"`
+	Datastore       string            `json:"datastore"`
+	DiskSize        *int              `json:"diskSize"`
+	Network         string            `json:"network"`
+	EnableVNC       *bool             `json:"enableVNC"`
+	VMTemplateExtra map[string]string `json:"vmTemplateExtra,omitempty"`
+}
+
+func (spec *OpenNebulaNodeSpec) MarshalJSON() ([]byte, error) {
+	res := struct {
+		CPU             *float64          `json:"cpu"`
+		VCPU            *int              `json:"vcpu"`
+		Memory          *int              `json:"memory"`
+		Image           string            `json:"image"`
+		Datastore       string            `json:"datastore"`
+		DiskSize        *int              `json:"diskSize"`
+		Network         string            `json:"network"`
+		EnableVNC       *bool             `json:"enableVNC"`
+		VMTemplateExtra map[string]string `json:"vmTemplateExtra,omitempty"`
+	}{
+		CPU:             spec.CPU,
+		VCPU:            spec.VCPU,
+		Memory:          spec.Memory,
+		Image:           spec.Image,
+		Datastore:       spec.Datastore,
+		DiskSize:        spec.DiskSize,
+		Network:         spec.Network,
+		EnableVNC:       spec.EnableVNC,
+		VMTemplateExtra: spec.VMTemplateExtra,
 	}
 
 	return json.Marshal(&res)
