@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title fxFlex
                     fxLayout="row"
@@ -222,9 +222,9 @@ limitations under the License.
                         [(ngModel)]="settings.enableClusterBackups"
                         (change)="onSettingsChange()">
           </mat-checkbox>
-          <mat-chip>
+          <mat-chip-row>
             <div>Experimental</div>
-          </mat-chip>
+          </mat-chip-row>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
         </div>
 
@@ -391,7 +391,7 @@ limitations under the License.
   </mat-card-content>
 </mat-card>
 
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title fxFlex
                     fxLayout="row"

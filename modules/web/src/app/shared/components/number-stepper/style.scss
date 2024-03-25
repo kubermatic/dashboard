@@ -29,7 +29,7 @@ input[type='number'] {
   height: 45.5px;
   width: 30px;
 
-  &.mat-icon-button {
+  &.mat-mdc-icon-button {
     margin: 4px 0 0;
 
     &.left {
@@ -43,6 +43,6 @@ input[type='number'] {
   }
 }
 
-.mat-form-field.force-min-width {
+.mat-mdc-form-field.force-min-width {
   min-width: 135px;
 }

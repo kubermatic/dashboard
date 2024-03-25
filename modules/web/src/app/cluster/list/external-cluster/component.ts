@@ -16,14 +16,24 @@ import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {ClusterService} from '@core/services/cluster';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {View} from '@shared/entity/common';
+import {
+  ExternalCloudSpec,
+  ExternalCluster,
+  ExternalClusterProvider,
+  ExternalClusterState,
+} from '@shared/entity/external-cluster';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
@@ -31,16 +41,6 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, map, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {
-  ExternalCloudSpec,
-  ExternalCluster,
-  ExternalClusterProvider,
-  ExternalClusterState,
-} from '@shared/entity/external-cluster';
-import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
-import {ExternalClusterService} from '@core/services/external-cluster';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 enum Column {
   Status = 'status',

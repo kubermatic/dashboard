@@ -14,25 +14,25 @@
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {ClusterService} from '@core/services/cluster';
 import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {Cluster} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
+import {HealthStatus, getMachineDeploymentHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
-import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
-import {Datacenter} from '@shared/entity/datacenter';
-import {ClusterService} from '@core/services/cluster';
 
 enum Column {
   Status = 'status',

@@ -49,7 +49,7 @@ export class Wizard extends PageOptions implements Page {
     this.Buttons.datacenter(datacenter)
       .click()
       .then(_ => this._strategy?.onCreate(provider));
-    this.Elements.clusterNameInput.type(name);
+    this.Elements.clusterNameInput.type(name).should(Condition.HaveValue, name);
 
     if (sshKeyName) {
       this.Buttons.sshKeysSelect.click();

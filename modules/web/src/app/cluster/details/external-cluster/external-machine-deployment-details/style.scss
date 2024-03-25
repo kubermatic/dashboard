@@ -14,11 +14,11 @@
 
 @use 'variables';
 
-.mat-card {
-  .mat-card-header {
+.mat-mdc-card {
+  .mat-mdc-card-header {
     align-items: baseline;
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       &.machine-deployment-name {
         font-size: variables.$font-size-card-title;
         font-weight: 500;

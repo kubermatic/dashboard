@@ -50,7 +50,7 @@ import {
   GKEMachineDeploymentCloudSpec,
 } from '@app/shared/entity/external-machine-deployment';
 import {MachineDeploymentSpec} from '@app/shared/entity/machine-deployment';
-import {MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {NameGeneratorService} from '@app/core/services/name-generator';
 import {MasterVersion} from '@app/shared/entity/cluster';

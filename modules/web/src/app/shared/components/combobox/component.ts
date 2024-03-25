@@ -27,7 +27,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {MatLegacySelect as MatSelect} from '@angular/material/legacy-select';
+import {MatSelect} from '@angular/material/select';
 import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';

@@ -14,16 +14,16 @@
 
 @use 'mixins';
 
-.mat-card {
+.mat-mdc-card {
   margin-top: 0;
 
-  .mat-card-header {
+  .mat-mdc-card-header {
     .km-icon-arrow-down {
       @include mixins.size(16px, $force: true);
     }
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     padding: 0 30px;
   }
 }

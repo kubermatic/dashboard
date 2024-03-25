@@ -15,7 +15,7 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {Mode, PresetDialogComponent, PresetDialogData} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
@@ -33,7 +33,7 @@ import {
   NodeProviderConstants,
 } from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
-import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
+import {Observable, Subject, forkJoin, merge, of} from 'rxjs';
 import {finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Column {

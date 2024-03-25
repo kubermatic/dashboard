@@ -24,9 +24,9 @@ limitations under the License.
   <mat-dialog-content class="km-changelog-content-container">
     <div *ngFor="let category of categories"
          class="changelog-category">
-      <mat-chip-list>
-        <mat-chip [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip>
-      </mat-chip-list>
+      <mat-chip-grid>
+        <mat-chip-row [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip-row>
+      </mat-chip-grid>
 
       <ul>
         <div *ngFor="let entry of entries(category)"
@@ -59,7 +59,6 @@ limitations under the License.
   <mat-dialog-actions fxLayout="row"
                       fxLayoutAlign="end center"
                       class="actions">
-
     <a *ngIf="changelogURL"
        [href]="changelogURL"
        mat-flat-button

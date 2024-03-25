@@ -43,7 +43,7 @@
     font-size: variables.$font-size-subhead;
     padding: 20px 20px 8px;
 
-    .mat-icon-button {
+    .mat-mdc-icon-button {
       @include mixins.size(35px, $force: true);
 
       margin: -8px 4px 0 0;
@@ -75,8 +75,7 @@
   }
 
   .notification-list {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 
     .notification {
       margin: 8px 20px 20px 8px;

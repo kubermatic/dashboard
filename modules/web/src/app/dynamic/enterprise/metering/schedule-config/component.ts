@@ -19,18 +19,18 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MeteringReportConfiguration} from '@shared/entity/datacenter';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {MatSort} from '@angular/material/sort';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {filter, switchMap, take} from 'rxjs';
-import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
-import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {NotificationService} from '@core/services/notification';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
+import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
+import {NotificationService} from '@core/services/notification';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {MeteringReportConfiguration} from '@shared/entity/datacenter';
+import {filter, switchMap, take} from 'rxjs';
 
 enum Column {
   name = 'name',

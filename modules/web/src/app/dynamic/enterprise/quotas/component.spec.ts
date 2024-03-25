@@ -21,7 +21,7 @@
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
+import {MatTableModule} from '@angular/material/table';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {QuotaService} from './service';

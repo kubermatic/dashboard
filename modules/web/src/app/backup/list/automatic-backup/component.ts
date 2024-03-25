@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {
   AddAutomaticBackupDialogComponent,
@@ -31,10 +31,10 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
+import {HealthStatus, getBackupHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-automatic-backup-list',

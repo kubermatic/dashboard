@@ -16,9 +16,15 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {
+  ServiceAccountTokenDialog,
+  ServiceAccountTokenDialogData,
+  ServiceAccountTokenDialogMode,
+} from '@app/serviceaccount/token/add/component';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {ServiceAccountService} from '@core/services/service-account';
@@ -29,16 +35,10 @@ import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-accoun
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member';
 import _ from 'lodash';
-import {merge, of, Subject, timer} from 'rxjs';
+import {Subject, merge, of, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {CreateServiceAccountDialogComponent} from './create-dialog/component';
 import {EditServiceAccountDialogComponent} from './edit-dialog/component';
-import {
-  ServiceAccountTokenDialog,
-  ServiceAccountTokenDialogData,
-  ServiceAccountTokenDialogMode,
-} from '@app/serviceaccount/token/add/component';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 class TokenList {
   initializing = true;

@@ -16,8 +16,8 @@
 
 @mixin theme-chip-component($colors) {
   km-chip {
-    .mat-chip {
-      &.mat-standard-chip {
+    .mat-mdc-chip {
+      &.mat-mdc-standard-chip {
         color: white;
       }
 

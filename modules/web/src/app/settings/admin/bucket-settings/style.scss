@@ -18,7 +18,7 @@
   padding: 0 30px;
 }
 
-.mat-card-title {
+.mat-mdc-card-title {
   .km-icon-add {
     margin-left: 0;
     margin-right: 12px;
@@ -30,7 +30,7 @@
 }
 
 td {
-  &.mat-cell {
+  &.mat-mdc-cell {
     &.cdk-cell {
       &.bucket-destinations {
         padding: 0;

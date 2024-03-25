@@ -35,11 +35,11 @@
     }
   }
 
-  .mat-progress-spinner {
+  .mat-mdc-progress-spinner {
     margin-right: 10px;
   }
 
-  .mat-card {
+  .mat-mdc-card {
     margin: 0;
     padding: 0 10px;
   }
@@ -96,6 +96,7 @@
       width: 270px;
     }
 
+    // TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.
     mat-card-content {
       padding: 10px;
     }

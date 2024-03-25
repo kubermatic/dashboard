@@ -26,7 +26,7 @@
   grid-template-columns: 40px auto 40px;
   grid-template-rows: minmax(50px, 1fr);
 
-  button.mat-icon-button {
+  button.mat-mdc-icon-button {
     @include mixins.size(30px);
   }
 

@@ -19,7 +19,8 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<mat-card class="km-card">
+<mat-card appearance="outlined"
+          class="km-card">
   <div fxLayout="column">
     <mat-card-header>
       <mat-card-title fxFlex
@@ -40,9 +41,7 @@ END OF TERMS AND CONDITIONS
                    [valueFormatter]="clusterDisplayFn.bind(this)"
                    [options]="clusters"
                    (changed)="onClusterChange($event)">
-        <div *option="let cluster">
-          {{cluster.name}}
-        </div>
+        <div *option="let cluster">{{cluster.name}}</div>
       </km-combobox>
       <km-search-field class="search-field"
                        (queryChange)="onSearch($event)"></km-search-field>
@@ -227,10 +226,10 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
-                      class="namespaces-label">
+            <mat-chip-row *ngFor="let namespace of element.spec.includedNamespaces"
+                          class="namespaces-label">
               <div>{{namespace}}</div>
-            </mat-chip>
+            </mat-chip-row>
           </div>
         </td>
       </ng-container>

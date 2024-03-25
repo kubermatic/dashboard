@@ -41,7 +41,7 @@
     text-align: center;
   }
 
-  .mat-raised-button {
+  .mat-mdc-raised-button {
     @include mixins.size(200px, 50px);
 
     background-color: transparent;

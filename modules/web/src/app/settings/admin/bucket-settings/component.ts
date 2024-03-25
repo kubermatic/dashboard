@@ -13,16 +13,16 @@
 // limitations under the License.
 
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort, SortDirection} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {DestinationDialog, Mode} from '@app/settings/admin/bucket-settings/destinations/destination-dialog/component';
 import {DatacenterService} from '@core/services/datacenter';
 import {UserService} from '@core/services/user';
 import {AdminSeed} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {DestinationDialog, Mode} from '@app/settings/admin/bucket-settings/destinations/destination-dialog/component';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
 enum Column {
   StateArrow = 'stateArrow',

@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
-
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {ValidateJsonOrYamlComponent} from './component';
 
 describe('ValidateJsonOrYamlComponent', () => {

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-header>
     <mat-card-title>Nodes</mat-card-title>
   </mat-card-header>
@@ -24,7 +24,6 @@ limitations under the License.
            matSort
            (matSortChange)="onSortChange($event)"
            [dataSource]="dataSource">
-
       <ng-container [matColumnDef]="column.stateArrow">
         <th mat-header-cell
             *matHeaderCellDef
@@ -51,8 +50,7 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-35"
-            mat-sort-header>Name
-        </th>
+            mat-sort-header>Name</th>
         <td mat-cell
             *matCellDef="let element">
           <div fxLayout="row"
@@ -75,8 +73,7 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-15"
-            mat-sort-header>kubelet Version
-        </th>
+            mat-sort-header>kubelet Version</th>
         <td mat-cell
             *matCellDef="let element">{{element.status.nodeInfo.kubeletVersion}}</td>
       </ng-container>
@@ -84,8 +81,7 @@ limitations under the License.
       <ng-container [matColumnDef]="column.ipAddresses">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-30">IP Addresses
-        </th>
+            class="km-header-cell p-30">IP Addresses</th>
         <td mat-cell
             *matCellDef="let element">
           <ng-container *ngIf="element.status.addresses && getAddresses(element) as addresses">
@@ -127,8 +123,7 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-15"
-            mat-sort-header>Created
-        </th>
+            mat-sort-header>Created</th>
         <td mat-cell
             *matCellDef="let element">
           <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
@@ -214,8 +209,9 @@ limitations under the License.
 
             <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
               <div key>Node Capacity</div>
-              <div value>{{element.status.capacity.cpu}}
-                CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
+              <div value>
+                {{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}
+              </div>
             </km-property>
 
             <km-property>
@@ -290,19 +286,19 @@ limitations under the License.
               <km-property *ngIf="element.spec.cloud.kubevirt.instancetype as instanceType">
                 <div key>Instance Type</div>
                 <div value>
-                  <mat-chip>
+                  <mat-chip-row>
                     <div>{{getKubeVirtInstanceTypeCategory(instanceType)}}</div>
                     <div class="km-chip-accent">{{instanceType.name}}</div>
-                  </mat-chip>
+                  </mat-chip-row>
                 </div>
               </km-property>
               <km-property *ngIf="element.spec.cloud.kubevirt.preference as preference">
                 <div key>Preference</div>
                 <div value>
-                  <mat-chip>
+                  <mat-chip-row>
                     <div>{{getKubeVirtPreferenceCategory(preference)}}</div>
                     <div class="km-chip-accent">{{preference.name}}</div>
-                  </mat-chip>
+                  </mat-chip-row>
                 </div>
               </km-property>
               <km-property>
@@ -334,13 +330,13 @@ limitations under the License.
               <km-property *ngIf="element.spec.cloud.kubevirt.topologySpreadConstraints?.length > 0">
                 <div key>Topology Spread Constraints</div>
                 <div value>
-                  <mat-chip-list selectable="false">
-                    <mat-chip *ngFor="let constraint of element.spec.cloud.kubevirt.topologySpreadConstraints">
+                  <mat-chip-grid selectable="false">
+                    <mat-chip-row *ngFor="let constraint of element.spec.cloud.kubevirt.topologySpreadConstraints">
                       <div>{{constraint.topologyKey}}</div>
                       <div class="km-chip-accent">{{constraint.maxSkew}}</div>
                       <div>{{constraint.whenUnsatisfiable}}</div>
-                    </mat-chip>
-                  </mat-chip-list>
+                    </mat-chip-row>
+                  </mat-chip-grid>
                 </div>
               </km-property>
             </ng-container>
@@ -376,13 +372,13 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.anexia?.disks?.length > 0">
               <div key>Disks</div>
               <div value>
-                <mat-chip-list selectable="false">
-                  <mat-chip *ngFor="let disk of element.spec.cloud.anexia.disks">
+                <mat-chip-grid selectable="false">
+                  <mat-chip-row *ngFor="let disk of element.spec.cloud.anexia.disks">
                     <div>{{disk.size}}GB</div>
                     <div class="km-chip-accent"
                          *ngIf="disk.performanceType">{{disk.performanceType}}</div>
-                  </mat-chip>
-                </mat-chip-list>
+                  </mat-chip-row>
+                </mat-chip-grid>
               </div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.anexia?.templateID">
@@ -409,9 +405,7 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.azure">
               <div key>Data Disk Size</div>
               <div *ngIf="element.spec.cloud.azure.dataDiskSize === 0"
-                   value>
-                Default
-              </div>
+                   value>Default</div>
               <div value
                    *ngIf="element.spec.cloud.azure.dataDiskSize !== 0">
                 {{element.spec.cloud.azure.dataDiskSize}} GB
@@ -420,11 +414,10 @@ limitations under the License.
             <km-property *ngIf="element.spec.cloud.azure">
               <div key>OS Disk Size</div>
               <div *ngIf="element.spec.cloud.azure.osDiskSize === 0"
-                   value>
-                Default
-              </div>
+                   value>Default</div>
               <div *ngIf="element.spec.cloud.azure.osDiskSize !== 0"
-                   value>{{element.spec.cloud.azure.osDiskSize}} GB
+                   value>
+                {{element.spec.cloud.azure.osDiskSize}} GB
               </div>
             </km-property>
             <!-- End of other properties. -->
@@ -542,7 +535,6 @@ limitations under the License.
                                  [used]="getMetrics(element.name)?.memoryTotalBytes"
                                  [total]="getMetrics(element.name).memoryAvailableBytes"></km-property-usage>
             </div>
-
           </mat-card-content>
         </td>
       </ng-container>
@@ -561,9 +553,7 @@ limitations under the License.
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="!nodes || nodes.length === 0">
-      No nodes available.
-    </div>
+         *ngIf="!nodes || nodes.length === 0">No nodes available.</div>
 
     <div [hidden]="!isPaginatorVisible()"
          class="km-paginator-container">

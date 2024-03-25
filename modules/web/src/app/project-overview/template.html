@@ -16,7 +16,7 @@ limitations under the License.
 
 <div fxLayout="column"
      fxLayoutGap="20px">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title>Project Overview</mat-card-title>
       <button mat-icon-button
@@ -136,7 +136,8 @@ limitations under the License.
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
-      <mat-card *ngIf="isEnterpriseEdition && projectQuota">
+      <mat-card appearance="outlined"
+                *ngIf="isEnterpriseEdition && projectQuota">
         <mat-card-header>
           <mat-card-title>Project Quota</mat-card-title>
         </mat-card-header>

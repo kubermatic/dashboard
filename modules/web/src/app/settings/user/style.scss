@@ -15,12 +15,12 @@
 @use 'variables';
 @use 'mixins';
 
-.mat-card {
-  .mat-card-header {
+.mat-mdc-card {
+  .mat-mdc-card-header {
     padding: 0 30px;
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     padding-left: 30px;
   }
 
@@ -52,6 +52,7 @@
   }
 }
 
+// TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .mat-button-toggle {
   margin: 10px 10px 10px 0;
 

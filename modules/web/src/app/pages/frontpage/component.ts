@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MatLegacyAnchor as MatAnchor} from '@angular/material/legacy-button';
+import {MatAnchor} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 

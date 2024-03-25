@@ -20,33 +20,31 @@ limitations under the License.
 <form [formGroup]="form">
   <mat-form-field class="km-node-tags">
     <mat-label *ngIf="label">{{label}}</mat-label>
-    <mat-chip-list #chipList
+    <mat-chip-grid #chipList
                    class="km-chip-list-with-input"
                    [formControlName]="controls.Tags"
                    kmValueChangedIndicator>
-      <mat-chip *ngFor="let tag of tags"
-                [selectable]="false"
-                [removable]="true"
-                (removed)="removeTag(tag)">
+      <mat-chip-row *ngFor="let tag of tags"
+                    [selectable]="false"
+                    [removable]="true"
+                    (removed)="removeTag(tag)">
         {{tag}}
         <i matChipRemove
            class="km-icon-mask km-icon-remove"></i>
-      </mat-chip>
+      </mat-chip-row>
       <input [placeholder]="placeholder"
              [matChipInputFor]="chipList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              [matChipInputAddOnBlur]="true"
-             (matChipInputTokenEnd)="addTag($event)">
-    </mat-chip-list>
+             (matChipInputTokenEnd)="addTag($event)" />
+    </mat-chip-grid>
     <mat-hint *ngIf="!description; else defaultHint">
       <ng-content select="[hint]"></ng-content>
     </mat-hint>
     <ng-template #defaultHint>
       <mat-hint>{{description}}</mat-hint>
     </ng-template>
-    <mat-error *ngIf="form.get(controls.Tags).hasError('unique')">
-      Value already exists.
-    </mat-error>
+    <mat-error *ngIf="form.get(controls.Tags).hasError('unique')"> Value already exists. </mat-error>
     <mat-error *ngIf="form.get(controls.Tags).hasError('pattern')">
       <span [innerHTML]="patternError"></span>
     </mat-error>

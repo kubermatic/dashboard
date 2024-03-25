@@ -15,10 +15,11 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
+import {SSHKeyService} from '@core/services/ssh-key';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
@@ -29,9 +30,8 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {EMPTY, merge, Observer, Subject, timer} from 'rxjs';
+import {EMPTY, Observer, Subject, merge, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {SSHKeyService} from '@core/services/ssh-key';
 
 @Component({
   selector: 'km-edit-sshkeys',

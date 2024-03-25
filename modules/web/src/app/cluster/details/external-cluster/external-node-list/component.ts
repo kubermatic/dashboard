@@ -15,16 +15,16 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
 import {ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node, NodeIPAddress} from '@shared/entity/node';
+import {HealthStatus, getNodeHealthStatus} from '@shared/utils/health-status';
 import {NodeUtils} from '@shared/utils/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-external-node-list',

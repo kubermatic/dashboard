@@ -16,7 +16,8 @@ import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core'
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 import {DatacenterService} from '@core/services/datacenter';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
@@ -26,10 +27,9 @@ import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {UserSettings} from '@shared/entity/settings';
 import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
-import {combineLatest, Observable, Subject} from 'rxjs';
+import {Observable, Subject, combineLatest} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AdminRuleGroupDialog} from './rule-group-dialog/component';
-import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-admin-settings-rule-groups',

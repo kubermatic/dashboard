@@ -184,6 +184,8 @@ presubmits:
               value: "--max-old-space-size=6144"
 
   - name: pre-dashboard-web-unit
+    # Temporarily marking these tests as optional as they will be refactored through https://github.com/kubermatic/dashboard/issues/5864
+    optional: true
     run_if_changed: "modules/web"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"

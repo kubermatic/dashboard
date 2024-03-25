@@ -15,7 +15,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {
   KubeOneMachineDeploymentDialogComponent,
@@ -28,12 +28,12 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
 import {Member} from '@shared/entity/member';
 import {getOperatingSystem} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {HealthStatus, getMachineDeploymentHealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {minor, major} from 'semver';
+import {major, minor} from 'semver';
 
 enum Column {
   Status = 'status',

@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ExternalClusterService} from '@core/services/external-cluster';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatPaginator} from '@angular/material/paginator';
-import {UserService} from '@core/services/user';
+import {MatTableDataSource} from '@angular/material/table';
 import {GKECluster} from '@app/shared/entity/provider/gke';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {UserService} from '@core/services/user';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-gke-cluster-select',

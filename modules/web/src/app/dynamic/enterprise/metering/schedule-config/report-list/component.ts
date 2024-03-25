@@ -20,18 +20,18 @@
 
 import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
+import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {UserService} from '@core/services/user';
 import {Report} from '@shared/entity/metering';
-import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {NotificationService} from '@app/core/services/notification';
+import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Column {
   name = 'name',

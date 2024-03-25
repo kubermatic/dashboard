@@ -17,7 +17,7 @@
 
 @mixin theme-tab-card-component($colors) {
   .tab-card {
-    .mat-tab-header {
+    .mat-mdc-tab-header {
       border-bottom: 1px solid map.get($colors, tab-divider);
 
       .mat-ink-bar {
@@ -27,12 +27,17 @@
   }
 
   .tab-card.tab-cards {
-    .mat-tab-header {
+    .mat-mdc-tab-header {
+      // TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
+
+      // TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
       .mat-tab-label-container {
+        // TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         .mat-tab-label:hover:not(.mat-tab-label-active) {
           background: map.get($colors, background-hover);
         }
 
+        // TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         .mat-tab-label-active {
           background: map.get($colors, background-card);
         }

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
-import {Subject} from 'rxjs';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 import {SimpleClusterBinding} from '@shared/entity/rbac';
+import {Subject} from 'rxjs';
 
 enum Column {
   Scope = 'Scope',

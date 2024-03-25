@@ -15,12 +15,12 @@
 @use 'mixins';
 @use 'variables';
 
-.cluster-detail-actions .mat-icon-button i {
+.cluster-detail-actions .mat-mdc-icon-button i {
   @include mixins.size(24px);
 }
 
-.mat-card-header {
-  .mat-card-title {
+.mat-mdc-card-header {
+  .mat-mdc-card-title {
     &.cluster-name {
       font-weight: 500;
       padding: 0;

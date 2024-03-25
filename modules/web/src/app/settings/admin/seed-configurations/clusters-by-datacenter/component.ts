@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterDetail} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 enum Column {

@@ -25,7 +25,7 @@ limitations under the License.
     <div fxFlex></div>
   </div>
 
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title fxFlex
                       fxLayout="row"
@@ -157,25 +157,25 @@ limitations under the License.
           <km-property>
             <div key>Subnet Ids</div>
             <div value>
-              <mat-chip-list *ngIf="subnetIds?.length">
+              <mat-chip-grid *ngIf="subnetIds?.length">
                 <div *ngFor="let subnetId of subnetIds">
-                  <mat-chip>
+                  <mat-chip-row>
                     <div>{{subnetId}}</div>
-                  </mat-chip>
+                  </mat-chip-row>
                 </div>
-              </mat-chip-list>
+              </mat-chip-grid>
             </div>
           </km-property>
           <km-property>
             <div key>Security Group Ids</div>
             <div value>
-              <mat-chip-list *ngIf="securityGroupIds?.length">
+              <mat-chip-grid *ngIf="securityGroupIds?.length">
                 <div *ngFor="let securityGroupId of securityGroupIds">
-                  <mat-chip>
+                  <mat-chip-row>
                     <div>{{securityGroupId}}</div>
-                  </mat-chip>
+                  </mat-chip-row>
                 </div>
-              </mat-chip-list>
+              </mat-chip-grid>
             </div>
           </km-property>
           <km-property *ngIf="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig">
@@ -232,7 +232,6 @@ limitations under the License.
       </div>
 
       <km-cluster-metrics [clusterMetrics]="clusterMetrics"></km-cluster-metrics>
-
     </mat-card-content>
   </mat-card>
 
