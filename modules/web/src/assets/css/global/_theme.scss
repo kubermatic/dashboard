@@ -105,10 +105,6 @@
     background-color: map.get($colors, primary);
   }
 
-  .km-unknown-bg {
-    background-color: map.get($colors, changelog-deprecated);
-  }
-
   .km-option-hover-bg:hover {
     background-color: map.get($colors, option-background-hover);
   }

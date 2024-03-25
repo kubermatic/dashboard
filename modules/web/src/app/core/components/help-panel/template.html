@@ -21,7 +21,7 @@ limitations under the License.
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-help"></i>
-    <i *ngIf="!settings?.disableChangelogPopup && hasChangelog() && hasNewChangelog()"
+    <i *ngIf="!settings?.disableChangelogPopup &&  hasNewChangelog()"
        class="km-icon-circle km-new-bg"></i>
   </button>
 
@@ -41,13 +41,17 @@ limitations under the License.
 
     <div class="menu"
          fxLayout="column">
-      <div *ngIf="!settings?.disableChangelogPopup && hasChangelog()"
+      <div *ngIf="!settings?.disableChangelogPopup"
            class="km-option-hover-bg"
            matRipple
            (click)="openChangelog()"
            fxLayoutGap="8px"
            fxLayoutAlign=" center">
         <span>What's New</span>
+        <span fxFlex="0 0 auto"
+              fxLayoutAlign=" center">
+          <i class="km-icon-external-link"></i>
+        </span>
         <i *ngIf="hasNewChangelog()"
            class="km-icon-sparkles"></i>
       </div>
