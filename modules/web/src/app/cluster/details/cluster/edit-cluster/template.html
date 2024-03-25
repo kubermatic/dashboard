@@ -30,7 +30,7 @@ limitations under the License.
                type="text"
                autocomplete="off"
                cdkFocusInitial
-               kmValueChangedIndicator>
+               kmValueChangedIndicator />
         <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
           <strong>Required</strong>
         </mat-error>
@@ -78,9 +78,10 @@ limitations under the License.
              fxLayoutAlign=" center"
              fxLayoutGap="16px">
           <i class="km-icon-warning km-warning km-pointer"></i>
-          <p fxFlex="95">An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm
-            charts will not work out of the box. Enabling Pod Security Policy is not recommended since this is a deprecated
-            feature that will be removed with Kubernetes v1.25.
+          <p fxFlex="95">
+            An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm charts will not
+            work out of the box. Enabling Pod Security Policy is not recommended since this is a deprecated feature that
+            will be removed with Kubernetes v1.25.
             <a href="https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/#pod-security-changes"
                target="_blank"
                fxLayout="row inline"
@@ -233,11 +234,9 @@ limitations under the License.
         Cluster Backup
         <i class="km-icon-info km-pointer"
            matTooltip="Enable create backups from this cluster"></i>
-        <mat-chip-option>
-          <div>
-            Experimental
-          </div>
-        </mat-chip-option>
+        <mat-chip-row>
+          <div>Experimental</div>
+        </mat-chip-row>
       </mat-checkbox>
 
       <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled"
@@ -262,7 +261,7 @@ limitations under the License.
                      [disabledLabelTooltip]="CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP"
                      [canDeleteDisabledLabel]="true"
                      [inheritedLabels]="cluster.inheritedLabels"
-                     [asyncKeyValidators]=asyncLabelValidators
+                     [asyncKeyValidators]="asyncLabelValidators"
                      [formControlName]="Controls.Labels"></km-label-form>
     </form>
   </mat-dialog-content>

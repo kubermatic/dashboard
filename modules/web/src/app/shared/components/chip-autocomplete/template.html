@@ -21,15 +21,15 @@ limitations under the License.
 <form [formGroup]="form">
   <mat-form-field>
     <mat-label *ngIf="label">{{label}}</mat-label>
-    <mat-chip-listbox class="km-chip-list-with-input"
-                      #tagList
-                      [formControlName]="Controls.Tags">
-      <mat-chip-option *ngFor="let tag of selectedTags"
-                       (removed)="removeTag(tag)">
+    <mat-chip-grid class="km-chip-list-with-input"
+                   #tagList
+                   [formControlName]="Controls.Tags">
+      <mat-chip-row *ngFor="let tag of selectedTags"
+                    (removed)="removeTag(tag)">
         {{tag}}
         <i matChipRemove
            class="km-icon-mask km-icon-remove"></i>
-      </mat-chip-option>
+      </mat-chip-row>
       <input #tagInput
              [required]="required"
              [formControlName]="Controls.Filter"
@@ -38,7 +38,7 @@ limitations under the License.
              [matChipInputFor]="tagList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              (matChipInputTokenEnd)="addTag($event)" />
-    </mat-chip-listbox>
+    </mat-chip-grid>
     <mat-autocomplete #auto="matAutocomplete"
                       (optionSelected)="selected($event)">
       <mat-option *ngFor="let tag of filteredTags"

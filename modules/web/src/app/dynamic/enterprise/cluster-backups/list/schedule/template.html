@@ -41,9 +41,7 @@ END OF TERMS AND CONDITIONS
                    [options]="clusters"
                    [valueFormatter]="clusterDisplayFn.bind(this)"
                    (changed)="onClusterChange($event)">
-        <div *option="let cluster">
-          {{cluster.name}}
-        </div>
+        <div *option="let cluster">{{cluster.name}}</div>
       </km-combobox>
       <km-search-field class="search-field"
                        (queryChange)="onSearch($event)"></km-search-field>
@@ -212,10 +210,10 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip-option *ngFor="let namespace of element.spec.includedNamespaces"
-                             class="namespaces-label">
+            <mat-chip-row *ngFor="let namespace of element.spec.includedNamespaces"
+                          class="namespaces-label">
               <div>{{namespace}}</div>
-            </mat-chip-option>
+            </mat-chip-row>
           </div>
         </td>
       </ng-container>
@@ -235,7 +233,9 @@ END OF TERMS AND CONDITIONS
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="!clusterScheduleBackups.length && !loadingBackups">No schedules available.</div>
+         *ngIf="!clusterScheduleBackups.length && !loadingBackups">
+      No schedules available.
+    </div>
 
     <div class="km-row"
          *ngIf="loadingBackups && !clusterScheduleBackups.length">

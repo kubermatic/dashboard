@@ -18,6 +18,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
 import {MatOptionModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -109,6 +110,7 @@ const services = [NodeDataService];
     MatOptionModule,
     MatSelectModule,
     MatInputModule,
+    MatChipsModule,
     MatCheckboxModule,
     MatCardModule,
     MatAutocompleteModule,

@@ -766,7 +766,7 @@ button {
 }
 
 // TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
-mat-chip-listbox {
+mat-chip-grid {
   cursor: default;
 
   &:not(.km-chip-list-with-input) {
