@@ -192,7 +192,6 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
     {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
     {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
-    {m: RequestType.GET, p: Endpoint.Changelog, r: {}},
     {m: RequestType.GET, p: Endpoint.FeatureGates, r: {fixture: 'feature-gates.json'}},
   ];
 

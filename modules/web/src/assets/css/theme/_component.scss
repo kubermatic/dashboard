@@ -22,7 +22,6 @@
 @import 'src/app/core/components/notification/theme';
 @import 'src/app/core/components/notification-panel/theme';
 @import 'src/app/core/components/sidenav/theme';
-@import 'src/app/core/components/changelog/theme';
 @import 'src/app/pages/api-docs/theme';
 @import 'src/app/project/theme';
 @import 'src/app/shared/components/addon-list/install-addon-dialog/theme';
@@ -78,7 +77,6 @@
   @include theme-tab-card-component($colors);
   @include theme-preset-list-component($colors);
   @include theme-preset-edit-dialog-component($colors);
-  @include theme-changelog-component($colors);
   @include theme-admin-sidenav-component($colors);
   @include theme-wizard-openstack-provider-basic($colors);
   @include theme-constraints-component($colors);

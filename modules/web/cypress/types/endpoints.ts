@@ -177,7 +177,6 @@ const AddonConfigs = '**/api/*/addonconfigs';
 const Addons = '**/api/*/addons';
 const AdmissionPlugins = '**/api/**/admission/plugins/*';
 const AlertmanagerConfig = '**/alertmanager/config';
-const Changelog = '**/changelog.json';
 const Members = '**/api/**/users';
 const SystemLabels = '**/api/*/labels/system';
 const Tokens = '**/tokens';
@@ -192,7 +191,6 @@ export const Endpoints = {
   Addons,
   AdmissionPlugins,
   AlertmanagerConfig,
-  Changelog,
   Members,
   SystemLabels,
   Tokens,
