@@ -31,7 +31,7 @@ import {takeUntil} from 'rxjs/operators';
 export class HelpPanelComponent implements OnInit, OnDestroy {
   settings: AdminSettings;
   lastSeenChangelogVersion: string;
-  KKPDocumentationURL = 'https://docs.kubermatic.com/kubermatic/{version}/release-notes/#/{version-anchor-link}';
+  KKPDocumentationURL = 'https://docs.kubermatic.com/kubermatic/{version}/release-notes/#{version-anchor-link}';
 
   private _isOpen = false;
   private _unsubscribe = new Subject<void>();
@@ -80,7 +80,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
     const semver = `v${this._config.getGitVersion().semver.major}.${this._config.getGitVersion().semver.minor}`;
     const url = this.KKPDocumentationURL.replace(/{version}/g, semver).replace(
       /{version-anchor-link}/g,
-      semver.replace(/\./g, '')
+      this._config.getGitVersion().semver.raw.replace(/\./g, '')
     );
     window.open(url, '_blank');
   }
