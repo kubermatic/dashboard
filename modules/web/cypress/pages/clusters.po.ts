@@ -31,11 +31,11 @@ export class ClustersPage {
 
   // TODO: Use our own IDs once https://github.com/angular/components/issues/4136 will be fixed.
   static getClustersTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-0');
+    return cy.get('#mat-mdc-tab-0-0');
   }
 
   static getExternalClustersTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-1');
+    return cy.get('#mat-mdc-tab-0-1');
   }
 
   static getAddClusterBtn(): Cypress.Chainable {
@@ -167,7 +167,7 @@ export class ClustersPage {
   }
 
   static getTabCard(title: string): Cypress.Chainable {
-    return cy.get('#km-cluster-details-tab-card').find('div.mat-tab-label-content').contains(title);
+    return cy.get('#km-cluster-details-tab-card').find('div.mdc-tab__content').contains(title);
   }
 
   static getAddConstraintBtn(): Cypress.Chainable {

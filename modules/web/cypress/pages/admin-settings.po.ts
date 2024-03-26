@@ -319,7 +319,7 @@ class OPAPage {
   }
 
   getTabCard(title: string): Cypress.Chainable {
-    return cy.get('#km-admin-opa-card').find('div.mat-tab-label-content').contains(title);
+    return cy.get('#km-admin-opa-card').find('div.mdc-tab__content').contains(title);
   }
 
   verifyUrl(): void {
