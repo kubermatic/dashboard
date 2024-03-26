@@ -177,7 +177,7 @@
   }
 
   // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .mat-form-field-empty.mat-form-field-label .mat-form-field-required-marker {
+  .mat-form-field-empty.mat-mdc-floating-label .mat-form-field-required-marker {
     color: map.get($colors, secondary);
   }
 
@@ -277,8 +277,7 @@
     }
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-  .mat-button-focus-overlay {
+  .mat-mdc-focus-indicator {
     background-color: transparent;
   }
 
@@ -326,13 +325,11 @@
         }
       }
 
-      // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
-      .mat-radio-inner-circle {
+      .mdc-radio__inner-circle {
         background-color: map.get($colors, primary);
       }
 
-      // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
-      &.mat-radio-checked .mat-radio-outer-circle {
+      &.mat-mdc-radio-checked .mdc-radio__outer-circle {
         border-color: map.get($colors, primary);
       }
     }
@@ -398,7 +395,7 @@
   }
 
   // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
+  .mat-mdc-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
     background-color: map.get($colors, primary);
   }
 
@@ -411,9 +408,9 @@
     // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 
     // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    &:not(.mat-checkbox-checked) {
+    &:not(.mat-mdc-checkbox-checked) {
       // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-inner-container .mat-checkbox-frame {
+      .mat-checkbox-inner-container .mdc-checkbox__checkmark {
         background-color: map.get($colors, checkbox-disabled);
         border-color: map.get($colors, checkbox-disabled-border);
       }
@@ -422,7 +419,7 @@
     // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 
     // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    &.mat-checkbox-checked {
+    &.mat-mdc-checkbox-checked {
       // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
       .mat-checkbox-inner-container .mat-checkbox-background {
         background-color: map.get($colors, checkbox-disabled-checked);
@@ -430,13 +427,13 @@
     }
 
     // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    .mat-checkbox-label {
+    .mdc-label {
       color: map.get($colors, text-secondary);
     }
   }
 
   // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-checkbox-frame {
+  .mdc-checkbox__checkmark {
     border: 2px solid map.get($colors, divider);
   }
 

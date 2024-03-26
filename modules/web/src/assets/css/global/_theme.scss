@@ -357,13 +357,13 @@
 
   .radio-group-column {
     // TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
-    .mat-radio-checked::after {
+    .mat-mdc-radio-checked::after {
       background-color: map.get($colors, primary);
     }
   }
 
   // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .mat-form-field-infix:has(> .km-value-changed) {
+  .mat-mdc-form-text-infix:has(> .km-value-changed) {
     &::after {
       background-color: map.get($colors, primary);
     }
