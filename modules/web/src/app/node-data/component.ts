@@ -486,8 +486,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             })
           )
         : this._datacenterSpec?.spec
-        ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
-        : EMPTY;
+          ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
+          : EMPTY;
 
       profiles$
         .pipe(takeUntil(this._unsubscribe))

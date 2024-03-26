@@ -45,9 +45,9 @@ export class ClusterServiceAccountService {
       const serviceAccounts$ = merge(this._refreshTimer$, this._refreshServiceAccounts).pipe(
         switchMap(_ =>
           this._http
-            .get<ClusterServiceAccount[]>(
-              `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/serviceaccount`
-            )
+            .get<
+              ClusterServiceAccount[]
+            >(`${this._restRoot}/projects/${projectID}/clusters/${clusterID}/serviceaccount`)
             .pipe(catchError(_ => of(null)))
         ),
         shareReplay({
