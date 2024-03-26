@@ -273,45 +273,45 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "kubermatic:build",
             "proxyConfig": "./proxy.conf.cjs",
-            "port": 8000
+            "port": 8000,
+            "buildTarget": "kubermatic:build"
           },
           "configurations": {
             "default-ee": {},
             "default-ce": {
-              "browserTarget": "kubermatic:build:default-ce"
+              "buildTarget": "kubermatic:build:default-ce"
             },
             "production-ee": {
-              "browserTarget": "kubermatic:build:production-ee"
+              "buildTarget": "kubermatic:build:production-ee"
             },
             "production-ce": {
-              "browserTarget": "kubermatic:build:production-ce"
+              "buildTarget": "kubermatic:build:production-ce"
             },
             "e2e-ee": {
-              "browserTarget": "kubermatic:build:e2e-ee"
+              "buildTarget": "kubermatic:build:e2e-ee"
             },
             "e2e-ce": {
-              "browserTarget": "kubermatic:build:e2e-ce"
+              "buildTarget": "kubermatic:build:e2e-ce"
             },
             "e2e-local-ee": {
-              "browserTarget": "kubermatic:build:e2e-local-ee"
+              "buildTarget": "kubermatic:build:e2e-local-ee"
             },
             "e2e-local-ce": {
-              "browserTarget": "kubermatic:build:e2e-local-ce"
+              "buildTarget": "kubermatic:build:e2e-local-ce"
             },
             "e2e-mock-ee": {
-              "browserTarget": "kubermatic:build:e2e-mock-ee"
+              "buildTarget": "kubermatic:build:e2e-mock-ee"
             },
             "e2e-mock-ce": {
-              "browserTarget": "kubermatic:build:e2e-mock-ce"
+              "buildTarget": "kubermatic:build:e2e-mock-ce"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "kubermatic:build"
+            "buildTarget": "kubermatic:build"
           }
         }
       }

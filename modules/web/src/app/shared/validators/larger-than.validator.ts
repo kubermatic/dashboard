@@ -36,8 +36,8 @@ export class LargerThanValidator implements Validator {
         ? null
         : this._error(value)
       : value > this.min
-      ? null
-      : this._error(value);
+        ? null
+        : this._error(value);
   }
 
   private _error(value: number) {

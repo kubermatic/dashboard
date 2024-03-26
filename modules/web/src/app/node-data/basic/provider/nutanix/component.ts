@@ -254,8 +254,8 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     return this.categoryLabel === CategoryState.Loading
       ? CategoryState.Loading
       : this.filteredCategories[this.getSelectedCategory(control) || '']?.length === 0
-      ? CategoryState.Empty
-      : this.categoryLabel;
+        ? CategoryState.Empty
+        : this.categoryLabel;
   }
 
   addCategory(category = '', value = ''): void {
