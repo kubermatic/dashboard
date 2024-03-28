@@ -53,7 +53,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
       this._initialValue = this._control.control.value === null ? false : this._control.control.value;
     }
 
-    if (classList.includes('mat-radio-group')) {
+    if (classList.includes('mat-mdc-radio-group')) {
       element.classList.toggle('radio-group-column', element.style.flexDirection === 'column');
     }
 

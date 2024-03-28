@@ -78,16 +78,16 @@ limitations under the License.
         <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
                           class="km-radio-button">
           <div class="km-radio-button-title">Static Version</div>
+          <div class="km-radio-button-description">Manually manage the version upgrades,
+            GKE will only upgrade the control plane and nodes
+            if it's necessary to maintain security and compatibility.
+          </div>
         </mat-radio-button>
-        <mat-hint>Manually manage the version upgrades,
-          GKE will only upgrade the control plane and nodes
-          if it's necessary to maintain security and compatibility.
-        </mat-hint>
         <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
                           class="km-radio-button">
           <div class="km-radio-button-title">Release Channel</div>
+          <div class="km-radio-button-description">Let GKE automatically manage the cluster's control plane version.</div>
         </mat-radio-button>
-        <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
 
         <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
                    label="Release Channel"
