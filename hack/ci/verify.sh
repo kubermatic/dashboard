@@ -29,6 +29,7 @@ whereis node
 source ~/.bashrc
 whereis npm
 whereis node
+echo $PATH
 
 sleep 300000
 
