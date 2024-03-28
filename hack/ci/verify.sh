@@ -25,7 +25,7 @@ source hack/lib.sh
 
 echo $0
 echo $SHELL
-cat /etc/shells
+echo $HOME
 
 cat ~/.bashrc
 whereis npm
