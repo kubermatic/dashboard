@@ -23,6 +23,9 @@ set -euo pipefail
 cd $(dirname $0)/../..
 source hack/lib.sh
 
+node -v
+npm -v
+
 EXIT_CODE=0
 
 try() {
