@@ -7,8 +7,8 @@
   "repository": "https://github.com/kubermatic/dashboard",
   "private": true,
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.5.5"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "scripts": {
     "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
