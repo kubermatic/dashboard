@@ -26,13 +26,6 @@ label {
   }
 }
 
-// TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version. */
-mat-radio-group {
-  mat-hint {
-    bottom: 8px;
-    font-size: variables.$font-size-caption;
-    left: 15px;
-    position: relative;
-    width: 90%;
-  }
+.km-radio-button-title{
+  margin-bottom: 5px;
 }
