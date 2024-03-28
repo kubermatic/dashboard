@@ -1,4 +1,4 @@
-SHELL=/bin/bash
+SHELL = /bin/bash -eu -o pipefail
 export KUBERMATIC_EDITION ?= ee
 KUBERMATIC_VERSION?=v2.25.0
 CC=npm
