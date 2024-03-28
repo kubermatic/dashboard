@@ -23,6 +23,10 @@ set -euo pipefail
 cd $(dirname $0)/../..
 source hack/lib.sh
 
+echo $0
+echo $SHELL
+cat /etc/shells
+
 cat ~/.bashrc
 whereis npm
 whereis node
@@ -30,6 +34,7 @@ source ~/.bashrc
 whereis npm
 whereis node
 echo $PATH
+echo $0
 
 sleep 300000
 
