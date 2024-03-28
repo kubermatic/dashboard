@@ -1,4 +1,4 @@
-SHELL=ku
+SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
 KUBERMATIC_VERSION?=v2.25.0
 DOCKER_REPO ?= quay.io/kubermatic
