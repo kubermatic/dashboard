@@ -112,7 +112,6 @@ export enum NodePoolVersionState {
 @Component({
   selector: 'km-aks-cluster-settings',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

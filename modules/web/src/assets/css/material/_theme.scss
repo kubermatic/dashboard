@@ -323,7 +323,7 @@
       --mdc-radio-selected-pressed-icon-color: var(--mdc-radio-selected-icon-color);
       --mdc-radio-selected-hover-icon-color: var(--mdc-radio-selected-icon-color);
       --mdc-radio-selected-focus-icon-color: var(--mdc-radio-selected-icon-color);
-      --mdc-radio-unselected-icon-color:#{map.get($colors, text-secondary)};
+      --mdc-radio-unselected-icon-color: #{map.get($colors, text-secondary)};
     }
   }
 
@@ -386,47 +386,15 @@
     }
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-mdc-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
-    background-color: map.get($colors, primary);
-  }
-
-  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mat-checkbox-disabled {
-    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    &:not(.mat-mdc-checkbox-checked) {
-      // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-inner-container .mdc-checkbox__checkmark {
-        background-color: map.get($colors, checkbox-disabled);
-        border-color: map.get($colors, checkbox-disabled-border);
-      }
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    &.mat-mdc-checkbox-checked {
-      // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-      .mat-checkbox-inner-container .mat-checkbox-background {
-        background-color: map.get($colors, checkbox-disabled-checked);
-      }
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-    .mdc-label {
-      color: map.get($colors, text-secondary);
-    }
-  }
-
-  // TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-  .mdc-checkbox__checkmark {
-    border: 2px solid map.get($colors, divider);
+  .mdc-checkbox {
+    --mdc-checkbox-selected-icon-color: #{map.get($colors, primary)};
+    --mdc-checkbox-selected-hover-icon-color: var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-focus-icon-color: var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-pressed-icon-color: var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-focus-state-layer-color :var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-pressed-state-layer-color: var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-focus-state-layer-opacity: 0;
+    --mdc-checkbox-unselected-focus-state-layer-opacity: 0;
   }
 
   // Chips.
