@@ -49,7 +49,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
       }
     }
 
-    if (classList?.includes('mat-checkbox')) {
+    if (classList?.includes('mat-mdc-checkbox')) {
       this._initialValue = this._control.control.value === null ? false : this._control.control.value;
     }
 

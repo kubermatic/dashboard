@@ -168,6 +168,10 @@ hr {
   }
 }
 
+.km-icon-info {
+  margin: -2px 8px;
+}
+
 .km-icon-check,
 .km-icon-running,
 .km-icon-pending,
@@ -767,7 +771,7 @@ km-cni-version {
 
   &.mat-mdc-checkbox::after {
     left: -12px !important;
-    top: 6px !important;
+    top: 8px !important;
   }
 
   &.mat-mdc-radio-group:not(.radio-group-column)::after {
