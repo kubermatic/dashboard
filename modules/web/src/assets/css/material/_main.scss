@@ -17,65 +17,59 @@
 @import 'images';
 
 // Cards.
-// TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-// TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-mat-card {
-  &.mat-mdc-card {
-    border-radius: variables.$border-radius;
+mat-card.mat-mdc-card {
+  border-radius: variables.$border-radius;
+  box-shadow: variables.$border-box-shadow;
+  margin: 20px 0 0;
+  padding: 30px 0;
+
+  &:not([class*='mat-elevation-z']) {
     box-shadow: variables.$border-box-shadow;
-    margin: 20px 0 0;
-    padding: 30px 0;
+  }
 
-    &:not([class*='mat-elevation-z']) {
-      box-shadow: variables.$border-box-shadow;
-    }
+  .mat-mdc-card-header {
+    border-radius: variables.$border-radius variables.$border-radius 0 0;
+    line-height: 16px;
+    margin: 0;
+    padding: 0 30px;
 
-    .mat-mdc-card-header {
-      border-radius: variables.$border-radius variables.$border-radius 0 0;
-      line-height: 16px;
+    .mat-mdc-card-header-text {
+      flex: 1 1 auto;
       margin: 0;
-      padding: 0 30px;
+    }
 
-      // TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-      .mat-card-header-text {
-        flex: 1 1 auto;
-        margin: 0;
+    .mat-mdc-card-title {
+      font-size: variables.$font-size-card-title;
+      font-weight: normal;
+      padding: 8px 0 16px;
+
+      i {
+        font-size: variables.$font-size-subhead-lg;
+        margin: 0 20px;
       }
 
-      .mat-mdc-card-title {
-        font-size: variables.$font-size-card-title;
-        font-weight: normal;
-        padding: 8px 0 16px;
-
+      .km-search-input {
         i {
-          font-size: variables.$font-size-subhead-lg;
-          margin: 0 20px;
-        }
-
-        .km-search-input {
-          i {
-            margin: 0;
-          }
+          margin: 0;
         }
       }
     }
+  }
 
-    .mat-mdc-card-content {
-      p {
-        font-size: variables.$font-size-caption;
-      }
+  .mat-mdc-card-content {
+    p {
+      font-size: variables.$font-size-caption;
+    }
 
-      button {
-        cursor: pointer;
-        font-size: variables.$font-size-body;
-        outline: none;
-      }
+    button {
+      cursor: pointer;
+      font-size: variables.$font-size-body;
+      outline: none;
     }
   }
 }
 
 km-wizard {
-  // TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card.mat-mdc-card .mat-mdc-card-header .mat-mdc-card-title {
     margin: 0;
     padding: 26px 0 20px;
@@ -102,8 +96,7 @@ km-wizard {
     font-weight: 400;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  .mat-card-header-text {
+  .mat-mdc-card-header-text {
     margin: 0;
     padding: 0;
 
@@ -697,7 +690,6 @@ button {
   }
 }
 /* stylelint-enable selector-class-pattern */
-
 
 // Chips.
 .mat-mdc-chip {

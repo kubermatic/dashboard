@@ -20,7 +20,6 @@
 
 @use 'variables';
 
-// TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.
 mat-card-header {
   cursor: pointer;
   height: 32px;
@@ -28,7 +27,6 @@ mat-card-header {
 }
 
 .toggled {
-  // TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.
   mat-card-header {
     border-radius: variables.$border-radius;
   }
