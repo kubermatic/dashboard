@@ -50,7 +50,7 @@ func TestGetMeteringReportConfigEndpoint(t *testing.T) {
 			Enabled:          true,
 			StorageClassName: "test",
 			StorageSize:      "10Gi",
-			ReportConfigurations: map[string]*kubermaticv1.MeteringReportConfiguration{
+			ReportConfigurations: map[string]kubermaticv1.MeteringReportConfiguration{
 				"weekly": {
 					Schedule:  "0 1 * * 6",
 					Interval:  7,
@@ -148,7 +148,7 @@ func TestCreateMeteringReportConfigEndpoint(t *testing.T) {
 			Enabled:          true,
 			StorageClassName: "test",
 			StorageSize:      "10Gi",
-			ReportConfigurations: map[string]*kubermaticv1.MeteringReportConfiguration{
+			ReportConfigurations: map[string]kubermaticv1.MeteringReportConfiguration{
 				"weekly": {
 					Schedule: "0 1 * * 6",
 					Interval: 7,
@@ -309,7 +309,7 @@ func TestUpdateMeteringReportConfigEndpoint(t *testing.T) {
 			Enabled:          true,
 			StorageClassName: "test",
 			StorageSize:      "10Gi",
-			ReportConfigurations: map[string]*kubermaticv1.MeteringReportConfiguration{
+			ReportConfigurations: map[string]kubermaticv1.MeteringReportConfiguration{
 				"weekly": {
 					Schedule:  "0 1 * * 6",
 					Interval:  7,
@@ -471,7 +471,7 @@ func TestDeleteMeteringReportConfigEndpoint(t *testing.T) {
 			Enabled:          true,
 			StorageClassName: "test",
 			StorageSize:      "10Gi",
-			ReportConfigurations: map[string]*kubermaticv1.MeteringReportConfiguration{
+			ReportConfigurations: map[string]kubermaticv1.MeteringReportConfiguration{
 				"weekly": {
 					Schedule: "0 1 * * 6",
 					Interval: 7,
