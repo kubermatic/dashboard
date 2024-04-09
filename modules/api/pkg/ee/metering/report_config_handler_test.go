@@ -56,6 +56,7 @@ func TestGetMeteringReportConfigEndpoint(t *testing.T) {
 					Interval:  7,
 					Retention: &retention,
 					Types:     []string{"cluster"},
+					Format:    "json",
 				},
 			},
 		}
@@ -316,6 +317,7 @@ func TestUpdateMeteringReportConfigEndpoint(t *testing.T) {
 					Interval:  7,
 					Retention: &retention,
 					Types:     sets.List(metering.ReportTypes),
+					Format:    "json",
 				},
 			},
 		}
@@ -415,7 +417,7 @@ func TestUpdateMeteringReportConfigEndpoint(t *testing.T) {
 			existingKubermaticObjs: []ctrlruntimeclient.Object{testSeed},
 			existingAPIUser:        test.GenDefaultAdminAPIUser(),
 			httpStatus:             http.StatusOK,
-			expectedResponse:       `{"name":"weekly","schedule":"0 1 * * 6","interval":7,"types":["namespace"]}`,
+			expectedResponse:       `{"name":"weekly","schedule":"0 1 * * 6","interval":7,"retention":30,"types":["cluster","namespace"]}`,
 		},
 		// scenario 8
 		{
