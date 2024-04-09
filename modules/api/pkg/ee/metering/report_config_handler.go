@@ -376,7 +376,7 @@ func createMeteringReportConfiguration(ctx context.Context, reportCfgReq createR
 	}
 
 	if seed.Spec.Metering.ReportConfigurations == nil {
-		seed.Spec.Metering.ReportConfigurations = make(map[string]*kubermaticv1.MeteringReportConfiguration)
+		seed.Spec.Metering.ReportConfigurations = make(map[string]kubermaticv1.MeteringReportConfiguration)
 	}
 
 	if _, exists := seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name]; exists {
@@ -392,14 +392,14 @@ func createMeteringReportConfiguration(ctx context.Context, reportCfgReq createR
 
 	if reportCfgReq.Body.Retention != nil {
 		retention := uint32(*reportCfgReq.Body.Retention)
-		seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = &kubermaticv1.MeteringReportConfiguration{
+		seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = kubermaticv1.MeteringReportConfiguration{
 			Interval:  uint32(reportCfgReq.Body.Interval),
 			Schedule:  reportCfgReq.Body.Schedule,
 			Retention: &retention,
 			Types:     *reportCfgReq.Body.Types,
 		}
 	} else {
-		seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = &kubermaticv1.MeteringReportConfiguration{
+		seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = kubermaticv1.MeteringReportConfiguration{
 			Interval:  uint32(reportCfgReq.Body.Interval),
 			Schedule:  reportCfgReq.Body.Schedule,
 			Retention: nil,
@@ -454,6 +454,7 @@ func updateMeteringReportConfiguration(ctx context.Context, reportCfgReq updateR
 		reportConfiguration.Types = *reportCfgReq.Body.Types
 	}
 
+	seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = reportConfiguration
 	if err := masterClient.Update(ctx, seed); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
