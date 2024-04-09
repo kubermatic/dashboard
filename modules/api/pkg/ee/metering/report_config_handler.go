@@ -454,6 +454,7 @@ func updateMeteringReportConfiguration(ctx context.Context, reportCfgReq updateR
 		reportConfiguration.Types = *reportCfgReq.Body.Types
 	}
 
+	seed.Spec.Metering.ReportConfigurations[reportCfgReq.Name] = reportConfiguration
 	if err := masterClient.Update(ctx, seed); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
