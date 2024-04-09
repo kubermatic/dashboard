@@ -153,6 +153,7 @@ func TestCreateMeteringReportConfigEndpoint(t *testing.T) {
 					Schedule: "0 1 * * 6",
 					Interval: 7,
 					Types:    sets.List(metering.ReportTypes),
+					Format:   "json",
 				},
 			},
 		}
