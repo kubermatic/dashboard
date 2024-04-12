@@ -34232,6 +34232,9 @@
       "description": "MeteringReportConfiguration holds report configuration",
       "type": "object",
       "properties": {
+        "format": {
+          "$ref": "#/definitions/MeteringReportFormat"
+        },
         "interval": {
           "description": "Interval defines the number of days consulted in the metering report.\nIgnored when `Monthly` is set to true",
           "type": "integer",
@@ -34263,6 +34266,12 @@
           "x-go-name": "Types"
         }
       },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "MeteringReportFormat": {
+      "description": "+kubebuilder:validation:Enum=csv;json",
+      "type": "string",
+      "title": "MeteringReportFormat maps directly to the values supported by the kubermatic-metering tool.",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "MeteringReportURL": {
