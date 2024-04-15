@@ -92,8 +92,8 @@ func TestListAdmissionPluginsFromVersion(t *testing.T) {
 			expectedResult: sets.New("DefaultTolerationSeconds", "ImagePolicyWebhook"),
 		},
 		{
-			name:        "test 1: get plugins for version 1.14.3",
-			fromVersion: "1.14.3",
+			name:        "test 1: get plugins for version 1.14.9",
+			fromVersion: "1.14.9",
 			plugins: []ctrlruntimeclient.Object{
 				&kubermaticv1.AdmissionPlugin{
 					ObjectMeta: metav1.ObjectMeta{
