@@ -57,7 +57,7 @@
     ]
   },
   "overrides": {
-    "socks": "2.7.4"
+    "socks": "2.7.3"
   },
   "dependencies": {
     "@angular/animations": "17.3.1",
