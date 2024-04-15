@@ -226,10 +226,10 @@ END OF TERMS AND CONDITIONS
             [attr.colspan]="columns.length">
           <div class="namespaces-detail">Namespaces</div>
           <div>
-            <mat-chip-row *ngFor="let namespace of element.spec.includedNamespaces"
-                          class="namespaces-label">
+            <mat-chip *ngFor="let namespace of element.spec.includedNamespaces"
+                      class="namespaces-label">
               <div>{{namespace}}</div>
-            </mat-chip-row>
+            </mat-chip>
           </div>
         </td>
       </ng-container>

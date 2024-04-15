@@ -15,17 +15,17 @@ limitations under the License.
 -->
 <div fxLayout="row"
      fxLayoutGap="8px">
-  <mat-chip-grid [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
-                 *ngIf="labelKeys.length > 0">
+  <mat-chip-set [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
+                *ngIf="labelKeys.length > 0">
     <div #chipListLabels
          *ngFor="let labelKey of labelKeys; let i = index">
-      <mat-chip-row *ngIf="!limit || i < limit">
+      <mat-chip *ngIf="!limit || i < limit">
         <div>{{labelKey}}</div>
         <div class="km-chip-accent"
              *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
-      </mat-chip-row>
+      </mat-chip>
     </div>
-  </mat-chip-grid>
+  </mat-chip-set>
 
   <span *ngIf="checkLabelsHeight()"
         fxLayoutAlign=" start"

@@ -826,19 +826,19 @@ limitations under the License.
               <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.instancetype as instanceType">
                 <div key>Instance Type</div>
                 <div value>
-                  <mat-chip-row>
+                  <mat-chip>
                     <div>{{getKubeVirtInstanceTypeCategory(instanceType)}}</div>
                     <div class="km-chip-accent">{{instanceType.name}}</div>
-                  </mat-chip-row>
+                  </mat-chip>
                 </div>
               </km-property>
               <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.preference as preference">
                 <div key>Preference</div>
                 <div value>
-                  <mat-chip-row>
+                  <mat-chip>
                     <div>{{getKubeVirtPreferenceCategory(preference)}}</div>
                     <div class="km-chip-accent">{{preference.name}}</div>
-                  </mat-chip-row>
+                  </mat-chip>
                 </div>
               </km-property>
               <km-property>
@@ -870,13 +870,13 @@ limitations under the License.
               <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints?.length > 0">
                 <div key>Topology Spread Constraints</div>
                 <div value>
-                  <mat-chip-grid selectable="false">
-                    <mat-chip-row *ngFor="let constraint of machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints">
+                  <mat-chip-set selectable="false">
+                    <mat-chip *ngFor="let constraint of machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints">
                       <div>{{constraint.topologyKey}}</div>
                       <div class="km-chip-accent">{{constraint.maxSkew}}</div>
                       <div>{{constraint.whenUnsatisfiable}}</div>
-                    </mat-chip-row>
-                  </mat-chip-grid>
+                    </mat-chip>
+                  </mat-chip-set>
                 </div>
               </km-property>
             </ng-container>
@@ -995,13 +995,13 @@ limitations under the License.
               <km-property *ngIf="machineDeployment.spec.template.cloud?.anexia?.disks?.length > 0">
                 <div key>Disks</div>
                 <div value>
-                  <mat-chip-grid selectable="false">
-                    <mat-chip-row *ngFor="let disk of machineDeployment.spec.template.cloud?.anexia?.disks">
+                  <mat-chip-set selectable="false">
+                    <mat-chip *ngFor="let disk of machineDeployment.spec.template.cloud?.anexia?.disks">
                       <div>{{disk.size}}GB</div>
                       <div class="km-chip-accent"
                            *ngIf="disk.performanceType">{{disk.performanceType}}</div>
-                    </mat-chip-row>
-                  </mat-chip-grid>
+                    </mat-chip>
+                  </mat-chip-set>
                 </div>
               </km-property>
               <km-property *ngIf="machineDeployment.spec.template.cloud?.anexia?.templateID">

@@ -157,25 +157,25 @@ limitations under the License.
           <km-property>
             <div key>Subnet Ids</div>
             <div value>
-              <mat-chip-grid *ngIf="subnetIds?.length">
+              <mat-chip-set *ngIf="subnetIds?.length">
                 <div *ngFor="let subnetId of subnetIds">
-                  <mat-chip-row>
+                  <mat-chip>
                     <div>{{subnetId}}</div>
-                  </mat-chip-row>
+                  </mat-chip>
                 </div>
-              </mat-chip-grid>
+              </mat-chip-set>
             </div>
           </km-property>
           <km-property>
             <div key>Security Group Ids</div>
             <div value>
-              <mat-chip-grid *ngIf="securityGroupIds?.length">
+              <mat-chip-set *ngIf="securityGroupIds?.length">
                 <div *ngFor="let securityGroupId of securityGroupIds">
-                  <mat-chip-row>
+                  <mat-chip>
                     <div>{{securityGroupId}}</div>
-                  </mat-chip-row>
+                  </mat-chip>
                 </div>
-              </mat-chip-grid>
+              </mat-chip-set>
             </div>
           </km-property>
           <km-property *ngIf="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig">
