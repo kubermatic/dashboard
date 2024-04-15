@@ -34,6 +34,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
 	"k8c.io/kubermatic/v2/pkg/version"
+	clusterversion "k8c.io/kubermatic/v2/pkg/version/cluster"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -66,13 +67,6 @@ func GetUpgradesEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGe
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the cloud provider name: %w", err)
 	}
-	var updateConditions []kubermaticv1.ConditionType
-	externalCloudProvider := cluster.Spec.Features[kubermaticv1.ClusterFeatureExternalCloudProvider]
-	if externalCloudProvider {
-		updateConditions = append(updateConditions, kubermaticv1.ExternalCloudProviderCondition)
-	} else {
-		updateConditions = append(updateConditions, kubermaticv1.InTreeCloudProviderCondition)
-	}
 
 	config, err := configGetter(ctx)
 	if err != nil {
@@ -81,7 +75,7 @@ func GetUpgradesEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGe
 
 	versionManager := version.NewFromConfiguration(config)
 
-	versions, err := versionManager.GetPossibleUpdates(cluster.Spec.Version.String(), kubermaticv1.ProviderType(providerName), updateConditions...)
+	versions, err := versionManager.GetPossibleUpdates(cluster.Spec.Version.String(), kubermaticv1.ProviderType(providerName), clusterversion.GetVersionConditions(&cluster.Spec)...)
 	if err != nil {
 		return nil, err
 	}
