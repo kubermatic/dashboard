@@ -391,7 +391,7 @@
     --mdc-checkbox-selected-hover-icon-color: var(--mdc-checkbox-selected-icon-color);
     --mdc-checkbox-selected-focus-icon-color: var(--mdc-checkbox-selected-icon-color);
     --mdc-checkbox-selected-pressed-icon-color: var(--mdc-checkbox-selected-icon-color);
-    --mdc-checkbox-selected-focus-state-layer-color :var(--mdc-checkbox-selected-icon-color);
+    --mdc-checkbox-selected-focus-state-layer-color: var(--mdc-checkbox-selected-icon-color);
     --mdc-checkbox-selected-pressed-state-layer-color: var(--mdc-checkbox-selected-icon-color);
     --mdc-checkbox-selected-focus-state-layer-opacity: 0;
     --mdc-checkbox-unselected-focus-state-layer-opacity: 0;
@@ -399,27 +399,33 @@
 
   // Chips.
   .mat-mdc-chip {
-    &.mat-mdc-standard-chip {
-      background: transparent;
+    --mdc-chip-elevated-container-color: #{map.get($colors, divider)};
+    --mdc-chip-label-text-color: #{map.get($colors, text)};
+    --mdc-chip-focus-state-layer-color: none;
+    --mdc-chip-hover-state-layer-color: none;
+
+    background: transparent;
+
+    .mat-mdc-chip-remove {
+      background-color: map.get($colors, text);
+    }
+
+    .mdc-evolution-chip__action--primary {
       border: 1px solid map.get($colors, divider);
-      color: map.get($colors, text);
+    }
 
-      &::after {
-        background: transparent;
-      }
+    .km-chip-accent {
+      background-color: #fff;
+    }
+  }
 
-      // TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-      div:not(.mat-chip-ripple) {
-        background: map.get($colors, divider);
-      }
+  .km-chip-list-with-input {
+    .mat-mdc-chip-row {
+      background-color: #fff !important;
+      border: 1px solid map.get($colors, divider);
 
-      div.km-chip-accent {
-        background: transparent;
-      }
-
-      // TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-      .mat-chip-remove {
-        background-color: map.get($colors, text);
+      .mdc-evolution-chip__action--primary {
+        border: none;
       }
     }
   }
