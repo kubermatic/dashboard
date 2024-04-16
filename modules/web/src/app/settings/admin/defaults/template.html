@@ -190,7 +190,7 @@ limitations under the License.
                class="entry-label">
             <span>Enable OIDC Kubeconfig</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
+                 matTooltip="Use OIDC provider as a proxy for kubeconfig download. When enabled, the option to download admin kubeconfig will be disabled from UI"></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
                         [disabled]="!isOIDCKubeCfgEndpointEnabled"
@@ -232,9 +232,9 @@ limitations under the License.
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
-            <span>Disable Admin Kubeconfig</span>
-            <div class="km-icon-info km-pointer"
-                 matTooltip="Disable the option to download admin kubeconfig and corresponding API endpoints."></div>
+            <span>Disable Admin Kubeconfig API endpoints</span>
+            <div class="km-icon-info km-pointer centered"
+                 matTooltip="Disable the option to download admin kubeconfig through corresponding API endpoints."></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.disableAdminKubeconfig"
                         [disabled]="!settings.enableOIDCKubeconfig"
