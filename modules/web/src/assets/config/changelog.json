@@ -15,7 +15,7 @@
     },
     {
       "category": "security",
-      "description": "Update Cilium to 1.14.9 and 1.13.14, mitigating [CVE-2024-28860](https://github.com/advisories/GHSA-pwqm-x5x6-5586) and [CVE-2024-28248](https://github.com/advisories/GHSA-68mj-9pjq-mc85)."
+      "description": "Update Cilium to 1.14.9 and 1.13.14, mitigating CVE-2024-28860 and CVE-2024-28248."
     }
   ]
 }
