@@ -4,6 +4,18 @@
     {
       "category": "fixed",
       "description": "Fix `csi` Addon not applying cleanly on Azure user clusters that were created with KKP <= 2.24"
+    },
+    {
+      "category": "fixed",
+      "description": "Cluster-autoscaler addon now works based on the namespace instead of cluster names; all MachineDeployments in the `kube-system` namespace are scaled."
+    },
+    {
+      "category": "fixed",
+      "description": "Add Canal CNI version v3.27.3, having a fix to the ipset incompatibility bug."
+    },
+    {
+      "category": "security",
+      "description": "Update Cilium to 1.14.9 and 1.13.14, mitigating [CVE-2024-28860](https://github.com/advisories/GHSA-pwqm-x5x6-5586) and [CVE-2024-28248](https://github.com/advisories/GHSA-68mj-9pjq-mc85)."
     }
   ]
 }
