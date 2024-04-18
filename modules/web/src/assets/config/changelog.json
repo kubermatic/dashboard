@@ -2,6 +2,10 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2251",
   "entries": [
     {
+      "category": "added",
+      "description": "Add support for Kubernetes 1.27.13, 1.28.9 and 1.29.4 (fixes CVE-2024-3177)."
+    },
+    {
       "category": "fixed",
       "description": "Fix `csi` Addon not applying cleanly on Azure user clusters that were created with KKP <= 2.24"
     },
