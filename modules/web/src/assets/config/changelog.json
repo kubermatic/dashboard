@@ -14,6 +14,10 @@
       "description": "Add Canal CNI version v3.27.3, having a fix to the ipset incompatibility bug."
     },
     {
+      "category": "fixed",
+      "description": "Resolve conflict in determining available Kubernetes versions where upgrades where possible in `Cluster` object but not via the Dashboard."
+    },
+    {
       "category": "security",
       "description": "Update Cilium to 1.14.9 and 1.13.14, mitigating CVE-2024-28860 and CVE-2024-28248."
     }
