@@ -6,8 +6,8 @@
       "description": "Add support for Kubernetes 1.27.13 (fixes CVE-2024-3177)."
     },
     {
-      "category": "added",
-      "description": "Add Canal CNI version v3.27.3"
+      "category": "fixed",
+      "description": "Add Canal CNI version v3.27.3, having a fix to the ipset incompatibility bug."
     }
   ]
 }
