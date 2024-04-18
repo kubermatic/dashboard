@@ -1,4 +1,13 @@
 {
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2246",
-  "entries": []
+  "entries": [
+    {
+      "category": "added",
+      "description": "Add support for Kubernetes 1.27.13 and 1.28.9 (fixes CVE-2024-3177)."
+    },
+    {
+      "category": "fixed",
+      "description": "Add Canal CNI version v3.27.3, having a fix to the ipset incompatibility bug."
+    }
+  ]
 }
