@@ -188,6 +188,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return this.applicationDefinitionsMap.get(name)?.spec?.logoData;
   }
 
+  getApplicationName(name: string): string {
+    return this.applicationDefinitionsMap.get(name)?.spec?.displayName || name;
+  }
+
   onAddApplication(): void {
     if (this.canAdd()) {
       const dialog = this._matDialog.open(AddApplicationDialogComponent);

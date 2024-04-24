@@ -82,7 +82,7 @@ limitations under the License.
              fxFlexAlign=" center"></i>
           <mat-card-title [matTooltip]="application.name"
                           [attr.id]="'km-application-name-' + application.name">
-            {{application.name}}
+            {{getApplicationName(application.name)}}
             <span *ngIf="isSystemApplication(application)"
                   class="km-label-primary">System</span>
           </mat-card-title>
@@ -104,10 +104,10 @@ limitations under the License.
               <img *ngIf="getApplicationLogo(application.spec.applicationRef.name) as logo; else applicationDefName"
                    class="km-application-logo"
                    [src]="logo"
-                   [alt]="application.spec.applicationRef.name"
+                   [alt]="getApplicationName(application.spec.applicationRef.name)"
                    [matTooltip]="application.spec.applicationRef.name">
               <ng-template #applicationDefName>
-                <span>{{application.spec.applicationRef.name}}</span>
+                <span>{{getApplicationName(application.spec.applicationRef.name)}}</span>
               </ng-template>
             </div>
             <div fxLayout="row"
@@ -196,10 +196,10 @@ limitations under the License.
           <img *ngIf="getApplicationLogo(element.spec.applicationRef.name) as logo; else applicationDefName"
                class="km-application-logo"
                [src]="logo"
-               [alt]="element.spec.applicationRef.name"
+               [alt]="getApplicationName(element.spec.applicationRef.name)"
                [matTooltip]="element.spec.applicationRef.name">
           <ng-template #applicationDefName>
-            {{element.spec.applicationRef.name}}
+            {{getApplicationName(element.spec.applicationRef.name)}}
           </ng-template>
         </td>
       </ng-container>

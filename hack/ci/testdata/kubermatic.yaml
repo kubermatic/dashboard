@@ -25,6 +25,9 @@ spec:
   userCluster:
     apiserverReplicas: 1
   api:
+    # this is how we override KKP's default API/UI docker tag and inject
+    # the locally built Docker image tag
+    dockerTag: '__DASHBOARD_VERSION__'
     replicas: 1
     debugLog: true
   featureGates:

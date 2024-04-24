@@ -2018,6 +2018,9 @@ type ApplicationDefinitionListItemSpec struct {
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
 
+	// DisplayName is the name for the application that will be displayed in the UI.
+	DisplayName string `json:"displayName,omitempty"`
+
 	// DocumentationURL holds a link to official documentation of the Application
 	// Alternatively this can be a link to the Readme of a chart in a git repository
 	DocumentationURL string `json:"documentationURL,omitempty"`
@@ -2117,6 +2120,10 @@ type GlobalSettings struct {
 	// ProviderConfiguration are the cloud provider specific configurations on dashboard.
 	// +optional
 	ProviderConfiguration kubermaticv1.ProviderConfiguration `json:"providerConfiguration,omitempty"`
+
+	// WebTerminalOptions are the configurations for the Web Terminal feature.
+	// +optional
+	WebTerminalOptions *kubermaticv1.WebTerminalOptions `json:"webTerminalOptions,omitempty"`
 
 	// MachineDeploymentVMResourceQuota is used to filter out allowed machine flavors based on the specified resource limits like CPU, Memory, and GPU etc.
 	MachineDeploymentVMResourceQuota *kubermaticv1.MachineFlavorFilter `json:"machineDeploymentVMResourceQuota,omitempty"`

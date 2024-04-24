@@ -98,6 +98,9 @@ type GlobalSettings struct {
 
 	// provider configuration
 	ProviderConfiguration *ProviderConfiguration `json:"providerConfiguration,omitempty"`
+
+	// web terminal options
+	WebTerminalOptions *WebTerminalOptions `json:"webTerminalOptions,omitempty"`
 }
 
 // Validate validates this global settings
@@ -137,6 +140,10 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateProviderConfiguration(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWebTerminalOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -315,6 +322,25 @@ func (m *GlobalSettings) validateProviderConfiguration(formats strfmt.Registry) 
 	return nil
 }
 
+func (m *GlobalSettings) validateWebTerminalOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.WebTerminalOptions) { // not required
+		return nil
+	}
+
+	if m.WebTerminalOptions != nil {
+		if err := m.WebTerminalOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("webTerminalOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("webTerminalOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this global settings based on the context it is used
 func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -352,6 +378,10 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 	}
 
 	if err := m.contextValidateProviderConfiguration(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWebTerminalOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -495,6 +525,22 @@ func (m *GlobalSettings) contextValidateProviderConfiguration(ctx context.Contex
 				return ve.ValidateName("providerConfiguration")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("providerConfiguration")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateWebTerminalOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WebTerminalOptions != nil {
+		if err := m.WebTerminalOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("webTerminalOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("webTerminalOptions")
 			}
 			return err
 		}

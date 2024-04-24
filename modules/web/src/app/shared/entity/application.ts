@@ -68,6 +68,7 @@ export class ApplicationDefinitionSpec {
   defaultValues?: string | object;
   defaultValuesBlock?: string;
   description: string;
+  displayName?: string;
   documentationURL?: string;
   sourceURL?: string;
   method: ApplicationMethod;

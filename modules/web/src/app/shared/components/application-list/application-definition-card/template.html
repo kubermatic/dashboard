@@ -34,7 +34,7 @@ limitations under the License.
        fxLayoutGap="10px"
        class="application-details-wrapper">
     <div class="application-title">
-      {{applicationDefinition.name}}
+      {{applicationDefinition.spec.displayName || applicationDefinition.name}}
     </div>
     <div fxFlex
          fxLayout="column"

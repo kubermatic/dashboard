@@ -25,6 +25,9 @@ type ApplicationDefinitionSpec struct {
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
 
+	// DisplayName is the name for the application that will be displayed in the UI.
+	DisplayName string `json:"displayName,omitempty"`
+
 	// DocumentationURL holds a link to official documentation of the Application
 	// Alternatively this can be a link to the Readme of a chart in a git repository
 	DocumentationURL string `json:"documentationURL,omitempty"`

@@ -148,6 +148,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
 		AllowedOperatingSystems:          settings.AllowedOperatingSystems,
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
+		WebTerminalOptions:               settings.WebTerminalOptions,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {
@@ -193,6 +194,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		MachineDeploymentOptions:         settings.MachineDeploymentOptions,
 		AllowedOperatingSystems:          settings.AllowedOperatingSystems,
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
+		WebTerminalOptions:               settings.WebTerminalOptions,
 	}
 
 	if settings.DefaultProjectResourceQuota != nil {

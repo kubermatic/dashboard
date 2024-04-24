@@ -27177,6 +27177,11 @@
           "type": "string",
           "x-go-name": "Description"
         },
+        "displayName": {
+          "description": "DisplayName is the name for the application that will be displayed in the UI.",
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
         "documentationURL": {
           "description": "DocumentationURL holds a link to official documentation of the Application\nAlternatively this can be a link to the Readme of a chart in a git repository",
           "type": "string",
@@ -27227,6 +27232,11 @@
           "description": "Description of the application. what is its purpose",
           "type": "string",
           "x-go-name": "Description"
+        },
+        "displayName": {
+          "description": "DisplayName is the name for the application that will be displayed in the UI.",
+          "type": "string",
+          "x-go-name": "DisplayName"
         },
         "documentationURL": {
           "description": "DocumentationURL holds a link to official documentation of the Application\nAlternatively this can be a link to the Readme of a chart in a git repository",
@@ -29159,6 +29169,29 @@
       "type": "string",
       "x-go-package": "k8s.io/api/core/v1"
     },
+    "ConfigMapKeySelector": {
+      "description": "+structType=atomic",
+      "type": "object",
+      "title": "Selects a key from a ConfigMap.",
+      "properties": {
+        "key": {
+          "description": "The key to select.",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "name": {
+          "description": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "optional": {
+          "description": "Specify whether the ConfigMap or its key must be defined\n+optional",
+          "type": "boolean",
+          "x-go-name": "Optional"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
     "Constraint": {
       "description": "Constraint represents a gatekeeper Constraint",
       "type": "object",
@@ -30711,6 +30744,45 @@
       "description": "EdgeNodeSpec specifies edge specific node settings",
       "type": "object",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "EnvVar": {
+      "type": "object",
+      "title": "EnvVar represents an environment variable present in a Container.",
+      "properties": {
+        "name": {
+          "description": "Name of the environment variable. Must be a C_IDENTIFIER.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "value": {
+          "description": "Variable references $(VAR_NAME) are expanded\nusing the previously defined environment variables in the container and\nany service environment variables. If a variable cannot be resolved,\nthe reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e.\n\"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\".\nEscaped references will never be expanded, regardless of whether the variable\nexists or not.\nDefaults to \"\".\n+optional",
+          "type": "string",
+          "x-go-name": "Value"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/EnvVarSource"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
+    "EnvVarSource": {
+      "type": "object",
+      "title": "EnvVarSource represents a source for the value of an EnvVar.",
+      "properties": {
+        "configMapKeyRef": {
+          "$ref": "#/definitions/ConfigMapKeySelector"
+        },
+        "fieldRef": {
+          "$ref": "#/definitions/ObjectFieldSelector"
+        },
+        "resourceFieldRef": {
+          "$ref": "#/definitions/ResourceFieldSelector"
+        },
+        "secretKeyRef": {
+          "$ref": "#/definitions/SecretKeySelector"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
     },
     "ErrorDetails": {
       "type": "object",
@@ -32504,6 +32576,9 @@
           "type": "integer",
           "format": "int64",
           "x-go-name": "UserProjectsLimit"
+        },
+        "webTerminalOptions": {
+          "$ref": "#/definitions/WebTerminalOptions"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -35521,6 +35596,24 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "ObjectFieldSelector": {
+      "description": "+structType=atomic",
+      "type": "object",
+      "title": "ObjectFieldSelector selects an APIVersioned field of an object.",
+      "properties": {
+        "apiVersion": {
+          "description": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional",
+          "type": "string",
+          "x-go-name": "APIVersion"
+        },
+        "fieldPath": {
+          "description": "Path of the field to select in the specified API version.",
+          "type": "string",
+          "x-go-name": "FieldPath"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
     "ObjectMeta": {
       "description": "ObjectMeta defines the set of fields that objects returned from the API have",
       "type": "object",
@@ -37290,6 +37383,26 @@
           "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
           "type": "string",
           "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ResourceFieldSelector": {
+      "description": "ResourceFieldSelector represents container resources (cpu, memory) and their output format\n+structType=atomic",
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "description": "Container name: required for volumes, optional for env vars\n+optional",
+          "type": "string",
+          "x-go-name": "ContainerName"
+        },
+        "divisor": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "resource": {
+          "description": "Required: resource to select",
+          "type": "string",
+          "x-go-name": "Resource"
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
@@ -39114,6 +39227,30 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "WebTerminalOptions": {
+      "type": "object",
+      "properties": {
+        "additionalEnvironmentVariables": {
+          "description": "AdditionalEnvironmentVariables are the additional environment variables that can be set for the Web Terminal.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EnvVar"
+          },
+          "x-go-name": "AdditionalEnvironmentVariables"
+        },
+        "enableInternetAccess": {
+          "description": "EnableInternetAccess enables the Web Terminal feature to access the internet.",
+          "type": "boolean",
+          "x-go-name": "EnableInternetAccess"
+        },
+        "enabled": {
+          "description": "Enabled enables the Web Terminal feature for the user clusters.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "bcBody": {
       "type": "object",
