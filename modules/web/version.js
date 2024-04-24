@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import packageInfo from '@package.json';
 import gitDescribe from 'git-describe';
 import {resolve, dirname} from 'path';
 import {writeFileSync} from 'fs';
@@ -32,8 +33,8 @@ const gitInfo = gitDescribe.gitDescribeSync({
 // Append edition information
 gitInfo.edition = getEditionDisplayName();
 
-// Reuse the version logic from our Makefile
-gitInfo.humanReadable = execSync("make version --no-print-directory").toString().trim();
+// Reuse the version that set-version.sh has produced
+gitInfo.humanReadable = packageInfo.version;
 
 // Append date information
 gitInfo.date = new Date().toDateString();
