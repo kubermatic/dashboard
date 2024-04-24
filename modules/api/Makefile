@@ -5,13 +5,10 @@ export GOFLAGS ?= -mod=readonly -trimpath
 export GO111MODULE = on
 CMD ?= $(notdir $(wildcard ./cmd/*))
 GIT_VERSION = $(shell git describe --tags --always)
-UI_VERSION = $(shell jq -r '.version' ../web/package.json)
 LDFLAGS += -extldflags '-static' \
   -X k8c.io/kubermatic/v2/pkg/version/kubermatic.gitVersion=$(GIT_VERSION) \
   -X k8c.io/kubermatic/v2/pkg/version/kubermatic.kubermaticDockerTag=NA \
-  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.uiDockerTag=NA \
-  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Edition=$(KUBERMATIC_EDITION) \
-  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Version=$(UI_VERSION)
+  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.uiDockerTag=NA
 GOBUILDFLAGS ?= -v
 LDFLAGS_EXTRA ?= -w
 BUILD_DEST ?= _build
