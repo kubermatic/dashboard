@@ -2121,6 +2121,10 @@ type GlobalSettings struct {
 	// +optional
 	ProviderConfiguration kubermaticv1.ProviderConfiguration `json:"providerConfiguration,omitempty"`
 
+	// WebTerminalOptions are the configurations for the Web Terminal feature.
+	// +optional
+	WebTerminalOptions *kubermaticv1.WebTerminalOptions `json:"webTerminalOptions,omitempty"`
+
 	// MachineDeploymentVMResourceQuota is used to filter out allowed machine flavors based on the specified resource limits like CPU, Memory, and GPU etc.
 	MachineDeploymentVMResourceQuota *kubermaticv1.MachineFlavorFilter `json:"machineDeploymentVMResourceQuota,omitempty"`
 
