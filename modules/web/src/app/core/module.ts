@@ -81,6 +81,7 @@ import {NutanixService} from '@core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {DialogModeService} from '@core/services/dialog-mode';
 import {ClusterBackupService} from './services/cluster-backup';
+import {HotfixMatSelectDirective} from '@app/hotfix-mat-select';
 
 const components = [
   SidenavComponent,
@@ -95,6 +96,7 @@ const components = [
   UserPanelComponent,
   ChangelogDialog,
   HelpPanelComponent,
+  HotfixMatSelectDirective,
 ];
 
 const services = [
