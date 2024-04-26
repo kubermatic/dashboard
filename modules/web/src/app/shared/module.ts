@@ -48,6 +48,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {HotfixMatSelectDirective} from '@app/hotfix-mat-select';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
@@ -270,6 +271,7 @@ const directives = [
   OptionDirective,
   InputPasswordDirective,
   ValueChangedIndicatorDirective,
+  HotfixMatSelectDirective,
 ];
 
 @NgModule({
