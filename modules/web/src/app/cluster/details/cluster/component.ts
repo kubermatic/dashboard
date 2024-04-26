@@ -622,6 +622,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isWebTerminalEnabled(): boolean {
+    return this.adminSettings.webTerminalOptions
+      ? this.adminSettings.webTerminalOptions.enabled
+      : this.adminSettings.enableWebTerminal;
+  }
+
+  isWebTerminalAccessible(): boolean {
     if (this.machineDeployments?.length) {
       return (
         this.machineDeployments.some(
@@ -637,7 +643,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       return this.clusterDeletionTooltip;
     }
 
-    if (!this.isWebTerminalEnabled()) {
+    if (!this.isWebTerminalAccessible()) {
       return 'At least one machine should be running to enable Web Terminal';
     }
     return '';

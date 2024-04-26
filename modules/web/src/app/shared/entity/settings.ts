@@ -54,6 +54,14 @@ export interface AdminSettings {
   machineDeploymentOptions: MachineDeploymentOptions;
   allowedOperatingSystems?: AllowedOperatingSystems;
   disableChangelogPopup?: boolean;
+  webTerminalOptions?: WebTerminalOptions;
+}
+
+export interface WebTerminalOptions {
+  enabled?: boolean;
+  enableInternetAccess?: boolean;
+  // This is not used/handled by the frontend so it's safe to use unknown
+  additionalEnvironmentVariables?: unknown;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -239,4 +247,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     quota: {},
   },
   disableChangelogPopup: false,
+  webTerminalOptions: {
+    enabled: false,
+  },
 };

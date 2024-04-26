@@ -82,7 +82,6 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 			DisplayAPIDocs:              false,
 			DisplayTermsOfService:       false,
 			EnableDashboard:             true,
-			EnableWebTerminal:           false,
 			EnableShareCluster:          ptr.To[bool](false),
 			EnableOIDCKubeconfig:        false,
 			UserProjectsLimit:           0,
@@ -95,6 +94,9 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 				MinRAM:    2,
 				MaxRAM:    128,
 				EnableGPU: false,
+			},
+			WebTerminalOptions: &kubermaticv1.WebTerminalOptions{
+				Enabled: ptr.To[bool](false),
 			},
 		},
 	}

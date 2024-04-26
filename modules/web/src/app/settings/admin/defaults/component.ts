@@ -62,6 +62,15 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      // Soft migration for the web terminal settings.
+      if (!settings.webTerminalOptions) {
+        settings.webTerminalOptions = {
+          enabled: settings.enableWebTerminal,
+        };
+      } else if (settings.webTerminalOptions.enabled === null || settings.webTerminalOptions.enabled === undefined) {
+        settings.webTerminalOptions.enabled = settings.enableWebTerminal;
+      }
+
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
           this._notificationService.success('Updated the admin settings');
@@ -112,9 +121,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   onOIDCKubeconfigSettingsChange(): void {
-    if (this.settings.enableWebTerminal) {
-      this.settings.enableWebTerminal = false;
+    if (this.settings.webTerminalOptions?.enabled) {
+      this.settings.webTerminalOptions.enabled = false;
     }
+
     if (this.settings.enableShareCluster) {
       this.settings.enableShareCluster = false;
     }
