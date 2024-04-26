@@ -14,8 +14,6 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {SettingsService} from '@app/core/services/settings';
-import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {GlobalModule} from '@core/services/global/module';
@@ -57,7 +55,6 @@ enum Controls {
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
-  allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   initiallySelectedOS: OperatingSystem;
 
   private readonly _minMemory = 512;
@@ -75,8 +72,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _datacenterService: DatacenterService,
-    private readonly _settingsService: SettingsService
+    private readonly _datacenterService: DatacenterService
   ) {
     super();
 
@@ -105,12 +101,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     this.initiallySelectedOS = OperatingSystemSpec.getOperatingSystem(
       this._nodeDataService.nodeData.spec.operatingSystem
     );
-
-    this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
-      if (settings.allowedOperatingSystems) {
-        this.allowedOperatingSystems = settings.allowedOperatingSystems;
-      }
-    });
 
     merge(
       this.form.get(Controls.Memory).valueChanges,
@@ -158,10 +148,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultTemplate(os: OperatingSystem = undefined): void {
     os = os ? os : this.initiallySelectedOS ? this.initiallySelectedOS : this._getFirstAvailableOS();
-    // Ensure that this is an allowed OS
-    if (!this.allowedOperatingSystems[os]) {
-      os = this._getFirstAvailableOS();
-    }
 
     if (this.initiallySelectedOS === os && this.form.get(Controls.Template).value) {
       return this.form.get(Controls.Template).value;
@@ -192,15 +178,15 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _getFirstAvailableOS(): OperatingSystem {
-    if (this._templates.ubuntu && this.allowedOperatingSystems.ubuntu) {
+    if (this._templates.ubuntu) {
       return OperatingSystem.Ubuntu;
-    } else if (this._templates.centos && this.allowedOperatingSystems.centos) {
+    } else if (this._templates.centos) {
       return OperatingSystem.CentOS;
-    } else if (this._templates.flatcar && this.allowedOperatingSystems.flatcar) {
+    } else if (this._templates.flatcar) {
       return OperatingSystem.Flatcar;
-    } else if (this._templates.rockylinux && this.allowedOperatingSystems.rockylinux) {
+    } else if (this._templates.rockylinux) {
       return OperatingSystem.RockyLinux;
-    } else if (this._templates.rhel && this.allowedOperatingSystems.rhel) {
+    } else if (this._templates.rhel) {
       return OperatingSystem.RHEL;
     }
     return undefined;
