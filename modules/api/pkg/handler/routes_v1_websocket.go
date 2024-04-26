@@ -81,7 +81,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -213,8 +213,15 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 
-		if err := checkWebTerminalEnabled(ctx, providers.SettingsProvider); err != nil {
-			log.Logger.Debug(err)
+		// Check if the Web Terminal is enabled
+		settings, err := providers.SettingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			log.Logger.Debug(utilerrors.New(http.StatusInternalServerError, "could not read global settings"))
+			return
+		}
+
+		if (settings.Spec.WebTerminalOptions != nil && (settings.Spec.WebTerminalOptions.Enabled == nil || !*settings.Spec.WebTerminalOptions.Enabled)) || (settings.Spec.WebTerminalOptions == nil && !settings.Spec.EnableWebTerminal) {
+			log.Logger.Debug(utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings"))
 			return
 		}
 
@@ -305,7 +312,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, k8sClient, cfg, userEmailID, cluster)
+		writer(ctx, ws, client, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions)
 	}
 }
 
@@ -361,18 +368,4 @@ func requestLoggingReader(websocket *websocket.Conn) {
 
 		log.Logger.Debug(message)
 	}
-}
-
-func checkWebTerminalEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
-	settings, err := settingsProvider.GetGlobalSettings(ctx)
-
-	if err != nil {
-		return utilerrors.New(http.StatusInternalServerError, "could not read global settings")
-	}
-
-	if !settings.Spec.EnableWebTerminal {
-		return utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings")
-	}
-
-	return nil
 }

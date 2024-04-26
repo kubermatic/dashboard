@@ -67,11 +67,11 @@ limitations under the License.
         <span>Open Dashboard</span>
       </a>
 
-      <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableWebTerminal"
+      <button *ngIf="adminSettings.enableOIDCKubeconfig && isWebTerminalEnabled()"
               fxLayoutAlign="center center"
               mat-flat-button
               type="button"
-              [disabled]="!isWebTerminalEnabled()"
+              [disabled]="!isWebTerminalAccessible()"
               (click)="toggleTerminal()">
         <i class="km-icon-mask km-icon-terminal"></i>
         <span [matTooltip]="getWebTerminalTooltip()">Web Terminal</span>

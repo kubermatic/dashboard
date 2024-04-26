@@ -262,11 +262,26 @@ limitations under the License.
             <div class="km-icon-info km-pointer"
                  matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
           </div>
-          <mat-checkbox [(ngModel)]="settings.enableWebTerminal"
+          <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enabled"
                         [disabled]="!settings.enableOIDCKubeconfig"
                         (change)="onSettingsChange()">
           </mat-checkbox>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableWebTerminal, apiSettings.enableWebTerminal)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enabled, apiSettings.webTerminalOptions.enabled)"></km-spinner-with-confirmation>
+        </div>
+
+        <div fxLayout="row">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>Enable WebTerminal Internet Access</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip='Enable internet access for web terminal. On enabling/disabling this option will not affect existing terminal instances.'></div>
+          </div>
+          <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enableInternetAccess"
+                        [disabled]="!settings.enableOIDCKubeconfig"
+                        (change)="onSettingsChange()">
+          </mat-checkbox>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enableInternetAccess, apiSettings.webTerminalOptions.enableInternetAccess)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">

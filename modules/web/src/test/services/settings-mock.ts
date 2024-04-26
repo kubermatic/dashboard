@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
 import {AdminSettings, UserSettings} from '@shared/entity/settings';
+import {Observable, of} from 'rxjs';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,
@@ -71,6 +71,11 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     vmwareCloudDirector: {
       ipAllocationModes: ['DHCP', 'POOL'],
     },
+  },
+  webTerminalOptions: {
+    enabled: false,
+    enableInternetAccess: false,
+    additionalEnvironmentVariables: null,
   },
 };
 
