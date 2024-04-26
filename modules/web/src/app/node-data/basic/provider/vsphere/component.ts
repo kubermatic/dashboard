@@ -14,20 +14,20 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {GlobalModule} from '@core/services/global/module';
-import {DynamicModule} from '@dynamic/module-registry';
-import {merge, of} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
+import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {DynamicModule} from '@dynamic/module-registry';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
-import {NodeCloudSpec, NodeSpec, VSphereNodeSpec} from '@shared/entity/node';
+import {NodeCloudSpec, NodeSpec, OperatingSystemSpec, VSphereNodeSpec} from '@shared/entity/node';
+import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
-import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
+import {merge, of} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   CPUs = 'cpus',
@@ -55,6 +55,8 @@ enum Controls {
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  initiallySelectedOS: OperatingSystem;
+
   private readonly _minMemory = 512;
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
@@ -63,6 +65,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
   private _quotaCalculationService: QuotaCalculationService;
+
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   constructor(
@@ -95,6 +98,9 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
+    this.initiallySelectedOS = OperatingSystemSpec.getOperatingSystem(
+      this._nodeDataService.nodeData.spec.operatingSystem
+    );
 
     merge(
       this.form.get(Controls.Memory).valueChanges,
@@ -134,11 +140,20 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.cpus);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.memory);
       this.form.get(Controls.DiskSizeGB).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.diskSizeGB);
+      if (this._nodeDataService.nodeData.spec.cloud.vsphere.template) {
+        this.form.get(Controls.Template).setValue(this._nodeDataService.nodeData.spec.cloud.vsphere.template);
+      }
     }
   }
 
   private _setDefaultTemplate(os: OperatingSystem = undefined): void {
-    os = os ? os : this._getFirstAvailableOS();
+    os = os ? os : this.initiallySelectedOS ? this.initiallySelectedOS : this._getFirstAvailableOS();
+
+    if (this.initiallySelectedOS === os && this.form.get(Controls.Template).value) {
+      return this.form.get(Controls.Template).value;
+    }
+    this.initiallySelectedOS = null;
+
     switch (os) {
       case OperatingSystem.CentOS:
         this._defaultTemplate = this._templates.centos;
@@ -171,6 +186,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       return OperatingSystem.Flatcar;
     } else if (this._templates.rockylinux) {
       return OperatingSystem.RockyLinux;
+    } else if (this._templates.rhel) {
+      return OperatingSystem.RHEL;
     }
     return undefined;
   }
