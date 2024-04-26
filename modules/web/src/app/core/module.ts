@@ -80,6 +80,7 @@ import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {NutanixService} from '@core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {DialogModeService} from '@core/services/dialog-mode';
+import {HotfixMatSelectDirective} from '@app/hotfix-mat-select';
 
 const components = [
   SidenavComponent,
@@ -94,6 +95,7 @@ const components = [
   UserPanelComponent,
   ChangelogDialog,
   HelpPanelComponent,
+  HotfixMatSelectDirective,
 ];
 
 const services = [
