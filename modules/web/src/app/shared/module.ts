@@ -52,6 +52,7 @@ import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-t
 import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {HotfixMatSelectDirective} from '@app/hotfix-mat-select';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
@@ -275,6 +276,7 @@ const directives = [
   OptionDirective,
   InputPasswordDirective,
   ValueChangedIndicatorDirective,
+  HotfixMatSelectDirective,
 ];
 
 @NgModule({
