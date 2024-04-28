@@ -17,9 +17,8 @@
 @mixin theme-version-picker-component($colors) {
   .version-picker-container {
     .km-version-picker {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline {
-        color: map.get($colors, divider);
+        --mdc-outlined-text-field-disabled-outline-color: #{map.get($colors, divider)};
       }
 
       .version-picker-type {
@@ -32,26 +31,36 @@
           color: map.get($colors, text);
         }
 
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+        .mdc-notched-outline {
+          .mdc-notched-outline__leading {
+            border-radius: 0;
+          }
+        }
+
         div.mat-mdc-form-field-flex label {
           color: map.get($colors, text-secondary);
         }
       }
-    }
 
-    .km-version-picker-enabled:hover {
-      .version-picker-type {
-        border-color: map.get($colors, secondary);
-      }
+      &.km-version-picker-enabled:hover {
+        .version-picker-type {
+          border-color: map.get($colors, secondary);
+        }
 
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline-thick {
-        color: map.get($colors, secondary);
-      }
+        .mat-mdc-form-field {
+          .mdc-notched-outline {
+            .mdc-notched-outline__leading,
+            .mdc-notched-outline__notch,
+            .mdc-notched-outline__trailing {
+              border-color: map.get($colors, secondary);
+              border-width: 2px;
+            }
+          }
+        }
 
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      div.mat-mdc-form-field-flex label {
-        color: map.get($colors, secondary-dark);
+        div.mat-mdc-form-field-flex label {
+          color: map.get($colors, secondary-dark);
+        }
       }
     }
   }

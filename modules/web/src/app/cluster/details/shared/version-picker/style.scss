@@ -19,10 +19,10 @@
   margin: 6px 30px 6px 0;
 
   .km-version-picker {
-    height: 50px;
+    height: 45px;
 
     * {
-      cursor: default;
+      cursor: pointer;
     }
 
     .version-picker-type {
@@ -64,6 +64,8 @@
     .mat-mdc-form-field {
       font-size: variables.$font-size-subhead;
       max-width: 140px;
+      position: relative;
+      top: 10px;
 
       &.cluster-external {
         max-width: 200px;

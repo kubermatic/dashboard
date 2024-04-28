@@ -323,10 +323,11 @@ mat-list-item {
 // Forms.
 mat-form-field {
   &.mat-mdc-form-field {
+    margin-bottom: 10px;
     width: 100%;
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+    --mat-form-field-container-height: 49px;
+
     .mat-mdc-form-field-text-prefix,
     .mat-mdc-form-field-text-suffix {
       .mat-mdc-icon-button {
@@ -336,17 +337,11 @@ mat-form-field {
       }
     }
 
-    &.km-with-hint {
-      margin-bottom: 15px;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-mdc-text-field-wrapper {
-      padding-bottom: 22px;
+      height: 45px;
     }
 
     &.km-long-subscript {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       .mat-mdc-form-field-subscript-wrapperr {
         position: initial;
       }
@@ -399,83 +394,35 @@ mat-form-field {
       }
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-mdc-form-field-flex {
       align-items: center;
     }
-  }
 
-  &.km-dropdown-with-suffix {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-form-text-infix {
-      padding: 9px 0;
+    .mat-mdc-form-field-hint-wrapper {
+      top: 5px;
     }
   }
 
   &.km-dropdown-without-subtext {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-text-field-wrapper {
-      padding-bottom: 0;
-    }
-
     // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
     .mat-select-arrow-wrapper {
       height: 20px;
     }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-form-text-infix {
-      padding: 9px 0;
-    }
   }
 
   &.mat-form-field-appearance-outline {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    &.mat-form-field-can-float {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-      &.mat-form-field-should-float {
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-        .mat-mdc-floating-label {
-          transform: translateY(-21px) scale(0.75);
-        }
+    .mat-mdc-form-field-subscript-wrapper {
+      i {
+        @include mixins.size(16px, 16px, true);
       }
     }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-form-text-infix {
-      padding: 9px 0;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-label-wrapper {
-      top: -20px;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-mdc-form-field-subscript-wrapperr i {
-      @include mixins.size(16px, 16px, true);
-    }
   }
 }
 
-km-admin-settings-defaults {
-  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-  mat-form-field.mat-mdc-form-field .mat-mdc-text-field-wrapper {
-    padding-bottom: 0;
-  }
+mat-hint,
+mat-error {
+  font-size: 75%;
 }
-
-/* stylelint-disable */
-// TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled)
-  div.mat-mdc-form-field-flex:hover
-  label {
-  transition: all 0.2s ease;
-}
-/* stylelint-enable */
 
 .mat-mdc-select {
   width: fit-content;

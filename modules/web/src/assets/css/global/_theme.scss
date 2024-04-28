@@ -287,21 +287,14 @@
   .km-search-input {
     &.mat-mdc-form-field {
       &.mat-form-field-appearance-outline {
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        &.mat-form-field-should-float {
-          // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-          .mat-form-field-outline-start,
-          .mat-form-field-outline-gap,
-          .mat-form-field-outline-end {
-            border-width: 2px;
-            color: map.get($colors, primary);
-          }
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-width: 2px;
+          color: map.get($colors, primary);
         }
 
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        .mat-form-field-outline {
+        .mdc-notched-outline {
           color: map.get($colors, search-outline);
         }
       }
@@ -361,8 +354,7 @@
     }
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .mat-mdc-form-text-infix:has(> .km-value-changed) {
+  .mat-mdc-form-field-infix:has(> .km-value-changed) {
     &::after {
       background-color: map.get($colors, primary);
     }

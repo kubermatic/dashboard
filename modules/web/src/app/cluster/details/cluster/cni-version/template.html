@@ -31,7 +31,7 @@ limitations under the License.
       <i class="km-cni-image-{{cluster.spec.cniPlugin.type}} type-{{cluster.spec.cniPlugin.type}}"></i>
     </div>
 
-    <mat-form-field class="cni-version">
+    <mat-form-field>
       <mat-label>CNI Plugin</mat-label>
       <mat-select [ngModel]="cluster.spec.cniPlugin.version"
                   disabled
