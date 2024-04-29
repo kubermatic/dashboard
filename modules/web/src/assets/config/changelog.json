@@ -1,13 +1,21 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2246",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2247",
   "entries": [
     {
-      "category": "added",
-      "description": "Add support for Kubernetes 1.27.13 and 1.28.9 (fixes CVE-2024-3177)."
+      "category": "fixed",
+      "description": "Fix template value for MachineDeployments in edit mode"
     },
     {
       "category": "fixed",
-      "description": "Add Canal CNI version v3.27.3, having a fix to the ipset incompatibility bug."
+      "description": "Hotfix to mitigate a bug in new releases of Chromium that causes browser crashes on `mat-select` component"
+    },
+    {
+      "category": "fixed",
+      "description": "vSphere: fix anti-affinity DRS configuration for VMs"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix Azure CCM not being reconciled because of labelling changes"
     }
   ]
 }
