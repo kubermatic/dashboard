@@ -129,66 +129,17 @@
   // Forms.
   mat-form-field {
     &.mat-mdc-form-field {
-      color: map.get($colors, text);
+      color: map.get($colors, hint-color);
+
+      --mdc-outlined-text-field-outline-color: #{map.get($colors, divider)};
+      --mdc-outlined-text-field-disabled-outline-color: #{map.get($colors, divider-disabled)};
+      --mdc-outlined-text-field-hover-outline-color: #{map.get($colors, secondary-dark)};
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    &.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      div.mat-form-field-flex:hover {
-        label {
-          color: map.get($colors, secondary-dark);
-        }
-      }
-    }
-
-    &.mat-focused {
-      &:not(.ng-invalid),
-      &.ng-pristine:not(.ng-touched) {
-        // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-        label.mat-form-field-label {
-          color: map.get($colors, primary-dark);
-        }
-      }
-    }
   }
 
-  .mat-form-field-appearance-outline {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-outline {
-      color: map.get($colors, divider);
-    }
-
-    &.mat-focused {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline-thick {
-        color: map.get($colors, primary);
-      }
-    }
-
-    &.mat-form-field-disabled {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline {
-        color: map.get($colors, divider-disabled);
-      }
-    }
-  }
-
-  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  .mat-form-field-empty.mat-mdc-floating-label .mat-form-field-required-marker {
-    color: map.get($colors, secondary);
-  }
-
-  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: map.get($colors, secondary);
-  }
-
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-  .mat-select-arrow {
-    background-color: map.get($colors, text);
+  .mat-mdc-select-arrow {
+    --mat-select-enabled-arrow-color: #{map.get($colors, text)};
   }
 
   .mat-mdc-optgroup-label {
@@ -415,7 +366,7 @@
     }
 
     .km-chip-accent {
-      background-color: #fff;
+      background-color: map.get($colors, background-card );
     }
   }
 
@@ -432,7 +383,7 @@
 
   // Tooltips.
   .mat-mdc-tooltip {
-    background-color: map.get($colors, tooltip-background);
+    --mdc-plain-tooltip-container-color: #{map.get($colors, tooltip-background)};
   }
 
   // Spinners.

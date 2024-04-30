@@ -19,7 +19,7 @@
   margin: 0 30px 0 0;
 
   .cni-version {
-    height: 55px;
+    height: 45px;
 
     * {
       cursor: default;
@@ -60,11 +60,17 @@
     .mat-mdc-form-field {
       font-size: variables.$font-size-subhead;
       max-width: 120px;
+      position: relative;
+      top: 15px;
     }
   }
 
   .enabled {
     &:hover {
+      * {
+        cursor: pointer;
+      }
+
       .cni-version-type {
         border-width: 2px 0 2px 2px;
       }

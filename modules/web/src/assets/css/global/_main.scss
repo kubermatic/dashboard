@@ -120,10 +120,6 @@ hr {
   }
 }
 
-.km-multiple-values-dropdown {
-  margin-left: 30px;
-}
-
 .km-add-dialog-dropdown {
   margin-top: 34px;
 }
@@ -366,22 +362,14 @@ hr {
 
 .km-version-picker {
   .mat-mdc-form-field {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-form-field-flex {
       height: 49px;
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-mdc-form-text-infix {
-      padding: 9px 0;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-outline-start {
+    .mdc-notched-outline__leading {
       border-radius: 0;
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-text-field-wrapper {
       padding-bottom: 2px;
     }
@@ -392,23 +380,13 @@ hr {
       * {
         cursor: pointer;
       }
-
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-form-field-outline-thick {
-        opacity: 100%;
-        transition: all 0.5s ease;
-      }
     }
   }
 
   &.km-version-picker-disabled {
     mat-form-field.mat-primary {
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-      .mat-select-arrow-wrapper {
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-        .mat-select-arrow {
+      .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
           display: none;
         }
       }
@@ -419,12 +397,8 @@ hr {
 .cni-version {
   &.disabled {
     mat-form-field.mat-primary {
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-      .mat-select-arrow-wrapper {
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-        .mat-select-arrow {
+      .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
           display: none;
         }
       }
@@ -435,20 +409,13 @@ hr {
 .km-number-stepper-input {
   &.mat-mdc-form-field {
     &:not(.message) {
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-mdc-text-field-wrapper {
-        padding-bottom: 0;
+      .mdc-notched-outline__trailing {
+        border-radius: 0;
       }
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-form-text-infix {
       width: 100%;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-outline-end {
-      border-radius: 0;
     }
   }
 }
@@ -516,12 +483,10 @@ km-dashboard {
 }
 
 .km-select-ellipsis {
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-  .mat-select-trigger {
+  .mat-mdc-select-trigger {
     height: 18px;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
   mat-select-trigger {
     align-items: center;
 
@@ -534,28 +499,27 @@ km-dashboard {
     }
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-  .mat-select-value {
+  .mat-mdc-select-value {
     align-self: center;
   }
 }
 
 .km-search-input {
   &.mat-mdc-form-field {
-    margin: -10px 10px -30px 0;
+    // margin: -10px 10px -30px 0;
     max-height: 30px;
     width: 280px;
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-text-field-wrapper {
       margin: unset;
       padding: unset;
 
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-mdc-form-text-infix {
-        padding: 5.5px 12px 12px;
+      .mat-mdc-form-field-flex {
+        padding-left: 10px;
+
+        .mat-mdc-form-field-infix {
+          padding-left: 10px;
+        }
       }
     }
   }
@@ -611,7 +575,6 @@ km-dashboard {
 }
 
 .mat-mdc-form-field.km-edit-sshkeys-dropdown {
-  // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-mdc-text-field-wrapper {
     margin-bottom: 2px;
     padding: 0;
@@ -620,18 +583,15 @@ km-dashboard {
 
 km-cni-version {
   .mat-mdc-form-field {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-form-field-flex {
       height: 49px;
+
+      .mat-mdc-form-field-infix {
+        width: 120px;
+      }
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-mdc-form-text-infix {
-      width: 120px;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-outline-start {
+    .mdc-notched-outline__leading {
       border-radius: 0;
     }
   }
@@ -640,22 +600,12 @@ km-cni-version {
     * {
       cursor: pointer;
     }
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-    .mat-form-field-outline-thick {
-      opacity: 100%;
-      transition: all 0.5s ease;
-    }
   }
 
   .disabled {
     mat-form-field.mat-primary {
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-      .mat-select-arrow-wrapper {
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-        .mat-select-arrow {
+      .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
           display: none;
         }
       }
@@ -691,7 +641,6 @@ km-cni-version {
 
 .km-external-cluster-delete-confirmation {
   .mat-mdc-form-field {
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-text-field-wrapper {
       padding-bottom: 12px;
     }
@@ -782,7 +731,7 @@ km-cni-version {
 
   &.radio-group-column {
     .mat-mdc-radio-checked {
-      .mdc-radio{
+      .mdc-radio {
         position: relative;
 
         &::after {
@@ -826,17 +775,16 @@ km-cni-version {
   }
 }
 
-// TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.mat-mdc-form-text-infix:not(:has(textarea)):has(> .km-value-changed),
-.mat-mdc-form-text-infix:has(> textarea):has(> .km-value-changed) {
+.mat-mdc-form-field-infix:not(:has(textarea)):has(> .km-value-changed),
+.mat-mdc-form-field-infix:has(> textarea):has(> .km-value-changed) {
   &::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
     content: '';
     height: 44px;
-    left: -11px;
+    left: -15px;
     position: absolute;
-    top: -9px;
+    top: 0;
     width: 5px;
   }
 
@@ -985,33 +933,25 @@ km-side-nav-field .sub-menu-item:last-child {
 .km-pagination-page-size-select-container {
   font-size: variables.$font-size-caption;
 
-  mat-form-field.mat-mdc-form-field {
+  .mat-mdc-form-field {
     width: 70px;
 
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-mdc-text-field-wrapper {
       padding-bottom: 0;
 
-      // TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-      .mat-mdc-form-field-subscript-wrapperr {
-        display: none;
-      }
-
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-      .mat-mdc-select .mat-select-trigger {
+      .mat-mdc-select .mat-mdc-select-trigger {
         align-items: flex-end;
         display: flex;
 
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-        .mat-select-arrow-wrapper {
+        .mat-mdc-select-arrow-wrapper {
           align-items: flex-end;
           display: flex;
         }
       }
+    }
+
+    .mat-mdc-form-field-bottom-align::before {
+      display: none;
     }
   }
 }
