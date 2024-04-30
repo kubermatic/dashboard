@@ -41,6 +41,7 @@ mat-card.mat-mdc-card {
     .mat-mdc-card-title {
       font-size: variables.$font-size-card-title;
       font-weight: normal;
+      margin-bottom: 12px;
       padding: 8px 0 16px;
 
       i {
@@ -348,28 +349,19 @@ mat-form-field {
     }
 
     &.mat-primary {
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-      // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-      .mat-select-trigger {
+      .mat-mdc-select-trigger {
         display: flex;
 
         .km-select-trigger-button-wrapper {
           margin-bottom: 8px;
         }
 
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-        .mat-select-arrow-wrapper {
-          align-items: center;
-          display: flex;
-          justify-content: center;
+        .mat-mdc-select-arrow-wrapper {
+          margin-right: 10px;
 
-          // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-          .mat-select-arrow {
+          .mat-mdc-select-arrow {
             @include mixins.size(14px);
 
-            color: transparent;
             display: inline-block;
             mask: url('/assets/images/icons/arrow-down.svg');
             mask-repeat: no-repeat;
@@ -381,11 +373,8 @@ mat-form-field {
 
     &.mat-focused {
       &.mat-primary {
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-        // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-        .mat-select-arrow-wrapper {
-          // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-          .mat-select-arrow {
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
             @include mixins.size(14px);
 
             transform: rotate(180deg);
@@ -404,8 +393,7 @@ mat-form-field {
   }
 
   &.km-dropdown-without-subtext {
-    // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-    .mat-select-arrow-wrapper {
+    .mat-mdc-select-arrow-wrapper {
       height: 20px;
     }
   }
@@ -427,25 +415,21 @@ mat-error {
 .mat-mdc-select {
   width: fit-content;
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-  .mat-select-value {
+  .mat-mdc-select-value {
     max-width: 100%;
     min-width: 2ch;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-  .mat-select-arrow {
+  .mat-mdc-select-arrow {
     display: none;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-  .mat-select-value-text {
+  .mat-mdc-select-value-text {
     font-size: variables.$font-size-subhead;
     line-height: 20px;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
-  .mat-select-placeholder {
+  .mat-mdc-select-placeholder {
     font-size: variables.$font-size-subhead;
     line-height: 18px;
     opacity: 70%;
@@ -468,11 +452,15 @@ mat-error {
   }
 }
 
+.mat-mdc-select-panel-above:has(> .mat-mdc-select-panel) {
+    bottom:-20px !important;
+    left: 1060px !important;
+}
+
 .mat-mdc-select-panel {
-  margin-left: 6px;
-  margin-top: 28px;
   max-width: calc(100% + 20px) !important;
   min-width: calc(100% + 20px) !important;
+  padding: 0 !important;
   transform-origin: 50% 0 0;
 
   &.ng-animating {

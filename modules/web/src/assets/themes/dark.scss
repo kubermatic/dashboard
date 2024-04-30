@@ -221,9 +221,8 @@ $theme-dark: map.merge(
 }
 
 // Make selected option text light blue.
-// TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
-.mat-mdc-option.mat-mdc-option-multiple.mat-selected .mat-option-text {
-  color: map.get($colors-dark, primary-dark);
+.mat-mdc-option.mat-mdc-option-multiple.mdc-list-item--selected .mdc-list-item__primary-text {
+  --mat-option-selected-state-label-text-color: #{ map.get($colors-dark, primary-dark)};
 }
 
 .mat-mdc-option:hover:not(.mat-option-disabled),
