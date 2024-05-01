@@ -2092,6 +2092,9 @@ type GlobalSettings struct {
 	// EnableClusterBackups enables the Cluster Backup feature in the dashboard.
 	EnableClusterBackups *bool `json:"enableClusterBackups,omitempty"`
 
+	// EnableEtcdBackup enables the etcd Backup feature in the dashboard.
+	EnableEtcdBackup bool `json:"enableEtcdBackup,omitempty"`
+
 	// DisableAdminKubeconfig disables the admin kubeconfig functionality on the dashboard.
 	DisableAdminKubeconfig bool `json:"disableAdminKubeconfig,omitempty"`
 

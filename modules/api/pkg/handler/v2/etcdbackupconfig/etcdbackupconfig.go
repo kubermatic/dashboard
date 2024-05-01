@@ -49,9 +49,13 @@ const (
 )
 
 func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createEtcdBackupConfigReq)
+
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -107,9 +111,13 @@ func DecodeCreateEtcdBackupConfigReq(c context.Context, r *http.Request) (interf
 }
 
 func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getEtcdBackupConfigReq)
+
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -135,9 +143,13 @@ type getEtcdBackupConfigReq struct {
 }
 
 func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listEtcdBackupConfigReq)
+
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -193,9 +205,13 @@ func DecodeGetEtcdBackupConfigReq(c context.Context, r *http.Request) (interface
 }
 
 func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getEtcdBackupConfigReq)
+
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -211,9 +227,13 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 }
 
 func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(patchEtcdBackupConfigReq)
+
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -273,7 +293,7 @@ func DecodePatchEtcdBackupConfigReq(c context.Context, r *http.Request) (interfa
 }
 
 func ProjectListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listProjectEtcdBackupConfigReq)
 		if err := req.validate(); err != nil {
@@ -286,6 +306,9 @@ func ProjectListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		if err := IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 		ebcLists, err := listProjectEtcdBackupConfig(ctx, req.ProjectID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
@@ -570,4 +593,18 @@ func getUserInfoEtcdBackupConfigProvider(ctx context.Context, userInfoGetter pro
 
 	etcdBackupConfigProvider := ctx.Value(middleware.EtcdBackupConfigProviderContextKey).(provider.EtcdBackupConfigProvider)
 	return userInfo, etcdBackupConfigProvider, nil
+}
+
+func IsEtcdBackupEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+	globalSettings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return common.KubernetesErrorToHTTPError(err)
+	}
+
+	if !globalSettings.Spec.EnableEtcdBackup {
+		return fmt.Errorf("etcd backup feature is disabled by the admin")
+	}
+
+	return nil
 }

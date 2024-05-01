@@ -32519,6 +32519,11 @@
           "type": "boolean",
           "x-go-name": "EnableDashboard"
         },
+        "enableEtcdBackup": {
+          "description": "EnableEtcdBackup enables the etcd Backup feature in the dashboard.",
+          "type": "boolean",
+          "x-go-name": "EnableEtcdBackup"
+        },
         "enableExternalClusterImport": {
           "type": "boolean",
           "x-go-name": "EnableExternalClusterImport"

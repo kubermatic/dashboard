@@ -45,6 +45,9 @@ type GlobalSettings struct {
 	// EnableDashboard enables the link to the Kubernetes dashboard for a user cluster.
 	EnableDashboard bool `json:"enableDashboard,omitempty"`
 
+	// EnableEtcdBackup enables the etcd Backup feature in the dashboard.
+	EnableEtcdBackup bool `json:"enableEtcdBackup,omitempty"`
+
 	// enable external cluster import
 	EnableExternalClusterImport bool `json:"enableExternalClusterImport,omitempty"`
 
