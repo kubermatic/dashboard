@@ -1337,6 +1337,7 @@ func GenDefaultSettings() *kubermaticv1.KubermaticSetting {
 			EnableWebTerminal:     false,
 			EnableShareCluster:    ptr.To[bool](false),
 			EnableOIDCKubeconfig:  false,
+			EnableEtcdBackup:      true,
 		},
 	}
 }
@@ -1384,6 +1385,7 @@ func GenDefaultGlobalSettings() *kubermaticv1.KubermaticSetting {
 			DisplayAPIDocs:              true,
 			DisplayTermsOfService:       true,
 			EnableExternalClusterImport: true,
+			EnableEtcdBackup:            true,
 			OpaOptions: kubermaticv1.OpaOptions{
 				Enabled:  true,
 				Enforced: true,

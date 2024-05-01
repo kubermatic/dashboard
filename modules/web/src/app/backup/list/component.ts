@@ -14,7 +14,10 @@
 
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {SettingsService} from '@app/core/services/settings';
 import {View} from '@app/shared/entity/common';
+import {AdminSettings} from '@app/shared/entity/settings';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'km-backups',
@@ -22,12 +25,19 @@ import {View} from '@app/shared/entity/common';
 })
 export class BackupsComponent implements OnInit {
   readonly view = View;
+  enableEtcdBackup: boolean;
   etcdBackupType = '';
 
-  constructor(private _router: Router) {}
+  constructor(
+    private _router: Router,
+    private readonly _settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.getEtcdBackupType();
+    this._settingsService.adminSettings.pipe(take(1)).subscribe((settings: AdminSettings) => {
+      this.enableEtcdBackup = settings.enableEtcdBackup;
+    });
   }
 
   getEtcdBackupType(): void {
