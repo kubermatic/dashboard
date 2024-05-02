@@ -34,6 +34,8 @@ export interface AddBackupStorageLocationDialogConfig {
 enum Controls {
   Name = 'name',
   Bucket = 'bucket',
+  Prefix = 'prefix',
+  CaCert = 'caCert',
   AccessKeyId = 'accessKeyId',
   SecretAccessKey = 'secretAccessKey',
   BackupSyncPeriod = 'backupSyncPeriod',
@@ -77,6 +79,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         this._config.bslObject?.spec.objectStorage.bucket ?? '',
         Validators.required
       ),
+      [Controls.Prefix]: this._builder.control(this._config.bslObject?.spec.objectStorage.prefix ?? ''),
+      [Controls.CaCert]: this._builder.control(this._config.bslObject?.spec.objectStorage.caCert ?? ''),
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
       [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? '0'),
@@ -119,6 +123,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       cbslSpec: {
         objectStorage: {
           bucket: this.form.get(Controls.Bucket).value,
+          prefix: this.form.get(Controls.Prefix).value,
+          caCert: this.form.get(Controls.CaCert).value,
         },
         backupSyncPeriod: this.form.get(Controls.BackupSyncPeriod).value,
         config: {

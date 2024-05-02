@@ -38,6 +38,18 @@ END OF TERMS AND CONDITIONS
       <mat-hint>The bucket in which to store backups.</mat-hint>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Prefix</mat-label>
+      <input [formControlName]="Controls.Prefix"
+             matInput>
+      <mat-hint>Prefix is the path inside a bucket to use for backup storage.</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>CA Certificate</mat-label>
+      <input [formControlName]="Controls.CaCert"
+             matInput>
+      <mat-hint>base64 encoded CA bundle to be used when verifying TLS connections</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Access Key ID</mat-label>
       <input [formControlName]="Controls.AccessKeyId"
              matInput

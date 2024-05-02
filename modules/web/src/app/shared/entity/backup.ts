@@ -210,7 +210,9 @@ export class BackupStorageLocation {
 
 export class BackupStorageLocationSpec {
   objectStorage: {
-    bucket: string;
+    caCert: string;
+    prefix?: string;
+    bucket?: string;
   };
   config: BackupStorageLocationConfig;
   credential?: {
