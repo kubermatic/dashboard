@@ -75,6 +75,30 @@ END OF TERMS AND CONDITIONS
           </div>
         </td>
       </ng-container>
+      <ng-container matColumnDef="prefix">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Prefix</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.objectStorage.prefix}}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="caCert">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">CA Certificate</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            <span>{{element.spec.objectStorage.caCert}}</span>
+          </div>
+        </td>
+      </ng-container>
       <ng-container matColumnDef="region">
         <th mat-header-cell
             *matHeaderCellDef
