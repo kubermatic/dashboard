@@ -973,6 +973,7 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv2.GlobalSettin
 		DisplayAPIDocs:        gSettings.DisplayAPIDocs,
 		DisplayTermsOfService: gSettings.DisplayTermsOfService,
 		EnableOIDCKubeconfig:  gSettings.EnableOIDCKubeconfig,
+		EnableEtcdBackup:      gSettings.EnableEtcdBackup,
 		EnableDashboard:       gSettings.EnableDashboard,
 		EnableWebTerminal:     gSettings.EnableWebTerminal,
 		EnableShareCluster:    gSettings.EnableShareCluster,

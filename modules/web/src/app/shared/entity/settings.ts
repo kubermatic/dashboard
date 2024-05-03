@@ -48,6 +48,7 @@ export interface AdminSettings {
   mlaAlertmanagerPrefix: string;
   mlaGrafanaPrefix: string;
   enableClusterBackups?: boolean;
+  enableEtcdBackup?: boolean;
   notifications?: NotificationOptions;
   providerConfiguration?: ProviderConfiguration;
   defaultQuota?: DefaultProjectQuota;
@@ -209,6 +210,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   disableAdminKubeconfig: false,
   enableOIDCKubeconfig: false,
   enableClusterBackups: false,
+  enableEtcdBackup: false,
   restrictProjectCreation: false,
   restrictProjectDeletion: false,
   enableExternalClusterImport: true,

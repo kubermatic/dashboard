@@ -53,6 +53,7 @@ func TestCreateEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			EtcdRestore:            test.GenAPIEtcdRestore("test-er", test.GenDefaultCluster().Name),
@@ -67,6 +68,7 @@ func TestCreateEndpoint(t *testing.T) {
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
 				test.GenAdminUser("John", "john@acme.com", false),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
 			EtcdRestore:            test.GenAPIEtcdRestore("test-er", test.GenDefaultCluster().Name),
@@ -81,6 +83,7 @@ func TestCreateEndpoint(t *testing.T) {
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
 				test.GenAdminUser("John", "john@acme.com", true),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
 			EtcdRestore:            test.GenAPIEtcdRestore("test-er", test.GenDefaultCluster().Name),
@@ -94,6 +97,7 @@ func TestCreateEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			EtcdRestore: func() *apiv2.EtcdRestore {
@@ -111,6 +115,7 @@ func TestCreateEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			EtcdRestore:            test.GenAPIEtcdRestore("", test.GenDefaultCluster().Name),
@@ -169,6 +174,7 @@ func TestGetEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
@@ -183,6 +189,7 @@ func TestGetEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusNotFound,
@@ -195,6 +202,7 @@ func TestGetEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", false),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
@@ -209,6 +217,7 @@ func TestGetEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", true),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
@@ -263,6 +272,7 @@ func TestListEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
@@ -280,6 +290,7 @@ func TestListEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", false),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenDefaultCluster(), test.GenDefaultProject().Name),
@@ -294,6 +305,7 @@ func TestListEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", true),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenDefaultCluster(), test.GenDefaultProject().Name),
@@ -354,6 +366,7 @@ func TestDeleteEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
@@ -367,6 +380,7 @@ func TestDeleteEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusNotFound,
@@ -379,6 +393,7 @@ func TestDeleteEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", false),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
@@ -393,6 +408,7 @@ func TestDeleteEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", true),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 			),
@@ -407,6 +423,7 @@ func TestDeleteEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				func() *kubermaticv1.EtcdRestore {
 					er := test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name)
 					er.Status.Phase = kubermaticv1.EtcdRestorePhaseStarted
@@ -453,6 +470,7 @@ func TestProjectListEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenCluster("clusterAbcID", "clusterAbc", test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC)), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-3", test.GenDefaultCluster(), "some-different-project"),
@@ -470,6 +488,7 @@ func TestProjectListEndpoint(t *testing.T) {
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
+				test.GenDefaultSettings(),
 				test.GenAdminUser("John", "john@acme.com", false),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenDefaultCluster(), test.GenDefaultProject().Name),
@@ -484,6 +503,7 @@ func TestProjectListEndpoint(t *testing.T) {
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
 				test.GenAdminUser("John", "john@acme.com", true),
+				test.GenDefaultSettings(),
 				test.GenEtcdRestore("test-1", test.GenDefaultCluster(), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-2", test.GenCluster("clusterAbcID", "clusterAbc", test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC)), test.GenDefaultProject().Name),
 				test.GenEtcdRestore("test-3", test.GenDefaultCluster(), "some-different-project"),

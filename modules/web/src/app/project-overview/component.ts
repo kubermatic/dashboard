@@ -64,6 +64,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   clusterMachinesCount: Record<string, MachineDeploymentStatus> = {};
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
+  etcdBackupEnabled = false;
   clusterTemplates: ClusterTemplate[] = [];
   backups: EtcdBackupConfig[] = [];
   sshKeys: SSHKey[] = [];
@@ -186,7 +187,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadClusters();
     this._loadExternalClusters();
     this._loadClusterTemplates();
-    this._loadBackups();
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
@@ -205,12 +205,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadAdminSettings(): void {
-    this._settingsService.adminSettings
-      .pipe(
-        map(settings => settings.enableExternalClusterImport),
-        takeUntil(this._unsubscribe)
-      )
-      .subscribe(externalClustersEnabled => (this.externalClustersEnabled = externalClustersEnabled));
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.etcdBackupEnabled = settings.enableEtcdBackup;
+      this.externalClustersEnabled = settings.enableExternalClusterImport;
+      if (this.etcdBackupEnabled) {
+        this._loadBackups();
+      }
+    });
   }
 
   private _loadClusters(): void {

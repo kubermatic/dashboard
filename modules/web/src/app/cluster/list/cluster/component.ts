@@ -72,6 +72,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
+  private _enableEtcdBackups = false;
   readonly Column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
@@ -121,9 +122,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._clusterService.refreshClusters());
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._enableEtcdBackups = settings.enableEtcdBackup;
+      this.getRestores();
+      this._clusterService.refreshClusters();
+    });
 
     this._projectChange$
       .pipe(
@@ -133,18 +136,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           this._loadClusterTemplates();
         })
       )
+      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id)))
       .pipe(
-        switchMap(_ =>
-          combineLatest([
-            this._userService.getCurrentUserGroup(this._selectedProject.id),
-            this._clusterService.restores(this._selectedProject.id),
-          ])
-        )
-      )
-      .pipe(
-        tap(([userGroup, restores]) => {
+        tap(userGroup => {
           this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
-          this._etcdRestores = restores;
+          this.getRestores();
         })
       )
       .pipe(switchMap(_ => this._clusterService.projectClusterList(this._selectedProject.id)))
@@ -183,7 +179,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           this.health[cluster.id] = health;
           this._loadMachineDeployments(cluster);
         });
-
         this.dataSource.data = this.clusters;
         this.isInitialized = true;
       });
@@ -269,6 +264,19 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   isEmpty(arr: any): boolean {
     return _.isEmpty(arr);
+  }
+
+  getRestores(): void {
+    if (this._enableEtcdBackups) {
+      this._clusterService
+        .restores(this._selectedProject.id)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(restores => {
+          this._etcdRestores = restores;
+        });
+    } else {
+      this._etcdRestores = [];
+    }
   }
 
   isRestoring(clusterID: string): boolean {

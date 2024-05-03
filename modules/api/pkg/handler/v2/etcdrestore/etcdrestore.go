@@ -31,6 +31,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	"k8c.io/dashboard/v2/pkg/handler/v2/etcdbackupconfig"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -42,9 +43,13 @@ import (
 )
 
 func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createEtcdRestoreReq)
+
+		if err := etcdbackupconfig.IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -117,9 +122,13 @@ func DecodeCreateEtcdRestoreReq(c context.Context, r *http.Request) (interface{}
 }
 
 func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getEtcdRestoreReq)
+
+		if err := etcdbackupconfig.IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -145,9 +154,13 @@ type getEtcdRestoreReq struct {
 }
 
 func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listEtcdRestoreReq)
+
+		if err := etcdbackupconfig.IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -203,9 +216,13 @@ func DecodeGetEtcdRestoreReq(c context.Context, r *http.Request) (interface{}, e
 }
 
 func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getEtcdRestoreReq)
+
+		if err := etcdbackupconfig.IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -232,9 +249,13 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 }
 
 func ProjectListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listProjectEtcdRestoreReq)
+
+		if err := etcdbackupconfig.IsEtcdBackupEnabled(ctx, settingsProvider); err != nil {
+			return nil, err
+		}
 
 		// check if user has access to the project
 		_, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

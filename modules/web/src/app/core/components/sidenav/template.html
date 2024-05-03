@@ -107,7 +107,8 @@ limitations under the License.
         <span *ngIf="!isSidenavCollapsed">Cluster Templates</span>
       </a>
     </div>
-    <km-side-nav-field [label]="projectSidenavSections.Backups"
+    <km-side-nav-field *ngIf="adminSettings.enableEtcdBackup"
+                       [label]="projectSidenavSections.Backups"
                        icon="km-icon-backup"
                        [isSidenavCollapsed]="isSidenavCollapsed">
       <ng-container *ngIf="!isSidenavCollapsed">
