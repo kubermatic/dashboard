@@ -445,12 +445,6 @@ limitations under the License.
                  matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
-              Operating System Manager
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
-            </mat-checkbox>
-
             <ng-container *ngIf="isMLAEnabled">
               <mat-checkbox [formControlName]="Controls.MLALogging">
                 User Cluster Logging

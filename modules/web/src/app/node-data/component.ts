@@ -119,16 +119,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
 
-  private _enableOperatingSystemManager: boolean;
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
-  }
-
-  get isOperatingSystemManagerEnabled(): boolean {
-    return this._clusterSpecService.cluster.spec.enableOperatingSystemManager;
   }
 
   get displayQuotaInWizard(): boolean {
@@ -249,13 +244,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._clusterSpecService.clusterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
-
-      if (this._enableOperatingSystemManager !== this.isOperatingSystemManagerEnabled) {
-        this._enableOperatingSystemManager = this.isOperatingSystemManagerEnabled;
-        if (this.isOperatingSystemManagerEnabled) {
-          this._loadOperatingSystemProfiles();
-        }
-      }
+      this._loadOperatingSystemProfiles();
     });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
@@ -474,31 +463,29 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _loadOperatingSystemProfiles() {
-    if (this.isOperatingSystemManagerEnabled) {
-      this.isLoadingOSProfiles = true;
-      const profiles$ = this.isDialogView()
-        ? this._projectService.selectedProject.pipe(take(1)).pipe(
-            switchMap(project => {
-              return this._osmService.getOperatingSystemProfilesForCluster(
-                this._clusterSpecService.cluster.id,
-                project.id
-              );
-            })
-          )
-        : this._datacenterSpec?.spec
-          ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
-          : EMPTY;
+    this.isLoadingOSProfiles = true;
+    const profiles$ = this.isDialogView()
+      ? this._projectService.selectedProject.pipe(take(1)).pipe(
+          switchMap(project => {
+            return this._osmService.getOperatingSystemProfilesForCluster(
+              this._clusterSpecService.cluster.id,
+              project.id
+            );
+          })
+        )
+      : this._datacenterSpec?.spec
+        ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
+        : EMPTY;
 
-      profiles$
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(take(1))
-        .pipe(finalize(() => (this.isLoadingOSProfiles = false)))
-        .subscribe(profiles => {
-          this.operatingSystemProfiles = profiles;
-          this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
-          this.setDefaultOperatingSystemProfiles();
-        });
-    }
+    profiles$
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(take(1))
+      .pipe(finalize(() => (this.isLoadingOSProfiles = false)))
+      .subscribe(profiles => {
+        this.operatingSystemProfiles = profiles;
+        this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
+        this.setDefaultOperatingSystemProfiles();
+      });
   }
 
   private _getOperatingSystemSpec(): OperatingSystemSpec {

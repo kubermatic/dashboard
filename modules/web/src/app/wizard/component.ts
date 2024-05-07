@@ -288,7 +288,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     if (cluster.spec.exposeStrategy !== ExposeStrategy.tunneling) {
       clusterModel.cluster.spec.clusterNetwork.tunnelingAgentIP = null;
     }
-    if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
+    if (nodeData.operatingSystemProfile) {
       clusterModel.nodeDeployment.annotations = {
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };

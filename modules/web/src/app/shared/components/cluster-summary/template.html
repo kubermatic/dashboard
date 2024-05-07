@@ -231,10 +231,6 @@ limitations under the License.
                                  [value]="cluster.spec.kubernetesDashboard?.enabled">
             </km-property-boolean>
 
-            <km-property-boolean *ngIf="cluster.spec.enableOperatingSystemManager"
-                                 label="Operating System Manager"
-                                 [value]="cluster.spec.enableOperatingSystemManager">
-            </km-property-boolean>
             <km-property-boolean *ngIf="cluster.spec.disableCsiDriver"
                                  label="CSI Storage Driver"
                                  [value]="!cluster.spec.disableCsiDriver">

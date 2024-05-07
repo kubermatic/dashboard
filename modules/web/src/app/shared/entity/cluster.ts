@@ -348,7 +348,6 @@ export class ClusterSpec {
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
-  enableOperatingSystemManager?: boolean;
   podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   backupConfig?: BackupConfig;
   mla?: MLASettings;
@@ -525,7 +524,6 @@ export class ClusterSpecPatch {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   useEventRateLimitAdmissionPlugin?: boolean;
-  enableOperatingSystemManager?: boolean;
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;

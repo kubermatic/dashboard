@@ -92,7 +92,6 @@ enum Controls {
   AuditLogging = 'auditLogging',
   AuditPolicyPreset = 'auditPolicyPreset',
   UserSSHKeyAgent = 'userSSHKeyAgent',
-  OperatingSystemManager = 'enableOperatingSystemManager',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
   Labels = 'labels',
@@ -374,7 +373,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.AuditLogging).valueChanges,
       this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
-      this.form.get(Controls.OperatingSystemManager).valueChanges,
       this.form.get(Controls.ClusterBackup).valueChanges,
       this.form.get(Controls.KubernetesDashboardEnabled).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
@@ -522,7 +520,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: this._builder.control(clusterSpec?.auditLogging?.enabled ?? false),
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
-      [Controls.OperatingSystemManager]: this._builder.control(clusterSpec?.enableOperatingSystemManager ?? true),
       [Controls.ClusterBackup]: this._builder.control(!!clusterSpec?.backupConfig ?? false),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
@@ -616,8 +613,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.AuditPolicyPreset]:
             clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
-          [Controls.OperatingSystemManager]:
-            clusterSpec?.enableOperatingSystemManager ?? this.controlValue(Controls.OperatingSystemManager),
           [Controls.ClusterBackup]: !!clusterSpec.backupConfig ?? false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
           [Controls.Konnectivity]:
@@ -956,7 +951,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
         exposeStrategy: this.controlValue(Controls.ExposeStrategy),
-        enableOperatingSystemManager: this.controlValue(Controls.OperatingSystemManager),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork,
         cniPlugin: cniPlugin,

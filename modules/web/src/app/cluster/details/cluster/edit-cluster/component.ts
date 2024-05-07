@@ -64,7 +64,6 @@ enum Controls {
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
-  OperatingSystemManager = 'enableOperatingSystemManager',
   KubeLB = 'kubelb',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
@@ -161,7 +160,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       }),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
-      [Controls.OperatingSystemManager]: new FormControl(this.cluster.spec.enableOperatingSystemManager),
       [Controls.KubeLB]: new FormControl(this.cluster.spec.kubelb?.enabled),
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
@@ -397,7 +395,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           enabled: this.form.get(Controls.KubernetesDashboardEnabled).value,
         },
         disableCsiDriver: this.form.get(Controls.DisableCSIDriver).value,
-        enableOperatingSystemManager: this.form.get(Controls.OperatingSystemManager).value,
         kubelb: {
           enabled: this.form.get(Controls.KubeLB).value,
         },
