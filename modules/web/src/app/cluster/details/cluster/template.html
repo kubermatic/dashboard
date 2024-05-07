@@ -236,8 +236,7 @@ limitations under the License.
             <km-property-health *ngIf="!cluster.spec.cloud.edge"
                                 label="Machine Controller"
                                 [healthState]="health?.machineController"></km-property-health>
-            <km-property-health *ngIf="cluster.spec.enableOperatingSystemManager"
-                                label="Operating System Manager"
+            <km-property-health label="Operating System Manager"
                                 [healthState]="health?.operatingSystemManager"></km-property-health>
             <km-property-health label="User Controller Manager"
                                 [healthState]="health?.userClusterControllerManager"></km-property-health>

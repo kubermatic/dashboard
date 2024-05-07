@@ -84,7 +84,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         maxReplicas: data.maxReplicas,
       },
     };
-    if (data.operatingSystemProfile && this._clusterSpecService.cluster.spec.enableOperatingSystemManager) {
+    if (data.operatingSystemProfile) {
       md.annotations = {
         [OPERATING_SYSTEM_PROFILE_ANNOTATION]: data.operatingSystemProfile,
       };

@@ -210,7 +210,7 @@ limitations under the License.
       </div>
     </div>
 
-    <km-autocomplete *ngIf="isOperatingSystemManagerEnabled && form.get(Controls.OperatingSystem).value"
+    <km-autocomplete *ngIf="form.get(Controls.OperatingSystem).value"
                      label="Operating System Profile"
                      [formControlName]="Controls.OperatingSystemProfile"
                      [isLoading]="isLoadingOSProfiles"
