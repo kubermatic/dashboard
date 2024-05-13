@@ -32,7 +32,6 @@
 }
 
 .toggle-button {
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.
   .mat-button-toggle {
     @include mixins.size(110px, 45px, true);
 

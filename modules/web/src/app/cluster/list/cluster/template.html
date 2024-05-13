@@ -44,8 +44,7 @@ limitations under the License.
             [disabled]="!can(Permission.Create) || !clusterTemplates?.length"
             (click)="selectTemplate()">
       <i class="km-icon-mask km-icon-add"></i>
-      <span [matTooltip]="isInitialized && !clusterTemplates?.length ? 'No cluster templates available' : ''">
-        Create Clusters From Template
+      <span [matTooltip]="isInitialized && !clusterTemplates?.length ? 'No cluster templates available' : ''">Create Clusters From Template
       </span>
     </button>
     <button id="km-add-cluster-top-btn"

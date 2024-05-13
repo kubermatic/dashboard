@@ -234,7 +234,6 @@ $theme-dark: map.merge(
 .mat-stepper-horizontal.km-stepper-in-dialog {
   background-color: map.get($colors-dark, option-background);
 
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
   .mat-button-toggle-group .mat-button-toggle {
     background-color: map.get($colors-dark, option-background);
   }
