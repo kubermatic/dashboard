@@ -15,18 +15,10 @@
 @use 'variables';
 
 .dialog {
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle-group {
     border-radius: variables.$border-radius;
     margin-bottom: 30px;
 
-    &.toggle-subject-type {
-      margin-left: 30px;
-    }
-
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle {
       border-radius: 0;
       margin-right: 0;

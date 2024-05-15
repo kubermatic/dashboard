@@ -15,7 +15,8 @@ limitations under the License.
 -->
 
 <div [ngClass]="getClass()">
-  <mat-tab-group animationDuration="0ms"
+  <mat-tab-group mat-stretch-tabs="false"
+                 animationDuration="0ms"
                  dynamicHeight>
     <mat-tab *ngFor="let tab of tabs; let i = index"
              [label]="tab.label">

@@ -655,8 +655,13 @@ km-cni-version {
   .mat-mdc-card {
     .mat-mdc-card-header {
       .mat-mdc-card-title {
+        button {
+          min-width: 245px;
+          top: 0
+        }
+
         i {
-          margin: 0 12px 0 0;
+          margin: 0;
         }
       }
     }
@@ -706,8 +711,7 @@ km-cni-version {
 .km-value-changed {
   position: relative;
 
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-  &:not(.mat-button-toggle-group):not(.radio-group-column)::after {
+  &:not(.mat-button-toggle-group):not(.radio-group-column):not(.mat-mdc-select)::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
     content: '';
@@ -747,12 +751,6 @@ km-cni-version {
     }
   }
 
-  &.mat-mdc-select::after {
-    height: 44px !important;
-    left: -11px !important;
-    top: -17px !important;
-  }
-
   &.mat-mdc-slide-toggle::after {
     height: 95% !important;
     left: -12px !important;
@@ -764,7 +762,6 @@ km-cni-version {
     top: 0 !important;
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle-checked::after {
     border-bottom-left-radius: variables.$border-radius;
     border-top-left-radius: variables.$border-radius;
@@ -782,7 +779,7 @@ km-cni-version {
     border-top-left-radius: variables.$border-radius;
     content: '';
     height: 44px;
-    left: -15px;
+    left: -10px;
     position: absolute;
     top: 0;
     width: 5px;
@@ -899,14 +896,7 @@ km-side-nav-field .sub-menu-item:last-child {
 }
 
 .km-button-toggle-group {
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   &.mat-button-toggle-group {
-    border-radius: variables.$border-radius;
-    margin-bottom: 0;
-
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle {
       border-radius: 0;
       margin-right: 0;

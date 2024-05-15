@@ -33,8 +33,7 @@
       }
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-    &.mat-button-disabled {
+    &.mat-mdc-button-disabled {
       .km-icon-mask {
         background-color: map.get($colors, text);
         opacity: 30%;
@@ -337,13 +336,11 @@
   // style for kmValueChangedIndicator directive
 
   .km-value-changed {
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-    &:not(.mat-button-toggle-group)::after {
+    *::after {
       background-color: map.get($colors, primary);
     }
 
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-    .mat-button-toggle-checked::after {
+    &::after {
       background-color: map.get($colors, primary);
     }
   }

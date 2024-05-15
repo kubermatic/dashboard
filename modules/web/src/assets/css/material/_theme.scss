@@ -159,8 +159,8 @@
   .mat-mdc-button,
   .mat-mdc-unelevated-button,
   .mat-mdc-raised-button {
-    background-color: map.get($colors, primary);
-    color: #fff;
+    --mdc-filled-button-container-color: #{map.get($colors, primary)};
+    --mdc-filled-button-label-text-color: #fff;
 
     &:hover:not([disabled]) {
       background-color: map.get($colors, primary-hover);
@@ -279,7 +279,8 @@
   }
 
   .mat-mdc-slide-toggle {
-    &.mat-accent {
+    &.mat-accent,
+    button {
       // track color
       --mdc-switch-selected-track-color: #{map.get($colors, primary)};
       --mdc-switch-selected-focus-track-color: var(--mdc-switch-selected-track-color);
@@ -308,31 +309,17 @@
     }
   }
 
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-
-  // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle-group {
     background-color: transparent;
 
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-
-    // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle {
       border-color: map.get($colors, divider);
 
-      // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
       &.mat-button-toggle-checked {
         --mat-standard-button-toggle-divider-color: #{map.get($colors, primary)};
 
         background-color: transparent;
         border-color: map.get($colors, primary);
-      }
-
-      // TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
-      .mat-button-toggle-label-content {
-        color: map.get($colors, text);
       }
     }
   }

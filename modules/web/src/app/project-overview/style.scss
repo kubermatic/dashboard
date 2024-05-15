@@ -20,6 +20,8 @@
   .mat-mdc-card-header {
     .km-icon-arrow-down {
       @include mixins.size(16px, $force: true);
+
+      margin-bottom: 0 !important;
     }
   }
 
@@ -29,9 +31,9 @@
 }
 
 .edit-button {
-  height: 45px;
+  height: 45px !important;
   margin: 0 10px;
-  width: 45px;
+  width: 45px !important;
 }
 
 .labels-icon {
