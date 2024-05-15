@@ -15,3 +15,12 @@
 .manifest-message {
   margin: 0 0 30px;
 }
+
+mat-form-field {
+  height: 175px;
+
+  &:last-child {
+    flex: none !important;
+    height: 45px;
+  }
+}

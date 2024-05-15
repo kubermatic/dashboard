@@ -35,6 +35,7 @@
 
         .mdc-tab--active {
           background: map.get($colors, background-card);
+          border-top: 2px solid map.get($colors, primary);
         }
       }
     }

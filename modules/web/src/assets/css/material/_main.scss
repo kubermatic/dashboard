@@ -28,10 +28,10 @@ mat-card.mat-mdc-card {
   }
 
   .mat-mdc-card-header {
+    align-self: unset !important;
     border-radius: variables.$border-radius variables.$border-radius 0 0;
     line-height: 16px;
     margin: 0;
-    padding: 0 30px;
 
     .mat-mdc-card-header-text {
       flex: 1 1 auto;
@@ -306,13 +306,11 @@ km-wizard {
 }
 
 .mat-nav-list {
-  // TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-  .mat-list-item-content {
+  .mdc-list-item__content {
     padding: 0;
   }
 }
 
-// TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
 mat-list-item {
   &.disabled {
     i {
@@ -341,6 +339,11 @@ mat-form-field {
     .mat-mdc-text-field-wrapper {
       height: 45px;
       padding: 0 0 0 10px;
+
+     &:has(textarea) {
+          height: 80px;
+          padding-right: 10px;
+      }
     }
 
     &.km-long-subscript {
@@ -483,6 +486,11 @@ mat-error {
   &.project-selector-dropdown {
     max-height: 370px;
   }
+}
+
+.cdk-overlay-pane:has(.project-selector-dropdown) {
+  margin-top: 10px;
+  width: fit-content !important;
 }
 
 .mat-mdc-option {
@@ -696,7 +704,6 @@ mat-chip-grid {
 }
 
 // Tooltips.
-// TODO(mdc-migration): The following rule targets internal classes of tooltip that may no longer apply for the MDC version.*/
 mat-tooltip-component .mat-mdc-tooltip {
   font-size: variables.$font-size-caption;
   margin-top: 5px;
