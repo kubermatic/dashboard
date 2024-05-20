@@ -44,16 +44,6 @@ km-button {
 
 .mat-mdc-card-header {
   .mat-mdc-card-title {
-    &.cluster-name {
-      padding-bottom: 0;
-      padding-top: 0;
-
-      .cluster-health {
-        font-size: variables.$font-size-subhead;
-        margin: 2px 20px 0 -5px;
-      }
-    }
-
     &.additional-margin {
       padding-left: 30px;
     }
