@@ -3,7 +3,15 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "[ACTION REQUIRED] The latest Ubuntu 22.04 images ship with cloud-init 24.x package. This package has breaking changes and thus rendered our OSPs as incompatible. It's recommended to refresh your machines with latest provided OSPs to ensure that a system-wide package update, that updates cloud-init to 24.x, doesn't break the machines."
+      "description": "Fix a bug where unrequired  `cloud-config` secret was being propagated to the user clusters"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where externally deployed Velero CRDs are removed automatically from the user cluster."
+    },
+    {
+      "category": "changed",
+      "description": "Update OSM to v1.5.2; fixing cloud-init bootstrapping issues on Ubuntu 22.04 on Azure."
     }
   ]
 }
