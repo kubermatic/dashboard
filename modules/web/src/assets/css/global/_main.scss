@@ -320,14 +320,14 @@ hr {
     border-bottom-width: 0;
     font-size: variables.$font-size-subhead;
     line-height: 25px;
-    padding-right: 16px;
+    padding: 0;
 
     &:last-of-type {
       padding-right: 16px;
     }
 
     &:first-of-type {
-      padding-left: 16px;
+      padding-right: 16px;
     }
 
     &.mat-column-provider {
@@ -922,12 +922,16 @@ km-side-nav-field .sub-menu-item:last-child {
 
 .km-pagination-page-size-select-container {
   font-size: variables.$font-size-caption;
+  margin-top: 10px;
 
   .mat-mdc-form-field {
     width: 70px;
 
     .mat-mdc-text-field-wrapper {
+      height: 40px;
       padding-bottom: 0;
+
+      --mat-form-field-container-vertical-padding: 7px;
 
       .mat-mdc-select .mat-mdc-select-trigger {
         align-items: flex-end;

@@ -19,20 +19,6 @@
   @include mixins.size(24px);
 }
 
-.mat-mdc-card-header {
-  .mat-mdc-card-title {
-    &.cluster-name {
-      font-weight: 500;
-      padding: 0;
-
-      .cluster-health {
-        font-size: variables.$font-size-subhead;
-        margin: 2px 20px 0 -5px;
-      }
-    }
-  }
-}
-
 .km-provider-logo {
   max-height: unset;
   max-width: unset;
