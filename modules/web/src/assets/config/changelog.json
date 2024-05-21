@@ -3,7 +3,7 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix a bug where unrequired  `cloud-config` secret was being propagated to the user clusters"
+      "description": "Fix a bug where unrequired cloud-config secret was being propagated to the user clusters."
     },
     {
       "category": "fixed",
