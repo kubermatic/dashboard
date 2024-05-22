@@ -26,6 +26,8 @@ export const IPV4_IPV6_PATTERN =
 
 export const KUBERNETES_RESOURCE_NAME_PATTERN =
   '^(?=.{1,63}$)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*';
+export const EMAIL_DOMAIN_VALIDOTOR =
+  '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.(?:[A-Za-z]{2,6}|[A-Za-z]{2,})$|^\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b';
 export const KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR = Validators.pattern(KUBERNETES_RESOURCE_NAME_PATTERN);
 export const AKS_POOL_NAME_VALIDATOR = Validators.pattern('[a-z0-9]{0,12}$');
 export const GKE_POOL_NAME_VALIDATOR = Validators.pattern('(?:[a-z](?:[-a-z0-9]{0,38}[a-z0-9])?)');

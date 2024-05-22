@@ -330,7 +330,7 @@ mat-list-item {
 
 // Forms.
 mat-form-field {
-  &.mat-mdc-form-field {
+  &.mat-mdc-form-field:not(.km-node-tags) {
     margin-bottom: 10px;
     width: 100%;
 
@@ -349,9 +349,9 @@ mat-form-field {
       height: 45px;
       padding: 0 0 0 10px;
 
-     &:has(textarea) {
-          height: 80px;
-          padding-right: 10px;
+      &:has(textarea) {
+        height: 80px;
+        padding-right: 10px;
       }
     }
 
@@ -415,15 +415,34 @@ mat-form-field {
     .mdc-icon-button {
       @include mixins.size(30px);
 
-      margin-right: 5px
-
+      margin-right: 5px;
     }
   }
 
   .mat-mdc-select {
     .mdc-icon-button {
       @include mixins.size(30px);
+    }
+  }
 
+  &.km-node-tags {
+    margin-bottom: 10px;
+    width: 100%;
+
+    .mat-mdc-text-field-wrapper:not(.mdc-text-field--focused) {
+      .mat-mdc-floating-label {
+        position: relative;
+        top: 23px;
+      }
+
+      .mat-mdc-form-field-infix {
+        min-height: 45px;
+        padding: 0;
+
+        .mat-mdc-chip-grid {
+          margin-top: 15px;
+        }
+      }
     }
   }
 }
@@ -514,7 +533,7 @@ a,
 button {
   &.mat-mdc-button,
   &.mat-mdc-unelevated-button,
-  &.mat-mdc-raised-button{
+  &.mat-mdc-raised-button {
     --mat-icon-button-state-layer-color: none;
     --mdc-icon-button-state-layer-size: none;
 
@@ -549,15 +568,13 @@ button {
     .mat-mdc-button-touch-target {
       height: 45px;
     }
-
   }
 
-
-  &.mat-mdc-icon-button  {
+  &.mat-mdc-icon-button {
     --mat-icon-button-state-layer-color: none;
     --mdc-icon-button-state-layer-size: 45px !important;
 
-    bottom: 2px;;
+    bottom: 2px;
   }
 }
 
@@ -586,7 +603,6 @@ button {
       pointer-events: none;
       text-decoration: none;
     }
-
   }
 }
 
@@ -612,7 +628,7 @@ button {
     border-radius: variables.$border-radius;
     border-style: solid;
     border-width: 1px;
-      display: flex;
+    display: flex;
     margin: 0 10px 10px 0;
   }
 

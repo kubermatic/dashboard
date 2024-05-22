@@ -17,7 +17,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {EMAIL_DOMAIN_VALIDOTOR, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {ProjectService} from '@app/core/services/project';
 import {Project} from '@app/shared/entity/project';
 
@@ -53,7 +53,7 @@ enum ProjectState {
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;
-  readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
+  readonly emailAndDomainRegex = EMAIL_DOMAIN_VALIDOTOR;
 
   domains: string[] = [];
   projects: Project[] = [];
