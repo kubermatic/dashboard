@@ -37,14 +37,14 @@ limitations under the License.
   </mat-form-field>
 
   <div class="optional-section">Optional Settings</div>
-  <km-chip-list label="Restrict Preset Group to Domains"
+  <km-chip-list label="Restrict to Domains and Emails"
                 placeholder="Domains..."
                 description="Use commas, space or enter key as the separators."
                 [tags]="domains"
                 (onChange)="onDomainsChange($event)"
                 [formControlName]="controls.Domains"
-                [kmPattern]="domainRegex"
-                kmPatternError="Input has to be a valid domain like kubermatic.com"
+                [kmPattern]="emailAndDomainRegex"
+                kmPatternError="Input has to be a valid domain like kubermatic.com or emails"
                 fxFlex>
   </km-chip-list>
 
