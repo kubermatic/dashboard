@@ -26,8 +26,8 @@ type ClusterNetworkingConfig struct {
 	DNSDomain string `json:"dnsDomain,omitempty"`
 
 	// Deprecated: KonnectivityEnabled enables konnectivity for controlplane to node network communication.
-	// As OpenVPN will be removed in the future KKP versions, clusters with konnectivity disabled will not be supported.
-	// All existing clusters with OpenVPN should migrate to the Konnectivity.
+	// Konnectivity is the only supported choice for controlplane to node network communication. This field is
+	// defaulted to true and setting it to false is rejected. It will be removed in a future release.
 	KonnectivityEnabled bool `json:"konnectivityEnabled,omitempty"`
 
 	// NodeCIDRMaskSizeIPv4 is the mask size used to address the nodes within provided IPv4 Pods CIDR.

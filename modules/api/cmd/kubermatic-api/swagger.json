@@ -28663,7 +28663,7 @@
           "$ref": "#/definitions/IPVSConfiguration"
         },
         "konnectivityEnabled": {
-          "description": "Deprecated: KonnectivityEnabled enables konnectivity for controlplane to node network communication.\nAs OpenVPN will be removed in the future KKP versions, clusters with konnectivity disabled will not be supported.\nAll existing clusters with OpenVPN should migrate to the Konnectivity.",
+          "description": "Deprecated: KonnectivityEnabled enables konnectivity for controlplane to node network communication.\nKonnectivity is the only supported choice for controlplane to node network communication. This field is\ndefaulted to true and setting it to false is rejected. It will be removed in a future release.",
           "type": "boolean",
           "x-go-name": "KonnectivityEnabled"
         },
