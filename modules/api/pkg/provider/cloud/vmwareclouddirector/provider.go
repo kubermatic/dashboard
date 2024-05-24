@@ -214,10 +214,15 @@ func ListComputePolicies(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirec
 
 	var policies apiv1.VMwareCloudDirectorComputePolicyList
 	for _, policy := range allPolicies {
+		description := ""
+
+		if policy.VdcComputePolicyV2.Description != nil {
+			description = *policy.VdcComputePolicyV2.Description
+		}
 		policies = append(policies, apiv1.VMwareCloudDirectorComputePolicy{
 			ID:           policy.VdcComputePolicyV2.ID,
 			Name:         policy.VdcComputePolicyV2.Name,
-			Description:  *policy.VdcComputePolicyV2.Description,
+			Description:  description,
 			IsSizingOnly: policy.VdcComputePolicyV2.IsSizingOnly,
 		})
 	}
