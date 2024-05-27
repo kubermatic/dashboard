@@ -26,6 +26,7 @@ type NetworkPolicyIngressRule struct {
 	// source). If this field is present and contains at least one item, this rule
 	// allows traffic only if the traffic matches at least one item in the from list.
 	// +optional
+	// +listType=atomic
 	From []*NetworkPolicyPeer `json:"from"`
 
 	// ports is a list of ports which should be made accessible on the pods selected for
@@ -34,6 +35,7 @@ type NetworkPolicyIngressRule struct {
 	// If this field is present and contains at least one item, then this rule allows
 	// traffic only if the traffic matches at least one port in the list.
 	// +optional
+	// +listType=atomic
 	Ports []*NetworkPolicyPort `json:"ports"`
 }
 

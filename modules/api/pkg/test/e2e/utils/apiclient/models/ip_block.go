@@ -27,6 +27,7 @@ type IPBlock struct {
 	// Valid examples are "192.168.1.0/24" or "2001:db8::/64"
 	// Except values will be rejected if they are outside the cidr range
 	// +optional
+	// +listType=atomic
 	Except []string `json:"except"`
 }
 
