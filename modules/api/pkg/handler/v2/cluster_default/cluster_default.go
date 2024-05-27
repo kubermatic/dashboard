@@ -230,7 +230,7 @@ func convertInternalDefaultClusterToExternal(internalCluster *kubermaticv1.Clust
 			UsePodNodeSelectorAdmissionPlugin:    internalCluster.Spec.UsePodNodeSelectorAdmissionPlugin,
 			UseEventRateLimitAdmissionPlugin:     internalCluster.Spec.UseEventRateLimitAdmissionPlugin,
 			EnableUserSSHKeyAgent:                internalCluster.Spec.EnableUserSSHKeyAgent,
-			EnableOperatingSystemManager:         internalCluster.Spec.EnableOperatingSystemManager,
+			EnableOperatingSystemManager:         internalCluster.Spec.EnableOperatingSystemManager, //nolint:staticcheck
 			KubernetesDashboard:                  internalCluster.Spec.KubernetesDashboard,
 			KubeLB:                               internalCluster.Spec.KubeLB,
 			AdmissionPlugins:                     internalCluster.Spec.AdmissionPlugins,
