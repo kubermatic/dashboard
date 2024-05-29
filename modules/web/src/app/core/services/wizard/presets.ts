@@ -147,6 +147,11 @@ export class PresetsService {
     return this._http.get<PresetStat>(url);
   }
 
+  getPresetByName(projectID: string, presetName: string): Observable<Preset> {
+    const url = `${environment.newRestRoot}/projects/${projectID}/presets?name=${presetName}`;
+    return this._http.get<Preset>(url);
+  }
+
   updateStatus(
     presetName: string,
     status: UpdatePresetStatusReq,

@@ -36,6 +36,8 @@ export enum StatusMassage {
   Updating = 'Updating',
   Disabled = 'Disabled',
   Unknown = 'Unknown',
+  Active = 'active',
+  Deleted = 'deleted',
 }
 
 export class HealthStatus {

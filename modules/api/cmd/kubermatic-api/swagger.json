@@ -7147,6 +7147,12 @@
             "x-go-name": "Disabled",
             "name": "disabled",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
           }
         ],
         "responses": {
@@ -16939,6 +16945,12 @@
             "x-go-name": "Disabled",
             "name": "disabled",
             "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
           }
         ],
         "responses": {
@@ -21733,6 +21745,12 @@
           },
           {
             "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProviderName",
             "name": "provider_name",
             "in": "path",
@@ -24234,6 +24252,12 @@
             "type": "boolean",
             "x-go-name": "Disabled",
             "name": "disabled",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
             "in": "query"
           },
           {

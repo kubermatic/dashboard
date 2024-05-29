@@ -44,7 +44,8 @@ import (
 // swagger:parameters listPresets
 type listPresetsReq struct {
 	// in: query
-	Disabled bool `json:"disabled,omitempty"`
+	Disabled bool   `json:"disabled,omitempty"`
+	Name     string `json:"name,omitempty"`
 }
 
 // listProjectPresetsReq represents a request for a list of presets in a specific project
@@ -57,6 +58,7 @@ type listProjectPresetsReq struct {
 func DecodeListPresets(_ context.Context, r *http.Request) (interface{}, error) {
 	return listPresetsReq{
 		Disabled: r.URL.Query().Get("disabled") == "true",
+		Name:     r.URL.Query().Get("name"),
 	}, nil
 }
 
@@ -128,6 +130,16 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		if req.Name != "" {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, &req.ProjectID, req.Name)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+			}
+			if !*preset.Spec.Enabled && !req.Disabled {
+				return nil, nil
+			}
+			return newAPIPreset(preset, preset.Spec.IsEnabled()), nil
+		}
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
 		presets, err := presetProvider.GetPresets(ctx, userInfo, &req.ProjectID)
 		if err != nil {

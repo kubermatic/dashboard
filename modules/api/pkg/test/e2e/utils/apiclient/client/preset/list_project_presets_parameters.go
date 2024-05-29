@@ -65,6 +65,9 @@ type ListProjectPresetsParams struct {
 	// Disabled.
 	Disabled *bool
 
+	// Name.
+	Name *string
+
 	// ProjectID.
 	ProjectID string
 
@@ -132,6 +135,17 @@ func (o *ListProjectPresetsParams) SetDisabled(disabled *bool) {
 	o.Disabled = disabled
 }
 
+// WithName adds the name to the list project presets params
+func (o *ListProjectPresetsParams) WithName(name *string) *ListProjectPresetsParams {
+	o.SetName(name)
+	return o
+}
+
+// SetName adds the name to the list project presets params
+func (o *ListProjectPresetsParams) SetName(name *string) {
+	o.Name = name
+}
+
 // WithProjectID adds the projectID to the list project presets params
 func (o *ListProjectPresetsParams) WithProjectID(projectID string) *ListProjectPresetsParams {
 	o.SetProjectID(projectID)
@@ -163,6 +177,23 @@ func (o *ListProjectPresetsParams) WriteToRequest(r runtime.ClientRequest, reg s
 		if qDisabled != "" {
 
 			if err := r.SetQueryParam("disabled", qDisabled); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Name != nil {
+
+		// query param name
+		var qrName string
+
+		if o.Name != nil {
+			qrName = *o.Name
+		}
+		qName := qrName
+		if qName != "" {
+
+			if err := r.SetQueryParam("name", qName); err != nil {
 				return err
 			}
 		}
