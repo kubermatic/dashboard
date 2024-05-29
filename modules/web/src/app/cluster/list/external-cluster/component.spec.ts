@@ -109,7 +109,7 @@ describe('ExternalClusterListComponent', () => {
     component.isInitialized = true;
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.mat-card'));
+    const de = fixture.debugElement.query(By.css('.mat-mdc-card'));
 
     expect(de).not.toBeNull();
     discardPeriodicTasks();
