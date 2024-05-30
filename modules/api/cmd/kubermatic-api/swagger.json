@@ -28884,11 +28884,6 @@
           "type": "boolean",
           "x-go-name": "DisableCSIDriver"
         },
-        "enableOperatingSystemManager": {
-          "description": "EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.",
-          "type": "boolean",
-          "x-go-name": "EnableOperatingSystemManager"
-        },
         "enableUserSSHKeyAgent": {
           "description": "EnableUserSSHKeyAgent control whether the UserSSHKeyAgent will be deployed in the user cluster or not.\nIf it was enabled, the agent will be deployed and used to sync the user ssh keys, that the user attach\nto the created cluster. If the agent was disabled, it won't be deployed in the user cluster, thus after\nthe cluster creation any attached ssh keys won't be synced to the worker nodes. Once the agent is enabled/disabled\nit cannot be changed after the cluster is being created.",
           "type": "boolean",
@@ -32858,7 +32853,7 @@
           "x-go-name": "CIDR"
         },
         "except": {
-          "description": "except is a slice of CIDRs that should not be included within an IPBlock\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"\nExcept values will be rejected if they are outside the cidr range\n+optional",
+          "description": "except is a slice of CIDRs that should not be included within an IPBlock\nValid examples are \"192.168.1.0/24\" or \"2001:db8::/64\"\nExcept values will be rejected if they are outside the cidr range\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -32993,6 +32988,7 @@
           "$ref": "#/definitions/JSONSchemaPropsOrBool"
         },
         "allOf": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/JSONSchemaProps"
@@ -33000,6 +32996,7 @@
           "x-go-name": "AllOf"
         },
         "anyOf": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/JSONSchemaProps"
@@ -33020,6 +33017,7 @@
           "x-go-name": "Description"
         },
         "enum": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/JSON"
@@ -33105,6 +33103,7 @@
           "x-go-name": "Nullable"
         },
         "oneOf": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/JSONSchemaProps"
@@ -33130,6 +33129,7 @@
           "x-go-name": "Properties"
         },
         "required": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -33159,7 +33159,7 @@
           "x-go-name": "XIntOrString"
         },
         "x-kubernetes-list-map-keys": {
-          "description": "x-kubernetes-list-map-keys annotates an array with the x-kubernetes-list-type `map` by specifying the keys used\nas the index of the map.\n\nThis tag MUST only be used on lists that have the \"x-kubernetes-list-type\"\nextension set to \"map\". Also, the values specified for this attribute must\nbe a scalar typed field of the child structure (no nesting is supported).\n\nThe properties specified must either be required or have a default value,\nto ensure those properties are present for all list items.\n\n+optional",
+          "description": "x-kubernetes-list-map-keys annotates an array with the x-kubernetes-list-type `map` by specifying the keys used\nas the index of the map.\n\nThis tag MUST only be used on lists that have the \"x-kubernetes-list-type\"\nextension set to \"map\". Also, the values specified for this attribute must\nbe a scalar typed field of the child structure (no nesting is supported).\n\nThe properties specified must either be required or have a default value,\nto ensure those properties are present for all list items.\n\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -33192,6 +33192,7 @@
       "type": "object",
       "properties": {
         "JSONSchemas": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/JSONSchemaProps"
@@ -33222,6 +33223,7 @@
       "title": "JSONSchemaPropsOrStringArray represents a JSONSchemaProps or a string array.",
       "properties": {
         "Property": {
+          "description": "+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -33911,7 +33913,7 @@
       "type": "object",
       "properties": {
         "matchExpressions": {
-          "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.\n+optional",
+          "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/LabelSelectorRequirement"
@@ -33947,7 +33949,7 @@
           "$ref": "#/definitions/LabelSelectorOperator"
         },
         "values": {
-          "description": "values is an array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. This array is replaced during a strategic\nmerge patch.\n+optional",
+          "description": "values is an array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. This array is replaced during a strategic\nmerge patch.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -34563,7 +34565,7 @@
       "type": "object",
       "properties": {
         "ports": {
-          "description": "ports is a list of destination ports for outgoing traffic.\nEach item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "description": "ports is a list of destination ports for outgoing traffic.\nEach item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPort"
@@ -34571,7 +34573,7 @@
           "x-go-name": "Ports"
         },
         "to": {
-          "description": "to is a list of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional",
+          "description": "to is a list of destinations for outgoing traffic of pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all destinations (traffic not restricted by\ndestination). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the to list.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPeer"
@@ -34586,7 +34588,7 @@
       "type": "object",
       "properties": {
         "from": {
-          "description": "from is a list of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional",
+          "description": "from is a list of sources which should be able to access the pods selected for this rule.\nItems in this list are combined using a logical OR operation. If this field is\nempty or missing, this rule matches all sources (traffic not restricted by\nsource). If this field is present and contains at least one item, this rule\nallows traffic only if the traffic matches at least one item in the from list.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPeer"
@@ -34594,7 +34596,7 @@
           "x-go-name": "From"
         },
         "ports": {
-          "description": "ports is a list of ports which should be made accessible on the pods selected for\nthis rule. Each item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional",
+          "description": "ports is a list of ports which should be made accessible on the pods selected for\nthis rule. Each item in this list is combined using a logical OR. If this field is\nempty or missing, this rule matches all ports (traffic not restricted by port).\nIf this field is present and contains at least one item, then this rule allows\ntraffic only if the traffic matches at least one port in the list.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyPort"
@@ -34644,7 +34646,7 @@
       "type": "object",
       "properties": {
         "egress": {
-          "description": "egress is a list of egress rules to be applied to the selected pods. Outgoing traffic\nis allowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional",
+          "description": "egress is a list of egress rules to be applied to the selected pods. Outgoing traffic\nis allowed if there are no NetworkPolicies selecting the pod (and cluster policy\notherwise allows the traffic), OR if the traffic matches at least one egress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy limits all outgoing traffic (and serves\nsolely to ensure that the pods it selects are isolated by default).\nThis field is beta-level in 1.8\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyEgressRule"
@@ -34652,7 +34654,7 @@
           "x-go-name": "Egress"
         },
         "ingress": {
-          "description": "ingress is a list of ingress rules to be applied to the selected pods.\nTraffic is allowed to a pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional",
+          "description": "ingress is a list of ingress rules to be applied to the selected pods.\nTraffic is allowed to a pod if there are no NetworkPolicies selecting the pod\n(and cluster policy otherwise allows the traffic), OR if the traffic source is\nthe pod's local node, OR if the traffic matches at least one ingress rule\nacross all of the NetworkPolicy objects whose podSelector matches the pod. If\nthis field is empty then this NetworkPolicy does not allow any traffic (and serves\nsolely to ensure that the pods it selects are isolated by default)\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/NetworkPolicyIngressRule"
@@ -34663,7 +34665,7 @@
           "$ref": "#/definitions/LabelSelector"
         },
         "policyTypes": {
-          "description": "policyTypes is a list of rule types that the NetworkPolicy relates to.\nValid options are [\"Ingress\"], [\"Egress\"], or [\"Ingress\", \"Egress\"].\nIf this field is not specified, it will default based on the existence of ingress or egress rules;\npolicies that contain an egress section are assumed to affect egress, and all policies\n(whether or not they contain an ingress section) are assumed to affect ingress.\nIf you want to write an egress-only policy, you must explicitly specify policyTypes [ \"Egress\" ].\nLikewise, if you want to write a policy that specifies that no egress is allowed,\nyou must specify a policyTypes value that include \"Egress\" (since such a policy would not include\nan egress section and would otherwise default to just [ \"Ingress\" ]).\nThis field is beta-level in 1.8\n+optional",
+          "description": "policyTypes is a list of rule types that the NetworkPolicy relates to.\nValid options are [\"Ingress\"], [\"Egress\"], or [\"Ingress\", \"Egress\"].\nIf this field is not specified, it will default based on the existence of ingress or egress rules;\npolicies that contain an egress section are assumed to affect egress, and all policies\n(whether or not they contain an ingress section) are assumed to affect ingress.\nIf you want to write an egress-only policy, you must explicitly specify policyTypes [ \"Egress\" ].\nLikewise, if you want to write a policy that specifies that no egress is allowed,\nyou must specify a policyTypes value that include \"Egress\" (since such a policy would not include\nan egress section and would otherwise default to just [ \"Ingress\" ]).\nThis field is beta-level in 1.8\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PolicyType"
@@ -36503,7 +36505,7 @@
       "type": "object",
       "properties": {
         "nameservers": {
-          "description": "A list of DNS name server IP addresses.\nThis will be appended to the base nameservers generated from DNSPolicy.\nDuplicated nameservers will be removed.\n+optional",
+          "description": "A list of DNS name server IP addresses.\nThis will be appended to the base nameservers generated from DNSPolicy.\nDuplicated nameservers will be removed.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36511,7 +36513,7 @@
           "x-go-name": "Nameservers"
         },
         "options": {
-          "description": "A list of DNS resolver options.\nThis will be merged with the base options generated from DNSPolicy.\nDuplicated entries will be removed. Resolution options given in Options\nwill override those that appear in the base DNSPolicy.\n+optional",
+          "description": "A list of DNS resolver options.\nThis will be merged with the base options generated from DNSPolicy.\nDuplicated entries will be removed. Resolution options given in Options\nwill override those that appear in the base DNSPolicy.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PodDNSConfigOption"
@@ -36519,7 +36521,7 @@
           "x-go-name": "Options"
         },
         "searches": {
-          "description": "A list of DNS search domains for host-name lookup.\nThis will be appended to the base search paths generated from DNSPolicy.\nDuplicated search paths will be removed.\n+optional",
+          "description": "A list of DNS search domains for host-name lookup.\nThis will be appended to the base search paths generated from DNSPolicy.\nDuplicated search paths will be removed.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36551,7 +36553,7 @@
       "type": "object",
       "properties": {
         "apiGroups": {
-          "description": "APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of\nthe enumerated resources in any API group will be allowed. \"\" represents the core API group and \"*\" represents all API groups.\n+optional",
+          "description": "APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of\nthe enumerated resources in any API group will be allowed. \"\" represents the core API group and \"*\" represents all API groups.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36559,7 +36561,7 @@
           "x-go-name": "APIGroups"
         },
         "nonResourceURLs": {
-          "description": "NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path\nSince non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding.\nRules can either apply to API resources (such as \"pods\" or \"secrets\") or non-resource URL paths (such as \"/api\"),  but not both.\n+optional",
+          "description": "NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path\nSince non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding.\nRules can either apply to API resources (such as \"pods\" or \"secrets\") or non-resource URL paths (such as \"/api\"),  but not both.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36567,7 +36569,7 @@
           "x-go-name": "NonResourceURLs"
         },
         "resourceNames": {
-          "description": "ResourceNames is an optional white list of names that the rule applies to.  An empty set means that everything is allowed.\n+optional",
+          "description": "ResourceNames is an optional white list of names that the rule applies to.  An empty set means that everything is allowed.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36575,7 +36577,7 @@
           "x-go-name": "ResourceNames"
         },
         "resources": {
-          "description": "Resources is a list of resources this rule applies to. '*' represents all resources.\n+optional",
+          "description": "Resources is a list of resources this rule applies to. '*' represents all resources.\n+optional\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"
@@ -36583,7 +36585,7 @@
           "x-go-name": "Resources"
         },
         "verbs": {
-          "description": "Verbs is a list of Verbs that apply to ALL the ResourceKinds contained in this rule. '*' represents all verbs.",
+          "description": "Verbs is a list of Verbs that apply to ALL the ResourceKinds contained in this rule. '*' represents all verbs.\n+listType=atomic",
           "type": "array",
           "items": {
             "type": "string"

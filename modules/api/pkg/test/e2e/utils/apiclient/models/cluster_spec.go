@@ -29,9 +29,6 @@ type ClusterSpec struct {
 	// If this is true at the data center then it can't be over-written in the cluster configuration
 	DisableCSIDriver bool `json:"disableCsiDriver,omitempty"`
 
-	// EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.
-	EnableOperatingSystemManager bool `json:"enableOperatingSystemManager,omitempty"`
-
 	// EnableUserSSHKeyAgent control whether the UserSSHKeyAgent will be deployed in the user cluster or not.
 	// If it was enabled, the agent will be deployed and used to sync the user ssh keys, that the user attach
 	// to the created cluster. If the agent was disabled, it won't be deployed in the user cluster, thus after

@@ -47,12 +47,6 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		kubernetesDashboardEnabled = apiCluster.Spec.KubernetesDashboard.Enabled
 	}
 
-	// Enable OSM by default.
-	var osmEnabled = ptr.To(true)
-	if apiCluster.Spec.EnableOperatingSystemManager != nil {
-		osmEnabled = apiCluster.Spec.EnableOperatingSystemManager
-	}
-
 	spec := &kubermaticv1.ClusterSpec{
 		HumanReadableName:                   apiCluster.Name,
 		Cloud:                               apiCluster.Spec.Cloud,
@@ -64,7 +58,6 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		UsePodNodeSelectorAdmissionPlugin:   apiCluster.Spec.UsePodNodeSelectorAdmissionPlugin,
 		UseEventRateLimitAdmissionPlugin:    apiCluster.Spec.UseEventRateLimitAdmissionPlugin,
 		EnableUserSSHKeyAgent:               userSSHKeysAgentEnabled,
-		EnableOperatingSystemManager:        osmEnabled,
 		KubernetesDashboard: &kubermaticv1.KubernetesDashboard{
 			Enabled: kubernetesDashboardEnabled,
 		},

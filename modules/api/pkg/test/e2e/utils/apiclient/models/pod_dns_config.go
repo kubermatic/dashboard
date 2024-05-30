@@ -24,6 +24,7 @@ type PodDNSConfig struct {
 	// This will be appended to the base nameservers generated from DNSPolicy.
 	// Duplicated nameservers will be removed.
 	// +optional
+	// +listType=atomic
 	Nameservers []string `json:"nameservers"`
 
 	// A list of DNS resolver options.
@@ -31,12 +32,14 @@ type PodDNSConfig struct {
 	// Duplicated entries will be removed. Resolution options given in Options
 	// will override those that appear in the base DNSPolicy.
 	// +optional
+	// +listType=atomic
 	Options []*PodDNSConfigOption `json:"options"`
 
 	// A list of DNS search domains for host-name lookup.
 	// This will be appended to the base search paths generated from DNSPolicy.
 	// Duplicated search paths will be removed.
 	// +optional
+	// +listType=atomic
 	Searches []string `json:"searches"`
 }
 

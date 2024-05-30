@@ -20,7 +20,7 @@ import (
 // swagger:model JSONSchemaPropsOrArray
 type JSONSchemaPropsOrArray struct {
 
-	// JSON schemas
+	// +listType=atomic
 	JSONSchemas []*JSONSchemaProps `json:"JSONSchemas"`
 
 	// schema

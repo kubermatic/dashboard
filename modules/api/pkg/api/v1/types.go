@@ -980,9 +980,6 @@ type ClusterSpec struct {
 	// it cannot be changed after the cluster is being created.
 	EnableUserSSHKeyAgent *bool `json:"enableUserSSHKeyAgent,omitempty"`
 
-	// EnableOperatingSystemManager enables OSM which in-turn is responsible for creating and managing worker node configuration.
-	EnableOperatingSystemManager *bool `json:"enableOperatingSystemManager,omitempty"`
-
 	// KubeLB holds the configuration for the kubeLB component.
 	// Only available in Enterprise Edition.
 	KubeLB *kubermaticv1.KubeLB `json:"kubelb,omitempty"`
@@ -1061,7 +1058,6 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UsePodNodeSelectorAdmissionPlugin    bool                                   `json:"usePodNodeSelectorAdmissionPlugin,omitempty"`
 		UseEventRateLimitAdmissionPlugin     bool                                   `json:"useEventRateLimitAdmissionPlugin,omitempty"`
 		EnableUserSSHKeyAgent                *bool                                  `json:"enableUserSSHKeyAgent,omitempty"`
-		EnableOperatingSystemManager         *bool                                  `json:"enableOperatingSystemManager,omitempty"`
 		KubeLB                               *kubermaticv1.KubeLB                   `json:"kubelb,omitempty"`
 		BackupConfig                         *kubermaticv1.BackupConfig             `json:"backupConfig,omitempty"`
 		KubernetesDashboard                  *kubermaticv1.KubernetesDashboard      `json:"kubernetesDashboard,omitempty"`
@@ -1106,7 +1102,6 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		UsePodNodeSelectorAdmissionPlugin:    cs.UsePodNodeSelectorAdmissionPlugin,
 		UseEventRateLimitAdmissionPlugin:     cs.UseEventRateLimitAdmissionPlugin,
 		EnableUserSSHKeyAgent:                cs.EnableUserSSHKeyAgent,
-		EnableOperatingSystemManager:         cs.EnableOperatingSystemManager,
 		KubeLB:                               cs.KubeLB,
 		BackupConfig:                         cs.BackupConfig,
 		KubernetesDashboard:                  cs.KubernetesDashboard,

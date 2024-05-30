@@ -27,6 +27,7 @@ type NetworkPolicyEgressRule struct {
 	// If this field is present and contains at least one item, then this rule allows
 	// traffic only if the traffic matches at least one port in the list.
 	// +optional
+	// +listType=atomic
 	Ports []*NetworkPolicyPort `json:"ports"`
 
 	// to is a list of destinations for outgoing traffic of pods selected for this rule.
@@ -35,6 +36,7 @@ type NetworkPolicyEgressRule struct {
 	// destination). If this field is present and contains at least one item, this rule
 	// allows traffic only if the traffic matches at least one item in the to list.
 	// +optional
+	// +listType=atomic
 	To []*NetworkPolicyPeer `json:"to"`
 }
 

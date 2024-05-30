@@ -304,13 +304,6 @@ func GenerateCluster(
 		partialCluster.Spec.EnableUserSSHKeyAgent = body.Cluster.Spec.EnableUserSSHKeyAgent
 	}
 
-	// OSM is enabled by default.
-	if body.Cluster.Spec.EnableOperatingSystemManager == nil {
-		partialCluster.Spec.EnableOperatingSystemManager = ptr.To(true)
-	} else {
-		partialCluster.Spec.EnableOperatingSystemManager = body.Cluster.Spec.EnableOperatingSystemManager
-	}
-
 	// add the cluster backup storage location if exist
 	if body.Cluster.Spec.BackupConfig != nil {
 		partialCluster.Spec.BackupConfig = body.Cluster.Spec.BackupConfig
@@ -559,7 +552,6 @@ func PatchEndpoint(
 	newInternalCluster.Spec.ClusterNetwork.ProxyMode = patchedCluster.Spec.ClusterNetwork.ProxyMode
 	newInternalCluster.Spec.CNIPlugin = patchedCluster.Spec.CNIPlugin
 	newInternalCluster.Spec.ExposeStrategy = patchedCluster.Spec.ExposeStrategy
-	newInternalCluster.Spec.EnableOperatingSystemManager = patchedCluster.Spec.EnableOperatingSystemManager
 	newInternalCluster.Spec.BackupConfig = patchedCluster.Spec.BackupConfig
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
@@ -1124,7 +1116,6 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			UsePodNodeSelectorAdmissionPlugin:    internalCluster.Spec.UsePodNodeSelectorAdmissionPlugin,
 			UseEventRateLimitAdmissionPlugin:     internalCluster.Spec.UseEventRateLimitAdmissionPlugin,
 			EnableUserSSHKeyAgent:                internalCluster.Spec.EnableUserSSHKeyAgent,
-			EnableOperatingSystemManager:         internalCluster.Spec.EnableOperatingSystemManager,
 			BackupConfig:                         internalCluster.Spec.BackupConfig,
 			KubeLB:                               internalCluster.Spec.KubeLB,
 			KubernetesDashboard:                  internalCluster.Spec.KubernetesDashboard,

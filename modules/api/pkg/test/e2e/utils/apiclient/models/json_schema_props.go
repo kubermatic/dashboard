@@ -23,16 +23,16 @@ type JSONSchemaProps struct {
 	// dollar schema
 	DollarSchema JSONSchemaURL `json:"$schema,omitempty"`
 
-	// all of
+	// +listType=atomic
 	AllOf []*JSONSchemaProps `json:"allOf"`
 
-	// any of
+	// +listType=atomic
 	AnyOf []*JSONSchemaProps `json:"anyOf"`
 
 	// description
 	Description string `json:"description,omitempty"`
 
-	// enum
+	// +listType=atomic
 	Enum []JSON `json:"enum"`
 
 	// exclusive maximum
@@ -102,7 +102,7 @@ type JSONSchemaProps struct {
 	// nullable
 	Nullable bool `json:"nullable,omitempty"`
 
-	// one of
+	// +listType=atomic
 	OneOf []*JSONSchemaProps `json:"oneOf"`
 
 	// pattern
@@ -117,7 +117,7 @@ type JSONSchemaProps struct {
 	// ref
 	Ref string `json:"$ref,omitempty"`
 
-	// required
+	// +listType=atomic
 	Required []string `json:"required"`
 
 	// title
@@ -164,6 +164,7 @@ type JSONSchemaProps struct {
 	// to ensure those properties are present for all list items.
 	//
 	// +optional
+	// +listType=atomic
 	XListMapKeys []string `json:"x-kubernetes-list-map-keys"`
 
 	// x-kubernetes-list-type annotates an array to further describe its topology.

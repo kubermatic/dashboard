@@ -18,7 +18,7 @@ import (
 // swagger:model JSONSchemaPropsOrStringArray
 type JSONSchemaPropsOrStringArray struct {
 
-	// property
+	// +listType=atomic
 	Property []string `json:"Property"`
 
 	// schema
