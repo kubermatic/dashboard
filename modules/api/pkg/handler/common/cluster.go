@@ -552,7 +552,6 @@ func PatchEndpoint(
 	newInternalCluster.Spec.ClusterNetwork.ProxyMode = patchedCluster.Spec.ClusterNetwork.ProxyMode
 	newInternalCluster.Spec.CNIPlugin = patchedCluster.Spec.CNIPlugin
 	newInternalCluster.Spec.ExposeStrategy = patchedCluster.Spec.ExposeStrategy
-	newInternalCluster.Spec.EnableOperatingSystemManager = patchedCluster.Spec.EnableOperatingSystemManager //nolint:staticcheck
 	newInternalCluster.Spec.BackupConfig = patchedCluster.Spec.BackupConfig
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
 	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
@@ -1117,7 +1116,6 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			UsePodNodeSelectorAdmissionPlugin:    internalCluster.Spec.UsePodNodeSelectorAdmissionPlugin,
 			UseEventRateLimitAdmissionPlugin:     internalCluster.Spec.UseEventRateLimitAdmissionPlugin,
 			EnableUserSSHKeyAgent:                internalCluster.Spec.EnableUserSSHKeyAgent,
-			EnableOperatingSystemManager:         internalCluster.Spec.EnableOperatingSystemManager, //nolint:staticcheck
 			BackupConfig:                         internalCluster.Spec.BackupConfig,
 			KubeLB:                               internalCluster.Spec.KubeLB,
 			KubernetesDashboard:                  internalCluster.Spec.KubernetesDashboard,
