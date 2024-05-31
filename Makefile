@@ -76,7 +76,9 @@ docker-push: docker-build
 	done
 
 deploy:
-	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
+	kubectl -n kubermatic patch kubermaticconfiguration kubermatic \
+	  --patch '{"spec":{"api":{"dockerTag":"$(IMAGE_TAG)"},"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' \
+	  --type merge
 
 download-gocache:
 	@./hack/ci/download-gocache.sh
