@@ -68,6 +68,9 @@ type ListProviderPresetsParams struct {
 	// Disabled.
 	Disabled *bool
 
+	// Name.
+	Name *string
+
 	// ProviderName.
 	ProviderName string
 
@@ -146,6 +149,17 @@ func (o *ListProviderPresetsParams) SetDisabled(disabled *bool) {
 	o.Disabled = disabled
 }
 
+// WithName adds the name to the list provider presets params
+func (o *ListProviderPresetsParams) WithName(name *string) *ListProviderPresetsParams {
+	o.SetName(name)
+	return o
+}
+
+// SetName adds the name to the list provider presets params
+func (o *ListProviderPresetsParams) SetName(name *string) {
+	o.Name = name
+}
+
 // WithProviderName adds the providerName to the list provider presets params
 func (o *ListProviderPresetsParams) WithProviderName(providerName string) *ListProviderPresetsParams {
 	o.SetProviderName(providerName)
@@ -194,6 +208,23 @@ func (o *ListProviderPresetsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if qDisabled != "" {
 
 			if err := r.SetQueryParam("disabled", qDisabled); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Name != nil {
+
+		// query param name
+		var qrName string
+
+		if o.Name != nil {
+			qrName = *o.Name
+		}
+		qName := qrName
+		if qName != "" {
+
+			if err := r.SetQueryParam("name", qName); err != nil {
 				return err
 			}
 		}

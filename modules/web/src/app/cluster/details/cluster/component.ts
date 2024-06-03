@@ -59,6 +59,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
   HealthStatus,
+  StatusIcon,
   StatusMassage,
   getClusterHealthStatus,
   isClusterAPIRunning,
@@ -75,6 +76,7 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {PresetsService} from '@app/core/services/wizard/presets';
 
 @Component({
   selector: 'km-cluster-details',
@@ -94,6 +96,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly clusterDeletionTooltip = 'Cluster is being deleted';
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   adminSettings: AdminSettings;
+  presetStatus: HealthStatus;
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
@@ -148,13 +151,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _mlaService: MLAService,
     private readonly _applicationService: ApplicationService,
     private readonly _dialogModeService: DialogModeService,
-    readonly settingsService: SettingsService
+    readonly settingsService: SettingsService,
+    private readonly _presetService: PresetsService
   ) {}
 
   ngOnInit(): void {
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
-
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
@@ -179,7 +182,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         switchMap(datacenter => {
           this.nodeDc = datacenter;
           this.seed = datacenter.spec.seed;
-
+          if (this.cluster.annotations?.presetName && !this.presetStatus) {
+            this.getPresetStatus(datacenter.spec.provider);
+          }
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id),
             this._clusterService.health(this.projectID, this.cluster.id),
@@ -321,6 +326,27 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getProvider(provider: string): string {
     return provider === 'google' ? 'gcp' : provider;
+  }
+
+  getPresetStatus(provider: string): void {
+    const presetAnnotations = this.cluster?.annotations;
+    if (presetAnnotations.presetInvalidated) {
+      this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
+    } else {
+      this._presetService
+        .getPresetByName(this.projectID, presetAnnotations.presetName)
+        .pipe(take(1))
+        .subscribe(preset => {
+          if (preset?.enabled) {
+            const usedProvider = preset.providers.find(p => p.name === this.getProvider(provider));
+            this.presetStatus = usedProvider.enabled
+              ? new HealthStatus(StatusMassage.Active, StatusIcon.Running)
+              : new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
+          } else {
+            this.presetStatus = new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
+          }
+        });
+    }
   }
 
   goBack(): void {

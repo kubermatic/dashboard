@@ -184,6 +184,18 @@ limitations under the License.
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
+        <km-property>
+          <div key>Preset</div>
+          <div value>
+            <div>
+              <i *ngIf="cluster?.annotations?.presetName"
+                 [matTooltip]="presetStatus?.message"
+                 [ngClass]="presetStatus?.icon"
+                 class="km-vertical-center"></i>
+              {{cluster.annotations?.presetName ?? "-"}}
+            </div>
+          </div>
+        </km-property>
         <km-property *ngIf="cluster.spec.containerRuntime">
           <div key>Container Runtime</div>
           <div value>{{cluster.spec.containerRuntime}}</div>

@@ -65,6 +65,9 @@ type ListPresetsParams struct {
 	// Disabled.
 	Disabled *bool
 
+	// Name.
+	Name *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -129,6 +132,17 @@ func (o *ListPresetsParams) SetDisabled(disabled *bool) {
 	o.Disabled = disabled
 }
 
+// WithName adds the name to the list presets params
+func (o *ListPresetsParams) WithName(name *string) *ListPresetsParams {
+	o.SetName(name)
+	return o
+}
+
+// SetName adds the name to the list presets params
+func (o *ListPresetsParams) SetName(name *string) {
+	o.Name = name
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListPresetsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -149,6 +163,23 @@ func (o *ListPresetsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 		if qDisabled != "" {
 
 			if err := r.SetQueryParam("disabled", qDisabled); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Name != nil {
+
+		// query param name
+		var qrName string
+
+		if o.Name != nil {
+			qrName = *o.Name
+		}
+		qName := qrName
+		if qName != "" {
+
+			if err := r.SetQueryParam("name", qName); err != nil {
 				return err
 			}
 		}

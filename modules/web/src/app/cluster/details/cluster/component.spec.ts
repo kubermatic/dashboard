@@ -59,6 +59,8 @@ import {AddonService} from '@core/services/addon';
 import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
 import {AddonServiceMock} from '@test/services/addon-mock';
 import {EndOfLifeService} from '@core/services/eol';
+import {PresetsService} from '@app/core/services/wizard/presets';
+import {PresetServiceMock} from '@test/services/preset-mock';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -113,6 +115,7 @@ describe('ClusterDetailsComponent', () => {
         {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         {provide: AddonService, useClass: AddonServiceMock},
         {provide: ApplicationService, useClass: ApplicationServiceMock},
+        {provide: PresetsService, useClass: PresetServiceMock},
         EndOfLifeService,
         GoogleAnalyticsService,
         NotificationService,
