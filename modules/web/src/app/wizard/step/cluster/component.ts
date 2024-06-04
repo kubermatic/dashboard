@@ -273,7 +273,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
               this.control(Controls.CNIPlugin).setValue(CNIPlugin.Canal);
             }
-          } else if (this.controlValue(Controls.CNIPlugin) !== CNIPlugin.Cilium) {
+          } else if (this.controlValue(Controls.CNIPlugin) === '') {
             this.control(Controls.CNIPlugin).setValue(CNIPlugin.Cilium);
           }
         })
