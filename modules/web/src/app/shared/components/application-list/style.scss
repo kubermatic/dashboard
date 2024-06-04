@@ -60,7 +60,7 @@ $application-card-width: 320px;
 
 .application-cards-view {
   button {
-    opacity: 0%;
+    opacity: 75%;
   }
 
   .application-card {
@@ -110,7 +110,7 @@ $application-card-width: 320px;
 
   .mat-mdc-card-content {
     font-size: variables.$font-size-subhead;
-    padding: 0 15px;
+    padding: 0 15px 10px;
     word-break: break-word;
 
     .application-description {

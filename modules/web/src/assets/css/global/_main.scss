@@ -338,7 +338,7 @@ hr {
   .km-table-actions {
     button {
       margin-left: 5px;
-      opacity: 0%;
+      opacity: 75%;
       transition:
         visibility 0s 0s,
         opacity 0s ease-out;
@@ -522,6 +522,18 @@ km-dashboard {
         }
       }
     }
+  }
+}
+
+.filters {
+  font-size: 16px;
+
+  .filter-title {
+    margin: -20px 8px 0 0;
+  }
+
+  .mat-mdc-form-field {
+    width: 250px;
   }
 }
 
