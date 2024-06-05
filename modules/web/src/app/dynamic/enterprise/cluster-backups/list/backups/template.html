@@ -37,7 +37,7 @@ END OF TERMS AND CONDITIONS
                    inputLabel="Select cluster..."
                    [label]="clusterLabel"
                    [enableResetButton]="false"
-                   [selected]="selectedCluster"
+                   [selected]="selectedCluster?.id"
                    [valueFormatter]="clusterDisplayFn.bind(this)"
                    [options]="clusters"
                    (changed)="onClusterChange($event)">
@@ -139,7 +139,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-10">Destination</th>
         <td mat-cell
             *matCellDef="let element">
-          <span>{{element.spec.storageLocation}}</span>
+          <span>{{clusterBSL}}</span>
         </td>
       </ng-container>
 

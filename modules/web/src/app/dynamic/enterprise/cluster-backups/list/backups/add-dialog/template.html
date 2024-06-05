@@ -36,11 +36,16 @@ END OF TERMS AND CONDITIONS
         <input [formControlName]="Controls.Destination"
                matInput
                required>
-        <mat-hint>default-cluster-backup-bsl is the backup storage location created inside the user cluster.</mat-hint>
+               <mat-hint>The name of the backup storage location used during cluster creation.</mat-hint>
       </mat-form-field>
-      <mat-form-field>
+      <mat-checkbox [formControlName]="Controls.AllNamespaces">
+        Backup All Namespaces
+        <i class="km-icon-info km-pointer"
+           matTooltip="Select all namespaces to backup."></i>
+      </mat-checkbox>
+      <mat-form-field *ngIf="!form?.get(Controls.AllNamespaces).value">
         <mat-label>{{namespacesLabel}}</mat-label>
-        <mat-select [formControlName]="Controls.NameSpaces"
+        <mat-select [formControlName]="Controls.Namespaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
@@ -49,7 +54,7 @@ END OF TERMS AND CONDITIONS
             {{nameSpace}}
           </mat-option>
         </mat-select>
-        <mat-hint>Namespaces to include in the backup. If unspecified, all namespaces are included.</mat-hint>
+        <mat-hint>Namespaces to include in the backup.</mat-hint>
       </mat-form-field>
 
       <mat-form-field *ngIf="isScheduleBackup()"

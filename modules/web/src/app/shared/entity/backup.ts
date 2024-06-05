@@ -139,7 +139,8 @@ export enum BackupType {
   BackupStorageLocation = 'Backup Storage Location',
 }
 
-// this variable is temporary, it will be removed after adding the functionalty for cluster backup storage location.
+// "BackupStorageLocationTempName" is the name of the default and only BSL in the user cluster.
+// This variable is temporary and will be removed after adding the functionality for multiple backup storage locations.
 export const BackupStorageLocationTempName = 'default-cluster-backup-bsl';
 
 export class ClusterBackup {
