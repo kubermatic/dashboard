@@ -7,7 +7,7 @@
 
 ## Motivation and Background
 
-*What is the background and why do we want to deplyo it e.g.*
+*What is the background and why do we want to deploy it e.g.*
 
 On your project some features need to work. Traditionally people tested them. However, the problem with this is that whenever you change something in your code, you might ruin something. As a result, you need to test everything again and again after each change in your code. Now, that could be troublesome. If you have to conduct 10 tests after each change, then, after only 10 changes you need to execute 100 tests. That takes time. Time is money. Therefore, whenever you can define automatic tests, then instead of going over your test cases each and every time, you can define unit tests which will automatically tell you whether something is wrong. The difference between manual tests and unit tests is like the difference between calculating everything using pen and paper instead of using a calculator. Some tests cannot be automated, but whenever something can be tested automatically, you need to define unit tests for it.
 
