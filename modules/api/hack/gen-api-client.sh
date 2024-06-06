@@ -24,7 +24,7 @@ source hack/lib.sh
 
 API=modules/api
 
-CONTAINERIZE_IMAGE=golang:1.21.8 containerize ./modules/api/hack/gen-api-client.sh
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.21-node-18-15 containerize ./modules/api/hack/gen-api-client.sh
 
 cd $API/cmd/kubermatic-api/
 SWAGGER_FILE="swagger.json"
