@@ -62,7 +62,8 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   clusterScheduleBackups: ClusterBackup[] = [];
   selectedScheduleBackups: ClusterBackup[] = [];
   selectAll: boolean = false;
-  selectedCluster: string;
+  selectedCluster: Cluster;
+  clusterBSL: string;
   loadingBackups: boolean = false;
   currentSearchfield: string;
   showRowDetails: Map<string, boolean> = new Map<string, boolean>();
@@ -157,7 +158,8 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   }
 
   onClusterChange(clusterID: string): void {
-    this.selectedCluster = clusterID;
+    this.selectedCluster = this.clusters.find(cluster => clusterID === cluster.id);
+    this._getCbslName();
     this._getScheduleBackupsList(this._selectedProject.id);
   }
 
@@ -185,12 +187,12 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
   }
 
   addScheduleBackup(): void {
-    const cluster = this.clusters.find(cluster => cluster.id === this.selectedCluster);
     const config: MatDialogConfig = {
       data: {
         projectID: this._selectedProject?.id,
         type: BackupType.Schedule,
-        cluster,
+        cluster: this.selectedCluster,
+        clusterBSL: this.clusterBSL,
       } as AddClustersBackupsDialogConfig,
     };
     this._matDialog
@@ -237,6 +239,13 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
       });
   }
 
+  private _getCbslName(): void {
+    // This method returns the name of the CBSL in the seed cluster that was used during cluster creation.
+    const cbslNameArr = this.selectedCluster.spec.backupConfig.backupStorageLocation.name.split('-');
+    cbslNameArr.pop();
+    this.clusterBSL = cbslNameArr.join('-');
+  }
+
   private _getClusters(projectID: string): void {
     this.clusterLabel = ClusterState.Loading;
     this._clusterService
@@ -245,7 +254,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
       .subscribe(clusters => {
         this.clusters = clusters.filter(cluster => cluster.spec.backupConfig);
         if (!this.selectedCluster) {
-          this.selectedCluster = this.clusters[0]?.id;
+          this.selectedCluster = this.clusters[0];
           this._getScheduleBackupsList(this._selectedProject.id);
         }
         this.clusterLabel = clusters.length ? ClusterState.Ready : ClusterState.Empty;
@@ -256,7 +265,7 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
     if (this.selectedCluster) {
       this.loadingBackups = true;
       this._clusterBackupService
-        .listClusterScheduleBackups(projectID, this.selectedCluster)
+        .listClusterScheduleBackups(projectID, this.selectedCluster.id)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(data => {
           this.clusterScheduleBackups = data;

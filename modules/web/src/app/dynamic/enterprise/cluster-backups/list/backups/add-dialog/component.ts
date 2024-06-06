@@ -25,10 +25,10 @@ import {UserService} from '@core/services/user';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import {RBACService} from '@core/services/rbac';
 import {
+  BackupStorageLocationTempName,
   BackupType,
   ClusterBackup,
   CreateClusterBackupSchedule,
-  BackupStorageLocationTempName,
 } from '@app/shared/entity/backup';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
@@ -39,12 +39,14 @@ export interface AddClustersBackupsDialogConfig {
   projectID: string;
   type: BackupType;
   cluster: Cluster;
+  clusterBSL: string;
 }
 
 enum Controls {
   Name = 'name',
   Destination = 'destination',
-  NameSpaces = 'namespaces',
+  AllNamespaces = 'allNamespaces',
+  Namespaces = 'namespaces',
   DefaultVolumesToFsBackup = 'defaultVolumesToFsBackup',
   CronJob = 'cronjob',
   ExpiresIn = 'ttl',
@@ -67,6 +69,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   type: BackupType = this._config.type;
   projectID = this._config.projectID;
   cluster = this._config.cluster;
+  cbslName = this._config.clusterBSL;
   destinations: string[] = [];
   isAdmin = false;
   nameSpaces: string[] = [];
@@ -92,10 +95,12 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this._getCbslName();
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Destination]: this._builder.control(BackupStorageLocationTempName, Validators.required),
-      [Controls.NameSpaces]: this._builder.control([]),
+      [Controls.Destination]: this._builder.control(this.cbslName, Validators.required),
+      [Controls.AllNamespaces]: this._builder.control(true),
+      [Controls.Namespaces]: this._builder.control([]),
       [Controls.DefaultVolumesToFsBackup]: this._builder.control(true),
       [Controls.CronJob]: this._builder.control(''),
       [Controls.ExpiresIn]: this._builder.control(''),
@@ -117,6 +122,19 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     this._cdr.detectChanges();
 
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
+
+    this.form
+      .get(Controls.AllNamespaces)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        const namespacesControl = this.form.get(Controls.Namespaces);
+        if (value) {
+          namespacesControl.clearValidators();
+        } else {
+          namespacesControl.setValidators(Validators.required);
+        }
+        namespacesControl.updateValueAndValidity();
+      });
   }
 
   ngOnDestroy(): void {
@@ -159,20 +177,27 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     this._notificationService.success(`Created the ${backup.name} ${this.type}`);
   }
 
+  private _getCbslName(): void {
+    // This method returns the name of the CBSL in the seed cluster that was used during cluster creation.
+    const cbslNameArr = this.cluster.spec.backupConfig.backupStorageLocation.name.split('-');
+    cbslNameArr.pop();
+    this.cbslName = cbslNameArr.join('-');
+  }
+
   private _getClusterBackupConfig(): ClusterBackup {
     const backup: ClusterBackup = {
       name: this.form.get(Controls.Name).value,
       spec: {
-        storageLocation: this.form.get(Controls.Destination).value,
+        storageLocation: BackupStorageLocationTempName,
         clusterid: this.cluster.id,
         defaultVolumesToFsBackup: this.form.get(Controls.DefaultVolumesToFsBackup).value,
       },
     };
 
-    if (this.form.get(Controls.NameSpaces).value.length) {
-      backup.spec.includedNamespaces = this.form.get(Controls.NameSpaces).value;
-    } else {
+    if (this.form.get(Controls.AllNamespaces).value) {
       backup.spec.includedNamespaces = this.nameSpaces;
+    } else {
+      backup.spec.includedNamespaces = this.form.get(Controls.Namespaces).value;
     }
 
     if (this.labels) {
@@ -192,17 +217,17 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
       spec: {
         schedule: this.form.get(Controls.CronJob).value,
         template: {
-          storageLocation: this.form.get(Controls.Destination).value,
+          storageLocation: BackupStorageLocationTempName,
           clusterid: this.cluster.id,
           defaultVolumesToFsBackup: this.form.get(Controls.DefaultVolumesToFsBackup).value,
         },
       },
     };
 
-    if (this.form.get(Controls.NameSpaces).value.length) {
-      scheduleBackup.spec.template.includedNamespaces = this.form.get(Controls.NameSpaces).value;
-    } else {
+    if (this.form.get(Controls.AllNamespaces).value) {
       scheduleBackup.spec.template.includedNamespaces = this.nameSpaces;
+    } else {
+      scheduleBackup.spec.template.includedNamespaces = this.form.get(Controls.Namespaces).value;
     }
 
     if (this.labels) {
