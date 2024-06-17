@@ -28636,7 +28636,7 @@
       "type": "object",
       "properties": {
         "coreDNSReplicas": {
-          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.",
+          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.\nDeprecated: This field should not be used anymore, use cluster.componentsOverride.coreDNS.replicas\ninstead. Only one of the two fields can be set at any time.",
           "type": "integer",
           "format": "int32",
           "x-go-name": "CoreDNSReplicas"
