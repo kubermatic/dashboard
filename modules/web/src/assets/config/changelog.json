@@ -3,7 +3,7 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix cloud-init bootstraping issues on Ubuntu 22.04 on Azure."
+      "description": "Fix cloud-init bootstrapping issues on Ubuntu 22.04 on Azure."
     },
     {
       "category": "fixed",
