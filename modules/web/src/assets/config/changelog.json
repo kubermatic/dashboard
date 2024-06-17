@@ -1,9 +1,29 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2248",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v2249",
   "entries": [
     {
       "category": "fixed",
-      "description": "[ACTION REQUIRED] The latest Ubuntu 22.04 images ship with cloud-init 24.x package. This package has breaking changes and thus rendered our OSPs as incompatible. It's recommended to refresh your machines with latest provided OSPs to ensure that a system-wide package update, that updates cloud-init to 24.x, doesn't break the machines."
+      "description": "Fix cloud-init bootstraping issues on Ubuntu 22.04 on Azure."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix support for Rockylinux 8 on AWS."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where unrequired `cloud-config` secret was being propagated to the user clusters."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix: use correct networkpolicy port for metrics-server."
+    },
+    {
+      "category": "fixed",
+      "description": "Address inconsistencies in Helm that lead to an Application being stuck in \"pending-install\"."
+    },
+    {
+      "category": "fixed",
+      "description": "Add Kubernetes 1.28.x support for cluster-autoscaler addon."
     }
   ]
 }
