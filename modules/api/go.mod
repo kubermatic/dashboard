@@ -47,7 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.47.0
-	github.com/kubermatic/machine-controller v1.57.7
+	github.com/kubermatic/machine-controller v1.57.8
 	github.com/minio/minio-go/v7 v7.0.59
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20230712214810-96753a21c26f // v0.9.0+
@@ -67,8 +67,8 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.0
-	k8c.io/kubermatic/v2 v2.24.8-0.20240430163344-616f9692b304
-	k8c.io/operating-system-manager v1.4.2
+	k8c.io/kubermatic/v2 v2.24.9-0.20240617103925-2451e1d1b17f
+	k8c.io/operating-system-manager v1.4.3
 	k8c.io/reconciler v0.4.0
 	k8s.io/api v0.28.2
 	k8s.io/apiextensions-apiserver v0.28.2
