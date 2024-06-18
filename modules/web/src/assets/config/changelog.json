@@ -1,17 +1,21 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2254",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2255",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix a bug where unrequired cloud-config secret was being propagated to the user clusters."
+      "description": "Fix support for Rockylinux 8 on AWS."
     },
     {
       "category": "fixed",
-      "description": "Fix a bug where externally deployed Velero CRDs are removed automatically from the user cluster."
+      "description": "Fix: use correct networkpolicy port for metrics-server."
     },
     {
-      "category": "changed",
-      "description": "Update OSM to v1.5.2; fixing cloud-init bootstrapping issues on Ubuntu 22.04 on Azure."
+      "category": "fixed",
+      "description": "Address inconsistencies in Helm that lead to an Application being stuck in \"pending-install\"."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug where CNI was always being defaulted to Cilium irrespective of what was configured in the cluster template or default cluster template."
     }
   ]
 }
