@@ -21,12 +21,28 @@ import (
 	"fmt"
 	"time"
 
-	"gopkg.in/square/go-jose.v2"
-	"gopkg.in/square/go-jose.v2/jwt"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 )
 
 // Now stubbed out to allow testing.
 var Now = time.Now
+
+var AllowedSignatureAlgorithms = []jose.SignatureAlgorithm{
+	jose.ES256,
+	jose.ES384,
+	jose.ES512,
+	jose.RS256,
+	jose.RS384,
+	jose.RS512,
+	jose.PS256,
+	jose.PS384,
+	jose.PS512,
+	jose.HS256,
+	jose.EdDSA,
+	jose.HS384,
+	jose.HS512,
+}
 
 // TokenGenerator declares the method to generate JWT token.
 type TokenGenerator interface {
@@ -95,7 +111,7 @@ func (j *jwtTokenGenerator) Generate(claims *jwt.Claims, customClaims *CustomTok
 	return jwt.Signed(j.signer).
 		Claims(customClaims).
 		Claims(claims).
-		CompactSerialize()
+		Serialize()
 }
 
 // JWTTokenAuthenticator authenticates tokens as JWT tokens produced by JWTTokenGenerator.
@@ -107,7 +123,7 @@ func JWTTokenAuthenticator(privateKey []byte) TokenAuthenticator {
 
 // Authenticate decrypts signed token data to CustomTokenClaim object and checks if token expired.
 func (a *jwtTokenAuthenticator) Authenticate(tokenData string) (*jwt.Claims, *CustomTokenClaim, error) {
-	tok, err := jwt.ParseSigned(tokenData)
+	tok, err := jwt.ParseSigned(tokenData, AllowedSignatureAlgorithms)
 	if err != nil {
 		return nil, nil, err
 	}

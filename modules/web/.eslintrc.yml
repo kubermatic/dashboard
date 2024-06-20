@@ -65,4 +65,3 @@ rules:
     - 15
 ignorePatterns:
   - "**/*.js"
-
