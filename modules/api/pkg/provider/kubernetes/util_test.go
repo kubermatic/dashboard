@@ -24,8 +24,8 @@ import (
 	"sort"
 	"time"
 
+	"github.com/go-jose/go-jose/v4/jwt"
 	constrainttemplatev1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
-	"gopkg.in/square/go-jose.v2/jwt"
 
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
