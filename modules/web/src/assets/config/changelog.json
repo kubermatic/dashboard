@@ -3,27 +3,7 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix cloud-init bootstrapping issues on Ubuntu 22.04 on Azure."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix support for Rockylinux 8 on AWS."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug where unrequired `cloud-config` secret was being propagated to the user clusters."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix: use correct networkpolicy port for metrics-server."
-    },
-    {
-      "category": "fixed",
-      "description": "Address inconsistencies in Helm that lead to an Application being stuck in \"pending-install\"."
-    },
-    {
-      "category": "fixed",
-      "description": "Add Kubernetes 1.28.x support for cluster-autoscaler addon."
+      "description": "Fix a critical regression in Applications with Helm sources, which resulted in \"release: not found\" errors."
     }
   ]
 }
