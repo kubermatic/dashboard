@@ -1,21 +1,9 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2255",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2256",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix support for Rockylinux 8 on AWS."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix: use correct networkpolicy port for metrics-server."
-    },
-    {
-      "category": "fixed",
-      "description": "Address inconsistencies in Helm that lead to an Application being stuck in \"pending-install\"."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug where CNI was always being defaulted to Cilium irrespective of what was configured in the cluster template or default cluster template."
+      "description": "Fix a critical regression in Applications with Helm sources, which resulted in \"release: not found\" errors."
     }
   ]
 }
