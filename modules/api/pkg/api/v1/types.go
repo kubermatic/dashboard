@@ -729,11 +729,19 @@ type ServiceAccountToken struct {
 // swagger:model Project
 type Project struct {
 	ObjectMeta
+	// Spec describes the configuration of the project.
+	Spec   ProjectSpec       `json:"spec,omitempty"`
 	Status string            `json:"status"`
 	Labels map[string]string `json:"labels,omitempty"`
 	// Owners an optional owners list for the given project
 	Owners         []User `json:"owners,omitempty"`
 	ClustersNumber int    `json:"clustersNumber,omitempty"`
+}
+
+// ProjectSpec is a specification of a project.
+type ProjectSpec struct {
+	// AllowedOperatingSystems defines a map of operating systems that can be used for the machines inside this project.
+	AllowedOperatingSystems map[providerconfig.OperatingSystem]bool `json:"allowedOperatingSystems,omitempty"`
 }
 
 // Kubeconfig is a clusters kubeconfig

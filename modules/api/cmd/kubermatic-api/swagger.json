@@ -1583,6 +1583,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "Spec": {
+                  "$ref": "#/definitions/ProjectSpec"
+                },
                 "labels": {
                   "type": "object",
                   "additionalProperties": {
@@ -28279,6 +28282,11 @@
       },
       "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
     },
+    "BaremetalCloudSpec": {
+      "type": "object",
+      "title": "BaremetalCloudSpec specifies access data for a baremetal cluster.",
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "BringYourOwnCloudSpec": {
       "type": "object",
       "title": "BringYourOwnCloudSpec specifies access data for a bring your own cluster.",
@@ -28439,6 +28447,9 @@
         },
         "azure": {
           "$ref": "#/definitions/AzureCloudSpec"
+        },
+        "baremetal": {
+          "$ref": "#/definitions/BaremetalCloudSpec"
         },
         "bringyourown": {
           "$ref": "#/definitions/BringYourOwnCloudSpec"
@@ -28670,7 +28681,7 @@
       "type": "object",
       "properties": {
         "coreDNSReplicas": {
-          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.",
+          "description": "CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.\nDeprecated: This field should not be used anymore, use cluster.componentsOverride.coreDNS.replicas\ninstead. Only one of the two fields can be set at any time.",
           "type": "integer",
           "format": "int32",
           "x-go-name": "CoreDNSReplicas"
@@ -36911,6 +36922,9 @@
           },
           "x-go-name": "Owners"
         },
+        "spec": {
+          "$ref": "#/definitions/ProjectSpec"
+        },
         "status": {
           "type": "string",
           "x-go-name": "Status"
@@ -36956,6 +36970,21 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "ProjectSpec": {
+      "type": "object",
+      "title": "ProjectSpec is a specification of a project.",
+      "properties": {
+        "allowedOperatingSystems": {
+          "description": "AllowedOperatingSystems defines a map of operating systems that can be used for the machines inside this project.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "x-go-name": "AllowedOperatingSystems"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Protocol": {
       "description": "+enum",

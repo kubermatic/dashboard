@@ -73,8 +73,12 @@ func CreateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 			return createProjectByServiceAccount(ctx, userEmail, projectRq, memberMapper, userProvider, privilegedMemberProvider, projectProvider)
 		}
 
+		projectSpec := &kubermaticv1.ProjectSpec{
+			Name:                    projectRq.Body.Name,
+			AllowedOperatingSystems: projectRq.Body.Spec.AllowedOperatingSystems,
+		}
 		// create the project
-		kubermaticProject, err := projectProvider.New(ctx, projectRq.Body.Name, projectRq.Body.Labels)
+		kubermaticProject, err := projectProvider.New(ctx, projectSpec, projectRq.Body.Labels)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -132,8 +136,12 @@ func createProjectByServiceAccount(ctx context.Context, saEmail string, projectR
 		return nil, utilerrors.New(http.StatusBadRequest, "owner user email list required for project creation by Service Account")
 	}
 
+	projectSpec := &kubermaticv1.ProjectSpec{
+		Name:                    projectReq.Body.Name,
+		AllowedOperatingSystems: projectReq.Body.Spec.AllowedOperatingSystems,
+	}
 	// create the project
-	kubermaticProject, err := projectProvider.New(ctx, projectReq.Body.Name, projectReq.Body.Labels)
+	kubermaticProject, err := projectProvider.New(ctx, projectSpec, projectReq.Body.Labels)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -441,6 +449,7 @@ func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 
 		kubermaticProject.Spec.Name = req.Body.Name
 		kubermaticProject.Labels = req.Body.Labels
+		kubermaticProject.Spec.AllowedOperatingSystems = req.Body.Spec.AllowedOperatingSystems
 
 		project, err := updateProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, kubermaticProject)
 		if err != nil {
@@ -553,7 +562,8 @@ func DecodeUpdateRq(c context.Context, r *http.Request) (interface{}, error) {
 type projectReq struct {
 	// in:body
 	Body struct {
-		Name   string            `json:"name"`
+		Name   string `json:"name"`
+		Spec   apiv1.ProjectSpec
 		Labels map[string]string `json:"labels,omitempty"`
 		// human user email list for the service account in projectmanagers group
 		Users []string `json:"users,omitempty"`

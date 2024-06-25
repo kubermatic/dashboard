@@ -39,6 +39,9 @@ type CloudSpec struct {
 	// azure
 	Azure *AzureCloudSpec `json:"azure,omitempty"`
 
+	// baremetal
+	Baremetal BaremetalCloudSpec `json:"baremetal,omitempty"`
+
 	// bringyourown
 	Bringyourown BringYourOwnCloudSpec `json:"bringyourown,omitempty"`
 

@@ -48,6 +48,9 @@ type Project struct {
 
 	// status
 	Status string `json:"status,omitempty"`
+
+	// spec
+	Spec *ProjectSpec `json:"spec,omitempty"`
 }
 
 // Validate validates this project
@@ -63,6 +66,10 @@ func (m *Project) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOwners(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSpec(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -122,11 +129,34 @@ func (m *Project) validateOwners(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Project) validateSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.Spec) { // not required
+		return nil
+	}
+
+	if m.Spec != nil {
+		if err := m.Spec.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("spec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("spec")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this project based on the context it is used
 func (m *Project) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateOwners(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSpec(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -151,6 +181,22 @@ func (m *Project) contextValidateOwners(ctx context.Context, formats strfmt.Regi
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *Project) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Spec != nil {
+		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("spec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("spec")
+			}
+			return err
+		}
 	}
 
 	return nil

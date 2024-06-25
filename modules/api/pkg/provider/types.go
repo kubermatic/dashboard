@@ -371,7 +371,7 @@ type PrivilegedProjectProvider interface {
 type ProjectProvider interface {
 	// New creates a brand new project in the system with the given name
 	// Note that a user cannot own more than one project with the given name
-	New(ctx context.Context, name string, labels map[string]string) (*kubermaticv1.Project, error)
+	New(ctx context.Context, projectSpec *kubermaticv1.ProjectSpec, labels map[string]string) (*kubermaticv1.Project, error)
 
 	// Delete deletes the given project as the given user
 	//

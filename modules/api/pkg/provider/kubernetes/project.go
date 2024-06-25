@@ -65,14 +65,15 @@ type PrivilegedProjectProvider struct {
 var _ provider.PrivilegedProjectProvider = &PrivilegedProjectProvider{}
 
 // New creates a brand new project in the system with the given name.
-func (p *ProjectProvider) New(ctx context.Context, projectName string, labels map[string]string) (*kubermaticv1.Project, error) {
+func (p *ProjectProvider) New(ctx context.Context, projectSpec *kubermaticv1.ProjectSpec, labels map[string]string) (*kubermaticv1.Project, error) {
 	project := &kubermaticv1.Project{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:   rand.String(10),
 			Labels: labels,
 		},
 		Spec: kubermaticv1.ProjectSpec{
-			Name: projectName,
+			Name:                    projectSpec.Name,
+			AllowedOperatingSystems: projectSpec.AllowedOperatingSystems,
 		},
 	}
 
