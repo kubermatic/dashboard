@@ -19,19 +19,31 @@ import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
 import {ProjectService} from '@core/services/project';
 import {Observable} from 'rxjs';
-import {Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {take} from 'rxjs/operators';
 import {AsyncValidators} from '../../validators/async.validators';
+import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
+import _ from 'lodash';
+import {AllowedOperatingSystems, DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
+
+enum Controls {
+  Name = 'name',
+  Labels = 'labels',
+  AllowedOperatingSystems = 'allowedOperatingSystems',
+}
 
 @Component({
   selector: 'km-add-project-dialog',
   templateUrl: './template.html',
 })
 export class AddProjectDialogComponent implements OnInit {
+  readonly Controls = Controls;
   form: FormGroup;
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
   adding = false;
+  allowedOperatingSystems: AllowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
+  OperatingSystem = OperatingSystem;
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -41,13 +53,26 @@ export class AddProjectDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      labels: new FormControl(''),
+      [Controls.Name]: new FormControl('', [Validators.required]),
+      [Controls.Labels]: new FormControl(''),
+      [Controls.AllowedOperatingSystems]: new FormControl(Object.keys(this.allowedOperatingSystems)),
     });
   }
 
+  onOperatingSystemChange(operatingSystems: string[]): void {
+    this.allowedOperatingSystems = {};
+    operatingSystems.forEach((os: string) => (this.allowedOperatingSystems[os] = true));
+  }
+
   getObservable(): Observable<Project> {
-    return this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).pipe(take(1));
+    const project: ProjectModel = {
+      name: this.form.controls.name.value,
+      labels: this.labels,
+      spec: {
+        allowedOperatingSystems: this.allowedOperatingSystems,
+      },
+    };
+    return this._projectService.create(project).pipe(take(1));
   }
 
   onNext(project: Project): void {

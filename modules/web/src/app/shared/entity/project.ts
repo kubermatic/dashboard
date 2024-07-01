@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {StatusIcon} from '@shared/utils/health-status';
+import {AllowedOperatingSystems} from './settings';
 
 export enum ProjectStatus {
   Active = 'Active',
@@ -34,6 +35,9 @@ export class Project {
   labels?: object;
   owners: ProjectOwner[];
   clustersNumber?: number;
+  spec?: {
+    allowedOperatingSystems?: AllowedOperatingSystems;
+  };
 
   static getStatusIcon(project: Project): string {
     switch (project?.status) {
@@ -66,4 +70,7 @@ export class OwnedProject {
 export class ProjectModel {
   name: string;
   labels?: object;
+  spec?: {
+    allowedOperatingSystems?: AllowedOperatingSystems;
+  };
 }

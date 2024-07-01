@@ -564,6 +564,18 @@ km-dashboard {
   }
 }
 
+.km-quota-inputs {
+  km-number-stepper {
+    max-width: 30%;
+    position: relative;
+    top: 10px;
+
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
+}
+
 .km-radio-group-label {
   font-weight: 500;
   padding: 12px 0;
@@ -927,6 +939,23 @@ km-side-nav-field .sub-menu-item:last-child {
         border-top-right-radius: variables.$border-radius;
         max-width: initial;
         min-width: 115px;
+      }
+    }
+  }
+}
+
+mat-button-toggle-group[group='projectOperatingSystemGroup'] {
+  justify-content: center;
+  margin-top: 10px;
+
+  .mat-button-toggle {
+    i:not(.km-os-image-rhel) {
+      filter: grayscale(100%);
+    }
+
+    &.mat-button-toggle-checked {
+      i {
+        filter: none;
       }
     }
   }

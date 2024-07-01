@@ -74,7 +74,7 @@ func TestRenameProjectEndpoint(t *testing.T) {
 				test.GenDefaultOwnerBinding(),
 			},
 			ExistingAPIUser:  *test.GenDefaultAPIUser(),
-			ExpectedResponse: `{"id":"my-first-project-ID","name":"Super-Project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse: `{"id":"my-first-project-ID","name":"Super-Project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 		},
 		{
 			Name:            "scenario 2: rename existing project with existing name",
@@ -92,7 +92,7 @@ func TestRenameProjectEndpoint(t *testing.T) {
 				test.GenBinding("my-third-project-ID", test.GenDefaultUser().Spec.Email, "owners"),
 			},
 			ExistingAPIUser:  *test.GenDefaultAPIUser(),
-			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-second-project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-second-project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 		},
 		{
 			Name:            "scenario 3: rename existing project with existing name where user is not the owner",
@@ -113,7 +113,7 @@ func TestRenameProjectEndpoint(t *testing.T) {
 				test.GenBinding("my-third-project-ID", "john@acme.com", "owners"),
 			},
 			ExistingAPIUser:  *test.GenAPIUser("John", "john@acme.com"),
-			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-second-project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-second-project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 		},
 
 		{
@@ -146,7 +146,7 @@ func TestRenameProjectEndpoint(t *testing.T) {
 			Name:             "scenario 6: the admin Bob can update John's project",
 			Body:             `{"Name": "Super-Project"}`,
 			ProjectToRename:  "my-first-project-ID",
-			ExpectedResponse: `{"id":"my-first-project-ID","name":"Super-Project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			ExpectedResponse: `{"id":"my-first-project-ID","name":"Super-Project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				// add some projects
@@ -236,6 +236,7 @@ func TestListProjectEndpoint(t *testing.T) {
 			}(),
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                "my-first-project-ID",
@@ -282,6 +283,7 @@ func TestListProjectEndpoint(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                "my-first-project-ID",
@@ -344,6 +346,7 @@ func TestListProjectEndpoint(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                "my-third-project-ID",
@@ -384,6 +387,7 @@ func TestListProjectEndpoint(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                "my-second-project-ID",
@@ -458,6 +462,7 @@ func TestListProjectMethod(t *testing.T) {
 			ExistingAPIUser: test.GenUser("JohnID", "John", "john@acme.com"),
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                test.ExistingFakeProjectID,
@@ -485,6 +490,7 @@ func TestListProjectMethod(t *testing.T) {
 			ExpectedDetails:  []string{test.ImpersonatedClientErrorMsg},
 			ExpectedResponse: []apiv1.Project{
 				{
+					Spec:   apiv1.ProjectSpec{},
 					Status: "Active",
 					ObjectMeta: apiv1.ObjectMeta{
 						ID:                test.ExistingFakeProjectID,
@@ -617,7 +623,7 @@ func TestGetProjectEndpoint(t *testing.T) {
 			Name:                      "scenario 1: get an existing project assigned to the given user",
 			Body:                      ``,
 			ProjectToSync:             test.GenDefaultProject().Name,
-			ExpectedResponse:          `{"id":"my-first-project-ID","name":"my-first-project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse:          `{"id":"my-first-project-ID","name":"my-first-project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 			HTTPStatus:                http.StatusOK,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(),
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
@@ -626,7 +632,7 @@ func TestGetProjectEndpoint(t *testing.T) {
 			Name:             "scenario 2: the admin Bob can get John's project",
 			Body:             ``,
 			ProjectToSync:    "my-first-project-ID",
-			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-first-project","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			ExpectedResponse: `{"id":"my-first-project-ID","name":"my-first-project","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"John","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				// add some projects
@@ -699,7 +705,7 @@ func TestCreateProjectEndpoint(t *testing.T) {
 			Name:             "scenario 1: a user doesn't have any projects, thus creating one succeeds",
 			Body:             `{"name":"my-first-project"}`,
 			RewriteProjectID: true,
-			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","spec":{},"status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 			HTTPStatus:       http.StatusCreated,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				test.GenDefaultUser(),
@@ -711,7 +717,7 @@ func TestCreateProjectEndpoint(t *testing.T) {
 			Name:                      "scenario 2: having more than one project with the same name is allowed",
 			Body:                      fmt.Sprintf(`{"name":"%s"}`, test.GenDefaultProject().Spec.Name),
 			RewriteProjectID:          true,
-			ExpectedResponse:          `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse:          `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","spec":{},"status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 			HTTPStatus:                http.StatusCreated,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(),
 			ExistingAPIUser:           test.GenDefaultAPIUser(),
@@ -737,7 +743,7 @@ func TestCreateProjectEndpoint(t *testing.T) {
 			Name:             "scenario 4: user has not owned project and doesn't reach maximum number of projects",
 			Body:             fmt.Sprintf(`{"name":"%s"}`, test.GenDefaultProject().Spec.Name),
 			RewriteProjectID: true,
-			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","spec":{},"status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 			HTTPStatus:       http.StatusCreated,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				// add some projects
@@ -776,7 +782,7 @@ func TestCreateProjectEndpoint(t *testing.T) {
 			Name:             "scenario 6: project creation is not restricted for the admin",
 			Body:             fmt.Sprintf(`{"name":"%s"}`, test.GenDefaultProject().Spec.Name),
 			RewriteProjectID: true,
-			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
+			ExpectedResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","spec":{},"status":"","owners":[{"name":"Bob","creationTimestamp":"0001-01-01T00:00:00Z","email":"bob@acme.com"}]}`,
 			HTTPStatus:       http.StatusCreated,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				// add some projects
@@ -935,7 +941,7 @@ func TestServiceAccountProjectAccess(t *testing.T) {
 			existingSa:                    test.GenProjectServiceAccount("1", "test-1", "editors", "plan9-ID"),
 			projectToSync:                 "plan9-ID",
 			bodyCreate:                    `{"name":"my-first-project"}`,
-			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 			expectedCreateProjectResponse: `{"error":{"code":403,"message":"the Service Account is not allowed to create a project"}}`,
 		},
 		{
@@ -955,7 +961,7 @@ func TestServiceAccountProjectAccess(t *testing.T) {
 			existingSa:                    test.GenProjectServiceAccount("1", "test-1", "viewers", "plan9-ID"),
 			projectToSync:                 "plan9-ID",
 			bodyCreate:                    `{"name":"my-first-project"}`,
-			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 			expectedCreateProjectResponse: `{"error":{"code":403,"message":"the Service Account is not allowed to create a project"}}`,
 		},
 		{
@@ -976,8 +982,8 @@ func TestServiceAccountProjectAccess(t *testing.T) {
 			existingSa:                    test.GenProjectServiceAccount("1", "test-1", "projectmanagers", "plan9-ID"),
 			projectToSync:                 "plan9-ID",
 			bodyCreate:                    `{"name":"my-first-project","users":["john@acme.com"]}`,
-			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
-			expectedCreateProjectResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","status":"","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			expectedGetProjectResponse:    `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			expectedCreateProjectResponse: `{"id":"%s","name":"my-first-project","creationTimestamp":"0001-01-01T00:00:00Z","spec":{},"status":"","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 		},
 	}
 
