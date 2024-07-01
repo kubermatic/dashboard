@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute"
@@ -337,12 +338,17 @@ func isVirtualMachinesType(sku armcompute.ResourceSKU) bool {
 func isLocation(sku armcompute.ResourceSKU, location string) bool {
 	if sku.Locations != nil {
 		for _, l := range sku.Locations {
-			if *l == location {
+			if isSameLocation(*l, location) {
 				return true
 			}
 		}
 	}
 	return false
+}
+
+func isSameLocation(l1, l2 string) bool {
+	// Azure API is inconsistent in naming locations.
+	return strings.EqualFold(l1, l2)
 }
 
 // isValidVM checks all constrains for VM.
@@ -360,7 +366,7 @@ func isValidVM(sku armcompute.ResourceSKU, location string) bool {
 		for _, r := range restrictions {
 			if info := r.RestrictionInfo; info != nil && info.Locations != nil {
 				for _, l := range info.Locations {
-					if *l == location {
+					if isSameLocation(*l, location) {
 						return false
 					}
 				}
@@ -473,7 +479,7 @@ func AzureSKUAvailabilityZones(ctx context.Context, subscriptionID, clientID, cl
 	for _, sku := range skuList {
 		if skuName == *sku.Name {
 			for _, l := range sku.LocationInfo {
-				if location == *l.Location && l.Zones != nil && len(l.Zones) > 0 {
+				if isSameLocation(location, *l.Location) && l.Zones != nil && len(l.Zones) > 0 {
 					azZones.Zones = []string{}
 					for _, z := range l.Zones {
 						azZones.Zones = append(azZones.Zones, *z)
@@ -501,7 +507,7 @@ func AzureSecurityGroupEndpoint(ctx context.Context, subscriptionID, clientID, c
 
 	apiSecurityGroups := &apiv1.AzureSecurityGroupsList{}
 	for _, sg := range securityGroupList {
-		if location == *sg.Location {
+		if isSameLocation(location, *sg.Location) {
 			apiSecurityGroups.SecurityGroups = append(apiSecurityGroups.SecurityGroups, *sg.Name)
 		}
 	}
@@ -522,7 +528,7 @@ func AzureResourceGroupEndpoint(ctx context.Context, subscriptionID, clientID, c
 
 	apiResourceGroups := &apiv1.AzureResourceGroupsList{}
 	for _, rg := range resourceGroupList {
-		if location == *rg.Location {
+		if isSameLocation(location, *rg.Location) {
 			apiResourceGroups.ResourceGroups = append(apiResourceGroups.ResourceGroups, *rg.Name)
 		}
 	}
@@ -543,7 +549,7 @@ func AzureRouteTableEndpoint(ctx context.Context, subscriptionID, clientID, clie
 
 	apiRouteTables := &apiv1.AzureRouteTablesList{}
 	for _, rt := range routeTableList {
-		if location == *rt.Location {
+		if isSameLocation(location, *rt.Location) {
 			apiRouteTables.RouteTables = append(apiRouteTables.RouteTables, *rt.Name)
 		}
 	}
@@ -564,7 +570,7 @@ func AzureVnetEndpoint(ctx context.Context, subscriptionID, clientID, clientSecr
 
 	vnets := &apiv1.AzureVirtualNetworksList{}
 	for _, vn := range vnetList {
-		if location == *vn.Location {
+		if isSameLocation(location, *vn.Location) {
 			vnets.VirtualNetworks = append(vnets.VirtualNetworks, *vn.Name)
 		}
 	}
