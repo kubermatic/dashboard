@@ -28,6 +28,7 @@ import {QuotaService} from '@app/dynamic/enterprise/quotas/service';
 import {QuotaDetails} from '@app/shared/entity/quota';
 import {UserService} from '@app/core/services/user';
 import {Member} from '@app/shared/entity/member';
+import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 
 enum Controls {
   Name = 'name',
@@ -35,6 +36,7 @@ enum Controls {
   CPUQuota = 'cpuQuota',
   MemoryQuota = 'memoryQuota',
   StorageQuota = 'storageQuota',
+  AllowedOperatingSystems = 'allowedOperatingSystems',
 }
 
 @Component({
@@ -44,6 +46,7 @@ enum Controls {
 export class EditProjectComponent implements OnInit {
   @Input() project: Project;
 
+  readonly Controls = Controls;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   labels: object;
   form: FormGroup;
@@ -51,7 +54,7 @@ export class EditProjectComponent implements OnInit {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
   user: Member;
   isMember: boolean;
-  readonly Controls = Controls;
+  OperatingSystem = OperatingSystem;
 
   private _quotaService: QuotaService;
 
@@ -73,10 +76,18 @@ export class EditProjectComponent implements OnInit {
     this._initForm();
   }
 
+  onOperatingSystemChange(operatingSystems: string[]): void {
+    this.project.spec.allowedOperatingSystems = {};
+    operatingSystems.forEach((os: string) => (this.project.spec.allowedOperatingSystems[os] = true));
+  }
+
   getObservable(): Observable<Project> {
     const project: ProjectModel = {
       name: this.form?.controls?.name?.value,
       labels: this.labels,
+      spec: {
+        allowedOperatingSystems: this.project.spec?.allowedOperatingSystems,
+      },
     };
 
     // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels component returns patch object.
@@ -113,7 +124,14 @@ export class EditProjectComponent implements OnInit {
       [Controls.CPUQuota]: new FormControl(''),
       [Controls.MemoryQuota]: new FormControl(''),
       [Controls.StorageQuota]: new FormControl(''),
+      [Controls.AllowedOperatingSystems]: new FormControl(Object.values(this.OperatingSystem)),
     });
+
+    const projectOS = this.project.spec?.allowedOperatingSystems;
+    if (!_.isEmpty(projectOS)) {
+      const allowedOSValue = Object.keys(projectOS).filter(os => projectOS[os]);
+      this.form.get(Controls.AllowedOperatingSystems).setValue(allowedOSValue);
+    }
 
     this.isMember = !!this.user.projects?.find(project => project.id === this.project.id);
 

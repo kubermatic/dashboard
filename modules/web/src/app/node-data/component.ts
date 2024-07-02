@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ResourceType} from '@app/shared/entity/common';
-import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
+import {AdminSettings, DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 import {AsyncValidators} from '@app/shared/validators/async.validators';
 import {
   IPV4_IPV6_CIDR_PATTERN,
@@ -38,7 +38,6 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {OperatingSystemManagerService} from '@core/services/operating-system-manager';
-import {ParamsService, PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
@@ -52,8 +51,10 @@ import {ResourceQuotaCalculation, ResourceQuotaCalculationPayload} from '@shared
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {EMPTY, merge, of} from 'rxjs';
+import {EMPTY, forkJoin, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import _ from 'lodash';
+import {ParamsService, PathParam} from '@app/core/services/params';
 
 enum Controls {
   Name = 'name',
@@ -295,34 +296,21 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this.setDefaultOperatingSystemProfiles();
       });
 
-    this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
-      this.allowedOperatingSystems = settings?.allowedOperatingSystems && settings.allowedOperatingSystems;
+    forkJoin([
+      this._settingsService.adminSettings.pipe(take(1)),
+      this._projectService.selectedProject.pipe(take(1)),
+    ]).subscribe(([settings, project]) => {
+      this.allowedOperatingSystems = {...settings.allowedOperatingSystems};
+      const projectOS = project?.spec?.allowedOperatingSystems;
+      if (!_.isEmpty(projectOS)) {
+        Object.keys(this.allowedOperatingSystems)
+          .filter(os => this.allowedOperatingSystems[os])
+          .forEach(os => {
+            this.allowedOperatingSystems[os] = projectOS[os] ?? false;
+          });
+      }
       this._setDefaultOS();
-
-      const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
-      const replicas =
-        this.dialogEditMode || this.isCusterTemplateEditMode
-          ? this._nodeDataService.nodeData.count
-          : settings.defaultNodeCount;
-
-      this.form.get(Controls.Count).setValue(replicas);
-      if (this.dialogEditMode) {
-        if (autoUpdatesEnabled && settings.machineDeploymentOptions.autoUpdatesEnforced) {
-          if (!this.form.get(Controls.UpgradeOnBoot).value) {
-            this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
-          }
-          if (this.form.get(Controls.DisableAutoUpdate).value) {
-            this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
-          }
-        }
-      } else {
-        this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
-        this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
-      }
-      if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
-        this.form.get(Controls.UpgradeOnBoot).disable();
-        this.form.get(Controls.DisableAutoUpdate).disable();
-      }
+      this._manageMDAutoUpdate(settings);
     });
 
     merge(this.form.get(Controls.Count).valueChanges)
@@ -462,17 +450,37 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
   }
 
+  private _manageMDAutoUpdate(settings: AdminSettings): void {
+    const autoUpdatesEnabled = settings.machineDeploymentOptions.autoUpdatesEnabled;
+    const replicas =
+      this.dialogEditMode || this.isCusterTemplateEditMode
+        ? this._nodeDataService.nodeData.count
+        : settings.defaultNodeCount;
+
+    this.form.get(Controls.Count).setValue(replicas);
+    if (this.dialogEditMode) {
+      if (autoUpdatesEnabled && settings.machineDeploymentOptions.autoUpdatesEnforced) {
+        if (!this.form.get(Controls.UpgradeOnBoot).value) {
+          this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
+        }
+        if (this.form.get(Controls.DisableAutoUpdate).value) {
+          this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
+        }
+      }
+    } else {
+      this.form.get(Controls.UpgradeOnBoot).setValue(autoUpdatesEnabled);
+      this.form.get(Controls.DisableAutoUpdate).setValue(!autoUpdatesEnabled);
+    }
+    if (settings.machineDeploymentOptions.autoUpdatesEnforced) {
+      this.form.get(Controls.UpgradeOnBoot).disable();
+      this.form.get(Controls.DisableAutoUpdate).disable();
+    }
+  }
+
   private _loadOperatingSystemProfiles() {
     this.isLoadingOSProfiles = true;
     const profiles$ = this.isDialogView()
-      ? this._projectService.selectedProject.pipe(take(1)).pipe(
-          switchMap(project => {
-            return this._osmService.getOperatingSystemProfilesForCluster(
-              this._clusterSpecService.cluster.id,
-              project.id
-            );
-          })
-        )
+      ? this._osmService.getOperatingSystemProfilesForCluster(this._clusterSpecService.cluster.id, this.projectId)
       : this._datacenterSpec?.spec
         ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
         : EMPTY;

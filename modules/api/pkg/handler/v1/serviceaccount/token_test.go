@@ -301,7 +301,7 @@ func TestServiceAccountCanGetProject(t *testing.T) {
 			existingSa:       test.GenProjectServiceAccount("1", "test-1", "editors", "plan9-ID"),
 			existingAPIUser:  *test.GenAPIUser("john", "john@acme.com"),
 			projectToSync:    "plan9-ID",
-			expectedResponse: `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
+			expectedResponse: `{"id":"plan9-ID","name":"plan9","creationTimestamp":"2013-02-03T19:54:00Z","spec":{},"status":"Active","owners":[{"name":"john","creationTimestamp":"0001-01-01T00:00:00Z","email":"john@acme.com"}]}`,
 		},
 	}
 

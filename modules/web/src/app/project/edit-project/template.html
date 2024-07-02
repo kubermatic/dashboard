@@ -34,6 +34,48 @@ limitations under the License.
           <strong>Required</strong>
         </mat-error>
       </mat-form-field>
+      <div>
+        <div fxLayoutAlign=" center"
+             class="entry-label">
+          <span>Allowed Operating Systems</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Allowed operating system shows if the operating system is allowed to be used with machine deployment in this project,
+               and it is only applicable to the supported operating systems for a cloud provider."></div>
+        </div>
+
+        <mat-button-toggle-group group="projectOperatingSystemGroup"
+                                 [formControlName]="Controls.AllowedOperatingSystems"
+                                 (change)="onOperatingSystemChange($event.value)"
+                                 multiple
+                                 fxLayout="row wrap"
+                                 kmValueChangedIndicator>
+          <mat-button-toggle [value]="OperatingSystem.Ubuntu">
+            <i class="km-os-image-ubuntu"></i>
+            Ubuntu
+          </mat-button-toggle>
+          <mat-button-toggle [value]="OperatingSystem.CentOS">
+            <i class="km-os-image-centos"></i>
+            CentOS
+          </mat-button-toggle>
+          <mat-button-toggle [value]="OperatingSystem.Flatcar">
+            <i class="km-os-image-flatcar"></i>
+            Flatcar
+          </mat-button-toggle>
+          <mat-button-toggle [value]="OperatingSystem.AmazonLinux2">
+            <i class="km-os-image-amazon-linux-2"></i>
+            Amazon Linux 2
+          </mat-button-toggle>
+          <mat-button-toggle [value]="OperatingSystem.RHEL"
+                             #rhelToggle>
+            <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
+            RHEL
+          </mat-button-toggle>
+          <mat-button-toggle [value]="OperatingSystem.RockyLinux">
+            <i class="km-os-image-rockylinux"></i>
+            Rocky Linux
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [asyncKeyValidators]=asyncLabelValidators

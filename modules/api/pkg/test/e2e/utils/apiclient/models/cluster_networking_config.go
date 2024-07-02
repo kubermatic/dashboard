@@ -20,6 +20,8 @@ import (
 type ClusterNetworkingConfig struct {
 
 	// CoreDNSReplicas is the number of desired pods of user cluster coredns deployment.
+	// Deprecated: This field should not be used anymore, use cluster.componentsOverride.coreDNS.replicas
+	// instead. Only one of the two fields can be set at any time.
 	CoreDNSReplicas int32 `json:"coreDNSReplicas,omitempty"`
 
 	// Domain name for services.

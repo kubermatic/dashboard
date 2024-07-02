@@ -94,6 +94,9 @@ func ConvertInternalProjectToExternal(kubermaticProject *kubermaticv1.Project, p
 				return nil
 			}(),
 		},
+		Spec: apiv1.ProjectSpec{
+			AllowedOperatingSystems: kubermaticProject.Spec.AllowedOperatingSystems,
+		},
 		Labels:         label.FilterLabels(label.ProjectResourceType, kubermaticProject.Labels),
 		Status:         string(kubermaticProject.Status.Phase),
 		Owners:         projectOwners,

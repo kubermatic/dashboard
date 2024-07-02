@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
@@ -304,17 +305,73 @@ type CreateProjectBody struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// spec
+	Spec *models.ProjectSpec `json:"Spec,omitempty"`
+
 	// human user email list for the service account in projectmanagers group
 	Users []string `json:"users"`
 }
 
 // Validate validates this create project body
 func (o *CreateProjectBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.validateSpec(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this create project body based on context it is used
+func (o *CreateProjectBody) validateSpec(formats strfmt.Registry) error {
+	if swag.IsZero(o.Spec) { // not required
+		return nil
+	}
+
+	if o.Spec != nil {
+		if err := o.Spec.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "Spec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "Spec")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this create project body based on the context it is used
 func (o *CreateProjectBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.contextValidateSpec(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *CreateProjectBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+
+	if o.Spec != nil {
+		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("Body" + "." + "Spec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("Body" + "." + "Spec")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
