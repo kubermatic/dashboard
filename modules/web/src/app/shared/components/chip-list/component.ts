@@ -58,7 +58,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   readonly controls = Controls;
   @Input() title: string;
   @Input() label: string;
-  @Input() description = 'Use comma, enter or space key as the separator.';
+  @Input() description = 'Use comma, space or enter key as the separator.';
   @Input() placeholder: string;
   @Input() disabled: boolean;
   @Input('kmRequired') required: boolean;
@@ -112,7 +112,14 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
     }
 
     event.chipInput?.clear();
-    this.tags.push(value);
+    const delimiters = [',', ' '];
+    const splitRegex = new RegExp(`[${delimiters.join('')}]`);
+    if (splitRegex.test(value)) {
+      const multiTags = value.split(splitRegex);
+      multiTags.filter(val => !!val.trim()).forEach(val => this.tags.push(val.trim()));
+    } else {
+      this.tags.push(value);
+    }
     this.onChange.emit(this.tags);
   }
 
