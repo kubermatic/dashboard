@@ -21,7 +21,7 @@ source hack/lib.sh
 
 API=modules/api
 
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.21-node-18-15 containerize ./$API/hack/verify-licenses.sh
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.21-node-18-16 containerize ./$API/hack/verify-licenses.sh
 
 cd $API
 go mod vendor
