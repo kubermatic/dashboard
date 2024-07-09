@@ -21,6 +21,7 @@ import (
 
 	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
+	veleroresults "github.com/vmware-tanzu/velero/pkg/util/results"
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -278,6 +279,14 @@ type ClusterBackup struct {
 	Name string `json:"name,omitempty"`
 	// Spec of a velero backup
 	Spec velerov1.BackupSpec `json:"spec,omitempty"`
+	// Extended status of a velero backup
+	Status ClusterBackupExtendedStatus `json:"status,omitempty"`
+}
+
+type ClusterBackupExtendedStatus struct {
+	velerov1.BackupStatus
+	// Velero backup results
+	Results map[string]veleroresults.Result
 }
 
 type ClusterRestore struct {

@@ -25,8 +25,10 @@
 package clusterbackup
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -34,6 +36,8 @@ import (
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 	veleroclient "github.com/vmware-tanzu/velero/pkg/client"
+	"github.com/vmware-tanzu/velero/pkg/cmd/util/downloadrequest"
+	veleroresults "github.com/vmware-tanzu/velero/pkg/util/results"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -198,7 +202,40 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	if err := client.Get(ctx, types.NamespacedName{Name: req.ClusterBackup, Namespace: UserClusterBackupNamespace}, clusterBackup); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return clusterBackup, nil
+
+	var results map[string]veleroresults.Result
+
+	if clusterBackup.Status.Errors != 0 || clusterBackup.Status.Warnings != 0 {
+		if results, err = getClusterBackupResults(ctx, clusterBackup, client); err != nil {
+			return nil, err
+		}
+	}
+
+	return &apiv2.ClusterBackup{
+		Name: clusterBackup.Name,
+		Spec: clusterBackup.Spec,
+		Status: apiv2.ClusterBackupExtendedStatus{
+			BackupStatus: clusterBackup.Status,
+			Results:      results,
+		},
+	}, nil
+}
+
+func getClusterBackupResults(ctx context.Context, clusterBackup *velerov1.Backup, client ctrlruntimeclient.Client) (map[string]veleroresults.Result, error) {
+	var buf bytes.Buffer
+	var results map[string]veleroresults.Result
+	err := downloadrequest.Stream(ctx, client, clusterBackup.Namespace, clusterBackup.Name, velerov1.DownloadTargetKindBackupResults, &buf, time.Second*30, true, "")
+	if err != nil {
+		if errors.Is(err, downloadrequest.ErrNotFound) {
+			return nil, fmt.Errorf("can't find cluster backup results, run `velero backup logs %s` on the user cluster for more information", clusterBackup.Name)
+		}
+		return nil, err
+	}
+
+	if err := json.NewDecoder(&buf).Decode(&results); err != nil {
+		return nil, err
+	}
+	return results, nil
 }
 
 // swagger:parameters postBackupDownloadUrl
