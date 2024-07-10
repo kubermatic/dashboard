@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -72,6 +73,9 @@ type GlobalSettings struct {
 	// restrict project deletion
 	RestrictProjectDeletion bool `json:"restrictProjectDeletion,omitempty"`
 
+	// StaticLabels are a list of labels that can be used for the clusters.
+	StaticLabels []*StaticLabel `json:"staticLabels"`
+
 	// UserProjectsLimit is the maximum number of projects a user can create.
 	UserProjectsLimit int64 `json:"userProjectsLimit,omitempty"`
 
@@ -109,6 +113,10 @@ type GlobalSettings struct {
 // Validate validates this global settings
 func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateStaticLabels(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateCleanupOptions(formats); err != nil {
 		res = append(res, err)
@@ -153,6 +161,32 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *GlobalSettings) validateStaticLabels(formats strfmt.Registry) error {
+	if swag.IsZero(m.StaticLabels) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.StaticLabels); i++ {
+		if swag.IsZero(m.StaticLabels[i]) { // not required
+			continue
+		}
+
+		if m.StaticLabels[i] != nil {
+			if err := m.StaticLabels[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("staticLabels" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("staticLabels" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -348,6 +382,10 @@ func (m *GlobalSettings) validateWebTerminalOptions(formats strfmt.Registry) err
 func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateStaticLabels(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCleanupOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -391,6 +429,26 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateStaticLabels(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.StaticLabels); i++ {
+
+		if m.StaticLabels[i] != nil {
+			if err := m.StaticLabels[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("staticLabels" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("staticLabels" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
