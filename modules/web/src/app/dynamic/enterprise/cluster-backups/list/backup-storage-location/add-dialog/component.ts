@@ -24,7 +24,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {BackupStorageLocation, CreateBackupStorageLocation, SuportedBSLProviders} from '@app/shared/entity/backup';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
+import * as y from 'js-yaml';
 
 export interface AddBackupStorageLocationDialogConfig {
   projectID: string;
@@ -41,6 +42,7 @@ enum Controls {
   BackupSyncPeriod = 'backupSyncPeriod',
   Region = 'region',
   Endpoints = 'endpoints',
+  AddCustomConfig = 'addCustomConfig',
 }
 
 @Component({
@@ -52,6 +54,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   form: FormGroup;
+  valuesConfig = '';
+  isYamlEditorValid = true;
 
   get label(): string {
     return this._config.bslObject ? 'Save Changes' : 'Create';
@@ -86,11 +90,35 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? '0'),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
+      [Controls.AddCustomConfig]: this._builder.control(false),
     });
 
     if (this._config.bslObject) {
       this.form.get(Controls.Name).disable();
     }
+
+    this.form
+      .get(Controls.AddCustomConfig)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        let config: Record<string, string>;
+        if (this._config.bslObject?.name) {
+          config = this._config.bslObject.spec.config as Record<string, string>;
+        } else {
+          config = {
+            region: this.form.get(Controls.Region).value,
+            s3Url: this.form.get(Controls.Endpoints).value,
+          };
+        }
+        try {
+          this.valuesConfig = y.dump({config: config});
+        } catch (error) {
+          this.isYamlEditorValid = false;
+        }
+        if (!value) {
+          this.isYamlEditorValid = true;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -114,11 +142,17 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
 
   onNext(backupStorageLocation: BackupStorageLocation): void {
     this._dialogRef.close();
-    this._notificationService.success(`Created the ${backupStorageLocation.name} backup storage location`);
+    this._notificationService.success(
+      `${this._config?.bslObject?.name ? 'Edited' : 'Created'} the ${backupStorageLocation.name} backup storage location`
+    );
+  }
+
+  isValidYaml(valid: boolean): void {
+    this.isYamlEditorValid = valid;
   }
 
   private _getBackupStorageLocation(): CreateBackupStorageLocation {
-    return {
+    const bsl = {
       name: this.form.get(Controls.Name).value,
       cbslSpec: {
         objectStorage: {
@@ -138,5 +172,15 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
       },
     };
+
+    if (this.form.get(Controls.AddCustomConfig)) {
+      try {
+        const yaml = y.load(this.valuesConfig) as any;
+        bsl.cbslSpec.config = yaml?.config;
+      } catch (error) {
+        this.isYamlEditorValid = false;
+      }
+    }
+    return bsl;
   }
 }
