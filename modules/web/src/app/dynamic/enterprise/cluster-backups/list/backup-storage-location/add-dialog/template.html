@@ -67,24 +67,38 @@ END OF TERMS AND CONDITIONS
              matInput>
       <mat-hint>Enter time in the format MMmSSs (e.g., 2m10s),BackupSyncPeriod defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.</mat-hint>
     </mat-form-field>
-    <mat-form-field class="region-field">
-      <mat-label>Region</mat-label>
-      <input [formControlName]="Controls.Region"
-             matInput>
-      <mat-hint>The AWS region where the bucket is located.</mat-hint>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Endpoints</mat-label>
-      <input [formControlName]="Controls.Endpoints"
-             matInput>
-      <mat-hint>You can specify the AWS S3 URL here for explicitness.</mat-hint>
-    </mat-form-field>
+    <mat-checkbox [formControlName]="Controls.AddCustomConfig">Add custom config
+    </mat-checkbox>
+    <ng-container *ngIf="form.get(Controls.AddCustomConfig).value">
+      <km-editor [(model)]="valuesConfig"
+                 height="370px"
+                 header="values.yaml">
+      </km-editor>
+      <km-validate-json-or-yaml [data]="valuesConfig"
+                                [isOnlyYAML]="true"
+                                (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
+    </ng-container>
+    <ng-container *ngIf="!form.get(Controls.AddCustomConfig).value">
+
+      <mat-form-field class="region-field">
+        <mat-label>Region</mat-label>
+        <input [formControlName]="Controls.Region"
+               matInput>
+        <mat-hint>The AWS region where the bucket is located.</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Endpoints</mat-label>
+        <input [formControlName]="Controls.Endpoints"
+               matInput>
+        <mat-hint>You can specify the AWS S3 URL here for explicitness.</mat-hint>
+      </mat-form-field>
+    </ng-container>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button [icon]="icon"
              [label]="label"
-             [disabled]="form.invalid"
+             [disabled]="form.invalid || !isYamlEditorValid"
              [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>
