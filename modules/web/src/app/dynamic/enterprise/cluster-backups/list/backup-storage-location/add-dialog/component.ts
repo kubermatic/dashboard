@@ -23,7 +23,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
-import {BackupStorageLocation, CreateBackupStorageLocation, SuportedBSLProviders} from '@app/shared/entity/backup';
+import {BackupStorageLocation, CreateBackupStorageLocation, SupportedBSLProviders} from '@app/shared/entity/backup';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import * as y from 'js-yaml';
 
@@ -165,7 +165,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
           region: this.form.get(Controls.Region).value,
           s3Url: this.form.get(Controls.Endpoints).value,
         },
-        provider: SuportedBSLProviders.AWS,
+        provider: SupportedBSLProviders.AWS,
       },
       credentials: {
         accessKeyId: this.form.get(Controls.AccessKeyId).value,

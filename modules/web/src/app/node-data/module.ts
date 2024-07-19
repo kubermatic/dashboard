@@ -42,7 +42,7 @@ import {EquinixBasicNodeDataComponent} from './basic/provider/equinix/component'
 import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
-import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-contraint-form/component';
+import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-constraint-form/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
 import {NodeDataComponent} from './component';

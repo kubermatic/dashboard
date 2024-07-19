@@ -35,7 +35,7 @@ export class MeteringComponent implements OnInit, OnDestroy {
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
   legacyReports: Report[] = [];
-  fetchingLegacyReportsInProgres = false;
+  fetchingLegacyReportsInProgress = false;
   showLegacyReportsCard = false;
 
   constructor(
@@ -73,7 +73,7 @@ export class MeteringComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.fetchingLegacyReportsInProgres = true;
+    this.fetchingLegacyReportsInProgress = true;
     this._meteringService
       .legacyReports()
       .pipe(takeUntil(this._unsubscribe))
@@ -85,7 +85,7 @@ export class MeteringComponent implements OnInit, OnDestroy {
           }
         },
         complete: () => {
-          this.fetchingLegacyReportsInProgres = false;
+          this.fetchingLegacyReportsInProgress = false;
         },
       });
   }

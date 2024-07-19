@@ -321,7 +321,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((value: boolean) => {
         if (value) {
           this.form.addControl(Controls.BackupStorageLocation, this._builder.control('', Validators.required));
-          this._handelClusterBackupChange();
+          this._handleClusterBackupChange();
         } else {
           this.form.removeControl(Controls.BackupStorageLocation);
         }
@@ -880,7 +880,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
   }
 
-  private _handelClusterBackupChange(): void {
+  private _handleClusterBackupChange(): void {
     this.form
       .get(Controls.BackupStorageLocation)
       .valueChanges.pipe(takeUntil(this._unsubscribe))

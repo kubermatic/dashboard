@@ -190,7 +190,7 @@ export class ClusterRestoreConfigSpec {
   createdAt?: string;
 }
 
-export enum SuportedBSLProviders {
+export enum SupportedBSLProviders {
   AWS = 'aws',
 }
 export class CreateBackupStorageLocation {

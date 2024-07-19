@@ -163,7 +163,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
     this._initializeTerminalOnSuccess.pipe(take(1)).subscribe(_ => {
       this.isLoadingTerminal = false;
-      this._cdr.detectChanges(); // Update DOM to access terminal elememt
+      this._cdr.detectChanges(); // Update DOM to access terminal element
       this.initTerminal();
     });
   }

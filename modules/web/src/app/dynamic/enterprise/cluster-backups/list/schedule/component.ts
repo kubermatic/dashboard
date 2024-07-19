@@ -178,11 +178,11 @@ export class ClustersScheduleBackupsListComponent implements OnInit, OnDestroy {
     return getClusterBackupHealthStatus(phase);
   }
 
-  toggelScheduleDetail(scheduleName: string): void {
+  toggleScheduleDetail(scheduleName: string): void {
     this.showRowDetails?.set(scheduleName, !this.showRowDetails?.get(scheduleName));
   }
 
-  isScheduleToggeled(scheduleName: string): boolean {
+  isScheduleToggled(scheduleName: string): boolean {
     return this.showRowDetails?.get(scheduleName);
   }
 

@@ -164,11 +164,11 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     return getClusterBackupHealthStatus(phase);
   }
 
-  toggelRestoreDetail(backupName: string): void {
+  toggleRestoreDetail(backupName: string): void {
     this.showRowDetails?.set(backupName, !this.showRowDetails?.get(backupName));
   }
 
-  isRestoreToggeled(backupName: string): boolean {
+  isRestoreToggled(backupName: string): boolean {
     return this.showRowDetails?.get(backupName);
   }
 
