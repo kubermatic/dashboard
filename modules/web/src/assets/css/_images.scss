@@ -447,7 +447,7 @@
 }
 
 .km-icon-terminal-placeholder {
-  @include mixins.mask-image('/assets/images/icons/webterminal-placholder.svg', 28px);
+  @include mixins.mask-image('/assets/images/icons/webterminal-placeholder.svg', 28px);
 
   &.i-60 {
     @include mixins.size(60px, 60px, true);

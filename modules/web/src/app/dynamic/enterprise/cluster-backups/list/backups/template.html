@@ -241,10 +241,10 @@ END OF TERMS AND CONDITIONS
           *matRowDef="let element; columns: columns"
           class="km-mat-row km-pointer"
           [ngClass]="{'km-selected': checkSelected(element.id)}"
-          (click)="toggelBackupDetail(element.name)"></tr>
+          (click)="toggleBackupDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isBackupToggeled(element.name) && element.spec.includedNamespaces?.length ? '' : 'km-hidden'"
+          [ngClass]="isBackupToggled(element.name) && element.spec.includedNamespaces?.length ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

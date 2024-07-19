@@ -169,10 +169,10 @@ END OF TERMS AND CONDITIONS
           *matRowDef="let element; columns: columns"
           class="km-mat-row km-pointer"
           [ngClass]="{'km-selected': checkSelected(element.id)}"
-          (click)="toggelRestoreDetail(element.name)"></tr>
+          (click)="toggleRestoreDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isRestoreToggeled(element.name) ? '' : 'km-hidden'"
+          [ngClass]="isRestoreToggled(element.name) ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

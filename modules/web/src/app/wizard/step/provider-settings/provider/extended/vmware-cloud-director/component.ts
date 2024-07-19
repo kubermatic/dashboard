@@ -88,7 +88,7 @@ enum StorageProfileState {
 export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _alwaysEnabledControls = [Controls.StorageProfile, Controls.Filesystem];
   private readonly _debounceTime = 500;
-  private readonly _defaultFilesytsem = Filesystem.EXT4;
+  private readonly _defaultFilesystem = Filesystem.EXT4;
   readonly Controls = Controls;
   readonly fstypes = [Filesystem.XFS, Filesystem.EXT4];
   private _preset = '';
@@ -150,7 +150,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VMWARECLOUDDIRECTOR))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.reset({[Controls.Filesystem]: this._defaultFilesytsem}));
+      .subscribe(_ => this.form.reset({[Controls.Filesystem]: this._defaultFilesystem}));
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VMWARECLOUDDIRECTOR))
@@ -217,7 +217,7 @@ export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValida
     this.form = this._builder.group({
       [Controls.OvdcNetworks]: this._builder.control([], Validators.required),
       [Controls.StorageProfile]: this._builder.control('', Validators.required),
-      [Controls.Filesystem]: this._builder.control(this._defaultFilesytsem, Validators.required),
+      [Controls.Filesystem]: this._builder.control(this._defaultFilesystem, Validators.required),
     });
   }
 

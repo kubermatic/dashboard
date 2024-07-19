@@ -225,10 +225,10 @@ END OF TERMS AND CONDITIONS
           *matRowDef="let element; columns: columns"
           class="km-mat-row km-pointer"
           [ngClass]="{'km-selected': checkSelected(element.id)}"
-          (click)="toggelScheduleDetail(element.name)"></tr>
+          (click)="toggleScheduleDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isScheduleToggeled(element.name) ? '' : 'km-hidden'"
+          [ngClass]="isScheduleToggled(element.name) ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

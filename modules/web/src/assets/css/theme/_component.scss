@@ -48,7 +48,7 @@
 @import 'app/dynamic/enterprise/quotas/quota-widget/theme';
 @import 'app/shared/components/taint-form/theme';
 @import 'app/shared/components/label-form/theme';
-@import 'app/node-data/basic/provider/kubevirt/topology-spread-contraint-form/theme';
+@import 'app/node-data/basic/provider/kubevirt/topology-spread-constraint-form/theme';
 @import 'app/node-data/basic/provider/nutanix/theme';
 
 @mixin theme-components($colors) {
@@ -88,6 +88,6 @@
   @include theme-terminal-overlay-component($colors);
   @include theme-taint-form-component($colors);
   @include theme-label-form-component($colors);
-  @include theme-topology-spread-contraint-form-component($colors);
+  @include theme-topology-spread-constraint-form-component($colors);
   @include theme-nutanix-basic-node-data-component($colors);
 }
