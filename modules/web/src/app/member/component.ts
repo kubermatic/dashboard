@@ -34,8 +34,6 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
-import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
-import {UserSettings} from '@app/shared/entity/settings';
 import {Router} from '@angular/router';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 
@@ -50,9 +48,9 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
-  currentUserSettings: UserSettings;
   urlPath = '';
-  private _dynamicTabs = new Set<DynamicTabComponent>();
+  @ViewChild(MatPaginator) private _paginator: MatPaginator;
+  @ViewChild(MatSort) private _sort: MatSort;
   private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
   private _membersUpdate = new Subject<void>();
@@ -72,36 +70,15 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     private _dialogModeService: DialogModeService
   ) {}
 
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (!sort) {
-      return;
-    }
-    sort.active = 'name';
-    sort.direction = 'asc';
-    this.dataSource.sort = sort;
-    this._cdr.detectChanges();
-  }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (!paginator) {
-      return;
-    }
-    this.dataSource.paginator = paginator;
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = paginator; // Force refresh.
-      this.currentUserSettings = settings;
-    });
-  }
-
-  get dynamicTabs(): DynamicTabComponent[] {
-    return [...this._dynamicTabs];
-  }
-
   ngOnInit(): void {
     this.dataSource.data = this.members;
-
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => {
+      this.currentUser = user;
+      if (this._paginator) {
+        this._paginator.pageSize = user.userSettings.itemsPerPage;
+        this.dataSource.paginator = this._paginator; // Force refresh.
+      }
+    });
 
     this._projectService.selectedProject
       .pipe(
@@ -136,6 +113,13 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   }
 
   ngAfterViewInit(): void {
+    if (this._paginator && this._sort) {
+      this._paginator.pageSize = this.currentUser.userSettings?.itemsPerPage;
+      this.dataSource.paginator = this._paginator;
+      this._sort.active = 'name';
+      this._sort.direction = 'asc';
+      this.dataSource.sort = this._sort;
+    }
     this._cdr.detectChanges();
   }
 
@@ -240,7 +224,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
   }
 
   isPaginatorVisible(): boolean {
-    return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
+    return !_.isEmpty(this.members) && this._paginator && this.members.length > this._paginator.pageSize;
   }
 
   getURLPath(): void {
