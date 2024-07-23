@@ -70,7 +70,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.2
-	k8c.io/kubermatic/v2 v2.25.6-0.20240624083333-3e9f41617fa6
+	k8c.io/kubermatic/v2 v2.25.7-0.20240723115507-b788b1d56017
 	k8c.io/operating-system-manager v1.5.2
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.29.1
