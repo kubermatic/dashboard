@@ -3,7 +3,7 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix a critical regression in Applications with Helm sources, which resulted in \"release: not found\" errors."
+      "description": "Fix the pagination in project members table."
     }
   ]
 }
