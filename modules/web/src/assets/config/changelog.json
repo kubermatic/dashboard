@@ -1,21 +1,9 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v22316",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v22317",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix cloud-init bootstrapping issues on Ubuntu 22.04 on Azure."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix support for Rockylinux 8 on AWS."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix a bug where unrequired `cloud-config` secret was being propagated to the user clusters."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix: use correct networkpolicy port for metrics-server."
+      "description": "Fix the pagination in project members table."
     }
   ]
 }
