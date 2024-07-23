@@ -3,7 +3,15 @@
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix a critical regression in Applications with Helm sources, which resulted in \"release: not found\" errors."
+      "description": "Fix the pagination in project members table."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix VPA admission-controller PDB blocking evictions."
+    },
+    {
+      "category": "fixed",
+      "description": "Fix an issue with Azure support that prevented successful provisioning of user clusters on some Azure locations."
     }
   ]
 }
