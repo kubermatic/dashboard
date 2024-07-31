@@ -26,9 +26,19 @@ type HelmSource struct {
 	// +kubebuilder:validation:MinLength=1
 	ChartVersion string `json:"chartVersion,omitempty"`
 
-	// URl of the helm repository.
-	// It can be an HTTP(s) repository (e.g. https://localhost/myrepo) or on OCI repository (e.g. oci://localhost:5000/myrepo).
-	// +kubebuilder:validation:Pattern="^(http|https|oci)://.+"
+	// Insecure disables certificate validation when using an HTTPS registry. This setting has no
+	// effect when using a plaintext connection.
+	Insecure bool `json:"insecure,omitempty"`
+
+	// PlainHTTP will enable HTTP-only (i.e. unencrypted) traffic for oci:// URLs. By default HTTPS
+	// is used when communicating with an oci:// URL.
+	PlainHTTP bool `json:"plainHTTP,omitempty"`
+
+	// URL of the Helm repository the following schemes are supported:
+	//
+	// http://example.com/myrepo (HTTP)
+	// https://example.com/myrepo (HTTPS)
+	// oci://example.com:5000/myrepo (OCI, HTTPS by default, use plainHTTP to enable unencrypted HTTP)
 	URL string `json:"url,omitempty"`
 
 	// credentials
