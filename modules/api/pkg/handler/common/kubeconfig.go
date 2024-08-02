@@ -87,7 +87,7 @@ func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.Use
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		return &encodeKubeConifgResponse{clientCfg: adminClientCfg, filePrefix: filePrefix}, nil
+		return &encodeKubeConfigResponse{clientCfg: adminClientCfg, filePrefix: filePrefix}, nil
 	}
 
 	userInfo, err := userInfoGetter(ctx, projectID)
@@ -103,7 +103,7 @@ func GetAdminKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.Use
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	return &encodeKubeConifgResponse{clientCfg: adminClientCfg, filePrefix: filePrefix}, nil
+	return &encodeKubeConfigResponse{clientCfg: adminClientCfg, filePrefix: filePrefix}, nil
 }
 
 func isAdminKubeconfigEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
@@ -140,7 +140,7 @@ func GetKubeconfigEndpoint(ctx context.Context, cluster *kubermaticv1.ExternalCl
 		return nil, fmt.Errorf("failed to parse kubeconfig: %w", err)
 	}
 
-	return &encodeKubeConifgResponse{clientCfg: cfg, filePrefix: filePrefix}, nil
+	return &encodeKubeConfigResponse{clientCfg: cfg, filePrefix: filePrefix}, nil
 }
 
 // GetClusterSAKubeconfigEndpoint returns the kubeconfig associated to a service account in the cluster.
@@ -199,7 +199,7 @@ func GetClusterSAKubeconfigEndpoint(ctx context.Context, userInfoGetter provider
 	saKubeConfig.Contexts[clusterID] = clientCmdCtx
 	saKubeConfig.CurrentContext = clusterID
 
-	return &encodeKubeConifgResponse{clientCfg: saKubeConfig, filePrefix: userName}, nil
+	return &encodeKubeConfigResponse{clientCfg: saKubeConfig, filePrefix: userName}, nil
 }
 
 // getServiceAccountToken returns the token associated to the k8s service account named serviceAccountID in serviceAccountNamespace.
@@ -259,7 +259,7 @@ func GetOidcKubeconfigEndpoint(ctx context.Context, userInfoGetter provider.User
 	adminClientCfg.AuthInfos = map[string]*clientcmdapi.AuthInfo{}
 	adminClientCfg.AuthInfos["default"] = clientCmdAuth
 
-	return &encodeKubeConifgResponse{clientCfg: adminClientCfg, filePrefix: oidc}, nil
+	return &encodeKubeConfigResponse{clientCfg: adminClientCfg, filePrefix: oidc}, nil
 }
 
 func GetClusterOidcEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID, clusterID string, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) (interface{}, error) {
@@ -326,9 +326,14 @@ func CreateOIDCKubeconfigEndpoint(
 		{
 			// grab admin kubeconfig to read the cluster info
 			var clusterFromAdminKubeCfg *clientcmdapi.Cluster
-			for clusterName, cluster := range adminKubeConfig.Clusters {
+			for clusterName, configCluster := range adminKubeConfig.Clusters {
 				if clusterName == req.ClusterID {
-					clusterFromAdminKubeCfg = cluster
+					clusterFromAdminKubeCfg = configCluster
+				}
+
+				// If the cluster has an external address, we need to add to use that address in the KubeConfig
+				if cluster.Status.Address.APIServerExternalAddress != "" {
+					clusterFromAdminKubeCfg.Server = cluster.Status.Address.APIServerExternalAddress
 				}
 			}
 			if clusterFromAdminKubeCfg == nil {
@@ -462,9 +467,14 @@ func CreateOIDCKubeconfigSecretEndpoint(
 		{
 			// grab admin kubeconfig to read the cluster info
 			var clusterFromAdminKubeCfg *clientcmdapi.Cluster
-			for clusterName, cluster := range adminKubeConfig.Clusters {
+			for clusterName, configCluster := range adminKubeConfig.Clusters {
 				if clusterName == req.ClusterID {
-					clusterFromAdminKubeCfg = cluster
+					clusterFromAdminKubeCfg = configCluster
+				}
+
+				// If the cluster has an external address, we need to add to use that address in the KubeConfig
+				if cluster.Status.Address.APIServerExternalAddress != "" {
+					clusterFromAdminKubeCfg.Server = cluster.Status.Address.APIServerExternalAddress
 				}
 			}
 			if clusterFromAdminKubeCfg == nil {
@@ -648,7 +658,7 @@ func EncodeOIDCKubeconfig(c context.Context, w http.ResponseWriter, response int
 		if err != nil {
 			return fmt.Errorf("the cookie can't be removed: %w", err)
 		}
-		return EncodeKubeconfig(c, w, &encodeKubeConifgResponse{clientCfg: rsp.oidcKubeConfig})
+		return EncodeKubeconfig(c, w, &encodeKubeConfigResponse{clientCfg: rsp.oidcKubeConfig})
 	}
 
 	// handles initialPhase
@@ -821,13 +831,13 @@ func getProjectForOIDCEndpoint(ctx context.Context, userInfo *provider.UserInfo,
 	return projectProvider.Get(ctx, userInfo, projectID, &provider.ProjectGetOptions{IncludeUninitialized: true})
 }
 
-type encodeKubeConifgResponse struct {
+type encodeKubeConfigResponse struct {
 	clientCfg  *clientcmdapi.Config
 	filePrefix string
 }
 
 func EncodeKubeconfig(c context.Context, w http.ResponseWriter, response interface{}) (err error) {
-	rsp := response.(*encodeKubeConifgResponse)
+	rsp := response.(*encodeKubeConfigResponse)
 	cfg := rsp.clientCfg
 	filename := "kubeconfig"
 
