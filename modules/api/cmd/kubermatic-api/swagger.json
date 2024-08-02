@@ -32425,7 +32425,7 @@
           "$ref": "#/definitions/GitReference"
         },
         "remote": {
-          "description": "URL to the repository. Can be HTTP(s) (e.g. https://example.com/myrepo) or SSH (e.g. git://example.com[:port]/path/to/repo.git/)\n+kubebuilder:validation:MinLength=1",
+          "description": "URL to the repository. Can be HTTP(s) (e.g. https://example.com/myrepo) or\nSSH (e.g. git://example.com[:port]/path/to/repo.git/).\n+kubebuilder:validation:MinLength=1",
           "type": "string",
           "x-go-name": "Remote"
         }
@@ -32700,8 +32700,18 @@
         "credentials": {
           "$ref": "#/definitions/HelmCredentials"
         },
+        "insecure": {
+          "description": "Insecure disables certificate validation when using an HTTPS registry. This setting has no\neffect when using a plaintext connection.",
+          "type": "boolean",
+          "x-go-name": "Insecure"
+        },
+        "plainHTTP": {
+          "description": "PlainHTTP will enable HTTP-only (i.e. unencrypted) traffic for oci:// URLs. By default HTTPS\nis used when communicating with an oci:// URL.",
+          "type": "boolean",
+          "x-go-name": "PlainHTTP"
+        },
         "url": {
-          "description": "URl of the helm repository.\nIt can be an HTTP(s) repository (e.g. https://localhost/myrepo) or on OCI repository (e.g. oci://localhost:5000/myrepo).\n+kubebuilder:validation:Pattern=\"^(http|https|oci)://.+\"",
+          "description": "URL of the Helm repository the following schemes are supported:\n\nhttp://example.com/myrepo (HTTP)\nhttps://example.com/myrepo (HTTPS)\noci://example.com:5000/myrepo (OCI, HTTPS by default, use plainHTTP to enable unencrypted HTTP)",
           "type": "string",
           "x-go-name": "URL"
         }

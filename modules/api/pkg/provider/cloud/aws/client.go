@@ -45,18 +45,6 @@ type ClientSet struct {
 	IAM *iam.Client
 }
 
-type endpointResolver struct {
-	Url string
-}
-
-func (e *endpointResolver) ResolveEndpoint(service, region string, options ...interface{}) (aws.Endpoint, error) {
-	return aws.Endpoint{
-		URL:           e.Url,
-		SigningName:   service,
-		SigningRegion: region,
-	}, nil
-}
-
 func ValidateCredentials(ctx context.Context, accessKeyID, secretAccessKey string) error {
 	cfg, err := awsconfig.LoadDefaultConfig(ctx,
 		awsconfig.WithRegion("us-east-2"),
@@ -84,19 +72,18 @@ func GetAWSConfig(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleA
 		awsconfig.WithRetryMaxAttempts(maxRetries),
 	}
 
-	if endpoint != "" {
-		opts = append(opts,
-			awsconfig.WithEndpointResolverWithOptions(&endpointResolver{Url: endpoint}),
-		)
-	}
-
 	cfg, err := awsconfig.LoadDefaultConfig(ctx, opts...)
 	if err != nil {
 		return aws.Config{}, err
 	}
 
 	if assumeRoleARN != "" {
-		stsSvc := sts.NewFromConfig(cfg)
+		stsSvc := sts.NewFromConfig(cfg, func(options *sts.Options) {
+			if endpoint != "" {
+				options.BaseEndpoint = &endpoint
+			}
+		})
+
 		creds := stscreds.NewAssumeRoleProvider(stsSvc, assumeRoleARN,
 			func(o *stscreds.AssumeRoleOptions) {
 				o.ExternalID = ptr.To(assumeRoleExternalID)
@@ -116,9 +103,21 @@ func getClientSet(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleA
 	}
 
 	return &ClientSet{
-		EC2: ec2.NewFromConfig(cfg),
-		EKS: eks.NewFromConfig(cfg),
-		IAM: iam.NewFromConfig(cfg),
+		EC2: ec2.NewFromConfig(cfg, func(options *ec2.Options) {
+			if endpoint != "" {
+				options.BaseEndpoint = &endpoint
+			}
+		}),
+		EKS: eks.NewFromConfig(cfg, func(options *eks.Options) {
+			if endpoint != "" {
+				options.BaseEndpoint = &endpoint
+			}
+		}),
+		IAM: iam.NewFromConfig(cfg, func(options *iam.Options) {
+			if endpoint != "" {
+				options.BaseEndpoint = &endpoint
+			}
+		}),
 	}, nil
 }
 

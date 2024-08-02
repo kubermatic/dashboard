@@ -349,7 +349,19 @@ func (p *ClusterProvider) GetAdminKubeconfigForUserCluster(ctx context.Context, 
 		return nil, err
 	}
 
-	return clientcmd.Load(secret.Data[resources.KubeconfigSecretKey])
+	config, err := clientcmd.Load(secret.Data[resources.KubeconfigSecretKey])
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range config.Clusters {
+		// If the cluster has an external address, we need to add to use that address in the KubeConfig
+		if c.Status.Address.APIServerExternalAddress != "" {
+			config.Clusters[i].Server = c.Status.Address.APIServerExternalAddress
+		}
+	}
+
+	return config, nil
 }
 
 // GetViewerKubeconfigForUserCluster returns the viewer kubeconfig for the given cluster.
@@ -365,7 +377,19 @@ func (p *ClusterProvider) GetViewerKubeconfigForUserCluster(ctx context.Context,
 		return nil, fmt.Errorf("no kubeconfig found")
 	}
 
-	return clientcmd.Load(d)
+	config, err := clientcmd.Load(d)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range config.Clusters {
+		// If the cluster has an external address, we need to add to use that address in the KubeConfig
+		if c.Status.Address.APIServerExternalAddress != "" {
+			config.Clusters[i].Server = c.Status.Address.APIServerExternalAddress
+		}
+	}
+
+	return config, nil
 }
 
 // RevokeViewerKubeconfig revokes the viewer token and kubeconfig.
