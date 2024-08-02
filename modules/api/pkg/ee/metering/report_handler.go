@@ -37,6 +37,8 @@ import (
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/resources"
+	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/util/s3"
 
@@ -223,11 +225,21 @@ func getS3DataFromSeed(ctx context.Context, seed *kubermaticv1.Seed, seedClient 
 		return nil, "", err
 	}
 
+	var caBundleConfigMap corev1.ConfigMap
+	if err := seedClient.Get(ctx, types.NamespacedName{Name: resources.CABundleConfigMapName, Namespace: seed.Namespace}, &caBundleConfigMap); err != nil {
+		return nil, "", err
+	}
+
+	caBundle, err := certificates.NewCABundleFromBytes([]byte(caBundleConfigMap.Data[resources.CABundleConfigMapKey]))
+	if err != nil {
+		return nil, "", err
+	}
+
 	s3endpoint := string(s3secret.Data[Endpoint])
 	s3accessKeyID := string(s3secret.Data[AccessKey])
 	s3secretAccessKey := string(s3secret.Data[SecretKey])
 
-	mc, err := s3.NewClient(s3endpoint, s3accessKeyID, s3secretAccessKey, nil)
+	mc, err := s3.NewClient(s3endpoint, s3accessKeyID, s3secretAccessKey, caBundle.CertPool())
 	if err != nil {
 		return nil, "", err
 	}
