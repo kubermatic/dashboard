@@ -808,8 +808,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _updateAvailableProxyModes(): void {
     const proxyModeControl = this.control(Controls.ProxyMode);
+    const controlValueCNIPlugin = this.controlValue(Controls.CNIPlugin);
     let newValue: ProxyMode;
-    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
+    if (controlValueCNIPlugin === CNIPlugin.Cilium) {
       if (this.controlValue(Controls.Konnectivity)) {
         this.availableProxyModes = [ProxyMode.iptables, ProxyMode.ebpf];
         if (proxyModeControl.value === ProxyMode.ipvs) {
@@ -820,7 +821,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         newValue = ProxyMode.iptables;
       }
     } else {
-      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
+      this.availableProxyModes =
+        controlValueCNIPlugin === CNIPlugin.None ? Object.values(ProxyMode) : [ProxyMode.ipvs, ProxyMode.iptables];
       if (proxyModeControl.pristine || !this.availableProxyModes.includes(proxyModeControl.value)) {
         newValue = this._defaultProxyMode || ProxyMode.ipvs;
       }
