@@ -437,7 +437,7 @@ func (r AddReq) Validate(authenticatesUserInfo *provider.UserInfo) error {
 	if projectFromRequest.ID != r.ProjectID {
 		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("you can only assign the user to %s project", r.ProjectID))
 	}
-	if strings.EqualFold(apiUserFromRequest.Email, authenticatesUserInfo.Email) {
+	if strings.EqualFold(apiUserFromRequest.Email, authenticatesUserInfo.Email) && !authenticatesUserInfo.IsAdmin {
 		return utilerrors.New(http.StatusForbidden, "you cannot assign yourself to a different group")
 	}
 	isRequestedGroupPrefixValid := false

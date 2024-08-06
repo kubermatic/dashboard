@@ -199,7 +199,9 @@ func (p *ProjectMemberProvider) MapUserToGroups(ctx context.Context, user *kuber
 			groups.Insert(suffixedGroupName)
 		}
 	}
-
+	if user.Spec.IsAdmin {
+		groups.Insert(fmt.Sprintf("owners-%s", projectID))
+	}
 	if groups.Len() > 0 {
 		return groups, nil
 	} else {
@@ -279,6 +281,10 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 	}
 
 	roles := sets.New[string]()
+	if user.Spec.IsAdmin {
+		roles.Insert("owners")
+		return roles, nil
+	}
 	for _, gpb := range groupProjectBindings.Items {
 		if slice.ContainsString(user.Spec.Groups, gpb.Spec.Group, nil) && gpb.Spec.ProjectID == projectID {
 			roles.Insert(gpb.Spec.Role)
