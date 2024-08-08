@@ -25,6 +25,9 @@ import (
 	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
 	aws "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/aws/types"
 	azure "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/azure/types"
+	plugins "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
+	baremetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/types"
+
 	digitalocean "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
 	equinixmetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
 	gce "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/gce/types"
@@ -319,6 +322,32 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			Tags:        config.Tags,
 			CustomImage: config.CustomImage.Value,
 		}
+
+	case providerconfig.CloudProviderBaremetal:
+		config := &baremetal.RawConfig{}
+		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
+			return nil, fmt.Errorf("failed to parse baremetal config: %w", err)
+		}
+
+		switch config.Driver.Value {
+		case string(plugins.Tinkerbell):
+			var tinkerbellSpec apiv1.TinkerbellNodeSpec
+			if config.DriverSpec.Raw == nil {
+				return nil, fmt.Errorf("driver spec is empty")
+			}
+
+			if err := json.Unmarshal(config.DriverSpec.Raw, &tinkerbellSpec); err != nil {
+				return nil, fmt.Errorf("failed to parse tinkerbell spec config: %w", err)
+			}
+			_, err := tinkerbellSpec.MarshalJSON()
+			if err != nil {
+				return nil, err
+			}
+			cloudSpec.Baremetal = &apiv1.BaremetalNodeSpec{
+				Tinkerbell: &tinkerbellSpec,
+			}
+		}
+
 	case providerconfig.CloudProviderKubeVirt:
 		config := &kubevirt.RawConfig{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {

@@ -1025,6 +1025,31 @@ type EKSVPC struct {
 	IsDefault bool   `json:"default"`
 }
 
+// TinkerbellImageSourceType represents a Tinkerbell image source type.
+// swagger:model TinkerbellImageSourceType
+type TinkerbellImageSourceType string
+
+const (
+	// TinkerbellImageHTTPSourceType represents http image source.
+	TinkerbellImageHTTPSourceType TinkerbellImageSourceType = "http"
+)
+
+// TinkerbellImagesList represents list of available Tinkerbell images with their categories.
+// swagger:model TinkerbellImagesList
+type TinkerbellImagesList struct {
+	// Standard represents standard images for Tinkerbell cloud provider.
+	Standard TinkerbellImages `json:"standard"`
+}
+
+// TinkerbellImages represents images with versions and their source.
+// swagger:model TinkerbellImages
+type TinkerbellImages struct {
+	// Source represents an image source.
+	Source TinkerbellImageSourceType `json:"source"`
+	// OperatingSystems represents list of operating systems with their versions.
+	OperatingSystems kubermaticv1.ImageListWithVersions `json:"operatingSystems"`
+}
+
 // AKSCluster represents an object of AKS cluster.
 // swagger:model AKSCluster
 type AKSCluster struct {
