@@ -26,6 +26,9 @@ type AuditLoggingSettings struct {
 
 	// sidecar
 	Sidecar *AuditSidecarSettings `json:"sidecar,omitempty"`
+
+	// webhook backend
+	WebhookBackend *AuditWebhookBackendSettings `json:"webhookBackend,omitempty"`
 }
 
 // Validate validates this audit logging settings
@@ -37,6 +40,10 @@ func (m *AuditLoggingSettings) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateSidecar(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateWebhookBackend(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -82,6 +89,25 @@ func (m *AuditLoggingSettings) validateSidecar(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *AuditLoggingSettings) validateWebhookBackend(formats strfmt.Registry) error {
+	if swag.IsZero(m.WebhookBackend) { // not required
+		return nil
+	}
+
+	if m.WebhookBackend != nil {
+		if err := m.WebhookBackend.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("webhookBackend")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("webhookBackend")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this audit logging settings based on the context it is used
 func (m *AuditLoggingSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -91,6 +117,10 @@ func (m *AuditLoggingSettings) ContextValidate(ctx context.Context, formats strf
 	}
 
 	if err := m.contextValidateSidecar(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateWebhookBackend(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -122,6 +152,22 @@ func (m *AuditLoggingSettings) contextValidateSidecar(ctx context.Context, forma
 				return ve.ValidateName("sidecar")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("sidecar")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AuditLoggingSettings) contextValidateWebhookBackend(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.WebhookBackend != nil {
+		if err := m.WebhookBackend.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("webhookBackend")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("webhookBackend")
 			}
 			return err
 		}

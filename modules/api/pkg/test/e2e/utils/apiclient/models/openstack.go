@@ -17,17 +17,17 @@ import (
 // swagger:model Openstack
 type Openstack struct {
 
-	// application credential ID
+	// Application credential ID to authenticate in combination with an application credential secret (which is not the user's password).
 	ApplicationCredentialID string `json:"applicationCredentialID,omitempty"`
 
-	// application credential secret
+	// Application credential secret (which is not the user's password) to authenticate in combination with an application credential ID.
 	ApplicationCredentialSecret string `json:"applicationCredentialSecret,omitempty"`
 
 	// If datacenter is set, this preset is only applicable to the
 	// configured datacenter.
 	Datacenter string `json:"datacenter,omitempty"`
 
-	// domain
+	// Domain holds the name of the identity service (keystone) domain.
 	Domain string `json:"domain,omitempty"`
 
 	// Only enabled presets will be available in the KKP dashboard.
