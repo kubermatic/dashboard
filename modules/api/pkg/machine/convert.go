@@ -27,7 +27,6 @@ import (
 	azure "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/azure/types"
 	plugins "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
 	baremetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/types"
-
 	digitalocean "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
 	equinixmetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
 	gce "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/gce/types"
