@@ -1471,7 +1471,7 @@ type NodeCloudSpec struct {
 	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
 	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
 	Packet              *PacketNodeSpec              `json:"packet,omitempty"`
-	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty`
+	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
 	VSphere             *VSphereNodeSpec             `json:"vsphere,omitempty"`
