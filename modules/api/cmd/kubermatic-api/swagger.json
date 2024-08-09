@@ -34963,9 +34963,6 @@
       "type": "object",
       "title": "NodeCloudSpec represents the collection of cloud provider specific settings. Only one must be set at a time.",
       "properties": {
-        "Baremetal": {
-          "$ref": "#/definitions/BaremetalNodeSpec"
-        },
         "alibaba": {
           "$ref": "#/definitions/AlibabaNodeSpec"
         },
@@ -34977,6 +34974,9 @@
         },
         "azure": {
           "$ref": "#/definitions/AzureNodeSpec"
+        },
+        "baremetal": {
+          "$ref": "#/definitions/BaremetalNodeSpec"
         },
         "digitalocean": {
           "$ref": "#/definitions/DigitaloceanNodeSpec"
