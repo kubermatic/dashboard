@@ -166,6 +166,11 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/featuregates").
 		Handler(r.getFeatureGates())
 
+	// Defines a set of HTTP endpoints for interacting with Baremetal clusters
+	mux.Methods(http.MethodGet).
+		Path("/providers/baremetal/tinkerbell/dc/{dc}/images").
+		Handler(r.listTinkerbellImages())
+
 	// Defines a set of HTTP endpoints for interacting with KubeVirt clusters
 	mux.Methods(http.MethodGet).
 		Path("/providers/kubevirt/instancetypes").
@@ -5913,6 +5918,28 @@ func (r Routing) validateProjectGKECredentials() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.GKEValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		externalcluster.DecodeGKEProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/providers/baremetal/tinkerbell/dc/{dc}/images tinkerbell listTinkerbellImages
+//
+// List Tinkerbell images
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: TinkerbellImagesList
+func (r Routing) listTinkerbellImages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.TinkerbellImagesEndpoint(r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeTinkerbellListImageReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

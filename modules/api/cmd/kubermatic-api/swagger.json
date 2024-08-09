@@ -22521,6 +22521,41 @@
         }
       }
     },
+    "/api/v2/providers/baremetal/tinkerbell/dc/{dc}/images": {
+      "get": {
+        "description": "List Tinkerbell images",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "tinkerbell"
+        ],
+        "operationId": "listTinkerbellImages",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TinkerbellImagesList",
+            "schema": {
+              "$ref": "#/definitions/TinkerbellImagesList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/providers/eks/clusterroles": {
       "get": {
         "produces": [
@@ -27648,6 +27683,9 @@
         },
         "sidecar": {
           "$ref": "#/definitions/AuditSidecarSettings"
+        },
+        "webhookBackend": {
+          "$ref": "#/definitions/AuditWebhookBackendSettings"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -27700,6 +27738,21 @@
         },
         "resources": {
           "$ref": "#/definitions/ResourceRequirements"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "AuditWebhookBackendSettings": {
+      "type": "object",
+      "title": "AuditWebhookBackendSettings configures webhook backend for audit logging functionality.",
+      "properties": {
+        "auditWebhookConfig": {
+          "$ref": "#/definitions/SecretReference"
+        },
+        "auditWebhookInitialBackoff": {
+          "description": "+kubebuilder:default=\"10s\"",
+          "type": "string",
+          "x-go-name": "AuditWebhookInitialBackoff"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -28282,10 +28335,47 @@
       },
       "x-go-package": "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
     },
+    "Baremetal": {
+      "type": "object",
+      "properties": {
+        "datacenter": {
+          "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
+          "type": "string",
+          "x-go-name": "Datacenter"
+        },
+        "enabled": {
+          "description": "Only enabled presets will be available in the KKP dashboard.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "tinkerbell": {
+          "$ref": "#/definitions/Tinkerbell"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "BaremetalCloudSpec": {
       "type": "object",
       "title": "BaremetalCloudSpec specifies access data for a baremetal cluster.",
+      "properties": {
+        "credentialsReference": {
+          "$ref": "#/definitions/GlobalSecretKeySelector"
+        },
+        "tinkerbell": {
+          "$ref": "#/definitions/TinkerbellCloudSpec"
+        }
+      },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "BaremetalNodeSpec": {
+      "description": "BaremetalNodeSpec baremetal specific node settings",
+      "type": "object",
+      "properties": {
+        "tinkerbell": {
+          "$ref": "#/definitions/TinkerbellNodeSpec"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "BringYourOwnCloudSpec": {
       "type": "object",
@@ -29671,6 +29761,9 @@
         "azure": {
           "$ref": "#/definitions/DatacenterSpecAzure"
         },
+        "baremetal": {
+          "$ref": "#/definitions/DatacenterSpecBaremetal"
+        },
         "bringyourown": {
           "$ref": "#/definitions/DatacenterSpecBringYourOwn"
         },
@@ -29813,6 +29906,16 @@
           "description": "Region to use, for example \"westeurope\". A list of available regions can be\nfound at https://azure.microsoft.com/en-us/global-infrastructure/locations/",
           "type": "string",
           "x-go-name": "Location"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DatacenterSpecBaremetal": {
+      "type": "object",
+      "title": "DatacenterSpecBaremetal describes a datacenter of baremetal nodes.",
+      "properties": {
+        "tinkerbell": {
+          "$ref": "#/definitions/DatacenterSpecTinkerbell"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -30052,6 +30155,16 @@
           "description": "Metros are facilities that are grouped together geographically and share capacity\nand networking features, see https://metal.equinix.com/developers/docs/locations/metros/",
           "type": "string",
           "x-go-name": "Metro"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DatacenterSpecTinkerbell": {
+      "type": "object",
+      "title": "DatacenterSepcTinkerbell contains spec for tinkerbell provider.",
+      "properties": {
+        "images": {
+          "$ref": "#/definitions/TinkerbellImageSources"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34546,6 +34659,18 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "NamespacedName": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Namespace": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "k8s.io/apimachinery/pkg/types"
+    },
     "NetworkDefaults": {
       "type": "object",
       "title": "NetworkDefaults contains cluster network default settings.",
@@ -34849,6 +34974,9 @@
         },
         "azure": {
           "$ref": "#/definitions/AzureNodeSpec"
+        },
+        "baremetal": {
+          "$ref": "#/definitions/BaremetalNodeSpec"
         },
         "digitalocean": {
           "$ref": "#/definitions/DigitaloceanNodeSpec"
@@ -35871,10 +35999,12 @@
       "type": "object",
       "properties": {
         "applicationCredentialID": {
+          "description": "Application credential ID to authenticate in combination with an application credential secret (which is not the user's password).",
           "type": "string",
           "x-go-name": "ApplicationCredentialID"
         },
         "applicationCredentialSecret": {
+          "description": "Application credential secret (which is not the user's password) to authenticate in combination with an application credential ID.",
           "type": "string",
           "x-go-name": "ApplicationCredentialSecret"
         },
@@ -35884,6 +36014,7 @@
           "x-go-name": "Datacenter"
         },
         "domain": {
+          "description": "Domain holds the name of the identity service (keystone) domain.",
           "type": "string",
           "x-go-name": "Domain"
         },
@@ -35956,10 +36087,12 @@
       "title": "OpenstackCloudSpec specifies access data to an OpenStack cloud.",
       "properties": {
         "applicationCredentialID": {
+          "description": "Application credential ID to authenticate in combination with an application credential secret (which is not the user's password).",
           "type": "string",
           "x-go-name": "ApplicationCredentialID"
         },
         "applicationCredentialSecret": {
+          "description": "Application credential secret (which is not the user's password) to authenticate in combination with an application credential ID.",
           "type": "string",
           "x-go-name": "ApplicationCredentialSecret"
         },
@@ -35972,6 +36105,7 @@
           "$ref": "#/definitions/GlobalSecretKeySelector"
         },
         "domain": {
+          "description": "Domain holds the name of the identity service (keystone) domain.",
           "type": "string",
           "x-go-name": "Domain"
         },
@@ -36800,6 +36934,9 @@
         },
         "azure": {
           "$ref": "#/definitions/Azure"
+        },
+        "baremetal": {
+          "$ref": "#/definitions/Baremetal"
         },
         "digitalocean": {
           "$ref": "#/definitions/Digitalocean"
@@ -38312,6 +38449,96 @@
       "description": "+kubebuilder:validation:Enum=helm",
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
+    "Tinkerbell": {
+      "type": "object",
+      "properties": {
+        "kubeconfig": {
+          "description": "Kubeconfig is the cluster's kubeconfig file, encoded with base64.",
+          "type": "string",
+          "x-go-name": "Kubeconfig"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "TinkerbellCloudSpec": {
+      "type": "object",
+      "properties": {
+        "kubeconfig": {
+          "description": "The cluster's kubeconfig file, encoded with base64.",
+          "type": "string",
+          "x-go-name": "Kubeconfig"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "TinkerbellHTTPSource": {
+      "type": "object",
+      "title": "TinkerbellHTTPSource represents list of images and their versions that can be downloaded over HTTP.",
+      "properties": {
+        "operatingSystems": {
+          "description": "OperatingSystems represents list of supported operating-systems with their URLs.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/OSVersions"
+          },
+          "x-go-name": "OperatingSystems"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "TinkerbellImageSourceType": {
+      "type": "string",
+      "title": "TinkerbellImageSourceType represents a Tinkerbell image source type.",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "TinkerbellImageSources": {
+      "type": "object",
+      "title": "TinkerbellImageSources represents Operating System image sources for Tinkerbell.",
+      "properties": {
+        "http": {
+          "$ref": "#/definitions/TinkerbellHTTPSource"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "TinkerbellImages": {
+      "type": "object",
+      "title": "TinkerbellImages represents images with versions and their source.",
+      "properties": {
+        "operatingSystems": {
+          "$ref": "#/definitions/ImageListWithVersions"
+        },
+        "source": {
+          "$ref": "#/definitions/TinkerbellImageSourceType"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "TinkerbellImagesList": {
+      "type": "object",
+      "title": "TinkerbellImagesList represents list of available Tinkerbell images with their categories.",
+      "properties": {
+        "standard": {
+          "$ref": "#/definitions/TinkerbellImages"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "TinkerbellNodeSpec": {
+      "description": "TinkerbellNodeSpec tinkerbell specific node settings",
+      "type": "object",
+      "properties": {
+        "hardwareRef": {
+          "$ref": "#/definitions/NamespacedName"
+        },
+        "osImageUrl": {
+          "description": "OsImageUrl is the link for Operating System.",
+          "type": "string",
+          "x-go-name": "OsImageUrl"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "TopologySpreadConstraint": {
       "type": "object",

@@ -18,10 +18,10 @@ import (
 // swagger:model OpenstackCloudSpec
 type OpenstackCloudSpec struct {
 
-	// application credential ID
+	// Application credential ID to authenticate in combination with an application credential secret (which is not the user's password).
 	ApplicationCredentialID string `json:"applicationCredentialID,omitempty"`
 
-	// application credential secret
+	// Application credential secret (which is not the user's password) to authenticate in combination with an application credential ID.
 	ApplicationCredentialSecret string `json:"applicationCredentialSecret,omitempty"`
 
 	// Flag to configure enablement of topology support for the Cinder CSI plugin.
@@ -29,7 +29,7 @@ type OpenstackCloudSpec struct {
 	// +optional
 	CinderTopologyEnabled bool `json:"cinderTopologyEnabled,omitempty"`
 
-	// domain
+	// Domain holds the name of the identity service (keystone) domain.
 	Domain string `json:"domain,omitempty"`
 
 	// Enable the `enable-ingress-hostname` cloud provider option on the Openstack CCM. Can only be used with the
