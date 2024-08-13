@@ -425,8 +425,9 @@ func (m *PresetProvider) setBaremetalCredentials(preset *kubermaticv1.Preset, cl
 		return nil, emptyCredentialError(preset.Name, "Baremetal")
 	}
 
-	// I need to add Tinkerbell Check here! After #13586 is merged in KKP
-	cloud.Baremetal.Tinkerbell.Kubeconfig = preset.Spec.Kubevirt.Kubeconfig
+	if cloud.Baremetal.Tinkerbell != nil {
+		cloud.Baremetal.Tinkerbell.Kubeconfig = preset.Spec.Kubevirt.Kubeconfig
+	}
 
 	return &cloud, nil
 }
