@@ -20,6 +20,7 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -95,6 +96,9 @@ func createOrUpdateCredentialSecretForCluster(ctx context.Context, seedClient ct
 	}
 	if cluster.Spec.Cloud.VSphere != nil {
 		return createVSphereSecret(ctx, seedClient, cluster, validate)
+	}
+	if cluster.Spec.Cloud.Baremetal != nil {
+		return createOrUpdateBaremetalSecret(ctx, seedClient, cluster)
 	}
 	if cluster.Spec.Cloud.Alibaba != nil {
 		return createAlibabaSecret(ctx, seedClient, cluster, validate)
@@ -473,6 +477,33 @@ func createVSphereSecret(ctx context.Context, seedClient ctrlruntimeclient.Clien
 	cluster.Spec.Cloud.VSphere.Password = ""
 	cluster.Spec.Cloud.VSphere.InfraManagementUser.Username = ""
 	cluster.Spec.Cloud.VSphere.InfraManagementUser.Password = ""
+
+	return true, nil
+}
+
+func createOrUpdateBaremetalSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster) (bool, error) {
+	spec := cluster.Spec.Cloud.Baremetal
+	if spec.Tinkerbell == nil {
+		return false, errors.New("tinkerbell is required")
+	}
+	// already migrated
+	if spec.Tinkerbell.Kubeconfig == "" {
+		return false, nil
+	}
+
+	// move credentials into dedicated Secret
+	credentialRef, err := ensureCredentialSecret(ctx, seedClient, cluster, map[string][]byte{
+		resources.TinkerbellKubeconfig: []byte(spec.Tinkerbell.Kubeconfig),
+	})
+	if err != nil {
+		return false, err
+	}
+
+	// add secret key selectors to cluster object
+	cluster.Spec.Cloud.Baremetal.CredentialsReference = credentialRef
+
+	// clean old inline credentials
+	cluster.Spec.Cloud.Baremetal.Tinkerbell.Kubeconfig = ""
 
 	return true, nil
 }

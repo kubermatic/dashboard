@@ -200,6 +200,9 @@ func (m *PresetProvider) SetCloudCredentials(ctx context.Context, userInfo *prov
 	if cloud.VSphere != nil {
 		return m.setVsphereCredentials(preset, cloud, dc)
 	}
+	if cloud.Baremetal != nil {
+		return m.setBaremetalCredentials(preset, cloud)
+	}
 	if cloud.Openstack != nil {
 		return m.setOpenStackCredentials(preset, cloud, dc)
 	}
@@ -413,6 +416,17 @@ func (m *PresetProvider) setVsphereCredentials(preset *kubermaticv1.Preset, clou
 	if cloud.VSphere.StoragePolicy == "" {
 		cloud.VSphere.StoragePolicy = dc.Spec.VSphere.DefaultStoragePolicy
 	}
+
+	return &cloud, nil
+}
+
+func (m *PresetProvider) setBaremetalCredentials(preset *kubermaticv1.Preset, cloud kubermaticv1.CloudSpec) (*kubermaticv1.CloudSpec, error) {
+	if preset.Spec.Baremetal == nil {
+		return nil, emptyCredentialError(preset.Name, "Baremetal")
+	}
+
+	// I need to add Tinkerbell Check here! After #13586 is merged in KKP
+	cloud.Baremetal.Tinkerbell.Kubeconfig = preset.Spec.Kubevirt.Kubeconfig
 
 	return &cloud, nil
 }

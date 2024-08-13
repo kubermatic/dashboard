@@ -33,12 +33,13 @@ import (
 	"k8s.io/utils/ptr"
 )
 
-// providerNames holds a list of providers. They must stay in this order.
+// providerNames holds a list of providers. This is the list of fields in the kubermaticv1/Preset struct and It must stay in this order.
 var providerNames = []string{
 	"digitalocean",
 	"hetzner",
 	"azure",
 	"vsphere",
+	"baremeatl",
 	"aws",
 	"openstack",
 	"packet",
@@ -93,6 +94,7 @@ func CredentialEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 			//	Hetzner      		Hetzner
 			//	Azure        		Azure
 			//	VSphere      		VSphere
+			// 	Baremetal			Baremetal
 			//	AWS          		AWS
 			//	Openstack    		Openstack
 			//	Packet       		Packet
