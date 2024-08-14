@@ -34,6 +34,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 // ObjectMeta defines the set of fields that objects returned from the API have
@@ -72,6 +73,7 @@ type DatacenterSpec struct {
 	Provider            string                                          `json:"provider,omitempty"`
 	Digitalocean        *kubermaticv1.DatacenterSpecDigitalocean        `json:"digitalocean,omitempty"`
 	BringYourOwn        *kubermaticv1.DatacenterSpecBringYourOwn        `json:"bringyourown,omitempty"`
+	Baremetal           *kubermaticv1.DatacenterSpecBaremetal           `json:"baremetal,omitempty"`
 	AWS                 *kubermaticv1.DatacenterSpecAWS                 `json:"aws,omitempty"`
 	Azure               *kubermaticv1.DatacenterSpecAzure               `json:"azure,omitempty"`
 	Openstack           *kubermaticv1.DatacenterSpecOpenstack           `json:"openstack,omitempty"`
@@ -1469,6 +1471,7 @@ type NodeCloudSpec struct {
 	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
 	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
 	Packet              *PacketNodeSpec              `json:"packet,omitempty"`
+	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
 	VSphere             *VSphereNodeSpec             `json:"vsphere,omitempty"`
@@ -1729,6 +1732,73 @@ func (spec *AzureNodeSpec) MarshalJSON() ([]byte, error) {
 		ImageID:                     spec.ImageID,
 		AssignAvailabilitySet:       spec.AssignAvailabilitySet,
 		EnableAcceleratedNetworking: spec.EnableAcceleratedNetworking,
+	}
+
+	return json.Marshal(&res)
+}
+
+// BaremetalNodeSpec baremetal specific node settings
+// swagger:model BaremetalNodeSpec
+type BaremetalNodeSpec struct {
+	// Tinkerbell contains the node settings provisioned by Tinkerbell.
+	Tinkerbell *TinkerbellNodeSpec `json:"tinkerbell,omitempty"`
+}
+
+func (spec *BaremetalNodeSpec) MarshalJSON() ([]byte, error) {
+	if spec.Tinkerbell != nil {
+		_, err := spec.Tinkerbell.MarshalJSON()
+		if err != nil {
+			return []byte{}, err
+		}
+		res := struct {
+			Tinkerbell *TinkerbellNodeSpec `json:"tinkerbell,omitempty"`
+		}{
+			Tinkerbell: spec.Tinkerbell,
+		}
+		return json.Marshal(&res)
+	}
+	return []byte{}, fmt.Errorf("provisioner node spec is missing")
+}
+
+// TinkerbellNodeSpec tinkerbell specific node settings
+// swagger:model TinkerbellNodeSpec
+type TinkerbellNodeSpec struct {
+	// OsImageUrl is the link for Operating System.
+	OsImageUrl string `json:"osImageUrl"`
+
+	// Hardware Object reference
+	HardwareRef types.NamespacedName `json:"hardwareRef"`
+}
+
+func (spec *TinkerbellNodeSpec) MarshalJSON() ([]byte, error) {
+	missing := make([]string, 0)
+
+	if len(spec.OsImageUrl) == 0 {
+		missing = append(missing, "osImageUrl")
+	}
+
+	if spec.HardwareRef.String() == "/" {
+		missing = append(missing, "hardwareRef")
+	}
+
+	if len(spec.HardwareRef.Name) == 0 {
+		missing = append(missing, "hardwareRef.name")
+	}
+
+	if len(spec.HardwareRef.Namespace) == 0 {
+		missing = append(missing, "hardwareRef.namespace")
+	}
+
+	if len(missing) > 0 {
+		return nil, fmt.Errorf("missing or invalid required parameter(s): %s", strings.Join(missing, ", "))
+	}
+
+	res := struct {
+		OsImageUrl  string               `json:"osImageUrl"`
+		HardwareRef types.NamespacedName `json:"hardwareRef"`
+	}{
+		OsImageUrl:  spec.OsImageUrl,
+		HardwareRef: spec.HardwareRef,
 	}
 
 	return json.Marshal(&res)

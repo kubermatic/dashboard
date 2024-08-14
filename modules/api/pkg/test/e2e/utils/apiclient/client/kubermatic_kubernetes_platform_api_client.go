@@ -55,6 +55,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/seed"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/serviceaccounts"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/settings"
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/tinkerbell"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/tokens"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/user"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/users"
@@ -151,6 +152,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Kubermatic
 	cli.Seed = seed.New(transport, formats)
 	cli.Serviceaccounts = serviceaccounts.New(transport, formats)
 	cli.Settings = settings.New(transport, formats)
+	cli.Tinkerbell = tinkerbell.New(transport, formats)
 	cli.Tokens = tokens.New(transport, formats)
 	cli.User = user.New(transport, formats)
 	cli.Users = users.New(transport, formats)
@@ -292,6 +294,8 @@ type KubermaticKubernetesPlatformAPI struct {
 
 	Settings settings.ClientService
 
+	Tinkerbell tinkerbell.ClientService
+
 	Tokens tokens.ClientService
 
 	User user.ClientService
@@ -357,6 +361,7 @@ func (c *KubermaticKubernetesPlatformAPI) SetTransport(transport runtime.ClientT
 	c.Seed.SetTransport(transport)
 	c.Serviceaccounts.SetTransport(transport)
 	c.Settings.SetTransport(transport)
+	c.Tinkerbell.SetTransport(transport)
 	c.Tokens.SetTransport(transport)
 	c.User.SetTransport(transport)
 	c.Users.SetTransport(transport)

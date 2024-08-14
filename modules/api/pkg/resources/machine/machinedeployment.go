@@ -208,6 +208,12 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 		if err != nil {
 			return nil, err
 		}
+	case nd.Spec.Template.Cloud.Baremetal != nil && dc.Spec.Baremetal != nil:
+		config.CloudProvider = providerconfig.CloudProviderBaremetal
+		cloudExt, err = getBaremetalProviderSpec(c, nd.Spec.Template, dc)
+		if err != nil {
+			return nil, err
+		}
 	case nd.Spec.Template.Cloud.Openstack != nil && dc.Spec.Openstack != nil:
 		config.CloudProvider = providerconfig.CloudProviderOpenstack
 		if err := validation.ValidateCreateNodeSpec(c, &nd.Spec.Template, dc); err != nil {

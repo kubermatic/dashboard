@@ -30,6 +30,9 @@ type NodeCloudSpec struct {
 	// azure
 	Azure *AzureNodeSpec `json:"azure,omitempty"`
 
+	// baremetal
+	Baremetal *BaremetalNodeSpec `json:"baremetal,omitempty"`
+
 	// digitalocean
 	Digitalocean *DigitaloceanNodeSpec `json:"digitalocean,omitempty"`
 
@@ -81,6 +84,10 @@ func (m *NodeCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateAzure(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateBaremetal(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -198,6 +205,25 @@ func (m *NodeCloudSpec) validateAzure(formats strfmt.Registry) error {
 				return ve.ValidateName("azure")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("azure")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NodeCloudSpec) validateBaremetal(formats strfmt.Registry) error {
+	if swag.IsZero(m.Baremetal) { // not required
+		return nil
+	}
+
+	if m.Baremetal != nil {
+		if err := m.Baremetal.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("baremetal")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("baremetal")
 			}
 			return err
 		}
@@ -416,6 +442,10 @@ func (m *NodeCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Regi
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateBaremetal(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDigitalocean(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -518,6 +548,22 @@ func (m *NodeCloudSpec) contextValidateAzure(ctx context.Context, formats strfmt
 				return ve.ValidateName("azure")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("azure")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NodeCloudSpec) contextValidateBaremetal(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Baremetal != nil {
+		if err := m.Baremetal.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("baremetal")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("baremetal")
 			}
 			return err
 		}

@@ -25,6 +25,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/anexia"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/azure"
+	"k8c.io/dashboard/v2/pkg/provider/cloud/baremetal"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/bringyourown"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/digitalocean"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/edge"
@@ -74,6 +75,9 @@ func Provider(
 	}
 	if datacenter.Spec.VSphere != nil {
 		return vsphere.NewCloudProvider(datacenter, secretKeyGetter, caBundle)
+	}
+	if datacenter.Spec.Baremetal != nil {
+		return baremetal.NewCloudProvider(datacenter, secretKeyGetter)
 	}
 	if datacenter.Spec.GCP != nil {
 		return gcp.NewCloudProvider(secretKeyGetter), nil
