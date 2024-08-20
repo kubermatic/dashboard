@@ -1,9 +1,4 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v22317",
-  "entries": [
-    {
-      "category": "fixed",
-      "description": "Fix the pagination in project members table."
-    }
-  ]
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.23.md#v22318",
+  "entries": []
 }
