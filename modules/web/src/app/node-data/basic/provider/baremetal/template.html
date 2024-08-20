@@ -17,7 +17,6 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
 
-
   <km-combobox #osImageCombobox
                [required]="true"
                [grouped]="false"
@@ -33,21 +32,25 @@ limitations under the License.
   </km-combobox>
 
   <mat-card-header class="km-no-padding">
-    <mat-card-title>Hardware Settings</mat-card-title>
+    <mat-card-title fxLayoutAlign=" center">
+      Hardware Settings
+      <i class="km-icon-info km-pointer"
+         matTooltip="Hardware Settings are reference to the hardware object (baremetal server reference) in Tinkerbell cluster."></i>
+    </mat-card-title>
   </mat-card-header>
 
   <mat-form-field fxFlex>
-    <mat-label>Name</mat-label>
+    <mat-label>Hardware Reference Name</mat-label>
     <input matInput
-           [formControlName]="Controls.HardwareName"
+           [formControlName]="Controls.HardwareReferenceName"
            autocomplete="off"
            kmValueChangedIndicator>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Namespace</mat-label>
+    <mat-label>Hardware Reference Namespace</mat-label>
     <input matInput
-           [formControlName]="Controls.HardwareNamespace"
+           [formControlName]="Controls.HardwareReferenceNamespace"
            autocomplete="off"
            kmValueChangedIndicator>
   </mat-form-field>

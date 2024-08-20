@@ -40,22 +40,22 @@ import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   OSImage = 'osImage',
-  HardwareName = 'hardwareName',
-  HardwareNamespace = 'hardwareNamespace',
+  HardwareReferenceName = 'hardwareReferenceName',
+  HardwareReferenceNamespace = 'hardwareReferenceNamespace',
 }
 
 class OSImageState {
   static Loading = 'Loading...';
 
   static Ready(os?: OperatingSystem) {
-    return `${this.getOSMessage(os)} System Image`;
+    return `${this._getOSMessage(os)} System Image`;
   }
 
   static Empty(os?: OperatingSystem) {
-    return `No ${this.getOSMessage(os)} System Images Available`;
+    return `No ${this._getOSMessage(os)} System Images Available`;
   }
 
-  private static getOSMessage(os?: OperatingSystem): string {
+  private static _getOSMessage(os?: OperatingSystem): string {
     return os ? NodeProviderConstants.getOperatingSystemDisplayName(os) : 'Operating';
   }
 }
@@ -68,6 +68,7 @@ class OSImageDropdownOption {
 @Component({
   selector: 'km-baremetal-basic-node-data',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -104,8 +105,8 @@ export class BaremetalBasicNodeDataComponent extends BaseFormValidator implement
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.OSImage]: this._builder.control('', Validators.required),
-      [Controls.HardwareName]: this._builder.control('', Validators.required),
-      [Controls.HardwareNamespace]: this._builder.control('', Validators.required),
+      [Controls.HardwareReferenceName]: this._builder.control('', Validators.required),
+      [Controls.HardwareReferenceNamespace]: this._builder.control('', Validators.required),
     });
 
     this._init();
@@ -119,7 +120,10 @@ export class BaremetalBasicNodeDataComponent extends BaseFormValidator implement
       this._setOSImageLabel();
     });
 
-    merge(this.form.get(Controls.HardwareName).valueChanges, this.form.get(Controls.HardwareNamespace).valueChanges)
+    merge(
+      this.form.get(Controls.HardwareReferenceName).valueChanges,
+      this.form.get(Controls.HardwareReferenceNamespace).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -142,8 +146,8 @@ export class BaremetalBasicNodeDataComponent extends BaseFormValidator implement
   private _init(): void {
     const tinkerbellSpec = this._nodeDataService.nodeData.spec.cloud.baremetal?.tinkerbell;
     if (tinkerbellSpec) {
-      this.form.get(Controls.HardwareName).setValue(tinkerbellSpec.hardwareRef?.Name);
-      this.form.get(Controls.HardwareNamespace).setValue(tinkerbellSpec.hardwareRef?.Namespace);
+      this.form.get(Controls.HardwareReferenceName).setValue(tinkerbellSpec.hardwareRef?.Name);
+      this.form.get(Controls.HardwareReferenceNamespace).setValue(tinkerbellSpec.hardwareRef?.Namespace);
       this.form.get(Controls.OSImage).setValue(tinkerbellSpec.osImageUrl);
 
       this._cdr.detectChanges();
@@ -205,8 +209,8 @@ export class BaremetalBasicNodeDataComponent extends BaseFormValidator implement
           baremetal: {
             tinkerbell: {
               hardwareRef: {
-                Name: this.form.get(Controls.HardwareName).value,
-                Namespace: this.form.get(Controls.HardwareNamespace).value,
+                Name: this.form.get(Controls.HardwareReferenceName).value,
+                Namespace: this.form.get(Controls.HardwareReferenceNamespace).value,
               } as BaremetalTinkerbellHardwareRef,
             } as BaremetalTinkerbellNodeSpec,
           } as BaremetalNodeSpec,
