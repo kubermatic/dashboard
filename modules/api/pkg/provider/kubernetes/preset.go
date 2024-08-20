@@ -426,7 +426,7 @@ func (m *PresetProvider) setBaremetalCredentials(preset *kubermaticv1.Preset, cl
 	}
 
 	if cloud.Baremetal.Tinkerbell != nil {
-		cloud.Baremetal.Tinkerbell.Kubeconfig = preset.Spec.Kubevirt.Kubeconfig
+		cloud.Baremetal.Tinkerbell.Kubeconfig = preset.Spec.Baremetal.Tinkerbell.Kubeconfig
 	}
 
 	return &cloud, nil
