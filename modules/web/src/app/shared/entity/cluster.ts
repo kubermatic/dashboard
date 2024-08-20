@@ -22,6 +22,7 @@ export enum Provider {
   Anexia = 'anexia',
   AWS = 'aws',
   Azure = 'azure',
+  Baremetal = 'baremetal',
   kubeAdm = 'bringyourown',
   Digitalocean = 'digitalocean',
   Edge = 'edge',
@@ -40,6 +41,7 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.Anexia, 'Anexia'],
   [Provider.AWS, 'AWS'],
   [Provider.Azure, 'Azure'],
+  [Provider.Baremetal, 'Baremetal'],
   [Provider.kubeAdm, 'kubeAdm'],
   [Provider.Digitalocean, 'DigitalOcean'],
   [Provider.Edge, 'Edge'],
@@ -126,6 +128,7 @@ export class CloudSpec {
   anexia?: AnexiaCloudSpec;
   vmwareclouddirector?: VMwareCloudDirectorCloudSpec;
   edge?: EdgeCloudSpec;
+  baremetal?: BaremetalCloudSpec;
 }
 
 export class ExtraCloudSpecOptions {
@@ -334,6 +337,14 @@ export class VMwareCloudDirectorCSIConfig {
 }
 
 export class EdgeCloudSpec {}
+
+export class BaremetalCloudSpec {
+  tinkerbell: BaremetalTinkerbellCloudSpec;
+}
+
+export class BaremetalTinkerbellCloudSpec {
+  kubeconfig: string;
+}
 
 export class ClusterSpec {
   cloud: CloudSpec;
@@ -558,6 +569,7 @@ export class CloudSpecPatch {
   kubevirt?: KubevirtCloudSpecPatch;
   alibaba?: AlibabaCloudSpecPatch;
   vmwareclouddirector?: VMwareCloudDirectorCloudSpecPatch;
+  baremetal?: BaremetalCloudSpecPatch;
 }
 
 export class AnexiaCloudSpecPatch {
@@ -640,6 +652,14 @@ export class VMwareCloudDirectorCloudSpecPatch {
   vdc: string;
   ovdcNetwork?: string;
   ovdcNetworks?: string[];
+}
+
+export class BaremetalCloudSpecPatch {
+  tinkerbell: BaremetalTinkerbellCloudSpecPatch;
+}
+
+export class BaremetalTinkerbellCloudSpecPatch {
+  kubeconfig?: string;
 }
 
 export class ProviderSettingsPatch {

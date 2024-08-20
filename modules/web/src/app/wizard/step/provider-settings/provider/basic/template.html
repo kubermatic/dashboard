@@ -49,4 +49,7 @@ limitations under the License.
   <km-wizard-vmware-cloud-director-provider-basic *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
                                                   [formControl]="form.get(Controls.ProviderBasic)">
   </km-wizard-vmware-cloud-director-provider-basic>
+  <km-wizard-baremetal-provider-basic *ngSwitchCase="Providers.BAREMETAL"
+                                      [formControl]="form.get(Controls.ProviderBasic)">
+  </km-wizard-baremetal-provider-basic>
 </div>

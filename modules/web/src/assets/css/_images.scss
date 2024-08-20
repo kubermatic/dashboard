@@ -546,6 +546,10 @@
   @include mixins.provider-image('/assets/images/clouds/edge.svg', 65px, 26px);
 }
 
+.km-provider-logo-baremetal {
+  @include mixins.provider-image('/assets/images/clouds/baremetal.svg', 110px, 30px);
+}
+
 .km-provider-logo-gke {
   @include mixins.provider-image('/assets/images/clouds/gke.svg', 130px, 30px);
 }

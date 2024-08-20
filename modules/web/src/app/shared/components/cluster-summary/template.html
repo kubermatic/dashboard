@@ -1070,6 +1070,22 @@ limitations under the License.
               </km-property>
             </ng-container>
 
+            <!-- Baremetal Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud?.baremetal?.tinkerbell">
+              <km-property>
+                <div key>Hardware Name</div>
+                <div value>{{machineDeployment.spec.template.cloud?.baremetal.tinkerbell?.hardwareRef?.Name}}</div>
+              </km-property>
+              <km-property>
+                <div key>Hardware Namespace</div>
+                <div value>{{machineDeployment.spec.template.cloud?.baremetal.tinkerbell?.hardwareRef?.Namespace}}</div>
+              </km-property>
+              <km-property>
+                <div key>Operating System Image</div>
+                <div value>{{machineDeployment.spec.template.cloud?.baremetal.tinkerbell?.osImageUrl}}</div>
+              </km-property>
+            </ng-container>
+
             <!-- AWS Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.aws">
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance !== undefined"

@@ -52,6 +52,7 @@ export class DatacenterSpec {
   anexia?: AnexiaDatacenterSpec;
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
   edge?: EdgeDatacenterSpec;
+  baremetal?: BaremetalDatacenterSpec;
   operatingSystemProfiles?: DatacenterOperatingSystemOptions;
   machineFlavorFilter?: MachineFlavorFilter;
   disableCsiDriver?: boolean;
@@ -151,6 +152,8 @@ export class VMwareCloudDirectorDatacenterSpec {
 }
 
 export class EdgeDatacenterSpec {}
+
+export class BaremetalDatacenterSpec {}
 
 export class SeedSettings {
   mla: MLA;

@@ -424,6 +424,21 @@ limitations under the License.
                 {{element.spec.cloud.azure.osDiskSize}} GB
               </div>
             </km-property>
+
+            <ng-container *ngIf="element.spec.cloud.baremetal?.tinkerbell">
+              <km-property *ngIf="element.spec.cloud.baremetal.tinkerbell.hardwareRef?.Name">
+                <div key>Hardware Name</div>
+                <div value>{{ element.spec.cloud.baremetal.tinkerbell.hardwareRef?.Name }}</div>
+              </km-property>
+              <km-property *ngIf="element.spec.cloud.baremetal.tinkerbell.hardwareRef?.Namespace">
+                <div key>Hardware Namespace</div>
+                <div value>{{ element.spec.cloud.baremetal.tinkerbell.hardwareRef?.Namespace }}</div>
+              </km-property>
+              <km-property>
+                <div key>Operating System Image</div>
+                <div value>{{ element.spec.cloud.baremetal.tinkerbell.osImageUrl }}</div>
+              </km-property>
+            </ng-container>
             <!-- End of other properties. -->
 
             <!-- Tags for all providers. -->
