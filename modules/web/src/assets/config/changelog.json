@@ -1,13 +1,4 @@
 {
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v22412",
-  "entries": [
-    {
-      "category": "fixed",
-      "description": "Fix the pagination in project members table."
-    },
-    {
-      "category": "fixed",
-      "description": "Fix an issue with Azure support that prevented successful provisioning of user clusters on some Azure locations."
-    }
-  ]
+  "entries": []
 }
