@@ -1220,9 +1220,7 @@ func newPublicVSphereCloudSpec(internal *kubermaticv1.VSphereCloudSpec) (public 
 
 // PublicBaremetalCloudSpec is a public counterpart of apiv1.VSphereCloudSpec.
 
-type PublicBaremetalCloudSpec struct {
-	PreAllocatedDataVolumes []kubermaticv1.PreAllocatedDataVolume `json:"preAllocatedDataVolumes,omitempty"`
-}
+type PublicBaremetalCloudSpec struct{}
 
 func newPublicBaremetalCloudSpec(internal *kubermaticv1.BaremetalCloudSpec) (public *PublicBaremetalCloudSpec) {
 	if internal == nil {
