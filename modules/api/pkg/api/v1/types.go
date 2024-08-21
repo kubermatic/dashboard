@@ -1097,6 +1097,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 			Packet:              newPublicPacketCloudSpec(cs.Cloud.Packet),
 			Hetzner:             newPublicHetznerCloudSpec(cs.Cloud.Hetzner),
 			VSphere:             newPublicVSphereCloudSpec(cs.Cloud.VSphere),
+			Baremetal:           newPublicBaremetalCloudSpec(cs.Cloud.Baremetal),
 			GCP:                 newPublicGCPCloudSpec(cs.Cloud.GCP),
 			Kubevirt:            newPublicKubevirtCloudSpec(cs.Cloud.Kubevirt),
 			Alibaba:             newPublicAlibabaCloudSpec(cs.Cloud.Alibaba),
@@ -1147,6 +1148,7 @@ type PublicCloudSpec struct {
 	Packet              *PublicPacketCloudSpec              `json:"packet,omitempty"`
 	Hetzner             *PublicHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *PublicVSphereCloudSpec             `json:"vsphere,omitempty"`
+	Baremetal           *PublicBaremetalCloudSpec           `json:"baremetal,omitempty"`
 	GCP                 *PublicGCPCloudSpec                 `json:"gcp,omitempty"`
 	Kubevirt            *PublicKubevirtCloudSpec            `json:"kubevirt,omitempty"`
 	Alibaba             *PublicAlibabaCloudSpec             `json:"alibaba,omitempty"`
@@ -1214,6 +1216,18 @@ func newPublicVSphereCloudSpec(internal *kubermaticv1.VSphereCloudSpec) (public 
 	}
 
 	return &PublicVSphereCloudSpec{}
+}
+
+// PublicBaremetalCloudSpec is a public counterpart of apiv1.VSphereCloudSpec.
+
+type PublicBaremetalCloudSpec struct{}
+
+func newPublicBaremetalCloudSpec(internal *kubermaticv1.BaremetalCloudSpec) (public *PublicBaremetalCloudSpec) {
+	if internal == nil {
+		return nil
+	}
+
+	return &PublicBaremetalCloudSpec{}
 }
 
 // PublicBringYourOwnCloudSpec is a public counterpart of apiv1.BringYourOwnCloudSpec.
