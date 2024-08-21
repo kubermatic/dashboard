@@ -135,7 +135,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 			if err != nil {
 				return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
 			}
-			if !*preset.Spec.Enabled && !req.Disabled {
+			if !preset.Spec.IsEnabled() && !req.Disabled {
 				return nil, nil
 			}
 			return newAPIPreset(preset, preset.Spec.IsEnabled()), nil

@@ -37223,6 +37223,19 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "PublicBaremetalCloudSpec": {
+      "type": "object",
+      "properties": {
+        "preAllocatedDataVolumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PreAllocatedDataVolume"
+          },
+          "x-go-name": "PreAllocatedDataVolumes"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "PublicBringYourOwnCloudSpec": {
       "type": "object",
       "title": "PublicBringYourOwnCloudSpec is a public counterpart of apiv1.BringYourOwnCloudSpec.",
@@ -37243,6 +37256,9 @@
         },
         "azure": {
           "$ref": "#/definitions/PublicAzureCloudSpec"
+        },
+        "baremetal": {
+          "$ref": "#/definitions/PublicBaremetalCloudSpec"
         },
         "bringyourown": {
           "$ref": "#/definitions/PublicBringYourOwnCloudSpec"
