@@ -472,6 +472,7 @@ limitations under the License.
                            [formControlName]="Controls.Labels"
                            [disabledLabel]="clusterDefaultNodeSelectorNamespace"
                            [disabledLabelTooltip]="CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP"
+                           [staticLabels]="adminStaticLabels"
                            [canDeleteDisabledLabel]="true"
                            (labelsChange)="onLabelsChange($event)"
                            fxFlex="100">

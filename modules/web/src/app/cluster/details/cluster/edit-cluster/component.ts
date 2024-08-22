@@ -36,7 +36,7 @@ import {
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {AdminSettings} from '@shared/entity/settings';
+import {AdminSettings, StaticLabel} from '@shared/entity/settings';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
@@ -94,6 +94,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
+  adminStaticLabels: StaticLabel[];
   apiServerAllowedIPRanges: string[] = [];
   editionVersion: string = getEditionVersion();
   isKubeLBEnforced = false;
@@ -192,7 +193,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
-
+      if (settings.staticLabels) {
+        this.adminStaticLabels = settings.staticLabels.filter(label => Object.keys(this.labels).includes(label.key));
+      }
       if (this._settings.opaOptions.enabled) {
         this.form.get(Controls.OPAIntegration).setValue(true);
       }

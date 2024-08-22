@@ -416,6 +416,18 @@ limitations under the License.
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
+        <div fxLayout="row">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>Static Labels</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="StaticLabels are a list of labels that can be used for the clusters."></div>
+          </div>
+          <km-static-labels-form class="static-labels"
+                                 [staticLabels]="settings.staticLabels"
+                                 (staticLabelsChange)="onStaticLabelsChange($event)"></km-static-labels-form>
+        </div>
       </div>
     </div>
   </mat-card-content>

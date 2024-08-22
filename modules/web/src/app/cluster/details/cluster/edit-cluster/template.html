@@ -249,6 +249,7 @@ limitations under the License.
       <km-label-form title="Labels"
                      (labelsChange)="onLabelsChange($event)"
                      [labels]="labels"
+                     [staticLabels]="adminStaticLabels"
                      [disabledLabel]="clusterDefaultNodeSelectorNamespace"
                      [disabledLabelTooltip]="CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP"
                      [canDeleteDisabledLabel]="true"

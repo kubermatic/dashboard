@@ -20,7 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
-import {AdminSettings, AllowedOperatingSystems} from '@shared/entity/settings';
+import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -156,6 +156,13 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     this.onSettingsChange();
   }
 
+  onStaticLabelsChange(labels: StaticLabel[]): void {
+    if (this._checkLabels(labels)) {
+      this.settings.staticLabels = labels;
+      this.onSettingsChange();
+    }
+  }
+
   isLastEnabledOS(os: OperatingSystem): boolean {
     if (this.allowedOperatingSystems.length === 1) {
       return os === this.allowedOperatingSystems[0];
@@ -163,6 +170,15 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  private _checkLabels(staticLabels: StaticLabel[]): boolean {
+    let correct = true;
+    staticLabels.forEach(label => {
+      if (!label.key?.length || !label.values?.length) {
+        correct = false;
+      }
+    });
+    return correct;
+  }
   private _verifyEnableKubernetesDashboardRequirements() {
     // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
     if ((!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) && this.settings.enableDashboard) {
@@ -181,6 +197,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
     if (patch.customLinks) {
       patch.customLinks = this.settings.customLinks;
+    }
+
+    if (patch.staticLabels) {
+      patch.staticLabels = this.settings.staticLabels;
     }
 
     return patch;

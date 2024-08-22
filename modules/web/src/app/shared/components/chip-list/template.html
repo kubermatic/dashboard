@@ -48,6 +48,8 @@ limitations under the License.
     <mat-error *ngIf="form.get(controls.Tags).hasError('pattern')">
       <span [innerHTML]="patternError"></span>
     </mat-error>
+    <mat-error *ngIf="form.get(controls.Tags).errors?.validLabelValuePattern"> {{valueName}} not allowed. </mat-error>
+    <mat-error *ngIf="form.get(controls.Tags).errors?.validLabelValueLength"> {{valueName}} is too long. </mat-error>
     <mat-error *ngIf="form.get(controls.Tags).hasError('required')">
       <strong>Required</strong>
     </mat-error>

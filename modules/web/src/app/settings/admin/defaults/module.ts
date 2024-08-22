@@ -16,9 +16,10 @@ import {NgModule} from '@angular/core';
 import {DefaultsComponent} from '@app/settings/admin/defaults/component';
 import {AdminSettingsDefaultsRoutingModule} from '@app/settings/admin/defaults/routing';
 import {SharedModule} from '@shared/module';
+import {StaticLabelsFormComponent} from './static-labels-form/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsDefaultsRoutingModule],
-  declarations: [DefaultsComponent],
+  declarations: [DefaultsComponent, StaticLabelsFormComponent],
 })
 export class AdminSettingsDefaultsModule {}
