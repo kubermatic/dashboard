@@ -65,7 +65,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   @Input('kmRequired') required: boolean;
   @Input('kmPatternError') patternError = 'Invalid pattern';
   @Input('kmPattern') pattern: string;
-  @Input() isStatickLabel = false;
+  @Input() isStaticLabel = false;
   @Input() tags: string[] = [];
   @Output() onChange = new EventEmitter<string[]>();
   form: FormGroup;
@@ -159,7 +159,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
       validators.push(KmValidators.chipPattern(this.pattern));
     }
 
-    if (this.isStatickLabel) {
+    if (this.isStaticLabel) {
       validators.push(LabelFormValidators.labelValueLength, LabelFormValidators.labelValuePattern);
     }
     return validators;

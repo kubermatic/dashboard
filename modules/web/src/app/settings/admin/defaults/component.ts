@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
@@ -50,7 +50,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
-    private readonly _featureGatesService: FeatureGateService
+    private readonly _featureGatesService: FeatureGateService,
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -160,6 +161,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     if (this._checkLabels(labels)) {
       this.settings.staticLabels = labels;
       this.onSettingsChange();
+      this._cdr.detectChanges();
     }
   }
 
@@ -171,13 +173,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   private _checkLabels(staticLabels: StaticLabel[]): boolean {
-    let correct = true;
-    staticLabels.forEach(label => {
-      if (!label.key?.length || !label.values?.length) {
-        correct = false;
-      }
-    });
-    return correct;
+    return staticLabels.every(label => label?.key && label.values?.length);
   }
   private _verifyEnableKubernetesDashboardRequirements() {
     // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.

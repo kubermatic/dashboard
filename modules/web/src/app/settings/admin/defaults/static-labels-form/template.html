@@ -16,7 +16,7 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.StaticLabels">
-    <div *ngFor="let control of statickLabelArray?.controls;    let i = index;"
+    <div *ngFor="let control of staticLabelArray?.controls;    let i = index;"
          class="label-row"
          fxLayout="row"
          fxLayoutGap="10px"
@@ -39,18 +39,17 @@ limitations under the License.
       <km-chip-list class="static-labels-values"
                     label="Values"
                     placeholder="Values..."
-                    isStatickLabel="true"
+                    isStaticLabel="true"
                     [formControlName]="Controls.Values">
       </km-chip-list>
       <mat-checkbox fxFlex="13"
-                    [formControlName]="Controls.Default"
-                    kmValueChangedIndicator>Default
+                    [formControlName]="Controls.Default">Default
       </mat-checkbox>
       <mat-checkbox fxFlex="13"
                     [formControlName]="Controls.Protected"
-                    kmValueChangedIndicator>Protected
+                    (change)="onProtectedValueChange(control.get(Controls.Protected).value, i)">Protected
       </mat-checkbox>
-      <button [disabled]="i === statickLabelArray.length - 1 "
+      <button [disabled]="i === staticLabelArray?.length - 1 "
               mat-icon-button
               type="button"
               (click)="deleteLabel(i)">

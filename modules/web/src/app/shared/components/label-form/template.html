@@ -94,7 +94,7 @@ limitations under the License.
         <button mat-icon-button
                 type="button"
                 class="delete-button"
-                [disabled]="!isRemovable(i) || isProtectedKey(label.get('key').value, i)"
+                [disabled]="!isRemovable(i)"
                 (click)="deleteLabel(i)">
           <i class="km-icon-mask km-icon-delete"
              aria-hidden="true"></i>

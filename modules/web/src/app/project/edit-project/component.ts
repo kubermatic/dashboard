@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GlobalModule} from '@core/services/global/module';
@@ -62,7 +62,8 @@ export class EditProjectComponent implements OnInit {
     private readonly _projectService: ProjectService,
     private readonly _matDialogRef: MatDialogRef<EditProjectComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
@@ -74,6 +75,7 @@ export class EditProjectComponent implements OnInit {
 
     this._userService.currentUser.subscribe(user => (this.user = user));
     this._initForm();
+    this._cdr.detectChanges();
   }
 
   onOperatingSystemChange(operatingSystems: string[]): void {

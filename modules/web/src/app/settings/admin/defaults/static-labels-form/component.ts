@@ -42,7 +42,7 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   @Output() staticLabelsChange = new EventEmitter<StaticLabel[]>();
 
-  get statickLabelArray(): FormArray {
+  get staticLabelArray(): FormArray {
     return this.form.get(Controls.StaticLabels) as FormArray;
   }
 
@@ -51,8 +51,8 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._initForm();
 
-    this.staticLabels.forEach(label => {
-      this._addStaticLabel(label.key, label.values, label.protected, label.default);
+    this.staticLabels?.forEach(label => {
+      this._addStaticLabel(label);
     });
     this._addStaticLabel();
     this._updateLabelsObject();
@@ -69,15 +69,15 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
   }
 
   deleteLabel(index: number): void {
-    this.statickLabelArray.removeAt(index);
+    this.staticLabelArray.removeAt(index);
     this._updateLabelsObject();
   }
 
   isKeyUnique(index: number): void {
     let duplications = 0;
-    const key = this.statickLabelArray.at(index).get('key');
+    const key = this.staticLabelArray.at(index).get(Controls.Key);
 
-    this.statickLabelArray.getRawValue().forEach((label: StaticLabel) => {
+    this.staticLabelArray.getRawValue().forEach((label: StaticLabel) => {
       if (label.key === key.value) {
         duplications++;
       }
@@ -88,8 +88,19 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  onProtectedValueChange(val: boolean, index: number): boolean {
+    const defaultControl = this.staticLabelArray.at(index).get(Controls.Default);
+    if (val) {
+      defaultControl.setValue(true);
+      defaultControl.disable();
+    } else {
+      defaultControl.enable();
+    }
+    return val;
+  }
+
   private _addLabelIfNeeded(): void {
-    const lastLabel = this.statickLabelArray.at(this.statickLabelArray.length - 1)?.value;
+    const lastLabel = this.staticLabelArray.at(this.staticLabelArray.length - 1)?.value;
     if (lastLabel?.key && lastLabel?.values?.tags?.length) {
       this._addStaticLabel();
     }
@@ -101,15 +112,10 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _addStaticLabel(
-    key: string = '',
-    values: string[] = [],
-    isProtected: boolean = false,
-    isDefault: boolean = false
-  ): void {
+  private _addStaticLabel(label?: StaticLabel): void {
     const staticLabel = this._formBuilder.group({
       [Controls.Key]: [
-        key,
+        label?.key || '',
         Validators.compose([
           LabelFormValidators.labelKeyNameLength,
           LabelFormValidators.labelKeyPrefixLength,
@@ -118,23 +124,23 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
         ]),
         Validators.composeAsync(this.asyncLabelValidators),
       ],
-      [Controls.Values]: [values],
-      [Controls.Protected]: [isProtected],
-      [Controls.Default]: [isDefault],
+      [Controls.Values]: [label?.values || []],
+      [Controls.Protected]: [label?.protected || false],
+      [Controls.Default]: [{value: label?.protected || label?.default || false, disabled: label?.protected}],
     });
 
-    this.statickLabelArray.push(staticLabel);
+    this.staticLabelArray.push(staticLabel);
   }
 
   private _updateLabelsObject(): void {
     let err = false;
-    const labels: StaticLabel[] = this.statickLabelArray
+    const labels: StaticLabel[] = this.staticLabelArray
       .getRawValue()
       .filter((raw, i) => {
         this.isKeyUnique(i);
         if (
-          !!this.statickLabelArray.controls[i].get(Controls.Key).errors ||
-          !!this.statickLabelArray.controls[i].get(Controls.Values).errors
+          !!this.staticLabelArray.controls[i].get(Controls.Key).errors ||
+          !!this.staticLabelArray.controls[i].get(Controls.Values).errors
         ) {
           err = true;
         }
