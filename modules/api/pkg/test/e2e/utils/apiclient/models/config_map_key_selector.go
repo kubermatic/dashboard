@@ -23,9 +23,15 @@ type ConfigMapKeySelector struct {
 	Key string `json:"key,omitempty"`
 
 	// Name of the referent.
-	// More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+	// This field is effectively required, but due to backwards compatibility is
+	// allowed to be empty. Instances of this type with an empty value here are
+	// almost certainly wrong.
 	// TODO: Add other useful fields. apiVersion, kind, uid?
+	// More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
 	// +optional
+	// +default=""
+	// +kubebuilder:default=""
+	// TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
 	Name string `json:"name,omitempty"`
 
 	// Specify whether the ConfigMap or its key must be defined

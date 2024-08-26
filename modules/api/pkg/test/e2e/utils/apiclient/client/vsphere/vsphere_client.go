@@ -38,6 +38,8 @@ type ClientService interface {
 
 	ListProjectVSphereTagsForTagCategories(params *ListProjectVSphereTagsForTagCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereTagsForTagCategoriesOK, error)
 
+	ListProjectVSphereVMGroups(params *ListProjectVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereVMGroupsOK, error)
+
 	ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error)
 
 	ListVSphereFoldersNoCredentialsV2(params *ListVSphereFoldersNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereFoldersNoCredentialsV2OK, error)
@@ -47,6 +49,8 @@ type ClientService interface {
 	ListVSphereTagCategoriesNoCredentials(params *ListVSphereTagCategoriesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagCategoriesNoCredentialsOK, error)
 
 	ListVSphereTagsForTagCategoryNoCredentials(params *ListVSphereTagsForTagCategoryNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereTagsForTagCategoryNoCredentialsOK, error)
+
+	ListVSphereVMGroups(params *ListVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -242,6 +246,44 @@ func (a *Client) ListProjectVSphereTagsForTagCategories(params *ListProjectVSphe
 }
 
 /*
+ListProjectVSphereVMGroups lists VM groups from v sphere datacenter
+*/
+func (a *Client) ListProjectVSphereVMGroups(params *ListProjectVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectVSphereVMGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectVSphereVMGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectVSphereVMGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/vsphere/vmgroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectVSphereVMGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectVSphereVMGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectVSphereVMGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListVSphereDatastores Lists datastores from vsphere datacenter
 */
 func (a *Client) ListVSphereDatastores(params *ListVSphereDatastoresParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereDatastoresOK, error) {
@@ -428,6 +470,44 @@ func (a *Client) ListVSphereTagsForTagCategoryNoCredentials(params *ListVSphereT
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVSphereTagsForTagCategoryNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereVMGroups Lists VM Groups from vsphere datacenter
+*/
+func (a *Client) ListVSphereVMGroups(params *ListVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereVMGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereVMGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/providers/vsphere/vmgroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereVMGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereVMGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereVMGroupsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

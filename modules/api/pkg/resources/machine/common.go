@@ -236,6 +236,7 @@ func GetVSphereProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		AllowInsecure:    providerconfig.ConfigVarBool{Value: ptr.To(dc.Spec.VSphere.AllowInsecure)},
 		ResourcePool:     providerconfig.ConfigVarString{Value: c.Spec.Cloud.VSphere.ResourcePool},
 		VMAntiAffinity:   providerconfig.ConfigVarBool{Value: nodeSpec.Cloud.VSphere.VMAntiAffinity},
+		VMGroup:          providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VSphere.VMGroup},
 	}
 
 	if len(c.Spec.Cloud.VSphere.Networks) > 0 {

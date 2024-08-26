@@ -124,6 +124,55 @@ func VsphereDatastoreEndpoint(seedsGetter provider.SeedsGetter, presetProvider p
 	}
 }
 
+func VsphereVMGroupEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
+	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       vSphereCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(vSphereCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = commonReq
+		} else {
+			projectReq, ok := request.(vSphereProjectReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			req = projectReq.vSphereCommonReq
+			projectID = projectReq.GetProjectID()
+		}
+
+		userInfo, err := userInfoGetter(ctx, projectID)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		username := req.Username
+		password := req.Password
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(projectID), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+
+			if credentials := preset.Spec.VSphere; credentials != nil {
+				username = credentials.Username
+				password = credentials.Password
+			}
+		}
+
+		return providercommon.GetVsphereVMGroupsList(ctx, userInfo, seedsGetter, username, password, req.DatacenterName, caBundle)
+	}
+}
+
 func VsphereNetworksEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
 	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
@@ -277,6 +326,13 @@ func DecodeVSphereCommonReq(_ context.Context, r *http.Request) (interface{}, er
 // vSphereProjectReq represents a request for vSphere data within the context of a KKP project.
 // swagger:parameters listProjectVSphereNetworks listProjectVSphereFolders listProjectVSphereDatastores listProjectVSphereTagCategories
 type vSphereProjectReq struct {
+	common.ProjectReq
+	vSphereCommonReq
+}
+
+// vSphereVMGroupsReq represents a request for vSphere data within the context of a KKP project for VM Groups.
+// swagger:parameters listProjectVSphereVMGroups
+type vSphereVMGroupsReq struct {
 	common.ProjectReq
 	vSphereCommonReq
 }

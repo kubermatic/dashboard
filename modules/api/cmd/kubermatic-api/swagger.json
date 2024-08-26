@@ -21722,6 +21722,64 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/vsphere/vmgroups": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "summary": "Lists VM Groups from vSphere datacenter.",
+        "operationId": "listProjectVSphereVMGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereVMGroupList",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereVMGroupList"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/{provider_name}/presets": {
       "get": {
         "description": "Lists presets for the provider in a specific project",
@@ -24167,6 +24225,35 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/VSphereDatastoreList"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/providers/vsphere/vmgroups": {
+      "get": {
+        "description": "Lists VM Groups from vsphere datacenter",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "operationId": "listVSphereVMGroups",
+        "responses": {
+          "200": {
+            "description": "VSphereVMGroupList",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereVMGroupList"
               }
             }
           },
@@ -29300,7 +29387,7 @@
           "x-go-name": "Key"
         },
         "name": {
-          "description": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -30011,7 +30098,7 @@
           "$ref": "#/definitions/PodDNSConfig"
         },
         "dnsPolicy": {
-          "description": "DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
+          "description": "+kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None\n+kubebuilder:default=ClusterFirst\nDNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
           "type": "string",
           "x-go-name": "DNSPolicy"
         },
@@ -30030,6 +30117,9 @@
             "$ref": "#/definitions/KubeVirtInfraStorageClass"
           },
           "x-go-name": "InfraStorageClasses"
+        },
+        "namespacedMode": {
+          "$ref": "#/definitions/NamespacedMode"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -30112,6 +30202,16 @@
           "description": "Optional: defines if the IPv6 is enabled for the datacenter",
           "type": "boolean",
           "x-go-name": "IPv6Enabled"
+        },
+        "loadBalancerMethod": {
+          "description": "Optional: Gets mapped to the \"lb-method\" setting in the cloud config.\ndefaults to \"ROUND_ROBIN\".",
+          "type": "string",
+          "x-go-name": "LoadBalancerMethod"
+        },
+        "loadBalancerProvider": {
+          "description": "Optional: Gets mapped to the \"lb-provider\" setting in the cloud config.\ndefaults to \"\"",
+          "type": "string",
+          "x-go-name": "LoadBalancerProvider"
         },
         "manageSecurityGroups": {
           "description": "Optional: Gets mapped to the \"manage-security-groups\" setting in the cloud config.\nThis setting defaults to true.",
@@ -34122,7 +34222,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         }
@@ -34658,6 +34758,22 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "NamespacedMode": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enabled indicates whether the single namespace mode is enabled or not.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "name": {
+          "description": "Namespace is the name of the namespace to be used, if not specified the default \"kubevirt-workload\" will be used.\n+kubebuilder:default=kubevirt-workload",
+          "type": "string",
+          "x-go-name": "Namespace"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "NamespacedName": {
       "type": "object",
@@ -37980,7 +38096,7 @@
           "x-go-name": "Key"
         },
         "name": {
-          "description": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?\n+optional",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -39308,6 +39424,10 @@
           "description": "Automatically create anti affinity rules for machines.",
           "type": "boolean",
           "x-go-name": "VMAntiAffinity"
+        },
+        "vmGroup": {
+          "type": "string",
+          "x-go-name": "VMGroup"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
@@ -39356,6 +39476,20 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "VSphereVMGroupList": {
+      "type": "object",
+      "title": "VSphereVMGroupList is the object representing a vsphere VM Groups.",
+      "properties": {
+        "vmGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "VMGroups"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Validation": {
       "type": "object",
