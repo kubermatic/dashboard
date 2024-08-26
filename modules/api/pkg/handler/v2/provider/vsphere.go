@@ -299,7 +299,7 @@ func VsphereFoldersEndpoint(seedsGetter provider.SeedsGetter, presetProvider pro
 }
 
 // VSphereCommonReq represents a request for vSphere data.
-// swagger:parameters listVSphereDatastores
+// swagger:parameters listVSphereDatastores listVSphereVMGroups
 type vSphereCommonReq struct {
 	// in: header
 	Username string
@@ -324,7 +324,7 @@ func DecodeVSphereCommonReq(_ context.Context, r *http.Request) (interface{}, er
 }
 
 // vSphereProjectReq represents a request for vSphere data within the context of a KKP project.
-// swagger:parameters listProjectVSphereNetworks listProjectVSphereFolders listProjectVSphereDatastores listProjectVSphereTagCategories
+// swagger:parameters listProjectVSphereNetworks listProjectVSphereFolders listProjectVSphereDatastores listProjectVSphereTagCategories listProjectVSphereVMGroups
 type vSphereProjectReq struct {
 	common.ProjectReq
 	vSphereCommonReq

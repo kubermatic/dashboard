@@ -338,7 +338,7 @@ func TestVSphereNodeSpec_MarshalJSON(t *testing.T) {
 				DiskSizeGB: &[]int64{1}[0],
 				Template:   "test-template",
 			},
-			"{\"cpus\":1,\"memory\":1,\"diskSizeGB\":1,\"template\":\"test-template\",\"vmAntiAffinity\":null}",
+			"{\"cpus\":1,\"memory\":1,\"diskSizeGB\":1,\"template\":\"test-template\",\"vmAntiAffinity\":null,\"vmGroup\":\"\"}",
 		},
 	}
 

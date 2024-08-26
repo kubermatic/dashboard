@@ -60,6 +60,19 @@ ListVSphereVMGroupsParams contains all the parameters to send to the API endpoin
 	Typically these are written to a http.Request.
 */
 type ListVSphereVMGroupsParams struct {
+
+	// Credential.
+	Credential *string
+
+	// DatacenterName.
+	DatacenterName *string
+
+	// Password.
+	Password *string
+
+	// Username.
+	Username *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +126,50 @@ func (o *ListVSphereVMGroupsParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCredential adds the credential to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) WithCredential(credential *string) *ListVSphereVMGroupsParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithDatacenterName adds the datacenterName to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) WithDatacenterName(datacenterName *string) *ListVSphereVMGroupsParams {
+	o.SetDatacenterName(datacenterName)
+	return o
+}
+
+// SetDatacenterName adds the datacenterName to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) SetDatacenterName(datacenterName *string) {
+	o.DatacenterName = datacenterName
+}
+
+// WithPassword adds the password to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) WithPassword(password *string) *ListVSphereVMGroupsParams {
+	o.SetPassword(password)
+	return o
+}
+
+// SetPassword adds the password to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) SetPassword(password *string) {
+	o.Password = password
+}
+
+// WithUsername adds the username to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) WithUsername(username *string) *ListVSphereVMGroupsParams {
+	o.SetUsername(username)
+	return o
+}
+
+// SetUsername adds the username to the list v sphere VM groups params
+func (o *ListVSphereVMGroupsParams) SetUsername(username *string) {
+	o.Username = username
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListVSphereVMGroupsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +177,38 @@ func (o *ListVSphereVMGroupsParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DatacenterName != nil {
+
+		// header param DatacenterName
+		if err := r.SetHeaderParam("DatacenterName", *o.DatacenterName); err != nil {
+			return err
+		}
+	}
+
+	if o.Password != nil {
+
+		// header param Password
+		if err := r.SetHeaderParam("Password", *o.Password); err != nil {
+			return err
+		}
+	}
+
+	if o.Username != nil {
+
+		// header param Username
+		if err := r.SetHeaderParam("Username", *o.Username); err != nil {
+			return err
+		}
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
