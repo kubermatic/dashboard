@@ -18,7 +18,7 @@ import {ProjectService} from '@core/services/project';
 import {VSphereService} from '@core/services/provider/vsphere';
 import {PresetsService} from '@core/services/wizard/presets';
 import {VSphereTag} from '@shared/entity/node';
-import {VSphereTagCategory} from '@shared/entity/provider/vsphere';
+import {VSphereTagCategory, VSphereVMGroup} from '@shared/entity/provider/vsphere';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext, startWith} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, tap} from 'rxjs/operators';
@@ -129,6 +129,51 @@ export class NodeDataVSphereProvider {
               this._vsphereService.getTags(project.id, this._clusterSpecService.cluster.id, category)
             )
           )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+    }
+  }
+
+  vmGroups(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<VSphereVMGroup[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
+          .pipe(debounceTime(this._debounce))
+          .pipe(map(() => this._clusterSpecService.cluster))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.VSPHERE)
+                .username(cluster.spec.cloud.vsphere.username)
+                .password(cluster.spec.cloud.vsphere.password)
+                .credential(this._presetService.preset)
+                .datacenter(this._clusterSpecService.datacenter)
+                .vmGroups(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog:
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(switchMap(project => this._vsphereService.getVMGroups(project.id, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

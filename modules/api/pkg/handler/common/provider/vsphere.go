@@ -192,6 +192,28 @@ func GetVsphereDatastoreList(ctx context.Context, userInfo *provider.UserInfo, s
 	return apiDatastores, nil
 }
 
+func GetVsphereVMGroupsList(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, username, password,
+	datacenterName string, caBundle *x509.CertPool) (*apiv1.VSphereVMGroupList, error) {
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find Datacenter %q: %w", datacenterName, err)
+	}
+
+	groups, err := vsphere.GetVMGroupsList(ctx, datacenter.Spec.VSphere, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get VM Groups list against cluster %q: %w", datacenter.Spec.VSphere.Cluster, err)
+	}
+
+	var apiVMGroups apiv1.VSphereVMGroupList
+	for _, group := range groups {
+		apiVMGroups = append(apiVMGroups, apiv1.VSphereVMGroup{
+			Name: group.Name,
+		})
+	}
+
+	return &apiVMGroups, nil
+}
+
 func getVsphereCredentialsAndDatacenterInfoFromCluster(ctx context.Context, userInfoGetter provider.UserInfoGetter,
 	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
 	seedsGetter provider.SeedsGetter, projectID, clusterID string,

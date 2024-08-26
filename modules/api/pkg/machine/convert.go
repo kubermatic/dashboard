@@ -250,6 +250,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			DiskSizeGB:     config.DiskSizeGB,
 			Template:       config.TemplateVMName.Value,
 			VMAntiAffinity: config.VMAntiAffinity.Value,
+			VMGroup:        config.VMGroup.Value,
 		}
 		for _, v := range config.Tags {
 			cloudSpec.VSphere.Tags = append(cloudSpec.VSphere.Tags, apiv1.VSphereTag{

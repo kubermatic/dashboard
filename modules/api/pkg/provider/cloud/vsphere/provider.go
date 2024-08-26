@@ -33,6 +33,7 @@ import (
 	"github.com/vmware/govmomi/vapi/tags"
 	"github.com/vmware/govmomi/vim25"
 	"github.com/vmware/govmomi/vim25/soap"
+	"github.com/vmware/govmomi/vim25/types"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -51,6 +52,11 @@ type Provider struct {
 // Folder represents a vsphere folder.
 type Folder struct {
 	Path string
+}
+
+// VMGroup represents a VMGroup.
+type VMGroup struct {
+	Name string
 }
 
 // NewCloudProvider creates a new vSphere provider.
@@ -262,6 +268,34 @@ func GetDatastoreList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSpher
 	}
 
 	return datastoreList, nil
+}
+
+// GetVMGroupsList returns a slice of Datastore of the datacenter from the passed cloudspec.
+func GetVMGroupsList(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]VMGroup, error) {
+	session, err := newSession(ctx, dc, username, password, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create vCenter session: %w", err)
+	}
+	defer session.Logout(ctx)
+
+	cluster, err := session.Finder.ClusterComputeResource(ctx, dc.Cluster)
+	if err != nil {
+		return nil, err
+	}
+
+	clusterConfigInfoEx, err := cluster.Configuration(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var vmGroups []VMGroup
+	for _, group := range clusterConfigInfoEx.Group {
+		if clusterVMGroup, ok := group.(*types.ClusterVmGroup); ok {
+			vmGroups = append(vmGroups, VMGroup{Name: clusterVMGroup.Name})
+		}
+	}
+
+	return vmGroups, nil
 }
 
 // Precedence if not infraManagementUser:

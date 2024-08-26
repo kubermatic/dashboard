@@ -43,6 +43,14 @@ type DatacenterSpecOpenstack struct {
 	// Optional
 	IgnoreVolumeAZ bool `json:"ignoreVolumeAZ,omitempty"`
 
+	// Optional: Gets mapped to the "lb-method" setting in the cloud config.
+	// defaults to "ROUND_ROBIN".
+	LoadBalancerMethod string `json:"loadBalancerMethod,omitempty"`
+
+	// Optional: Gets mapped to the "lb-provider" setting in the cloud config.
+	// defaults to ""
+	LoadBalancerProvider string `json:"loadBalancerProvider,omitempty"`
+
 	// Optional: Gets mapped to the "manage-security-groups" setting in the cloud config.
 	// This setting defaults to true.
 	ManageSecurityGroups bool `json:"manageSecurityGroups,omitempty"`

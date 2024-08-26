@@ -37,7 +37,7 @@ limitations under the License.
            type="text"
            autocomplete="off"
            required
-           kmValueChangedIndicator>
+           kmValueChangedIndicator />
     <mat-error *ngIf="form.get(Controls.Template).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -49,4 +49,15 @@ limitations under the License.
                      min="1"
                      required>
   </km-number-stepper>
+
+  <km-combobox #vmGroupsCombobox
+               [selected]="selectedVMGroup"
+               [options]="vmGroups"
+               [formControlName]="Controls.VMGroup"
+               (changed)="onVMGroupChange($event)"
+               [label]="vmGroupStateLabel"
+               inputLabel="Select VM Group..."
+               filterBy="name">
+    <div *option="let group">{{group.name}}</div>
+  </km-combobox>
 </form>

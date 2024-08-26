@@ -289,6 +289,7 @@ export class VSphereNodeSpec {
   diskSizeGB?: number;
   tags?: VSphereTag[];
   vmAntiAffinity: boolean;
+  vmGroup?: string;
 }
 
 export class VSphereTag {

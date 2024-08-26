@@ -31,3 +31,7 @@ export class VSphereTagCategory {
   name: string;
   id: string;
 }
+
+export class VSphereVMGroup {
+  name: string;
+}

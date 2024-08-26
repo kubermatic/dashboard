@@ -785,6 +785,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectVSphereDatastores())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/vsphere/vmgroups").
+		Handler(r.listProjectVSphereVMGroups())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/vsphere/tagcategories").
 		Handler(r.listProjectVSphereTagCategories())
 
@@ -1144,6 +1148,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/providers/vsphere/datastores").
 		Handler(r.listVSphereDatastores())
+
+	mux.Methods(http.MethodGet).
+		Path("/providers/vsphere/vmgroups").
+		Handler(r.listVSphereVMGroups())
 
 	mux.Methods(http.MethodGet).
 		Path("/providers/nutanix/{dc}/clusters").
@@ -5161,6 +5169,28 @@ func (r Routing) listVSphereDatastores() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/providers/vsphere/vmgroups vsphere listVSphereVMGroups
+//
+// Lists VM Groups from vsphere datacenter
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VSphereVMGroupList
+func (r Routing) listVSphereVMGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereVMGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
+		provider.DecodeVSphereCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/providers/azure/subnets azure listAzureSubnets
 //
 // Lists available VM subnets
@@ -6567,6 +6597,28 @@ func (r Routing) listProjectVSphereDatastores() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.VsphereDatastoreEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
+		provider.DecodeVSphereProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/vsphere/vmgroups vsphere listProjectVSphereVMGroups
+//
+// Lists VM Groups from vSphere datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: VSphereVMGroupList
+func (r Routing) listProjectVSphereVMGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.VsphereVMGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
 		provider.DecodeVSphereProjectReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

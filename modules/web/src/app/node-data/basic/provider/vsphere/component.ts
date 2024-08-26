@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SettingsService} from '@app/core/services/settings';
+import {FilteredComboboxComponent} from '@app/shared/components/combobox/component';
+import {VSphereVMGroup} from '@app/shared/entity/provider/vsphere';
 import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -28,7 +30,7 @@ import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge, of} from 'rxjs';
+import {merge, Observable, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
@@ -36,6 +38,13 @@ enum Controls {
   Memory = 'memory',
   Template = 'template',
   DiskSizeGB = 'diskSizeGB',
+  VMGroup = 'vmGroup',
+}
+
+enum VMGroupsState {
+  Ready = 'VM Groups',
+  Loading = 'Loading...',
+  Empty = 'No VM Groups available',
 }
 
 @Component({
@@ -56,9 +65,16 @@ enum Controls {
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+
+  @ViewChild('vmGroupsCombobox')
+  private readonly _vmGroupsCombobox: FilteredComboboxComponent;
+
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   initiallySelectedOS: OperatingSystem;
+  vmGroupStateLabel = VMGroupsState.Empty;
+  selectedVMGroup = '';
+  vmGroups: VSphereVMGroup[] = [];
 
   private readonly _minMemory = 512;
   private readonly _defaultCPUCount = 2;
@@ -76,7 +92,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
 
@@ -98,6 +115,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       ]),
       [Controls.Template]: this._builder.control('', Validators.required),
       [Controls.DiskSizeGB]: this._builder.control(this._defaultDiskSize, [Validators.required, Validators.min(1)]),
+      [Controls.VMGroup]: this._builder.control(''),
     });
 
     this._init();
@@ -138,11 +156,19 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultTemplate.bind(this));
+
+    this._vmGroupsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultVMGroup.bind(this));
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onVMGroupChange(vmGroup: string): void {
+    this.selectedVMGroup = vmGroup;
+    this._nodeDataService.nodeData.spec.cloud.vsphere.vmGroup = vmGroup;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   private _init(): void {
@@ -250,5 +276,29 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     }
 
     return payload;
+  }
+
+  private get _vmGroupsObservable(): Observable<VSphereVMGroup[]> {
+    return this._nodeDataService.vsphere.vmGroups(this._clearVMGroup.bind(this), this._onVMGroupsLoading.bind(this));
+  }
+
+  private _onVMGroupsLoading(): void {
+    this._clearVMGroup();
+    this.vmGroupStateLabel = VMGroupsState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearVMGroup(): void {
+    this.selectedVMGroup = '';
+    this.vmGroups = [];
+    this._vmGroupsCombobox.reset();
+    this.vmGroupStateLabel = VMGroupsState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultVMGroup(vmGroups: VSphereVMGroup[]): void {
+    this.vmGroups = vmGroups;
+    this.vmGroupStateLabel = this.vmGroups ? VMGroupsState.Ready : VMGroupsState.Empty;
+    this._cdr.detectChanges();
   }
 }

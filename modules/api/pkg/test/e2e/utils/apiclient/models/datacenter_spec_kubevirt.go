@@ -23,6 +23,8 @@ type DatacenterSpecKubevirt struct {
 	// in the dedicated infra KubeVirt cluster. They are added to the defaults.
 	CustomNetworkPolicies []*CustomNetworkPolicy `json:"customNetworkPolicies"`
 
+	// +kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None
+	// +kubebuilder:default=ClusterFirst
 	// DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',
 	// 'Default' or 'None'. Defaults to "ClusterFirst". DNS parameters given in DNSConfig will be merged with the
 	// policy selected with DNSPolicy.
@@ -43,6 +45,9 @@ type DatacenterSpecKubevirt struct {
 
 	// images
 	Images *KubeVirtImageSources `json:"images,omitempty"`
+
+	// namespaced mode
+	NamespacedMode *NamespacedMode `json:"namespacedMode,omitempty"`
 }
 
 // Validate validates this datacenter spec kubevirt
@@ -62,6 +67,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateImages(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNamespacedMode(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -161,6 +170,25 @@ func (m *DatacenterSpecKubevirt) validateImages(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *DatacenterSpecKubevirt) validateNamespacedMode(formats strfmt.Registry) error {
+	if swag.IsZero(m.NamespacedMode) { // not required
+		return nil
+	}
+
+	if m.NamespacedMode != nil {
+		if err := m.NamespacedMode.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("namespacedMode")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("namespacedMode")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this datacenter spec kubevirt based on the context it is used
 func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -178,6 +206,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateImages(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNamespacedMode(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -251,6 +283,22 @@ func (m *DatacenterSpecKubevirt) contextValidateImages(ctx context.Context, form
 				return ve.ValidateName("images")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("images")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateNamespacedMode(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NamespacedMode != nil {
+		if err := m.NamespacedMode.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("namespacedMode")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("namespacedMode")
 			}
 			return err
 		}
