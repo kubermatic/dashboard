@@ -330,13 +330,6 @@ type vSphereProjectReq struct {
 	vSphereCommonReq
 }
 
-// vSphereVMGroupsReq represents a request for vSphere data within the context of a KKP project for VM Groups.
-// swagger:parameters listProjectVSphereVMGroups
-type vSphereVMGroupsReq struct {
-	common.ProjectReq
-	vSphereCommonReq
-}
-
 func DecodeVSphereProjectReq(c context.Context, r *http.Request) (interface{}, error) {
 	projectReq, err := common.DecodeProjectRequest(c, r)
 	if err != nil {
