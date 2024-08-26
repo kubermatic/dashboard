@@ -237,8 +237,24 @@ limitations under the License.
             </km-property-boolean>
             <km-property-boolean *ngIf="cluster.spec.backupConfig"
                                  label="Cluster Backup"
-                                 [value]="cluster.spec.backupConfig">
+                                 [value]="!!cluster.spec.backupConfig">
             </km-property-boolean>
+          </div>
+          <div fxLayout="row wrap">
+            <ng-container *ngIf="cluster.spec.auditLogging?.webhookBackend as webhookBackend">
+              <km-property>
+                <div key>Audit Webhook Backend Secret Name</div>
+                <div value>{{webhookBackend.auditWebhookConfig.name}}</div>
+              </km-property>
+              <km-property>
+                <div key>Audit Webhook Backend Secret Namespace</div>
+                <div value>{{webhookBackend.auditWebhookConfig.namespace}}</div>
+              </km-property>
+              <km-property *ngIf="webhookBackend.auditWebhookInitialBackoff">
+                <div key>Audit Webhook Backend Initial Backoff</div>
+                <div value>{{webhookBackend.auditWebhookInitialBackoff}}</div>
+              </km-property>
+            </ng-container>
           </div>
         </div>
 

@@ -40,6 +40,7 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
 import {
+  AuditLoggingWebhookBackend,
   AuditPolicyPreset,
   Cluster,
   ClusterAnnotation,
@@ -69,7 +70,7 @@ import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
-import {combineLatest, merge} from 'rxjs';
+import {combineLatest, merge, Subscription} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
@@ -91,6 +92,10 @@ enum Controls {
   Type = 'type',
   AuditLogging = 'auditLogging',
   AuditPolicyPreset = 'auditPolicyPreset',
+  AuditWebhookBackend = 'auditWebhookBackend',
+  AuditWebhookBackendInitialBackoff = 'auditWebhookBackendInitialBackoff',
+  AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
+  AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   UserSSHKeyAgent = 'userSSHKeyAgent',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
@@ -184,6 +189,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
   private readonly _cniCiliumApplicationName = 'cilium';
+  private _auditWebhookBackendChangesSubscription: Subscription;
 
   get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;
@@ -328,6 +334,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
+    this.control(Controls.AuditLogging)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (!value && this.controlValue(Controls.AuditWebhookBackend)) {
+          this.control(Controls.AuditWebhookBackend).setValue(false);
+        }
+      });
+
+    this.control(Controls.AuditWebhookBackend)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (value) {
+          this._initAuditWebhookBackendControls();
+        } else {
+          this.form.removeControl(Controls.AuditWebhookBackendSecretName);
+          this.form.removeControl(Controls.AuditWebhookBackendSecretNamespace);
+          this.form.removeControl(Controls.AuditWebhookBackendInitialBackoff);
+          this._auditWebhookBackendChangesSubscription?.unsubscribe();
+          this.form.updateValueAndValidity();
+        }
+      });
+
     merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.IPFamily).valueChanges)
       .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
       .pipe(takeUntil(this._unsubscribe))
@@ -455,6 +483,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
   }
+
   getPluginName(name: string): string {
     return AdmissionPluginUtils.getPluginName(name);
   }
@@ -517,6 +546,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.required,
       ]),
       [Controls.AuditLogging]: this._builder.control(clusterSpec?.auditLogging?.enabled ?? false),
+      [Controls.AuditWebhookBackend]: this._builder.control(!!clusterSpec?.auditLogging?.webhookBackend ?? false),
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
       [Controls.ClusterBackup]: this._builder.control(!!clusterSpec?.backupConfig ?? false),
@@ -583,6 +613,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._builder.control(clusterSpec?.backupConfig?.backupStorageLocation?.name, Validators.required)
       );
     }
+    if (this.controlValue(Controls.AuditWebhookBackend)) {
+      this._initAuditWebhookBackendControls(clusterSpec?.auditLogging?.webhookBackend);
+    }
   }
 
   private _loadClusterDefaults(): void {
@@ -611,6 +644,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.AuditLogging]: clusterSpec?.auditLogging?.enabled ?? this.controlValue(Controls.AuditLogging),
           [Controls.AuditPolicyPreset]:
             clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
+          [Controls.AuditWebhookBackend]: !!clusterSpec?.auditLogging?.webhookBackend,
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
           [Controls.ClusterBackup]: !!clusterSpec.backupConfig ?? false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
@@ -677,6 +711,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         if (!this.isDualStackAllowed) {
           this.control(Controls.IPFamily).reset();
           this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
+        }
+
+        if (this.controlValue(Controls.AuditWebhookBackend)) {
+          this._initAuditWebhookBackendControls(clusterSpec?.auditLogging?.webhookBackend);
         }
 
         this._handleClusterSpecChanges();
@@ -749,6 +787,37 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(_ => {
         ipv6Controls.forEach(control => this.control(control).updateValueAndValidity({emitEvent: false}));
       });
+  }
+
+  private _initAuditWebhookBackendControls(config?: AuditLoggingWebhookBackend): void {
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendSecretName))) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretName, this._builder.control('', Validators.required));
+    }
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendSecretNamespace))) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretNamespace, this._builder.control('', Validators.required));
+    }
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendInitialBackoff))) {
+      this.form.addControl(Controls.AuditWebhookBackendInitialBackoff, this._builder.control(''));
+    }
+
+    this._auditWebhookBackendChangesSubscription?.unsubscribe(); // avoid duplicate subscriptions
+    this.form.updateValueAndValidity();
+
+    this._auditWebhookBackendChangesSubscription = merge(
+      this.control(Controls.AuditWebhookBackendSecretName).valueChanges,
+      this.control(Controls.AuditWebhookBackendSecretNamespace).valueChanges,
+      this.control(Controls.AuditWebhookBackendInitialBackoff).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    if (config) {
+      this.form.patchValue({
+        [Controls.AuditWebhookBackendSecretName]: config?.auditWebhookConfig?.name,
+        [Controls.AuditWebhookBackendSecretNamespace]: config?.auditWebhookConfig?.namespace,
+        [Controls.AuditWebhookBackendInitialBackoff]: config?.auditWebhookInitialBackoff,
+      });
+    }
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
@@ -934,7 +1003,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         version: this.controlValue(Controls.Version),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
-          policyPreset: this.controlValue(Controls.AuditPolicyPreset),
+          policyPreset: this.controlValue(Controls.AuditLogging) ? this.controlValue(Controls.AuditPolicyPreset) : '',
+          webhookBackend: this.controlValue(Controls.AuditWebhookBackend)
+            ? {
+                auditWebhookConfig: {
+                  name: this.controlValue(Controls.AuditWebhookBackendSecretName),
+                  namespace: this.controlValue(Controls.AuditWebhookBackendSecretNamespace),
+                },
+                auditWebhookInitialBackoff: this.controlValue(Controls.AuditWebhookBackendInitialBackoff),
+              }
+            : null,
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
