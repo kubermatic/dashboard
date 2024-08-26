@@ -21765,10 +21765,7 @@
           "200": {
             "description": "VSphereVMGroupList",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VSphereVMGroupList"
-              }
+              "$ref": "#/definitions/VSphereVMGroupList"
             }
           },
           "default": {
@@ -24251,10 +24248,7 @@
           "200": {
             "description": "VSphereVMGroupList",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/VSphereVMGroupList"
-              }
+              "$ref": "#/definitions/VSphereVMGroupList"
             }
           },
           "default": {
@@ -39477,17 +39471,22 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
-    "VSphereVMGroupList": {
+    "VSphereVMGroup": {
       "type": "object",
-      "title": "VSphereVMGroupList is the object representing a vsphere VM Groups.",
+      "title": "VSphereVMGroup is the object representing a vsphere VM Group.",
       "properties": {
-        "vmGroups": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "VMGroups"
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
         }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "VSphereVMGroupList": {
+      "type": "array",
+      "title": "VSphereVMGroupList represents an array of vSphere VM Groups.",
+      "items": {
+        "$ref": "#/definitions/VSphereVMGroup"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },

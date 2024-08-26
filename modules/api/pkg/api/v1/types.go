@@ -845,11 +845,15 @@ type VSphereDatastoreList struct {
 	Datastores []string `json:"datastores"`
 }
 
-// VSphereVMGroupList is the object representing a vsphere VM Groups.
-// swagger:model VSphereVMGroupList
-type VSphereVMGroupList struct {
-	VMGroups []string `json:"vmGroups"`
+// VSphereVMGroup is the object representing a vsphere VM Group.
+// swagger:model VSphereVMGroup
+type VSphereVMGroup struct {
+	Name string `json:"name"`
 }
+
+// VSphereVMGroupList represents an array of vSphere VM Groups.
+// swagger:model VSphereVMGroupList
+type VSphereVMGroupList []VSphereVMGroup
 
 // AlibabaInstanceTypeList represents an array of Alibaba instance types.
 // swagger:model AlibabaInstanceTypeList
@@ -1835,7 +1839,7 @@ type VSphereNodeSpec struct {
 	// required: false
 	Tags []VSphereTag `json:"tags,omitempty"`
 	// Automatically create anti affinity rules for machines.
-	VMAntiAffinity *bool `json:"vmAntiAffinity"`
+	VMAntiAffinity *bool  `json:"vmAntiAffinity"`
 	VMGroup        string `json:"vmGroup"`
 }
 
@@ -1878,7 +1882,7 @@ func (spec *VSphereNodeSpec) MarshalJSON() ([]byte, error) {
 		Template       string       `json:"template"`
 		Tags           []VSphereTag `json:"tags,omitempty"`
 		VMAntiAffinity *bool        `json:"vmAntiAffinity"`
-		VMGroup        string      `json:"vmGroup"`
+		VMGroup        string       `json:"vmGroup"`
 	}{
 		CPUs:           spec.CPUs,
 		Memory:         spec.Memory,

@@ -5178,7 +5178,7 @@ func (r Routing) listVSphereDatastores() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: []VSphereVMGroupList
+//	  200: VSphereVMGroupList
 func (r Routing) listVSphereVMGroups() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -6612,7 +6612,7 @@ func (r Routing) listProjectVSphereDatastores() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: []VSphereVMGroupList
+//	  200: VSphereVMGroupList
 func (r Routing) listProjectVSphereVMGroups() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(

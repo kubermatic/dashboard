@@ -52,7 +52,7 @@ ListProjectVSphereVMGroupsOK describes a response with status code 200, with def
 VSphereVMGroupList
 */
 type ListProjectVSphereVMGroupsOK struct {
-	Payload []*models.VSphereVMGroupList
+	Payload models.VSphereVMGroupList
 }
 
 // IsSuccess returns true when this list project v sphere Vm groups o k response has a 2xx status code
@@ -88,7 +88,7 @@ func (o *ListProjectVSphereVMGroupsOK) String() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/vmgroups][%d] listProjectVSphereVmGroupsOK  %+v", 200, o.Payload)
 }
 
-func (o *ListProjectVSphereVMGroupsOK) GetPayload() []*models.VSphereVMGroupList {
+func (o *ListProjectVSphereVMGroupsOK) GetPayload() models.VSphereVMGroupList {
 	return o.Payload
 }
 

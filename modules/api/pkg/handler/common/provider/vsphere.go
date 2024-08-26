@@ -204,12 +204,14 @@ func GetVsphereVMGroupsList(ctx context.Context, userInfo *provider.UserInfo, se
 		return nil, fmt.Errorf("failed to get VM Groups list against cluster %q: %w", datacenter.Spec.VSphere.Cluster, err)
 	}
 
-	apiVMGroups := &apiv1.VSphereVMGroupList{}
+	var apiVMGroups apiv1.VSphereVMGroupList
 	for _, group := range groups {
-		apiVMGroups.VMGroups = append(apiVMGroups.VMGroups, group.Name)
+		apiVMGroups = append(apiVMGroups, apiv1.VSphereVMGroup{
+			Name: group.Name,
+		})
 	}
 
-	return apiVMGroups, nil
+	return &apiVMGroups, nil
 }
 
 func getVsphereCredentialsAndDatacenterInfoFromCluster(ctx context.Context, userInfoGetter provider.UserInfoGetter,

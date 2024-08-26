@@ -7,44 +7,67 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
-// VSphereVMGroupList VSphereVMGroupList is the object representing a vsphere VM Groups.
+// VSphereVMGroupList VSphereVMGroupList represents an array of vSphere VM Groups.
 //
 // swagger:model VSphereVMGroupList
-type VSphereVMGroupList struct {
-
-	// VM groups
-	VMGroups []string `json:"vmGroups"`
-}
+type VSphereVMGroupList []*VSphereVMGroup
 
 // Validate validates this v sphere VM group list
-func (m *VSphereVMGroupList) Validate(formats strfmt.Registry) error {
+func (m VSphereVMGroupList) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	for i := 0; i < len(m); i++ {
+		if swag.IsZero(m[i]) { // not required
+			continue
+		}
+
+		if m[i] != nil {
+			if err := m[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName(strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName(strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this v sphere VM group list based on context it is used
-func (m *VSphereVMGroupList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
-}
+// ContextValidate validate this v sphere VM group list based on the context it is used
+func (m VSphereVMGroupList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
 
-// MarshalBinary interface implementation
-func (m *VSphereVMGroupList) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(m)
-}
+	for i := 0; i < len(m); i++ {
 
-// UnmarshalBinary interface implementation
-func (m *VSphereVMGroupList) UnmarshalBinary(b []byte) error {
-	var res VSphereVMGroupList
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
+		if m[i] != nil {
+			if err := m[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName(strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName(strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
 	}
-	*m = res
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
