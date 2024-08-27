@@ -52,6 +52,8 @@ type ClientService interface {
 
 	ListVSphereVMGroups(params *ListVSphereVMGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsOK, error)
 
+	ListVSphereVMGroupsNoCredentials(params *ListVSphereVMGroupsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsNoCredentialsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -508,6 +510,44 @@ func (a *Client) ListVSphereVMGroups(params *ListVSphereVMGroupsParams, authInfo
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListVSphereVMGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListVSphereVMGroupsNoCredentials Lists VM groups from vsphere datacenter
+*/
+func (a *Client) ListVSphereVMGroupsNoCredentials(params *ListVSphereVMGroupsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListVSphereVMGroupsNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListVSphereVMGroupsNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listVSphereVMGroupsNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListVSphereVMGroupsNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListVSphereVMGroupsNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListVSphereVMGroupsNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

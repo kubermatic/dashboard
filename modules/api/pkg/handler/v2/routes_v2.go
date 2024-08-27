@@ -1025,6 +1025,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listVSphereTagsForTagCategoryNoCredentials())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups").
+		Handler(r.listVSphereVMGroupsNoCredentials())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/instancetypes").
 		Handler(r.listAlibabaInstanceTypesNoCredentials())
 
@@ -4549,6 +4553,30 @@ func (r Routing) listVSphereFoldersNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.VsphereFoldersWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.caBundle)),
+		provider.DecodeVSphereNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups vsphere listVSphereVMGroupsNoCredentials
+//
+// Lists VM groups from vsphere datacenter
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []VSphereVMGroup
+func (r Routing) listVSphereVMGroupsNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.VsphereVMGroupsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.caBundle)),
 		provider.DecodeVSphereNoCredentialsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
