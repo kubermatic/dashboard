@@ -19,3 +19,4 @@
 .vscode/*
 .nvmrc
 .DS_Store
+applypatch-msg
