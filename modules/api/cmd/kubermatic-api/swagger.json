@@ -13297,6 +13297,51 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups": {
+      "get": {
+        "description": "Lists VM groups from vsphere datacenter",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vsphere"
+        ],
+        "operationId": "listVSphereVMGroupsNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "VSphereVMGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VSphereVMGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/rolenames": {
       "get": {
         "description": "Lists all Role names with namespaces",

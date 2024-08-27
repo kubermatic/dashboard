@@ -57,6 +57,18 @@ func VsphereFoldersWithClusterCredentialsEndpoint(ctx context.Context, userInfoG
 	return GetVsphereFolders(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
 }
 
+func VsphereVMGroupsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
+) (interface{}, error) {
+	username, password, datacenterName, userInfo, err := getVsphereCredentialsAndDatacenterInfoFromCluster(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetVsphereVMGroupsList(ctx, userInfo, seedsGetter, username, password, datacenterName, caBundle)
+}
+
 func VsphereTagCategoriesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
 	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
 	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool,
