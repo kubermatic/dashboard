@@ -2169,6 +2169,9 @@ type GlobalSettings struct {
 
 	// DisableChangelogPopup disables the changelog popup in KKP dashboard.
 	DisableChangelogPopup bool `json:"disableChangelogPopup,omitempty"`
+
+	// StaticLabels are a list of labels that can be used for the clusters.
+	StaticLabels []kubermaticv1.StaticLabel `json:"staticLabels,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

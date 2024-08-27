@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
@@ -36,7 +36,7 @@ import {
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {AdminSettings} from '@shared/entity/settings';
+import {AdminSettings, StaticLabel} from '@shared/entity/settings';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
@@ -94,6 +94,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
+  adminStaticLabels: StaticLabel[];
   apiServerAllowedIPRanges: string[] = [];
   editionVersion: string = getEditionVersion();
   isKubeLBEnforced = false;
@@ -128,7 +129,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
-    private readonly _clusterBackupService: ClusterBackupService
+    private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -192,7 +194,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
-
+      if (settings.staticLabels) {
+        this.adminStaticLabels = settings.staticLabels.filter(label => Object.keys(this.labels).includes(label.key));
+      }
       if (this._settings.opaOptions.enabled) {
         this.form.get(Controls.OPAIntegration).setValue(true);
       }
@@ -251,6 +255,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     if (initialClusterDefaultNodeSelectorKey && this.labels?.[initialClusterDefaultNodeSelectorKey]) {
       this._handleClusterDefaultNodeSelector(this.podNodeSelectorAdmissionPluginConfig);
     }
+    this._cdr.detectChanges();
   }
 
   private _getAuditPolicyPresetInitialState(): AuditPolicyPreset | '' {

@@ -54,10 +54,19 @@ limitations under the License.
         <mat-form-field fxFlex="45">
           <mat-label>{{keyName}}</mat-label>
           <input matInput
+                 [readonly]="isProtectedKey(label.get('key').value, i)"
                  (keyup)="check(i)"
-                 [ngClass]="{'km-value-changed':isLabelsChange(i)}"
+                 [ngClass]="{'km-value-changed':isLabelsChange(i), 'km-disabled':isProtectedKey(label.get('key').value, i)}"
                  name="key"
-                 formControlName="key" />
+                 formControlName="key"
+                 [matAutocomplete]="staticKeys" />
+          <mat-autocomplete #staticKeys="matAutocomplete"
+                            (closed)="check(i)">
+            <mat-option *ngFor="let key of getStaticLabelsKeys()"
+                        [value]="key">
+              {{key}}
+            </mat-option>
+          </mat-autocomplete>
           <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"> {{keyName}} is not unique. </mat-error>
           <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixPattern"> Prefix not allowed. </mat-error>
           <mat-error *ngIf="label.get('key').errors?.validLabelKeyNamePattern"> Name not allowed. </mat-error>
@@ -70,7 +79,15 @@ limitations under the License.
           <input matInput
                  (keyup)="check(i)"
                  name="value"
+                 [matAutocomplete]="staticValues"
                  formControlName="value" />
+          <mat-autocomplete #staticValues="matAutocomplete"
+                            (closed)="check(i)">
+            <mat-option *ngFor="let value of getKeyValues(label.get('key').value)"
+                        [value]="value">
+              {{value}}
+            </mat-option>
+          </mat-autocomplete>
           <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"> {{valueName}} not allowed. </mat-error>
           <mat-error *ngIf="label.get('value').errors?.validLabelValueLength"> {{valueName}} is too long. </mat-error>
         </mat-form-field>

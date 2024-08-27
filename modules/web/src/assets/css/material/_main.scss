@@ -447,6 +447,16 @@ mat-form-field {
   }
 }
 
+.static-labels-values mat-form-field.km-node-tags .mat-mdc-text-field-wrapper {
+  .mdc-floating-label--float-above{
+    top: 27px !important;
+  }
+
+  .mat-mdc-chip-grid {
+    margin-top: 12px !important;
+  }
+}
+
 mat-hint,
 mat-error {
   font-size: 75%;

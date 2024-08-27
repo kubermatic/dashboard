@@ -56,7 +56,7 @@ import {
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {AdminSettings} from '@shared/entity/settings';
+import {AdminSettings, StaticLabel} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
@@ -146,6 +146,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
   labels: Record<string, string>;
+  adminStaticLabels: StaticLabel[];
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
@@ -219,7 +220,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
-
+      this.adminStaticLabels = settings.staticLabels;
       // Admin settings should be ignored in this case since we want to completely depend upon the cluster template
       // as the data source.
       if (this.clusterTemplateEditMode) {

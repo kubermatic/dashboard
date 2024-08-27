@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {FormControl} from '@angular/forms';
+import _ from 'lodash';
 
 /**
  * Validation on the frontend side is required to avoid errors when sending labels to the cluster.
@@ -69,6 +70,17 @@ export class LabelFormValidators {
   static labelValueLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
     const maxLength = 63;
+    if (_.isArray(value)) {
+      let err = null;
+
+      value.forEach(val => {
+        if (val.length > maxLength) {
+          err = {validLabelValueLength: {value: true}};
+        }
+      });
+      return err;
+    }
+
     return value.length <= maxLength ? null : {validLabelValueLength: {value: true}};
   }
 
@@ -78,6 +90,16 @@ export class LabelFormValidators {
   static labelValuePattern(control: FormControl): {[key: string]: object} {
     const value = control.value;
     const labelValuePattern = /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$/;
+    if (_.isArray(value)) {
+      let err = null;
+
+      value.forEach(val => {
+        if (!labelValuePattern.test(val)) {
+          err = {validLabelValuePattern: {value: true}};
+        }
+      });
+      return err;
+    }
     return labelValuePattern.test(value) ? null : {validLabelValuePattern: {value: true}};
   }
 }

@@ -157,36 +157,27 @@ describe('EditClusterComponent', () => {
       spec = component.cluster.spec;
     });
 
-    it('should be disabled when initial Konnectivity value is true', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        clusterNetwork: {
-          ...spec.clusterNetwork,
-          konnectivityEnabled: true,
-        },
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.Cilium,
-        },
+    it('should set Konnectivity control disabled state based on initial value', () => {
+      const cases = [
+        {konnectivityEnabled: true, expectedDisabled: true},
+        {konnectivityEnabled: false, expectedDisabled: false},
+      ];
+
+      cases.forEach(testCase => {
+        setClusterAndRunNgOnInit({
+          ...spec,
+          clusterNetwork: {
+            ...spec.clusterNetwork,
+            konnectivityEnabled: testCase.konnectivityEnabled,
+          },
+          cniPlugin: {
+            ...spec.cniPlugin,
+            type: CNIPlugin.Cilium,
+          },
+        });
+
+        expect(component.form.get(component.Controls.Konnectivity).disabled).toBe(testCase.expectedDisabled);
       });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeTruthy();
-    });
-
-    it('should not be disabled when initial Konnectivity value is false', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        clusterNetwork: {
-          ...spec.clusterNetwork,
-          konnectivityEnabled: false,
-        },
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.Cilium,
-        },
-      });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
     });
   });
 });

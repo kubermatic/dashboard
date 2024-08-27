@@ -32880,6 +32880,14 @@
           "type": "boolean",
           "x-go-name": "RestrictProjectDeletion"
         },
+        "staticLabels": {
+          "description": "StaticLabels are a list of labels that can be used for the clusters.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StaticLabel"
+          },
+          "x-go-name": "StaticLabels"
+        },
         "userProjectsLimit": {
           "description": "UserProjectsLimit is the maximum number of projects a user can create.",
           "type": "integer",
@@ -38502,6 +38510,32 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "StaticLabel": {
+      "type": "object",
+      "title": "StaticLabel is a label that can be used for the clusters.",
+      "properties": {
+        "default": {
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
+        "key": {
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "protected": {
+          "type": "boolean",
+          "x-go-name": "Protected"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Values"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "StorageClass": {
       "description": "StorageClass represents a Kubernetes StorageClass",

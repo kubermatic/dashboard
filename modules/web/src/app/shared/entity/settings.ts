@@ -56,6 +56,14 @@ export interface AdminSettings {
   allowedOperatingSystems?: AllowedOperatingSystems;
   disableChangelogPopup?: boolean;
   webTerminalOptions?: WebTerminalOptions;
+  staticLabels?: StaticLabel[];
+}
+
+export interface StaticLabel {
+  key: string;
+  values: string[];
+  default: boolean;
+  protected: boolean;
 }
 
 export interface WebTerminalOptions {

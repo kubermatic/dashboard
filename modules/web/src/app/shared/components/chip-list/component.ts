@@ -31,6 +31,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Validators} from '@angular/forms';
+import {LabelFormValidators} from '@app/shared/validators/label-form.validators';
 
 enum Controls {
   Tags = 'tags',
@@ -64,6 +65,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   @Input('kmRequired') required: boolean;
   @Input('kmPatternError') patternError = 'Invalid pattern';
   @Input('kmPattern') pattern: string;
+  @Input() isStaticLabel = false;
   @Input() tags: string[] = [];
   @Output() onChange = new EventEmitter<string[]>();
   form: FormGroup;
@@ -155,6 +157,10 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
 
     if (this.pattern) {
       validators.push(KmValidators.chipPattern(this.pattern));
+    }
+
+    if (this.isStaticLabel) {
+      validators.push(LabelFormValidators.labelValueLength, LabelFormValidators.labelValuePattern);
     }
     return validators;
   }

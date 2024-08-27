@@ -44,6 +44,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 import {ControlsOf} from '../../model/shared';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import _ from 'lodash';
+import {StaticLabel} from '@app/shared/entity/settings';
 
 @Component({
   selector: 'km-label-form',
@@ -67,6 +68,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() keyName = 'Key';
   @Input() valueName = 'Value';
   @Input() labels: Record<string, string>;
+  @Input() staticLabels: StaticLabel[] = [];
   @Input() disabledLabel: KeyValueEntry;
   @Input() disabledLabelTooltip: string;
   @Input() canDeleteDisabledLabel: boolean;
@@ -213,6 +215,16 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   private _initForm() {
     // Initialize labels form.
     this.form = this._formBuilder.group({labels: this._formBuilder.array([])});
+    // Add the default labels.
+    if (_.isEmpty(this.labels) && this.staticLabels?.length) {
+      this.staticLabels
+        .sort((a, b) => Number(b.protected) - Number(a.protected))
+        .forEach(label => {
+          if (label.default || label.protected) {
+            this._addLabel(label.key, label.values[0]);
+          }
+        });
+    }
 
     // Setup labels form with label data.
     const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
@@ -221,16 +233,39 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
         this._addLabel(key, this.labels[key]);
       });
     }
-
     // Add initial label for the user.
     this._addLabel();
+    this._updateLabelsObject();
   }
 
   isRemovable(index: number): boolean {
-    return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
+    return (
+      index < this.labelArray.length - 1 &&
+      !this._isInherited(Object.keys(this.labels)[index]) &&
+      !this.isProtectedKey(this.labelArray.controls[index].get('key').value, index)
+    );
+  }
+
+  getKeyValues(key: string): string[] {
+    return this.staticLabels?.find(label => label.key === key)?.values;
+  }
+
+  getStaticLabelsKeys(): string[] {
+    const filterdLabels = this.staticLabels?.filter(label => !this.labels[label.key]);
+    return filterdLabels?.map(label => label.key);
+  }
+
+  isProtectedKey(key: string, index: number): boolean {
+    return (
+      !!this.staticLabels?.find(label => label.protected && label.key === key) &&
+      !this.labelArray.controls[index]?.get('key').errors?.validLabelKeyUniqueness
+    );
   }
 
   deleteLabel(index: number): void {
+    if (this.isProtectedKey(this.labelArray.controls[index].get('key').value, index)) {
+      return;
+    }
     if (this._dialogModeService.isEditDialog) {
       this.removedLabels.push(this.labelArray.value[index]);
     }

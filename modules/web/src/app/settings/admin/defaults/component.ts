@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {VMwareCloudDirectorIPAllocationMode} from '@app/shared/entity/provider/vmware-cloud-director';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
@@ -20,7 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
-import {AdminSettings, AllowedOperatingSystems} from '@shared/entity/settings';
+import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -50,7 +50,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
-    private readonly _featureGatesService: FeatureGateService
+    private readonly _featureGatesService: FeatureGateService,
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -156,6 +157,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     this.onSettingsChange();
   }
 
+  onStaticLabelsChange(labels: StaticLabel[]): void {
+    if (this._checkLabels(labels)) {
+      this.settings.staticLabels = labels;
+      this.onSettingsChange();
+      this._cdr.detectChanges();
+    }
+  }
+
   isLastEnabledOS(os: OperatingSystem): boolean {
     if (this.allowedOperatingSystems.length === 1) {
       return os === this.allowedOperatingSystems[0];
@@ -163,6 +172,9 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  private _checkLabels(staticLabels: StaticLabel[]): boolean {
+    return staticLabels.every(label => label?.key && label.values?.length);
+  }
   private _verifyEnableKubernetesDashboardRequirements() {
     // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
     if ((!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) && this.settings.enableDashboard) {
@@ -181,6 +193,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
     if (patch.customLinks) {
       patch.customLinks = this.settings.customLinks;
+    }
+
+    if (patch.staticLabels) {
+      patch.staticLabels = this.settings.staticLabels;
     }
 
     return patch;
