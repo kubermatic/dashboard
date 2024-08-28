@@ -29938,6 +29938,9 @@
           "type": "boolean",
           "x-go-name": "EnforcePodSecurityPolicy"
         },
+        "enforcedAuditWebhookSettings": {
+          "$ref": "#/definitions/AuditWebhookBackendSettings"
+        },
         "fake": {
           "$ref": "#/definitions/DatacenterSpecFake"
         },

@@ -394,11 +394,13 @@ limitations under the License.
             </div>
 
             <ng-container *ngIf="!!controlValue(Controls.AuditLogging)">
-              <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
-                Audit Webhook Backend
+              <div fxLayoutAlign=" center">
+                <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
+                  Audit Webhook Backend
+                </mat-checkbox>
                 <i class="km-icon-info km-pointer"
-                   matTooltip="Configure webhook backend for audit logging functionality."></i>
-              </mat-checkbox>
+                   [matTooltip]="enforcedAuditWebhookSettings ? 'Audit Webhook Backend settings are enforced by your admin in the chosen datacenter.' : 'Configure webhook backend for audit logging functionality.'"></i>
+              </div>
 
               <ng-container *ngIf="!!controlValue(Controls.AuditWebhookBackend)">
                 <mat-form-field>

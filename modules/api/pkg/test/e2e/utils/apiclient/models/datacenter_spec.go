@@ -72,6 +72,9 @@ type DatacenterSpec struct {
 	// digitalocean
 	Digitalocean *DatacenterSpecDigitalocean `json:"digitalocean,omitempty"`
 
+	// enforced audit webhook settings
+	EnforcedAuditWebhookSettings *AuditWebhookBackendSettings `json:"enforcedAuditWebhookSettings,omitempty"`
+
 	// fake
 	Fake *DatacenterSpecFake `json:"fake,omitempty"`
 
@@ -137,6 +140,10 @@ func (m *DatacenterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDigitalocean(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEnforcedAuditWebhookSettings(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -304,6 +311,25 @@ func (m *DatacenterSpec) validateDigitalocean(formats strfmt.Registry) error {
 				return ve.ValidateName("digitalocean")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("digitalocean")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpec) validateEnforcedAuditWebhookSettings(formats strfmt.Registry) error {
+	if swag.IsZero(m.EnforcedAuditWebhookSettings) { // not required
+		return nil
+	}
+
+	if m.EnforcedAuditWebhookSettings != nil {
+		if err := m.EnforcedAuditWebhookSettings.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enforcedAuditWebhookSettings")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enforcedAuditWebhookSettings")
 			}
 			return err
 		}
@@ -587,6 +613,10 @@ func (m *DatacenterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateEnforcedAuditWebhookSettings(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateFake(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -733,6 +763,22 @@ func (m *DatacenterSpec) contextValidateDigitalocean(ctx context.Context, format
 				return ve.ValidateName("digitalocean")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("digitalocean")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpec) contextValidateEnforcedAuditWebhookSettings(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EnforcedAuditWebhookSettings != nil {
+		if err := m.EnforcedAuditWebhookSettings.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("enforcedAuditWebhookSettings")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("enforcedAuditWebhookSettings")
 			}
 			return err
 		}

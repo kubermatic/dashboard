@@ -107,6 +107,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isKubeLBEnforced = false;
   isKubeLBEnabled = false;
   isCSIDriverDisabled = false;
+  enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   isAllowedIPRangeSupported: boolean;
@@ -246,6 +247,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
               .get(Controls.NodePortsAllowedIPRanges)
               .setValue(this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks);
           }
+          this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
+          this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
@@ -413,6 +416,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).disable();
+    } else {
+      this.form.get(control).enable();
     }
   }
 
@@ -436,15 +441,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         auditLogging: {
           enabled: this.form.get(Controls.AuditLogging).value,
           policyPreset: this.form.get(Controls.AuditPolicyPreset).value,
-          webhookBackend: this.form.get(Controls.AuditWebhookBackend).value
-            ? {
-                auditWebhookConfig: {
-                  name: this.form.get(Controls.AuditWebhookBackendSecretName).value,
-                  namespace: this.form.get(Controls.AuditWebhookBackendSecretNamespace).value,
-                },
-                auditWebhookInitialBackoff: this.form.get(Controls.AuditWebhookBackendInitialBackoff).value,
-              }
-            : null,
+          webhookBackend:
+            !this.enforcedAuditWebhookSettings && this.form.get(Controls.AuditWebhookBackend).value
+              ? {
+                  auditWebhookConfig: {
+                    name: this.form.get(Controls.AuditWebhookBackendSecretName).value,
+                    namespace: this.form.get(Controls.AuditWebhookBackendSecretNamespace).value,
+                  },
+                  auditWebhookInitialBackoff: this.form.get(Controls.AuditWebhookBackendInitialBackoff).value,
+                }
+              : null,
         },
         opaIntegration: {
           enabled: this.form.get(Controls.OPAIntegration).value,
@@ -542,6 +548,27 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         [Controls.AuditWebhookBackendSecretNamespace]: config?.auditWebhookConfig?.namespace,
         [Controls.AuditWebhookBackendInitialBackoff]: config?.auditWebhookInitialBackoff,
       });
+    }
+  }
+
+  private _enforceAuditWebhookBackendSettings(auditWebhookBackend?: AuditLoggingWebhookBackend): void {
+    if (auditWebhookBackend) {
+      if (!this.form.get(Controls.AuditWebhookBackend).value) {
+        this.form.get(Controls.AuditWebhookBackend).setValue(true, {emitEvent: false});
+        this._initAuditWebhookBackendControls(auditWebhookBackend);
+      } else {
+        this.form.patchValue({
+          [Controls.AuditWebhookBackendSecretName]: auditWebhookBackend.auditWebhookConfig?.name,
+          [Controls.AuditWebhookBackendSecretNamespace]: auditWebhookBackend.auditWebhookConfig?.namespace,
+          [Controls.AuditWebhookBackendInitialBackoff]: auditWebhookBackend.auditWebhookInitialBackoff,
+        });
+      }
+    }
+    this._enforce(Controls.AuditWebhookBackend, !!auditWebhookBackend);
+    if (this.form.get(Controls.AuditWebhookBackend).value) {
+      this._enforce(Controls.AuditWebhookBackendSecretName, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendSecretNamespace, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendInitialBackoff, !!auditWebhookBackend);
     }
   }
 

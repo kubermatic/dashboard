@@ -172,6 +172,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   provider: NodeProvider;
+  enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -185,11 +186,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
   private _defaultProxyMode: ProxyMode;
+  private _auditWebhookBackendChangesSubscription: Subscription;
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
   private readonly _cniCiliumApplicationName = 'cilium';
-  private _auditWebhookBackendChangesSubscription: Subscription;
 
   get isKubernetesDashboardEnabled(): boolean {
     return this._settings.enableDashboard;
@@ -263,9 +264,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
+          this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
           this._enforceDisableCSIDriver(datacenter.spec.disableCsiDriver);
+          this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -713,7 +716,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
         }
 
-        if (this.controlValue(Controls.AuditWebhookBackend)) {
+        if (this.controlValue(Controls.AuditWebhookBackend) && !this.enforcedAuditWebhookSettings) {
           this._initAuditWebhookBackendControls(clusterSpec?.auditLogging?.webhookBackend);
         }
 
@@ -820,9 +823,32 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private _enforceAuditWebhookBackendSettings(auditWebhookBackend?: AuditLoggingWebhookBackend): void {
+    if (auditWebhookBackend) {
+      if (!this.form.get(Controls.AuditWebhookBackend).value) {
+        this.form.get(Controls.AuditWebhookBackend).setValue(true, {emitEvent: false});
+        this._initAuditWebhookBackendControls(auditWebhookBackend);
+      } else {
+        this.form.patchValue({
+          [Controls.AuditWebhookBackendSecretName]: auditWebhookBackend.auditWebhookConfig?.name,
+          [Controls.AuditWebhookBackendSecretNamespace]: auditWebhookBackend.auditWebhookConfig?.namespace,
+          [Controls.AuditWebhookBackendInitialBackoff]: auditWebhookBackend.auditWebhookInitialBackoff,
+        });
+      }
+    }
+    this._enforce(Controls.AuditWebhookBackend, !!auditWebhookBackend);
+    if (this.control(Controls.AuditWebhookBackend).value) {
+      this._enforce(Controls.AuditWebhookBackendSecretName, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendSecretNamespace, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendInitialBackoff, !!auditWebhookBackend);
+    }
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).disable();
+    } else {
+      this.form.get(control).enable();
     }
   }
 
@@ -1004,15 +1030,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
           policyPreset: this.controlValue(Controls.AuditLogging) ? this.controlValue(Controls.AuditPolicyPreset) : '',
-          webhookBackend: this.controlValue(Controls.AuditWebhookBackend)
-            ? {
-                auditWebhookConfig: {
-                  name: this.controlValue(Controls.AuditWebhookBackendSecretName),
-                  namespace: this.controlValue(Controls.AuditWebhookBackendSecretNamespace),
-                },
-                auditWebhookInitialBackoff: this.controlValue(Controls.AuditWebhookBackendInitialBackoff),
-              }
-            : null,
+          webhookBackend: this._getAuditWebhookBackendConfig(),
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
@@ -1047,6 +1065,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       clusterObject.spec.backupConfig = null;
     }
     return clusterObject;
+  }
+
+  private _getAuditWebhookBackendConfig(): AuditLoggingWebhookBackend {
+    if (this.controlValue(Controls.AuditWebhookBackend) && !this.enforcedAuditWebhookSettings) {
+      return {
+        auditWebhookConfig: {
+          name: this.controlValue(Controls.AuditWebhookBackendSecretName),
+          namespace: this.controlValue(Controls.AuditWebhookBackendSecretNamespace),
+        },
+        auditWebhookInitialBackoff: this.controlValue(Controls.AuditWebhookBackendInitialBackoff),
+      };
+    }
+    return null;
   }
 
   private initializeCiliumValues(valuesConfig: string | object): string {

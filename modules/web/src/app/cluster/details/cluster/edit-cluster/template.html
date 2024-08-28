@@ -142,14 +142,16 @@ limitations under the License.
         </ng-container>
       </km-chip-list>
 
-      <mat-checkbox [formControlName]="Controls.Konnectivity"
-                    [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
-                    kmValueChangedIndicator>
-        Konnectivity
+      <div fxLayoutAlign=" center">
+        <mat-checkbox [formControlName]="Controls.Konnectivity"
+                      [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
+                      kmValueChangedIndicator>
+          Konnectivity
+        </mat-checkbox>
         <i *ngIf="!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled"
            class="km-icon-info km-pointer"
            matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
-      </mat-checkbox>
+      </div>
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
@@ -181,11 +183,13 @@ limitations under the License.
       </div>
 
       <ng-container *ngIf="!!form.get(Controls.AuditLogging).value">
-        <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
-          Audit Webhook Backend
+        <div fxLayoutAlign=" center">
+          <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
+            Audit Webhook Backend
+          </mat-checkbox>
           <i class="km-icon-info km-pointer"
              matTooltip="Configure webhook backend for audit logging functionality."></i>
-        </mat-checkbox>
+        </div>
 
         <ng-container *ngIf="!!form.get(Controls.AuditWebhookBackend).value">
           <mat-form-field>
