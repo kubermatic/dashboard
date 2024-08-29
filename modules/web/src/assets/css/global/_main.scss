@@ -746,6 +746,12 @@ km-cni-version {
     width: 5px;
   }
 
+  &:has(.km-chip-list-with-input)::after {
+    height: 100% !important;
+    left: -15px !important;
+    top: 0 !important;
+  }
+
   &.mat-mdc-checkbox::after {
     left: -12px !important;
     top: 8px !important;

@@ -57,7 +57,7 @@ import {
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings, StaticLabel} from '@shared/entity/settings';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {NodeProvider, NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
@@ -476,9 +476,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   isAllowedIPRangeSupported(): boolean {
-    return [NodeProvider.AWS, NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK].includes(
-      this._clusterSpecService.provider
-    );
+    return NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS.includes(this._clusterSpecService.provider);
   }
 
   isExposeStrategyLoadBalancer(): boolean {

@@ -18,6 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
+import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS} from '@app/shared/model/NodeProviderConstants';
 import {BSLListState} from '@app/wizard/step/cluster/component';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -70,6 +71,7 @@ enum Controls {
   DisableCSIDriver = 'disableCSIDriver',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
+  NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
 }
 
 @Component({
@@ -102,6 +104,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isCSIDriverDisabled = false;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
+  isAllowedIPRangeSupported: boolean;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -113,6 +116,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
+  private _provider: string;
 
   get isKubernetesDashboardEnable(): boolean {
     return this._settings.enableDashboard;
@@ -171,6 +175,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
       [Controls.ClusterBackup]: new FormControl(!!this.cluster.spec.backupConfig),
+      [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -222,6 +227,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
+          this._provider = datacenter.spec.provider;
+          this.isAllowedIPRangeSupported = (NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS as string[]).includes(
+            this._provider
+          );
+          if (this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.length) {
+            this.form
+              .get(Controls.NodePortsAllowedIPRanges)
+              .setValue(this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks);
+          }
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
@@ -435,6 +449,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     } else {
       patch.spec.backupConfig = null;
+    }
+
+    if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {
+      patch.spec.cloud[this._provider] = {
+        nodePortsAllowedIPRanges: {
+          cidrBlocks: this.form.get(Controls.NodePortsAllowedIPRanges).value.tags,
+        },
+      };
     }
 
     return this._clusterService.patch(this.projectID, this.cluster.id, patch, true).pipe(take(1));

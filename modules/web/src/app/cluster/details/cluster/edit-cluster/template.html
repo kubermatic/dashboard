@@ -113,6 +113,14 @@ limitations under the License.
         </div>
       </div>
 
+      <km-chip-list *ngIf="isAllowedIPRangeSupported"
+                    label="Allowed IP Ranges for NodePorts"
+                    placeholder="IP CIDRs..."
+                    [formControlName]="Controls.NodePortsAllowedIPRanges"
+                    [kmPattern]="ipv4AndIPv6CidrRegex"
+                    kmPatternError="Input has to be a valid IPv4 or IPv6 CIDR">
+      </km-chip-list>
+
       <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
                     class="tag-list"
                     label="Allowed IP Ranges for API server"
@@ -214,7 +222,8 @@ limitations under the License.
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.DisableCSIDriver"
-                    [disabled]="isCSIDriverDisabled">
+                    [disabled]="isCSIDriverDisabled"
+                    kmValueChangedIndicator>
         Disable CSI Driver
         <i class="km-icon-info km-pointer"
            [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
