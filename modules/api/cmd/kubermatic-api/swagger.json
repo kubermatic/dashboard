@@ -30159,7 +30159,7 @@
           "$ref": "#/definitions/PodDNSConfig"
         },
         "dnsPolicy": {
-          "description": "+kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None\n+kubebuilder:default=ClusterFirst\nDNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
+          "description": "DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
           "type": "string",
           "x-go-name": "DNSPolicy"
         },

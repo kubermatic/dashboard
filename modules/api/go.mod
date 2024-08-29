@@ -70,7 +70,7 @@ require (
 	google.golang.org/api v0.187.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.25.1-0.20240823163015-db36dbe1818f
+	k8c.io/kubermatic/v2 v2.25.1-0.20240828091320-045f90ef8db4
 	k8c.io/operating-system-manager v1.5.1-0.20240822183214-db378951daf3
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.0
@@ -237,9 +237,10 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
-	github.com/spf13/viper v1.18.1 // indirect
+	github.com/spf13/viper v1.18.2 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
+	github.com/tinkerbell/tink v0.10.0 // indirect
 	github.com/toqueteos/webbrowser v1.2.0 // indirect
 	go.mongodb.org/mongo-driver v1.13.1 // indirect
 	go.opencensus.io v0.24.0 // indirect

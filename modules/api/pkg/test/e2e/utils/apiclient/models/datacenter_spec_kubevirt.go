@@ -23,8 +23,6 @@ type DatacenterSpecKubevirt struct {
 	// in the dedicated infra KubeVirt cluster. They are added to the defaults.
 	CustomNetworkPolicies []*CustomNetworkPolicy `json:"customNetworkPolicies"`
 
-	// +kubebuilder:validation:Enum=ClusterFirstWithHostNet;ClusterFirst;Default;None
-	// +kubebuilder:default=ClusterFirst
 	// DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',
 	// 'Default' or 'None'. Defaults to "ClusterFirst". DNS parameters given in DNSConfig will be merged with the
 	// policy selected with DNSPolicy.

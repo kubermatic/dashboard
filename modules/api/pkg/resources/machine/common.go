@@ -30,6 +30,8 @@ import (
 	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
 	aws "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/aws/types"
 	azure "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/azure/types"
+	"github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
+	tink "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins/tinkerbell/types"
 	baremetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/types"
 	digitalocean "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
 	equinixmetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
@@ -273,30 +275,51 @@ func getVSphereProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 	return EncodeAsRawExtension(config)
 }
 
-func getBaremetalProviderSpec(cluster *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*runtime.RawExtension, error) {
-	// Check if Tinkerbell configuration is provided
+func getBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, _ *kubermaticv1.Datacenter) (*baremetal.RawConfig, error) {
+	// Ensure Tinkerbell configuration is provided
 	if nodeSpec.Cloud.Baremetal.Tinkerbell == nil {
-		return nil, errors.New("tinkerbell provisioner is required")
+		return nil, errors.New("tinkerbell provisioner is required in baremetal configuration")
 	}
 
-	// Create TinkerbellNodeSpec from nodeSpec
-	tinkerbellSpec := apiv1.TinkerbellNodeSpec{
-		OsImageUrl:  nodeSpec.Cloud.Baremetal.Tinkerbell.OsImageUrl,
-		HardwareRef: nodeSpec.Cloud.Baremetal.Tinkerbell.HardwareRef,
+	tinkerbellConfig := nodeSpec.Cloud.Baremetal.Tinkerbell
+
+	// Validate required fields in Tinkerbell configuration
+	if tinkerbellConfig.HardwareRef.String() == "/" {
+		return nil, errors.New("HardwareRef must be provided in Tinkerbell configuration")
+	}
+	if tinkerbellConfig.OsImageUrl == "" {
+		return nil, errors.New("OsImageUrl must be provided in Tinkerbell configuration")
 	}
 
-	// Marshal TinkerbellNodeSpec into JSON
-	tinkerbellData, err := tinkerbellSpec.MarshalJSON()
+	// Prepare Tinkerbell plugin specification
+	tinkerbellSpec := &tink.TinkerbellPluginSpec{
+		ClusterName: providerconfig.ConfigVarString{Value: cluster.Name},
+		HardwareRef: tinkerbellConfig.HardwareRef,
+		Auth:        tink.Auth{Kubeconfig: providerconfig.ConfigVarString{Value: cluster.Spec.Cloud.Baremetal.Tinkerbell.Kubeconfig}},
+		OSImageURL:  providerconfig.ConfigVarString{Value: tinkerbellConfig.OsImageUrl},
+	}
+
+	// Marshal TinkerbellSpec into JSON
+	tinkerbellData, err := json.Marshal(tinkerbellSpec)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal TinkerbellNodeSpec: %w", err)
+		return nil, fmt.Errorf("failed to marshal TinkerbellPluginSpec: %w", err)
 	}
 
 	// Create a new baremetal.RawConfig and set the DriverSpec
 	config := &baremetal.RawConfig{
 		DriverSpec: runtime.RawExtension{Raw: tinkerbellData},
+		Driver:     providerconfig.ConfigVarString{Value: string(plugins.Tinkerbell)},
 	}
 
-	// Encode the config as a RawExtension
+	return config, nil
+}
+
+func getBaremetalProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*runtime.RawExtension, error) {
+	config, err := getBaremetalProviderConfig(c, nodeSpec, dc)
+	if err != nil {
+		return nil, err
+	}
+
 	return EncodeAsRawExtension(config)
 }
 
