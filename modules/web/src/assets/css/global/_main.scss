@@ -968,31 +968,13 @@ mat-button-toggle-group[group='projectOperatingSystemGroup'] {
 }
 
 .km-pagination-page-size-select-container {
-  font-size: variables.$font-size-caption;
-  margin-top: 10px;
-
   .mat-mdc-form-field {
-    width: 70px;
-
-    .mat-mdc-text-field-wrapper {
-      height: 40px;
-      padding-bottom: 0;
-
-      --mat-form-field-container-vertical-padding: 7px;
-
-      .mat-mdc-select .mat-mdc-select-trigger {
-        align-items: flex-end;
-        display: flex;
-
-        .mat-mdc-select-arrow-wrapper {
-          align-items: flex-end;
-          display: flex;
-        }
-      }
-    }
-
     .mat-mdc-form-field-bottom-align::before {
       display: none;
     }
   }
+}
+
+.km-paginator-container {
+  padding-top: 10px;
 }

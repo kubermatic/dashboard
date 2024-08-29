@@ -142,10 +142,6 @@
     --mat-select-enabled-arrow-color: #{map.get($colors, text)};
   }
 
-  .mat-mdc-optgroup-label {
-    background-color: map.get($colors, option-background);
-  }
-
   .mat-mdc-option {
     background-color: map.get($colors, option-background);
     color: map.get($colors, text);

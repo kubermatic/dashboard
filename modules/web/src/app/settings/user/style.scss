@@ -49,6 +49,16 @@
     .entry-label {
       min-width: 200px;
     }
+
+    .input {
+      margin: 0 16px -20px 0;
+      width: 310px;
+
+      &.sm {
+        width: 140px;
+      }
+
+    }
   }
 }
 
@@ -70,13 +80,4 @@
 
 .km-pointer {
   margin-left: 8px;
-}
-
-.input {
-  margin: 0 16px -20px 0;
-  width: 310px;
-
-  &.sm {
-    width: 140px;
-  }
 }
