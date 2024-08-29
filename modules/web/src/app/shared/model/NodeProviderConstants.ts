@@ -35,7 +35,12 @@ export enum NodeProvider {
   EDGE = 'edge',
   NONE = '',
 }
-
+export const NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS = [
+  NodeProvider.AWS,
+  NodeProvider.AZURE,
+  NodeProvider.GCP,
+  NodeProvider.OPENSTACK,
+];
 export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
 
 export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(

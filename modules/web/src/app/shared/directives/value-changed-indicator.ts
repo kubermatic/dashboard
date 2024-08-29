@@ -37,7 +37,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
 
     const element = this._el.nativeElement;
     const classList = Array.from(element.classList);
-    this._initialValue = this._control.control.value;
+    this._initialValue = _.cloneDeep(this._control.control.value);
 
     if (classList?.includes('mat-input-element')) {
       if (element.getAttribute('type') === 'number') {
@@ -74,6 +74,8 @@ export class ValueChangedIndicatorDirective implements OnInit {
       } else if (classList.includes('ngx-monaco-editor')) {
         this._initialValue = this._initialValue === null ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
+      } else if (classList?.includes('km-chip-list-with-input')) {
+        element.parentElement.classList.toggle('km-value-changed', !_.isEqual(this._initialValue, value));
       } else {
         this._initialValue = this._initialValue === null ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
