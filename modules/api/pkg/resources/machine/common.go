@@ -30,6 +30,7 @@ import (
 	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
 	aws "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/aws/types"
 	azure "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/azure/types"
+	"github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
 	tink "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins/tinkerbell/types"
 	baremetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/types"
 	digitalocean "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
@@ -274,7 +275,7 @@ func getVSphereProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 	return EncodeAsRawExtension(config)
 }
 
-func GetBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*baremetal.RawConfig, error) {
+func getBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, _ *kubermaticv1.Datacenter) (*baremetal.RawConfig, error) {
 	// Ensure Tinkerbell configuration is provided
 	if nodeSpec.Cloud.Baremetal.Tinkerbell == nil {
 		return nil, errors.New("tinkerbell provisioner is required in baremetal configuration")
@@ -283,8 +284,11 @@ func GetBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.No
 	tinkerbellConfig := nodeSpec.Cloud.Baremetal.Tinkerbell
 
 	// Validate required fields in Tinkerbell configuration
-	if tinkerbellConfig.HardwareRef.String() == "/" || tinkerbellConfig.OsImageUrl == "" {
-		return nil, errors.New("HardwareRef and OsImageUrl must be provided in Tinkerbell configuration")
+	if tinkerbellConfig.HardwareRef.String() == "/" {
+		return nil, errors.New("HardwareRef must be provided in Tinkerbell configuration")
+	}
+	if tinkerbellConfig.OsImageUrl == "" {
+		return nil, errors.New("OsImageUrl must be provided in Tinkerbell configuration")
 	}
 
 	// Prepare Tinkerbell plugin specification
@@ -304,14 +308,14 @@ func GetBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.No
 	// Create a new baremetal.RawConfig and set the DriverSpec
 	config := &baremetal.RawConfig{
 		DriverSpec: runtime.RawExtension{Raw: tinkerbellData},
-		Driver:     providerconfig.ConfigVarString{Value: "tinkerbell"},
+		Driver:     providerconfig.ConfigVarString{Value: string(plugins.Tinkerbell)},
 	}
 
 	return config, nil
 }
 
 func getBaremetalProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*runtime.RawExtension, error) {
-	config, err := GetBaremetalProviderConfig(c, nodeSpec, dc)
+	config, err := getBaremetalProviderConfig(c, nodeSpec, dc)
 	if err != nil {
 		return nil, err
 	}
