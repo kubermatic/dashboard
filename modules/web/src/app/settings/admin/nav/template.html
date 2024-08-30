@@ -168,6 +168,13 @@ limitations under the License.
 
       <a fxLayoutAlign=" center"
          routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Applications)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Applications}}</span>
+      </a>
+
+      <a fxLayoutAlign=" center"
+         routerLinkActive="active"
          [routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.BackupDestinations}}</span>
