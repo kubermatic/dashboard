@@ -542,8 +542,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this.provider === this.NodeProvider.EDGE
           ? clusterSpec?.cniPlugin?.type === CNIPlugin.Cilium
             ? CNIPlugin.Canal
-            : clusterSpec?.cniPlugin?.type ?? CNIPlugin.Canal
-          : clusterSpec?.cniPlugin?.type ?? CNIPlugin.Cilium
+            : (clusterSpec?.cniPlugin?.type ?? CNIPlugin.Canal)
+          : (clusterSpec?.cniPlugin?.type ?? CNIPlugin.Cilium)
       ),
       [Controls.CNIPluginVersion]: this._builder.control(clusterSpec?.cniPlugin?.version ?? ''),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv4 ?? null),
@@ -641,8 +641,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.APIServerAllowedIPRanges]:
             clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? this.controlValue(Controls.APIServerAllowedIPRanges),
           [Controls.NodePortsAllowedIPRanges]: this.isAllowedIPRangeSupported()
-            ? this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges?.cidrBlocks ??
-              this.controlValue(Controls.NodePortsAllowedIPRanges)
+            ? (this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges?.cidrBlocks ??
+              this.controlValue(Controls.NodePortsAllowedIPRanges))
             : this.controlValue(Controls.NodePortsAllowedIPRanges),
           [Controls.IPv4PodsCIDR]:
             NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? this.controlValue(Controls.IPv4PodsCIDR),
@@ -666,7 +666,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             [Controls.CNIPlugin]:
               this.provider === this.NodeProvider.EDGE && clusterSpec?.cniPlugin?.type === CNIPlugin.Cilium
                 ? CNIPlugin.Canal
-                : clusterSpec?.cniPlugin?.type ?? this.controlValue(Controls.CNIPlugin),
+                : (clusterSpec?.cniPlugin?.type ?? this.controlValue(Controls.CNIPlugin)),
           },
           {emitEvent: false}
         );
