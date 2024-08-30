@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Directive, ElementRef, Input, OnInit} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {DialogModeService} from '@app/core/services/dialog-mode';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { NgControl } from '@angular/forms';
+import { DialogModeService } from '@app/core/services/dialog-mode';
 import _ from 'lodash';
 
 @Directive({
@@ -71,7 +71,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
       } else if (classList.includes('mat-radio-group')) {
         this._initialValue = !this._initialValue ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
-      } else if (classList.includes('ngx-monaco-editor')) {
+      } else if (classList.includes('ngx-monaco-editor-v2')) {
         this._initialValue = this._initialValue === null ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
       } else {

@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
-import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule} from '@angular/router';
-import {CoreModule} from '@core/module';
-import {DatacenterService} from '@core/services/datacenter';
-import {HistoryService} from '@core/services/history';
-import {ProjectService} from '@core/services/project';
-import {UserService} from '@core/services/user';
-import {environment} from '@environments/environment';
-import {SharedModule} from '@shared/module';
-import {CookieService} from 'ngx-cookie-service';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
-import {kmTooltipDefaultOptions} from '../app-config';
-import {KubermaticComponent} from './component';
-import {AppConfigService} from './config.service';
-import {DashboardComponent} from './dashboard/component';
-import {GoogleAnalyticsService} from './google-analytics.service';
-import {AppRoutingModule} from './routing';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { CoreModule } from '@core/module';
+import { DatacenterService } from '@core/services/datacenter';
+import { HistoryService } from '@core/services/history';
+import { ProjectService } from '@core/services/project';
+import { UserService } from '@core/services/user';
+import { environment } from '@environments/environment';
+import { SharedModule } from '@shared/module';
+import { CookieService } from 'ngx-cookie-service';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { kmTooltipDefaultOptions } from '../app-config';
+import { KubermaticComponent } from './component';
+import { AppConfigService } from './config.service';
+import { DashboardComponent } from './dashboard/component';
+import { GoogleAnalyticsService } from './google-analytics.service';
+import { AppRoutingModule } from './routing';
 
 const appInitializerFn = (
   appConfigService: AppConfigService,
