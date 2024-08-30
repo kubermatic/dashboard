@@ -18,6 +18,7 @@ package packet
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/packethost/packngo"
 
@@ -67,7 +68,13 @@ func GetCredentialsForCluster(cloudSpec kubermaticv1.CloudSpec, secretKeySelecto
 }
 
 func ValidateCredentials(apiKey, projectID string) error {
-	client := packngo.NewClientWithAuth("kubermatic", apiKey, nil)
+	client := GetClient(apiKey)
 	_, _, err := client.Projects.Get(projectID, nil)
 	return err
+}
+
+func GetClient(apiKey string) *packngo.Client {
+	client := packngo.NewClientWithAuth("kubermatic", apiKey, nil)
+	client.UserAgent = fmt.Sprintf("kubermatic/api %s", client.UserAgent)
+	return client
 }

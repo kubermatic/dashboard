@@ -97,7 +97,7 @@ func PacketSizes(apiKey, projectID string, machineFilter kubermaticv1.MachineFla
 		return sizes, fmt.Errorf("missing required parameter: projectID")
 	}
 
-	client := packngo.NewClientWithAuth("kubermatic", apiKey, nil)
+	client := packet.GetClient(apiKey)
 	req, err := client.NewRequest(http.MethodGet, "/projects/"+projectID+"/plans", nil)
 	if err != nil {
 		return sizes, err
