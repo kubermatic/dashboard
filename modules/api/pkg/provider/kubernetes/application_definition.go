@@ -87,3 +87,7 @@ func (p *ApplicationDefinitionProvider) DeleteUnsecured(ctx context.Context, app
 	}
 	return nil
 }
+
+func (p *ApplicationDefinitionProvider) PatchUnsecured(ctx context.Context, oldAppDef, newAppDef *appskubermaticv1.ApplicationDefinition) error {
+	return p.privilegedClient.Patch(ctx, newAppDef, ctrlruntimeclient.MergeFrom(oldAppDef))
+}

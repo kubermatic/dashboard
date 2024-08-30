@@ -44,6 +44,8 @@ type ClientService interface {
 
 	ListApplicationInstallations(params *ListApplicationInstallationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListApplicationInstallationsOK, error)
 
+	PatchApplicationDefinition(params *PatchApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchApplicationDefinitionOK, error)
+
 	UpdateApplicationDefinition(params *UpdateApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateApplicationDefinitionOK, error)
 
 	UpdateApplicationInstallation(params *UpdateApplicationInstallationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateApplicationInstallationOK, error)
@@ -352,6 +354,44 @@ func (a *Client) ListApplicationInstallations(params *ListApplicationInstallatio
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListApplicationInstallationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PatchApplicationDefinition patches the given application definition this endpoint only supports patching annotations for now
+*/
+func (a *Client) PatchApplicationDefinition(params *PatchApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchApplicationDefinitionOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchApplicationDefinitionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "patchApplicationDefinition",
+		Method:             "PATCH",
+		PathPattern:        "/api/v2/applicationdefinitions/{appdef_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PatchApplicationDefinitionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PatchApplicationDefinitionOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PatchApplicationDefinitionDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

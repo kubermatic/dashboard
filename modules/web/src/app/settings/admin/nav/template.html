@@ -108,6 +108,15 @@ limitations under the License.
 
       <div class="sub-menu-item"
            routerLinkActive="active">
+        <a id="km-nav-item-applications"
+           [routerLink]="getRouterLink(adminPanelView.Applications)"
+           fxLayoutAlign=" center">
+          <span>{{adminPanelViewDisplayName.Applications}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
         <a id="km-nav-item-backupdestinations"
            [routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
            fxLayoutAlign=" center">
@@ -155,6 +164,13 @@ limitations under the License.
          [routerLink]="getRouterLink(adminPanelView.ProviderPresets)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.ProviderPresets}}</span>
+      </a>
+
+      <a fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Applications)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Applications}}</span>
       </a>
 
       <a fxLayoutAlign=" center"

@@ -12,16 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {PresetListComponent} from '@app/settings/admin/presets/component';
+@use 'variables';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: PresetListComponent,
-  },
-];
+.mat-mdc-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+}
 
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsPresetsRoutingModule {}
+.card {
+  margin-top: 20px;
+}
+
+km-search-field {
+  font-size: variables.$font-size-subhead;
+
+  i {
+    margin: 0;
+  }
+}

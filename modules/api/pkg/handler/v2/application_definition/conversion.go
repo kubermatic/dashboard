@@ -26,7 +26,8 @@ import (
 
 func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinitionListItem {
 	return &apiv2.ApplicationDefinitionListItem{
-		Name: appDef.Name,
+		Annotations: appDef.Annotations,
+		Name:        appDef.Name,
 		Spec: apiv2.ApplicationDefinitionListItemSpec{
 			DisplayName:      appDef.Spec.DisplayName,
 			Labels:           appDef.Labels,
@@ -44,6 +45,7 @@ func convertInternalToAPIApplicationDefinition(appDef *appskubermaticv1.Applicat
 		ObjectMeta: apiv1.ObjectMeta{
 			CreationTimestamp: apiv1.Time(appDef.CreationTimestamp),
 			Name:              appDef.Name,
+			Annotations:       appDef.Annotations,
 		},
 		Spec:   &appDef.Spec,
 		Labels: appDef.Labels,

@@ -498,6 +498,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/applicationdefinitions/{appdef_name}").
 		Handler(r.updateApplicationDefinition())
 
+	mux.Methods(http.MethodPatch).
+		Path("/applicationdefinitions/{appdef_name}").
+		Handler(r.patchApplicationDefinition())
+
 	mux.Methods(http.MethodDelete).
 		Path("/applicationdefinitions/{appdef_name}").
 		Handler(r.deleteApplicationDefinition())
@@ -10474,7 +10478,6 @@ func (r Routing) createApplicationDefinition() http.Handler {
 //
 //	Updates the given ApplicationDefinition
 //
-//
 //	 Consumes:
 //	 - application/json
 //
@@ -10493,6 +10496,33 @@ func (r Routing) updateApplicationDefinition() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(applicationdefinition.UpdateApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
 		applicationdefinition.DecodeUpdateApplicationDefinition,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v2/applicationdefinitions/{appdef_name} applications patchApplicationDefinition
+//
+//	Patch the given ApplicationDefinition; this endpoint only supports patching annotations, for now.
+//
+//	 Consumes:
+//	 - application/json
+//
+//	 Produces:
+//	 - application/json
+//
+//	 Responses:
+//	   default: errorResponse
+//	   200: ApplicationDefinition
+//	   401: empty
+//	   403: empty
+func (r Routing) patchApplicationDefinition() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(applicationdefinition.PatchApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
+		applicationdefinition.DecodePatchApplicationDefinitionReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

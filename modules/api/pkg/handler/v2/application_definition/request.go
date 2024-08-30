@@ -53,6 +53,38 @@ type updateApplicationDefinitionReq struct {
 	Body apiv2.ApplicationDefinitionBody
 }
 
+// patchApplicationDefinitionReq defines HTTP request for patchApplicationDefinitionReq
+// swagger:parameters patchApplicationDefinition
+type patchApplicationDefinitionReq struct {
+	// in: path
+	AppDefName string `json:"appdef_name"`
+
+	// in: body
+	// required: true
+	Body struct {
+		Annotations map[string]string `json:"annotations,omitempty"`
+	}
+}
+
+func DecodePatchApplicationDefinitionReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req patchApplicationDefinitionReq
+	appDefName, err := DecodeApplicationDefinitionName(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.AppDefName = appDefName
+
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+		return nil, err
+	}
+	return req, nil
+}
+
+func (r patchApplicationDefinitionReq) Validate() error {
+	// Since we are only updating the annotations, we don't need to validate the request.
+	return nil
+}
+
 // deleteApplicationDefinitionReq defines HTTP request for deleteApplicationDefinitionReq
 // swagger:parameters deleteApplicationDefinition
 type deleteApplicationDefinitionReq struct {

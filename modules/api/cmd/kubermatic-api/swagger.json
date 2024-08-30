@@ -6553,6 +6553,65 @@
             }
           }
         }
+      },
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "applications"
+        ],
+        "summary": "Patch the given ApplicationDefinition; this endpoint only supports patching annotations, for now.",
+        "operationId": "patchApplicationDefinition",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "AppDefName",
+            "name": "appdef_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "x-go-name": "Annotations"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationDefinition",
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinition"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
       }
     },
     "/api/v2/cni/{cni_plugin_type}/versions": {
@@ -27368,6 +27427,13 @@
       "type": "object",
       "title": "ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"

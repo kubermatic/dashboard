@@ -14,7 +14,7 @@
 
 import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AdminPanelSections, ProjectSidenavSection, AdminPanelView, View} from '@app/shared/entity/common';
+import {AdminPanelSections, AdminPanelView, ProjectSidenavSection, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
 @Component({
   selector: 'km-side-nav-field',
@@ -110,7 +110,8 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
           this.checkUrl(AdminPanelView.BackupDestinations) ||
           this.checkUrl(AdminPanelView.ProjectQuotas) ||
           this.checkUrl(AdminPanelView.OPA) ||
-          this.checkUrl(AdminPanelView.SeedConfiguration)
+          this.checkUrl(AdminPanelView.SeedConfiguration) ||
+          this.checkUrl(AdminPanelView.Applications)
         );
       case AdminPanelSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
