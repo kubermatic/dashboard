@@ -18,6 +18,9 @@ import (
 // swagger:model ApplicationDefinitionListItem
 type ApplicationDefinitionListItem struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 

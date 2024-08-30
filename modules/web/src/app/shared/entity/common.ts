@@ -112,6 +112,7 @@ export enum AdminPanelView {
   Metering = 'metering',
   Accounts = 'accounts',
   Administrators = 'administrators',
+  Applications = 'applications',
 }
 
 export enum AdminPanelViewDisplayName {
@@ -128,6 +129,7 @@ export enum AdminPanelViewDisplayName {
   Metering = 'Metering',
   Accounts = 'Accounts',
   Administrators = 'Administrators',
+  Applications = 'Applications',
 }
 
 export enum AdminPanelSections {

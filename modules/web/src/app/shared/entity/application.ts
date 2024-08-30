@@ -61,6 +61,7 @@ export class ApplicationDefinition {
   deletionTimestamp?: Date;
   id: string;
   name: string;
+  annotations?: Record<string, string>;
   spec: ApplicationDefinitionSpec;
 }
 
@@ -138,6 +139,12 @@ export namespace ApplicationMethod {
 
 export enum ApplicationLabel {
   ManagedBy = 'apps.kubermatic.k8c.io/managed-by',
+}
+
+export enum ApplicationAnnotations {
+  Default = 'apps.kubermatic.k8c.io/default',
+  Enforce = 'apps.kubermatic.k8c.io/enforce',
+  TargetDatacenters = 'apps.kubermatic.k8c.io/target-datacenters',
 }
 
 export enum ApplicationLabelValue {

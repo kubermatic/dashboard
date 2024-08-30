@@ -13,15 +13,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {PresetListComponent} from '@app/settings/admin/presets/component';
+import {ApplicationsComponent} from '@app/settings/admin/applications/component';
+import {ApplicationsRoutingModule} from '@app/settings/admin/applications/routing';
+import {SharedModule} from '@shared/module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: PresetListComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsPresetsRoutingModule {}
+@NgModule({
+  imports: [SharedModule, ApplicationsRoutingModule],
+  declarations: [ApplicationsComponent],
+})
+export class ApplicationsModule {}

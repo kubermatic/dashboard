@@ -18,9 +18,9 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Application, ApplicationDefinition, getApplicationLogoData} from '@shared/entity/application';
+import _ from 'lodash';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap, tap} from 'rxjs/operators';
-import _ from 'lodash';
 
 @Injectable()
 export class ApplicationService {
@@ -95,6 +95,11 @@ export class ApplicationService {
         });
       })
     );
+  }
+
+  patchApplicationDefinition(name: string, patch: ApplicationDefinition): Observable<ApplicationDefinition> {
+    const url = `${this._restRoot}/applicationdefinitions/${name}`;
+    return this._httpClient.patch<ApplicationDefinition>(url, patch);
   }
 
   add(application: Application, projectID: string, clusterID: string): Observable<Application> {

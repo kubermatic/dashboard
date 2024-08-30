@@ -1337,6 +1337,9 @@ type ApplicationDefinitionProvider interface {
 	// is unsafe in a sense that it uses privileged account to get the resources
 	UpdateUnsecured(ctx context.Context, appDef *appskubermaticv1.ApplicationDefinition) (*appskubermaticv1.ApplicationDefinition, error)
 
+	// PatchUnsecured patches an ApplicationDefinition
+	PatchUnsecured(ctx context.Context, oldAppDef, newAppDef *appskubermaticv1.ApplicationDefinition) error
+
 	// Delete deletes an ApplicationDefinition
 	//
 	// Note that this function:

@@ -14,14 +14,14 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {PresetListComponent} from '@app/settings/admin/presets/component';
+import {ApplicationsComponent} from '@app/settings/admin/applications/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: PresetListComponent,
+    component: ApplicationsComponent,
   },
 ];
 
 @NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsPresetsRoutingModule {}
+export class ApplicationsRoutingModule {}

@@ -2031,9 +2031,9 @@ type Permission struct {
 // ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.
 // swagger:model ApplicationDefinitionListItem
 type ApplicationDefinitionListItem struct {
-	Name string `json:"name"`
-
-	Spec ApplicationDefinitionListItemSpec `json:"spec"`
+	Annotations map[string]string                 `json:"annotations,omitempty"`
+	Name        string                            `json:"name"`
+	Spec        ApplicationDefinitionListItemSpec `json:"spec"`
 }
 
 // ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.

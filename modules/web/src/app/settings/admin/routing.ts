@@ -70,6 +70,10 @@ const routes: Routes = [
         loadChildren: () => import('./accounts/module').then(m => m.AccountsModule),
       },
       {
+        path: 'applications',
+        loadChildren: () => import('./applications/module').then(m => m.ApplicationsModule),
+      },
+      {
         path: 'metering',
         loadChildren: () => DynamicModule.Metering,
         data: {preload: true},

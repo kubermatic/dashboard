@@ -287,6 +287,10 @@ func GenerateCluster(
 			return nil, fmt.Errorf("cannot marshal initial applications: %w", err)
 		}
 		partialCluster.Annotations[kubermaticv1.InitialApplicationInstallationsRequestAnnotation] = string(data)
+	} else {
+		// This is a workaround to ensure that if the request to create a cluster is coming in from our UI, it's known that the user explicitly disabled
+		// the default applications.
+		partialCluster.Annotations[kubermaticv1.InitialApplicationInstallationsRequestAnnotation] = "[]"
 	}
 
 	// Propagate initial CNI values request annotation
