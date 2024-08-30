@@ -26,7 +26,7 @@ import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {kmTooltipDefaultOptions} from '../app-config';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';

@@ -96,7 +96,7 @@ import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {SizeFormatterPipe} from '@shared/pipes/size';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ClipboardModule} from 'ngx-clipboard';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
+import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {AddProjectDialogComponent} from './components/add-project-dialog/component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/component';
 import {AddonsListComponent} from './components/addon-list/component';

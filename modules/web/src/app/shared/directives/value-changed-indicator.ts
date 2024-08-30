@@ -71,7 +71,7 @@ export class ValueChangedIndicatorDirective implements OnInit {
       } else if (classList.includes('mat-radio-group')) {
         this._initialValue = !this._initialValue ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
-      } else if (classList.includes('ngx-monaco-editor')) {
+      } else if (classList.includes('ngx-monaco-editor-v2')) {
         this._initialValue = this._initialValue === null ? value : this._initialValue;
         element.classList.toggle('km-value-changed', this._initialValue !== value);
       } else if (classList?.includes('km-chip-list-with-input')) {
