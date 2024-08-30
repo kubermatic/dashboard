@@ -17,6 +17,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
+import {AuditLoggingWebhookBackend} from '@shared/entity/cluster';
 import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
 import {DialogActionMode} from '@shared/types/common';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
@@ -45,6 +46,10 @@ export enum Controls {
   RequiredEmails = 'requiredEmails',
   EnforcePodSecurityPolicy = 'enforcePodSecurityPolicy',
   EnforceAuditLogging = 'enforceAuditLogging',
+  EnforceAuditWebhookBackend = 'enforcedAuditWebhookSettings',
+  AuditWebhookBackendInitialBackoff = 'auditWebhookBackendInitialBackoff',
+  AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
+  AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   MachineFlavorFilter = 'machineFlavorFilter',
 }
 
@@ -112,11 +117,41 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
       enforceAuditLogging: new FormControl(this.data.isEditing && this.data.datacenter.spec.enforceAuditLogging),
+      enforcedAuditWebhookSettings: new FormControl(
+        this.data.isEditing && !!this.data.datacenter.spec.enforcedAuditWebhookSettings
+      ),
       machineFlavorFilter: new FormControl(),
     });
 
     this._initRequiredEmailsInput();
     this._initProviderConfigEditor();
+
+    if (this.form.get(Controls.EnforceAuditWebhookBackend).value) {
+      this._initAuditWebhookBackendControls(this.data.datacenter.spec.enforcedAuditWebhookSettings);
+    }
+
+    this.form
+      .get(Controls.EnforceAuditLogging)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (!value && this.form.get(Controls.EnforceAuditWebhookBackend).value) {
+          this.form.get(Controls.EnforceAuditWebhookBackend).setValue(false);
+        }
+      });
+
+    this.form
+      .get(Controls.EnforceAuditWebhookBackend)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (value) {
+          this._initAuditWebhookBackendControls();
+        } else {
+          this.form.removeControl(Controls.AuditWebhookBackendSecretName);
+          this.form.removeControl(Controls.AuditWebhookBackendSecretNamespace);
+          this.form.removeControl(Controls.AuditWebhookBackendInitialBackoff);
+          this.form.updateValueAndValidity();
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -155,6 +190,15 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         requiredEmails: this.requiredEmails,
         enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
         enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
+        enforcedAuditWebhookSettings: this.form.get(Controls.EnforceAuditWebhookBackend).value
+          ? {
+              auditWebhookConfig: {
+                name: this.form.get(Controls.AuditWebhookBackendSecretName).value,
+                namespace: this.form.get(Controls.AuditWebhookBackendSecretNamespace).value,
+              },
+              auditWebhookInitialBackoff: this.form.get(Controls.AuditWebhookBackendInitialBackoff).value,
+            }
+          : null,
         machineFlavorFilter: this.form.get(Controls.MachineFlavorFilter).value,
       },
     };
@@ -208,6 +252,28 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       if (!_.isEmpty(spec)) {
         this.providerConfig = y.dump(spec);
       }
+    }
+  }
+
+  private _initAuditWebhookBackendControls(config?: AuditLoggingWebhookBackend): void {
+    if (!this.form.get(Controls.AuditWebhookBackendSecretName)) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretName, new FormControl('', Validators.required));
+    }
+    if (!this.form.get(Controls.AuditWebhookBackendSecretNamespace)) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretNamespace, new FormControl('', Validators.required));
+    }
+    if (!this.form.get(Controls.AuditWebhookBackendInitialBackoff)) {
+      this.form.addControl(Controls.AuditWebhookBackendInitialBackoff, new FormControl(''));
+    }
+
+    this.form.updateValueAndValidity();
+
+    if (config) {
+      this.form.patchValue({
+        [Controls.AuditWebhookBackendSecretName]: config?.auditWebhookConfig?.name,
+        [Controls.AuditWebhookBackendSecretNamespace]: config?.auditWebhookConfig?.namespace,
+        [Controls.AuditWebhookBackendInitialBackoff]: config?.auditWebhookInitialBackoff,
+      });
     }
   }
 

@@ -393,6 +393,47 @@ limitations under the License.
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
             </div>
 
+            <ng-container *ngIf="!!controlValue(Controls.AuditLogging)">
+              <div fxLayoutAlign=" center">
+                <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
+                  Audit Webhook Backend
+                </mat-checkbox>
+                <i class="km-icon-info km-pointer"
+                   [matTooltip]="enforcedAuditWebhookSettings ? 'Audit Webhook Backend settings are enforced by your admin in the chosen datacenter.' : 'Configure webhook backend for audit logging functionality.'"></i>
+              </div>
+
+              <ng-container *ngIf="!!controlValue(Controls.AuditWebhookBackend)">
+                <mat-form-field>
+                  <mat-label>Secret Name</mat-label>
+                  <input matInput
+                         [formControlName]="Controls.AuditWebhookBackendSecretName"
+                         type="text"
+                         autocomplete="off" />
+                  <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretName)?.hasError('required')">
+                    <strong>Required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Secret Namespace</mat-label>
+                  <input matInput
+                         [formControlName]="Controls.AuditWebhookBackendSecretNamespace"
+                         type="text"
+                         autocomplete="off" />
+                  <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretNamespace)?.hasError('required')">
+                    <strong>Required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Initial Backoff</mat-label>
+                  <input matInput
+                         [formControlName]="Controls.AuditWebhookBackendInitialBackoff"
+                         type="text"
+                         autocomplete="off" />
+                  <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
+                </mat-form-field>
+              </ng-container>
+            </ng-container>
+
             <mat-checkbox [formControlName]="Controls.ClusterBackup"
                           *ngIf="isclusterBackupEnabled">
               Cluster Backup

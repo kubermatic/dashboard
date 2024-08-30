@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {AuditLoggingWebhookBackend} from '@shared/entity/cluster';
 import {StatusIcon} from '@shared/utils/health-status';
 import {NodeProvider} from '../model/NodeProviderConstants';
 import {Metadata} from './common';
@@ -34,6 +35,7 @@ export class DatacenterSpec {
   provider: string;
   requiredEmails?: string[];
   enforceAuditLogging: boolean;
+  enforcedAuditWebhookSettings?: AuditLoggingWebhookBackend;
   enforcePodSecurityPolicy: boolean;
   kubelb?: KubeLB;
   ipv6Enabled?: boolean;

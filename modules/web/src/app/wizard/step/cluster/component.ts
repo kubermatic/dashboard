@@ -40,6 +40,7 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
 import {
+  AuditLoggingWebhookBackend,
   AuditPolicyPreset,
   Cluster,
   ClusterAnnotation,
@@ -69,7 +70,7 @@ import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
-import {combineLatest, merge} from 'rxjs';
+import {combineLatest, merge, Subscription} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
@@ -91,6 +92,10 @@ enum Controls {
   Type = 'type',
   AuditLogging = 'auditLogging',
   AuditPolicyPreset = 'auditPolicyPreset',
+  AuditWebhookBackend = 'auditWebhookBackend',
+  AuditWebhookBackendInitialBackoff = 'auditWebhookBackendInitialBackoff',
+  AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
+  AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   UserSSHKeyAgent = 'userSSHKeyAgent',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
@@ -167,6 +172,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   provider: NodeProvider;
+  enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -180,6 +186,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
   private _defaultProxyMode: ProxyMode;
+  private _auditWebhookBackendChangesSubscription: Subscription;
   private readonly _minNameLength = 5;
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
   private readonly _cniInitialValuesMinimumSupportedVersion = '1.13.0';
@@ -257,9 +264,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
+          this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
           this._enforceDisableCSIDriver(datacenter.spec.disableCsiDriver);
+          this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -325,6 +334,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._handleClusterBackupChange();
         } else {
           this.form.removeControl(Controls.BackupStorageLocation);
+        }
+      });
+
+    this.control(Controls.AuditLogging)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (!value && this.controlValue(Controls.AuditWebhookBackend)) {
+          this.control(Controls.AuditWebhookBackend).setValue(false);
+        }
+      });
+
+    this.control(Controls.AuditWebhookBackend)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((value: boolean) => {
+        if (value) {
+          this._initAuditWebhookBackendControls();
+        } else {
+          this.form.removeControl(Controls.AuditWebhookBackendSecretName);
+          this.form.removeControl(Controls.AuditWebhookBackendSecretNamespace);
+          this.form.removeControl(Controls.AuditWebhookBackendInitialBackoff);
+          this._auditWebhookBackendChangesSubscription?.unsubscribe();
+          this.form.updateValueAndValidity();
         }
       });
 
@@ -455,6 +486,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this._datacenterSpec);
   }
+
   getPluginName(name: string): string {
     return AdmissionPluginUtils.getPluginName(name);
   }
@@ -517,6 +549,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.required,
       ]),
       [Controls.AuditLogging]: this._builder.control(clusterSpec?.auditLogging?.enabled ?? false),
+      [Controls.AuditWebhookBackend]: this._builder.control(!!clusterSpec?.auditLogging?.webhookBackend ?? false),
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
       [Controls.ClusterBackup]: this._builder.control(!!clusterSpec?.backupConfig ?? false),
@@ -583,6 +616,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._builder.control(clusterSpec?.backupConfig?.backupStorageLocation?.name, Validators.required)
       );
     }
+    if (this.controlValue(Controls.AuditWebhookBackend)) {
+      this._initAuditWebhookBackendControls(clusterSpec?.auditLogging?.webhookBackend);
+    }
   }
 
   private _loadClusterDefaults(): void {
@@ -611,6 +647,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.AuditLogging]: clusterSpec?.auditLogging?.enabled ?? this.controlValue(Controls.AuditLogging),
           [Controls.AuditPolicyPreset]:
             clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
+          [Controls.AuditWebhookBackend]: !!clusterSpec?.auditLogging?.webhookBackend,
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
           [Controls.ClusterBackup]: !!clusterSpec.backupConfig ?? false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
@@ -677,6 +714,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         if (!this.isDualStackAllowed) {
           this.control(Controls.IPFamily).reset();
           this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
+        }
+
+        if (this.controlValue(Controls.AuditWebhookBackend) && !this.enforcedAuditWebhookSettings) {
+          this._initAuditWebhookBackendControls(clusterSpec?.auditLogging?.webhookBackend);
         }
 
         this._handleClusterSpecChanges();
@@ -751,9 +792,63 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
   }
 
+  private _initAuditWebhookBackendControls(config?: AuditLoggingWebhookBackend): void {
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendSecretName))) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretName, this._builder.control('', Validators.required));
+    }
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendSecretNamespace))) {
+      this.form.addControl(Controls.AuditWebhookBackendSecretNamespace, this._builder.control('', Validators.required));
+    }
+    if (_.isEmpty(this.control(Controls.AuditWebhookBackendInitialBackoff))) {
+      this.form.addControl(Controls.AuditWebhookBackendInitialBackoff, this._builder.control(''));
+    }
+
+    this._auditWebhookBackendChangesSubscription?.unsubscribe(); // avoid duplicate subscriptions
+    this.form.updateValueAndValidity();
+
+    this._auditWebhookBackendChangesSubscription = merge(
+      this.control(Controls.AuditWebhookBackendSecretName).valueChanges,
+      this.control(Controls.AuditWebhookBackendSecretNamespace).valueChanges,
+      this.control(Controls.AuditWebhookBackendInitialBackoff).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    if (config) {
+      this.form.patchValue({
+        [Controls.AuditWebhookBackendSecretName]: config?.auditWebhookConfig?.name,
+        [Controls.AuditWebhookBackendSecretNamespace]: config?.auditWebhookConfig?.namespace,
+        [Controls.AuditWebhookBackendInitialBackoff]: config?.auditWebhookInitialBackoff,
+      });
+    }
+  }
+
+  private _enforceAuditWebhookBackendSettings(auditWebhookBackend?: AuditLoggingWebhookBackend): void {
+    if (auditWebhookBackend) {
+      if (!this.form.get(Controls.AuditWebhookBackend).value) {
+        this.form.get(Controls.AuditWebhookBackend).setValue(true, {emitEvent: false});
+        this._initAuditWebhookBackendControls(auditWebhookBackend);
+      } else {
+        this.form.patchValue({
+          [Controls.AuditWebhookBackendSecretName]: auditWebhookBackend.auditWebhookConfig?.name,
+          [Controls.AuditWebhookBackendSecretNamespace]: auditWebhookBackend.auditWebhookConfig?.namespace,
+          [Controls.AuditWebhookBackendInitialBackoff]: auditWebhookBackend.auditWebhookInitialBackoff,
+        });
+      }
+    }
+    this._enforce(Controls.AuditWebhookBackend, !!auditWebhookBackend);
+    if (this.control(Controls.AuditWebhookBackend).value) {
+      this._enforce(Controls.AuditWebhookBackendSecretName, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendSecretNamespace, !!auditWebhookBackend);
+      this._enforce(Controls.AuditWebhookBackendInitialBackoff, !!auditWebhookBackend);
+    }
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).disable();
+    } else {
+      this.form.get(control).enable();
     }
   }
 
@@ -934,7 +1029,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         version: this.controlValue(Controls.Version),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
-          policyPreset: this.controlValue(Controls.AuditPolicyPreset),
+          policyPreset: this.controlValue(Controls.AuditLogging) ? this.controlValue(Controls.AuditPolicyPreset) : '',
+          webhookBackend: this._getAuditWebhookBackendConfig(),
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
@@ -969,6 +1065,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       clusterObject.spec.backupConfig = null;
     }
     return clusterObject;
+  }
+
+  private _getAuditWebhookBackendConfig(): AuditLoggingWebhookBackend {
+    if (this.controlValue(Controls.AuditWebhookBackend) && !this.enforcedAuditWebhookSettings) {
+      return {
+        auditWebhookConfig: {
+          name: this.controlValue(Controls.AuditWebhookBackendSecretName),
+          namespace: this.controlValue(Controls.AuditWebhookBackendSecretNamespace),
+        },
+        auditWebhookInitialBackoff: this.controlValue(Controls.AuditWebhookBackendInitialBackoff),
+      };
+    }
+    return null;
   }
 
   private initializeCiliumValues(valuesConfig: string | object): string {

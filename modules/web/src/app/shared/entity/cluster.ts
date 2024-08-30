@@ -446,6 +446,17 @@ export enum AuditPolicyPreset {
 export class AuditLoggingSettings {
   enabled?: boolean;
   policyPreset?: AuditPolicyPreset;
+  webhookBackend?: AuditLoggingWebhookBackend;
+}
+
+export class AuditLoggingWebhookBackend {
+  auditWebhookInitialBackoff?: string;
+  auditWebhookConfig: AuditLoggingWebhookSecretRef;
+}
+
+export class AuditLoggingWebhookSecretRef {
+  name: string;
+  namespace: string;
 }
 
 export class KubernetesDashboard {

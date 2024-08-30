@@ -142,6 +142,45 @@ limitations under the License.
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging"
                   kmValueChangedIndicator>Enforce Audit Logging</mat-checkbox>
 
+    <ng-container *ngIf="!!form.get(controls.EnforceAuditLogging).value">
+      <mat-checkbox [formControlName]="controls.EnforceAuditWebhookBackend">
+        Audit Webhook Backend
+        <i class="km-icon-info km-pointer"
+           matTooltip="Configure webhook backend for audit logging functionality. This enforces webhook backend for audit logs of all the clusters within the DC, ignoring cluster-specific settings."></i>
+      </mat-checkbox>
+
+      <ng-container *ngIf="!!form.get(controls.EnforceAuditWebhookBackend).value">
+        <mat-form-field>
+          <mat-label>Secret Name</mat-label>
+          <input matInput
+                 [formControlName]="controls.AuditWebhookBackendSecretName"
+                 type="text"
+                 autocomplete="off" />
+          <mat-error *ngIf="form.get(controls.AuditWebhookBackendSecretName)?.hasError('required')">
+            <strong>Required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Secret Namespace</mat-label>
+          <input matInput
+                 [formControlName]="controls.AuditWebhookBackendSecretNamespace"
+                 type="text"
+                 autocomplete="off" />
+          <mat-error *ngIf="form.get(controls.AuditWebhookBackendSecretNamespace)?.hasError('required')">
+            <strong>Required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Initial Backoff</mat-label>
+          <input matInput
+                 [formControlName]="controls.AuditWebhookBackendInitialBackoff"
+                 type="text"
+                 autocomplete="off" />
+          <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
+        </mat-form-field>
+      </ng-container>
+    </ng-container>
+
     <km-machine-flavor-filter class="km-machine-flavor-filter"
                               [formControl]="form.get(controls.MachineFlavorFilter)"
                               [machineFlavorFilter]="machineFlavorFilter"></km-machine-flavor-filter>

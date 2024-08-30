@@ -142,14 +142,16 @@ limitations under the License.
         </ng-container>
       </km-chip-list>
 
-      <mat-checkbox [formControlName]="Controls.Konnectivity"
-                    [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
-                    kmValueChangedIndicator>
-        Konnectivity
+      <div fxLayoutAlign=" center">
+        <mat-checkbox [formControlName]="Controls.Konnectivity"
+                      [class.km-text-muted]="form.get(Controls.Konnectivity).disabled"
+                      kmValueChangedIndicator>
+          Konnectivity
+        </mat-checkbox>
         <i *ngIf="!!form.get(Controls.Konnectivity).value && form.get(Controls.Konnectivity).disabled"
            class="km-icon-info km-pointer"
            matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
-      </mat-checkbox>
+      </div>
 
       <div fxLayoutAlign=" center">
         <mat-checkbox [formControlName]="Controls.AuditLogging"
@@ -179,6 +181,47 @@ limitations under the License.
            class="km-icon-info km-pointer"
            matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
       </div>
+
+      <ng-container *ngIf="!!form.get(Controls.AuditLogging).value">
+        <div fxLayoutAlign=" center">
+          <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
+            Audit Webhook Backend
+          </mat-checkbox>
+          <i class="km-icon-info km-pointer"
+             matTooltip="Configure webhook backend for audit logging functionality."></i>
+        </div>
+
+        <ng-container *ngIf="!!form.get(Controls.AuditWebhookBackend).value">
+          <mat-form-field>
+            <mat-label>Secret Name</mat-label>
+            <input matInput
+                   [formControlName]="Controls.AuditWebhookBackendSecretName"
+                   type="text"
+                   autocomplete="off" />
+            <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretName)?.hasError('required')">
+              <strong>Required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Secret Namespace</mat-label>
+            <input matInput
+                   [formControlName]="Controls.AuditWebhookBackendSecretNamespace"
+                   type="text"
+                   autocomplete="off" />
+            <mat-error *ngIf="form.get(Controls.AuditWebhookBackendSecretNamespace)?.hasError('required')">
+              <strong>Required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Initial Backoff</mat-label>
+            <input matInput
+                   [formControlName]="Controls.AuditWebhookBackendInitialBackoff"
+                   type="text"
+                   autocomplete="off" />
+            <mat-hint>Leave empty to use the default value. Default value is 10s.</mat-hint>
+          </mat-form-field>
+        </ng-container>
+      </ng-container>
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration"
                     kmValueChangedIndicator>
