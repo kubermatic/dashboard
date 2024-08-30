@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule } from '@core/module';
-import { MLAService } from '@core/services/mla';
-import { NotificationService } from '@core/services/notification';
-import { SharedModule } from '@shared/module';
-import { fakeDigitaloceanCluster } from '@test/data/cluster';
-import { fakeRuleGroups } from '@test/data/mla';
-import { fakeProject } from '@test/data/project';
-import { asyncData } from '@test/services/cluster-mock';
-import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
-import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG } from 'ngx-monaco-editor-v2';
-import { Mode, RuleGroupDialog } from './component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreModule} from '@core/module';
+import {MLAService} from '@core/services/mla';
+import {NotificationService} from '@core/services/notification';
+import {SharedModule} from '@shared/module';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeRuleGroups} from '@test/data/mla';
+import {fakeProject} from '@test/data/project';
+import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor-v2';
+import {Mode, RuleGroupDialog} from './component';
 
 declare let monaco: any;
 
