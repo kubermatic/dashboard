@@ -41,7 +41,8 @@ limitations under the License.
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">
-      <i [ngClass]="getIconClass()"></i>
+      <i [ngClass]="getIconClass()"
+         matButtonIcon></i>
       <span>{{data.confirmLabel}}</span>
     </button>
     <km-button *ngIf="data.throttleButton"

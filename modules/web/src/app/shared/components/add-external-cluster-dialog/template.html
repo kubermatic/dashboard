@@ -62,9 +62,10 @@ limitations under the License.
           mat-flat-button
           type="button"
           color="tertiary"
-          (click)="previous(stepper)"
+          (click)="previous()"
           *ngIf="!first">
-    <i class="km-icon-mask km-icon-back"></i>
+    <i class="km-icon-mask km-icon-back"
+       matButtonIcon></i>
     <span>Back</span>
   </button>
   <button mat-flat-button
@@ -72,7 +73,8 @@ limitations under the License.
           (click)="next()"
           [disabled]="invalid"
           *ngIf="!last">
-    <i class="km-icon-mask km-icon-next"></i>
+    <i class="km-icon-mask km-icon-next"
+       matButtonIcon></i>
     <span>Next</span>
   </button>
   <km-button *ngIf="last"

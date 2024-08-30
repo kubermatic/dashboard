@@ -32,9 +32,9 @@ limitations under the License.
           color="quaternary"
           [matTooltip]="getAddBtnTooltip()"
           [disabled]="!isClusterReady"
-          fxLayoutAlign="center center"
           (click)="add()">
-    <i class="km-icon-mask km-icon-add"></i>
+    <i class="km-icon-mask km-icon-add"
+       matButtonIcon></i>
     <span>Install Addon</span>
   </button>
 </div>

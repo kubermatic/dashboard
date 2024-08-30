@@ -366,10 +366,10 @@ limitations under the License.
   <button id="km-add-project-top-btn"
           mat-flat-button
           type="button"
-          fxLayoutAlign="center center"
           [disabled]="isProjectCreationRestricted()"
           (click)="addProject()">
-    <i class="km-icon-mask km-icon-add"></i>
+    <i class="km-icon-mask km-icon-add"
+       matButtonIcon></i>
     <span>Add Project</span>
   </button>
 </ng-template>

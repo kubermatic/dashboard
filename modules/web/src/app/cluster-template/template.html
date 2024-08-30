@@ -29,14 +29,14 @@ limitations under the License.
         <router-outlet name="quota-widget"
                        (activate)="onActivate($event)"></router-outlet>
       </div>
-      <button fxLayoutAlign="center center"
-              mat-flat-button
+      <button mat-flat-button
               type="button"
               [matTooltip]="projectViewOnlyToolTip"
               [matTooltipDisabled]="canCreate()"
               (click)="create()"
               [disabled]="!canCreate() || isGroupConfigLoading">
-        <i class="km-icon-mask km-icon-add"></i>
+        <i class="km-icon-mask km-icon-add"
+           matButtonIcon></i>
         <span>Create Cluster Template</span>
       </button>
     </div>

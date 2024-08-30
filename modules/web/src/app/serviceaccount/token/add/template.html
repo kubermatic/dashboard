@@ -16,8 +16,7 @@ limitations under the License.
 
 <km-dialog-title>{{mode}} Token</km-dialog-title>
 
-<form *ngIf="mode === modes.Create"
-      (keydown.enter)="form.valid ? update() : null">
+<form *ngIf="mode === modes.Create">
   <mat-horizontal-stepper class="km-stepper-in-dialog"
                           linear
                           disableRipple
@@ -61,8 +60,7 @@ limitations under the License.
   </ng-container>
 </mat-dialog-actions>
 
-<form *ngIf="mode === modes.Edit"
-      (keydown.enter)="form.valid ? update() : null">
+<form *ngIf="mode === modes.Edit">
   <mat-dialog-content>
     <km-serviceaccount-token-name-step [formControl]="form.get(controls.Name)"></km-serviceaccount-token-name-step>
   </mat-dialog-content>
@@ -103,18 +101,19 @@ limitations under the License.
              let-btnId="btnId">
   <a [href]="downloadURL"
      [download]="downloadTitle"
+     mat-flat-button
+     color="alternative"
      target="_blank"
      rel="noopener">
-    <button mat-flat-button
-            color="alternative">
-      <i [ngClass]="class"></i>
-      Download Token
-    </button>
+    <i class="km-icon-mask km-icon-download"
+       matButtonIcon></i>
+    <span>Download Token</span>
   </a>
-  <button id={{btnId}}
+  <button [id]="btnId"
           mat-flat-button
           mat-dialog-close>
-    <i class="km-icon-mask km-icon-check i-24"></i>
+    <i class="km-icon-mask km-icon-check i-24"
+       matButtonIcon></i>
     <span>Got it</span>
   </button>
 </ng-template>

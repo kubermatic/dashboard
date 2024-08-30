@@ -491,8 +491,6 @@ km-dashboard {
     align-items: center;
 
     > div:first-of-type {
-      display: initial !important;
-      flex: auto !important;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

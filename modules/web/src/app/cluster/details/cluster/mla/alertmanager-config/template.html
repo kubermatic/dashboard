@@ -42,10 +42,9 @@ limitations under the License.
        rel="noopener noreferrer"
        mat-flat-button
        color="quaternary"
-       *ngIf="shouldDisplayLink(Type.Alertmanager)"
-       fxFlex
-       fxLayoutAlign=" center">
-      <i class="km-icon-mask km-icon-external-link"></i>
+       *ngIf="shouldDisplayLink(Type.Alertmanager)">
+      <i class="km-icon-mask km-icon-external-link"
+         matButtonIcon></i>
       <span>Open Alertmanager UI</span>
     </a>
     <a [href]="getLinkURL(Type.Grafana)"
@@ -53,10 +52,9 @@ limitations under the License.
        rel="noopener noreferrer"
        mat-flat-button
        color="quaternary"
-       *ngIf="shouldDisplayLink(Type.Grafana)"
-       fxFlex
-       fxLayoutAlign=" center">
-      <i class="km-icon-mask km-icon-external-link"></i>
+       *ngIf="shouldDisplayLink(Type.Grafana)">
+      <i class="km-icon-mask km-icon-external-link"
+         matButtonIcon></i>
       <span>Open Grafana UI</span>
     </a>
     <i *ngIf="displayGrafanaWarning()"

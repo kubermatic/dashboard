@@ -40,20 +40,20 @@ limitations under the License.
     <button *ngIf="isConnectionLost"
             mat-flat-button
             class="button-border-box"
-            fxLayoutAlign="center center"
             matTooltip="Gain lost connection to terminal"
             (click)="onReconnect()">
-      <i class="km-icon-mask km-icon-reconnect"></i>
+      <i class="km-icon-mask km-icon-reconnect"
+         matButtonIcon></i>
       <span>Reconnect</span>
     </button>
 
     <button *ngIf="isSessionExpiring"
             mat-flat-button
             class="button-border-box"
-            fxLayoutAlign="center center"
             matTooltip="Retain current session to terminal"
             (click)="onExtendSession()">
-      <i class="km-icon-mask km-icon-clock"></i>
+      <i class="km-icon-mask km-icon-clock"
+         matButtonIcon></i>
       <span>Extend Session</span>
     </button>
 

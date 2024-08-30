@@ -37,11 +37,11 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          fxLayoutAlign="center center"
           [disabled]="valuesConfig && !isValuesConfigValid"
           kmThrottleClick
           (throttleClick)="onSave()">
-    <i class="km-icon-mask km-icon-save"></i>
+    <i class="km-icon-mask km-icon-save"
+       matButtonIcon></i>
     <span>Save Changes</span>
   </button>
 </mat-dialog-actions>

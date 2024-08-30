@@ -59,8 +59,7 @@ limitations under the License.
 
       <mat-select-trigger fxFlex
                           fxLayout="row">
-        <div fxFlex
-             fxLayoutAlign="start">
+        <div>
           {{ valueFormatter ? valueFormatter(selected) : multiple ? formatMultiple(selected) : selected }}
         </div>
 

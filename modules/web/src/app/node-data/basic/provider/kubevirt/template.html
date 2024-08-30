@@ -55,12 +55,12 @@ limitations under the License.
     </km-combobox>
     <button mat-flat-button
             type="button"
-            fxLayoutAlign=" center"
             color="tertiary"
             class="view-instance-details-button"
             (click)="viewInstanceDetails()"
             [disabled]="!selectedInstanceType">
-      <i class="km-icon-mask km-icon-search"></i>
+      <i class="km-icon-mask km-icon-search"
+         matButtonIcon></i>
       <span>View</span>
     </button>
   </div>

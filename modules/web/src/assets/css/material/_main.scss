@@ -446,7 +446,7 @@ mat-form-field {
     }
   }
 
-  &.mat-mdc-form-field-type-mat-select {
+  &.mat-mdc-form-field-type-mat-select, &.mat-mdc-form-field-type-mat-input {
     .mdc-text-field--no-label {
       .mat-mdc-form-field-infix {
         align-items: center;
@@ -555,15 +555,6 @@ button {
     }
 
     .mdc-button__label {
-      .km-icon-mask:not(.km-icon-arrow-down) {
-        margin-bottom: -6px;
-
-        &.km-icon-add,
-        &.km-icon-arrow-left {
-          margin-bottom: -3px;
-        }
-      }
-
       span {
         margin-left: 10px;
       }

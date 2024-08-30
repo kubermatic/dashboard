@@ -53,13 +53,15 @@ END OF TERMS AND CONDITIONS
                 type="button"
                 matTooltip="Delete selected"
                 (click)="deleteScheduleBackups(selectedScheduleBackups)">
-          <i class="km-icon-mask km-icon-delete"></i>
+          <i class="km-icon-mask km-icon-delete"
+             matButtonIcon></i>
         </button>
         <button mat-flat-button
                 type="button"
                 (click)="addScheduleBackup()"
                 [disabled]="!canAdd">
-          <i class="km-icon-mask km-icon-add"></i>
+          <i class="km-icon-mask km-icon-add"
+             matButtonIcon></i>
           <span>Create Cluster Schedule</span>
         </button>
       </div>

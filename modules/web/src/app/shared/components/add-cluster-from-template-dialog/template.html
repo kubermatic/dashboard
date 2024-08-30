@@ -64,7 +64,8 @@ limitations under the License.
           (click)="openClusterWizard()"
           [disabled]="invalid"
           *ngIf="active === step.Template && !last">
-    <i class="km-icon-mask km-icon-edit"></i>
+    <i class="km-icon-mask km-icon-edit"
+       matButtonIcon></i>
     <span>Customize Template</span>
   </button>
   <button mat-flat-button
@@ -72,7 +73,8 @@ limitations under the License.
           (click)="next()"
           [disabled]="invalid"
           *ngIf="active === step.Template && !last">
-    <i class="km-icon-mask km-icon-next"></i>
+    <i class="km-icon-mask km-icon-next"
+       matButtonIcon></i>
     <span>Next</span>
   </button>
   <div *ngIf="quotaExceeded && last"

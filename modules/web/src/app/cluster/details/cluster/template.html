@@ -18,10 +18,9 @@ limitations under the License.
   <div fxFlex
        fxLayoutAlign="start center"
        class="cluster-detail-actions">
-    <button mat-flat-button
+    <button mat-icon-button
             color="tertiary"
             (click)="goBack()"
-            fxLayoutAlign="center center"
             matTooltip="Go back to the cluster list">
       <i class="km-icon-mask km-icon-arrow-left"></i>
     </button>
@@ -55,7 +54,6 @@ limitations under the License.
 
       <a class="km-open-kubernetes-dashboard-btn"
          id="km-open-kubernetes-dashboard-btn"
-         fxLayoutAlign="center center"
          [href]="getProxyURL()"
          target="_blank"
          rel="noopener noreferrer"
@@ -63,17 +61,18 @@ limitations under the License.
          [disabled]="!isKubernetesDashboardHealthy || isDeletingState"
          [matTooltip]="getOpenDashboardTooltip()"
          *ngIf="adminSettings.enableDashboard">
-        <i class="km-icon-mask km-icon-external-link"></i>
+        <i class="km-icon-mask km-icon-external-link"
+           matButtonIcon></i>
         <span>Open Dashboard</span>
       </a>
 
       <button *ngIf="adminSettings.enableOIDCKubeconfig && isWebTerminalEnabled()"
-              fxLayoutAlign="center center"
               mat-flat-button
               type="button"
               [disabled]="!isWebTerminalAccessible()"
               (click)="toggleTerminal()">
-        <i class="km-icon-mask km-icon-terminal"></i>
+        <i class="km-icon-mask km-icon-terminal"
+           matButtonIcon></i>
         <span [matTooltip]="getWebTerminalTooltip()">Web Terminal</span>
       </button>
 

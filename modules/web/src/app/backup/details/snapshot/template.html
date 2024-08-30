@@ -28,7 +28,8 @@ limitations under the License.
             [attr.id]="'km-delete-backup-' + backup.name"
             (click)="delete(backup)"
             [disabled]="!canDelete">
-      <i class="km-icon-mask km-icon-delete"></i>
+      <i class="km-icon-mask km-icon-delete"
+         matButtonIcon></i>
       <span>Delete Snapshot</span>
     </button>
   </div>

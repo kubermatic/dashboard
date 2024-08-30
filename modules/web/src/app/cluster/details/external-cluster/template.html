@@ -15,10 +15,9 @@ limitations under the License.
 -->
 <ng-container *ngIf="cluster">
   <div class="cluster-detail-actions">
-    <button mat-flat-button
+    <button mat-icon-button
             color="tertiary"
             (click)="goBack()"
-            fxLayoutAlign="center center"
             matTooltip="Go back to the cluster list">
       <i class="km-icon-mask km-icon-arrow-left"></i>
     </button>
@@ -45,13 +44,13 @@ limitations under the License.
       </mat-card-title>
 
       <button color="alternative"
-              fxLayoutAlign="center center"
               mat-flat-button
               type="button"
               kmThrottleClick
               (throttleClick)="downloadKubeconfig()"
               [disabled]="isKubeConfigButtonDisabled()">
-        <i class="km-icon-mask km-icon-download"></i>
+        <i class="km-icon-mask km-icon-download"
+           matButtonIcon></i>
         <span>Get Kubeconfig</span>
       </button>
       <div class="provider-menu">

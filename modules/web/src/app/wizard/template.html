@@ -81,12 +81,12 @@ limitations under the License.
 
         <div class="button-navigation"
              id="{{step.id}}-nav">
-          <a fxLayoutAlign="center center"
-             mat-flat-button
+          <a mat-flat-button
              type="button"
              color="tertiary"
              routerLink="/projects/{{project?.id}}/clusters">
-            <i class="km-icon-mask km-icon-cancel"></i>
+            <i class="km-icon-mask km-icon-cancel"
+               matButtonIcon></i>
             <span>Cancel</span>
           </a>
           <div fxFlex></div>
@@ -100,27 +100,26 @@ limitations under the License.
             <i class="km-icon-warning"></i>
             <div><strong>Quota exceeded.</strong> <br>In the last step cluster creation is disabled.</div>
           </div>
-          <button fxLayoutAlign="center center"
-                  mat-flat-button
+          <button mat-flat-button
                   type="button"
                   color="tertiary"
                   matStepperPrevious
                   *ngIf="!first">
-            <i class="km-icon-mask km-icon-back"></i>
+            <i class="km-icon-mask km-icon-back"
+               matButtonIcon></i>
             <span>Back</span>
           </button>
           <button id="km-wizard-{{step.id}}-next-btn"
-                  fxLayoutAlign="center center"
                   mat-flat-button
                   type="button"
                   matStepperNext
                   [disabled]="invalid"
                   *ngIf="!last">
-            <i class="km-icon-mask km-icon-next"></i>
+            <i class="km-icon-mask km-icon-next"
+               matButtonIcon></i>
             <span>Next</span>
           </button>
           <button id="km-wizard-create-template-btn"
-                  fxLayoutAlign="center center"
                   mat-flat-button
                   type="button"
                   color="alternative"
@@ -128,18 +127,19 @@ limitations under the License.
                   *ngIf="last"
                   kmThrottleClick
                   (throttleClick)="onSaveClusterTemplate()">
-            <i class="km-icon-mask km-icon-save"></i>
+            <i class="km-icon-mask km-icon-save"
+               matButtonIcon></i>
             <span>{{ getSecondaryButtonLabel() }}</span>
           </button>
           <button id="km-wizard-update-template-btn"
-                  fxLayoutAlign="center center"
                   mat-flat-button
                   type="button"
                   [disabled]="creating"
                   *ngIf="last && !showCreateClusterButton"
                   kmThrottleClick
                   (throttleClick)="onSaveClusterTemplate(true)">
-            <i class="km-icon-mask km-icon-save"></i>
+            <i class="km-icon-mask km-icon-save"
+               matButtonIcon></i>
             <span>{{getPrimaryButtonLabel()}}</span>
           </button>
           <km-button buttonId="km-wizard-create-btn"

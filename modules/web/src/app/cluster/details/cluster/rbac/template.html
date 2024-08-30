@@ -64,16 +64,16 @@ limitations under the License.
          fxLayoutGap="10px">
       <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
         <button mat-flat-button
-                fxLayoutAlign="center center"
                 (click)="addServiceAccount($event)">
-          <i class="km-icon-mask km-icon-add"></i>
+          <i class="km-icon-mask km-icon-add"
+             matButtonIcon></i>
           <span>Add Service Account</span>
         </button>
 
         <button mat-flat-button
-                fxLayoutAlign="center center"
                 (click)="addServiceAccountBinding()">
-          <i class="km-icon-mask km-icon-add"></i>
+          <i class="km-icon-mask km-icon-add"
+             matButtonIcon></i>
           <span>Add Binding</span>
         </button>
       </ng-container>
@@ -90,9 +90,9 @@ limitations under the License.
 
   <ng-template #userAndGroupBindingButton>
     <button mat-flat-button
-            fxLayoutAlign="center center"
             (click)="addBinding($event)">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add Binding</span>
     </button>
   </ng-template>
