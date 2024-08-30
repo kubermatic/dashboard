@@ -19,6 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
+import {BaremetalService} from '@core/services/provider/baremetal';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -62,6 +63,7 @@ describe('MachineNetworksComponent', () => {
         AnexiaService,
         AWSService,
         AzureService,
+        BaremetalService,
         DigitalOceanService,
         EquinixService,
         GCPService,

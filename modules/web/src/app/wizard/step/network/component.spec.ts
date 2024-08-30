@@ -19,6 +19,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
+import {BaremetalService} from '@core/services/provider/baremetal';
 import {AuthMockService} from '@test/services/auth-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {Auth} from '@core/services/auth/service';
@@ -65,6 +66,7 @@ describe('MachineNetworkStepComponent', () => {
         AnexiaService,
         AWSService,
         AzureService,
+        BaremetalService,
         DigitalOceanService,
         EquinixService,
         GCPService,

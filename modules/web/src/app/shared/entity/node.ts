@@ -80,6 +80,7 @@ export class NodeCloudSpec {
   anexia?: AnexiaNodeSpec;
   vmwareclouddirector?: VMwareCloudDirectorNodeSpec;
   edge?: EdgeNodeSpec;
+  baremetal?: BaremetalNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -317,6 +318,21 @@ export class VMwareCloudDirectorNodeSpec {
 
 export class EdgeNodeSpec {}
 
+export class BaremetalNodeSpec {
+  tinkerbell: BaremetalTinkerbellNodeSpec;
+}
+
+export class BaremetalTinkerbellNodeSpec {
+  hardwareRef: BaremetalTinkerbellHardwareRef;
+  osImageUrl: string;
+}
+
+export class BaremetalTinkerbellHardwareRef {
+  Name: string;
+  Namespace: string;
+}
+
+// eslint-disable-next-line complexity
 export function getDefaultNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
@@ -422,6 +438,16 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as VMwareCloudDirectorNodeSpec;
     case NodeProvider.EDGE:
       return {} as EdgeNodeSpec;
+    case NodeProvider.BAREMETAL:
+      return {
+        tinkerbell: {
+          hardwareRef: {
+            Name: '',
+            Namespace: '',
+          },
+          osImageUrl: '',
+        },
+      } as BaremetalNodeSpec;
   }
   return {};
 }

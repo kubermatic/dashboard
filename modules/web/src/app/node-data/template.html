@@ -58,7 +58,8 @@ limitations under the License.
     <div *ngIf="!isProvider(NodeProvider.EDGE)"
          fxLayout="row"
          fxLayoutGap="10px">
-      <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
+      <km-number-stepper *ngIf="!isProvider(NodeProvider.BAREMETAL)"
+                         [fxFlex]="isDialogView() ? '50' : '100'"
                          id="km-node-count-input"
                          mode="errors"
                          label="Replicas"
@@ -240,7 +241,7 @@ limitations under the License.
       <ng-template #quotaWidgetContainer></ng-template>
     </div>
 
-    <ng-container *ngIf="!isProvider(NodeProvider.EDGE)">
+    <ng-container *ngIf="!isProvider(NodeProvider.EDGE, NodeProvider.BAREMETAL)">
       <mat-card-header class="km-no-padding">
         <mat-card-title fxFlex
                         fxLayout="row"

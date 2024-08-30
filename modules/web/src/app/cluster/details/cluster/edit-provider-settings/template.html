@@ -36,6 +36,7 @@ limitations under the License.
     <km-nutanix-provider-settings *ngIf="!!cluster.spec.cloud.nutanix"></km-nutanix-provider-settings>
     <km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>
     <km-vmware-cloud-director-provider-settings *ngIf="!!cluster.spec.cloud.vmwareclouddirector"></km-vmware-cloud-director-provider-settings>
+    <km-baremetal-provider-settings *ngIf="!!cluster.spec.cloud.baremetal"></km-baremetal-provider-settings>
   </mat-dialog-content>
 
   <mat-dialog-actions>

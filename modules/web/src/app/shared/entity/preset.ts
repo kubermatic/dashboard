@@ -85,6 +85,7 @@ export class CreatePresetSpec {
   packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
   vmwareclouddirector?: VMwareCloudDirectorPresetSpec;
+  baremetal?: BaremetalPresetSpec;
 
   requiredEmails?: string[];
   projects?: string[];
@@ -232,4 +233,12 @@ export class VMwareCloudDirectorPresetSpec extends PresetProviderSpec {
   vdc: string;
   ovdcNetwork?: string;
   ovdcNetworks?: string[];
+}
+
+export class BaremetalPresetSpec extends PresetProviderSpec {
+  tinkerbell: BaremetalTinkerbellPresetSpec;
+}
+
+export class BaremetalTinkerbellPresetSpec {
+  kubeconfig: string;
 }

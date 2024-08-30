@@ -83,6 +83,9 @@ limitations under the License.
       <km-vmware-cloud-director-settings *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
                                          [formControl]="form.get(Controls.Settings)">
       </km-vmware-cloud-director-settings>
+      <km-baremetal-settings *ngSwitchCase="Providers.BAREMETAL"
+                             [formControl]="form.get(Controls.Settings)">
+      </km-baremetal-settings>
     </div>
 
     <ng-container *ngIf="!isExternal()">

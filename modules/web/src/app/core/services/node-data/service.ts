@@ -16,6 +16,7 @@ import {Inject, Injectable} from '@angular/core';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataBaremetalProvider} from '@core/services/node-data/provider/baremetal';
 import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
 import {NodeDataVMwareCloudDirectorProvider} from '@core/services/node-data/provider/vmware-cloud-director';
 import {NodeDataVSphereProvider} from '@core/services/node-data/provider/vsphere';
@@ -24,6 +25,7 @@ import {AlibabaService} from '@core/services/provider/alibaba';
 import {AnexiaService} from '@core/services/provider/anexia';
 import {AWSService} from '@core/services/provider/aws';
 import {AzureService} from '@core/services/provider/azure';
+import {BaremetalService} from '@core/services/provider/baremetal';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
 import {EquinixService} from '@core/services/provider/equinix';
 import {GCPService} from '@core/services/provider/gcp';
@@ -77,7 +79,8 @@ export class NodeDataService {
     private readonly _openStackService: OpenStackService,
     private readonly _vmwareCloudDirectorService: VMwareCloudDirectorService,
     private readonly _vsphereService: VSphereService,
-    private readonly _projectService: ProjectService
+    private readonly _projectService: ProjectService,
+    private readonly _baremetalService: BaremetalService
   ) {
     this._config = config;
   }
@@ -247,5 +250,12 @@ export class NodeDataService {
     this._presetService,
     this._projectService,
     this._vmwareCloudDirectorService
+  );
+
+  readonly baremetal = new NodeDataBaremetalProvider(
+    this,
+    this._baremetalService,
+    this._clusterSpecService,
+    this._projectService
   );
 }

@@ -52,7 +52,7 @@ import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/mode
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, forkJoin, merge, of} from 'rxjs';
-import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
 import {ParamsService, PathParam} from '@app/core/services/params';
 
@@ -95,6 +95,7 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounce = 500;
   private _datacenterSpec: Datacenter;
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
@@ -243,10 +244,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this._quotaCalculationService.reset(mapKey);
       });
 
-    this._clusterSpecService.clusterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
-      this._loadOperatingSystemProfiles();
-    });
+    this._clusterSpecService.clusterChanges
+      .pipe(debounceTime(this._debounce))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
+        this._loadOperatingSystemProfiles();
+      });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
@@ -341,6 +345,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
+          NodeProvider.BAREMETAL,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
@@ -350,6 +355,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.ANEXIA,
           NodeProvider.AWS,
           NodeProvider.AZURE,
+          NodeProvider.BAREMETAL,
           NodeProvider.EQUINIX,
           NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
@@ -370,6 +376,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
+          NodeProvider.BAREMETAL,
           NodeProvider.DIGITALOCEAN,
           NodeProvider.EQUINIX,
           NodeProvider.HETZNER,
@@ -585,12 +592,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getNodeData(): NodeData {
     let data: NodeData = {
       name: this.form.get(Controls.Name).value,
-      count: this.isProvider(NodeProvider.EDGE) ? 0 : this.form.get(Controls.Count).value,
+      count: this.isProvider(NodeProvider.EDGE)
+        ? 0
+        : this.isProvider(NodeProvider.BAREMETAL)
+          ? 1
+          : this.form.get(Controls.Count).value,
       dynamicConfig: false,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
 
-    if (!this.isProvider(NodeProvider.EDGE)) {
+    if (!this.isProvider(NodeProvider.EDGE, NodeProvider.BAREMETAL)) {
       data = {
         ...data,
         maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,

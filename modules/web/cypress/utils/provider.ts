@@ -26,6 +26,7 @@ export enum Provider {
   OpenStack = 'openstack',
   Equinix = 'packet',
   VSphere = 'vsphere',
+  Baremetal = 'baremetal',
 }
 
 export enum Alibaba {

@@ -24,6 +24,7 @@ import {AlibabaSettingsComponent} from '@app/settings/admin/presets/dialog/steps
 import {AnexiaSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/anexia/component';
 import {AWSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aws/component';
 import {AzureSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/azure/component';
+import {BaremetalSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/baremetal/component';
 import {DigitaloceanSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/digitalocean/component';
 import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
 import {EquinixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/equinix/component';
@@ -68,6 +69,7 @@ import {AdminSettingsRoutingModule} from './routing';
     VSphereSettingsComponent,
     NutanixSettingsComponent,
     VMwareCloudDirectorSettingsComponent,
+    BaremetalSettingsComponent,
   ],
   providers: [PresetDialogService],
 })

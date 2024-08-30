@@ -26,6 +26,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule, Routes} from '@angular/router';
 import {AnexiaBasicNodeDataComponent} from '@app/node-data/basic/provider/anexia/component';
+import {BaremetalBasicNodeDataComponent} from '@app/node-data/basic/provider/baremetal/component';
 import {EdgeBasicNodeDataComponent} from '@app/node-data/basic/provider/edge/component';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
@@ -89,6 +90,7 @@ const components = [
   TopologySpreadConstraintFormComponent,
   VSphereTagsComponent,
   EdgeBasicNodeDataComponent,
+  BaremetalBasicNodeDataComponent,
 ];
 
 // component NodeDataComponent is added to routing module so we can use our dynamic component here

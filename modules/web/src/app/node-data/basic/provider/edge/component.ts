@@ -15,7 +15,7 @@
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
-import {EdgeNodeSpec, EquinixNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {EdgeNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
@@ -63,18 +63,6 @@ export class EdgeBasicNodeDataComponent extends BaseFormValidator implements OnI
       spec: {
         cloud: {
           edge: {} as EdgeNodeSpec,
-        } as NodeCloudSpec,
-      } as NodeSpec,
-    } as NodeData;
-  }
-
-  onSizeChange(size: string): void {
-    this._nodeDataService.nodeData = {
-      spec: {
-        cloud: {
-          packet: {
-            instanceType: size,
-          } as EquinixNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
