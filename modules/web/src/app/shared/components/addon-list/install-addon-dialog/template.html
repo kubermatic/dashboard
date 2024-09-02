@@ -108,10 +108,10 @@ limitations under the License.
 </mat-horizontal-stepper>
 <mat-dialog-actions *ngIf="stepper.selectedIndex === stepper.steps.length - 1">
   <button mat-flat-button
-          fxLayoutAlign="center center"
           color="tertiary"
           (click)="goBack()">
-    <i class="km-icon-mask km-icon-arrow-left"></i>
+    <i class="km-icon-mask km-icon-arrow-left"
+       matButtonIcon></i>
     <span>Back</span>
   </button>
   <div fxFlex></div>
@@ -119,7 +119,8 @@ limitations under the License.
           [disabled]="!form.valid"
           kmThrottleClick
           (throttleClick)="install()">
-    <i class="km-icon-mask km-icon-add"></i>
+    <i class="km-icon-mask km-icon-add"
+       matButtonIcon></i>
     <span>Install Addon</span>
   </button>
 </mat-dialog-actions>

@@ -25,12 +25,12 @@ END OF TERMS AND CONDITIONS
   <mat-card-header>
     <mat-card-title>Groups</mat-card-title>
     <button id="km-add-group-btn"
-            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="addGroup()"
             [disabled]="!isAddEnabled()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add Group</span>
     </button>
   </mat-card-header>

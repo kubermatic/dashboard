@@ -334,7 +334,7 @@ mat-form-field {
     margin-bottom: 10px;
     width: 100%;
 
-    --mat-form-field-container-height: 49px;
+    --mat-form-field-container-height: 45px;
 
     .mat-mdc-form-field-text-prefix,
     .mat-mdc-form-field-text-suffix {
@@ -346,7 +346,7 @@ mat-form-field {
     }
 
     .mat-mdc-text-field-wrapper {
-      height: 45px;
+      height: var(--mat-form-field-container-height);
       padding: 0 0 0 10px;
 
       &:has(textarea) {
@@ -355,17 +355,12 @@ mat-form-field {
       }
     }
 
-    &.km-long-subscript {
-      .mat-mdc-form-field-subscript-wrapperr {
-        position: initial;
-      }
-    }
-
     &.mat-primary {
       .mat-mdc-select-trigger {
         display: flex;
 
         .mat-mdc-select-arrow-wrapper {
+          margin-left: 5px;
           margin-right: 10px;
 
           .mat-mdc-select-arrow {
@@ -445,6 +440,17 @@ mat-form-field {
       }
     }
   }
+
+  &.mat-mdc-form-field-type-mat-select, &.mat-mdc-form-field-type-mat-input {
+    .mdc-text-field--no-label {
+      .mat-mdc-form-field-infix {
+        align-items: center;
+        display: flex;
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+    }
+  }
 }
 
 .static-labels-values mat-form-field.km-node-tags .mat-mdc-text-field-wrapper {
@@ -502,20 +508,7 @@ mat-error {
   }
 }
 
-.mat-mdc-select-panel-above:has(> .mat-mdc-select-panel) {
-  bottom: -60px !important;
-}
-
 .mat-mdc-select-panel {
-  max-width: calc(100% + 20px) !important;
-  min-width: calc(100% + 20px) !important;
-  padding: 0 !important;
-  transform-origin: 50% 0 0;
-
-  &.ng-animating {
-    visibility: hidden;
-  }
-
   &.project-selector-dropdown {
     max-height: 370px;
   }
@@ -524,10 +517,6 @@ mat-error {
 .cdk-overlay-pane:has(.project-selector-dropdown) {
   margin-top: 10px;
   width: fit-content !important;
-}
-
-.mat-mdc-option {
-  padding: 0 0 0 10px;
 }
 
 .mat-mdc-optgroup-label {
@@ -561,15 +550,6 @@ button {
     }
 
     .mdc-button__label {
-      .km-icon-mask:not(.km-icon-arrow-down) {
-        margin-bottom: -6px;
-
-        &.km-icon-add,
-        &.km-icon-arrow-left {
-          margin-bottom: -3px;
-        }
-      }
-
       span {
         margin-left: 10px;
       }
@@ -754,10 +734,6 @@ mat-tooltip-component .mat-mdc-tooltip {
       font-size: 16px;
     }
   }
-}
-
-.mat-mdc-optgroup .mat-mdc-option:not(.mat-mdc-option-multiple) {
-  padding-left: 16px !important;
 }
 
 // Progress bar

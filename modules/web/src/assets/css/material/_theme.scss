@@ -142,10 +142,6 @@
     --mat-select-enabled-arrow-color: #{map.get($colors, text)};
   }
 
-  .mat-mdc-optgroup-label {
-    background-color: map.get($colors, option-background);
-  }
-
   .mat-mdc-option {
     background-color: map.get($colors, option-background);
     color: map.get($colors, text);
@@ -337,7 +333,7 @@
 
   // Chips.
   .mat-mdc-chip {
-    --mdc-chip-elevated-container-color: #{map.get($colors, divider)};
+    --mdc-chip-elevated-container-color: transparent;
     --mdc-chip-label-text-color: #{map.get($colors, text)};
     --mdc-chip-focus-state-layer-color: none;
     --mdc-chip-hover-state-layer-color: none;
@@ -359,7 +355,6 @@
 
   .km-chip-list-with-input {
     .mat-mdc-chip-row {
-      background-color: #fff !important;
       border: 1px solid map.get($colors, divider);
 
       .mdc-evolution-chip__action--primary {

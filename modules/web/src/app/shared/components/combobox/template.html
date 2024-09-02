@@ -35,7 +35,6 @@ limitations under the License.
              [placeholder]="inputLabel"
              type="text"
              autocomplete="off"
-             matInput
              kmAutofocus
              [opened]="select.openedChange">
       <ng-container *ngIf="grouped; else ungrouped">
@@ -60,8 +59,7 @@ limitations under the License.
 
       <mat-select-trigger fxFlex
                           fxLayout="row">
-        <div fxFlex
-             fxLayoutAlign="start">
+        <div>
           {{ valueFormatter ? valueFormatter(selected) : multiple ? formatMultiple(selected) : selected }}
         </div>
 

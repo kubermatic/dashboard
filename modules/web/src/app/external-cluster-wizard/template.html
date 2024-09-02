@@ -66,12 +66,12 @@ limitations under the License.
 
       <div class="button-navigation"
            id="{{step.id}}-nav">
-        <a fxLayoutAlign="center center"
-           mat-flat-button
+        <a mat-flat-button
            type="button"
            color="tertiary"
            (click)="onCancel()">
-          <i class="km-icon-mask km-icon-cancel"></i>
+          <i class="km-icon-mask km-icon-cancel"
+             matButtonIcon></i>
           <span>Cancel</span>
         </a>
 
@@ -80,21 +80,21 @@ limitations under the License.
         <button *ngIf="!stepperFirstIndex"
                 type="button"
                 color="tertiary"
-                fxLayoutAlign="center center"
                 mat-flat-button
                 matStepperPrevious>
-          <i class="km-icon-mask km-icon-back"></i>
+          <i class="km-icon-mask km-icon-back"
+             matButtonIcon></i>
           <span>Back</span>
         </button>
 
         <div *ngIf="!stepperLastIndex; else showCreateButton">
           <button type="button"
                   id="km-external-cluster-wizard-{{step.id}}-next-btn"
-                  fxLayoutAlign="center center"
                   mat-flat-button
                   (click)="onNext()"
                   [disabled]="isInvalidStep()">
-            <i class="km-icon-mask km-icon-next"></i>
+            <i class="km-icon-mask km-icon-next"
+               matButtonIcon></i>
             <span>Next</span>
           </button>
         </div>

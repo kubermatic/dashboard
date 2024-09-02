@@ -33,7 +33,8 @@ limitations under the License.
             mat-flat-button
             [disabled]="!can(Permission.Create)"
             (click)="addExternalCluster()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Import External Cluster</span>
     </button>
 
@@ -41,7 +42,8 @@ limitations under the License.
             mat-flat-button
             [disabled]="!can(Permission.Create)"
             (click)="openWizard()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Create External Cluster</span>
     </button>
   </div>

@@ -191,29 +191,29 @@ limitations under the License.
 <mat-dialog-actions *ngIf="stepper.selectedIndex > 0">
   <button mat-flat-button
           type="button"
-          fxLayoutAlign="center center"
           color="tertiary"
           (click)="goBack()">
-    <i class="km-icon-mask km-icon-arrow-left"></i>
+    <i class="km-icon-mask km-icon-arrow-left"
+       matButtonIcon></i>
     <span>Back</span>
   </button>
   <div fxFlex></div>
   <button *ngIf="stepper.selectedIndex < stepper.steps.length - 1; else lastStep"
           mat-flat-button
           type="button"
-          fxLayoutAlign="center center"
           [disabled]="!form?.valid || isLoadingDetails"
           (click)="next()">
-    <i class="km-icon-mask km-icon-next"></i>
+    <i class="km-icon-mask km-icon-next"
+       matButtonIcon></i>
     <span>Next</span>
   </button>
   <ng-template #lastStep>
     <button mat-flat-button
-            fxLayoutAlign="center center"
             [disabled]="!form.valid || !!(valuesConfig && !isValuesConfigValid)"
             kmThrottleClick
             (throttleClick)="add()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add Application</span>
     </button>
   </ng-template>

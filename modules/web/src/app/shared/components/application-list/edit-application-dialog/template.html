@@ -170,7 +170,8 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="edit()"
           [disabled]="!form?.valid || isLoadingDetails || !!(valuesConfig && !isValuesConfigValid)">
-    <i class="km-icon-mask km-icon-save"></i>
+    <i class="km-icon-mask km-icon-save"
+       matButtonIcon></i>
     <span>Save Changes</span>
   </button>
   <button *ngIf="isEnforcedApplication()"
@@ -178,7 +179,8 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="close()"
           [disabled]="isLoadingDetails">
-    <i class="km-icon-mask km-icon-close"></i>
+    <i class="km-icon-mask km-icon-close"
+       matButtonIcon></i>
     <span>Close</span>
   </button>
 </mat-dialog-actions>

@@ -19,12 +19,12 @@ limitations under the License.
   <mat-card-header>
     <mat-card-title>SSH Keys</mat-card-title>
     <button id="km-add-ssh-key-top-btn"
-            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="addSshKey()"
             [disabled]="!canAdd()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add SSH Key</span>
     </button>
   </mat-card-header>

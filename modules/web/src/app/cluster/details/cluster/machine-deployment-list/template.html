@@ -24,14 +24,14 @@ limitations under the License.
              fxLayoutAlign="space-between center">
           <router-outlet name="quota-widget"
                          (activate)="onActivate($event)"></router-outlet>
-          <button fxLayoutAlign="center center"
-                  mat-flat-button
+          <button mat-flat-button
                   type="button"
                   (click)="addNode()"
                   [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
                   [matTooltip]="isAddMachineDeploymentsEnabled ? '' : !isClusterRunning ? 'Cluster is not healthy' : 'You do not have permission to perform this action'"
                   [disabled]="!isAddMachineDeploymentsEnabled">
-            <i class="km-icon-mask km-icon-add"></i>
+            <i class="km-icon-mask km-icon-add"
+               matButtonIcon></i>
             <span>Add Machine Deployment</span>
           </button>
         </div>

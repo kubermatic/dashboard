@@ -50,7 +50,7 @@ END OF TERMS AND CONDITIONS
       <div class="action-button"
            *ngIf="clusters?.length">
         <button *ngIf="selectedBackups.length"
-                mat-flat-button
+                mat-icon-button
                 type="button"
                 matTooltip="Delete selected"
                 (click)="deleteBackups(selectedBackups)">
@@ -60,7 +60,8 @@ END OF TERMS AND CONDITIONS
                 type="button"
                 (click)="addBackup()"
                 [disabled]="!canAdd">
-          <i class="km-icon-mask km-icon-add"></i>
+          <i class="km-icon-mask km-icon-add"
+             matButtonIcon></i>
           <span>Create Cluster Backup</span>
         </button>
       </div>

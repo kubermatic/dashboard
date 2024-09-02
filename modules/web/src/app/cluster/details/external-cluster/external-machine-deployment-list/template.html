@@ -19,11 +19,11 @@ limitations under the License.
     <mat-card-title>Machine Deployments</mat-card-title>
     <button *ngIf="!cluster.cloud.bringYourOwn && !cluster.cloud.kubeOne"
             mat-flat-button
-            fxLayoutAlign="center center"
             type="button"
             [disabled]="!isClusterRunning"
             (click)="addExternalMachineDeployment()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add Machine Deployment</span>
     </button>
   </mat-card-header>

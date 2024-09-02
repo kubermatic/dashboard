@@ -16,11 +16,11 @@ limitations under the License.
 
 <div class="km-pagination-page-size-select-container"
      fxLayout="row"
+     fxLayoutAlign=" center"
      fxLayoutGap="10px">
   <km-spinner-with-confirmation [isSaved]="isSettingEqual()"
                                 fxFlexAlign=" center"></km-spinner-with-confirmation>
-  <div fxLayoutAlign=" center">Items per page:
-  </div>
+  <div fxLayoutAlign=" center">Items per page:</div>
   <mat-form-field>
     <mat-select id="km-items-per-page-select"
                 [(ngModel)]="settings.itemsPerPage"

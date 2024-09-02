@@ -114,7 +114,8 @@ limitations under the License.
                           [value]="proxyMode"> {{proxyMode}} </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="km-dropdown-with-suffix km-long-subscript">
+          <mat-form-field class="km-dropdown-with-suffix"
+                          subscriptSizing="dynamic">
             <mat-label>Expose Strategy</mat-label>
             <mat-select [formControlName]="Controls.ExposeStrategy"
                         class="km-select-ellipsis"
@@ -167,7 +168,7 @@ limitations under the License.
             <div fxLayout="column"
                  [fxFlex]="isDualStackIPFamilySelected() ? '50' : '100'">
               <h4 *ngIf="isDualStackIPFamilySelected()">IPv4</h4>
-              <mat-form-field class="km-long-subscript">
+              <mat-form-field [subscriptSizing]="form.get(Controls.IPv4PodsCIDR).hasError('pattern') ? 'dynamic' : 'fixed'">
                 <mat-label>Pods CIDR</mat-label>
                 <input matInput
                        [formControlName]="Controls.IPv4PodsCIDR"
@@ -180,7 +181,7 @@ limitations under the License.
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="km-long-subscript">
+              <mat-form-field [subscriptSizing]="form.get(Controls.IPv4ServicesCIDR).hasError('pattern') ? 'dynamic' : 'fixed'">
                 <mat-label>Services CIDR</mat-label>
                 <input matInput
                        [formControlName]="Controls.IPv4ServicesCIDR"
@@ -204,7 +205,7 @@ limitations under the License.
                  fxLayout="column"
                  fxFlex="50">
               <h4>IPv6</h4>
-              <mat-form-field class="km-long-subscript">
+              <mat-form-field [subscriptSizing]="form.get(Controls.IPv6PodsCIDR).hasError('pattern') ? 'dynamic' : 'fixed'">
                 <mat-label>Pods CIDR</mat-label>
                 <input matInput
                        [formControlName]="Controls.IPv6PodsCIDR"
@@ -217,7 +218,7 @@ limitations under the License.
                   Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="km-long-subscript">
+              <mat-form-field [subscriptSizing]="form.get(Controls.IPv6ServicesCIDR).hasError('pattern') ? 'dynamic' : 'fixed'">
                 <mat-label>Services CIDR</mat-label>
                 <input matInput
                        [formControlName]="Controls.IPv6ServicesCIDR"
@@ -245,9 +246,9 @@ limitations under the License.
               <button *ngIf="canEditCNIValues"
                       mat-flat-button
                       color="quaternary"
-                      fxLayoutAlign="center center"
                       (click)="editCNIValues()">
-                <i class="km-icon-mask km-icon-edit"></i>
+                <i class="km-icon-mask km-icon-edit"
+                   matButtonIcon></i>
                 <span>Edit CNI Values</span>
               </button>
             </div>

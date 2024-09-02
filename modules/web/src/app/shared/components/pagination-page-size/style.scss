@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
 
 @use 'variables';
 
-input {
-  background: none;
-  border: 0;
-  box-sizing: content-box;
-  color: currentcolor;
-  height: 24px;
-  outline: none;
-  padding: 16px 0 16px 16px;
-  width: calc(100% - 16px);
+.km-pagination-page-size-select-container {
+  font-size: variables.$font-size-caption;
+
+  .mat-mdc-form-field {
+    margin-bottom: 0;
+    width: 100px;
+  }
 }

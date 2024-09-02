@@ -38,17 +38,28 @@ limitations under the License.
         <mat-option [value]="cluster.spec.version">
           {{cluster.spec.version}}
         </mat-option>
+        <mat-select-trigger fxLayout="row"
+                            fxLayoutAlign=" center"
+                            fxLayoutGap="8px">
+          <div>{{cluster.spec.version}}</div>
+
+          <div fxFlex
+               fxLayoutAlign="end center"
+               fxLayoutGap="8px"
+               class="km-select-trigger-button-wrapper">
+            <i *ngIf="hasAvailableUpdates()"
+               matSuffix
+               matTooltip="Updates available"
+               class="km-icon-update-available"></i>
+            <i *ngIf="isClusterBeforeEOL()"
+               matSuffix
+               class="km-icon-warning"></i>
+            <i *ngIf="isClusterAfterEOL()"
+               matSuffix
+               class="km-icon-error"></i>
+          </div>
+        </mat-select-trigger>
       </mat-select>
-      <i *ngIf="hasAvailableUpdates()"
-         matSuffix
-         matTooltip="Updates available"
-         class="km-icon-update-available update-available-icon"></i>
-      <i *ngIf="isClusterBeforeEOL()"
-         matSuffix
-         class="km-icon-warning warning-icon"></i>
-      <i *ngIf="isClusterAfterEOL()"
-         matSuffix
-         class="km-icon-warning error-icon"></i>
     </mat-form-field>
 
   </div>

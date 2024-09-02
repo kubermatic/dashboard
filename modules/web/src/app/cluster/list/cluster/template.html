@@ -40,20 +40,20 @@ limitations under the License.
     </div>
     <button mat-flat-button
             type="button"
-            fxLayoutAlign="center center"
             [disabled]="!can(Permission.Create) || !clusterTemplates?.length"
             (click)="selectTemplate()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span [matTooltip]="isInitialized && !clusterTemplates?.length ? 'No cluster templates available' : ''">Create Clusters From Template
       </span>
     </button>
     <button id="km-add-cluster-top-btn"
             mat-flat-button
             type="button"
-            fxLayoutAlign="center center"
             [disabled]="!can(Permission.Create)"
             (click)="loadWizard()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Create Cluster</span>
     </button>
   </div>

@@ -37,9 +37,9 @@ limitations under the License.
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
             color="quaternary"
-            fxLayoutAlign="center center"
             [disabled]="!canAdd()">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Add SSH Key</span>
     </button>
   </div>

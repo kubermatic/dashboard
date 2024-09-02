@@ -25,7 +25,8 @@ limitations under the License.
         [disabled]="this.disabled || this.loading">
   <i *ngIf="icon"
      [ngClass]="this.loading ? 'km-icon-pending' : this.icon"
-     class="km-icon-mask"></i>
+     class="km-icon-mask"
+     matButtonIcon></i>
   <span>{{label}}</span>
 </button>
 <button *ngIf="iconButton"

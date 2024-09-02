@@ -20,12 +20,12 @@ limitations under the License.
   <mat-card-header>
     <mat-card-title>Service Accounts</mat-card-title>
     <button id="km-create-serviceaccount-top-btn"
-            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="createServiceAccount()"
             [disabled]="!isEnabled('create')">
-      <i class="km-icon-mask km-icon-add"></i>
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
       <span>Create Service Account</span>
     </button>
   </mat-card-header>
