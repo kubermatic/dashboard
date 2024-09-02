@@ -327,16 +327,16 @@ func UnbindServiceAccountFromRoles(ctx context.Context, client ctrlruntimeclient
 	}
 
 	for _, roleBinding := range roleBindingList.Items {
-		shouldUpate := false
+		shouldUpdate := false
 		var newSubjects []rbacv1.Subject
 		for _, subject := range roleBinding.Subjects {
 			if subject.Name == serviceAccount.Name && subject.Namespace == serviceAccount.Namespace {
-				shouldUpate = true
+				shouldUpdate = true
 				continue
 			}
 			newSubjects = append(newSubjects, subject)
 		}
-		if shouldUpate {
+		if shouldUpdate {
 			binding := roleBinding.DeepCopy()
 			binding.Subjects = newSubjects
 			if err := client.Update(ctx, binding); err != nil {
@@ -355,16 +355,16 @@ func UnbindServiceAccountFromClusterRoles(ctx context.Context, client ctrlruntim
 	}
 
 	for _, clusterRoleBinding := range clusterRoleBindingList.Items {
-		shouldUpate := false
+		shouldUpdate := false
 		var newSubjects []rbacv1.Subject
 		for _, subject := range clusterRoleBinding.Subjects {
 			if subject.Name == serviceAccount.Name && subject.Namespace == serviceAccount.Namespace {
-				shouldUpate = true
+				shouldUpdate = true
 				continue
 			}
 			newSubjects = append(newSubjects, subject)
 		}
-		if shouldUpate {
+		if shouldUpdate {
 			binding := clusterRoleBinding.DeepCopy()
 			binding.Subjects = newSubjects
 			if err := client.Update(ctx, binding); err != nil {

@@ -339,7 +339,7 @@ func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, ma
 					filtered.Instancetypes[category] = make([]apiv2.VirtualMachineInstancetype, 0)
 				}
 
-				// Convert memory from BinarySI to DeciamlSI.
+				// Convert memory from BinarySI to DecimalSI.
 				spec.Memory.Guest = *resource.NewScaledQuantity(spec.Memory.Guest.ScaledValue(resource.Mega), resource.Mega)
 				specWithScaledMem, err := json.Marshal(spec)
 				if err != nil {
