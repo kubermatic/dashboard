@@ -123,7 +123,7 @@ limitations under the License.
                       {{ version.version }}
                     </mat-option>
                   </mat-select>
-                  <mat-hint *ngIf="isSystemApplication(applicationDefinition?.labels)">
+                  <mat-hint *ngIf="isSystemApplication(application?.labels)">
                     Application version upgrades are not supported for system applications.
                   </mat-hint>
                   <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
