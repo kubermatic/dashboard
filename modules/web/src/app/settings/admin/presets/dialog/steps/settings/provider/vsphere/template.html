@@ -82,7 +82,7 @@ limitations under the License.
            kmValueChangedIndicator />
   </mat-form-field>
 
-  <mat-form-field class="km-long-subscript">
+  <mat-form-field subscriptSizing="dynamic">
     <mat-label>Base Folder Path</mat-label>
     <input matInput
            [formControlName]="Controls.BasePath"
@@ -90,12 +90,11 @@ limitations under the License.
            type="text"
            autocomplete="off"
            kmValueChangedIndicator />
-    <mat-hint>
-      Base folder path configures a vCenter folder path where KKP will create an
-      individual cluster folder. If the value is a relative path, it’s appended
-      to root path (results in <code>/&lt;root path&gt;/&lt;base path&gt;/&lt;cluster
-        folder to be created&gt;</code>). If it’s an absolute path it ignores the root
-      path (<code>/&lt;base path&gt;/&lt;cluster folder to be created&gt;</code>).
+    <mat-hint>Base folder path configures a vCenter folder path where KKP will
+      create an individual cluster folder. If the value is a relative path, it’s
+      appended to root path (results in <code>/&lt;root path&gt;/&lt;base path&gt;/&lt;cluster
+        folder to be created&gt;</code>). If it’s an absolute path it ignores the
+      root path (<code>/&lt;base path&gt;/&lt;cluster folder to be created&gt;</code>).
     </mat-hint>
   </mat-form-field>
 </form>

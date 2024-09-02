@@ -108,14 +108,14 @@ limitations under the License.
       <div *ngIf="form.get(Controls.Group).value === ScheduleOption.Custom"
            fxLayout="column"
            fxLayoutGap="20px">
-        <mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
           <mat-label>Cron Expression</mat-label>
           <input [formControlName]="Controls.Schedule"
                  type="text"
                  matInput
                  required>
-          <mat-hint>
-            Cron expression that describes how often a backup should be created. Must match the criteria specified
+          <mat-hint>Cron expression that describes how often a backup should be
+            created. Must match the criteria specified
             <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
                fxLayout="row inline"
                fxLayoutAlign=" center"

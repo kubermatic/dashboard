@@ -162,7 +162,7 @@
     border-color: map.get($colors, divider);
   }
 
-  .km-table-dropdown {
+  .km-table-dropdown.mat-mdc-table {
     background-color: transparent;
 
     *:not(i) {

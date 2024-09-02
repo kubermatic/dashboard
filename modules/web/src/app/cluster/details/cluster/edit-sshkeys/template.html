@@ -19,89 +19,83 @@ limitations under the License.
 <mat-dialog-content class="content-edit-sshkeys">
   <p class="km-dialog-context-description">Manage SSH keys of <b>{{cluster.name}}</b> cluster</p>
 
-  <ng-container *ngIf="loading">
-    <mat-spinner [diameter]="50"
-                 class="km-spinner"
-                 color="accent"></mat-spinner>
-  </ng-container>
-
-  <table class="km-table km-table-dropdown"
-         mat-table
-         multiTemplateDataRows
-         matSort
-         [dataSource]="getDataSource()"
-         [hidden]="!isTableVisible()">
-
-    <ng-container matColumnDef="name">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>SSH Keys
-      </th>
-      <td mat-cell
-          *matCellDef="let element">
-        {{element.name}}
-      </td>
+  <div fxLayout="column"
+       fxLayoutGap="10px">
+    <ng-container *ngIf="loading">
+      <mat-spinner [diameter]="25"
+                   class="km-spinner"
+                   color="accent"></mat-spinner>
     </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <div fxLayoutAlign="end"
-             class="km-table-actions">
-          <ng-container [ngSwitch]="!!element.deletionTimestamp">
-            <ng-container *ngSwitchCase="true">
-              <mat-spinner [diameter]="25"
-                           class="km-spinner row"
-                           color="accent"></mat-spinner>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="false">
-              <button mat-icon-button
-                      [attr.id]="'km-delete-sshkey-' + element.name"
-                      matTooltip="Remove SSH key"
-                      (click)="deleteSSHKey(element)"
-                      [disabled]="!canDelete()">
-                <i class="km-icon-mask km-icon-delete"></i>
-              </button>
-            </ng-container>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Add existing SSH key</mat-label>
+      <mat-select #addSSHKeySelect
+                  panelClass="km-add-dialog-dropdown"
+                  (selectionChange)="onSSHKeyAdd($event.value); addSSHKeySelect.writeValue(undefined)"
+                  [disabled]="sshKeysToAdd().length === 0"
+                  disableOptionCentering>
+        <mat-option *ngFor="let key of sshKeysToAdd()"
+                    value="{{key.id}}">{{key.name}}</mat-option>
+      </mat-select>
+      <mat-hint>
+        <span>
+          <ng-container *ngIf="sshKeysToAdd().length > 0; else noSSHKeyMsg">
+            Select one of the existing project's SSH keys to add to this cluster.
           </ng-container>
-        </div>
-      </td>
-    </ng-container>
+          <ng-template #noSSHKeyMsg>
+            This project does not have any more SSH keys that could be added.
+          </ng-template>
+        </span>
+        <a *ngIf="canAdd()"
+           class="km-pointer"
+           (click)="createSSHKey()">Add SSH Key to the project.</a>
+      </mat-hint>
+    </mat-form-field>
 
-    <tr mat-header-row
-        class="km-header-row"
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: displayedColumns;"
-        class="km-mat-row"></tr>
-  </table>
+    <table class="km-table km-table-dropdown"
+           mat-table
+           multiTemplateDataRows
+           matSort
+           [dataSource]="getDataSource()"
+           [hidden]="!isTableVisible()">
 
-  <mat-form-field class="km-edit-sshkeys-dropdown">
-    <mat-label>Add existing SSH key</mat-label>
-    <mat-select #addSSHKeySelect
-                panelClass="km-add-dialog-dropdown"
-                (selectionChange)="onSSHKeyAdd($event.value); addSSHKeySelect.writeValue(undefined)"
-                [disabled]="sshKeysToAdd().length === 0"
-                disableOptionCentering>
-      <mat-option *ngFor="let key of sshKeysToAdd()"
-                  value="{{key.id}}">{{key.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <ng-container matColumnDef="name">
+        <td mat-cell
+            *matCellDef="let element">
+          {{element.name}}
+        </td>
+      </ng-container>
 
-  <span *ngIf="sshKeysToAdd().length > 0"
-        class="combobox-caption indent">
-    Select one of the existing project's SSH keys to add to this cluster.
-  </span>
-  <span *ngIf="sshKeysToAdd().length === 0"
-        class="combobox-caption indent">
-    This project does not have any more SSH keys that could be added.
-  </span>
-  <a *ngIf="canAdd()"
-     class="combobox-caption km-pointer"
-     (click)="createSSHKey()">Add SSH Key to the project.</a>
+      <ng-container matColumnDef="actions">
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <ng-container [ngSwitch]="!!element.deletionTimestamp">
+              <ng-container *ngSwitchCase="true">
+                <mat-spinner [diameter]="25"
+                             class="km-spinner row"
+                             color="accent"></mat-spinner>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="false">
+                <button mat-icon-button
+                        [attr.id]="'km-delete-sshkey-' + element.name"
+                        matTooltip="Remove SSH key"
+                        (click)="deleteSSHKey(element)"
+                        [disabled]="!canDelete()">
+                  <i class="km-icon-mask km-icon-delete"></i>
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          class="km-mat-row"></tr>
+    </table>
+  </div>
+
 </mat-dialog-content>

@@ -271,7 +271,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
           this.selectedCluster = this.clusters[0];
           this._getBackupsList(this._selectedProject.id);
         }
-        this.clusterLabel = clusters.length ? ClusterState.Ready : ClusterState.Empty;
+        this.clusterLabel = this.clusters.length ? ClusterState.Ready : ClusterState.Empty;
       });
   }
 

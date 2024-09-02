@@ -120,10 +120,6 @@ hr {
   }
 }
 
-.km-add-dialog-dropdown {
-  margin-top: 34px;
-}
-
 .km-table-dropdown {
   margin: 0;
   padding: 0;
@@ -594,13 +590,6 @@ km-dashboard {
 .km-radio-button-description {
   font-size: variables.$font-size-body;
   white-space: normal;
-}
-
-.mat-mdc-form-field.km-edit-sshkeys-dropdown {
-  .mat-mdc-text-field-wrapper {
-    margin-bottom: 2px;
-    padding: 0;
-  }
 }
 
 km-cni-version {
