@@ -18,6 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ApplicationService} from '@core/services/application';
 import {
   Application,
+  ApplicationAnnotations,
   ApplicationDefinition,
   ApplicationLabel,
   ApplicationLabelValue,
@@ -95,6 +96,18 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close(this._getApplicationPatch());
   }
 
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  isEnforcedApplication(): boolean {
+    return this.application?.annotations?.[ApplicationAnnotations.Enforce] === 'true';
+  }
+
+  isSystemApplication(labels: Record<string, string>): boolean {
+    return labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
+  }
+
   private _loadApplicationDetails() {
     this.isLoadingDetails = true;
     forkJoin([
@@ -127,28 +140,36 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       [Controls.Version]: this._builder.control(
         {
           value: this.application.spec.applicationRef?.version,
-          disabled: this.application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP,
+          disabled: this.isEnforcedApplication() ? true : this.isSystemApplication(this.application?.labels),
         },
         Validators.required
       ),
-      [Controls.Values]: this._builder.control(this.valuesConfig),
+      [Controls.Values]: this._builder.control({
+        value: this.valuesConfig,
+        disabled: this.isEnforcedApplication(),
+      }),
     });
 
     if (!this.application.creationTimestamp) {
       this.form.addControl(
         Controls.Namespace,
-        this._builder.control(this.application.spec.namespace?.name, [
-          Validators.required,
-          KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-        ])
+        this._builder.control(
+          {
+            value: this.application.spec.namespace?.name,
+            disabled: this.isEnforcedApplication(),
+          },
+          [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
+        )
       );
       this.form.addControl(
         Controls.Name,
-        this._builder.control(this.application.name, [
-          Validators.required,
-          KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-          this._duplicateNameValidator(),
-        ])
+        this._builder.control(
+          {
+            value: this.application.name,
+            disabled: this.isEnforcedApplication(),
+          },
+          [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, this._duplicateNameValidator()]
+        )
       );
       this.form
         .get(Controls.Namespace)

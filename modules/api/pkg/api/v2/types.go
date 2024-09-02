@@ -1861,6 +1861,8 @@ type ApplicationInstallation struct {
 
 	Labels map[string]string `json:"labels,omitempty"`
 
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	Spec *ApplicationInstallationSpec `json:"spec"`
 
 	Status *ApplicationInstallationStatus `json:"status"`
@@ -1875,6 +1877,8 @@ type ApplicationInstallationListItem struct {
 	CreationTimestamp apiv1.Time `json:"creationTimestamp,omitempty"`
 
 	Labels map[string]string `json:"labels,omitempty"`
+
+	Annotations map[string]string `json:"annotations,omitempty"`
 
 	Spec *ApplicationInstallationListItemSpec `json:"spec"`
 
@@ -2032,19 +2036,35 @@ type Permission struct {
 // swagger:model ApplicationDefinitionListItem
 type ApplicationDefinitionListItem struct {
 	Annotations map[string]string                 `json:"annotations,omitempty"`
+	Labels      map[string]string                 `json:"labels,omitempty"`
 	Name        string                            `json:"name"`
 	Spec        ApplicationDefinitionListItemSpec `json:"spec"`
 }
 
 // ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.
 type ApplicationDefinitionListItemSpec struct {
-	// Labels can contain metadata about the application, such as the owner who manages it.
-	Labels map[string]string `json:"labels,omitempty"`
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
 
 	// DisplayName is the name for the application that will be displayed in the UI.
 	DisplayName string `json:"displayName,omitempty"`
+
+	// DefaultVersion of the application to use, if not specified the latest available version will be used.
+	DefaultVersion string `json:"defaultVersion,omitempty"`
+
+	// Enforced specifies if the application is enforced to be installed on the user clusters. Enforced applications are
+	// installed/updated by KKP for the user clusters. Users are not allowed to update/delete them. KKP will revert the changes
+	// done by the application to the desired state specified in the ApplicationDefinition.
+	Enforced bool `json:"enforced,omitempty"`
+
+	// Default specifies if the application should be installed by default when a new user cluster is created. Default applications are
+	// not enforced and users can update/delete them. KKP will only install them during cluster creation if the user didn't explicitly
+	// opt out from installing default applications.
+	Default bool `json:"default,omitempty"`
+
+	// Selector is used to select the targeted user clusters for defaulting and enforcing applications. This is only used for default/enforced applications and ignored otherwise.
+	// +optional
+	Selector appskubermaticv1.DefaultingSelector `json:"selector,omitempty"`
 
 	// DocumentationURL holds a link to official documentation of the Application
 	// Alternatively this can be a link to the Readme of a chart in a git repository
@@ -2066,8 +2086,9 @@ type ApplicationDefinitionListItemSpec struct {
 type ApplicationDefinitionBody struct {
 	apiv1.ObjectMeta
 
-	Labels map[string]string `json:"labels,omitempty"`
-	Spec   *appskubermaticv1.ApplicationDefinitionSpec
+	Labels      map[string]string `json:"labels,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty"`
+	Spec        *appskubermaticv1.ApplicationDefinitionSpec
 }
 
 type DatacentersByProvider = map[string]ClustersByDatacenter

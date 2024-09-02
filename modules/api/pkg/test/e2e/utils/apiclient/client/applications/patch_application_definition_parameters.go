@@ -61,8 +61,8 @@ PatchApplicationDefinitionParams contains all the parameters to send to the API 
 */
 type PatchApplicationDefinitionParams struct {
 
-	// Body.
-	Body PatchApplicationDefinitionBody
+	// Patch.
+	Patch interface{}
 
 	// AppdefName.
 	AppDefName string
@@ -120,15 +120,15 @@ func (o *PatchApplicationDefinitionParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithBody adds the body to the patch application definition params
-func (o *PatchApplicationDefinitionParams) WithBody(body PatchApplicationDefinitionBody) *PatchApplicationDefinitionParams {
-	o.SetBody(body)
+// WithPatch adds the patch to the patch application definition params
+func (o *PatchApplicationDefinitionParams) WithPatch(patch interface{}) *PatchApplicationDefinitionParams {
+	o.SetPatch(patch)
 	return o
 }
 
-// SetBody adds the body to the patch application definition params
-func (o *PatchApplicationDefinitionParams) SetBody(body PatchApplicationDefinitionBody) {
-	o.Body = body
+// SetPatch adds the patch to the patch application definition params
+func (o *PatchApplicationDefinitionParams) SetPatch(patch interface{}) {
+	o.Patch = patch
 }
 
 // WithAppDefName adds the appdefName to the patch application definition params
@@ -149,8 +149,10 @@ func (o *PatchApplicationDefinitionParams) WriteToRequest(r runtime.ClientReques
 		return err
 	}
 	var res []error
-	if err := r.SetBodyParam(o.Body); err != nil {
-		return err
+	if o.Patch != nil {
+		if err := r.SetBodyParam(o.Patch); err != nil {
+			return err
+		}
 	}
 
 	// path param appdef_name

@@ -18,6 +18,9 @@ import (
 // swagger:model ApplicationInstallationListItem
 type ApplicationInstallationListItem struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// creation timestamp
 	CreationTimestamp string `json:"creationTimestamp,omitempty"`
 

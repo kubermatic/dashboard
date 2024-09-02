@@ -42,12 +42,16 @@ export class ApplicationService {
     return this._applications;
   }
 
+  get applicationDefinitions(): ApplicationDefinition[] {
+    return this._applicationDefinitions;
+  }
+
   set applications(applications: Application[]) {
     this._applications = applications;
     this.applicationChanges.emit(this._applications);
   }
 
-  applicationDefinitions(): Observable<ApplicationDefinition[]> {
+  listApplicationDefinitions(): Observable<ApplicationDefinition[]> {
     if (!this._applicationDefinitions$) {
       this._applicationDefinitions$ = this._refreshTimer$
         .pipe(

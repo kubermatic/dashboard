@@ -27,6 +27,7 @@ import {
   ApplicationRef,
   ApplicationSpec,
   ApplicationVersion,
+  getApplicationVersion,
 } from '@shared/entity/application';
 import {getEditionVersion} from '@shared/utils/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
@@ -139,7 +140,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
 
   private get _allowedApplicationDefinitions() {
     return this.applicationDefinitions?.filter(
-      appDef => !appDef.spec.labels || appDef.spec.labels[ApplicationLabel.ManagedBy] !== ApplicationLabelValue.KKP
+      appDef => !appDef.labels || appDef.labels[ApplicationLabel.ManagedBy] !== ApplicationLabelValue.KKP
     );
   }
 
@@ -171,7 +172,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
         this.valuesConfig = '';
       }
     }
-    const version = this.selectedApplication.spec.versions[0]?.version;
+    const version = getApplicationVersion(this.selectedApplication);
     this.form = this._builder.group({
       [Controls.Version]: this._builder.control(version, Validators.required),
       [Controls.Namespace]: this._builder.control(this.selectedApplication.name, [

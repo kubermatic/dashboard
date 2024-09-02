@@ -6555,6 +6555,7 @@
         }
       },
       "patch": {
+        "description": "Patch the given ApplicationDefinition",
         "consumes": [
           "application/json"
         ],
@@ -6564,7 +6565,6 @@
         "tags": [
           "applications"
         ],
-        "summary": "Patch the given ApplicationDefinition; this endpoint only supports patching annotations, for now.",
         "operationId": "patchApplicationDefinition",
         "parameters": [
           {
@@ -6575,20 +6575,10 @@
             "required": true
           },
           {
-            "name": "Body",
+            "name": "Patch",
             "in": "body",
-            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "annotations": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "x-go-name": "Annotations"
-                }
-              }
+              "type": "object"
             }
           }
         ],
@@ -27434,6 +27424,13 @@
           },
           "x-go-name": "Annotations"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -27448,6 +27445,16 @@
       "type": "object",
       "title": "ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.",
       "properties": {
+        "default": {
+          "description": "Default specifies if the application should be installed by default when a new user cluster is created. Default applications are\nnot enforced and users can update/delete them. KKP will only install them during cluster creation if the user didn't explicitly\nopt out from installing default applications.",
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
+        "defaultVersion": {
+          "description": "DefaultVersion of the application to use, if not specified the latest available version will be used.",
+          "type": "string",
+          "x-go-name": "DefaultVersion"
+        },
         "description": {
           "description": "Description of the application. what is its purpose",
           "type": "string",
@@ -27463,13 +27470,10 @@
           "type": "string",
           "x-go-name": "DocumentationURL"
         },
-        "labels": {
-          "description": "Labels can contain metadata about the application, such as the owner who manages it.",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Labels"
+        "enforced": {
+          "description": "Enforced specifies if the application is enforced to be installed on the user clusters. Enforced applications are\ninstalled/updated by KKP for the user clusters. Users are not allowed to update/delete them. KKP will revert the changes\ndone by the application to the desired state specified in the ApplicationDefinition.",
+          "type": "boolean",
+          "x-go-name": "Enforced"
         },
         "logo": {
           "description": "Logo of the Application as a base64 encoded svg",
@@ -27480,6 +27484,9 @@
           "description": "LogoFormat contains logo format of the configured Application. Options are \"svg+xml\" and \"png\"\n+kubebuilder:validation:Enum=svg+xml;png",
           "type": "string",
           "x-go-name": "LogoFormat"
+        },
+        "selector": {
+          "$ref": "#/definitions/DefaultingSelector"
         },
         "sourceURL": {
           "description": "SourceURL holds a link to the official source code mirror or git repository of the application",
@@ -27493,6 +27500,11 @@
       "type": "object",
       "title": "ApplicationDefinitionSpec defines the desired state of ApplicationDefinition.",
       "properties": {
+        "default": {
+          "description": "Default specifies if the application should be installed by default when a new user cluster is created. Default applications are\nnot enforced and users can update/delete them. KKP will only install them during cluster creation if the user didn't explicitly\nopt out from installing default applications.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
         "defaultDeployOptions": {
           "$ref": "#/definitions/DeployOptions"
         },
@@ -27503,6 +27515,11 @@
           "description": "DefaultValuesBlock specifies default values for the UI which are passed to helm templating when creating an application. Comments are preserved.",
           "type": "string",
           "x-go-name": "DefaultValuesBlock"
+        },
+        "defaultVersion": {
+          "description": "DefaultVersion of the application to use, if not specified the latest available version will be used.\n+optional",
+          "type": "string",
+          "x-go-name": "DefaultVersion"
         },
         "description": {
           "description": "Description of the application. what is its purpose",
@@ -27519,6 +27536,11 @@
           "type": "string",
           "x-go-name": "DocumentationURL"
         },
+        "enforced": {
+          "description": "Enforced specifies if the application is enforced to be installed on the user clusters. Enforced applications are\ninstalled/updated by KKP for the user clusters. Users are not allowed to update/delete them. KKP will revert the changes\ndone by the application to the desired state specified in the ApplicationDefinition.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Enforced"
+        },
         "logo": {
           "description": "Logo of the Application as a base64 encoded svg",
           "type": "string",
@@ -27531,6 +27553,9 @@
         },
         "method": {
           "$ref": "#/definitions/TemplateMethod"
+        },
+        "selector": {
+          "$ref": "#/definitions/DefaultingSelector"
         },
         "sourceURL": {
           "description": "SourceURL holds a link to the official source code mirror or git repository of the application",
@@ -27698,6 +27723,13 @@
       "type": "object",
       "title": "ApplicationInstallationListItem is the object representing an ApplicationInstallationListItem.",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "creationTimestamp": {
           "type": "string",
           "x-go-name": "CreationTimestamp"
@@ -30485,6 +30517,21 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DefaultingSelector": {
+      "type": "object",
+      "title": "DefaultingSelector is used to select the targeted user clusters for defaulting and enforcing applications.",
+      "properties": {
+        "datacenters": {
+          "description": "Datacenters is a list of datacenters where the application can be installed.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Datacenters"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
     "DependencyCredentials": {
       "type": "object",
@@ -37851,6 +37898,11 @@
           "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
           "type": "string",
           "x-go-name": "Name"
+        },
+        "request": {
+          "description": "Request is the name chosen for a request in the referenced claim.\nIf empty, everything from the claim is made available, otherwise\nonly the result of this request.\n\n+optional",
+          "type": "string",
+          "x-go-name": "Request"
         }
       },
       "x-go-package": "k8s.io/api/core/v1"

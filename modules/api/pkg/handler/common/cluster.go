@@ -38,6 +38,7 @@ import (
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
+	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
@@ -282,13 +283,20 @@ func GenerateCluster(
 	}
 
 	if len(body.Applications) > 0 {
-		data, err := json.Marshal(body.Applications)
+		// Remove enforced applications since they are automatically installed by the controllers.
+		apps := []apiv1.Application{}
+		for _, app := range body.Applications {
+			if value, ok := app.Annotations[appskubermaticv1.ApplicationEnforcedAnnotation]; !ok || value != "true" {
+				apps = append(apps, app)
+			}
+		}
+		data, err := json.Marshal(apps)
 		if err != nil {
 			return nil, fmt.Errorf("cannot marshal initial applications: %w", err)
 		}
 		partialCluster.Annotations[kubermaticv1.InitialApplicationInstallationsRequestAnnotation] = string(data)
 	} else {
-		// This is a workaround to ensure that if the request to create a cluster is coming in from our UI, it's known that the user explicitly disabled
+		// This is a workaround to ensure that if the request to create a cluster is originating from our UI, it's known that the user explicitly disabled
 		// the default applications.
 		partialCluster.Annotations[kubermaticv1.InitialApplicationInstallationsRequestAnnotation] = "[]"
 	}

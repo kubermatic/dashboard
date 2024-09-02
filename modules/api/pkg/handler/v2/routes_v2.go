@@ -10503,7 +10503,7 @@ func (r Routing) updateApplicationDefinition() http.Handler {
 
 // swagger:route PATCH /api/v2/applicationdefinitions/{appdef_name} applications patchApplicationDefinition
 //
-//	Patch the given ApplicationDefinition; this endpoint only supports patching annotations, for now.
+//	Patch the given ApplicationDefinition
 //
 //	 Consumes:
 //	 - application/json

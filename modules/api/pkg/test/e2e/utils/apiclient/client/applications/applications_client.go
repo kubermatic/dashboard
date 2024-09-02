@@ -358,7 +358,7 @@ func (a *Client) ListApplicationInstallations(params *ListApplicationInstallatio
 }
 
 /*
-PatchApplicationDefinition patches the given application definition this endpoint only supports patching annotations for now
+PatchApplicationDefinition Patch the given ApplicationDefinition
 */
 func (a *Client) PatchApplicationDefinition(params *PatchApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchApplicationDefinitionOK, error) {
 	// TODO: Validate the params before sending

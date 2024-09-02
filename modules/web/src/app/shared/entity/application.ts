@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {SafeUrl} from '@angular/platform-browser';
+import semver from 'semver';
 
 export class Application {
   creationTimestamp?: Date;
@@ -21,8 +22,9 @@ export class Application {
   name: string;
   namespace?: string;
   spec: ApplicationSpec;
-  status: ApplicationStatus;
+  status?: ApplicationStatus;
   labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
+  annotations?: Record<ApplicationAnnotations | string, string>;
 }
 
 export class ApplicationSpec {
@@ -62,11 +64,16 @@ export class ApplicationDefinition {
   id: string;
   name: string;
   annotations?: Record<string, string>;
+  labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
   spec: ApplicationDefinitionSpec;
 }
 
 export class ApplicationDefinitionSpec {
   defaultValues?: string | object;
+  defaultVersion?: string;
+  enforced: boolean;
+  default: boolean;
+  selector: ApplicationDefinitionSelector;
   defaultValuesBlock?: string;
   description: string;
   displayName?: string;
@@ -77,7 +84,10 @@ export class ApplicationDefinitionSpec {
   logo?: string;
   logoFormat?: string;
   logoData?: SafeUrl; // to be used as "src" value of image
-  labels?: Record<ApplicationLabel | string, ApplicationLabelValue | string>;
+}
+
+export class ApplicationDefinitionSelector {
+  datacenters: string[];
 }
 
 export class ApplicationVersion {
@@ -142,8 +152,8 @@ export enum ApplicationLabel {
 }
 
 export enum ApplicationAnnotations {
-  Default = 'apps.kubermatic.k8c.io/default',
-  Enforce = 'apps.kubermatic.k8c.io/enforce',
+  Default = 'apps.kubermatic.k8c.io/defaulted',
+  Enforce = 'apps.kubermatic.k8c.io/enforced',
   TargetDatacenters = 'apps.kubermatic.k8c.io/target-datacenters',
 }
 
@@ -156,4 +166,22 @@ export function getApplicationLogoData(applicationDefinition: ApplicationDefinit
   return applicationDefinition?.spec?.logo && applicationDefinition.spec.logoFormat
     ? `data:image/${applicationDefinition.spec.logoFormat};base64,${applicationDefinition.spec.logo}`
     : '';
+}
+
+export function getApplicationVersion(applicationDefinition: ApplicationDefinition): string {
+  if (applicationDefinition.spec.defaultVersion) {
+    // Ensure that the default version exists in the versions array
+    if (
+      applicationDefinition.spec.versions.some(version => version.version === applicationDefinition.spec.defaultVersion)
+    ) {
+      return applicationDefinition.spec.defaultVersion;
+    }
+  }
+
+  // Find the highest semver version from the versions array
+  const versions = applicationDefinition.spec.versions.filter(version => version.version);
+  const sortedVersions = versions.sort((a, b) => {
+    return semver.compare(a.version, b.version);
+  });
+  return sortedVersions[sortedVersions.length - 1].version;
 }
