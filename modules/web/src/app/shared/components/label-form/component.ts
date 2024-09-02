@@ -251,8 +251,8 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   getStaticLabelsKeys(): string[] {
-    const filterdLabels = this.staticLabels?.filter(label => !this.labels[label.key]);
-    return filterdLabels?.map(label => label.key);
+    const filteredLabels = this.staticLabels?.filter(label => !this.labels[label.key]);
+    return filteredLabels?.map(label => label.key);
   }
 
   isProtectedKey(key: string, index: number): boolean {

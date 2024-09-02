@@ -469,7 +469,7 @@ func updateMeteringReportConfiguration(ctx context.Context, reportCfgReq updateR
 	}, nil
 }
 
-func deleteMeteringReportConfiguration(ctx context.Context, reportConfigName string, seed *kubermaticv1.Seed, masterClinet ctrlruntimeclient.Client) error {
+func deleteMeteringReportConfiguration(ctx context.Context, reportConfigName string, seed *kubermaticv1.Seed, masterClient ctrlruntimeclient.Client) error {
 	if seed.Spec.Metering == nil || seed.Spec.Metering.ReportConfigurations == nil {
 		return fmt.Errorf("metering report configuration map for %q does not exist", seed.Name)
 	}
@@ -480,7 +480,7 @@ func deleteMeteringReportConfiguration(ctx context.Context, reportConfigName str
 	}
 
 	delete(seed.Spec.Metering.ReportConfigurations, reportConfigName)
-	if err := masterClinet.Update(ctx, seed); err != nil {
+	if err := masterClient.Update(ctx, seed); err != nil {
 		return common.KubernetesErrorToHTTPError(err)
 	}
 
