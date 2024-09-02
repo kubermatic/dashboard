@@ -21,7 +21,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
 import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
-import {objectDiff} from '@shared/utils/common';
+import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -39,6 +39,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   isOIDCKubeCfgEndpointEnabled = true;
   isOpenIDAuthPluginEnabled = true;
   allowedOperatingSystems: string[] = Object.values(OperatingSystem);
+  editionVersion: string = getEditionVersion();
 
   readonly OperatingSystem = OperatingSystem;
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
