@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -16,6 +17,14 @@ import (
 //
 // swagger:model ApplicationDefinitionListItemSpec
 type ApplicationDefinitionListItemSpec struct {
+
+	// Default specifies if the application should be installed by default when a new user cluster is created. Default applications are
+	// not enforced and users can update/delete them. KKP will only install them during cluster creation if the user didn't explicitly
+	// opt out from installing default applications.
+	Default bool `json:"default,omitempty"`
+
+	// DefaultVersion of the application to use, if not specified the latest available version will be used.
+	DefaultVersion string `json:"defaultVersion,omitempty"`
 
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
@@ -27,8 +36,10 @@ type ApplicationDefinitionListItemSpec struct {
 	// Alternatively this can be a link to the Readme of a chart in a git repository
 	DocumentationURL string `json:"documentationURL,omitempty"`
 
-	// Labels can contain metadata about the application, such as the owner who manages it.
-	Labels map[string]string `json:"labels,omitempty"`
+	// Enforced specifies if the application is enforced to be installed on the user clusters. Enforced applications are
+	// installed/updated by KKP for the user clusters. Users are not allowed to update/delete them. KKP will revert the changes
+	// done by the application to the desired state specified in the ApplicationDefinition.
+	Enforced bool `json:"enforced,omitempty"`
 
 	// Logo of the Application as a base64 encoded svg
 	Logo string `json:"logo,omitempty"`
@@ -39,15 +50,71 @@ type ApplicationDefinitionListItemSpec struct {
 
 	// SourceURL holds a link to the official source code mirror or git repository of the application
 	SourceURL string `json:"sourceURL,omitempty"`
+
+	// selector
+	Selector *DefaultingSelector `json:"selector,omitempty"`
 }
 
 // Validate validates this application definition list item spec
 func (m *ApplicationDefinitionListItemSpec) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateSelector(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this application definition list item spec based on context it is used
+func (m *ApplicationDefinitionListItemSpec) validateSelector(formats strfmt.Registry) error {
+	if swag.IsZero(m.Selector) { // not required
+		return nil
+	}
+
+	if m.Selector != nil {
+		if err := m.Selector.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("selector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("selector")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this application definition list item spec based on the context it is used
 func (m *ApplicationDefinitionListItemSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateSelector(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *ApplicationDefinitionListItemSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Selector != nil {
+		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("selector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("selector")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

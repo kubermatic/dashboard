@@ -14,11 +14,16 @@
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ClusterSpecService} from '@app/core/services/cluster-spec';
+import {StepRegistry} from '@app/wizard/config';
 import {StepBase} from '@app/wizard/step/base';
+import {ApplicationService} from '@core/services/application';
 import {WizardService} from '@core/services/wizard/wizard';
 import {ApplicationsListView} from '@shared/components/application-list/component';
-import {Application} from '@shared/entity/application';
-import {ApplicationService} from '@core/services/application';
+import {Application, ApplicationAnnotations, getApplicationVersion} from '@shared/entity/application';
+import * as y from 'js-yaml';
+import _, {merge} from 'lodash';
+import {forkJoin, takeUntil} from 'rxjs';
 
 enum Controls {
   Applications = 'applications',
@@ -48,9 +53,10 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   constructor(
     wizard: WizardService,
     private readonly _builder: FormBuilder,
-    private readonly _applicationService: ApplicationService
+    private readonly _applicationService: ApplicationService,
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
-    super(wizard, 'Applications');
+    super(wizard, StepRegistry.Applications);
   }
 
   ngOnInit(): void {
@@ -68,7 +74,74 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
         }
         return application;
       }) || [];
+
+    merge(this._clusterSpecService.datacenterChanges, this._applicationService.applicationChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.loadDefaultAndEnforcedApplications();
+      });
+
     this._onApplicationsChanged();
+  }
+
+  private loadDefaultAndEnforcedApplications() {
+    const defaultAndEnforcedApplications = this._applicationService.applicationDefinitions.filter(
+      application => application.spec.default || application.spec.enforced
+    );
+
+    // Fetch individual application definitions and create ApplicationInstallations
+    forkJoin(
+      defaultAndEnforcedApplications.map(application =>
+        this._applicationService.getApplicationDefinition(application.name)
+      )
+    ).subscribe(applicationDefinitions => {
+      applicationDefinitions.forEach(appDef => {
+        if (appDef.name === 'k8sgpt') {
+          appDef.spec.enforced = true;
+        }
+
+        if (appDef.name === 'cert-manager') {
+          appDef.spec.default = true;
+        }
+
+        const applicationInstallation = this.createApplicationInstallation(appDef);
+        this.onApplicationAdded(applicationInstallation);
+      });
+    });
+  }
+
+  private createApplicationInstallation(appDef: any): Application {
+    const applicationInstallation: Application = {
+      name: appDef.name,
+      namespace: appDef.name,
+      spec: {
+        applicationRef: {
+          name: appDef.name,
+          version: getApplicationVersion(appDef),
+        },
+        namespace: {
+          name: appDef.name,
+        },
+      },
+    };
+
+    if (!_.isEmpty(appDef.spec.defaultValuesBlock)) {
+      applicationInstallation.spec.valuesBlock = appDef.spec.defaultValuesBlock;
+    } else if (!_.isEmpty(appDef.spec.defaultValues)) {
+      applicationInstallation.spec.valuesBlock = y.dump(appDef.spec.defaultValues);
+    } else {
+      applicationInstallation.spec.valuesBlock = '';
+    }
+
+    const annotations = new Map<string, string>();
+    if (appDef.spec.default) {
+      annotations.set(ApplicationAnnotations.Default, 'true');
+    }
+    if (appDef.spec.enforced) {
+      annotations.set(ApplicationAnnotations.Enforce, 'true');
+    }
+    applicationInstallation.annotations = Object.fromEntries(annotations);
+    return applicationInstallation;
   }
 
   onApplicationAdded(application: Application): void {

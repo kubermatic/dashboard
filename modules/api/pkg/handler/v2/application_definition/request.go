@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -60,10 +61,7 @@ type patchApplicationDefinitionReq struct {
 	AppDefName string `json:"appdef_name"`
 
 	// in: body
-	// required: true
-	Body struct {
-		Annotations map[string]string `json:"annotations,omitempty"`
-	}
+	Patch json.RawMessage
 }
 
 func DecodePatchApplicationDefinitionReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -74,14 +72,20 @@ func DecodePatchApplicationDefinitionReq(c context.Context, r *http.Request) (in
 	}
 	req.AppDefName = appDefName
 
-	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+	if req.Patch, err = io.ReadAll(r.Body); err != nil {
 		return nil, err
 	}
 	return req, nil
 }
 
 func (r patchApplicationDefinitionReq) Validate() error {
-	// Since we are only updating the annotations, we don't need to validate the request.
+	if r.Patch == nil {
+		return fmt.Errorf("patch is required but was not provided")
+	}
+
+	if r.AppDefName == "" {
+		return fmt.Errorf("appDefName is required but was not provided")
+	}
 	return nil
 }
 

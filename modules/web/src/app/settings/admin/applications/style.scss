@@ -21,6 +21,12 @@
   }
 }
 
+.km-table {
+  td.mat-mdc-cell {
+    line-height: 0px;
+  }
+}
+
 .card {
   margin-top: 20px;
 }

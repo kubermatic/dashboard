@@ -27,15 +27,19 @@ import (
 func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinitionListItem {
 	return &apiv2.ApplicationDefinitionListItem{
 		Annotations: appDef.Annotations,
+		Labels:      appDef.Labels,
 		Name:        appDef.Name,
 		Spec: apiv2.ApplicationDefinitionListItemSpec{
 			DisplayName:      appDef.Spec.DisplayName,
-			Labels:           appDef.Labels,
 			Description:      appDef.Spec.Description,
 			DocumentationURL: appDef.Spec.DocumentationURL,
 			SourceURL:        appDef.Spec.SourceURL,
 			Logo:             appDef.Spec.Logo,
 			LogoFormat:       appDef.Spec.LogoFormat,
+			DefaultVersion:   appDef.Spec.DefaultVersion,
+			Enforced:         appDef.Spec.Enforced,
+			Default:          appDef.Spec.Default,
+			Selector:         appDef.Spec.Selector,
 		},
 	}
 }

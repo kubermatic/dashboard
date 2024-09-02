@@ -21,6 +21,13 @@ type ResourceClaim struct {
 	// the Pod where this field is used. It makes that resource available
 	// inside a container.
 	Name string `json:"name,omitempty"`
+
+	// Request is the name chosen for a request in the referenced claim.
+	// If empty, everything from the claim is made available, otherwise
+	// only the result of this request.
+	//
+	// +optional
+	Request string `json:"request,omitempty"`
 }
 
 // Validate validates this resource claim

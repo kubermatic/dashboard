@@ -22,7 +22,13 @@ import {ApplicationService} from '@core/services/application';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {Application, ApplicationDefinition, ApplicationLabel, ApplicationLabelValue} from '@shared/entity/application';
+import {
+  Application,
+  ApplicationAnnotations,
+  ApplicationDefinition,
+  ApplicationLabel,
+  ApplicationLabelValue,
+} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {StatusIcon} from '@shared/utils/health-status';
@@ -176,8 +182,20 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  getEditIcon(application: Application): string {
+    return this.isEnforcedApplication(application) ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-edit';
+  }
+
   isSystemApplication(application: Application): boolean {
     return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
+  }
+
+  isEnforcedApplication(application: Application): boolean {
+    return application.annotations?.[ApplicationAnnotations.Enforce] === 'true';
+  }
+
+  isDefaultedApplication(application: Application): boolean {
+    return application.annotations?.[ApplicationAnnotations.Default] === 'true';
   }
 
   canAdd(): boolean {
@@ -277,7 +295,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   private _initSubscriptions(): void {
     this._applicationService
-      .applicationDefinitions()
+      .listApplicationDefinitions()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(applicationDefinitions => {
         this._updateApplicationDefinitions(applicationDefinitions);

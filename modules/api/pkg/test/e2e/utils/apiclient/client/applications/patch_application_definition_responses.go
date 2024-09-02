@@ -6,13 +6,11 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"context"
 	"fmt"
 	"io"
 
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
@@ -289,43 +287,5 @@ func (o *PatchApplicationDefinitionDefault) readResponse(response runtime.Client
 		return err
 	}
 
-	return nil
-}
-
-/*
-PatchApplicationDefinitionBody patch application definition body
-swagger:model PatchApplicationDefinitionBody
-*/
-type PatchApplicationDefinitionBody struct {
-
-	// annotations
-	Annotations map[string]string `json:"annotations,omitempty"`
-}
-
-// Validate validates this patch application definition body
-func (o *PatchApplicationDefinitionBody) Validate(formats strfmt.Registry) error {
-	return nil
-}
-
-// ContextValidate validates this patch application definition body based on context it is used
-func (o *PatchApplicationDefinitionBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *PatchApplicationDefinitionBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *PatchApplicationDefinitionBody) UnmarshalBinary(b []byte) error {
-	var res PatchApplicationDefinitionBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
 	return nil
 }

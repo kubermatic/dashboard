@@ -86,25 +86,29 @@ require (
 	kubevirt.io/api v1.2.2
 	kubevirt.io/containerized-data-importer-api v1.59.0
 	sigs.k8s.io/controller-runtime v0.19.0
-	sigs.k8s.io/controller-tools v0.14.0
+	sigs.k8s.io/controller-tools v0.16.1
 	sigs.k8s.io/yaml v1.4.0
 )
 
+replace k8c.io/kubermatic/v2 => /Users/waleedmalik/src/ahmedwaleedmalik/kubermatic
+
+// replace sigs.k8s.io/controller-tools => sigs.k8s.io/controller-tools v0.14.0
+
 // Temporarily pinning k8s.io dependencies to v0.30.0
 // TODO: Remove this when https://github.com/kubermatic/kubermatic/pull/13593 and https://github.com/kubermatic/kubermatic/pull/13621 are merged.
-replace (
-	k8s.io/api => k8s.io/api v0.30.3
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.30.3
-	k8s.io/apimachinery => k8s.io/apimachinery v0.30.3
-	k8s.io/apiserver => k8s.io/apiserver v0.30.3
-	k8s.io/client-go => k8s.io/client-go v0.30.3
-	k8s.io/code-generator => k8s.io/code-generator v0.30.3
-	k8s.io/component-base => k8s.io/component-base v0.30.3
-	k8s.io/kubectl => k8s.io/kubectl v0.30.3
-	k8s.io/metrics => k8s.io/metrics v0.30.3
-	k8s.io/utils => k8s.io/utils v0.0.0-20240711033017-18e509b52bc8
-	sigs.k8s.io/controller-runtime => sigs.k8s.io/controller-runtime v0.18.2
-)
+// replace (
+// 	k8s.io/api => k8s.io/api v0.30.3
+// 	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.30.3
+// 	k8s.io/apimachinery => k8s.io/apimachinery v0.30.3
+// 	k8s.io/apiserver => k8s.io/apiserver v0.30.3
+// 	k8s.io/client-go => k8s.io/client-go v0.30.3
+// 	k8s.io/code-generator => k8s.io/code-generator v0.30.3
+// 	k8s.io/component-base => k8s.io/component-base v0.30.3
+// 	k8s.io/kubectl => k8s.io/kubectl v0.30.3
+// 	k8s.io/metrics => k8s.io/metrics v0.30.3
+// 	k8s.io/utils => k8s.io/utils v0.0.0-20240711033017-18e509b52bc8
+// 	sigs.k8s.io/controller-runtime => sigs.k8s.io/controller-runtime v0.18.2
+// )
 
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
@@ -128,7 +132,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3 // indirect
 	github.com/PaesslerAG/gval v1.2.2 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
-	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20230305170008-8188dc5388df // indirect
+	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.9 // indirect
@@ -152,9 +156,10 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.0 // indirect
-	github.com/fatih/color v1.16.0 // indirect
+	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -170,7 +175,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/cel-go v0.17.8 // indirect
+	github.com/google/cel-go v0.20.1 // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.1-0.20210504230335-f78f29fc09ea // indirect
@@ -242,6 +247,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tinkerbell/tink v0.10.0 // indirect
 	github.com/toqueteos/webbrowser v1.2.0 // indirect
+	github.com/x448/float16 v0.8.4 // indirect
 	go.mongodb.org/mongo-driver v1.13.1 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.53.0 // indirect
@@ -264,6 +270,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094 // indirect
 	google.golang.org/grpc v1.65.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
+	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
@@ -274,7 +281,7 @@ require (
 	k8s.io/component-base v0.31.0 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240812201722-3b05ca7b6e59 // indirect
 	k8s.io/klog v1.0.0 // indirect
-	k8s.io/kube-aggregator v0.30.0 // indirect
+	k8s.io/kube-aggregator v0.31.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20240816214639-573285566f34 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.0.1-0.20240305045206-346e951245f2 // indirect

@@ -19,8 +19,18 @@ import (
 // swagger:model ApplicationDefinitionSpec
 type ApplicationDefinitionSpec struct {
 
+	// Default specifies if the application should be installed by default when a new user cluster is created. Default applications are
+	// not enforced and users can update/delete them. KKP will only install them during cluster creation if the user didn't explicitly
+	// opt out from installing default applications.
+	// +optional
+	Default bool `json:"default,omitempty"`
+
 	// DefaultValuesBlock specifies default values for the UI which are passed to helm templating when creating an application. Comments are preserved.
 	DefaultValuesBlock string `json:"defaultValuesBlock,omitempty"`
+
+	// DefaultVersion of the application to use, if not specified the latest available version will be used.
+	// +optional
+	DefaultVersion string `json:"defaultVersion,omitempty"`
 
 	// Description of the application. what is its purpose
 	Description string `json:"description,omitempty"`
@@ -31,6 +41,12 @@ type ApplicationDefinitionSpec struct {
 	// DocumentationURL holds a link to official documentation of the Application
 	// Alternatively this can be a link to the Readme of a chart in a git repository
 	DocumentationURL string `json:"documentationURL,omitempty"`
+
+	// Enforced specifies if the application is enforced to be installed on the user clusters. Enforced applications are
+	// installed/updated by KKP for the user clusters. Users are not allowed to update/delete them. KKP will revert the changes
+	// done by the application to the desired state specified in the ApplicationDefinition.
+	// +optional
+	Enforced bool `json:"enforced,omitempty"`
 
 	// Logo of the Application as a base64 encoded svg
 	Logo string `json:"logo,omitempty"`
@@ -53,6 +69,9 @@ type ApplicationDefinitionSpec struct {
 
 	// method
 	Method TemplateMethod `json:"method,omitempty"`
+
+	// selector
+	Selector *DefaultingSelector `json:"selector,omitempty"`
 }
 
 // Validate validates this application definition spec
@@ -68,6 +87,10 @@ func (m *ApplicationDefinitionSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMethod(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSelector(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -139,6 +162,25 @@ func (m *ApplicationDefinitionSpec) validateMethod(formats strfmt.Registry) erro
 	return nil
 }
 
+func (m *ApplicationDefinitionSpec) validateSelector(formats strfmt.Registry) error {
+	if swag.IsZero(m.Selector) { // not required
+		return nil
+	}
+
+	if m.Selector != nil {
+		if err := m.Selector.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("selector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("selector")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this application definition spec based on the context it is used
 func (m *ApplicationDefinitionSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -152,6 +194,10 @@ func (m *ApplicationDefinitionSpec) ContextValidate(ctx context.Context, formats
 	}
 
 	if err := m.contextValidateMethod(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateSelector(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -206,6 +252,22 @@ func (m *ApplicationDefinitionSpec) contextValidateMethod(ctx context.Context, f
 			return ce.ValidateName("method")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *ApplicationDefinitionSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Selector != nil {
+		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("selector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("selector")
+			}
+			return err
+		}
 	}
 
 	return nil

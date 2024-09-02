@@ -27,6 +27,7 @@ import {
   ApplicationRef,
   ApplicationSpec,
   ApplicationVersion,
+  getApplicationVersion,
 } from '@shared/entity/application';
 import {getEditionVersion} from '@shared/utils/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
@@ -34,7 +35,6 @@ import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject, Subscription} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import * as semver from 'semver';
 
 enum Controls {
   Version = 'version',
@@ -172,7 +172,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
         this.valuesConfig = '';
       }
     }
-    const version = this.getApplicationVersion(this.selectedApplication);
+    const version = getApplicationVersion(this.selectedApplication);
     this.form = this._builder.group({
       [Controls.Version]: this._builder.control(version, Validators.required),
       [Controls.Namespace]: this._builder.control(this.selectedApplication.name, [
@@ -240,18 +240,5 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       applicationDefinition.name.toLowerCase().includes(query) ||
       applicationDefinition.spec.description?.toLowerCase().includes(query)
     );
-  }
-
-  private getApplicationVersion(applicationDefinition: ApplicationDefinition): string {
-    if (applicationDefinition.spec.defaultVersion) {
-      return applicationDefinition.spec.defaultVersion;
-    }
-
-    // Find the higest semver version from the versions array
-    const versions = applicationDefinition.spec.versions.filter(version => version.version.includes('v'));
-    const sortedVersions = versions.sort((a, b) => {
-      return semver.compare(a.version, b.version);
-    });
-    return sortedVersions[sortedVersions.length - 1].version;
   }
 }

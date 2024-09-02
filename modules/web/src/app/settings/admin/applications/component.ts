@@ -21,7 +21,7 @@ import {ApplicationService} from '@app/core/services/application';
 import {DatacenterService} from '@app/core/services/datacenter';
 import {NotificationService} from '@app/core/services/notification';
 import {UserService} from '@app/core/services/user';
-import {ApplicationAnnotations, ApplicationDefinition} from '@app/shared/entity/application';
+import {ApplicationDefinition} from '@app/shared/entity/application';
 import {Datacenter} from '@app/shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -38,7 +38,6 @@ export class ApplicationsComponent implements OnInit, OnChanges {
   dataSource = new MatTableDataSource<ApplicationDefinition>();
   displayedColumns: string[] = ['name', 'default', 'enforce', 'datacenters'];
   datacenters: Datacenter[] = [];
-  applicationDatacenters: Map<string, string[]> = new Map();
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -60,18 +59,12 @@ export class ApplicationsComponent implements OnInit, OnChanges {
     this.isLoading = true;
 
     this._applicationService
-      .applicationDefinitions()
+      .listApplicationDefinitions()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: applications => {
           this.applications = this._filter(applications);
           this.dataSource.data = this.applications;
-          this.applicationDatacenters = new Map(
-            this.applications.map(app => {
-              const datacenters = app.annotations?.[ApplicationAnnotations.TargetDatacenters]?.split(',') || [];
-              return [app.name, datacenters];
-            })
-          );
           this.isLoading = false;
         },
         error: () => (this.isLoading = false),
@@ -118,10 +111,8 @@ export class ApplicationsComponent implements OnInit, OnChanges {
   onDefaultChange(event: MatSlideToggleChange, application: ApplicationDefinition): void {
     const newDefaultValue = event.checked;
 
-    if (newDefaultValue) {
-      application.annotations[ApplicationAnnotations.Default] = 'true';
-    } else {
-      delete application.annotations[ApplicationAnnotations.Default];
+    if (newDefaultValue !== application.spec.default) {
+      application.spec.default = newDefaultValue;
     }
 
     this.patchApplication(application);
@@ -130,25 +121,17 @@ export class ApplicationsComponent implements OnInit, OnChanges {
   onEnforceChange(event: MatSlideToggleChange, application: ApplicationDefinition): void {
     const newDefaultValue = event.checked;
 
-    if (newDefaultValue) {
-      application.annotations[ApplicationAnnotations.Enforce] = 'true';
-    } else {
-      delete application.annotations[ApplicationAnnotations.Enforce];
+    if (newDefaultValue !== application.spec.enforced) {
+      application.spec.enforced = newDefaultValue;
     }
 
     this.patchApplication(application);
   }
 
   onDatacentersChange(dc: string[], application: ApplicationDefinition): void {
-    const newDatacenters = dc;
-
-    if (newDatacenters && newDatacenters.length > 0) {
-      application.annotations[ApplicationAnnotations.TargetDatacenters] = newDatacenters.join(',');
-    } else {
-      delete application.annotations[ApplicationAnnotations.TargetDatacenters];
+    if (application.spec.selector?.datacenters !== dc) {
+      application.spec.selector.datacenters = dc;
     }
-
-    this.applicationDatacenters.set(application.name, newDatacenters);
     this.patchApplication(application);
   }
 
@@ -170,14 +153,14 @@ export class ApplicationsComponent implements OnInit, OnChanges {
   }
 
   defaultApplication(app: ApplicationDefinition): boolean {
-    return app.annotations?.[ApplicationAnnotations.Default] === 'true';
+    return app.spec.default;
   }
 
   enforceApplication(app: ApplicationDefinition): boolean {
-    return app.annotations?.[ApplicationAnnotations.Enforce] === 'true';
+    return app.spec.enforced;
   }
 
   targetDatacenters(app: ApplicationDefinition): string[] {
-    return app.annotations?.[ApplicationAnnotations.TargetDatacenters]?.split(',') || [];
+    return app.spec.selector?.datacenters || [];
   }
 }

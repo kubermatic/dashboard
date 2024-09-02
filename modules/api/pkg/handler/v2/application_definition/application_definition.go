@@ -18,9 +18,11 @@ package applicationdefinition
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
+	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -155,13 +157,38 @@ func PatchApplicationDefinition(userInfoGetter provider.UserInfoGetter, applicat
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		newApplicationDefinition := original.DeepCopy()
-		newApplicationDefinition.Annotations = req.Body.Annotations
+		originalJSON, err := json.Marshal(convertInternalToAPIApplicationDefinition(original))
+		if err != nil {
+			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to convert existing application definition: %v", err))
+		}
 
-		if err := applicationDefinitionProvider.PatchUnsecured(ctx, original, newApplicationDefinition); err != nil {
+		patchedJSON, err := jsonpatch.MergePatch(originalJSON, req.Patch)
+		if err != nil {
+			return nil, utilerrors.New(http.StatusBadRequest, fmt.Sprintf("failed to merge patch application definition: %v", err))
+		}
+
+		var patched *apiv2.ApplicationDefinition
+		err = json.Unmarshal(patchedJSON, &patched)
+		if err != nil {
+			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to unmarshal patch application definition: %v", err))
+		}
+
+		// validate
+		if patched.Name != original.Name {
+			return nil, utilerrors.New(http.StatusBadRequest, fmt.Sprintf("Changing application definition name is not allowed: %q to %q", original.Name, patched.Name))
+		}
+
+		patchedAD := original.DeepCopy()
+		patchedAD.Annotations = patched.Annotations
+		patchedAD.Labels = patched.Labels
+		patchedAD.Spec = *patched.Spec
+		patchedAD.ResourceVersion = original.ResourceVersion
+
+		err = applicationDefinitionProvider.PatchUnsecured(ctx, original, patchedAD)
+		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		return convertInternalToAPIApplicationDefinition(newApplicationDefinition), nil
+		return convertInternalToAPIApplicationDefinition(patchedAD), nil
 	}
 }
 
