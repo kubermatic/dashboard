@@ -28,6 +28,8 @@ export class TerminalConfig {
   CursorBlink: boolean;
   Foreground: string;
   Background: string;
+  Cols: number;
+  Rows: number;
 }
 
 export enum LayoutType {

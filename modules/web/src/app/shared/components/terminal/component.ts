@@ -39,15 +39,17 @@ import {ITerminalFrame, LayoutType, TerminalConfig} from '@shared/model/Terminal
 import {debounce} from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {Terminal} from 'xterm';
-import {FitAddon} from 'xterm-addon-fit';
+import {Terminal} from '@xterm/xterm';
+import {FitAddon} from '@xterm/addon-fit';
 
 const Config: TerminalConfig = {
-  FontSize: 13,
+  FontSize: 14,
   FontFamily: 'Consolas, "Courier New", monospace',
-  CursorBlink: true,
+  CursorBlink: false,
   Foreground: '#f8f8f8',
   Background: '#2b3035',
+  Cols: 80,
+  Rows: 25,
 };
 
 enum Operations {
@@ -69,7 +71,6 @@ enum MessageTypes {
   Ping = 'PING',
   Pong = 'PONG',
 }
-
 @Component({
   selector: 'km-terminal',
   templateUrl: './template.html',
@@ -189,6 +190,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       fontSize: Config.FontSize,
       fontFamily: Config.FontFamily,
       cursorBlink: Config.CursorBlink,
+      cols: Config.Cols,
+      rows: Config.Rows,
       theme: {
         foreground: Config.Foreground,
         background: Config.Background,
@@ -199,6 +202,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     const fitAddon = new FitAddon();
     this.terminal.loadAddon(fitAddon);
     this.terminal.open(containerElement);
+    this.terminal.focus();
 
     const clusterName = this.cluster && this.cluster.name;
     this._logToTerminal('\x1b[37mWelcome to Web Terminal! Type "help" to get started.\r\n');
@@ -206,6 +210,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
     const delayFn = debounce(() => {
       fitAddon.fit();
+      // Sync pty size on window resize
+      const dimensions = fitAddon.proposeDimensions();
+      this._resizePty(dimensions.cols, dimensions.rows);
     }, this.DELAY_TIMEOUT);
     delayFn();
 
@@ -332,6 +339,14 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   private _onTerminalExtendSession(): void {
     this._webTerminalSocketService.sendMessage({
       Op: Operations.Refresh,
+    });
+  }
+
+  private _resizePty(cols: number, rows: number): void {
+    this._webTerminalSocketService.sendMessage({
+      Op: 'resize',
+      Cols: cols,
+      Rows: rows,
     });
   }
 }
