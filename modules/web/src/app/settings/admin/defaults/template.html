@@ -170,7 +170,7 @@ limitations under the License.
                         id="km-enable-kubernetes-dashboard-setting">
             <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
               <mat-hint>This feature is disabled. Visit the
-                <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+                <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
                    target="_blank"
                    rel="noopener noreferrer"
                    fxLayout="row inline"
@@ -197,7 +197,7 @@ limitations under the License.
                         (change)="onOIDCKubeconfigSettingsChange()"
                         id="km-enable-oidc-setting">
             <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
                  target="_blank"
                  rel="noopener noreferrer"
                  fxLayout="row inline"
@@ -256,7 +256,7 @@ limitations under the License.
                         (change)="onSettingsChange()"
                         id="km-disabled-admin-kubeconfig-setting">
             <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
                  target="_blank"
                  rel="noopener noreferrer"
                  fxLayout="row inline"
