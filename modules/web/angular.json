@@ -36,13 +36,11 @@
               "swagger-ui"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/assets/css"
-              ]
+              "includePaths": ["src/assets/css"]
             },
             "styles": [
               "src/assets/css/root.scss",
-              "node_modules/xterm/css/xterm.css",
+              "node_modules/@xterm/xterm/css/xterm.css",
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "light",
@@ -59,9 +57,7 @@
                 "inject": false
               }
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js"
-            ],
+            "scripts": ["node_modules/jquery/dist/jquery.js"],
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,

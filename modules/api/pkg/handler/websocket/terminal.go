@@ -297,7 +297,6 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
 func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
-
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
 	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
@@ -402,11 +401,13 @@ func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Clien
 			return err
 		}
 	}
+
 	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID, options)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
 	}
+
 	if err := client.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
@@ -544,7 +545,7 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 		},
 		{
 			Name:  "PS1",
-			Value: "\\$ ",
+			Value: "\\s-\\v \\w \\$ ",
 		},
 	}
 
@@ -725,6 +726,8 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.
 			websocketConn: ws,
 			userEmailID:   userEmailID,
 			clusterClient: client,
+			sizeChan:      make(chan remotecommand.TerminalSize),
+			doneChan:      make(chan struct{}),
 		},
 		ws); err != nil {
 		log.Logger.Debug(err)
