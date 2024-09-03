@@ -21,6 +21,12 @@ type PresetProvider struct {
 	// enabled
 	Enabled bool `json:"enabled,omitempty"`
 
+	// is customizable
+	IsCustomizable bool `json:"isEditable,omitempty"`
+
+	// open stack
+	OpenStack *OpenStackAPIPreset `json:"OpenStack,omitempty"`
+
 	// name
 	Name ProviderType `json:"name,omitempty"`
 
@@ -31,6 +37,10 @@ type PresetProvider struct {
 // Validate validates this preset provider
 func (m *PresetProvider) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateOpenStack(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
@@ -43,6 +53,25 @@ func (m *PresetProvider) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PresetProvider) validateOpenStack(formats strfmt.Registry) error {
+	if swag.IsZero(m.OpenStack) { // not required
+		return nil
+	}
+
+	if m.OpenStack != nil {
+		if err := m.OpenStack.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("OpenStack")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("OpenStack")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -86,6 +115,10 @@ func (m *PresetProvider) validateVmwareCloudDirector(formats strfmt.Registry) er
 func (m *PresetProvider) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateOpenStack(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateName(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -97,6 +130,22 @@ func (m *PresetProvider) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PresetProvider) contextValidateOpenStack(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.OpenStack != nil {
+		if err := m.OpenStack.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("OpenStack")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("OpenStack")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

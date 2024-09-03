@@ -159,7 +159,9 @@ type PresetBodyMetadata struct {
 type PresetProvider struct {
 	Name                kubermaticv1.ProviderType     `json:"name"`
 	Enabled             bool                          `json:"enabled"`
+	IsCustomizable      bool                          `json:"isEditable"`
 	VMwareCloudDirector *VMwareCloudDirectorAPIPreset `json:"vmwareCloudDirector,omitempty"`
+	OpenStack           *OpenStackAPIPreset           `json:"OpenStack,omitempty"`
 }
 
 // VMwareCloudDirectorPreset represents a preset for VMware Cloud Director
@@ -167,6 +169,16 @@ type PresetProvider struct {
 type VMwareCloudDirectorAPIPreset struct {
 	OVDCNetwork  string   `json:"ovdcNetwork,omitempty"`
 	OVDCNetworks []string `json:"ovdcNetworks,omitempty"`
+}
+
+// OpenStack represents a preset for OpenStack Cloud Director
+// swagger:model OpenStackAPIPreset
+type OpenStackAPIPreset struct {
+	Network        string `json:"network,omitempty"`
+	SecurityGroups string `json:"securityGroups,omitempty"`
+	FloatingIPPool string `json:"floatingIPPool,omitempty"`
+	RouterID       string `json:"routerID,omitempty"`
+	SubnetID       string `json:"subnetID,omitempty"`
 }
 
 // PresetStats represents a preset statistics

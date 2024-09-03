@@ -36441,6 +36441,33 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "OpenStackAPIPreset": {
+      "description": "OpenStack represents a preset for OpenStack Cloud Director",
+      "type": "object",
+      "properties": {
+        "floatingIPPool": {
+          "type": "string",
+          "x-go-name": "FloatingIPPool"
+        },
+        "network": {
+          "type": "string",
+          "x-go-name": "Network"
+        },
+        "routerID": {
+          "type": "string",
+          "x-go-name": "RouterID"
+        },
+        "securityGroups": {
+          "type": "string",
+          "x-go-name": "SecurityGroups"
+        },
+        "subnetID": {
+          "type": "string",
+          "x-go-name": "SubnetID"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Openstack": {
       "type": "object",
       "properties": {
@@ -37360,9 +37387,16 @@
       "description": "PresetProvider represents a preset provider",
       "type": "object",
       "properties": {
+        "OpenStack": {
+          "$ref": "#/definitions/OpenStackAPIPreset"
+        },
         "enabled": {
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isEditable": {
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "name": {
           "$ref": "#/definitions/ProviderType"

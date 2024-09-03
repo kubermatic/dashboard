@@ -202,9 +202,19 @@ func GenerateCluster(
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("invalid credentials: %v", err)
 		}
+
+		preset, err := credentialManager.GetPreset(ctx, adminUserInfo, &projectID, credentialName)
+		if err != nil {
+			return nil, err
+		}
+		// At the moment, the only provider that can be customized is OpenStack.
+		if body.Cluster.Spec.Cloud.Openstack != nil && preset.Spec.Openstack.IsCustomizable {
+			body.Cluster.Credential = ""
+		} else {
+			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
+			partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
+		}
 		body.Cluster.Spec.Cloud = *cloudSpec
-		partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
-		partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
 	}
 
 	// Fetch the defaulting ClusterTemplate.

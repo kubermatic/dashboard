@@ -675,7 +675,6 @@ func DecodeOpenstackSubnetReq(c context.Context, r *http.Request) (interface{}, 
 	if err != nil {
 		return nil, err
 	}
-
 	networkID := r.URL.Query().Get("network_id")
 	if networkID == "" {
 		return nil, fmt.Errorf("'network_id' is a required parameter and may not be empty")
