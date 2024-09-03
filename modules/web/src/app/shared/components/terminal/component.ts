@@ -206,6 +206,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
     const delayFn = debounce(() => {
       fitAddon.fit();
+      // Sync pty size on window resize
+      const dimensions = fitAddon.proposeDimensions();
+      this._resizePty(dimensions.cols, dimensions.rows);
     }, this.DELAY_TIMEOUT);
     delayFn();
 
@@ -332,6 +335,14 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   private _onTerminalExtendSession(): void {
     this._webTerminalSocketService.sendMessage({
       Op: Operations.Refresh,
+    });
+  }
+
+  private _resizePty(cols: number, rows: number): void {
+    this._webTerminalSocketService.sendMessage({
+      Op: 'resize',
+      Cols: cols,
+      Rows: rows,
     });
   }
 }

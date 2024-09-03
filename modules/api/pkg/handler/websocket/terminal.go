@@ -711,6 +711,8 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.
 			websocketConn: ws,
 			userEmailID:   userEmailID,
 			clusterClient: client,
+			sizeChan:      make(chan remotecommand.TerminalSize),
+			doneChan:      make(chan struct{}),
 		},
 		ws); err != nil {
 		log.Logger.Debug(err)
