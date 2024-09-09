@@ -71,6 +71,10 @@ export class MachineFlavorFilter {
 export class KubeLB {
   enabled?: boolean;
   enforced?: boolean;
+  useLoadBalancerClass?: boolean;
+  enableGatewayAPI?: boolean;
+  enableSecretSynchronizer?: boolean;
+  disableIngressClass?: boolean;
 }
 
 export class DatacenterOperatingSystemOptions {

@@ -373,6 +373,8 @@ export class ClusterSpec {
 
 export class KubeLB {
   enabled: boolean;
+  useLoadBalancerClass?: boolean;
+  enableGatewayAPI?: boolean;
 }
 
 export class EventRateLimitConfig {

@@ -71,6 +71,8 @@ enum Controls {
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   KubeLB = 'kubelb',
+  KubeLBUseLoadBalancerClass = 'kubelbUseLoadBalancerClass',
+  KubeLBEnableGatewayAPI = 'kubelbEnableGatewayAPI',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   DisableCSIDriver = 'disableCSIDriver',
@@ -174,6 +176,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       [Controls.KubeLB]: new FormControl(this.cluster.spec.kubelb?.enabled),
+      [Controls.KubeLBUseLoadBalancerClass]: new FormControl(this.cluster.spec.kubelb?.useLoadBalancerClass),
+      [Controls.KubeLBEnableGatewayAPI]: new FormControl(this.cluster.spec.kubelb?.enableGatewayAPI),
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
@@ -464,6 +468,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         disableCsiDriver: this.form.get(Controls.DisableCSIDriver).value,
         kubelb: {
           enabled: this.form.get(Controls.KubeLB).value,
+          useLoadBalancerClass: this.form.get(Controls.KubeLBUseLoadBalancerClass).value,
+          enableGatewayAPI: this.form.get(Controls.KubeLBEnableGatewayAPI).value,
         },
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,

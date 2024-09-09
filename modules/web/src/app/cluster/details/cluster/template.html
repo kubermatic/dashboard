@@ -431,6 +431,16 @@ limitations under the License.
                                  *ngIf="cluster.spec.kubelb?.enabled">
             </km-property-boolean>
 
+            <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.useLoadBalancerClass"
+                                 label="KubeLB: Use LoadBalancer Class"
+                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass">
+            </km-property-boolean>
+
+            <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.enableGatewayAPI"
+                                 label="KubeLB: Enable Gateway API"
+                                 [value]="cluster.spec.kubelb?.enableGatewayAPI">
+            </km-property-boolean>
+
             <km-property-boolean [label]="cluster.spec.disableCsiDriver ? 'External CCM' : 'External CCM/CSI'"
                                  [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
             </km-property-boolean>

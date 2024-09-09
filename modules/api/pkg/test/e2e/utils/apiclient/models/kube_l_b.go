@@ -19,8 +19,15 @@ import (
 // swagger:model KubeLB
 type KubeLB struct {
 
+	// EnableGatewayAPI is used to configure the use of gateway API for kubeLB.
+	EnableGatewayAPI bool `json:"enableGatewayAPI,omitempty"`
+
 	// Controls whether kubeLB is deployed or not.
 	Enabled bool `json:"enabled,omitempty"`
+
+	// UseLoadBalancerClass is used to configure the use of load balancer class `kubelb` for kubeLB. If false, kubeLB will manage all load balancers in the
+	// user cluster irrespective of the load balancer class.
+	UseLoadBalancerClass bool `json:"useLoadBalancerClass,omitempty"`
 }
 
 // Validate validates this kube l b

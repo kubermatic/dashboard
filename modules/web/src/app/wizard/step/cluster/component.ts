@@ -58,7 +58,7 @@ import {
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings, StaticLabel} from '@shared/entity/settings';
-import {NodeProvider, NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS} from '@shared/model/NodeProviderConstants';
+import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import {KeyValueEntry} from '@shared/types/common';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {
@@ -124,6 +124,8 @@ enum Controls {
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
   KubeLB = 'kubelb',
+  KubeLBUseLoadBalancerClass = 'kubelbUseLoadBalancerClass',
+  KubeLBEnableGatewayAPI = 'kubelbEnableGatewayAPI',
   DisableCSIDriver = 'disableCSIDriver',
   CiliumIngress = 'ciliumIngress',
 }
@@ -427,6 +429,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.APIServerAllowedIPRanges).valueChanges,
       this.form.get(Controls.NodePortsAllowedIPRanges).valueChanges,
       this.form.get(Controls.KubeLB).valueChanges,
+      this.form.get(Controls.KubeLBUseLoadBalancerClass).valueChanges,
+      this.form.get(Controls.KubeLBEnableGatewayAPI).valueChanges,
       this.form.get(Controls.DisableCSIDriver).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -558,6 +562,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
       [Controls.KubeLB]: this._builder.control(clusterSpec?.kubelb?.enabled ?? false),
+      [Controls.KubeLBUseLoadBalancerClass]: this._builder.control(clusterSpec?.kubelb?.useLoadBalancerClass ?? false),
+      [Controls.KubeLBEnableGatewayAPI]: this._builder.control(clusterSpec?.kubelb?.enableGatewayAPI ?? false),
       [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
       [Controls.CiliumIngress]: this._builder.control(false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
@@ -691,6 +697,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ??
             this.controlValue(Controls.IPv6ServicesCIDR),
           [Controls.KubeLB]: clusterSpec?.kubelb?.enabled ?? this.controlValue(Controls.KubeLB),
+          [Controls.KubeLBUseLoadBalancerClass]:
+            clusterSpec?.kubelb?.useLoadBalancerClass ?? this.controlValue(Controls.KubeLBUseLoadBalancerClass),
+          [Controls.KubeLBEnableGatewayAPI]:
+            clusterSpec?.kubelb?.enableGatewayAPI ?? this.controlValue(Controls.KubeLBEnableGatewayAPI),
           [Controls.DisableCSIDriver]: clusterSpec?.disableCsiDriver ?? this.controlValue(Controls.DisableCSIDriver),
         });
 
@@ -1040,6 +1050,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         kubelb: {
           enabled: this.controlValue(Controls.KubeLB),
+          useLoadBalancerClass: this.controlValue(Controls.KubeLBUseLoadBalancerClass),
+          enableGatewayAPI: this.controlValue(Controls.KubeLBEnableGatewayAPI),
         },
         disableCsiDriver: this.controlValue(Controls.DisableCSIDriver),
         mla: {

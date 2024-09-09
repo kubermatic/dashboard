@@ -11789,6 +11789,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11800,13 +11807,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -12323,6 +12323,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12334,11 +12339,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {
@@ -30339,6 +30339,11 @@
           },
           "x-go-name": "DNSServers"
         },
+        "enableConfigDrive": {
+          "description": "Optional: enable a configuration drive that will be attached to the instance when it boots.\nThe instance can mount this drive and read files from it to get information",
+          "type": "boolean",
+          "x-go-name": "EnableConfigDrive"
+        },
         "enabledFlavors": {
           "description": "Optional: List of enabled flavors for the given datacenter",
           "type": "array",
@@ -33716,10 +33721,20 @@
       "type": "object",
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
+        "enableGatewayAPI": {
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.",
+          "type": "boolean",
+          "x-go-name": "EnableGatewayAPI"
+        },
         "enabled": {
           "description": "Controls whether kubeLB is deployed or not.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "useLoadBalancerClass": {
+          "description": "UseLoadBalancerClass is used to configure the use of load balancer class `kubelb` for kubeLB. If false, kubeLB will manage all load balancers in the\nuser cluster irrespective of the load balancer class.",
+          "type": "boolean",
+          "x-go-name": "UseLoadBalancerClass"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -33727,6 +33742,21 @@
     "KubeLBDatacenterSettings": {
       "type": "object",
       "properties": {
+        "disableIngressClass": {
+          "description": "DisableIngressClass is used to disable the ingress class `kubelb` filter for kubeLB.",
+          "type": "boolean",
+          "x-go-name": "DisableIngressClass"
+        },
+        "enableGatewayAPI": {
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.",
+          "type": "boolean",
+          "x-go-name": "EnableGatewayAPI"
+        },
+        "enableSecretSynchronizer": {
+          "description": "EnableSecretSynchronizer is used to configure the use of secret synchronizer for kubeLB.",
+          "type": "boolean",
+          "x-go-name": "EnableSecretSynchronizer"
+        },
         "enabled": {
           "description": "Enabled is used to enable/disable kubeLB for the datacenter. This is used to control whether installing kubeLB is allowed or not for the datacenter.",
           "type": "boolean",
@@ -33744,6 +33774,11 @@
           "description": "NodeAddressType is used to configure the address type from node, used for load balancing.\nOptional: Defaults to ExternalIP.\n+kubebuilder:validation:Enum=InternalIP;ExternalIP\n+kubebuilder:default=ExternalIP",
           "type": "string",
           "x-go-name": "NodeAddressType"
+        },
+        "useLoadBalancerClass": {
+          "description": "UseLoadBalancerClass is used to configure the use of load balancer class `kubelb` for kubeLB. If false, kubeLB will manage all load balancers in the\nuser cluster irrespective of the load balancer class.",
+          "type": "boolean",
+          "x-go-name": "UseLoadBalancerClass"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
