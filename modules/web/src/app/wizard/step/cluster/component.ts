@@ -100,6 +100,7 @@ enum Controls {
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
   Labels = 'labels',
+  Annotations = 'annotations',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
@@ -153,6 +154,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
   labels: Record<string, string>;
+  annotations: Record<string, string>;
   adminStaticLabels: StaticLabel[];
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
@@ -464,6 +466,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._clusterSpecService.labels = labels;
   }
 
+  onAnnotationsChange(annotations: Record<string, string>): void {
+    this.annotations = annotations;
+    this._clusterSpecService.annotations = annotations;
+  }
+
   onPodNodeSelectorAdmissionPluginConfigChange(config: Record<string, string>): void {
     this.podNodeSelectorAdmissionPluginConfig = config;
     this._clusterSpecService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
@@ -572,6 +579,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       // We intentionally don't default labels and podNodeSelectorAdmissionPluginConfig to the values from
       // clusterSpecService and instead just rely on `onLabelsChange` method for the defaulting.
       [Controls.Labels]: this._builder.control(null),
+      [Controls.Annotations]: this._builder.control(null),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(null),
       [Controls.SSHKeys]: this._builder.control(this._clusterSpecService?.sshKeys ?? ''),
       [Controls.IPFamily]: this._builder.control(clusterSpec?.clusterNetwork?.ipFamily ?? IPFamily.IPv4),
@@ -668,6 +676,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.EventRateLimitConfig]:
             clusterSpec?.eventRateLimitConfig ?? this.controlValue(Controls.EventRateLimitConfig),
           [Controls.Labels]: cluster?.labels ?? this.controlValue(Controls.Labels),
+          [Controls.Annotations]: cluster?.annotations ?? this.controlValue(Controls.Annotations),
           [Controls.PodNodeSelectorAdmissionPluginConfig]:
             clusterSpec?.podNodeSelectorAdmissionPluginConfig ??
             this.controlValue(Controls.PodNodeSelectorAdmissionPluginConfig),
@@ -749,7 +758,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     if (clusterSpec?.cloud?.dc) {
       this.onLabelsChange(this._clusterSpecService.cluster.labels ?? null);
-
+      this.onAnnotationsChange(this._clusterSpecService.cluster.annotations ?? null);
       if (clusterSpec?.podNodeSelectorAdmissionPluginConfig) {
         this.onPodNodeSelectorAdmissionPluginConfigChange(clusterSpec?.podNodeSelectorAdmissionPluginConfig);
       }

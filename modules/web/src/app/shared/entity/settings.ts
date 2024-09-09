@@ -57,6 +57,12 @@ export interface AdminSettings {
   disableChangelogPopup?: boolean;
   webTerminalOptions?: WebTerminalOptions;
   staticLabels?: StaticLabel[];
+  annotations?: AdminSettingsAnnotations;
+}
+
+export interface AdminSettingsAnnotations {
+  hiddenAnnotations?: string[];
+  protectedAnnotations?: string[];
 }
 
 export interface StaticLabel {

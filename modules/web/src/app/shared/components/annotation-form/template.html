@@ -1,0 +1,71 @@
+<!--
+Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<mat-card-header class="km-no-padding">
+  <mat-card-title>{{title}}</mat-card-title>
+</mat-card-header>
+<form [formGroup]="form" fxLayout="column">
+  <div formArrayName="annotations">
+    <div *ngFor="let annotation of annotationsArray.controls; let i = index;"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="45">
+        <mat-label>Key</mat-label>
+        <input matInput
+               formControlName="key"
+               [readonly]="annotation.get('protected').value"
+               [ngClass]="{'km-value-changed': isAnnotationChanged(i)}"
+               (keyup)="check(i)">
+        <mat-error *ngIf="annotation.get('key').errors?.required">
+          Key is required.
+        </mat-error>
+        <mat-error *ngIf="annotation.get('key').errors?.validLabelKeyUniqueness">
+          Key is not unique.
+        </mat-error>
+        <mat-error *ngIf="annotation.get('key').errors?.forbiddenKey">
+          Key is restricted and cannot be used.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="45">
+        <mat-label>Value</mat-label>
+        <input matInput
+               formControlName="value"
+               [readonly]="annotation.get('protected').value"
+               (keyup)="check(i)">
+        <mat-error *ngIf="annotation.get('value').errors?.required">
+          Value is required.
+        </mat-error>
+        <mat-error *ngIf="annotation.get('value').errors?.validLabelValuePattern">
+          Value not allowed.
+        </mat-error>
+      </mat-form-field>
+      <button mat-icon-button
+              class="delete-button"
+              *ngIf="isRemovable(i)"
+              [disabled]="annotation.get('protected').value"
+              (click)="deleteAnnotation(i)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </div>
+</form>
+<div *ngIf="removedAnnotations.length" class="removed-annotation-form">
+  <p>Removed Annotations</p>
+  <div *ngFor="let annotation of removedAnnotations">
+    <p>Key: {{annotation?.key}}, Value: {{annotation?.value}}</p>
+  </div>
+</div>

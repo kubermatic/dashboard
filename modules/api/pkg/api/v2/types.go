@@ -2193,6 +2193,9 @@ type GlobalSettings struct {
 
 	// StaticLabels are a list of labels that can be used for the clusters.
 	StaticLabels []kubermaticv1.StaticLabel `json:"staticLabels,omitempty"`
+
+	// Annotations are the settings for the annotations in KKP UI.
+	Annotations kubermaticv1.AnnotationSettings `json:"annotations,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

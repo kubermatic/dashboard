@@ -102,6 +102,7 @@ import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/componen
 import {AddonsListComponent} from './components/addon-list/component';
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/component';
+import {AnnotationFormComponent} from './components/annotation-form/component';
 import {ChipListComponent} from './components/chip-list/component';
 import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
@@ -190,6 +191,7 @@ const components = [
   EventCardComponent,
   EventListComponent,
   LabelFormComponent,
+  AnnotationFormComponent,
   LabelsComponent,
   TaintFormComponent,
   TaintsComponent,

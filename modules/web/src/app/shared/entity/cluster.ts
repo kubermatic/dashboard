@@ -84,7 +84,7 @@ export class Cluster {
   inheritedLabels?: object;
   credential?: string;
   machineDeploymentCount?: number;
-  annotations?: Record<ClusterAnnotation | string, string>;
+  annotations?: Record<string, string>;
 
   static isDualStackNetworkSelected(cluster: Cluster) {
     return cluster?.spec.clusterNetwork?.ipFamily === IPFamily.DualStack;
@@ -539,6 +539,7 @@ export class ClusterPatch {
   id?: string;
   name?: string;
   labels?: object;
+  annotations?: Record<string, string>;
   spec?: ClusterSpecPatch;
 }
 
@@ -695,7 +696,7 @@ class ClusterModel {
   spec: ClusterSpec;
   labels?: object;
   credential?: string;
-  annotations?: Record<ClusterAnnotation | string, string>;
+  annotations?: Record<string, string>;
 }
 
 export class ProjectClusterList {

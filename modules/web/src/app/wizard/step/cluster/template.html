@@ -536,6 +536,11 @@ limitations under the License.
                            (labelsChange)="onLabelsChange($event)"
                            fxFlex="100">
             </km-label-form>
+
+            <km-annotation-form [annotations]="annotations"
+                                [formControlName]="Controls.Annotations"
+                                (annotationsChange)="onAnnotationsChange($event)"
+                                fxFlex="100"></km-annotation-form>
           </div>
         </div>
       </div>

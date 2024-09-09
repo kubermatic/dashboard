@@ -120,6 +120,10 @@ export class ClusterSpecService {
     this._cluster.labels = labels;
   }
 
+  set annotations(annotations: Record<string, string>) {
+    this._cluster.annotations = annotations;
+  }
+
   set podNodeSelectorAdmissionPluginConfig(config: Record<string, string>) {
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
