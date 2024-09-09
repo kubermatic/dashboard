@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// OpenStackAPIPreset OpenStack represents a preset for OpenStack Cloud Director
+// OpenStackAPIPreset OpenStackPreset represents a preset for OpenStack
 //
 // swagger:model OpenStackAPIPreset
 type OpenStackAPIPreset struct {

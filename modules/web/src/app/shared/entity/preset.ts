@@ -44,9 +44,19 @@ export class Preset {
 export class PresetProvider {
   name: NodeProvider;
   enabled: boolean;
+  isCustomizable: boolean;
 
   // Provider specific fields
+  openstack?: OpenstackAPIPreset;
   vmwareCloudDirector?: VMwareCloudDirectorAPIPreset;
+}
+
+export class OpenstackAPIPreset {
+  network?: string;
+  securityGroups?: string;
+  floatingIPPool?: string;
+  routerID?: string;
+  subnetID?: string;
 }
 
 export class VMwareCloudDirectorAPIPreset {
@@ -103,6 +113,7 @@ export class CreatePresetSpec {
 export class PresetProviderSpec {
   enabled?: boolean;
   datacenter?: string;
+  isCustomizable?: boolean;
 }
 
 export class AlibabaPresetSpec extends PresetProviderSpec {

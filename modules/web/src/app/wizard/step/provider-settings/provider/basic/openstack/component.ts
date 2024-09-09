@@ -96,15 +96,25 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
     this._init();
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+    this._presets.presetDetailedChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this.isPresetSelected = !!preset;
       Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
         this._enable(!this.isPresetSelected, control);
-      })
-    );
+      });
+      const providerSettings = preset?.providers.find(provider => provider.name === NodeProvider.OPENSTACK);
+      if (providerSettings?.isCustomizable) {
+        if (providerSettings.openstack?.floatingIPPool) {
+          this.form.get(Controls.FloatingIPPool).setValue(providerSettings.openstack.floatingIPPool);
+          this.onFloatingIPPoolChange(providerSettings.openstack.floatingIPPool);
+        }
+        this._enable(true, Controls.FloatingIPPool);
+        this.onCredentialsChange(null, preset.name);
+      }
+    });
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(OpenstackCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.openstack))
@@ -153,9 +163,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     return '';
   }
 
-  onCredentialsChange(credentials: OpenstackCredentials): void {
+  onCredentialsChange(credentials?: OpenstackCredentials, preset?: string): void {
     this._clearFloatingIPPool();
-    this._floatingIPPoolListObservable(credentials)
+    this._floatingIPPoolListObservable(credentials, preset)
       .pipe(take(1))
       .subscribe((floatingIPPools: OpenstackFloatingIPPool[]) => {
         this.floatingIPPools = floatingIPPools;
@@ -171,13 +181,18 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       (!!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialID &&
         !!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialSecret) ||
       (!!this._clusterSpecService.cluster.spec.cloud.openstack?.username &&
-        !!this._clusterSpecService.cluster.spec.cloud.openstack?.password)
+        !!this._clusterSpecService.cluster.spec.cloud.openstack?.password) ||
+      this.isPresetSelected
     );
   }
 
-  private _floatingIPPoolListObservable(credentials: OpenstackCredentials): Observable<OpenstackFloatingIPPool[]> {
+  private _floatingIPPoolListObservable(
+    credentials?: OpenstackCredentials,
+    preset?: string
+  ): Observable<OpenstackFloatingIPPool[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
+      .credential(preset)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .applicationCredentialID(credentials?.applicationCredentialID)
       .applicationCredentialPassword(credentials?.applicationCredentialSecret)

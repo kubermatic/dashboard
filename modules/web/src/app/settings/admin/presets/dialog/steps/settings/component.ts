@@ -27,6 +27,7 @@ import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/oper
 enum Controls {
   Settings = 'settings',
   Datacenter = 'datacenter',
+  IsCustomizable = 'isCustomizable',
 }
 
 @Component({
@@ -72,6 +73,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
     this.form = this._builder.group({
       [Controls.Settings]: this._builder.control(''),
       [Controls.Datacenter]: this._builder.control(''),
+      [Controls.IsCustomizable]: this._builder.control(false),
     });
 
     this._presetDialogService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => {
@@ -79,6 +81,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       this.form.removeControl(Controls.Settings);
       this.form.addControl(Controls.Settings, this._builder.control(''));
       this.form.get(Controls.Datacenter).setValue(AutocompleteInitialState);
+      this.form.get(Controls.IsCustomizable).setValue(false);
       this.form.updateValueAndValidity();
     });
 
@@ -102,18 +105,31 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       .pipe(filter(form => !!form))
       .pipe(map(form => form[AutocompleteControls.Main]))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => this._update(datacenter));
+      .subscribe(datacenter => this._updateDatacenter(datacenter));
+
+    this.form
+      .get(Controls.IsCustomizable)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => this._updateIsEditable(value));
+  }
+
+  isExternal(): boolean {
+    return EXTERNAL_NODE_PROVIDERS.includes(this.provider);
+  }
+
+  isProvider(...provider: NodeProvider[]): boolean {
+    return provider.includes(this.provider);
   }
 
   private _filterByProvider(datacenters: Datacenter[]): string[] {
     return datacenters.filter(dc => dc.spec.provider === this.provider).map(dc => dc.metadata.name);
   }
 
-  private _update(datacenter: string): void {
+  private _updateDatacenter(datacenter: string): void {
     this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = datacenter;
   }
 
-  isExternal(): boolean {
-    return EXTERNAL_NODE_PROVIDERS.includes(this.provider);
+  private _updateIsEditable(value: boolean): void {
+    this._presetDialogService.preset.spec[this._presetDialogService.provider].isCustomizable = value;
   }
 }

@@ -57,23 +57,23 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-extended-default-credentials',
+  selector: 'km-wizard-openstack-provider-extended-credentials',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderExtendedDefaultCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderExtendedDefaultCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
       multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackProviderExtendedDefaultCredentialsComponent
+export class OpenstackProviderExtendedCredentialsComponent
   extends BaseFormValidator
   implements OnInit, AfterViewInit, OnDestroy
 {
@@ -107,6 +107,9 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   private _password = '';
   private _project = '';
   private _projectID = '';
+  private _applicationCredentialID = '';
+  private _applicationCredentialSecret = '';
+  private _preset = '';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -127,12 +130,26 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       [Controls.IPv6SubnetPool]: this._builder.control(''),
     });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+    this._presets.presetDetailedChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this.isPresetSelected = !!preset;
+      const providerSettings = preset?.providers.find(provider => provider.name === NodeProvider.OPENSTACK);
       Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
-        this._enable(!this.isPresetSelected, control);
-      })
-    );
+        this._enable(!this.isPresetSelected || providerSettings?.isCustomizable, control);
+      });
+      if (providerSettings?.isCustomizable) {
+        const openstack = providerSettings.openstack;
+        this.form.get(Controls.SecurityGroup).setValue(openstack?.securityGroups);
+        this.onSecurityGroupChange(openstack?.securityGroups);
+        this.form.get(Controls.Network).setValue(openstack?.network);
+        this.onNetworkChange(openstack?.network);
+        this.form.get(Controls.IPv4SubnetID).setValue(openstack?.subnetID);
+        this.onIPv4SubnetIDChange(openstack?.subnetID);
+        this.form.get(Controls.IPv6SubnetID).setValue('');
+        this.onIPv6SubnetIDChange('');
+        this.form.get(Controls.IPv6SubnetPool).setValue('');
+        this.onIPv6SubnetPoolChange('');
+      }
+    });
 
     this._credentialsTypeService.credentialsTypeChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -166,7 +183,11 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       )
       .subscribe(null);
 
-    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
+    merge(
+      this._clusterSpecService.clusterChanges,
+      this._credentialsTypeService.credentialsTypeChanges,
+      this._presets.presetChanges
+    )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(debounceTime(this._debounceTime))
       .pipe(
@@ -178,13 +199,26 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
           }
         })
       )
-      .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(_ => this._hasRequiredCredentials() || this.isPresetSelected))
       .pipe(filter(_ => this._areCredentialsChanged()))
-      .pipe(tap(_ => this._securityGroupListObservable().subscribe(this._loadSecurityGroups.bind(this))))
-      .pipe(tap(_ => this._networkListObservable().subscribe(this._loadNetworks.bind(this))))
+      .pipe(
+        tap(
+          _ =>
+            this.form.get(Controls.SecurityGroup).enabled &&
+            this._securityGroupListObservable().subscribe(this._loadSecurityGroups.bind(this))
+        )
+      )
+      .pipe(
+        tap(
+          _ =>
+            this.form.get(Controls.Network).enabled &&
+            this._networkListObservable().subscribe(this._loadNetworks.bind(this))
+        )
+      )
       .pipe(
         tap(_ =>
-          Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)
+          Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster) &&
+          this.form.get(Controls.IPv6SubnetPool).enabled
             ? this._subnetPoolListObservable().subscribe(this._loadSubnetPools.bind(this))
             : null
         )
@@ -228,7 +262,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       case Controls.SecurityGroup:
       case Controls.Network:
       case Controls.IPv6SubnetPool:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+        return this._hasRequiredCredentials() || this.isPresetSelected ? '' : 'Please enter your credentials first.';
       case Controls.IPv4SubnetID:
       case Controls.IPv6SubnetID:
         return this._canLoadSubnet() ? '' : 'Please enter your credentials and network first.';
@@ -278,11 +312,17 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     this._cdr.detectChanges();
   }
 
-  private _hasBasicCredentials(): boolean {
+  private _hasUserCredentials(): boolean {
     return (
-      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.password
+      !!this._clusterSpecService.cluster.spec.cloud.openstack?.username &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack?.password
+    );
+  }
+
+  private _hasApplicationCredentials(): boolean {
+    return (
+      !!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialID &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialSecret
     );
   }
 
@@ -295,11 +335,16 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasBasicCredentials() && this._hasProject();
+    return (this._hasUserCredentials() && this._hasProject()) || this._hasApplicationCredentials();
   }
 
   private _areCredentialsChanged(): boolean {
     let credentialsChanged = false;
+
+    if (this._preset !== this._presets.preset) {
+      this._preset = this._presets.preset;
+      credentialsChanged = true;
+    }
 
     if (this._clusterSpecService.cluster.spec.cloud.openstack?.domain !== this._domain) {
       this._domain = this._clusterSpecService.cluster.spec.cloud.openstack.domain;
@@ -326,6 +371,22 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       credentialsChanged = true;
     }
 
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialID !== this._applicationCredentialID
+    ) {
+      this._applicationCredentialID = this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID;
+      credentialsChanged = true;
+    }
+
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialSecret !==
+      this._applicationCredentialSecret
+    ) {
+      this._applicationCredentialSecret =
+        this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret;
+      credentialsChanged = true;
+    }
+
     return credentialsChanged;
   }
 
@@ -335,20 +396,29 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     this._password = '';
     this._project = '';
     this._projectID = '';
+    this._applicationCredentialID = '';
+    this._applicationCredentialSecret = '';
+    this._preset = '';
   }
 
   private _canLoadSubnet(): boolean {
-    return this._hasBasicCredentials() && !!this._clusterSpecService.cluster.spec.cloud.openstack.network;
+    return (
+      (this._hasUserCredentials() || this._hasApplicationCredentials() || this.isPresetSelected) &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.network
+    );
   }
 
   private _securityGroupListObservable(): Observable<OpenstackSecurityGroup[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
+      .credential(this._presets.preset)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
       .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .securityGroups(this._onSecurityGroupLoading.bind(this))
       .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.name.toLowerCase())))
@@ -376,12 +446,15 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   private _networkListObservable(): Observable<OpenstackNetwork[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
+      .credential(this._presets.preset)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
       .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -408,11 +481,14 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   private _subnetIDListObservable(): Observable<OpenstackSubnet[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
+      .credential(this._presets.preset)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
       .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .subnets(this._clusterSpecService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
       .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))
@@ -426,6 +502,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
 
   private _clearSubnetID(): void {
     this.ipv4SubnetIDs = [];
+    this.ipv6SubnetIDs = [];
     this._ipv4SubnetIDCombobox.reset();
     this._ipv6SubnetIDCombobox?.reset();
     this.ipv4SubnetIDsLabel = IPv4SubnetIDState.Empty;
@@ -443,11 +520,14 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   private _subnetPoolListObservable(): Observable<OpenstackSubnetPool[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
+      .credential(this._presets.preset)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
       .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .subnetPools(IPVersion.IPv6, this._onSubnetPoolLoading.bind(this))
       .pipe(map(subnetPools => _.sortBy(subnetPools, s => s.name.toLowerCase())))

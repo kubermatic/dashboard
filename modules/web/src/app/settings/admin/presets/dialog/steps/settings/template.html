@@ -90,6 +90,12 @@ limitations under the License.
 
     <ng-container *ngIf="!isExternal()">
       <div class="optional-section">Optional Restrictions</div>
+      <mat-checkbox *ngIf="isProvider(Providers.OPENSTACK)"
+                    [formControlName]="Controls.IsCustomizable">
+        Is Customizable
+        <i class="km-icon-info km-pointer"
+           matTooltip="Allow customization of settings (barring secrets) during cluster creation."></i>
+      </mat-checkbox>
       <km-autocomplete label="Restrict to Datacenter"
                        [formControlName]="Controls.Datacenter"
                        [isLoading]="isLoadingDatacenters"

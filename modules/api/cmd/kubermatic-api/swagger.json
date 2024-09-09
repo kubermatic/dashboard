@@ -36442,7 +36442,7 @@
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "OpenStackAPIPreset": {
-      "description": "OpenStack represents a preset for OpenStack Cloud Director",
+      "description": "OpenStackPreset represents a preset for OpenStack",
       "type": "object",
       "properties": {
         "floatingIPPool": {
@@ -37387,9 +37387,6 @@
       "description": "PresetProvider represents a preset provider",
       "type": "object",
       "properties": {
-        "OpenStack": {
-          "$ref": "#/definitions/OpenStackAPIPreset"
-        },
         "enabled": {
           "type": "boolean",
           "x-go-name": "Enabled"
@@ -37400,6 +37397,9 @@
         },
         "name": {
           "$ref": "#/definitions/ProviderType"
+        },
+        "openstack": {
+          "$ref": "#/definitions/OpenStackAPIPreset"
         },
         "vmwareCloudDirector": {
           "$ref": "#/definitions/VMwareCloudDirectorAPIPreset"

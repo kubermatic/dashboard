@@ -161,7 +161,7 @@ type PresetProvider struct {
 	Enabled             bool                          `json:"enabled"`
 	IsCustomizable      bool                          `json:"isEditable"`
 	VMwareCloudDirector *VMwareCloudDirectorAPIPreset `json:"vmwareCloudDirector,omitempty"`
-	OpenStack           *OpenStackAPIPreset           `json:"OpenStack,omitempty"`
+	OpenStack           *OpenStackAPIPreset           `json:"openstack,omitempty"`
 }
 
 // VMwareCloudDirectorPreset represents a preset for VMware Cloud Director
@@ -171,7 +171,7 @@ type VMwareCloudDirectorAPIPreset struct {
 	OVDCNetworks []string `json:"ovdcNetworks,omitempty"`
 }
 
-// OpenStack represents a preset for OpenStack Cloud Director
+// OpenStackPreset represents a preset for OpenStack
 // swagger:model OpenStackAPIPreset
 type OpenStackAPIPreset struct {
 	Network        string `json:"network,omitempty"`
