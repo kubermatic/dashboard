@@ -211,6 +211,16 @@ limitations under the License.
                                  [value]="cluster.spec.kubelb?.enabled">
             </km-property-boolean>
 
+            <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.useLoadBalancerClass"
+                                 label="KubeLB: Use LoadBalancer Class"
+                                 [value]="cluster.spec.kubelb?.useLoadBalancerClass">
+            </km-property-boolean>
+
+            <km-property-boolean *ngIf="cluster.spec.kubelb?.enabled && cluster.spec.kubelb?.enableGatewayAPI"
+                                 label="KubeLB: Enable Gateway API"
+                                 [value]="cluster.spec.kubelb?.enableGatewayAPI">
+            </km-property-boolean>
+
             <km-property-boolean *ngIf="cluster.spec.opaIntegration?.enabled"
                                  label="OPA Integration"
                                  [value]="cluster.spec.opaIntegration?.enabled">

@@ -473,6 +473,23 @@ limitations under the License.
                  [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB, responsible for provisioning and managing load balancers.'"></i>
             </mat-checkbox>
 
+            <ng-container *ngIf="form.get(Controls.KubeLB).value">
+              <div class="km-suboption">
+                <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
+                  Use LoadBalancer Class
+                  <i class="km-icon-info km-pointer"
+                     matTooltip="Enable to limit kubelb to only process services with Kubernetes LoadBalancer Class named kubelb. If not enabled, kubelb will manage all services with a LoadBalancer type."></i>
+                </mat-checkbox>
+              </div>
+              <div class="km-suboption">
+                <mat-checkbox [formControlName]="Controls.KubeLBEnableGatewayAPI">
+                  Enable Gateway API
+                  <i class="km-icon-info km-pointer"
+                     matTooltip="Enable to use Gateway API."></i>
+                </mat-checkbox>
+              </div>
+            </ng-container>
+
             <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled"
                           *ngIf="isKubernetesDashboardEnabled">
               Kubernetes Dashboard

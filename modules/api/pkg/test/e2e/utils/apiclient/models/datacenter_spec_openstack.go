@@ -31,6 +31,10 @@ type DatacenterSpecOpenstack struct {
 	// Used for automatic network creation
 	DNSServers []string `json:"dnsServers"`
 
+	// Optional: enable a configuration drive that will be attached to the instance when it boots.
+	// The instance can mount this drive and read files from it to get information
+	EnableConfigDrive bool `json:"enableConfigDrive,omitempty"`
+
 	// Optional: List of enabled flavors for the given datacenter
 	EnabledFlavors []string `json:"enabledFlavors"`
 
