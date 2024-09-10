@@ -94,6 +94,11 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 		md.Spec.Template.Spec.Labels["system/project"] = projectID
 	}
 
+	md.Spec.Template.Spec.Annotations = nd.Spec.Template.Annotations
+	if md.Spec.Template.Spec.Annotations == nil {
+		md.Spec.Template.Spec.Annotations = make(map[string]string)
+	}
+
 	var taints []corev1.Taint
 	for _, taint := range nd.Spec.Template.Taints {
 		taints = append(taints, corev1.Taint{

@@ -192,10 +192,26 @@ limitations under the License.
             </div>
           </km-property>
           <km-property fxFlex="50%"
+                       *ngIf="machineDeployment.spec.template.annotations">
+            <div key>Node Annotations</div>
+            <div value>
+              <km-labels [labels]="machineDeployment.spec.template.annotations"
+                         emptyMessage="No assigned annotations"></km-labels>
+            </div>
+          </km-property>
+          <km-property fxFlex="50%"
                        *ngIf="machineDeployment.spec.template.taints">
             <div key>Node Taints</div>
             <div value>
               <km-taints [taints]="machineDeployment.spec.template.taints"></km-taints>
+            </div>
+          </km-property>
+
+          <km-property fxFlex="50%"
+                       *ngIf="machineDeployment.annotations">
+            <div key>Machine Deployment Annotations</div>
+            <div value>
+              <km-labels [labels]="machineDeployment.annotations"></km-labels>
             </div>
           </km-property>
         </div>

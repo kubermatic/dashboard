@@ -13,18 +13,17 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ApplicationService} from '@core/services/application';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
+import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Subject} from 'rxjs';
-import {take, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
-import {ApplicationService} from '@core/services/application';
-import {Application} from '@shared/entity/application';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -76,6 +75,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     const data = this._nodeDataService.nodeData;
     const md: MachineDeployment = {
       name: data.name,
+      annotations: data.annotations,
       spec: {
         template: data.spec,
         replicas: data.count,
@@ -86,6 +86,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     };
     if (data.operatingSystemProfile) {
       md.annotations = {
+        ...md.annotations,
         [OPERATING_SYSTEM_PROFILE_ANNOTATION]: data.operatingSystemProfile,
       };
     }

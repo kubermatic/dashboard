@@ -31,6 +31,7 @@ export class Node {
 }
 
 export class NodeSpec {
+  annotations?: object;
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
   network?: NodeNetworkSpec;

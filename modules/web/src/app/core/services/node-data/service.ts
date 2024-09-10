@@ -130,6 +130,16 @@ export class NodeDataService {
     this._nodeData.spec.labels = labels;
   }
 
+  set annotations(annotations: object) {
+    delete this._nodeData.spec.annotations;
+    this._nodeData.spec.annotations = annotations;
+  }
+
+  set machineDeploymentAnnotations(annotations: object) {
+    delete this._nodeData.annotations;
+    this._nodeData.annotations = annotations;
+  }
+
   set taints(taints: Taint[]) {
     delete this._nodeData.spec.taints;
     this._nodeData.spec.taints = taints;
@@ -153,6 +163,7 @@ export class NodeDataService {
       dynamicConfig: md.spec.dynamicConfig,
       minReplicas: md.spec.minReplicas,
       maxReplicas: md.spec.maxReplicas,
+      annotations: md.annotations,
     } as NodeData;
   }
 

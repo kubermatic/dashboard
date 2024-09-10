@@ -20,7 +20,7 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
-  NG_VALIDATORS,
+  NG_ASYNC_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validators,
@@ -42,7 +42,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     },
     {
-      provide: NG_VALIDATORS,
+      provide: NG_ASYNC_VALIDATORS,
       useExisting: forwardRef(() => AnnotationFormComponent),
       multi: true,
     },
@@ -51,6 +51,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
 export class AnnotationFormComponent implements OnInit, ControlValueAccessor, AsyncValidator, DoCheck, OnDestroy {
   @Input() title = 'Annotations';
   @Input() annotations: Record<string, string> = {};
+  @Input() infoTooltip: string;
   @Output() annotationsChange = new EventEmitter<Record<string, string>>();
 
   form: FormGroup;
@@ -66,6 +67,19 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
     private readonly _settingsService: SettingsService,
     private readonly _dialogModeService: DialogModeService
   ) {}
+
+  static filterNullifiedKeys(labels: object): object {
+    const filteredLabelsObject = {};
+    if (labels instanceof Object) {
+      Object.keys(labels).forEach(key => {
+        // Do not allow nullified (marked for removal) labels.
+        if (labels[key] !== null) {
+          filteredLabelsObject[key] = labels[key];
+        }
+      });
+    }
+    return filteredLabelsObject;
+  }
 
   ngOnInit(): void {
     if (!this.annotations) {
@@ -226,12 +240,28 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
   }
 
   private updateAnnotations(): void {
-    const updatedAnnotations: Record<string, string> = {};
+    const updatedAnnotations = {};
     this.annotationsArray.controls.forEach(control => {
       const key = control.get('key').value;
       const value = control.get('value').value;
       if (key && value) {
         updatedAnnotations[key] = value;
+      }
+    });
+
+    if (this.initialAnnotations) {
+      // Nullify initial annotations data (it is needed to make edit work as it uses JSON Merge Patch).
+      Object.keys(this.initialAnnotations).forEach(initialKey => {
+        if (!Object.prototype.hasOwnProperty.call(updatedAnnotations, initialKey)) {
+          updatedAnnotations[initialKey] = null;
+        }
+      });
+    }
+
+    // Add back hidden annotations, they cannot be updated or deleted from the UI so they are not included in the form.
+    Object.keys(this.annotations).forEach(key => {
+      if (this.hiddenAnnotations.has(key)) {
+        updatedAnnotations[key] = this.annotations[key];
       }
     });
     this.annotations = updatedAnnotations;

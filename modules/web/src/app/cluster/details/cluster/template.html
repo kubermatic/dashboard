@@ -473,6 +473,12 @@ limitations under the License.
                            emptyMessage="No assigned labels"></km-labels>
               </div>
             </km-property>
+            <km-property *ngIf="cluster.annotations">
+              <div key>Annotations</div>
+              <div value>
+                <km-labels [labels]="cluster.annotations"></km-labels>
+              </div>
+            </km-property>
           </div>
         </div>
       </km-expansion-panel>

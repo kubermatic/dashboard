@@ -173,6 +173,7 @@ func OutputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 			Replicas: *md.Spec.Replicas,
 			Template: apiv1.NodeSpec{
 				Labels: label.FilterLabels(label.NodeDeploymentResourceType, md.Spec.Template.Spec.Labels),
+				Annotations: md.Spec.Template.Spec.Annotations,
 				Taints: taints,
 				Versions: apiv1.NodeVersionInfo{
 					Kubelet: md.Spec.Template.Spec.Versions.Kubelet,

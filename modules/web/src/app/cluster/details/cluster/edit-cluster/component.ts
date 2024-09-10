@@ -63,6 +63,7 @@ enum Controls {
   AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
   AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   Labels = 'labels',
+  Annotations = 'annotations',
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   EventRateLimitConfig = 'eventRateLimitConfig',
@@ -94,6 +95,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: Record<string, string>;
+  annotations: Record<string, string>;
   podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
   admissionPlugins: string[] = [];
@@ -147,6 +149,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.cluster.labels) as Record<string, string>;
+    this.annotations = _.cloneDeep(this.cluster.annotations) as Record<string, string>;
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(
       this.cluster.spec.podNodeSelectorAdmissionPluginConfig
     ) as Record<string, string>;
@@ -183,6 +186,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(null),
+      [Controls.Annotations]: new FormControl(null),
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
       [Controls.ClusterBackup]: new FormControl(!!this.cluster.spec.backupConfig),
@@ -326,6 +330,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.labels = labels;
   }
 
+  onAnnotationsChange(annotations: Record<string, string>): void {
+    this.annotations = annotations;
+  }
+
   onPodNodeSelectorAdmissionPluginConfigChange(config: Record<string, string>): void {
     this.podNodeSelectorAdmissionPluginConfig = config;
 
@@ -440,6 +448,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     const patch: ClusterPatch = {
       name: this.form.get(Controls.Name).value,
       labels: this.labels,
+      annotations: this.annotations,
       spec: {
         cloud: this.providerSettingsPatch.cloudSpecPatch,
         auditLogging: {
