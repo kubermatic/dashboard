@@ -29438,6 +29438,13 @@
       "type": "object",
       "title": "ClusterTemplateInfo represents a ClusterTemplateInfo object.",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "credential": {
           "description": "indicates the preset name",
           "type": "string",

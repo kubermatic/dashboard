@@ -223,6 +223,7 @@ type ClusterTemplate struct {
 // ClusterTemplateInfo represents a ClusterTemplateInfo object.
 type ClusterTemplateInfo struct {
 	Labels          map[string]string `json:"labels,omitempty"`
+	Annotations     map[string]string `json:"annotations,omitempty"`
 	InheritedLabels map[string]string `json:"inheritedLabels,omitempty"`
 	// indicates the preset name
 	Credential string            `json:"credential,omitempty"`
