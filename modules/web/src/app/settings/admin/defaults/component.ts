@@ -56,11 +56,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   ) {}
 
   get hiddenAnnotations(): string[] {
-    return this.settings.annotations.hiddenAnnotations;
+    return this.settings.annotations?.hiddenAnnotations;
   }
 
   get protectedAnnotations(): string[] {
-    return this.settings.annotations.protectedAnnotations;
+    return this.settings.annotations?.protectedAnnotations;
   }
 
   ngOnInit(): void {
@@ -117,12 +117,12 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   }
 
   onHiddenAnnotationsChange(val: string[]): void {
-    this.settings.annotations.hiddenAnnotations = val;
+    this.settings.annotations = {...(this.settings.annotations || {}), hiddenAnnotations: val};
     this.onSettingsChange();
   }
 
   onProtectedAnnotationsChange(val: string[]): void {
-    this.settings.annotations.protectedAnnotations = val;
+    this.settings.annotations = {...(this.settings.annotations || {}), protectedAnnotations: val};
     this.onSettingsChange();
   }
 
@@ -216,6 +216,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
     if (patch.staticLabels) {
       patch.staticLabels = this.settings.staticLabels;
+    }
+
+    if (patch.annotations) {
+      patch.annotations = this.settings.annotations;
     }
 
     return patch;
