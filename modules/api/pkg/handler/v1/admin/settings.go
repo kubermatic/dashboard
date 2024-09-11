@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"slices"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
@@ -32,6 +33,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/utils/ptr"
 )
 
@@ -151,7 +153,10 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
 		WebTerminalOptions:               settings.WebTerminalOptions,
 		StaticLabels:                     settings.StaticLabels,
+		Annotations:                      settings.Annotations,
 	}
+
+	addDefaultAnnotations(&s.Annotations)
 
 	if settings.DefaultProjectResourceQuota != nil {
 		crdQuota, err := apiv2.ConvertToCRDQuota(settings.DefaultProjectResourceQuota.Quota)
@@ -199,7 +204,10 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		DisableChangelogPopup:            settings.DisableChangelogPopup,
 		WebTerminalOptions:               settings.WebTerminalOptions,
 		StaticLabels:                     settings.StaticLabels,
+		Annotations:                      settings.Annotations,
 	}
+
+	addDefaultAnnotations(&s.Annotations)
 
 	if settings.DefaultProjectResourceQuota != nil {
 		apiQuota := apiv2.ConvertToAPIQuota(settings.DefaultProjectResourceQuota.Quota)
@@ -209,4 +217,19 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 	}
 
 	return s
+}
+
+// These annotations are forced by KKP and cannot be changed by the user. Since KKP API is responsible for managing KubermaticSettings at the moment,
+// we need to make sure that these annotations are always present.
+// This might change with https://github.com/kubermatic/kubermatic/issues/13671 in the future.
+func addDefaultAnnotations(annotations *kubermaticv1.AnnotationSettings) {
+	if !slices.Contains(annotations.ProtectedAnnotations, kubermaticv1.PresetNameAnnotation) {
+		annotations.ProtectedAnnotations = append(annotations.ProtectedAnnotations, kubermaticv1.PresetNameAnnotation)
+	}
+
+	if len(annotations.HiddenAnnotations) == 0 {
+		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, corev1.LastAppliedConfigAnnotation)
+		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, kubermaticv1.InitialApplicationInstallationsRequestAnnotation)
+		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, kubermaticv1.InitialMachineDeploymentRequestAnnotation)
+	}
 }

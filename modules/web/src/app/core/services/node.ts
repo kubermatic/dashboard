@@ -33,6 +33,7 @@ export class NodeService {
   private static _getMachineDeploymentEntity(nodeData: NodeData): MachineDeployment {
     const machineDeployment: MachineDeployment = {
       name: nodeData.name,
+      annotations: nodeData.annotations,
       spec: {
         template: nodeData.spec,
         replicas: nodeData.count,
@@ -43,6 +44,7 @@ export class NodeService {
     };
     if (nodeData.operatingSystemProfile) {
       machineDeployment.annotations = {
+        ...machineDeployment.annotations,
         [OPERATING_SYSTEM_PROFILE_ANNOTATION]: nodeData.operatingSystemProfile,
       };
     }
@@ -51,6 +53,7 @@ export class NodeService {
 
   private static _createPatch(data: DialogDataOutput): MachineDeploymentPatch {
     const patch: MachineDeploymentPatch = {
+      annotations: data.nodeData.annotations,
       spec: {
         replicas: data.nodeData.count,
         template: data.nodeData.spec,
@@ -61,6 +64,7 @@ export class NodeService {
     };
     if (data.nodeData.operatingSystemProfile) {
       patch.annotations = {
+        ...patch.annotations,
         [OPERATING_SYSTEM_PROFILE_ANNOTATION]: data.nodeData.operatingSystemProfile,
       };
     }
@@ -128,6 +132,7 @@ export class NodeService {
           minReplicas: md.spec.minReplicas,
           maxReplicas: md.spec.maxReplicas,
           creationTimestamp: md.creationTimestamp,
+          annotations: md.annotations,
         } as NodeData,
         projectID: projectID,
       } as DialogDataInput,

@@ -275,6 +275,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       nodeDeployment: {
         name: nodeData.name,
+        annotations: nodeData.annotations,
         spec: {
           template: nodeData.spec,
           replicas: nodeData.count,
@@ -290,6 +291,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     }
     if (nodeData.operatingSystemProfile) {
       clusterModel.nodeDeployment.annotations = {
+        ...clusterModel.nodeDeployment.annotations,
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }

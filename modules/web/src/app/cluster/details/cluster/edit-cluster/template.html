@@ -184,9 +184,7 @@ limitations under the License.
 
       <ng-container *ngIf="!!form.get(Controls.AuditLogging).value">
         <div fxLayoutAlign=" center">
-          <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
-            Audit Webhook Backend
-          </mat-checkbox>
+          <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
           <i class="km-icon-info km-pointer"
              matTooltip="Configure webhook backend for audit logging functionality."></i>
         </div>
@@ -325,6 +323,11 @@ limitations under the License.
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]="asyncLabelValidators"
                      [formControlName]="Controls.Labels"></km-label-form>
+
+      <km-annotation-form [annotations]="annotations"
+                          [formControlName]="Controls.Annotations"
+                          (annotationsChange)="onAnnotationsChange($event)">
+      </km-annotation-form>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

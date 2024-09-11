@@ -223,6 +223,7 @@ type ClusterTemplate struct {
 // ClusterTemplateInfo represents a ClusterTemplateInfo object.
 type ClusterTemplateInfo struct {
 	Labels          map[string]string `json:"labels,omitempty"`
+	Annotations     map[string]string `json:"annotations,omitempty"`
 	InheritedLabels map[string]string `json:"inheritedLabels,omitempty"`
 	// indicates the preset name
 	Credential string            `json:"credential,omitempty"`
@@ -2193,6 +2194,9 @@ type GlobalSettings struct {
 
 	// StaticLabels are a list of labels that can be used for the clusters.
 	StaticLabels []kubermaticv1.StaticLabel `json:"staticLabels,omitempty"`
+
+	// Annotations are the settings for the annotations in KKP UI.
+	Annotations kubermaticv1.AnnotationSettings `json:"annotations,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

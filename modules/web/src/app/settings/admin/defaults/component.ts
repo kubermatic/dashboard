@@ -55,6 +55,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     private readonly _cdr: ChangeDetectorRef
   ) {}
 
+  get hiddenAnnotations(): string[] {
+    return this.settings.annotations?.hiddenAnnotations;
+  }
+
+  get protectedAnnotations(): string[] {
+    return this.settings.annotations?.protectedAnnotations;
+  }
+
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
     this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
@@ -106,6 +114,16 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   isEqual(a: any, b: any): boolean {
     return _.isEqual(a, b);
+  }
+
+  onHiddenAnnotationsChange(val: string[]): void {
+    this.settings.annotations = {...(this.settings.annotations || {}), hiddenAnnotations: val};
+    this.onSettingsChange();
+  }
+
+  onProtectedAnnotationsChange(val: string[]): void {
+    this.settings.annotations = {...(this.settings.annotations || {}), protectedAnnotations: val};
+    this.onSettingsChange();
   }
 
   isMLALoggingEqual(): boolean {
@@ -198,6 +216,10 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
     if (patch.staticLabels) {
       patch.staticLabels = this.settings.staticLabels;
+    }
+
+    if (patch.annotations) {
+      patch.annotations = this.settings.annotations;
     }
 
     return patch;

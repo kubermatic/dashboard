@@ -125,9 +125,19 @@ export class NodeDataService {
     return OperatingSystemSpec.getOperatingSystem(this._nodeData.spec.operatingSystem);
   }
 
-  set labels(labels: object) {
+  set labels(labels: Record<string, string>) {
     delete this._nodeData.spec.labels;
     this._nodeData.spec.labels = labels;
+  }
+
+  set annotations(annotations: Record<string, string>) {
+    delete this._nodeData.spec.annotations;
+    this._nodeData.spec.annotations = annotations;
+  }
+
+  set machineDeploymentAnnotations(annotations: Record<string, string>) {
+    delete this._nodeData.annotations;
+    this._nodeData.annotations = annotations;
   }
 
   set taints(taints: Taint[]) {
@@ -153,6 +163,7 @@ export class NodeDataService {
       dynamicConfig: md.spec.dynamicConfig,
       minReplicas: md.spec.minReplicas,
       maxReplicas: md.spec.maxReplicas,
+      annotations: md.annotations,
     } as NodeData;
   }
 

@@ -105,7 +105,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
   @Input() provider: NodeProvider;
-  labels: object = {};
+  labels: Record<string, string>;
+  annotations: Record<string, string>;
+  machineDeploymentAnnotations: Record<string, string>;
   taints: Taint[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   selectedOperatingSystemProfile: string;
@@ -409,9 +411,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return !this._nodeDataService.isInWizardMode();
   }
 
-  onLabelsChange(labels: object): void {
+  onLabelsChange(labels: Record<string, string>): void {
     this.labels = labels;
     this._nodeDataService.labels = this.labels;
+  }
+
+  onAnnotationsChange(annotations: Record<string, string>): void {
+    this.annotations = annotations;
+    this._nodeDataService.annotations = this.annotations;
+  }
+
+  onMachineDeploymentAnnotationsChange(annotations: Record<string, string>): void {
+    this.machineDeploymentAnnotations = annotations;
+    this._nodeDataService.machineDeploymentAnnotations = this.machineDeploymentAnnotations;
   }
 
   onTaintsChange(taints: Taint[]): void {
@@ -442,8 +454,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
 
     this.onLabelsChange(this._nodeDataService.nodeData.spec.labels);
+    this.onAnnotationsChange(this._nodeDataService.nodeData.spec.annotations);
     this.onTaintsChange(this._nodeDataService.nodeData.spec.taints);
-
+    this.onMachineDeploymentAnnotationsChange(this._nodeDataService.nodeData.annotations);
     this.form.get(Controls.UpgradeOnBoot).setValue(!!upgradeOnBoot);
     this.form.get(Controls.DisableAutoUpdate).setValue(!!disableAutoUpdate);
 

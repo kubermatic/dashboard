@@ -14,11 +14,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {SettingsService} from '@app/core/services/settings';
+import {AdminSettings} from '@app/shared/entity/settings';
+import {getVisibleAnnotations} from '@app/shared/utils/annotations';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
+import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
@@ -27,13 +33,10 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
+import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {PathParam} from '@core/services/params';
-import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
-import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -54,6 +57,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   projectID: string;
   machineDeploymentID: string;
   clusterName: string;
+  adminSettings: AdminSettings;
 
   private readonly _refreshTime = 10;
   private _isMachineDeploymentLoaded = false;
@@ -74,7 +78,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
     private readonly _clusterService: ClusterService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -98,7 +103,15 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
         this.loadNodesMetrics();
       });
 
+    this._settingsService.adminSettings.pipe(take(1)).subscribe((settings: AdminSettings) => {
+      this.adminSettings = settings;
+    });
+
     this.loadCluster();
+  }
+
+  getFilteredAnnotations(annotations: Record<string, string>): Record<string, string> {
+    return getVisibleAnnotations(annotations, this.adminSettings);
   }
 
   loadMachineDeployment(): void {

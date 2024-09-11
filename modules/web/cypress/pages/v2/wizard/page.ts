@@ -56,7 +56,7 @@ export class Wizard extends PageOptions implements Page {
       this.Buttons.sshKeysSelectOption(sshKeyName)
         .click()
         .then(_ => this._strategy?.onSSHKeyAdd(provider));
-      this.Buttons.overlayContainer.click();
+      this.Buttons.overlayContainer.click({force: true});
     }
 
     this.Buttons.nextStep(WizardStep.Cluster).click();

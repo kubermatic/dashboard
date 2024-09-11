@@ -733,7 +733,8 @@ func ConvertNodetoExternalClusterNode(node corev1.Node) (*apiv2.ExternalClusterN
 				Versions: apiv1.NodeVersionInfo{
 					Kubelet: node.Status.NodeInfo.KubeletVersion,
 				},
-				Labels: node.Labels,
+				Labels:      node.Labels,
+				Annotations: node.Annotations,
 			},
 			Status: nodeStatus,
 		},

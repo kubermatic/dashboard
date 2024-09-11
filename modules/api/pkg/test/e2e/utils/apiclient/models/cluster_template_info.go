@@ -18,6 +18,9 @@ import (
 // swagger:model ClusterTemplateInfo
 type ClusterTemplateInfo struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// indicates the preset name
 	Credential string `json:"credential,omitempty"`
 

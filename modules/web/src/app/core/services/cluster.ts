@@ -43,6 +43,7 @@ import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shar
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
+import {AnnotationFormComponent} from '@app/shared/components/annotation-form/component';
 
 @Injectable()
 export class ClusterService {
@@ -138,6 +139,9 @@ export class ClusterService {
   create(projectID: string, createClusterModel: CreateClusterModel): Observable<Cluster> {
     createClusterModel.nodeDeployment.spec.template.labels = LabelFormComponent.filterNullifiedKeys(
       createClusterModel.nodeDeployment.spec.template.labels
+    );
+    createClusterModel.nodeDeployment.spec.template.annotations = AnnotationFormComponent.filterNullifiedKeys(
+      createClusterModel.nodeDeployment.spec.template.annotations
     );
     createClusterModel.nodeDeployment.spec.template.taints = TaintFormComponent.filterNullifiedTaints(
       createClusterModel.nodeDeployment.spec.template.taints

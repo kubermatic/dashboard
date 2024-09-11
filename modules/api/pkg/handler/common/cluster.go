@@ -192,6 +192,9 @@ func GenerateCluster(
 		partialCluster.Labels = make(map[string]string)
 	}
 	partialCluster.Annotations = make(map[string]string)
+	if body.Cluster.Annotations != nil {
+		partialCluster.Annotations = body.Cluster.Annotations
+	}
 
 	credentialName := body.Cluster.Credential
 	if len(credentialName) > 0 {

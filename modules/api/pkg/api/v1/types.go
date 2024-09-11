@@ -1601,6 +1601,8 @@ type NodeSpec struct {
 	// It will be applied to Nodes allowing users run their apps on specific Node using labelSelector.
 	// required: false
 	Labels map[string]string `json:"labels,omitempty"`
+	// required: false
+	Annotations map[string]string `json:"annotations,omitempty"`
 	// List of taints to set on new nodes
 	Taints []TaintSpec `json:"taints,omitempty"`
 }

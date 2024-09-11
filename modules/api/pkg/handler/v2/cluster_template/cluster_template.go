@@ -763,6 +763,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 			ID:                template.Name,
 			Name:              template.Spec.HumanReadableName,
 			CreationTimestamp: apiv1.NewTime(template.CreationTimestamp.Time),
+			Annotations:       template.Annotations,
 			DeletionTimestamp: func() *apiv1.Time {
 				if template.DeletionTimestamp != nil {
 					deletionTimestamp := apiv1.NewTime(template.DeletionTimestamp.Time)
@@ -778,6 +779,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 		Scope:     template.Labels[kubermaticv1.ClusterTemplateScopeLabelKey],
 		Cluster: &apiv2.ClusterTemplateInfo{
 			Labels:          label.FilterLabels(label.ClusterResourceType, template.ClusterLabels),
+			Annotations:     template.Annotations,
 			InheritedLabels: template.InheritedClusterLabels,
 			Credential:      template.Credential,
 			Spec: apiv1.ClusterSpec{
@@ -813,21 +815,6 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 			Annotations: initialNodeDeployment.Annotations,
 		},
 		Applications: apps,
-	}
-
-	ct.Annotations = make(map[string]string)
-	if template.Annotations != nil {
-		// Add preset annotations
-		if value, ok := template.Annotations[kubermaticv1.PresetNameAnnotation]; ok {
-			ct.Annotations[kubermaticv1.PresetNameAnnotation] = value
-		}
-		if value, ok := template.Annotations[kubermaticv1.PresetInvalidatedAnnotation]; ok {
-			ct.Annotations[kubermaticv1.PresetInvalidatedAnnotation] = value
-		}
-		// Add initial CNI values request annotation
-		if value, ok := template.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation]; ok {
-			ct.Annotations[kubermaticv1.InitialCNIValuesRequestAnnotation] = value
-		}
 	}
 
 	if len(template.UserSSHKeys) > 0 {

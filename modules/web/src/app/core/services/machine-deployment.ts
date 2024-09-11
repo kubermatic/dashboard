@@ -14,15 +14,16 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AnnotationFormComponent} from '@app/shared/components/annotation-form/component';
 import {environment} from '@environments/environment';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
-import {Node} from '@shared/entity/node';
-import {NodeMetrics} from '@shared/entity/metrics';
 import {Event} from '@shared/entity/event';
+import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class MachineDeploymentService {
@@ -32,6 +33,7 @@ export class MachineDeploymentService {
 
   create(md: MachineDeployment, clusterID: string, projectID: string): Observable<MachineDeployment> {
     md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
+    md.spec.template.annotations = AnnotationFormComponent.filterNullifiedKeys(md.spec.template.annotations);
     md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
 
     const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments`;

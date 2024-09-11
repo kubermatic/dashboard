@@ -11789,13 +11789,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11807,6 +11800,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -12323,11 +12323,6 @@
         "parameters": [
           {
             "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12339,6 +12334,11 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -27274,6 +27274,29 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "AnnotationSettings": {
+      "type": "object",
+      "title": "AnnotationSettings is the settings for the annotations.",
+      "properties": {
+        "hiddenAnnotations": {
+          "description": "HiddenAnnotations are the annotations that are hidden from the user in the UI.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "HiddenAnnotations"
+        },
+        "protectedAnnotations": {
+          "description": "ProtectedAnnotations are the annotations that are visible in the UI but cannot be added or modified by the user.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ProtectedAnnotations"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "Anything": {
       "description": "Anything is a struct wrapper around a field of type `interface{}`\nthat plays nicely with controller-gen\n+kubebuilder:object:generate=false\n+kubebuilder:validation:Type=\"\"",
       "type": "object",
@@ -29415,6 +29438,13 @@
       "type": "object",
       "title": "ClusterTemplateInfo represents a ClusterTemplateInfo object.",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "credential": {
           "description": "indicates the preset name",
           "type": "string",
@@ -32894,6 +32924,9 @@
           },
           "x-go-name": "AllowedOperatingSystems"
         },
+        "annotations": {
+          "$ref": "#/definitions/AnnotationSettings"
+        },
         "cleanupOptions": {
           "$ref": "#/definitions/CleanupOptions"
         },
@@ -35538,6 +35571,13 @@
         "versions"
       ],
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "cloud": {
           "$ref": "#/definitions/NodeCloudSpec"
         },

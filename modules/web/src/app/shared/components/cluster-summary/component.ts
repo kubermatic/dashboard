@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {SettingsService} from '@app/core/services/settings';
+import {AdminSettings} from '@app/shared/entity/settings';
+import {getVisibleAnnotations} from '@app/shared/utils/annotations';
 import {ApplicationsListView} from '@shared/components/application-list/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Application} from '@shared/entity/application';
@@ -26,13 +29,14 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {convertArrayToObject} from '@shared/utils/common';
 import _ from 'lodash';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-cluster-summary',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ClusterSummaryComponent {
+export class ClusterSummaryComponent implements OnInit {
   readonly ApplicationsListView = ApplicationsListView;
 
   @Input() cluster: Cluster;
@@ -44,6 +48,7 @@ export class ClusterSummaryComponent {
   @Input() clusterTemplateEditMode = false;
 
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
+  adminSettings: AdminSettings;
 
   private _sshKeys: SSHKey[] = [];
 
@@ -121,6 +126,14 @@ export class ClusterSummaryComponent {
     return Cluster.isDualStackNetworkSelected(this.cluster);
   }
 
+  constructor(private readonly _settingsService: SettingsService) {}
+
+  ngOnInit(): void {
+    this._settingsService.adminSettings.pipe(take(1)).subscribe((settings: AdminSettings) => {
+      this.adminSettings = settings;
+    });
+  }
+
   isAdmissionPluginEnabled(plugin: string): boolean {
     return this.cluster?.spec?.admissionPlugins?.includes(plugin) || false;
   }
@@ -151,7 +164,7 @@ export class ClusterSummaryComponent {
     return Object.values(NodeProvider).some(p => this._hasProviderOptions(p));
   }
 
-  displayTags(tags: object): boolean {
+  displayTags(tags: Record<string, string>): boolean {
     return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
   }
 
@@ -167,6 +180,10 @@ export class ClusterSummaryComponent {
 
   getKubeVirtPreferenceCategory(preference: KubeVirtNodePreference): string {
     return KubeVirtNodePreference.getCategory(preference);
+  }
+
+  getFilteredAnnotations(annotations: Record<string, string>): Record<string, string> {
+    return getVisibleAnnotations(annotations, this.adminSettings);
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

@@ -79,6 +79,9 @@ type GlobalSettings struct {
 	// UserProjectsLimit is the maximum number of projects a user can create.
 	UserProjectsLimit int64 `json:"userProjectsLimit,omitempty"`
 
+	// annotations
+	Annotations *AnnotationSettings `json:"annotations,omitempty"`
+
 	// cleanup options
 	CleanupOptions *CleanupOptions `json:"cleanupOptions,omitempty"`
 
@@ -115,6 +118,10 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateStaticLabels(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateAnnotations(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -185,6 +192,25 @@ func (m *GlobalSettings) validateStaticLabels(formats strfmt.Registry) error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateAnnotations(formats strfmt.Registry) error {
+	if swag.IsZero(m.Annotations) { // not required
+		return nil
+	}
+
+	if m.Annotations != nil {
+		if err := m.Annotations.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("annotations")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("annotations")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -386,6 +412,10 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateAnnotations(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCleanupOptions(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -447,6 +477,22 @@ func (m *GlobalSettings) contextValidateStaticLabels(ctx context.Context, format
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateAnnotations(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Annotations != nil {
+		if err := m.Annotations.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("annotations")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("annotations")
+			}
+			return err
+		}
 	}
 
 	return nil

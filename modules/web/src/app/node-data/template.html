@@ -276,10 +276,23 @@ limitations under the License.
                    [labels]="labels"
                    (labelsChange)="onLabelsChange($event)"></km-label-form>
 
+    <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
+                        title="Node Annotations"
+                        [infoTooltip]="'Annotations for the nodes created against this machine deployment'"
+                        [annotations]="annotations"
+                        (annotationsChange)="onAnnotationsChange($event)"></km-annotation-form>
+
     <km-taint-form *ngIf="!isProvider(NodeProvider.EDGE)"
                    title="Node Taints"
                    [taints]="taints"
                    (taintsChange)="onTaintsChange($event)"></km-taint-form>
+
+    <km-annotation-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
+                        [annotations]="machineDeploymentAnnotations"
+                        [infoTooltip]="'Annotations for the machine deployment object'"
+                        title="Machine Deployment Annotations"
+                        (annotationsChange)="onMachineDeploymentAnnotationsChange($event)">
+    </km-annotation-form>
   </div>
 
   <div *ngIf="!isDialogView()"

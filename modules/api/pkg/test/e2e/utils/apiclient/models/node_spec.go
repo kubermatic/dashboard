@@ -20,6 +20,9 @@ import (
 // swagger:model NodeSpec
 type NodeSpec struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// Map of string keys and values that can be used to organize and categorize (scope and select) objects.
 	// It will be applied to Nodes allowing users run their apps on specific Node using labelSelector.
 	Labels map[string]string `json:"labels,omitempty"`

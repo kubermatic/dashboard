@@ -93,9 +93,10 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
   }
 
   private _getClusterTemplate(): ClusterTemplate {
-    let annotations = null;
+    let annotations = this.data.nodeData.annotations;
     if (this.data.nodeData.operatingSystemProfile) {
       annotations = {
+        ...annotations,
         [this.operatingSystemProfileAnnotation]: this.data.nodeData.operatingSystemProfile,
       };
     }

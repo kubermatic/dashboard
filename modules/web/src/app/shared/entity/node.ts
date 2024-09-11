@@ -22,6 +22,7 @@ import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmwar
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
 export class Node {
+  annotations?: Record<string, string>;
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
@@ -31,12 +32,13 @@ export class Node {
 }
 
 export class NodeSpec {
+  annotations?: Record<string, string>;
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
   network?: NodeNetworkSpec;
   versions?: NodeVersionInfo;
   sshUserName?: string;
-  labels?: object;
+  labels?: Record<string, string>;
   taints?: Taint[];
 }
 
