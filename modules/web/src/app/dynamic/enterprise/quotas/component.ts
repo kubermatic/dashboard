@@ -196,7 +196,7 @@ export class QuotasComponent implements OnInit {
       .open<ConfirmationDialogComponent, ConfirmationDialogConfig, boolean>(ConfirmationDialogComponent, config)
       .afterClosed()
       .pipe(
-        filter(confirmed => confirmed),
+        // filter(confirmed => confirmed),
         switchMap(_ => this._quotaService.deleteQuota(name))
       )
       .subscribe(_ => {
