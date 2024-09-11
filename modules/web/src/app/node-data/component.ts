@@ -105,9 +105,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
   @Input() provider: NodeProvider;
-  labels: object = {};
-  annotations: object = {};
-  machineDeploymentAnnotations: object = {};
+  labels: Record<string, string>;
+  annotations: Record<string, string>;
+  machineDeploymentAnnotations: Record<string, string>;
   taints: Taint[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   selectedOperatingSystemProfile: string;
@@ -411,17 +411,17 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return !this._nodeDataService.isInWizardMode();
   }
 
-  onLabelsChange(labels: object): void {
+  onLabelsChange(labels: Record<string, string>): void {
     this.labels = labels;
     this._nodeDataService.labels = this.labels;
   }
 
-  onAnnotationsChange(annotations: object): void {
+  onAnnotationsChange(annotations: Record<string, string>): void {
     this.annotations = annotations;
     this._nodeDataService.annotations = this.annotations;
   }
 
-  onMachineDeploymentAnnotationsChange(annotations: object): void {
+  onMachineDeploymentAnnotationsChange(annotations: Record<string, string>): void {
     this.machineDeploymentAnnotations = annotations;
     this._nodeDataService.machineDeploymentAnnotations = this.machineDeploymentAnnotations;
   }

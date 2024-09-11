@@ -172,9 +172,9 @@ func OutputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		Spec: apiv1.NodeDeploymentSpec{
 			Replicas: *md.Spec.Replicas,
 			Template: apiv1.NodeSpec{
-				Labels: label.FilterLabels(label.NodeDeploymentResourceType, md.Spec.Template.Spec.Labels),
+				Labels:      label.FilterLabels(label.NodeDeploymentResourceType, md.Spec.Template.Spec.Labels),
 				Annotations: md.Spec.Template.Spec.Annotations,
-				Taints: taints,
+				Taints:      taints,
 				Versions: apiv1.NodeVersionInfo{
 					Kubelet: md.Spec.Template.Spec.Versions.Kubelet,
 				},
@@ -763,6 +763,7 @@ func outputMachine(machine *clusterv1alpha1.Machine, node *corev1.Node, hideInit
 			Name:              displayName,
 			DeletionTimestamp: deletionTimestamp,
 			CreationTimestamp: apiv1.NewTime(machine.CreationTimestamp.Time),
+			Annotations:       machine.Annotations,
 		},
 		Spec: apiv1.NodeSpec{
 			Versions: apiv1.NodeVersionInfo{

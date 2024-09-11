@@ -15,7 +15,7 @@
 import {NodeCloudSpec, NodeSpec, OperatingSystemSpec} from '../entity/node';
 
 export class NodeData {
-  annotations?: object;
+  annotations?: Record<string, string>;
   operatingSystemProfile?: string;
   name?: string;
   spec?: NodeSpec;

@@ -68,7 +68,7 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
     private readonly _dialogModeService: DialogModeService
   ) {}
 
-  static filterNullifiedKeys(labels: object): object {
+  static filterNullifiedKeys(labels: Record<string, string>): Record<string, string> {
     const filteredLabelsObject = {};
     if (labels instanceof Object) {
       Object.keys(labels).forEach(key => {
@@ -79,6 +79,10 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
       });
     }
     return filteredLabelsObject;
+  }
+
+  get annotationsArray(): FormArray {
+    return this.form.get('annotations') as FormArray;
   }
 
   ngOnInit(): void {
@@ -124,33 +128,6 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
 
   validate(_: AbstractControl): Observable<ValidationErrors | null> {
     return of(this.form.valid ? null : {invalid: true});
-  }
-
-  get annotationsArray(): FormArray {
-    return this.form.get('annotations') as FormArray;
-  }
-
-  private async initializeAnnotationSets(): Promise<void> {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.protectedAnnotations = new Set(settings.annotations?.protectedAnnotations || []);
-      this.hiddenAnnotations = new Set(settings.annotations?.hiddenAnnotations || []);
-    });
-  }
-
-  private initForm(): void {
-    this.form = this._formBuilder.group({
-      annotations: this._formBuilder.array([]),
-    });
-
-    if (!_.isEmpty(this.annotations)) {
-      Object.entries(this.annotations).forEach(([key, value]) => {
-        if (!this.hiddenAnnotations.has(key)) {
-          this.addAnnotation(key, value, this.protectedAnnotations.has(key));
-        }
-      });
-    }
-
-    this.addAnnotation();
   }
 
   addAnnotation(key: string = '', value: string = '', isProtected: boolean = false): void {
@@ -201,6 +178,36 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
       return this.annotations[key] !== annotation.get('value').value && this._dialogModeService.isEditDialog;
     }
     return false;
+  }
+
+  private async initializeAnnotationSets(): Promise<void> {
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.protectedAnnotations = new Set(settings.annotations?.protectedAnnotations || []);
+      this.hiddenAnnotations = new Set(settings.annotations?.hiddenAnnotations || []);
+    });
+  }
+
+  private initForm(): void {
+    this.form = this._formBuilder.group({
+      annotations: this._formBuilder.array([]),
+    });
+
+    if (!_.isEmpty(this.annotations)) {
+      Object.entries(this.annotations).forEach(([key, value]) => {
+        if (!this.hiddenAnnotations.has(key)) {
+          this.addAnnotation(key, value, this.protectedAnnotations.has(key));
+        }
+      });
+    }
+    this.addAnnotation();
+  }
+
+  private keyValidator(control: AbstractControl): ValidationErrors | null {
+    const key = control.value;
+    if (this.protectedAnnotations.has(key) || this.hiddenAnnotations.has(key)) {
+      return {forbiddenKey: true};
+    }
+    return null;
   }
 
   private addAnnotationIfNeeded(): void {
@@ -266,13 +273,5 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
     });
     this.annotations = updatedAnnotations;
     this.annotationsChange.emit(this.annotations);
-  }
-
-  keyValidator(control: AbstractControl): ValidationErrors | null {
-    const key = control.value;
-    if (this.protectedAnnotations.has(key) || this.hiddenAnnotations.has(key)) {
-      return {forbiddenKey: true};
-    }
-    return null;
   }
 }

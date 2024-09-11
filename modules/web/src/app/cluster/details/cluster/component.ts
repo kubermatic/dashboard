@@ -17,7 +17,9 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {PresetsService} from '@app/core/services/wizard/presets';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {getVisibleAnnotations} from '@app/shared/utils/annotations';
 import {AddonService} from '@core/services/addon';
 import {ApplicationService} from '@core/services/application';
 import {ClusterService} from '@core/services/cluster';
@@ -76,7 +78,6 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {PresetsService} from '@app/core/services/wizard/presets';
 
 @Component({
   selector: 'km-cluster-details',
@@ -366,6 +367,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(filter(deleted => deleted))
       .pipe(take(1))
       .subscribe(_ => this.goBack());
+  }
+
+  getFilteredAnnotations(annotations: Record<string, string>): Record<string, string> {
+    return getVisibleAnnotations(annotations, this.adminSettings);
   }
 
   shareConfigDialog(): void {

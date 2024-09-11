@@ -195,7 +195,7 @@ limitations under the License.
                        *ngIf="machineDeployment.spec.template.annotations">
             <div key>Node Annotations</div>
             <div value>
-              <km-labels [labels]="machineDeployment.spec.template.annotations"
+              <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)"
                          emptyMessage="No assigned annotations"></km-labels>
             </div>
           </km-property>
@@ -211,7 +211,7 @@ limitations under the License.
                        *ngIf="machineDeployment.annotations">
             <div key>Machine Deployment Annotations</div>
             <div value>
-              <km-labels [labels]="machineDeployment.annotations"></km-labels>
+              <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)"></km-labels>
             </div>
           </km-property>
         </div>

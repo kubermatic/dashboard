@@ -476,7 +476,7 @@ limitations under the License.
             <km-property *ngIf="cluster.annotations">
               <div key>Annotations</div>
               <div value>
-                <km-labels [labels]="cluster.annotations"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)"></km-labels>
               </div>
             </km-property>
           </div>

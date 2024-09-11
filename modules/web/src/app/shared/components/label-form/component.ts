@@ -95,7 +95,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     return this.form?.get('labels') as FormArray;
   }
 
-  static filterNullifiedKeys(labels: object): object {
+  static filterNullifiedKeys(labels: Record<string, string>): Record<string, string> {
     const filteredLabelsObject = {};
     if (labels instanceof Object) {
       Object.keys(labels).forEach(key => {

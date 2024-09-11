@@ -87,7 +87,7 @@ limitations under the License.
             <km-property *ngIf="displayTags(cluster.annotations)">
               <div key>Cluster Annotations</div>
               <div value>
-                <km-labels [labels]="cluster.annotations"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(cluster.annotations)"></km-labels>
               </div>
             </km-property>
           </div>
@@ -705,14 +705,14 @@ limitations under the License.
             <km-property *ngIf="machineDeployment.spec.template.annotations">
               <div key>Node Annotations</div>
               <div value>
-                <km-labels [labels]="machineDeployment.spec.template.annotations"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(machineDeployment.spec.template.annotations)"></km-labels>
               </div>
             </km-property>
 
             <km-property *ngIf="machineDeployment.annotations">
               <div key>Machine Deployment Annotations</div>
               <div value>
-                <km-labels [labels]="machineDeployment.annotations"></km-labels>
+                <km-labels [labels]="getFilteredAnnotations(machineDeployment.annotations)"></km-labels>
               </div>
             </km-property>
           </div>

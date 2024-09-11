@@ -290,7 +290,7 @@ limitations under the License.
                class="entry-label">
             <span>Enable WebTerminal Internet Access</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Enable internet access for web terminal. On enabling/disabling this option will not affect existing terminal instances.'></div>
+                 matTooltip="Enable internet access for web terminal. On enabling/disabling this option will not affect existing terminal instances."></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enableInternetAccess"
                         [disabled]="!settings.enableOIDCKubeconfig"
@@ -427,6 +427,27 @@ limitations under the License.
           <km-static-labels-form class="static-labels"
                                  [staticLabels]="settings.staticLabels"
                                  (staticLabelsChange)="onStaticLabelsChange($event)"></km-static-labels-form>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>Annotations</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Global configurations for annotations for clusters, machine deployments, and nodes. Hidden annotations are not visible on UI and protected annotations are visible but cannot be updated or deleted."></div>
+          </div>
+          <km-chip-list label="Hidden Annotations"
+                        [tags]="hiddenAnnotations"
+                        (onChange)="onHiddenAnnotationsChange($event)"
+                        fxFlex>
+          </km-chip-list>
+
+          <km-chip-list label="Protected Annotations"
+                        [tags]="protectedAnnotations"
+                        (onChange)="onProtectedAnnotationsChange($event)"
+                        description="Use comma, space or enter key as the separator. presetName is an internal KKP protected annotation and cannot be deleted."
+                        fxFlex>
+          </km-chip-list>
         </div>
       </div>
     </div>

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsAnnotations} from '../entity/settings';
+import {AdminSettings} from '@shared/entity/settings';
 
 export function getVisibleAnnotations(
   annotations: Record<string, string>,
-  settings: AdminSettingsAnnotations
+  settings: AdminSettings
 ): Record<string, string> {
-  const hiddenAnnotations = settings.hiddenAnnotations || [];
+  const hiddenAnnotations = settings?.annotations?.hiddenAnnotations || [];
 
   return Object.entries(annotations).reduce((acc, [key, value]) => {
     if (!hiddenAnnotations.includes(key)) {
