@@ -180,7 +180,7 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
     return false;
   }
 
-  private async initializeAnnotationSets(): Promise<void> {
+  private initializeAnnotationSets(): void {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.protectedAnnotations = new Set(settings.annotations?.protectedAnnotations || []);
       this.hiddenAnnotations = new Set(settings.annotations?.hiddenAnnotations || []);
