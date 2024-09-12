@@ -85,7 +85,8 @@ type OpenstackCloudSpec struct {
 	// router ID
 	RouterID string `json:"routerID,omitempty"`
 
-	// security groups
+	// SecurityGroups is a comma-separated list of group names that shall be used for Machines in the cluster.
+	// If this field is left empty, a single default security group will be created and this field will be filled-in.
 	SecurityGroups string `json:"securityGroups,omitempty"`
 
 	// subnet ID

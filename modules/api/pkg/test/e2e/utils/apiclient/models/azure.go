@@ -31,6 +31,10 @@ type Azure struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
+	// IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.
+	// NOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.
+	IsCustomizable bool `json:"isCutomizable,omitempty"`
+
 	// The resource group that will be used to look up and create resources for the cluster in.
 	// If set to empty string at cluster creation, a new resource group will be created and this field will be updated to
 	// the generated resource group's name.
