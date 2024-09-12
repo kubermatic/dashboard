@@ -35,6 +35,10 @@ type EKS struct {
 	// Only enabled presets will be available in the KKP dashboard.
 	Enabled bool `json:"enabled,omitempty"`
 
+	// IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.
+	// NOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.
+	IsCustomizable bool `json:"isCutomizable,omitempty"`
+
 	// The Secret Access Key used to authenticate against AWS.
 	SecretAccessKey string `json:"secretAccessKey,omitempty"`
 }

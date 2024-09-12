@@ -25705,6 +25705,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "subscriptionID": {
           "description": "The Azure Subscription used for the user cluster.",
           "type": "string",
@@ -26081,6 +26086,11 @@
           "description": "Instance profile to use. This can be configured, but if left empty will be\nautomatically filled in during reconciliation.",
           "type": "string",
           "x-go-name": "InstanceProfileName"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "roleARN": {
           "description": "ARN to use. This can be configured, but if left empty will be\nautomatically filled in during reconciliation.",
@@ -26922,6 +26932,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -27106,6 +27121,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "token": {
           "description": "Token is used to authenticate with the Anexia API.",
@@ -28049,6 +28069,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "loadBalancerSKU": {
           "$ref": "#/definitions/LBSKU"
         },
@@ -28616,6 +28641,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "tinkerbell": {
           "$ref": "#/definitions/Tinkerbell"
@@ -30600,6 +30630,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "token": {
           "description": "Token is used to authenticate with the DigitalOcean API.",
           "type": "string",
@@ -30766,6 +30801,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "secretAccessKey": {
           "description": "The Secret Access Key used to authenticate against AWS.",
@@ -31904,6 +31944,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "token": {
           "type": "string",
           "x-go-name": "Token"
@@ -31971,6 +32016,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "network": {
           "type": "string",
@@ -32254,6 +32304,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "serviceAccount": {
           "type": "string",
@@ -33166,6 +33221,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "network": {
           "description": "Network is the pre-existing Hetzner network in which the machines are running.\nWhile machines can be in multiple networks, a single one must be chosen for the\nHCloud CCM to work.\nIf this is empty, the network configured on the datacenter will be used.",
@@ -34232,6 +34292,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "kubeconfig": {
           "description": "Kubeconfig is the cluster's kubeconfig file, encoded with base64.",
@@ -35791,6 +35856,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "password": {
           "description": "Password corresponding to the provided user.",
           "type": "string",
@@ -36404,6 +36474,11 @@
           "type": "string",
           "x-go-name": "FloatingIPPool"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "network": {
           "description": "Network holds the name of the internal network When specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.",
           "type": "string",
@@ -36542,6 +36617,7 @@
           "x-go-name": "RouterID"
         },
         "securityGroups": {
+          "description": "SecurityGroups is a comma-separated list of group names that shall be used for Machines in the cluster.\nIf this field is left empty, a single default security group will be created and this field will be filled-in.",
           "type": "string",
           "x-go-name": "SecurityGroups"
         },
@@ -36900,6 +36976,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "projectID": {
           "type": "string",
@@ -37539,6 +37620,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -39166,6 +39252,11 @@
           "type": "boolean",
           "x-go-name": "Enabled"
         },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
+        },
         "organization": {
           "description": "The name of organization to use.",
           "type": "string",
@@ -39511,6 +39602,11 @@
           "description": "Only enabled presets will be available in the KKP dashboard.",
           "type": "boolean",
           "x-go-name": "Enabled"
+        },
+        "isCutomizable": {
+          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
+          "type": "boolean",
+          "x-go-name": "IsCustomizable"
         },
         "networks": {
           "description": "List of vSphere networks.",
