@@ -22,7 +22,7 @@ type PresetProvider struct {
 	Enabled bool `json:"enabled,omitempty"`
 
 	// is customizable
-	IsCustomizable bool `json:"isEditable,omitempty"`
+	IsCustomizable bool `json:"isCustomizable,omitempty"`
 
 	// name
 	Name ProviderType `json:"name,omitempty"`

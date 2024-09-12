@@ -938,13 +938,16 @@ func newAPIPreset(preset *kubermaticv1.Preset, enabled bool) apiv2.Preset {
 				}
 			}
 
-			if providerType == kubermaticv1.OpenstackCloudProvider && preset.Spec.Openstack.IsCustomizable {
-				provider.OpenStack = &apiv2.OpenStackAPIPreset{
-					Network:        preset.Spec.Openstack.Network,
-					SecurityGroups: preset.Spec.Openstack.SecurityGroups,
-					FloatingIPPool: preset.Spec.Openstack.FloatingIPPool,
-					RouterID:       preset.Spec.Openstack.RouterID,
-					SubnetID:       preset.Spec.Openstack.SubnetID,
+			if providerType == kubermaticv1.OpenstackCloudProvider && preset.Spec.Openstack != nil {
+				provider.IsCustomizable = preset.Spec.Openstack.IsCustomizable
+				if provider.IsCustomizable {
+					provider.OpenStack = &apiv2.OpenStackAPIPreset{
+						Network:        preset.Spec.Openstack.Network,
+						SecurityGroups: preset.Spec.Openstack.SecurityGroups,
+						FloatingIPPool: preset.Spec.Openstack.FloatingIPPool,
+						RouterID:       preset.Spec.Openstack.RouterID,
+						SubnetID:       preset.Spec.Openstack.SubnetID,
+					}
 				}
 			}
 

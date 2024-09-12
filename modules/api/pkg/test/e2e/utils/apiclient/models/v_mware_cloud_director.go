@@ -29,7 +29,7 @@ type VMwareCloudDirector struct {
 
 	// IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.
 	// NOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.
-	IsCustomizable bool `json:"isCutomizable,omitempty"`
+	IsCustomizable bool `json:"isCustomizable,omitempty"`
 
 	// The name of organizational virtual data center network that will be associated with the VMs and vApp.
 	// Deprecated: OVDCNetwork has been deprecated starting with KKP 2.25 and will be removed in KKP 2.27+. It is recommended to use OVDCNetworks instead.

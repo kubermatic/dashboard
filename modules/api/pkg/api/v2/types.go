@@ -159,7 +159,7 @@ type PresetBodyMetadata struct {
 type PresetProvider struct {
 	Name                kubermaticv1.ProviderType     `json:"name"`
 	Enabled             bool                          `json:"enabled"`
-	IsCustomizable      bool                          `json:"isEditable"`
+	IsCustomizable      bool                          `json:"isCustomizable"`
 	VMwareCloudDirector *VMwareCloudDirectorAPIPreset `json:"vmwareCloudDirector,omitempty"`
 	OpenStack           *OpenStackAPIPreset           `json:"openstack,omitempty"`
 }
