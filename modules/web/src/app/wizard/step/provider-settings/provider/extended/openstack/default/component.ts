@@ -148,6 +148,8 @@ export class OpenstackProviderExtendedCredentialsComponent
         this.onIPv6SubnetIDChange('');
         this.form.get(Controls.IPv6SubnetPool).setValue('');
         this.onIPv6SubnetPoolChange('');
+      } else {
+        this.form.reset();
       }
     });
 
@@ -192,7 +194,7 @@ export class OpenstackProviderExtendedCredentialsComponent
       .pipe(debounceTime(this._debounceTime))
       .pipe(
         tap(_ => {
-          if (!this._hasRequiredCredentials()) {
+          if (!this._hasRequiredCredentials() && !this.isPresetSelected) {
             this._clearSecurityGroup();
             this._clearNetwork();
             this._clearSubnetPool();
@@ -286,12 +288,20 @@ export class OpenstackProviderExtendedCredentialsComponent
 
   private _loadSecurityGroups(securityGroups: OpenstackSecurityGroup[]): void {
     this.securityGroups = securityGroups;
+    const selectedSecurityGroup = this._clusterSpecService.cluster.spec.cloud.openstack.securityGroups;
+    if (selectedSecurityGroup && !securityGroups.find(sg => sg.name === selectedSecurityGroup)) {
+      this._securityGroupCombobox.reset();
+    }
     this.securityGroupsLabel = !_.isEmpty(this.securityGroups) ? SecurityGroupState.Ready : SecurityGroupState.Empty;
     this._cdr.detectChanges();
   }
 
   private _loadNetworks(networks: OpenstackNetwork[]): void {
     this.networks = networks.filter(network => !network.external);
+    const selectedNetwork = this._clusterSpecService.cluster.spec.cloud.openstack.network;
+    if (selectedNetwork && !networks.find(network => network.name === selectedNetwork)) {
+      this._networkCombobox.reset();
+    }
     this.networksLabel = !_.isEmpty(this.networks) ? NetworkState.Ready : NetworkState.Empty;
     this._cdr.detectChanges();
   }
@@ -299,6 +309,15 @@ export class OpenstackProviderExtendedCredentialsComponent
   private _loadSubnetIDs(subnetIDs: OpenstackSubnet[]): void {
     this.ipv4SubnetIDs = subnetIDs.filter(subnetID => subnetID.ipVersion === IPVersion.IPv4);
     this.ipv6SubnetIDs = subnetIDs.filter(subnetID => subnetID.ipVersion === IPVersion.IPv6);
+    const selectedIpv4SubnetID = this._clusterSpecService.cluster.spec.cloud.openstack.subnetID;
+    if (selectedIpv4SubnetID && !this.ipv4SubnetIDs.find(subnetID => subnetID.id === selectedIpv4SubnetID)) {
+      this._ipv4SubnetIDCombobox.reset();
+    }
+    const selectedIpv6SubnetID = this._clusterSpecService.cluster.spec.cloud.openstack.ipv6SubnetID;
+    if (selectedIpv6SubnetID && !this.ipv6SubnetIDs.find(subnetID => subnetID.id === selectedIpv6SubnetID)) {
+      this._ipv6SubnetIDCombobox.reset();
+    }
+
     this.ipv4SubnetIDsLabel = !_.isEmpty(this.ipv4SubnetIDs) ? IPv4SubnetIDState.Ready : IPv4SubnetIDState.Empty;
     this.ipv6SubnetIDsLabel = !_.isEmpty(this.ipv6SubnetIDs) ? IPv6SubnetIDState.Ready : IPv6SubnetIDState.Empty;
     this._cdr.detectChanges();
@@ -306,6 +325,10 @@ export class OpenstackProviderExtendedCredentialsComponent
 
   private _loadSubnetPools(subnetPools: OpenstackSubnetPool[]): void {
     this.ipv6SubnetPools = subnetPools;
+    const selectedSubnetPool = this._clusterSpecService.cluster.spec.cloud.openstack.ipv6SubnetPool;
+    if (selectedSubnetPool && !this.ipv6SubnetPools.find(subnetPool => subnetPool.name === selectedSubnetPool)) {
+      this._ipv6SubnetPoolCombobox.reset();
+    }
     this.ipv6SubnetPoolsLabel = !_.isEmpty(this.ipv6SubnetPools)
       ? IPv6SubnetPoolState.Ready
       : IPv6SubnetPoolState.Empty;
@@ -438,7 +461,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   private _onSecurityGroupLoading(): void {
-    this._clearSecurityGroup();
     this.securityGroupsLabel = SecurityGroupState.Loading;
     this._cdr.detectChanges();
   }
@@ -473,7 +495,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   private _onNetworkLoading(): void {
-    this._clearNetwork();
     this.networksLabel = NetworkState.Loading;
     this._cdr.detectChanges();
   }
@@ -511,7 +532,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   private _onSubnetIDLoading(): void {
-    this._clearSubnetID();
     this.ipv4SubnetIDsLabel = IPv4SubnetIDState.Loading;
     this.ipv6SubnetIDsLabel = IPv6SubnetIDState.Loading;
     this._cdr.detectChanges();
@@ -547,7 +567,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   private _onSubnetPoolLoading(): void {
-    this._clearSubnetPool();
     this.ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Loading;
     this._cdr.detectChanges();
   }

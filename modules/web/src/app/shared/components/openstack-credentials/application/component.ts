@@ -80,6 +80,7 @@ export class OpenstackApplicationCredentialsComponent extends BaseFormValidator 
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(OpenstackCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.openstack))
