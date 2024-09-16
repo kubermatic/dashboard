@@ -17,13 +17,7 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="15px">
-  <ng-container *ngIf="credentialsType === CredentialsType.Default">
-    <km-wizard-openstack-provider-extended-default-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-extended-default-credentials>
-  </ng-container>
-
-  <ng-container *ngIf="credentialsType === CredentialsType.Application">
-    <km-wizard-openstack-provider-extended-app-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-extended-app-credentials>
-  </ng-container>
+  <km-wizard-openstack-provider-extended-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-extended-credentials>
 
   <mat-checkbox [formControlName]="Controls.EnableIngressHostname"
                 [name]="Controls.EnableIngressHostname">

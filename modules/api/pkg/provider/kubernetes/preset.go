@@ -383,16 +383,18 @@ func (m *PresetProvider) setOpenStackCredentials(preset *kubermaticv1.Preset, cl
 	cloud.Openstack.ApplicationCredentialID = credentials.ApplicationCredentialID
 	cloud.Openstack.ApplicationCredentialSecret = credentials.ApplicationCredentialSecret
 
-	cloud.Openstack.SubnetID = credentials.SubnetID
-	cloud.Openstack.Network = credentials.Network
-	cloud.Openstack.FloatingIPPool = credentials.FloatingIPPool
+	// if the preset is customizable then no need to update these value from the prest, since we have them in the req.body
+	if !preset.Spec.Openstack.IsCustomizable {
+		cloud.Openstack.SubnetID = credentials.SubnetID
+		cloud.Openstack.Network = credentials.Network
+		cloud.Openstack.RouterID = credentials.RouterID
+		cloud.Openstack.FloatingIPPool = credentials.FloatingIPPool
+		cloud.Openstack.SecurityGroups = credentials.SecurityGroups
+	}
 
 	if cloud.Openstack.FloatingIPPool == "" && dc.Spec.Openstack != nil && dc.Spec.Openstack.EnforceFloatingIP {
 		return nil, fmt.Errorf("preset error, no floating ip pool specified for OpenStack")
 	}
-
-	cloud.Openstack.RouterID = credentials.RouterID
-	cloud.Openstack.SecurityGroups = credentials.SecurityGroups
 
 	return &cloud, nil
 }

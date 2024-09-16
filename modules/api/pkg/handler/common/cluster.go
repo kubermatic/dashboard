@@ -202,9 +202,14 @@ func GenerateCluster(
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("invalid credentials: %v", err)
 		}
+
+		if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
+			body.Cluster.Credential = ""
+		} else {
+			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
+			partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
+		}
 		body.Cluster.Spec.Cloud = *cloudSpec
-		partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
-		partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
 	}
 
 	// Fetch the defaulting ClusterTemplate.
@@ -1293,4 +1298,20 @@ func GetClusterClientWithClusterID(ctx context.Context, userInfoGetter provider.
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 	return client, nil
+}
+
+func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInfo provider.UserInfo, cloudSpec kubermaticv1.CloudSpec, credentialManager provider.PresetProvider, credentialName string) bool {
+	preset, _ := credentialManager.GetPreset(ctx, &adminUserInfo, &projectID, credentialName)
+
+	// At the moment, the only provider that can be customized is OpenStack.
+	if cloudSpec.Openstack != nil && preset.Spec.Openstack.IsCustomizable {
+		presetSpec := preset.Spec.Openstack
+		openstackCloudSpec := cloudSpec.Openstack
+		if presetSpec.Network != openstackCloudSpec.Network || presetSpec.RouterID != openstackCloudSpec.RouterID || presetSpec.FloatingIPPool != openstackCloudSpec.FloatingIPPool || presetSpec.SecurityGroups != openstackCloudSpec.SecurityGroups {
+			return true
+		}
+	}
+	// TODO: Add all other providers
+
+	return false
 }

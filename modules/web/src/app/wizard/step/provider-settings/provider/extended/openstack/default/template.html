@@ -19,7 +19,7 @@ limitations under the License.
   <km-combobox #securityGroupCombobox
                [required]="false"
                [grouped]="false"
-               [isDisabled]="isPresetSelected"
+               [isDisabled]="form.get(Controls.SecurityGroup).disabled"
                [options]="securityGroups"
                [hint]="getHint(Controls.SecurityGroup)"
                [formControlName]="Controls.SecurityGroup"
@@ -35,7 +35,7 @@ limitations under the License.
   <km-combobox #networkCombobox
                [required]="false"
                [grouped]="false"
-               [isDisabled]="isPresetSelected"
+               [isDisabled]="form.get(Controls.Network).disabled"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
@@ -51,7 +51,7 @@ limitations under the License.
   <km-combobox #ipv4SubnetIDCombobox
                [required]="false"
                [grouped]="false"
-               [isDisabled]="isPresetSelected"
+               [isDisabled]="form.get(Controls.IPv4SubnetID).disabled"
                [valueFormatter]="ipv4SubnetIDDisplayName.bind(this)"
                [options]="ipv4SubnetIDs"
                [hint]="getHint(Controls.IPv4SubnetID)"
@@ -70,7 +70,7 @@ limitations under the License.
     <km-combobox #ipv6SubnetIDCombobox
                  [required]="false"
                  [grouped]="false"
-                 [isDisabled]="isPresetSelected"
+                 [isDisabled]="form.get(Controls.IPv6SubnetID).disabled"
                  [valueFormatter]="ipv6SubnetIDDisplayName.bind(this)"
                  [options]="ipv6SubnetIDs"
                  [hint]="getHint(Controls.IPv6SubnetID)"
@@ -88,7 +88,7 @@ limitations under the License.
     <km-combobox #ipv6SubnetPoolCombobox
                  [required]="false"
                  [grouped]="false"
-                 [isDisabled]="isPresetSelected"
+                 [isDisabled]="form.get(Controls.IPv6SubnetPool).disabled"
                  [options]="ipv6SubnetPools"
                  [hint]="getHint(Controls.IPv6SubnetPool)"
                  [formControlName]="Controls.IPv6SubnetPool"
