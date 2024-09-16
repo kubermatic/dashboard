@@ -18,7 +18,6 @@ package rulegroup
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -76,7 +75,7 @@ func CreateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 		req := request.(createReq)
 		groupName, err := req.validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(fmt.Errorf("invalid rule group: %w", err).Error())
+			return nil, utilerrors.NewBadRequest("invalid rule group: %v", err)
 		}
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {
@@ -99,7 +98,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(updateReq)
 		if err := req.validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(fmt.Errorf("invalid rule group: %w", err).Error())
+			return nil, utilerrors.NewBadRequest("invalid rule group: %v", err)
 		}
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
 		if err != nil {

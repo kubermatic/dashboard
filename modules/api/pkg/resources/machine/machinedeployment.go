@@ -117,16 +117,14 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	if md.Annotations == nil {
 		md.Annotations = map[string]string{}
 	}
-	max := nd.Spec.MaxReplicas
-	if max != nil {
-		md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*max))
+	if nd.Spec.MaxReplicas != nil {
+		md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MaxReplicas))
 	} else {
 		delete(md.Annotations, AutoscalerMaxSizeAnnotation)
 	}
 
-	min := nd.Spec.MinReplicas
-	if min != nil {
-		md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*min))
+	if nd.Spec.MinReplicas != nil {
+		md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MinReplicas))
 	} else {
 		delete(md.Annotations, AutoscalerMinSizeAnnotation)
 	}

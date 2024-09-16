@@ -46,7 +46,7 @@ func CreateTokenEndpoint(projectProvider provider.ProjectProvider, privilegedPro
 		req := request.(addTokenReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
 		if err != nil {
@@ -142,7 +142,7 @@ func ListTokenEndpoint(projectProvider provider.ProjectProvider, privilegedProje
 		req := request.(commonTokenReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -184,7 +184,7 @@ func UpdateTokenEndpoint(projectProvider provider.ProjectProvider, privilegedPro
 		req := request.(updateTokenReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		secret, err := updateEndpoint(ctx, projectProvider, privilegedProjectProvider, serviceAccountProvider, privilegedServiceAccount, serviceAccountTokenProvider, privilegedServiceAccountTokenProvider, userInfoGetter, tokenGenerator, req.ProjectID, req.ServiceAccountID, req.TokenID, req.Body.Name, true)
@@ -207,12 +207,12 @@ func PatchTokenEndpoint(projectProvider provider.ProjectProvider, privilegedProj
 		req := request.(patchTokenReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		tokenReq := &apiv1.PublicServiceAccountToken{}
 		if err := json.Unmarshal(req.Body, tokenReq); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		if len(tokenReq.Name) == 0 {
 			return nil, utilerrors.NewBadRequest("new name can not be empty")
@@ -238,7 +238,7 @@ func DeleteTokenEndpoint(projectProvider provider.ProjectProvider, privilegedPro
 		req := request.(deleteTokenReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

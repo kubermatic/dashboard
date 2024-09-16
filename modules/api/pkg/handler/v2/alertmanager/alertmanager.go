@@ -62,7 +62,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 		req := request.(updateAlertmanagerReq)
 
 		if err := req.validateUpdateAlertmanagerReq(); err != nil {
-			return nil, utilerrors.NewBadRequest(fmt.Errorf("invalid alertmanager configuration: %w", err).Error())
+			return nil, utilerrors.NewBadRequest("invalid alertmanager configuration: %v", err)
 		}
 
 		c, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)

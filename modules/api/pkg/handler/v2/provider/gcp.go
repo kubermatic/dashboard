@@ -324,7 +324,7 @@ func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGet
 
 		var err error
 		if err = listReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := listReq.ServiceAccount
@@ -348,7 +348,7 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 
 		var err error
 		if err = projectReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		projectID := projectReq.GetProjectID()

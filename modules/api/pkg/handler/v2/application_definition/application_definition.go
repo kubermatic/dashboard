@@ -140,7 +140,7 @@ func PatchApplicationDefinition(userInfoGetter provider.UserInfoGetter, applicat
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(patchApplicationDefinitionReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		adminUserInfo, err := userInfoGetter(ctx, "")

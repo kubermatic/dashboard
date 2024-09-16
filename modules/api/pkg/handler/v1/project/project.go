@@ -439,7 +439,7 @@ func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 		}
 		err := req.validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

@@ -66,7 +66,7 @@ func AWSSubnetNoCredentialsEndpoint(ctx context.Context, userInfoGetter provider
 	}
 	_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)
 	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
 	if !ok {

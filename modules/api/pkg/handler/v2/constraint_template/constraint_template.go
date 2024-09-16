@@ -57,7 +57,7 @@ func GetEndpoint(constraintTemplateProvider provider.ConstraintTemplateProvider)
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(constraintTemplateReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		constraintTemplate, err := constraintTemplateProvider.Get(ctx, req.Name)
@@ -164,7 +164,7 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, constraintTemplatePro
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(patchConstraintTemplateReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		adminUserInfo, err := userInfoGetter(ctx, "")

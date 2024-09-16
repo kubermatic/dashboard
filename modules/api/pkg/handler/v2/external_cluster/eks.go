@@ -295,7 +295,7 @@ func ListEKSClustersEndpoint(userInfoGetter provider.UserInfoGetter, projectProv
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req.EKSRegionReq, userInfoGetter, presetProvider, req.ProjectID)
@@ -331,7 +331,7 @@ func ListEKSVPCEndpoint(userInfoGetter provider.UserInfoGetter, presetProvider p
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -367,7 +367,7 @@ func ListEKSSubnetsEndpoint(userInfoGetter provider.UserInfoGetter, presetProvid
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req.EKSRegionReq, userInfoGetter, presetProvider, projectID)
@@ -403,7 +403,7 @@ func ListEKSSecurityGroupsEndpoint(userInfoGetter provider.UserInfoGetter, prese
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req.EKSRegionReq, userInfoGetter, presetProvider, projectID)
@@ -439,7 +439,7 @@ func ListEKSRegionsEndpoint(userInfoGetter provider.UserInfoGetter, presetProvid
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		eksTypesReq := EKSRegionReq{
@@ -479,7 +479,7 @@ func ListEKSClusterRolesEndpoint(userInfoGetter provider.UserInfoGetter, presetP
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		eksTypesReq := EKSRegionReq{
@@ -519,7 +519,7 @@ func ListEKSNodeRolesEndpoint(userInfoGetter provider.UserInfoGetter, presetProv
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -555,7 +555,7 @@ func EKSValidateCredentialsEndpoint(presetProvider provider.PresetProvider, user
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		credential, err := getEKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -1008,7 +1008,7 @@ func EKSSubnetsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGe
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

@@ -23,25 +23,25 @@ import (
 )
 
 // Filter is a CPU filter function applied to a single record.
-type Filter func(record, min, max int) bool
+type Filter func(record, minCPU, maxCPU int) bool
 
-func FilterCPU(record, min, max int) bool {
+func FilterCPU(record, minCPU, maxCPU int) bool {
 	// unlimited
-	if max == 0 {
-		max = math.MaxInt32
+	if maxCPU == 0 {
+		maxCPU = math.MaxInt32
 	}
-	if record >= min && record <= max {
+	if record >= minCPU && record <= maxCPU {
 		return true
 	}
 	return false
 }
 
-func FilterMemory(record, min, max int) bool {
+func FilterMemory(record, minMemory, maxMemory int) bool {
 	// unlimited
-	if max == 0 {
-		max = math.MaxInt32
+	if maxMemory == 0 {
+		maxMemory = math.MaxInt32
 	}
-	if record >= min && record <= max {
+	if record >= minMemory && record <= maxMemory {
 		return true
 	}
 	return false

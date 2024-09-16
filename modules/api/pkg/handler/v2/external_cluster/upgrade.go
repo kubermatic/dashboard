@@ -49,7 +49,7 @@ func GetUpgradesEndpoint(configGetter provider.KubermaticConfigurationGetter,
 
 		req := request.(GetClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -109,7 +109,7 @@ func GetMachineDeploymentUpgradesEndpoint(userInfoGetter provider.UserInfoGetter
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(machineDeploymentReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})

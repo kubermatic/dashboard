@@ -623,7 +623,7 @@ func GetDefaultEndpoint(defaultConstraintProvider provider.DefaultConstraintProv
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(defaultConstraintReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		constraint, err := defaultConstraintProvider.Get(ctx, req.Name)
@@ -689,7 +689,7 @@ func PatchDefaultEndpoint(userInfoGetter provider.UserInfoGetter,
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(patchDefaultConstraintReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		adminUserInfo, err := userInfoGetter(ctx, "")

@@ -105,11 +105,11 @@ func UpgradeNodeDeploymentsEndpoint(ctx context.Context, userInfoGetter provider
 
 	requestedKubeletVersion, err := semverlib.NewVersion(version.Version.String())
 	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	if err = nodeupdate.EnsureVersionCompatible(cluster.Spec.Version.Semver(), requestedKubeletVersion); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	client, err := clusterProvider.GetAdminClientForUserCluster(ctx, cluster)

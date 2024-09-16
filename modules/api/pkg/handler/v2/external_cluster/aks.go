@@ -234,7 +234,7 @@ func ListAKSClustersEndpoint(userInfoGetter provider.UserInfoGetter, projectProv
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider, req.ProjectID)
@@ -270,7 +270,7 @@ func ListAKSVMSizesEndpoint(presetProvider provider.PresetProvider, userInfoGett
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider, projectID)
@@ -306,7 +306,7 @@ func ListAKSResourceGroupsEndpoint(presetProvider provider.PresetProvider, userI
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -342,7 +342,7 @@ func ListAKSLocationsEndpoint(presetProvider provider.PresetProvider, userInfoGe
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -402,7 +402,7 @@ func AKSValidateCredentialsEndpoint(presetProvider provider.PresetProvider, user
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
@@ -994,7 +994,7 @@ func AKSNodeVersionsWithClusterCredentialsEndpoint(userInfoGetter provider.UserI
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -1057,7 +1057,7 @@ func AKSSizesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGett
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
 		if err != nil {

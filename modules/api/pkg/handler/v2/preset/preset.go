@@ -210,7 +210,7 @@ func UpdatePresetStatus(presetProvider provider.PresetProvider, userInfoGetter p
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -318,7 +318,7 @@ func ListProviderPresets(presetProvider provider.PresetProvider, userInfoGetter 
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -373,7 +373,7 @@ func ListProjectProviderPresets(presetProvider provider.PresetProvider, userInfo
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, req.ProjectID)
@@ -482,7 +482,7 @@ func CreatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -551,7 +551,7 @@ func UpdatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -614,7 +614,7 @@ func DeletePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -687,7 +687,7 @@ func DeletePresetProvider(presetProvider provider.PresetProvider, userInfoGetter
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -767,7 +767,7 @@ func DeleteProviderPreset(presetProvider provider.PresetProvider, userInfoGetter
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -844,7 +844,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		userInfo, err := userInfoGetter(ctx, "")

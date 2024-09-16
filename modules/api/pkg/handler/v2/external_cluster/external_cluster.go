@@ -115,7 +115,7 @@ func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeO
 	if rxBase64.MatchString(encodedManifest) {
 		manifest, err = base64.StdEncoding.DecodeString(encodedManifest)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 	} else {
 		manifest = []byte(encodedManifest)
@@ -171,7 +171,7 @@ func CreateEndpoint(
 
 		req := request.(createClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -204,7 +204,7 @@ func CreateEndpoint(
 
 			config, err := base64.StdEncoding.DecodeString(req.Body.Kubeconfig)
 			if err != nil {
-				return nil, utilerrors.NewBadRequest(err.Error())
+				return nil, utilerrors.NewBadRequest("%v", err)
 			}
 			if err := clusterProvider.ValidateKubeconfig(ctx, config); err != nil {
 				return nil, err
@@ -277,7 +277,7 @@ func CreateEndpoint(
 		// import KubeOne cluster
 		if cloud.KubeOne != nil {
 			if err := validatKubeOneReq(cloud.KubeOne, req.Credential); err != nil {
-				return nil, utilerrors.NewBadRequest(err.Error())
+				return nil, utilerrors.NewBadRequest("%v", err)
 			}
 
 			createdCluster, err := importKubeOneCluster(ctx, preset, userInfoGetter, project, cloud, clusterProvider, privilegedClusterProvider)
@@ -307,7 +307,7 @@ func DeleteEndpoint(userInfoGetter provider.UserInfoGetter,
 
 		req := request.(deleteClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -420,7 +420,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 
 		req := request.(listClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -482,7 +482,7 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 
 		req := request.(GetClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -577,7 +577,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 
 		req := request.(updateClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -592,7 +592,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 		if req.Body.Kubeconfig != "" {
 			config, err := base64.StdEncoding.DecodeString(req.Body.Kubeconfig)
 			if err != nil {
-				return nil, utilerrors.NewBadRequest(err.Error())
+				return nil, utilerrors.NewBadRequest("%v", err)
 			}
 			if err := clusterProvider.ValidateKubeconfig(ctx, config); err != nil {
 				return nil, err
@@ -606,7 +606,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 			cluster.Spec.HumanReadableName = req.Body.Name
 			cluster, err = updateCluster(ctx, userInfoGetter, clusterProvider, privilegedClusterProvider, project.Name, cluster)
 			if err != nil {
-				return nil, utilerrors.NewBadRequest(err.Error())
+				return nil, utilerrors.NewBadRequest("%v", err)
 			}
 		}
 
@@ -627,7 +627,7 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 
 		req := request.(patchClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -800,7 +800,7 @@ func GetMetricsEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider 
 
 		req := request.(GetClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -865,7 +865,7 @@ func ListEventsEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider 
 
 		req := request.(listEventsReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -1203,7 +1203,7 @@ func GetKubeconfigEndpoint(userInfoGetter provider.UserInfoGetter, projectProvid
 
 		req := request.(GetClusterReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

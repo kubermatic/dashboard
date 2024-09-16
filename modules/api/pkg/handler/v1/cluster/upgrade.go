@@ -75,7 +75,7 @@ func GetNodeUpgrades(configGetter provider.KubermaticConfigurationGetter) endpoi
 		}
 		err := req.TypeReq.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		config, err := configGetter(ctx)
 		if err != nil {
@@ -153,7 +153,7 @@ func GetMasterVersionsEndpoint(configGetter provider.KubermaticConfigurationGett
 		req := request.(TypeReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		config, err := configGetter(ctx)

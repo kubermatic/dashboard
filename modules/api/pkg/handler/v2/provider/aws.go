@@ -315,7 +315,7 @@ func ListProjectAWSSubnets(userInfoGetter provider.UserInfoGetter, seedsGetter p
 
 		_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DC)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		subnetList, err := providercommon.ListAWSSubnets(ctx, accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, vpcID, dc)
@@ -346,7 +346,7 @@ func ListProjectAWSVPCs(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 
 		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DC)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		return listAWSVPCS(ctx, credentials.accessKeyID, credentials.secretAccessKey, credentials.assumeRoleARN, credentials.assumeRoleExternalID, datacenter)
@@ -369,7 +369,7 @@ func ListProjectAWSSecurityGroups(userInfoGetter provider.UserInfoGetter, seedsG
 
 		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DC)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		return listSecurityGroup(ctx, credentials.accessKeyID, credentials.secretAccessKey, credentials.assumeRoleARN, credentials.assumeRoleExternalID, datacenter.Spec.AWS.Region, credentials.vpcID)

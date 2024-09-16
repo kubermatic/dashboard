@@ -220,7 +220,7 @@ func CreateGroupProjectBinding(ctx context.Context, request interface{},
 
 	err := req.Validate()
 	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -348,7 +348,7 @@ func PatchGroupProjectBinding(ctx context.Context, request interface{},
 
 	err := req.Validate()
 	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

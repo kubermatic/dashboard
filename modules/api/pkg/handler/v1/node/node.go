@@ -66,7 +66,7 @@ func DecodeCreateNodeDeployment(c context.Context, r *http.Request) (interface{}
 func (r *createNodeDeploymentReq) ValidateCreateNodeDeploymentReq() error {
 	errMsg := handlercommon.ValidateAutoscalingOptions(&r.Body.Spec)
 	if errMsg != "" {
-		return fmt.Errorf(errMsg)
+		return fmt.Errorf("%s", errMsg)
 	}
 	return nil
 }
@@ -75,7 +75,7 @@ func CreateNodeDeployment(sshKeyProvider provider.SSHKeyProvider, projectProvide
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createNodeDeploymentReq)
 		if err := req.ValidateCreateNodeDeploymentReq(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		return handlercommon.CreateMachineDeployment(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, seedsGetter, req.Body, req.ProjectID, req.ClusterID, settingsProvider)
 	}

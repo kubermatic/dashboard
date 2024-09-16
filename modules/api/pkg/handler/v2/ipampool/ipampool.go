@@ -233,7 +233,7 @@ func GetIPAMPoolEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoi
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := ipamPoolReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		privilegedIPAMPoolProvider := ctx.Value(middleware.PrivilegedIPAMPoolProviderContextKey).(provider.PrivilegedIPAMPoolProvider)
@@ -265,7 +265,7 @@ func CreateIPAMPoolEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.End
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := createIPAMPoolReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		ipamPool := toIPAMPoolKubermaticModel(&createIPAMPoolReq.Body)
@@ -298,7 +298,7 @@ func PatchIPAMPoolEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endp
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := patchIPAMPoolReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		privilegedIPAMPoolProvider := ctx.Value(middleware.PrivilegedIPAMPoolProviderContextKey).(provider.PrivilegedIPAMPoolProvider)
@@ -339,7 +339,7 @@ func DeleteIPAMPoolEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.End
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := ipamPoolReq.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		privilegedIPAMPoolProvider := ctx.Value(middleware.PrivilegedIPAMPoolProviderContextKey).(provider.PrivilegedIPAMPoolProvider)

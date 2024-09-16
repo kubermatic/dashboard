@@ -179,7 +179,7 @@ func DecodeCreateResourceQuotaReq(r *http.Request) (interface{}, error) {
 	var req createResourceQuota
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	return req, nil
@@ -210,7 +210,7 @@ func DecodeCalculateProjectResourceQuotaUpdateReq(c context.Context, r *http.Req
 	req.ProjectReq = pReq.(common.ProjectReq)
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	return req, nil
@@ -781,12 +781,12 @@ func CreateResourceQuota(ctx context.Context, request interface{}, provider prov
 	}
 
 	if err := req.Validate(); err != nil {
-		return utilerrors.NewBadRequest(err.Error())
+		return utilerrors.NewBadRequest("%v", err)
 	}
 
 	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body.Quota)
 	if err != nil {
-		return utilerrors.NewBadRequest(err.Error())
+		return utilerrors.NewBadRequest("%v", err)
 	}
 
 	if err := provider.CreateUnsecured(ctx, kubermaticv1.Subject{Name: req.Body.SubjectName, Kind: req.Body.SubjectKind}, crdQuota); err != nil {
@@ -819,7 +819,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 
 	crdQuota, err := apiv2.ConvertToCRDQuota(req.Body)
 	if err != nil {
-		return utilerrors.NewBadRequest(err.Error())
+		return utilerrors.NewBadRequest("%v", err)
 	}
 	newResourceQuota.Spec.Quota = crdQuota
 

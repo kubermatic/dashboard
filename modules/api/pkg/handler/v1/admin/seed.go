@@ -61,14 +61,14 @@ func CreateSeedEndpoint(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 
 		err = req.Validate(seedsGetter)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		newSeed := genSeedFromRequest(req)
 
 		config, err := base64.StdEncoding.DecodeString(req.Body.Spec.Kubeconfig)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		if err := seedProvider.CreateOrUpdateKubeconfigSecretForSeed(ctx, newSeed, config); err != nil {
@@ -169,7 +169,7 @@ func UpdateSeedEndpoint(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		seed, err := getSeed(ctx, req.seedReq, userInfoGetter, seedsGetter)
 		if err != nil {
@@ -179,7 +179,7 @@ func UpdateSeedEndpoint(userInfoGetter provider.UserInfoGetter, seedsGetter prov
 		if req.Body.RawKubeconfig != "" {
 			config, err := base64.StdEncoding.DecodeString(req.Body.RawKubeconfig)
 			if err != nil {
-				return nil, utilerrors.NewBadRequest(err.Error())
+				return nil, utilerrors.NewBadRequest("%v", err)
 			}
 
 			if err := seedProvider.CreateOrUpdateKubeconfigSecretForSeed(ctx, seed, config); err != nil {
