@@ -378,7 +378,7 @@ func CreateOIDCKubeconfigEndpoint(
 	// PHASE initial handles request from the end-user that wants to authenticate
 	// and kicksoff the process of kubeconfig generation
 	if req.phase != initialPhase {
-		return nil, utilerrors.NewBadRequest(fmt.Sprintf("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase))
+		return nil, utilerrors.NewBadRequest("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase)
 	}
 
 	rsp := createOIDCKubeconfigRsp{}
@@ -525,7 +525,7 @@ func CreateOIDCKubeconfigSecretEndpoint(
 	// PHASE initial handles request from the end-user that wants to authenticate
 	// and kicksoff the process of kubeconfig generation
 	if req.phase != initialPhase {
-		return nil, utilerrors.NewBadRequest(fmt.Sprintf("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase))
+		return nil, utilerrors.NewBadRequest("bad request unexpected phase %d, expected phase %d, did you forget to set the phase while decoding the request?", req.phase, initialPhase)
 	}
 
 	rsp := createOIDCKubeconfigRsp{}

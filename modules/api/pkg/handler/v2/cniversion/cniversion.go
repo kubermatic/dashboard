@@ -44,12 +44,12 @@ func ListVersions() endpoint.Endpoint {
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		versions, err := cni.GetSupportedCNIPluginVersions(kubermaticv1.CNIPluginType(req.CNIPluginType))
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		return apiv2.CNIVersions{
@@ -103,7 +103,7 @@ func ListVersionsForCluster(userInfoGetter provider.UserInfoGetter, projectProvi
 
 		versions, err := cni.GetSupportedCNIPluginVersions(c.Spec.CNIPlugin.Type)
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		return apiv2.CNIVersions{

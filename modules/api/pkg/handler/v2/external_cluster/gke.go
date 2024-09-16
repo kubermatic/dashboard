@@ -60,7 +60,7 @@ func GKEImagesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGet
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -112,7 +112,7 @@ func GKEZonesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGett
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -172,7 +172,7 @@ func GKESizesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGett
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -205,7 +205,7 @@ func GKEDiskTypesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfo
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -807,7 +807,7 @@ func GKEVersionsEndpoint(presetProvider provider.PresetProvider, userInfoGetter 
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -968,7 +968,7 @@ func GKEClustersEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -1007,7 +1007,7 @@ func GKEImagesEndpoint(presetProvider provider.PresetProvider, userInfoGetter pr
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -1046,7 +1046,7 @@ func GKEZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter pro
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -1106,7 +1106,7 @@ func GKEValidateCredentialsEndpoint(presetProvider provider.PresetProvider, user
 		}
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -1215,7 +1215,7 @@ func GKEVMSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 			req = projectReq.GKEVMReq
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount
@@ -1253,7 +1253,7 @@ func GKEDiskTypesEndpoint(presetProvider provider.PresetProvider, userInfoGetter
 			req = projectReq.GKEVMReq
 		}
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		sa := req.ServiceAccount

@@ -101,7 +101,7 @@ func UpdateAdmissionPluginEndpoint(userInfoGetter provider.UserInfoGetter, admis
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {

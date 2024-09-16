@@ -51,7 +51,7 @@ func ListNodesEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider p
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listNodesReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -99,7 +99,7 @@ func ListNodesMetricsEndpoint(userInfoGetter provider.UserInfoGetter, projectPro
 
 		req := request.(listNodesReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		return getClusterNodesMetrics(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, clusterProvider, privilegedClusterProvider, req.ProjectID, req.ClusterID)
 	}
@@ -206,7 +206,7 @@ func GetNodeEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider pro
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(getNodeReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -239,7 +239,7 @@ func ListMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proje
 
 		req := request.(listMachineDeploymentsReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -300,7 +300,7 @@ func ListMachineDeploymentNodesEndpoint(userInfoGetter provider.UserInfoGetter, 
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(listMachineDeploymentNodesReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		nodes, err := getMachineDeploymentNodes(ctx,
@@ -395,7 +395,7 @@ func DeleteMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, pro
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(machineDeploymentReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -438,7 +438,7 @@ func ListMachineDeploymentMetricsEndpoint(userInfoGetter provider.UserInfoGetter
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(machineDeploymentReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		nodeMetrics := make([]apiv1.NodeMetric, 0)
 
@@ -471,7 +471,7 @@ func ListMachineDeploymentEventsEndpoint(userInfoGetter provider.UserInfoGetter,
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(machineDeploymentNodesEventsReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		apiEventType := ""
@@ -785,7 +785,7 @@ func GetMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, projec
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(machineDeploymentReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -849,7 +849,7 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 		req := request.(patchMachineDeploymentReq)
 
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})
@@ -929,7 +929,7 @@ func CreateMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, pro
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createMachineDeploymentsReq)
 		if err := req.Validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, &provider.ProjectGetOptions{IncludeUninitialized: false})

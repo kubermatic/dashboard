@@ -65,7 +65,7 @@ func CreateEndpoint(
 
 		err = req.Validate(version.NewFromConfiguration(config))
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		return handlercommon.CreateEndpoint(ctx, req.ProjectID, req.Body, projectProvider, privilegedProjectProvider,

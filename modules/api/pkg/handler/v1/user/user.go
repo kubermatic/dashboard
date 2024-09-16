@@ -502,7 +502,7 @@ func (r EditReq) Validate(authenticatesUserInfo *provider.UserInfo) error {
 		return err
 	}
 	if r.UserID != r.Body.ID {
-		return utilerrors.NewBadRequest(fmt.Sprintf("userID mismatch, you requested to update user %q but body contains user %q", r.UserID, r.Body.ID))
+		return utilerrors.NewBadRequest("userID mismatch, you requested to update user %q but body contains user %q", r.UserID, r.Body.ID)
 	}
 	return nil
 }

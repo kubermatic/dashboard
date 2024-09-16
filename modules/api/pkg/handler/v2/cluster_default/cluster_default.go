@@ -103,7 +103,7 @@ func GetDefaultClusterEndpoint(
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		// Order of priority for defaulting sources:

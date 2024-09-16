@@ -215,7 +215,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.22-node-20-kind-0.23-11
+        - image: quay.io/kubermatic/build:go-1.23-node-20-kind-0.24-3
           command:
             - make
             - web-check-dependencies
@@ -231,7 +231,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.22-node-20-11
+        - image: quay.io/kubermatic/build:go-1.23-node-20-3
           command:
             - make
             - web-lint
@@ -251,7 +251,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.22-node-20-kind-0.23-11
+        - image: quay.io/kubermatic/build:go-1.23-node-20-kind-0.24-3
           command:
             - make
             - web-check

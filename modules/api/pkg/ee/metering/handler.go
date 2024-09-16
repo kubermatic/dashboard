@@ -86,7 +86,7 @@ func CreateOrUpdateConfigurations(ctx context.Context, request interface{}, seed
 	}
 	err := req.Validate()
 	if err != nil {
-		return utilerrors.NewBadRequest(err.Error())
+		return utilerrors.NewBadRequest("%v", err)
 	}
 
 	seeds, err := seedsGetter()

@@ -188,7 +188,7 @@ func DecodeCreateMeteringReportConfigurationReq(r *http.Request) (interface{}, e
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	return req, nil
@@ -204,7 +204,7 @@ func DecodeUpdateMeteringReportConfigurationReq(r *http.Request) (interface{}, e
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	return req, nil
@@ -302,7 +302,7 @@ func CreateMeteringReportConfiguration(ctx context.Context, request interface{},
 	}
 
 	if err := req.Validate(); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	seeds, err := seedsGetter()
@@ -329,7 +329,7 @@ func UpdateMeteringReportConfiguration(ctx context.Context, request interface{},
 	}
 
 	if err := req.Validate(); err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 
 	seeds, err := seedsGetter()

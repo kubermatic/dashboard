@@ -47,7 +47,7 @@ func CreateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 		req := request.(addReq)
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		saFromRequest := req.Body
 		project, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
@@ -169,7 +169,7 @@ func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 		saFromRequest := req.Body
 
@@ -264,7 +264,7 @@ func DeleteEndpoint(serviceAccountProvider provider.ServiceAccountProvider, priv
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		// check if project exist

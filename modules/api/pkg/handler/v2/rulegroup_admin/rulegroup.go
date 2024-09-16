@@ -18,7 +18,6 @@ package rulegroupadmin
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -68,7 +67,7 @@ func CreateEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 		req := request.(createReq)
 		groupName, err := req.validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(fmt.Errorf("invalid rule group: %w", err).Error())
+			return nil, utilerrors.NewBadRequest("invalid rule group: %v", err)
 		}
 		ruleGroup, err := convertAPIToInternalRuleGroup(&req.Body, groupName)
 		if err != nil {
@@ -86,7 +85,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(updateReq)
 		if err := req.validate(); err != nil {
-			return nil, utilerrors.NewBadRequest(fmt.Errorf("invalid rule group: %w", err).Error())
+			return nil, utilerrors.NewBadRequest("invalid rule group: %v", err)
 		}
 		currentRuleGroup, err := getRuleGroup(ctx, userInfoGetter, req.RuleGroupID, ruleGroupNamespace)
 		if err != nil {

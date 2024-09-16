@@ -560,7 +560,7 @@ func getNutanixClient(ctx context.Context, req NutanixCommonReq, presetProvider 
 
 	_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DC)
 	if err != nil {
-		return nil, nil, utilerrors.NewBadRequest(err.Error())
+		return nil, nil, utilerrors.NewBadRequest("%v", err)
 	}
 	if dc.Spec.Nutanix == nil {
 		return nil, nil, utilerrors.NewBadRequest("datacenter '%s' is not a Nutanix datacenter", req.DC)

@@ -78,7 +78,7 @@ func ListVersions(configGetter provider.KubermaticConfigurationGetter) endpoint.
 		}
 		err := req.Validate()
 		if err != nil {
-			return nil, utilerrors.NewBadRequest(err.Error())
+			return nil, utilerrors.NewBadRequest("%v", err)
 		}
 
 		config, err := configGetter(ctx)

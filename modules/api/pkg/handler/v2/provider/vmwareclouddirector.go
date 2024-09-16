@@ -270,7 +270,7 @@ func getVMwareCloudDirectorCredentialsFromReq(ctx context.Context, req VMwareClo
 
 	_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DC)
 	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+		return nil, utilerrors.NewBadRequest("%v", err)
 	}
 	if dc.Spec.VMwareCloudDirector == nil {
 		return nil, utilerrors.NewBadRequest("datacenter '%s' is not a VMware Cloud Director datacenter", req.DC)
