@@ -70,7 +70,7 @@
     "@angular/platform-browser-dynamic": "17.3.9",
     "@angular/router": "17.3.9",
     "@fontsource/inconsolata": "4.5.10",
-    "@fontsource/roboto": "5.0.13",
+    "@fontsource/roboto": "5.1.0",
     "@fontsource/roboto-mono": "5.0.18",
     "@fontsource/ubuntu": "4.5.11",
     "@swimlane/ngx-charts": "20.5.0",
