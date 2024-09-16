@@ -58,31 +58,6 @@ limitations under the License.
       Upgrade Machine Deployments
     </mat-checkbox>
   </div>
-  <div *ngIf="!isDynamicKubeletConfigSupportedInUpgrade && nodesSupportDynamicKubeletConfig"
-       fxLayoutAlign="center start"
-       class="warning-container">
-    <i class="km-icon-warning"></i>
-    <div class="km-text dynamic-kubelet-config-warning">
-      Kubernetes version {{endOfDynamicKubeletConfigSupportVersion}} and higher do not support dynamic kubelet configuration.
-      On upgrade, dynamic kubelet configuration is going to be disabled on the machine deployments:
-      <span class="km-text-bolder">{{nodesSupportDynamicKubeletConfig}}</span>
-    </div>
-  </div>
-
-  <div *ngIf="isPSPAdmissionPluginEnabled && !isPSPSupportedInUpgrade"
-       fxLayoutAlign="center start"
-       class="warning-container">
-    <i class="km-icon-warning"></i>
-
-    <div>
-      PodSecurityPolicy admission plugin will be removed for this cluster with Kubernetes version upgrade. PodSecurityPolicy was removed in Kubernetes v1.25 and is no longer supported.
-      <a href="https://kubernetes.io/blog/2022/08/23/kubernetes-v1-25-release/#pod-security-changes"
-         target="_blank"
-         fxLayout="row inline"
-         fxLayoutAlign=" center"
-         rel="noreferrer noopener">Learn more <i class="km-icon-external-link i-18"></i></a>
-    </div>
-  </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>
