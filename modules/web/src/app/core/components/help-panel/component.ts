@@ -20,7 +20,7 @@ import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
 import {AdminSettings, CustomLinkLocation, UserSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-help-panel',
@@ -83,6 +83,13 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
       this._config.getGitVersion().semver.raw.replace(/\./g, '')
     );
     window.open(url, '_blank');
+
+    if (this.hasNewChangelog()) {
+      this._userService
+        .patchCurrentUserSettings({lastSeenChangelogVersion: this._config.getGitVersion().humanReadable})
+        .pipe(take(1))
+        .subscribe();
+    }
   }
 
   hasNewChangelog(): boolean {
