@@ -29947,6 +29947,16 @@
           "type": "boolean",
           "x-go-name": "IPv6Enabled"
         },
+        "loadBalancerMethod": {
+          "description": "Optional: Gets mapped to the \"lb-method\" setting in the cloud config.\ndefaults to \"ROUND_ROBIN\".",
+          "type": "string",
+          "x-go-name": "LoadBalancerMethod"
+        },
+        "loadBalancerProvider": {
+          "description": "Optional: Gets mapped to the \"lb-provider\" setting in the cloud config.\ndefaults to \"\"",
+          "type": "string",
+          "x-go-name": "LoadBalancerProvider"
+        },
         "manageSecurityGroups": {
           "description": "Optional: Gets mapped to the \"manage-security-groups\" setting in the cloud config.\nThis setting defaults to true.",
           "type": "boolean",
