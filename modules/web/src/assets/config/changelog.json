@@ -1,17 +1,9 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v2259",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v22510",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix vSphere degradation because of missing CCM/CSI container images"
-    },
-    {
-      "category": "fixed",
-      "description": "Fix an issue where the cursor in the web terminal kept jumping to the beginning due to a sizing issue"
-    },
-    {
-      "category": "fixed",
-      "description": "When deleting a cluster, the Kubevirt provider waits for the etcd backups to get deleted before removing the namespace"
+      "description": "Fix Cilium application not upgrading properly due to invalid values"
     }
   ]
 }
