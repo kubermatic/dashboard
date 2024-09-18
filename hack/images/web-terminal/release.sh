@@ -20,7 +20,7 @@ cd $(dirname $0)/../../..
 source hack/lib.sh
 
 REPOSITORY=quay.io/kubermatic/web-terminal
-VERSION=0.8.0
+VERSION=0.9.0
 SUFFIX=""
 ARCHITECTURES="${ARCHITECTURES:-linux/amd64,linux/arm64/v8}"
 IMAGE="$REPOSITORY:$VERSION$SUFFIX"
