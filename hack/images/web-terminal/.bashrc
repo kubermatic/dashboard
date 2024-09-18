@@ -7,6 +7,8 @@ alias k=kubectl
 complete -F __start_kubectl k
 
 ### helm
+# prevent 'Warning kubectl file is {world,group}-readable'
+chmod 600 ${KUBECONFIG}
 source <(helm completion bash)
 
 ##### fubectl
