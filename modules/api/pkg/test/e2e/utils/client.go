@@ -31,7 +31,6 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/gorilla/websocket"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	apiclient "k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client"
@@ -44,6 +43,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/users"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/util/wait"

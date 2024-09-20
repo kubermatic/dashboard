@@ -30017,7 +30017,7 @@
           "x-go-name": "Servers"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/providerconfig/types"
     },
     "Datacenter": {
       "type": "object",
@@ -32962,7 +32962,7 @@
           "$ref": "#/definitions/UID"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/providerconfig/types"
     },
     "GlobalSecretKeySelector": {
       "$ref": "#/definitions/GlobalObjectKeySelector"
@@ -33382,7 +33382,7 @@
     },
     "IPAllocationMode": {
       "type": "string",
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
     },
     "IPBlock": {
       "description": "IPBlock describes a particular CIDR (Ex. \"192.168.1.0/24\",\"2001:db8::/64\") that is allowed\nto the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs\nthat should not be included within this rule.",
@@ -34687,7 +34687,7 @@
           "x-go-name": "UpdatedReplicas"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+      "x-go-package": "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
     },
     "MachineFlavorFilter": {
       "type": "object",
