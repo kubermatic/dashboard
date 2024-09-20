@@ -22,6 +22,16 @@ limitations under the License.
                     fxLayoutAlign="start"
                     fxLayoutGap="32px">
       <div fxFlex>Applications</div>
+      <div class="km-selector-warning"
+           fxLayout="row"
+           fxLayoutAlign="start">
+        <i class="km-icon-warning km-warning km-pointer"></i>
+        <p fxFlex="95">
+          To apply default or enforced applications to specific datacenters, it's recommended to first select the datacenters
+          and then enable/disable enforced/default checkbox. Otherwise, the applications will be defaulted/enforced
+          unconditionally on all clusters.
+        </p>
+      </div>
       <km-search-field class="search"
                        (queryChange)="onSearch($event)"></km-search-field>
     </mat-card-title>
