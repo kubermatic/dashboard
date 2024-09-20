@@ -90,7 +90,8 @@ limitations under the License.
 
     <ng-container *ngIf="!isExternal()">
       <div class="optional-section">Optional Restrictions</div>
-      <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="column"
+           fxLayoutGap="10px">
         <mat-checkbox *ngIf="isProvider(Providers.OPENSTACK)"
                       [formControlName]="Controls.IsCustomizable">
           Customizable Preset

@@ -38,3 +38,16 @@ km-search-field {
     margin: 0;
   }
 }
+
+.km-selector-warning {
+  margin-bottom: 24px;
+
+  i.km-icon-warning {
+    margin: 0 8px;
+  }
+
+  p {
+    font-size: variables.$font-size-body;
+    margin: 0;
+  }
+}

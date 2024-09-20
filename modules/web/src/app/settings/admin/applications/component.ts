@@ -21,7 +21,7 @@ import {ApplicationService} from '@app/core/services/application';
 import {DatacenterService} from '@app/core/services/datacenter';
 import {NotificationService} from '@app/core/services/notification';
 import {UserService} from '@app/core/services/user';
-import {ApplicationDefinition} from '@app/shared/entity/application';
+import {ApplicationDefinition, ApplicationLabel, ApplicationLabelValue} from '@app/shared/entity/application';
 import {Datacenter} from '@app/shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -51,7 +51,7 @@ export class ApplicationsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.dataSource.data = this.applications;
+    this.dataSource.data = this.applications?.filter(app => !this.isSystemApplication(app));
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
@@ -64,7 +64,8 @@ export class ApplicationsComponent implements OnInit, OnChanges {
       .subscribe({
         next: applications => {
           this.applications = this._filter(applications);
-          this.dataSource.data = this.applications;
+          // Filter out system applications.
+          this.dataSource.data = this.applications?.filter(app => !this.isSystemApplication(app));
           this.isLoading = false;
         },
         error: () => (this.isLoading = false),
@@ -92,6 +93,10 @@ export class ApplicationsComponent implements OnInit, OnChanges {
 
   onSearch(query: string): void {
     this.dataSource.filter = query;
+  }
+
+  isSystemApplication(application: ApplicationDefinition): boolean {
+    return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
 
   isPaginatorVisible(): boolean {
