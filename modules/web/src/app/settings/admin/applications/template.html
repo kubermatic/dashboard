@@ -14,107 +14,87 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card appearance="outlined"
-          class="card">
+<mat-card appearance="outlined" class="card">
   <mat-card-header>
-    <mat-card-title fxFlex
-                    fxLayout="column"
-                    fxLayoutAlign="start"
-                    fxLayoutGap="32px">
+    <mat-card-title fxFlex fxLayout="column" fxLayoutAlign="start" fxLayoutGap="32px">
       <div fxFlex>Applications</div>
-      <km-search-field class="search"
-                       (queryChange)="onSearch($event)"></km-search-field>
+      <div class="km-selector-warning" fxLayout="row" fxLayoutAlign="start">
+        <i class="km-icon-warning km-warning km-pointer"></i>
+        <p fxFlex="95">
+          To apply default or enforced applications to specific datacenters, it's recommended to first select the datacenters
+          and then enable/disable enforced/default checkbox. Otherwise, the applications will be defaulted/enforced
+          unconditionally on all clusters.
+        </p>
+      </div>
+      <km-search-field class="search" (queryChange)="onSearch($event)"></km-search-field>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <table class="km-table"
-           mat-table
-           matSort
-           [dataSource]="dataSource">
+    <table class="km-table" mat-table matSort [dataSource]="dataSource">
       <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15"
-            mat-sort-header>Name</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15" mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="default">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15">
           Default
-          <div class="km-icon-info km-pointer tooltip"
-               matTooltip="Default applications are automatically installed to new clusters. Users can disable, update the applications afterwards and during cluster creation."></div>
+          <div
+            class="km-icon-info km-pointer tooltip"
+            matTooltip="Default applications are automatically installed to new clusters. Users can disable, update the applications afterwards and during cluster creation."></div>
         </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <mat-slide-toggle [checked]="defaultApplication(element)"
-                            (change)="onDefaultChange($event, element)">
+        <td mat-cell *matCellDef="let element">
+          <mat-slide-toggle [checked]="defaultApplication(element)" (change)="onDefaultChange($event, element)">
           </mat-slide-toggle>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="enforce">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15">
           Enforce
-          <div class="km-icon-info km-pointer tooltip"
-               matTooltip="Enforced applications are installed to all the clusters. Users cannot disable or modify them."></div>
+          <div
+            class="km-icon-info km-pointer tooltip"
+            matTooltip="Enforced applications are installed to all the clusters. Users cannot disable or modify them."></div>
         </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <mat-slide-toggle [checked]="enforceApplication(element)"
-                            (change)="onEnforceChange($event, element)">
+        <td mat-cell *matCellDef="let element">
+          <mat-slide-toggle [checked]="enforceApplication(element)" (change)="onEnforceChange($event, element)">
           </mat-slide-toggle>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="datacenters">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-15">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell p-15">
           Datacenters
-          <div class="km-icon-info km-pointer tooltip"
-               matTooltip="Specify datacenters where applications should be defaulted or enforced. This is only applicable if the application is defaulted or enforced."></div>
+          <div
+            class="km-icon-info km-pointer tooltip"
+            matTooltip="Specify datacenters where applications should be defaulted or enforced. This is only applicable if the application is defaulted or enforced."></div>
         </th>
-        <td mat-cell
-            *matCellDef="let element">
+        <td mat-cell *matCellDef="let element">
           <mat-form-field>
-            <mat-select [placeholder]="'Select Datacenters'"
-                        multiple
-                        [value]="targetDatacenters(element)"
-                        (selectionChange)="onDatacentersChange($event.value, element)"
-                        disableOptionCentering>
-              <mat-option *ngFor="let dc of datacenters"
-                          [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
+            <mat-select
+              [placeholder]="'Select Datacenters'"
+              multiple
+              [value]="targetDatacenters(element)"
+              (selectionChange)="onDatacentersChange($event.value, element)"
+              disableOptionCentering>
+              <mat-option *ngFor="let dc of datacenters" [value]="dc.metadata.name"> {{dc.metadata.name}} </mat-option>
             </mat-select>
           </mat-form-field>
         </td>
       </ng-container>
 
-      <tr mat-header-row
-          class="km-header-row"
-          *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
+      <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
     </table>
 
     <ng-container *ngIf="isLoading">
       <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
+        <mat-spinner color="accent" class="km-spinner" [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
 
-    <div [hidden]="!isPaginatorVisible()"
-         class="km-paginator-container">
-      <div fxLayout="row"
-           fxLayoutAlign="flex-end center">
+    <div [hidden]="!isPaginatorVisible()" class="km-paginator-container">
+      <div fxLayout="row" fxLayoutAlign="flex-end center">
         <km-pagination-page-size></km-pagination-page-size>
         <mat-paginator showFirstLastButtons></mat-paginator>
       </div>
