@@ -32962,7 +32962,7 @@
           "$ref": "#/definitions/UID"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/providerconfig/types"
     },
     "GlobalSecretKeySelector": {
       "$ref": "#/definitions/GlobalObjectKeySelector"
