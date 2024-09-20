@@ -25,12 +25,12 @@ import (
 	semverlib "github.com/Masterminds/semver/v3"
 	kubevirtv1 "kubevirt.io/api/core/v1"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
-	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
+	vcd "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
+	"k8c.io/machine-controller/pkg/userdata/flatcar"
 
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"

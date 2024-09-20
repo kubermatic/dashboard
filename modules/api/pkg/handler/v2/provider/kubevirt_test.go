@@ -27,7 +27,6 @@ import (
 	kvapiv1 "kubevirt.io/api/core/v1"
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 
-	"github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/test"
@@ -35,6 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/fake"
+	"k8c.io/machine-controller/pkg/providerconfig/types"
 
 	corev1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"

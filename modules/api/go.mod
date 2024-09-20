@@ -50,7 +50,6 @@ require (
 	github.com/gorilla/securecookie v1.1.2
 	github.com/gorilla/websocket v1.5.1
 	github.com/hetznercloud/hcloud-go v1.57.0
-	github.com/kubermatic/machine-controller v1.59.1-0.20240826111717-3ead298cdda9
 	github.com/minio/minio-go/v7 v7.0.69
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20240206175643-9de2e6ab07f8 // v0.9.0+
@@ -71,6 +70,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
 	k8c.io/kubermatic/v2 v2.26.0-beta.1.0.20240919150623-b92c4ba58bd1
+	k8c.io/machine-controller v1.59.1-0.20240913134034-7f090ad5fc65
 	k8c.io/operating-system-manager v1.5.1-0.20240822183214-db378951daf3
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.1
@@ -182,6 +182,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
+	github.com/kubermatic/machine-controller v1.59.1-0.20240821075210-107e3514d267 // indirect
 	github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
@@ -260,7 +261,6 @@ require (
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	helm.sh/helm/v3 v3.14.3 // indirect
-	k8c.io/machine-controller v1.59.1-0.20240913134034-7f090ad5fc65 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.0.0 // indirect
 	k8s.io/component-base v0.31.1 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
