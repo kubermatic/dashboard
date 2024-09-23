@@ -24,7 +24,7 @@ limitations under the License.
       <div fxFlex>Applications</div>
       <div class="km-selector-warning"
            fxLayout="row"
-           fxLayoutAlign="start">
+           fxLayoutAlign="start center">
         <i class="km-icon-warning km-warning km-pointer"></i>
         <p fxFlex="95">
           To apply default or enforced applications to specific datacenters, it's recommended to first select the datacenters
@@ -91,8 +91,9 @@ limitations under the License.
                matTooltip="Specify datacenters where applications should be defaulted or enforced. This is only applicable if the application is defaulted or enforced."></div>
         </th>
         <td mat-cell
-            *matCellDef="let element">
-          <mat-form-field>
+            *matCellDef="let element"
+            class="datacenters-dropdown">
+          <mat-form-field subscriptSizing="dynamic">
             <mat-select [placeholder]="'Select Datacenters'"
                         multiple
                         [value]="targetDatacenters(element)"

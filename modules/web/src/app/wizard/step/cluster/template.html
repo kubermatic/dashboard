@@ -133,9 +133,6 @@ limitations under the License.
                  href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/networking/expose-strategies/#configure-the-expose-strategy">here <i class="km-icon-external-link"></i></a>.
             </mat-hint>
           </mat-form-field>
-          <mat-checkbox *ngIf="isCiliumSelected()"
-                        [formControlName]="Controls.CiliumIngress">Ingress <i class="km-icon-info km-pointer"
-               matTooltip="Enable Cilium kubernetes ingress support"></i></mat-checkbox>
           <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
                         class="tag-list"
                         label="Allowed IP Ranges for API server"
@@ -241,7 +238,18 @@ limitations under the License.
           </div>
           <div fxLayout="column"
                fxFlex="100"
-               fxLayoutGap="10px">
+               fxLayoutGap="5px">
+            <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache"> Node Local DNS Cache </mat-checkbox>
+            <mat-checkbox [formControlName]="Controls.Konnectivity"
+                          [class.km-text-muted]="control(Controls.Konnectivity).disabled">
+              Konnectivity
+              <i *ngIf="!!control(Controls.Konnectivity).value && control(Controls.Konnectivity).disabled"
+                 class="km-icon-info km-pointer"
+                 matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
+            </mat-checkbox>
+            <mat-checkbox *ngIf="isCiliumSelected()"
+                          [formControlName]="Controls.CiliumIngress">Ingress <i class="km-icon-info km-pointer"
+                 matTooltip="Enable Cilium kubernetes ingress support"></i></mat-checkbox>
             <div fxLayoutAlign="flex-start">
               <button *ngIf="canEditCNIValues"
                       mat-flat-button
@@ -252,14 +260,6 @@ limitations under the License.
                 <span>Edit CNI Values</span>
               </button>
             </div>
-            <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache"> Node Local DNS Cache </mat-checkbox>
-            <mat-checkbox [formControlName]="Controls.Konnectivity"
-                          [class.km-text-muted]="control(Controls.Konnectivity).disabled">
-              Konnectivity
-              <i *ngIf="!!control(Controls.Konnectivity).value && control(Controls.Konnectivity).disabled"
-                 class="km-icon-info km-pointer"
-                 matTooltip="OpenVPN support is deprecated, hence Konnectivity can no longer be disabled."></i>
-            </mat-checkbox>
           </div>
         </km-expansion-panel>
       </div>

@@ -436,18 +436,22 @@ limitations under the License.
             <div class="km-icon-info km-pointer"
                  matTooltip="Global configurations for annotations for clusters, machine deployments, and nodes. Hidden annotations are not visible on UI and protected annotations are visible but cannot be updated or deleted."></div>
           </div>
-          <km-chip-list label="Hidden Annotations"
-                        [tags]="hiddenAnnotations"
-                        (onChange)="onHiddenAnnotationsChange($event)"
-                        fxFlex>
-          </km-chip-list>
+          <div fxFlex
+               fxLayout="row"
+               fxLayoutGap="10px">
+            <km-chip-list label="Hidden Annotations"
+                          [tags]="hiddenAnnotations"
+                          (onChange)="onHiddenAnnotationsChange($event)"
+                          fxFlex>
+            </km-chip-list>
 
-          <km-chip-list label="Protected Annotations"
-                        [tags]="protectedAnnotations"
-                        (onChange)="onProtectedAnnotationsChange($event)"
-                        description="Use comma, space or enter key as the separator. presetName is an internal KKP protected annotation and cannot be deleted."
-                        fxFlex>
-          </km-chip-list>
+            <km-chip-list label="Protected Annotations"
+                          [tags]="protectedAnnotations"
+                          (onChange)="onProtectedAnnotationsChange($event)"
+                          description="Use comma, space or enter key as the separator. presetName is an internal KKP protected annotation and cannot be deleted."
+                          fxFlex>
+            </km-chip-list>
+          </div>
         </div>
       </div>
     </div>

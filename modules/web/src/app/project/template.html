@@ -102,7 +102,8 @@ limitations under the License.
                     *matCellDef="let element">
                   <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
                   <span *ngIf="!getRole(element.id)"
-                        class="km-label-primary">External Project</span>
+                        class="km-label-primary"
+                        matTooltip="You're not a member of this project.">External Project</span>
                 </td>
               </ng-container>
 
@@ -226,10 +227,7 @@ limitations under the License.
 
       <!-- Cards View -->
       <div *ngIf="showCards">
-        <div class="project-cards-view"
-             fxFlex
-             fxLayout="row"
-             fxLayoutGap="20px">
+        <div class="project-cards-view">
 
           <mat-card appearance="outlined"
                     *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
@@ -310,7 +308,8 @@ limitations under the License.
                 </div>
                 <div fxFlex></div>
                 <span *ngIf="!getRole(project.id)"
-                      class="km-label-primary">External Project</span>
+                      class="km-label-primary"
+                      matTooltip="You're not a member of this project.">External Project</span>
               </div>
 
               <div *ngIf="hasQuota"

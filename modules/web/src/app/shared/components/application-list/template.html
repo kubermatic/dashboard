@@ -78,8 +78,11 @@ limitations under the License.
              class="km-health-state application-cards-status"
              fxFlexAlign=" center"></i>
           <mat-card-title [matTooltip]="application.name"
-                          [attr.id]="'km-application-name-' + application.name">
-            {{getApplicationName(application.name)}}
+                          [attr.id]="'km-application-name-' + application.name"
+                          fxLayout="row"
+                          fxLayoutAlign=" center"
+                          fxLayoutGap="5px">
+            <span>{{getApplicationName(application.name)}}</span>
             <span *ngIf="isSystemApplication(application)"
                   class="km-label-primary">System</span>
           </mat-card-title>

@@ -14,12 +14,6 @@
 
 @use 'variables';
 
-.mat-mdc-unelevated-button {
-  span {
-    font-weight: 600;
-  }
-}
-
 .km-empty-list-msg {
   border-radius: variables.$border-radius;
   border-style: solid;
