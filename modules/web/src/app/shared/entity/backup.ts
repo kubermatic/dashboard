@@ -136,6 +136,7 @@ export class S3BackupCredentials {
 export enum BackupType {
   Backup = 'Backup',
   Schedule = 'Schedule',
+  Restore = 'Restore',
   BackupStorageLocation = 'Backup Storage Location',
 }
 

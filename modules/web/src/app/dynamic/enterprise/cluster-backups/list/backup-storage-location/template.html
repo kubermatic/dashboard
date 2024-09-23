@@ -46,8 +46,8 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i [matTooltip]="getStatus(element.status.phase).message"
-             [ngClass]="getStatus(element.status.phase).icon"
+          <i [matTooltip]="element.status?.message"
+             [ngClass]="getStatusIcon(element.status?.phase)"
              class="km-vertical-center"></i>
         </td>
       </ng-container>
@@ -108,7 +108,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            <span>{{element.spec.config.region}}</span>
+            <span>{{element.spec?.config?.region}}</span>
           </div>
         </td>
       </ng-container>

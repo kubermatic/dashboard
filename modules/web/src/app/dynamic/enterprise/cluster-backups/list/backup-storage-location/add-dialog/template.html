@@ -29,6 +29,12 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The name of the created backup storage location.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Bucket</mat-label>
@@ -36,6 +42,9 @@ END OF TERMS AND CONDITIONS
              matInput
              required>
       <mat-hint>The bucket in which to store backups.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Prefix</mat-label>
@@ -66,6 +75,9 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="Controls.BackupSyncPeriod"
              matInput>
       <mat-hint>Enter time in the format MMmSSs (e.g., 2m10s),BackupSyncPeriod defines how frequently to sync backup API objects from object storage. A value of 0 disables sync.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.BackupSyncPeriod).hasError('pattern')">
+        Time must be in the format MMmSSs (e.g., 2m10s).
+      </mat-error>
     </mat-form-field>
     <mat-checkbox [formControlName]="Controls.AddCustomConfig">Add custom config
     </mat-checkbox>

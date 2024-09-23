@@ -25,6 +25,7 @@ import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {ClusterBackup, ClusterRestore} from '@app/shared/entity/backup';
 import {Cluster} from '@app/shared/entity/cluster';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {CookieService} from 'ngx-cookie-service';
 import {Observable, Subject} from 'rxjs';
 
@@ -60,7 +61,7 @@ export class AddRestoreDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.NameSpaces]: this._builder.control('', Validators.required),
     });
   }

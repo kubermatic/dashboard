@@ -21,7 +21,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {ClusterRestore} from '@app/shared/entity/backup';
+import {BackupType, ClusterRestore} from '@app/shared/entity/backup';
 import {DeleteRestoreDialogComponent, DeleteRestoreDialogConfig} from './delete-dialog/component';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {ProjectService} from '@app/core/services/project';
@@ -35,7 +35,7 @@ import {Member} from '@app/shared/entity/member';
 import {GroupConfig} from '@app/shared/model/Config';
 import {View} from '@app/shared/entity/common';
 import {UserService} from '@app/core/services/user';
-import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {HealthStatus, StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 
@@ -160,8 +160,16 @@ export class ClustersRestoresListComponent implements OnInit, OnDestroy {
     this.selectAll = false;
   }
 
-  getStatus(phase: string): HealthStatus {
-    return getClusterBackupHealthStatus(phase);
+  getStatus(phase: string, restoreName?: string): HealthStatus {
+    const status = getClusterBackupHealthStatus(phase);
+    if (
+      (status.icon === StatusIcon.Error && status.message !== 'Deleting') ||
+      status.icon === StatusIcon.Warning ||
+      status.icon === StatusIcon.Unknown
+    ) {
+      status.message = `${status.message}, Run "velero ${BackupType.Restore} logs ${restoreName}" for more information`;
+    }
+    return status;
   }
 
   toggleRestoreDetail(backupName: string): void {

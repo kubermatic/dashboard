@@ -36,7 +36,7 @@ import {View} from '@app/shared/entity/common';
 import {GroupConfig} from '@app/shared/model/Config';
 import {DeleteBackupDialogComponent} from '../backups/delete-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
-import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 
 @Component({
   selector: 'km-backup-storage-locations-list',
@@ -102,8 +102,8 @@ export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getStatus(phase: string): HealthStatus {
-    return getClusterBackupHealthStatus(phase);
+  getStatusIcon(phase: string): StatusIcon {
+    return getClusterBackupHealthStatus(phase).icon;
   }
 
   addBackupStorageLocation(): void {

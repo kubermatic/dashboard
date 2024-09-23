@@ -28,7 +28,11 @@ export class CronExpressionValidator implements Validator {
   private everyExpressionPrefix = '@every ';
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.allowedCronExpressions.includes(control.value) || control.value.startsWith(this.everyExpressionPrefix)) {
+    if (
+      this.allowedCronExpressions.includes(control.value) ||
+      control.value.startsWith(this.everyExpressionPrefix) ||
+      !control.value
+    ) {
       return null;
     }
 
