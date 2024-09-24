@@ -23,12 +23,18 @@ END OF TERMS AND CONDITIONS
   <form [formGroup]="form">
     <km-dialog-title>Restore {{backup.name}} Backup</km-dialog-title>
     <mat-dialog-content>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Name</mat-label>
         <input [formControlName]="controls.Name"
                matInput
                required>
         <mat-hint>Choose a unique name for restore. Name can't be changed.</mat-hint>
+        <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Choose Namespaces</mat-label>
@@ -41,6 +47,10 @@ END OF TERMS AND CONDITIONS
             {{nameSpace}}
           </mat-option>
         </mat-select>
+        <mat-hint>Namespaces to include in the backup.</mat-hint>
+        <mat-error *ngIf="form.get(controls.NameSpaces).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>

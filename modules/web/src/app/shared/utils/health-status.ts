@@ -40,6 +40,13 @@ export enum StatusMassage {
   Deleted = 'deleted',
 }
 
+export const clusterBackupStatus = {
+  error: ['FailedValidation', 'Failed', 'Unavailable', 'Deleting'],
+  running: ['New', 'Completed', 'Enabled', 'Available'],
+  warning: ['WaitingForPluginOperationsPartiallyFailed', 'PartiallyFailed', 'FinalizingPartiallyFailed'],
+  pending: ['WaitingForPluginOperations', 'FinalizingafterPluginOperations', 'InProgress'],
+};
+
 export class HealthStatus {
   message: string;
   icon: StatusIcon;
@@ -109,17 +116,13 @@ export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdB
 }
 
 export function getClusterBackupHealthStatus(phase: string): HealthStatus {
-  const statusError: string[] = ['FailedValidation', 'Failed', 'Unavailable', 'Deleting'];
-  const statusRunning = ['New', 'Completed', 'Enabled', 'Available'];
-  const statusWarning = ['WaitingForPluginOperationsPartiallyFailed', 'PartiallyFailed', 'FinalizingPartiallyFailed'];
-  const statusPending = ['WaitingForPluginOperations', 'FinalizingafterPluginOperations', 'InProgress'];
-  if (statusError.includes(phase)) {
+  if (clusterBackupStatus.error.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Error);
-  } else if (statusPending.includes(phase)) {
+  } else if (clusterBackupStatus.pending.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Pending);
-  } else if (statusRunning.includes(phase)) {
+  } else if (clusterBackupStatus.running.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Running);
-  } else if (statusWarning.includes(phase)) {
+  } else if (clusterBackupStatus.warning.includes(phase)) {
     return new HealthStatus(phase, StatusIcon.Warning);
   }
   return new HealthStatus('Unknown', StatusIcon.Unknown);

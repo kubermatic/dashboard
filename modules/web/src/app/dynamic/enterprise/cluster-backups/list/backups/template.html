@@ -95,7 +95,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i [matTooltip]="getStatus(element.spec.status).message"
+          <i [matTooltip]="getStatus(element.spec.status, element.name).message"
              [ngClass]="getStatus(element.spec.status).icon"
              class="km-vertical-center"></i>
         </td>
@@ -199,7 +199,7 @@ END OF TERMS AND CONDITIONS
             <button mat-icon-button
                     matTooltip="Restore Backup"
                     (click)="restoreBackup(element); $event.stopPropagation()"
-                    [disabled]="!canAdd">
+                    [disabled]="!canAdd || !isRunning(element.spec.status)">
               <i class="km-icon-mask km-icon-restore"></i>
             </button>
 
@@ -213,7 +213,7 @@ END OF TERMS AND CONDITIONS
             <km-button iconButton="true"
                        icon="km-icon-download"
                        matTooltip="Download Backup"
-                       [disabled]="!canAdd"
+                       [disabled]="!canAdd || !isRunning(element.spec.status)"
                        [observable]="getObservable(element)"
                        (next)="onNext($event)"
                        (click)="$event.stopPropagation()">

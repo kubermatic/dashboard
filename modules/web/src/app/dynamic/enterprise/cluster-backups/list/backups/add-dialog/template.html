@@ -24,12 +24,18 @@ END OF TERMS AND CONDITIONS
   <mat-dialog-content>
     <p class="km-dialog-context-description">Cluster name: <b>{{cluster.name}}</b></p>
     <form [formGroup]="form">
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Name</mat-label>
         <input [formControlName]="Controls.Name"
                matInput
                required>
         <mat-hint>The name of the created cluster {{type.toLowerCase()}}.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Backup Storage Location</mat-label>
@@ -55,10 +61,14 @@ END OF TERMS AND CONDITIONS
           </mat-option>
         </mat-select>
         <mat-hint>Namespaces to include in the backup.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.Namespaces).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field *ngIf="isScheduleBackup()"
-                      class="schedule-field">
+                      class="schedule-field"
+                      subscriptSizing="dynamic">
         <mat-label>Schedule</mat-label>
         <input [formControlName]="Controls.CronJob"
                matInput
@@ -71,6 +81,12 @@ END OF TERMS AND CONDITIONS
              fxLayoutAlign=" center"
              rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
         </mat-hint>
+        <mat-error *ngIf="form.get(Controls.CronJob).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.CronJob).hasError('cronExpression')">
+          Schedule must be in corn expression.
+        </mat-error>
       </mat-form-field>
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>Expires In</mat-label>
@@ -78,6 +94,9 @@ END OF TERMS AND CONDITIONS
                matInput>
         <mat-hint>Enter time in the format HHhMMmSSs (e.g., 24h10m10s), The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.ExpiresIn).hasError('pattern')">
+          Time must be in the format HHhMMmSSs (e.g., 24h10m10s).
+        </mat-error>
       </mat-form-field>
 
       <mat-checkbox class="default-volumes"
