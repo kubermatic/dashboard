@@ -262,8 +262,12 @@ func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType) 
 		cloudSpec.AWS = &kubermaticv1.AWSCloudSpec{}
 	case kubermaticv1.AzureCloudProvider:
 		cloudSpec.Azure = &kubermaticv1.AzureCloudSpec{}
+	case kubermaticv1.BringYourOwnCloudProvider:
+		cloudSpec.BringYourOwn = &kubermaticv1.BringYourOwnCloudSpec{}
 	case kubermaticv1.DigitaloceanCloudProvider:
 		cloudSpec.Digitalocean = &kubermaticv1.DigitaloceanCloudSpec{}
+	case kubermaticv1.EdgeCloudProvider:
+		cloudSpec.Edge = &kubermaticv1.EdgeCloudSpec{}
 	case kubermaticv1.GCPCloudProvider:
 		cloudSpec.GCP = &kubermaticv1.GCPCloudSpec{}
 	case kubermaticv1.HetznerCloudProvider:
