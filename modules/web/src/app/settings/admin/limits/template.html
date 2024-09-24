@@ -28,85 +28,91 @@ limitations under the License.
          class="admin-settings">
       <div fxFlex
            fxLayout="column"
-           fxLayoutGap="16px">
+           fxLayoutGap="10px">
 
         <div fxLayout="row"
-             fxLayoutAlign=" center">
+             fxLayoutAlign=" baseline">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
+               fxLayoutGap="5px"
                class="entry-label">
             <span>User Projects Limit</span>
             <div class="km-icon-info km-pointer"
                  matTooltip="Limit the amount of projects users are allowed to create. Set the limit to 0 to allow unlimited project creation for users. This setting does not affect administrators."></div>
           </div>
-          <div fxLayout="row wrap"
-               fxLayoutGap="16px">
-            <km-number-stepper [disabled]="settings.restrictProjectCreation"
-                               [(ngModel)]="settings.userProjectsLimit"
-                               (ngModelChange)="onSettingsChange()"
-                               id="km-project-limit-setting"
-                               label="User Projects Limit"
-                               min="0"
-                               required>
-            </km-number-stepper>
-            <mat-checkbox fxLayoutAlign=" center"
-                          id="km-project-admin-only-setting"
-                          [(ngModel)]="settings.restrictProjectCreation"
-                          (change)="onSettingsChange()">Restrict Project Creation to Administrators
-            </mat-checkbox>
-            <mat-checkbox fxLayoutAlign=" center"
-                          [(ngModel)]="settings.restrictProjectDeletion"
-                          (change)="onSettingsChange()">Restrict Project Deletion to Administrators
-            </mat-checkbox>
+          <div fxLayout="row">
+            <div fxLayout="row wrap"
+                 fxLayoutAlign=" baseline"
+                 fxLayoutGap="16px">
+              <km-number-stepper [disabled]="settings.restrictProjectCreation"
+                                 [(ngModel)]="settings.userProjectsLimit"
+                                 (ngModelChange)="onSettingsChange()"
+                                 id="km-project-limit-setting"
+                                 label="User Projects Limit"
+                                 min="0"
+                                 required>
+              </km-number-stepper>
+              <mat-checkbox id="km-project-admin-only-setting"
+                            [(ngModel)]="settings.restrictProjectCreation"
+                            (change)="onSettingsChange()">Restrict Project Creation to Administrators
+              </mat-checkbox>
+              <mat-checkbox [(ngModel)]="settings.restrictProjectDeletion"
+                            (change)="onSettingsChange()">Restrict Project Deletion to Administrators
+              </mat-checkbox>
+            </div>
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
           </div>
         </div>
 
-        <div fxLayout="row">
+        <div fxLayout="row"
+             fxLayoutAlign=" baseline">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
+               fxLayoutGap="5px"
                class="entry-label">
             <span>Resource Filter</span>
             <div class="km-icon-info km-pointer"
                  matTooltip="Hides machine sizes that do not meet the specified conditions in wizard and edit dialogs. Set limit to 0 for the respective limit to be disabled. Datacenter level resource filter values will have higher precedence over global settings."></div>
           </div>
 
-          <div fxLayout="row wrap"
-               fxLayoutGap="16px">
-            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
-                               (ngModelChange)="onSettingsChange()"
-                               id="km-cpu-resource-quota-setting"
-                               label="Min CPU"
-                               min="0"
-                               required>
-            </km-number-stepper>
+          <div fxLayout="row">
+            <div fxLayout="row wrap"
+                 fxLayoutAlign=" baseline"
+                 fxLayoutGap="16px">
+              <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
+                                 (ngModelChange)="onSettingsChange()"
+                                 id="km-cpu-resource-quota-setting"
+                                 label="Min CPU"
+                                 min="0"
+                                 required>
+              </km-number-stepper>
 
-            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
-                               (ngModelChange)="onSettingsChange()"
-                               label="Max CPU"
-                               min="0"
-                               required>
-            </km-number-stepper>
+              <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
+                                 (ngModelChange)="onSettingsChange()"
+                                 label="Max CPU"
+                                 min="0"
+                                 required>
+              </km-number-stepper>
 
-            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
-                               (ngModelChange)="onSettingsChange()"
-                               id="km-ram-resource-quota-setting"
-                               label="Min RAM (GB)"
-                               min="0"
-                               required>
-            </km-number-stepper>
+              <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
+                                 (ngModelChange)="onSettingsChange()"
+                                 id="km-ram-resource-quota-setting"
+                                 label="Min RAM (GB)"
+                                 min="0"
+                                 required>
+              </km-number-stepper>
 
-            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
-                               (ngModelChange)="onSettingsChange()"
-                               label="Max RAM (GB)"
-                               min="0"
-                               required>
-            </km-number-stepper>
+              <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
+                                 (ngModelChange)="onSettingsChange()"
+                                 label="Max RAM (GB)"
+                                 min="0"
+                                 required>
+              </km-number-stepper>
 
-            <mat-checkbox fxLayoutAlign=" center"
-                          [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
-                          (change)="onSettingsChange()">Enable GPU
-            </mat-checkbox>
+              <mat-checkbox [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
+                            (change)="onSettingsChange()">Enable GPU
+              </mat-checkbox>
+            </div>
 
             <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
           </div>

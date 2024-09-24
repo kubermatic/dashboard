@@ -25,7 +25,7 @@
 
   .km-provider-logo {
     &.disabled {
-      filter: grayscale(1);
+      filter: brightness(0) saturate(100%) invert(40%) sepia(6%) saturate(64%) hue-rotate(202deg) contrast(97%);
     }
   }
 }

@@ -39,19 +39,22 @@ limitations under the License.
         <button mat-icon-button
                 color="tertiary"
                 (click)="showRestartDialog()"
-                [disabled]="!isEditEnabled()">
+                [disabled]="!isEditEnabled()"
+                matTooltip="Restart Machine Deployment">
           <i class="km-icon-mask km-icon-regenerate"></i>
         </button>
         <button mat-icon-button
                 color="tertiary"
                 (click)="showEditDialog()"
-                [disabled]="!isEditEnabled()">
+                [disabled]="!isEditEnabled()"
+                matTooltip="Edit Machine Deployment">
           <i class="km-icon-mask km-icon-edit"></i>
         </button>
         <button mat-icon-button
                 color="tertiary"
                 (click)="showDeleteDialog()"
-                [disabled]="!isDeleteEnabled()">
+                [disabled]="!isDeleteEnabled()"
+                matTooltip="Delete Machine Deployment">
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
       </div>

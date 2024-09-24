@@ -345,14 +345,9 @@ mat-form-field {
       }
     }
 
-    .mat-mdc-text-field-wrapper {
+    .mat-mdc-text-field-wrapper:not(:has(textarea)) {
       height: var(--mat-form-field-container-height);
       padding: 0 0 0 10px;
-
-      &:has(textarea) {
-        height: 80px;
-        padding-right: 10px;
-      }
     }
 
     &.mat-primary {
@@ -421,21 +416,22 @@ mat-form-field {
   }
 
   &.km-node-tags {
+    --mat-form-field-container-height: 45px;
+    --mat-form-field-container-vertical-padding: 0;
+
     margin-bottom: 10px;
     width: 100%;
 
-    .mat-mdc-text-field-wrapper:not(.mdc-text-field--focused) {
-      .mat-mdc-floating-label {
-        position: relative;
-        top: 23px;
-      }
-
+    .mat-mdc-text-field-wrapper {
       .mat-mdc-form-field-infix {
-        min-height: 45px;
-        padding: 0;
+        min-height: var(--mat-form-field-container-height);
 
         .mat-mdc-chip-grid {
           margin-top: 15px;
+
+          input {
+            margin-bottom: 5px;
+          }
         }
       }
     }
@@ -450,16 +446,6 @@ mat-form-field {
         padding-top: 0;
       }
     }
-  }
-}
-
-.static-labels-values mat-form-field.km-node-tags .mat-mdc-text-field-wrapper {
-  .mdc-floating-label--float-above{
-    top: 27px !important;
-  }
-
-  .mat-mdc-chip-grid {
-    margin-top: 12px !important;
   }
 }
 
@@ -532,7 +518,8 @@ a,
 button {
   &.mat-mdc-button,
   &.mat-mdc-unelevated-button,
-  &.mat-mdc-raised-button {
+  &.mat-mdc-raised-button,
+  &.mat-mdc-icon-button {
     --mat-icon-button-state-layer-color: none;
     --mdc-icon-button-state-layer-size: none;
 

@@ -338,13 +338,12 @@
     --mdc-chip-focus-state-layer-color: none;
     --mdc-chip-hover-state-layer-color: none;
 
-    background: transparent;
-
     .mat-mdc-chip-remove {
       background-color: map.get($colors, text);
     }
 
     .mdc-evolution-chip__action--primary {
+      background: map.get($colors, divider);
       border: 1px solid map.get($colors, divider);
     }
 
@@ -358,6 +357,7 @@
       border: 1px solid map.get($colors, divider);
 
       .mdc-evolution-chip__action--primary {
+        background: transparent;
         border: none;
       }
     }

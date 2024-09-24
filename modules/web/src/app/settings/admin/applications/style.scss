@@ -23,7 +23,11 @@
 
 .km-table {
   td.mat-mdc-cell {
-    line-height: 0px;
+    line-height: 0;
+  }
+
+  td.datacenters-dropdown {
+    padding-top: 10px;
   }
 }
 

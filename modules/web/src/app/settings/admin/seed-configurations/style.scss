@@ -18,8 +18,9 @@
   margin: 6px 10px 5px 0;
 }
 
-.providers-column {
-  height: 48px;
-  line-height: 48px;
-  padding: 0 16px 0 0;
+.km-table {
+  td.providers-column {
+    height: 48px;
+    padding: 0 30px 0 0;
+  }
 }

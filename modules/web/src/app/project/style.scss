@@ -62,7 +62,10 @@ $project-card-width: 330px;
 }
 
 .project-cards-view {
-  flex-wrap: wrap;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, $project-card-width);
+  margin-top: 20px;
 
   button {
     opacity: 75%;
@@ -76,7 +79,7 @@ $project-card-width: 330px;
     @include mixins.size($project-card-width, $project-card-height-default, true);
 
     box-shadow: variables.$border-box-shadow;
-    margin-top: 20px;
+    margin-top: 0;
     padding: 0;
 
     &.project-card-extended {
