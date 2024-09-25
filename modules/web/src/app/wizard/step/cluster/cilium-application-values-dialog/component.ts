@@ -14,11 +14,9 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ApplicationService} from '@core/services/application';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {finalize, takeUntil} from 'rxjs/operators';
 
 export interface CiliumApplicationValuesDialogData {
   applicationValues?: string; // JSON encoded string
@@ -41,20 +39,14 @@ export class CiliumApplicationValuesDialogComponent implements OnInit, OnDestroy
   isLoadingDetails: boolean;
 
   private readonly _unsubscribe = new Subject<void>();
-  private readonly _applicationName = 'cilium';
 
   constructor(
     public dialogRef: MatDialogRef<CiliumApplicationValuesDialogComponent>,
-    private readonly _applicationService: ApplicationService,
     @Inject(MAT_DIALOG_DATA) private data: CiliumApplicationValuesDialogData
   ) {}
 
   ngOnInit(): void {
-    if (this.data.applicationValues) {
-      this._initValuesConfig(this.data.applicationValues);
-    } else {
-      this._loadApplicationDefinitionDetails();
-    }
+    this._initValuesConfig(this.data.applicationValues);
   }
 
   ngOnDestroy(): void {
@@ -70,35 +62,17 @@ export class CiliumApplicationValuesDialogComponent implements OnInit, OnDestroy
     this.dialogRef.close(this._getEncodedConfig());
   }
 
-  private _loadApplicationDefinitionDetails() {
-    this.isLoadingDetails = true;
-    this._applicationService
-      .getApplicationDefinition(this._applicationName)
-      .pipe(
-        takeUntil(this._unsubscribe),
-        finalize(() => (this.isLoadingDetails = false))
-      )
-      .subscribe({
-        next: appDef => {
-          this._initValuesConfig(appDef.spec.defaultValues);
-        },
-        error: _ => {},
-      });
-  }
-
-  private _initValuesConfig(valuesConfig: string | object): void {
+  /**
+   * Initializes the values for editor
+   * @param valuesConfig JSON encoded string
+   * @private
+   */
+  private _initValuesConfig(valuesConfig: string): void {
     this.valuesConfig = '';
-    if (typeof valuesConfig === 'string') {
-      try {
-        valuesConfig = JSON.parse(valuesConfig);
-      } catch (_) {
-        this.valuesConfig = '';
-      }
-    }
     if (!_.isEmpty(valuesConfig)) {
       try {
-        this.valuesConfig = y.dump(valuesConfig);
-      } catch (e) {
+        this.valuesConfig = y.dump(JSON.parse(valuesConfig));
+      } catch (_) {
         this.valuesConfig = '';
       }
     }
