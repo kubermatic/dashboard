@@ -13,15 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout="row"
+<div class="labels-container"
+     fxLayout="row"
      fxLayoutGap="8px">
   <mat-chip-set [ngClass]="{'hide-extra-labels': !showHiddenLabels && oneLineLimit}"
                 *ngIf="labelKeys.length > 0">
     <div #chipListLabels
          *ngFor="let labelKey of labelKeys; let i = index">
       <mat-chip *ngIf="!limit || i < limit">
-        <div>{{labelKey}}</div>
-        <div class="km-chip-accent"
+        <div class="label-key">{{labelKey}}</div>
+        <div class="km-chip-accent label-value"
              *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
       </mat-chip>
     </div>
