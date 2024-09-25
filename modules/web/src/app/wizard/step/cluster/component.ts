@@ -296,6 +296,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
+    this._clusterSpecService.clusterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(cluster => {
+      // sync annotations form values with cluster annotations just in case annotations were changed outside the form (e.g. initial CNI values)
+      this.annotations = cluster.annotations;
+    });
+
     if (!this.clusterTemplateEditMode) {
       combineLatest([this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges])
         .pipe(
