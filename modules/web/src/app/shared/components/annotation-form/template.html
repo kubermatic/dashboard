@@ -57,13 +57,13 @@ limitations under the License.
                (keyup)="check(i)" />
         <mat-error *ngIf="annotation.get('value').errors?.required"> Value is required. </mat-error>
         <mat-error *ngIf="annotation.get('value').errors?.validLabelValuePattern">
-          {{annotation.get('value').value}} not allowed.
+          Value is not allowed.
         </mat-error>
         <mat-error *ngIf="annotation.get('value').errors?.pattern">
           Must not start with ( or [ or &#125; or ) or |
         </mat-error>
         <mat-error *ngIf="annotation.get('value').errors?.validLabelValueLength">
-          {{annotation.get('value').value}} is too long.
+          Value is too long.
         </mat-error>
       </mat-form-field>
       <button mat-icon-button
