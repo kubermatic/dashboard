@@ -26,6 +26,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {KUBERNETES_ANNOTATION_VALUE_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {SettingsService} from '@core/services/settings';
 import _ from 'lodash';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
@@ -143,7 +144,10 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
             this.keyValidator.bind(this),
           ]),
         ],
-        value: [{value: value, disabled: isProtected}, Validators.compose([LabelFormValidators.labelValuePattern])],
+        value: [
+          {value: value, disabled: isProtected},
+          Validators.compose([KUBERNETES_ANNOTATION_VALUE_PATTERN_VALIDATOR]),
+        ],
         protected: [isProtected],
       })
     );
