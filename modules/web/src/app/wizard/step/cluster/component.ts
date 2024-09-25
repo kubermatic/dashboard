@@ -68,6 +68,7 @@ import {
 import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {KmValidators} from '@shared/validators/validators';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 import {combineLatest, merge} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -164,6 +165,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   loadingClusterDefaults = false;
   canEditCNIValues: boolean;
   cniApplicationValues: string;
+  defaultCNIApplicationValues: string;
   backupStorageLocationsList: BackupStorageLocation[];
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   provider: NodeProvider;
@@ -406,7 +408,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this._applicationService
         .getApplicationDefinition(this._cniCiliumApplicationName)
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(appDef => (this.cniApplicationValues = this.initializeCiliumValues(appDef.spec.defaultValues)));
+        .subscribe(
+          appDef => (this.defaultCNIApplicationValues = this.initializeCiliumValues(appDef.spec.defaultValuesBlock))
+        );
     }
 
     this.control(Controls.CiliumIngress)
@@ -493,7 +497,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   editCNIValues() {
     const dialogData = {
       data: {
-        applicationValues: this.cniApplicationValues,
+        applicationValues: this.cniApplicationValues || this.defaultCNIApplicationValues,
       } as CiliumApplicationValuesDialogData,
     };
     const dialogRef = this._matDialog.open(CiliumApplicationValuesDialogComponent, dialogData);
@@ -838,7 +842,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private updateCiliumCNIValues(): void {
     const ciliumIngress = this.controlValue(Controls.CiliumIngress);
     if (ciliumIngress) {
-      let cniApplicationValues = JSON.parse(this.cniApplicationValues);
+      let cniApplicationValues = JSON.parse(this.cniApplicationValues || this.defaultCNIApplicationValues);
       cniApplicationValues = {
         ...cniApplicationValues,
         ingressController: {
@@ -850,7 +854,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       };
       this.cniApplicationValues = JSON.stringify(cniApplicationValues);
     } else {
-      const cniApplicationValues = JSON.parse(this.cniApplicationValues);
+      const cniApplicationValues = JSON.parse(this.cniApplicationValues || this.defaultCNIApplicationValues);
       delete cniApplicationValues.ingressController;
       this.cniApplicationValues = JSON.stringify(cniApplicationValues);
     }
@@ -976,13 +980,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return clusterObject;
   }
 
-  private initializeCiliumValues(valuesConfig: string | object): string {
-    if (typeof valuesConfig === 'string') {
-      return valuesConfig;
-    }
+  private initializeCiliumValues(valuesConfig: string): string {
     if (!_.isEmpty(valuesConfig)) {
-      return JSON.stringify(valuesConfig);
+      try {
+        let raw = y.load(valuesConfig);
+        raw = !_.isEmpty(raw) ? raw : {};
+
+        return JSON.stringify(raw);
+      } catch (_) {
+        return '';
+      }
     }
-    return null;
+    return '';
   }
 }
