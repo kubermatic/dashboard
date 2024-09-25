@@ -36,15 +36,6 @@ limitations under the License.
         <i class="km-icon-warning"></i>
         <div>Changed node settings, Nodes will be recreated.</div>
       </div>
-      <div *ngIf="isDynamicKubeletConfigWarningVisible"
-           fxFlex
-           fxLayoutAlign="start center">
-        <i class="km-icon-warning"></i>
-        <div>
-          Kubernetes v{{endOfDynamicKubeletConfigSupportVersion}} and higher do not support dynamic kubelet
-          configuration. This setting will be disabled.
-        </div>
-      </div>
     </div>
     <button mat-flat-button
             (click)="onConfirm()"
