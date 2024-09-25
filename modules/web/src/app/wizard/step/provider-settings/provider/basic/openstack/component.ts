@@ -73,8 +73,10 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   floatingIPPools: OpenstackFloatingIPPool[] = [];
   floatingIPPoolsLabel = FloatingIPPoolState.Empty;
   readonly Controls = Controls;
+  readonly FloatingIPPoolState = FloatingIPPoolState;
   isPresetSelected = false;
   domains = this._domains.map(type => ({name: type}));
+  selectedPresetFloatingIPPool: string;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -102,15 +104,18 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         this._enable(!this.isPresetSelected, control);
       });
       const providerSettings = preset?.providers.find(provider => provider.name === NodeProvider.OPENSTACK);
+      this.selectedPresetFloatingIPPool = '';
       if (providerSettings?.isCustomizable) {
         this._enable(true, Controls.FloatingIPPool);
         this.onCredentialsChange(null, preset.name);
         if (providerSettings.openstack?.floatingIPPool) {
+          this.selectedPresetFloatingIPPool = providerSettings.openstack.floatingIPPool;
           this.form.get(Controls.FloatingIPPool).setValue(providerSettings.openstack.floatingIPPool);
           this.onFloatingIPPoolChange(providerSettings.openstack.floatingIPPool);
         }
-      } else {
+      } else if (this.isPresetSelected) {
         this.form.reset();
+        this._floatingIPPoolCombobox.reset();
       }
     });
 
@@ -174,6 +179,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         const selectedFloatingIPPool = this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool;
         if (
           selectedFloatingIPPool &&
+          selectedFloatingIPPool !== this.selectedPresetFloatingIPPool &&
           !floatingIPPools.find(floatingIPPool => floatingIPPool.name === selectedFloatingIPPool)
         ) {
           this._floatingIPPoolCombobox.reset();
