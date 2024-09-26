@@ -38,7 +38,8 @@ limitations under the License.
   <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
                             (onChange)="onCredentialsChange($event)"></km-openstack-credentials>
 
-  <km-combobox #floatingIPPoolCombobox
+  <km-combobox *ngIf="!selectedPresetFloatingIPPool || floatingIPPoolsLabel !== FloatingIPPoolState.Empty; else presetFloatingIPPool"
+               #floatingIPPoolCombobox
                [required]="isRequired(Controls.FloatingIPPool)"
                [grouped]="false"
                [isDisabled]="form.get(Controls.FloatingIPPool).disabled"
@@ -53,4 +54,18 @@ limitations under the License.
       {{floatingIPPool.name}}
     </div>
   </km-combobox>
+  <ng-template #presetFloatingIPPool>
+    <mat-form-field fxFlex>
+      <mat-label>{{FloatingIPPoolState.Ready}}</mat-label>
+      <input [name]="Controls.FloatingIPPool"
+             [value]="selectedPresetFloatingIPPool"
+             matInput
+             autocomplete="off"
+             disabled
+             required>
+      <mat-hint>
+        No floating IP pools available so floating IP pool from the preset will be used.
+      </mat-hint>
+    </mat-form-field>
+  </ng-template>
 </form>
