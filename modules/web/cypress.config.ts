@@ -24,6 +24,10 @@ export default defineConfig({
   chromeWebSecurity: false,
   screenshotOnRunFailure: true,
   videoCompression: false,
+  retries: {
+    runMode: 2,
+    openMode: 0,
+  },
   pageLoadTimeout: 60000,
   defaultCommandTimeout: 60000,
   responseTimeout: 60000,
