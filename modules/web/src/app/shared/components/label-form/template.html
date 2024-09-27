@@ -60,8 +60,12 @@ limitations under the License.
                  name="key"
                  formControlName="key"
                  [matAutocomplete]="staticKeys" />
+          <i *ngIf="getStaticLabelsKeys()?.length"
+             class="km-icon-mask autocomplete-arrow"
+             [ngClass]="keysListOpen ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
           <mat-autocomplete #staticKeys="matAutocomplete"
-                            (closed)="check(i)">
+                            (closed)="check(i); keysListOpen = false"
+                            (opened)="keysListOpen = true">
             <mat-option *ngFor="let key of getStaticLabelsKeys()"
                         [value]="key">
               {{key}}
@@ -81,8 +85,12 @@ limitations under the License.
                  name="value"
                  [matAutocomplete]="staticValues"
                  formControlName="value" />
+          <i *ngIf="getKeyValues(label.get('key').value)?.length"
+             class="km-icon-mask autocomplete-arrow"
+             [ngClass]="valuesListOpen ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
           <mat-autocomplete #staticValues="matAutocomplete"
-                            (closed)="check(i)">
+                            (closed)="check(i); valuesListOpen = false"
+                            (opened)="valuesListOpen = true">
             <mat-option *ngFor="let value of getKeyValues(label.get('key').value)"
                         [value]="value">
               {{value}}

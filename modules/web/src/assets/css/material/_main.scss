@@ -350,6 +350,15 @@ mat-form-field {
       padding: 0 0 0 10px;
     }
 
+    .mat-mdc-form-field-infix:has(.autocomplete-arrow) {
+      display: flex;
+
+      .autocomplete-arrow {
+        cursor: pointer;
+        margin: 4px 10px 0;
+      }
+    }
+
     &.mat-primary {
       .mat-mdc-select-trigger {
         display: flex;

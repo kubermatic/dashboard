@@ -84,6 +84,8 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   initialLabels: Record<string, string>;
   removedLabels: {key: string; value: string}[] = [];
   disabledLabelFormGroup: FormGroup<ControlsOf<{key: string; value: string}>>;
+  valuesListOpen = false;
+  keysListOpen = false;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -251,7 +253,10 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   getStaticLabelsKeys(): string[] {
-    const filteredLabels = this.staticLabels?.filter(label => !this.labels[label.key]);
+    const filteredLabels = this.staticLabels?.filter(label => {
+      return !Object.keys(this.labels).includes(label.key);
+    });
+
     return filteredLabels?.map(label => label.key);
   }
 
