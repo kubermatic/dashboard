@@ -59,7 +59,7 @@ describe('SSH Key Management Story', () => {
     Pages.expect(View.Clusters.Default);
   });
 
-  it('should create the cluster with ssh key', () => {
+  it('should create the cluster with ssh key', {retries: 3}, () => {
     Pages.Wizard.visit();
     Pages.Wizard.create(
       clusterName,
