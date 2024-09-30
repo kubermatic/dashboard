@@ -32,8 +32,10 @@ limitations under the License.
           unconditionally on all clusters.
         </p>
       </div>
-      <km-search-field class="search"
-                       (queryChange)="onSearch($event)"></km-search-field>
+      <div fxLayoutAlign="space-between">
+        <km-search-field class="search"
+                         (queryChange)="onSearch($event)"></km-search-field>
+      </div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -60,7 +62,8 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <mat-slide-toggle [checked]="defaultApplication(element)"
+          <mat-slide-toggle [checked]="isDefaultApplication(element)"
+                            [disabled]="isEnforcedApplication(element)"
                             (change)="onDefaultChange($event, element)">
           </mat-slide-toggle>
         </td>
@@ -76,7 +79,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <mat-slide-toggle [checked]="enforceApplication(element)"
+          <mat-slide-toggle [checked]="isEnforcedApplication(element)"
                             (change)="onEnforceChange($event, element)">
           </mat-slide-toggle>
         </td>

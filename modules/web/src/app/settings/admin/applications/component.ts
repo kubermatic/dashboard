@@ -152,16 +152,17 @@ export class ApplicationsComponent implements OnInit, OnChanges {
             this.applications[index] = updatedApplication;
             this.dataSource.data = [...this.applications];
           }
+          this._notificationService.success(`Updated the ${application.name} application`);
         },
         error: _ => this._notificationService.error('Could not patch the application definition'),
       });
   }
 
-  defaultApplication(app: ApplicationDefinition): boolean {
+  isDefaultApplication(app: ApplicationDefinition): boolean {
     return app.spec.default;
   }
 
-  enforceApplication(app: ApplicationDefinition): boolean {
+  isEnforcedApplication(app: ApplicationDefinition): boolean {
     return app.spec.enforced;
   }
 
