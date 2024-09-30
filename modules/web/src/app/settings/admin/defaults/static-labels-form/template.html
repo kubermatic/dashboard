@@ -16,7 +16,7 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.StaticLabels">
-    <div *ngFor="let control of staticLabelArray?.controls;    let i = index;"
+    <div *ngFor="let control of staticLabelArray?.controls; let i = index;"
          class="label-row"
          fxLayout="row"
          fxLayoutGap="10px"

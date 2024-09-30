@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ResourceType} from '@app/shared/entity/common';
 import {StaticLabel} from '@app/shared/entity/settings';
@@ -33,13 +33,13 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
 })
-export class StaticLabelsFormComponent implements OnInit, OnDestroy {
+export class StaticLabelsFormComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
 
   form: FormGroup;
-  @Input() staticLabels: StaticLabel[] = [];
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  @Input() staticLabels: StaticLabel[] = [];
   @Output() staticLabelsChange = new EventEmitter<StaticLabel[]>();
 
   get staticLabelArray(): FormArray {
@@ -48,19 +48,27 @@ export class StaticLabelsFormComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
-  ngOnInit(): void {
-    this._initForm();
+  ngOnInit(): void {}
 
-    this.staticLabels?.forEach(label => {
-      this._addStaticLabel(label);
-    });
-    this._addStaticLabel();
-    this._updateLabelsObject();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.form) {
+      this._initForm();
+      this._addStaticLabel();
+      this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+        this._updateLabelsObject();
+        this._addLabelIfNeeded();
+      });
+    }
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+    // Add the initial static label and remove the empty label that was added when initializing the form.
+    if (changes.staticLabels?.currentValue && !changes.staticLabels?.previousValue) {
+      this.staticLabelArray.controls.pop();
+      this.staticLabels?.forEach(label => {
+        this._addStaticLabel(label);
+      });
+      this._addStaticLabel();
       this._updateLabelsObject();
-      this._addLabelIfNeeded();
-    });
+    }
   }
 
   ngOnDestroy(): void {
