@@ -946,7 +946,7 @@ func EKSInstanceTypesWithClusterCredentialsEndpoint(userInfoGetter provider.User
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,
@@ -988,7 +988,7 @@ func EKSVPCsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGette
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,
@@ -1033,7 +1033,7 @@ func EKSSubnetsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGe
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,
