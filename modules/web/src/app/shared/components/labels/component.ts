@@ -57,8 +57,8 @@ export class LabelsComponent implements OnInit, OnChanges {
   }
 
   checkLabelsHeight(): boolean {
-    const labelsElem = 24;
-    if (this.chipListLabels?.nativeElement?.parentElement.offsetHeight > labelsElem) {
+    const labelsElem = 34;
+    if (this.chipListLabels?.nativeElement?.parentElement.scrollHeight > labelsElem) {
       this.hideExtraLabels = true;
     } else {
       this.hideExtraLabels = false;
