@@ -180,7 +180,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       },
     };
 
-    if (this.form.get(Controls.AddCustomConfig)) {
+    if (this.form.get(Controls.AddCustomConfig).value) {
       try {
         const yaml = y.load(this.valuesConfig) as any;
         bsl.cbslSpec.config = yaml?.config;
