@@ -150,7 +150,6 @@ export class ApplicationsComponent implements OnInit, OnChanges {
           const index = this.applications.findIndex(app => app.name === updatedApplication.name);
           if (index !== -1) {
             this.applications[index] = updatedApplication;
-            this.dataSource.data = [...this.applications];
           }
           this._notificationService.success(`Updated the ${application.name} application`);
         },
