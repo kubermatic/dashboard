@@ -347,7 +347,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.BAREMETAL,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
@@ -357,7 +356,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.ANEXIA,
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.BAREMETAL,
           NodeProvider.EQUINIX,
           NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
@@ -370,6 +368,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
         return !this.isProvider(
           NodeProvider.ANEXIA,
+          NodeProvider.BAREMETAL,
           NodeProvider.GCP,
           NodeProvider.VMWARECLOUDDIRECTOR,
           NodeProvider.EDGE
@@ -378,7 +377,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.BAREMETAL,
           NodeProvider.DIGITALOCEAN,
           NodeProvider.EQUINIX,
           NodeProvider.HETZNER,
