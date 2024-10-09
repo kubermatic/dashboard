@@ -1,8 +1,8 @@
 module k8c.io/dashboard/v2
 
-go 1.22.4
+go 1.22.7
 
-toolchain go1.23.0
+toolchain go1.23.2
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20231211165245-0e22ad1266d6
@@ -69,15 +69,15 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.0-beta.2.0.20240930093333-e06b038f9f3e
-	k8c.io/machine-controller v1.59.1-0.20240913134034-7f090ad5fc65
+	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241008131709-30c905bac915
+	k8c.io/machine-controller v1.59.1-0.20241008125410-cda075d98012
 	k8c.io/operating-system-manager v1.5.1-0.20240822183214-db378951daf3
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.1
 	k8s.io/apiextensions-apiserver v0.31.1
 	k8s.io/apimachinery v0.31.1
 	k8s.io/apiserver v0.31.1
-	k8s.io/client-go v0.31.1
+	k8s.io/client-go v1.5.2
 	k8s.io/code-generator v0.31.1
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.31.1
@@ -95,6 +95,10 @@ replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-2022081
 
 // Pin prism-go-client to v0.4.0 as we have no way to test v0.5.1, as we don't have a working environment for Nutanix.
 replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cloud-native/prism-go-client v0.4.0
+
+replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
+
+replace k8s.io/client-go => k8s.io/client-go v0.31.1
 
 require (
 	cloud.google.com/go/auth v0.9.4 // indirect
@@ -266,7 +270,7 @@ require (
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.31.1 // indirect
-	k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38 // indirect
+	k8s.io/kube-openapi v0.30.0 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect

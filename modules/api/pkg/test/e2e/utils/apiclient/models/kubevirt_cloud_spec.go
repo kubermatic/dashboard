@@ -41,6 +41,12 @@ type KubevirtCloudSpec struct {
 	// It contains also some flag specifying which one is the default one.
 	StorageClasses []*KubeVirtInfraStorageClass `json:"storageClasses"`
 
+	// SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).
+	SubnetName string `json:"subnetName,omitempty"`
+
+	// VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt.
+	VPCName string `json:"vpcName,omitempty"`
+
 	// credentials reference
 	CredentialsReference *GlobalSecretKeySelector `json:"credentialsReference,omitempty"`
 }
