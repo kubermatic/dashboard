@@ -623,6 +623,14 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 			},
 		},
 	}
+	config.VirtualMachine.ProviderNetwork = &kubevirt.ProviderNetwork{
+		VPC: kubevirt.VPC{
+			Name: cluster.Spec.Cloud.Kubevirt.VPCName,
+			Subnet: &kubevirt.Subnet{
+				Name: cluster.Spec.Cloud.Kubevirt.SubnetName,
+			},
+		},
+	}
 	config.VirtualMachine.Template.SecondaryDisks = make([]kubevirt.SecondaryDisks, 0, len(nodeSpec.Cloud.Kubevirt.SecondaryDisks))
 	for _, sd := range nodeSpec.Cloud.Kubevirt.SecondaryDisks {
 		secondaryDisk := kubevirt.SecondaryDisks{Disk: kubevirt.Disk{
