@@ -400,6 +400,7 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 		nd.Spec.Template.Cloud.AWS == nil &&
 		nd.Spec.Template.Cloud.Hetzner == nil &&
 		nd.Spec.Template.Cloud.VSphere == nil &&
+		nd.Spec.Template.Cloud.Baremetal == nil &&
 		nd.Spec.Template.Cloud.Azure == nil &&
 		nd.Spec.Template.Cloud.Packet == nil &&
 		nd.Spec.Template.Cloud.GCP == nil &&
