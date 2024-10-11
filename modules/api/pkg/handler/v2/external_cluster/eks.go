@@ -27,8 +27,6 @@ import (
 	ekstypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
 	"github.com/go-kit/kit/endpoint"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -41,6 +39,8 @@ import (
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 
 	"k8s.io/utils/ptr"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -946,7 +946,7 @@ func EKSInstanceTypesWithClusterCredentialsEndpoint(userInfoGetter provider.User
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,
@@ -988,7 +988,7 @@ func EKSVPCsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGette
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,
@@ -1033,7 +1033,7 @@ func EKSSubnetsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGe
 		}
 
 		if cloudSpec.Region == "" {
-			return nil, errors.New("no region provided in externalcluter spec")
+			return nil, errors.New("no region provided in externalcluster spec")
 		}
 		credential := resources.EKSCredential{
 			AccessKeyID:          creds.AccessKeyID,

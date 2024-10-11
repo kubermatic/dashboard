@@ -15576,7 +15576,7 @@
           {
             "type": "string",
             "x-go-name": "Action",
-            "description": "The Action is used to check if to `Delete` the cluster:\nboth the actual cluter from the provider\nand the respective KKP cluster object\nBy default the cluster will `Disconnect` which means the KKP cluster object will be deleted,\ncluster still exists on the provider, but is no longer connected/imported in KKP",
+            "description": "The Action is used to check if to `Delete` the cluster:\nboth the actual cluster from the provider\nand the respective KKP cluster object\nBy default the cluster will `Disconnect` which means the KKP cluster object will be deleted,\ncluster still exists on the provider, but is no longer connected/imported in KKP",
             "name": "action",
             "in": "header"
           }
@@ -30017,7 +30017,7 @@
           "x-go-name": "Servers"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/providerconfig/types"
     },
     "Datacenter": {
       "type": "object",
@@ -32962,7 +32962,7 @@
           "$ref": "#/definitions/UID"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/providerconfig/types"
     },
     "GlobalSecretKeySelector": {
       "$ref": "#/definitions/GlobalObjectKeySelector"
@@ -33382,7 +33382,7 @@
     },
     "IPAllocationMode": {
       "type": "string",
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
+      "x-go-package": "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
     },
     "IPBlock": {
       "description": "IPBlock describes a particular CIDR (Ex. \"192.168.1.0/24\",\"2001:db8::/64\") that is allowed\nto the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs\nthat should not be included within this rule.",
@@ -34302,6 +34302,16 @@
           "description": "Kubeconfig is the cluster's kubeconfig file, encoded with base64.",
           "type": "string",
           "x-go-name": "Kubeconfig"
+        },
+        "subnetName": {
+          "description": "SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
+          "type": "string",
+          "x-go-name": "SubnetName"
+        },
+        "vpcName": {
+          "description": "VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt",
+          "type": "string",
+          "x-go-name": "VPCName"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34350,6 +34360,16 @@
             "$ref": "#/definitions/KubeVirtInfraStorageClass"
           },
           "x-go-name": "StorageClasses"
+        },
+        "subnetName": {
+          "description": "SubnetName is the name of a subnet that is smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
+          "type": "string",
+          "x-go-name": "SubnetName"
+        },
+        "vpcName": {
+          "description": "VPCName  is a virtual network name dedicated to a single tenant within a KubeVirt.",
+          "type": "string",
+          "x-go-name": "VPCName"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34687,7 +34707,7 @@
           "x-go-name": "UpdatedReplicas"
         }
       },
-      "x-go-package": "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+      "x-go-package": "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
     },
     "MachineFlavorFilter": {
       "type": "object",

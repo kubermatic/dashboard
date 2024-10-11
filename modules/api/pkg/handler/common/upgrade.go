@@ -23,7 +23,6 @@ import (
 
 	semverlib "github.com/Masterminds/semver/v3"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -35,6 +34,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
 	"k8c.io/kubermatic/v2/pkg/version"
 	clusterversion "k8c.io/kubermatic/v2/pkg/version/cluster"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

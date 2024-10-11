@@ -266,6 +266,8 @@ func (m *PresetProvider) setKubevirtCredentials(preset *kubermaticv1.Preset, clo
 	}
 
 	cloud.Kubevirt.Kubeconfig = preset.Spec.Kubevirt.Kubeconfig
+	cloud.Kubevirt.VPCName = preset.Spec.Kubevirt.VPCName
+	cloud.Kubevirt.SubnetName = preset.Spec.Kubevirt.SubnetName
 
 	return &cloud, nil
 }

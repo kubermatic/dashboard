@@ -22,11 +22,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia"
-	anexiatypes "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
-	providerconfigtypes "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	anexia "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia"
+	anexiatypes "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia/types"
+	providerconfigtypes "k8c.io/machine-controller/pkg/providerconfig/types"
 
 	"k8s.io/utils/ptr"
 )

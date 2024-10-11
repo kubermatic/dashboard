@@ -25,34 +25,34 @@ import (
 
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 
-	alibaba "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/alibaba/types"
-	anexiaProvider "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia"
-	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
-	aws "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/aws/types"
-	azure "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/azure/types"
-	"github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
-	tink "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/plugins/tinkerbell/types"
-	baremetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/baremetal/types"
-	digitalocean "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
-	equinixmetal "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
-	gce "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/gce/types"
-	hetzner "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/hetzner/types"
-	kubevirt "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/kubevirt/types"
-	nutanix "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/nutanix/types"
-	openstack "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/openstack/types"
-	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	vsphere "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vsphere/types"
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
-	"github.com/kubermatic/machine-controller/pkg/userdata/amzn2"
-	"github.com/kubermatic/machine-controller/pkg/userdata/centos"
-	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
-	"github.com/kubermatic/machine-controller/pkg/userdata/rhel"
-	"github.com/kubermatic/machine-controller/pkg/userdata/rockylinux"
-	"github.com/kubermatic/machine-controller/pkg/userdata/ubuntu"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
+	alibaba "k8c.io/machine-controller/pkg/cloudprovider/provider/alibaba/types"
+	anexiaProvider "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia"
+	anexia "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia/types"
+	aws "k8c.io/machine-controller/pkg/cloudprovider/provider/aws/types"
+	azure "k8c.io/machine-controller/pkg/cloudprovider/provider/azure/types"
+	"k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
+	tink "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/plugins/tinkerbell/types"
+	baremetal "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/types"
+	digitalocean "k8c.io/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
+	equinixmetal "k8c.io/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
+	gce "k8c.io/machine-controller/pkg/cloudprovider/provider/gce/types"
+	hetzner "k8c.io/machine-controller/pkg/cloudprovider/provider/hetzner/types"
+	kubevirt "k8c.io/machine-controller/pkg/cloudprovider/provider/kubevirt/types"
+	nutanix "k8c.io/machine-controller/pkg/cloudprovider/provider/nutanix/types"
+	openstack "k8c.io/machine-controller/pkg/cloudprovider/provider/openstack/types"
+	vcd "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
+	vsphere "k8c.io/machine-controller/pkg/cloudprovider/provider/vsphere/types"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
+	"k8c.io/machine-controller/pkg/userdata/amzn2"
+	"k8c.io/machine-controller/pkg/userdata/centos"
+	"k8c.io/machine-controller/pkg/userdata/flatcar"
+	"k8c.io/machine-controller/pkg/userdata/rhel"
+	"k8c.io/machine-controller/pkg/userdata/rockylinux"
+	"k8c.io/machine-controller/pkg/userdata/ubuntu"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -620,6 +620,14 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 			NodeAffinityPreset: kubevirt.NodeAffinityPreset{
 				Type: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.NodeAffinityPreset.Type},
 				Key:  providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.NodeAffinityPreset.Key},
+			},
+		},
+	}
+	config.VirtualMachine.ProviderNetwork = &kubevirt.ProviderNetwork{
+		VPC: kubevirt.VPC{
+			Name: cluster.Spec.Cloud.Kubevirt.VPCName,
+			Subnet: &kubevirt.Subnet{
+				Name: cluster.Spec.Cloud.Kubevirt.SubnetName,
 			},
 		},
 	}

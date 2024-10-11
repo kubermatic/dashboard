@@ -26,6 +26,7 @@ import {NotificationService} from '@app/core/services/notification';
 import {BackupStorageLocation, CreateBackupStorageLocation, SupportedBSLProviders} from '@app/shared/entity/backup';
 import {Observable, Subject, takeUntil} from 'rxjs';
 import * as y from 'js-yaml';
+import {CBSL_SYNC_PERIOD, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 export interface AddBackupStorageLocationDialogConfig {
   projectID: string;
@@ -78,18 +79,24 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
   ) {}
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this._config.bslObject?.name ?? '', Validators.required),
+      [Controls.Name]: this._builder.control(this._config.bslObject?.name ?? '', [
+        Validators.required,
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+      ]),
       [Controls.Bucket]: this._builder.control(
         this._config.bslObject?.spec.objectStorage.bucket ?? '',
         Validators.required
       ),
-      [Controls.Prefix]: this._builder.control(this._config.bslObject?.spec.objectStorage.prefix ?? ''),
-      [Controls.CaCert]: this._builder.control(this._config.bslObject?.spec.objectStorage.caCert ?? ''),
+      [Controls.Prefix]: this._builder.control(this._config.bslObject?.spec.objectStorage?.prefix ?? ''),
+      [Controls.CaCert]: this._builder.control(this._config.bslObject?.spec.objectStorage?.caCert ?? ''),
       [Controls.AccessKeyId]: this._builder.control(''),
       [Controls.SecretAccessKey]: this._builder.control(''),
-      [Controls.BackupSyncPeriod]: this._builder.control(this._config.bslObject?.spec.backupSyncPeriod ?? '0'),
-      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config.region ?? ''),
-      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config.s3Url ?? ''),
+      [Controls.BackupSyncPeriod]: this._builder.control(
+        this._config.bslObject?.spec.backupSyncPeriod ?? '0',
+        CBSL_SYNC_PERIOD
+      ),
+      [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? ''),
+      [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? ''),
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
 
@@ -173,7 +180,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       },
     };
 
-    if (this.form.get(Controls.AddCustomConfig)) {
+    if (this.form.get(Controls.AddCustomConfig).value) {
       try {
         const yaml = y.load(this.valuesConfig) as any;
         bsl.cbslSpec.config = yaml?.config;

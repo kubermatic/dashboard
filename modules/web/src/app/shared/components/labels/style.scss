@@ -12,8 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+.labels-container {
+  .mat-mdc-chip {
+    height: auto;
+
+    .label-key, .label-value {
+      align-items: center;
+      display: flex;
+      min-width: 30%;
+      white-space: normal;
+      width: auto;
+      word-break: break-word;
+    }
+  }
+}
+
 .hide-extra-labels {
-  height: 30px;
+  height: 34px;
   overflow: hidden;
 }
 

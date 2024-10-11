@@ -54,6 +54,10 @@ $application-card-width: 320px;
   max-width: 80%;
 }
 
+td .km-application-logo {
+  padding-top: 10px;
+}
+
 .system-applications-toggle {
   margin-right: 10px;
 }
@@ -105,7 +109,7 @@ $application-card-width: 320px;
 
     align-items: center;
     display: flex;
-    margin-right: 12px;
+    margin: 0 12px 0 0;
   }
 
   .mat-mdc-card-content {

@@ -23,7 +23,11 @@
 
 .km-table {
   td.mat-mdc-cell {
-    line-height: 0px;
+    line-height: 0;
+  }
+
+  td.datacenters-dropdown {
+    padding-top: 10px;
   }
 }
 
@@ -35,6 +39,19 @@ km-search-field {
   font-size: variables.$font-size-subhead;
 
   i {
+    margin: 0;
+  }
+}
+
+.km-selector-warning {
+  margin-bottom: 24px;
+
+  i.km-icon-warning {
+    margin: 0 8px;
+  }
+
+  p {
+    font-size: variables.$font-size-body;
     margin: 0;
   }
 }

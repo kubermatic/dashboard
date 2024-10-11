@@ -19,14 +19,14 @@ ARG TARGETARCH
 
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.28.txt
-ENV KUBECTL_VERSION=v1.28.6
+# Source: https://dl.k8s.io/release/stable-1.30.txt
+ENV KUBECTL_VERSION=v1.30.5
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.14.0
+ENV HELM_VERSION=v3.16.1
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.3.26
+ENV K8SGPT_VERSION=v0.3.40
 
 ENV USER=webshell
 ENV GROUP=webshell
@@ -44,7 +44,7 @@ RUN apk add --no-cache -U \
   bash \
   bash-completion \
   ca-certificates \
-  'curl>=8.4.0-r0' \
+  curl \
   fzf-bash-plugin \
   git \
   jq \

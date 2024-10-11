@@ -37,7 +37,12 @@ import {Cluster} from '@app/shared/entity/cluster';
 import {ClusterService} from '@app/core/services/cluster';
 import {View} from '@app/shared/entity/common';
 import {NotificationService} from '@app/core/services/notification';
-import {HealthStatus, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
+import {
+  HealthStatus,
+  StatusIcon,
+  clusterBackupStatus,
+  getClusterBackupHealthStatus,
+} from '@app/shared/utils/health-status';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 
@@ -172,8 +177,23 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     this.selectAll = false;
   }
 
-  getStatus(phase: string): HealthStatus {
-    return getClusterBackupHealthStatus(phase);
+  getStatus(phase: string, backupName?: string): HealthStatus {
+    const status = getClusterBackupHealthStatus(phase);
+    if (
+      (status.icon === StatusIcon.Error && status.message !== 'Deleting') ||
+      status.icon === StatusIcon.Warning ||
+      status.icon === StatusIcon.Unknown
+    ) {
+      status.message = `${status.message}, Run "velero ${BackupType.Backup} logs ${backupName}" for more information`;
+    }
+    return status;
+  }
+
+  isRunning(phase: string): boolean {
+    if (clusterBackupStatus.running.includes(phase)) {
+      return true;
+    }
+    return false;
   }
 
   toggleBackupDetail(backupName: string): void {

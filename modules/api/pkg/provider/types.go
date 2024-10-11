@@ -21,7 +21,6 @@ import (
 	"errors"
 	"fmt"
 
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
@@ -29,6 +28,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"

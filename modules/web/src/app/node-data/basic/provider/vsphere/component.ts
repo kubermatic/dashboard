@@ -283,7 +283,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   }
 
   private _onVMGroupsLoading(): void {
-    this._clearVMGroup();
     this.vmGroupStateLabel = VMGroupsState.Loading;
     this._cdr.detectChanges();
   }
@@ -298,6 +297,10 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _setDefaultVMGroup(vmGroups: VSphereVMGroup[]): void {
     this.vmGroups = vmGroups;
+    this.selectedVMGroup = this._nodeDataService.nodeData.spec.cloud.vsphere.vmGroup;
+    if (this.selectedVMGroup && !this.vmGroups.find(vmGroup => vmGroup.name === this.selectedVMGroup)) {
+      this.onVMGroupChange('');
+    }
     this.vmGroupStateLabel = this.vmGroups ? VMGroupsState.Ready : VMGroupsState.Empty;
     this._cdr.detectChanges();
   }

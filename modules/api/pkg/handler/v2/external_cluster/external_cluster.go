@@ -366,7 +366,7 @@ type deleteClusterReq struct {
 	// required: true
 	ClusterID string `json:"cluster_id"`
 	// The Action is used to check if to `Delete` the cluster:
-	// both the actual cluter from the provider
+	// both the actual cluster from the provider
 	// and the respective KKP cluster object
 	// By default the cluster will `Disconnect` which means the KKP cluster object will be deleted,
 	// cluster still exists on the provider, but is no longer connected/imported in KKP

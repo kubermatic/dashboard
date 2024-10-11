@@ -16,12 +16,12 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div [formArrayName]="Controls.StaticLabels">
-    <div *ngFor="let control of staticLabelArray?.controls;    let i = index;"
+    <div *ngFor="let control of staticLabelArray?.controls; let i = index;"
          class="label-row"
          fxLayout="row"
          fxLayoutGap="10px"
          [formGroupName]="i">
-      <mat-form-field flex="22">
+      <mat-form-field fxFlex="22">
         <mat-label>Key</mat-label>
         <input matInput
                [name]="Controls.Key"
@@ -38,7 +38,6 @@ limitations under the License.
       </mat-form-field>
       <km-chip-list class="static-labels-values"
                     label="Values"
-                    placeholder="Values..."
                     isStaticLabel="true"
                     [formControlName]="Controls.Values">
       </km-chip-list>

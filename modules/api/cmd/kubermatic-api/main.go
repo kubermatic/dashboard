@@ -60,7 +60,6 @@ import (
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
 	"go.uber.org/zap"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	"k8c.io/dashboard/v2/pkg/handler"
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -80,6 +79,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/util/cli"
 	"k8c.io/kubermatic/v2/pkg/util/flagopts"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"

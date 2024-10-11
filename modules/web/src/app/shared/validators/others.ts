@@ -34,3 +34,9 @@ export const GKE_POOL_NAME_VALIDATOR = Validators.pattern('(?:[a-z](?:[-a-z0-9]{
 export const URL_PATTERN_VALIDATOR = Validators.pattern(
   /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/
 );
+export const CBSL_SYNC_PERIOD = Validators.pattern('^(0|([0-9]{1,2}m)?[0-9]{1,2}s)$');
+export const Cluster_BACKUP_EXPIRES_IN = Validators.pattern('^(0|[0-9]{1,2}h?[0-9]{1,2}m?[0-9]{1,2}s)$');
+
+// String shouldn't start with ( or [ or } or ) or |
+export const KUBERNETES_ANNOTATION_VALUE_PATTERN = '^[^(})|\\[]*';
+export const KUBERNETES_ANNOTATION_VALUE_PATTERN_VALIDATOR = Validators.pattern(KUBERNETES_ANNOTATION_VALUE_PATTERN);

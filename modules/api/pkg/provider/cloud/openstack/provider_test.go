@@ -20,10 +20,10 @@ import (
 	"reflect"
 	"testing"
 
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/test"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 
 	corev1 "k8s.io/api/core/v1"
 )
@@ -36,7 +36,7 @@ func TestGetCredentialsForCluster(t *testing.T) {
 		want    *resources.OpenstackCredentials
 		wantErr bool
 	}{
-		// there are 3 kinds of auth mode for openstack which are mutualy exclusive
+		// there are 3 kinds of auth mode for openstack which are mutually exclusive
 		//   * domain + token
 		//   * ApplicationCredential (ApplicationCredentialID and ApplicationCredentialSecret)
 		//   * domain + user (ie  Username, Password, (Project or Tenant) and (ProjectID or tenantID))

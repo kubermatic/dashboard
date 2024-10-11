@@ -22,8 +22,20 @@ limitations under the License.
                     fxLayoutAlign="start"
                     fxLayoutGap="32px">
       <div fxFlex>Applications</div>
-      <km-search-field class="search"
-                       (queryChange)="onSearch($event)"></km-search-field>
+      <div class="km-selector-warning"
+           fxLayout="row"
+           fxLayoutAlign="start center">
+        <i class="km-icon-warning km-warning km-pointer"></i>
+        <p fxFlex="95">
+          To apply default or enforced applications to specific datacenters, it's recommended to first select the datacenters
+          and then enable/disable enforced/default checkbox. Otherwise, the applications will be defaulted/enforced
+          unconditionally on all clusters.
+        </p>
+      </div>
+      <div fxLayoutAlign="space-between">
+        <km-search-field class="search"
+                         (queryChange)="onSearch($event)"></km-search-field>
+      </div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -50,7 +62,8 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <mat-slide-toggle [checked]="defaultApplication(element)"
+          <mat-slide-toggle [checked]="isDefaultApplication(element)"
+                            [disabled]="isEnforcedApplication(element)"
                             (change)="onDefaultChange($event, element)">
           </mat-slide-toggle>
         </td>
@@ -66,7 +79,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <mat-slide-toggle [checked]="enforceApplication(element)"
+          <mat-slide-toggle [checked]="isEnforcedApplication(element)"
                             (change)="onEnforceChange($event, element)">
           </mat-slide-toggle>
         </td>
@@ -81,8 +94,9 @@ limitations under the License.
                matTooltip="Specify datacenters where applications should be defaulted or enforced. This is only applicable if the application is defaulted or enforced."></div>
         </th>
         <td mat-cell
-            *matCellDef="let element">
-          <mat-form-field>
+            *matCellDef="let element"
+            class="datacenters-dropdown">
+          <mat-form-field subscriptSizing="dynamic">
             <mat-select [placeholder]="'Select Datacenters'"
                         multiple
                         [value]="targetDatacenters(element)"

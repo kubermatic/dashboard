@@ -92,7 +92,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-ubuntu",
 					OperatingSystem:         "ubuntu",
-					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "edge", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
+					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "edge", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
 				},
 			},
 		},
@@ -130,7 +130,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-ubuntu",
 					OperatingSystem:         "ubuntu",
-					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "edge", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
+					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "edge", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
 				},
 			},
 		},

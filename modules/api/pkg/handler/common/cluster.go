@@ -29,7 +29,6 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"go.uber.org/zap"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -52,6 +51,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation"
 	"k8c.io/kubermatic/v2/pkg/version"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"

@@ -231,5 +231,6 @@ func addDefaultAnnotations(annotations *kubermaticv1.AnnotationSettings) {
 		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, corev1.LastAppliedConfigAnnotation)
 		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, kubermaticv1.InitialApplicationInstallationsRequestAnnotation)
 		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, kubermaticv1.InitialMachineDeploymentRequestAnnotation)
+		annotations.HiddenAnnotations = append(annotations.HiddenAnnotations, kubermaticv1.InitialCNIValuesRequestAnnotation)
 	}
 }

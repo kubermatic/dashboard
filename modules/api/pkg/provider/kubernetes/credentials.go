@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"strconv"
 
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -43,6 +42,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vsphere"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"

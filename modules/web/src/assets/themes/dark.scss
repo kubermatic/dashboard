@@ -234,7 +234,7 @@ $theme-dark: map.merge(
 .mat-stepper-horizontal.km-stepper-in-dialog {
   background-color: map.get($colors-dark, option-background);
 
-  .mat-button-toggle-group .mat-button-toggle {
+  .mat-button-toggle-group .mat-button-toggle:not(.mat-button-toggle-checked) {
     background-color: map.get($colors-dark, option-background);
   }
 

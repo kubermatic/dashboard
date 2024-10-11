@@ -24,7 +24,6 @@ import (
 	semverlib "github.com/Masterminds/semver/v3"
 	jsonpatch "github.com/evanphx/json-patch"
 
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -35,6 +34,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
