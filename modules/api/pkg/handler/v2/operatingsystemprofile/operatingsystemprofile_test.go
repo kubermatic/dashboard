@@ -72,7 +72,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-centos",
 					OperatingSystem:         "centos",
-					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "nutanix", "openstack", "vsphere"},
+					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "nutanix", "openstack", "vsphere"},
 				},
 				{
 					Name:                    "osp-flatcar",
@@ -87,7 +87,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-rockylinux",
 					OperatingSystem:         "rockylinux",
-					SupportedCloudProviders: []string{"aws", "azure", "baremetal", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
+					SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
 				},
 				{
 					Name:                    "osp-ubuntu",
@@ -110,7 +110,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-centos",
 					OperatingSystem:         "centos",
-					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "nutanix", "openstack", "vsphere"},
+					SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "nutanix", "openstack", "vsphere"},
 				},
 				{
 					Name:                    "osp-flatcar",
@@ -125,7 +125,7 @@ func TestListOperatingSystemProfiles(t *testing.T) {
 				{
 					Name:                    "osp-rockylinux",
 					OperatingSystem:         "rockylinux",
-					SupportedCloudProviders: []string{"aws", "azure", "baremetal", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
+					SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
 				},
 				{
 					Name:                    "osp-ubuntu",
