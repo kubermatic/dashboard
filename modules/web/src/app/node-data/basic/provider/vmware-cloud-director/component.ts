@@ -236,6 +236,13 @@ export class VMwareCloudDirectorBasicNodeDataComponent
 
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(value => !!(value && this._datacenter && this.templates?.length)))
+      .pipe(
+        tap(_ => {
+          const templates = this.templates;
+          this._clearTemplate();
+          this.templates = templates;
+        })
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate(this.templates));
 
@@ -250,7 +257,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     this._catalogsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultCatalog.bind(this));
 
     this._catalogChanges
-      .pipe(tap(_ => this._clearTemplate()))
+      .pipe(tap(hasValue => !hasValue && this._clearTemplate()))
       .pipe(filter(hasValue => !!hasValue))
       .pipe(switchMap(_ => this._templatesObservable))
       .pipe(takeUntil(this._unsubscribe))
@@ -534,10 +541,11 @@ export class VMwareCloudDirectorBasicNodeDataComponent
     const selectedOS = this._nodeDataService.operatingSystem;
     const dcTemplate = this._datacenter?.spec.vmwareclouddirector?.templates?.[selectedOS];
 
-    if (dcTemplate && templates?.find(template => template.name === dcTemplate)) {
-      this.selectedTemplate = dcTemplate;
-    } else {
+    if (this.selectedTemplate && !templates?.find(template => template.name === this.selectedTemplate)) {
       this.selectedTemplate = '';
+    }
+    if (!this.selectedTemplate && dcTemplate && templates?.find(template => template.name === dcTemplate)) {
+      this.selectedTemplate = dcTemplate;
     }
 
     this.templateLabel = templates?.length ? TemplateState.Ready : TemplateState.Empty;
