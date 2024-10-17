@@ -624,6 +624,7 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 		},
 	}
 	config.VirtualMachine.ProviderNetwork = &kubevirt.ProviderNetwork{
+		Name: "kubeovn",
 		VPC: kubevirt.VPC{
 			Name: cluster.Spec.Cloud.Kubevirt.VPCName,
 			Subnet: &kubevirt.Subnet{

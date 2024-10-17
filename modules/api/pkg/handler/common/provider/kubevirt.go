@@ -120,6 +120,35 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx context.Context, u
 	return KubeVirtStorageClasses(ctx, kvKubeconfig)
 }
 
+func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	projectID, clusterID string) (interface{}, error) {
+	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return KubeVirtVPCs(ctx, kvKubeconfig)
+}
+
+func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	projectID, clusterID string) (interface{}, error) {
+	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return "", err
+	}
+
+	if cluster.Spec.Cloud.Kubevirt == nil {
+		return "", utilerrors.NewNotFound("cloud spec for ", clusterID)
+	}
+
+	return KubeVirtVPCSubnets(ctx, kvKubeconfig, cluster.Spec.Cloud.Kubevirt.VPCName)
+}
+
 // kubeVirtInstancetypes returns the kvinstancetypev1alpha1.VirtualMachineInstanceType:
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
@@ -297,6 +326,43 @@ func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kuberm
 	}
 
 	return res, nil
+}
+
+func KubeVirtVPCs(ctx context.Context, kubeconfig string) (apiv2.KubeVirtVPCList, error) {
+	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	vpcList, err := kubevirt.GetProviderNetworkVPCs(ctx, client)
+	if err != nil {
+		return nil, err
+	}
+
+	var vpcAPIList apiv2.KubeVirtVPCList
+	for _, vpc := range vpcList {
+		vpcAPIList = append(vpcAPIList, apiv2.KubeVirtVPC{Name: vpc})
+	}
+
+	return vpcAPIList, nil
+}
+
+func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) (apiv2.KubeVirtSubnetList, error) {
+	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	subnets, err := kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
+	if err != nil {
+		return nil, err
+	}
+
+	var subnetAPIList apiv2.KubeVirtSubnetList
+	for _, subnet := range subnets {
+		subnetAPIList = append(subnetAPIList, apiv2.KubeVirtSubnet{Name: subnet})
+	}
+	return subnetAPIList, nil
 }
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {

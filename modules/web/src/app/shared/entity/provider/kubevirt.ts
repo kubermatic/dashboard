@@ -87,6 +87,14 @@ export class KubeVirtStorageClass {
   name: string;
 }
 
+export class KubeVirtVPC {
+  name: string;
+}
+
+export class KubeVirtSubnet {
+  name: string;
+}
+
 export class KubeVirtTopologySpreadConstraint {
   maxSkew: number;
   topologyKey: string;
