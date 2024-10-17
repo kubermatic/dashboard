@@ -22,6 +22,7 @@ import {
   KubeVirtOSImageList,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtSubnet,
 } from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
@@ -169,6 +170,51 @@ export class NodeDataKubeVirtProvider {
               this._kubeVirtService.getStorageClasses(selectedProject, this._clusterSpecService.cluster.id)
             )
           )
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<KubeVirtSubnet[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.KUBEVIRT))
+          .pipe(debounceTime(this._debounce))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.KUBEVIRT)
+                .kubeconfig(cluster.spec.cloud.kubevirt.kubeconfig)
+                .credential(this._presetService.preset)
+                .subnets(cluster.spec.cloud.kubevirt?.vpcName, onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(switchMap(_ => this._kubeVirtService.getSubnets(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

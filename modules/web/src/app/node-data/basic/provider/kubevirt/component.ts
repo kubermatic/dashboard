@@ -24,8 +24,8 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
@@ -46,6 +46,7 @@ import {
   KubeVirtPreferenceKind,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtSubnet,
   KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
@@ -69,6 +70,7 @@ enum Controls {
   NodeAffinityPresetKey = 'nodeAffinityPresetKey',
   NodeAffinityPresetValues = 'nodeAffinityPresetValues',
   TopologySpreadConstraints = 'topologySpreadConstraints',
+  Subnet = 'subnet',
 }
 
 enum InstanceTypeState {
@@ -87,6 +89,12 @@ enum StorageClassState {
   Ready = 'Storage Class',
   Loading = 'Loading...',
   Empty = 'No Storage Classes Available',
+}
+
+enum SubnetState {
+  Ready = 'Subnet',
+  Loading = 'Loading...',
+  Empty = 'No Subnets available',
 }
 
 class OSImageState {
@@ -135,6 +143,7 @@ export class KubeVirtBasicNodeDataComponent
   @ViewChild('preferenceCombobox') private _preferenceCombobox: FilteredComboboxComponent;
   @ViewChild('storageClassCombobox') private _storageClassCombobox: FilteredComboboxComponent;
   @ViewChild('osImageCombobox') private _osImageCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetCombobox') private readonly _subnetCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _instanceTypeIDSeparator = ':';
@@ -156,7 +165,10 @@ export class KubeVirtBasicNodeDataComponent
   osImageLabel: string = OSImageState.Empty();
   storageClasses: KubeVirtStorageClass[] = [];
   selectedStorageClass = '';
+  selectedSubnet = '';
+  subnets: KubeVirtSubnet[] = [];
   storageClassLabel = StorageClassState.Empty;
+  subnetLabel = SubnetState.Empty;
   nodeAffinityPresetValues: string[] = [];
   selectedInstanceTypeCpus: string;
   selectedInstanceTypeMemory: string;
@@ -253,6 +265,8 @@ export class KubeVirtBasicNodeDataComponent
           this._quotaCalculationService.refreshQuotaCalculations(payload);
         }
       });
+
+    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
   }
 
   ngAfterViewChecked(): void {
@@ -428,6 +442,49 @@ export class KubeVirtBasicNodeDataComponent
   onTopologySpreadConstraintsChange(constraints: KubeVirtTopologySpreadConstraint[]): void {
     this._nodeDataService.nodeData.spec.cloud.kubevirt.topologySpreadConstraints = constraints;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onSubnetChange(subnet: string): void {
+    this.selectedSubnet = subnet;
+    // TODO(@ahmedwaleedmalik): We come back to the struct later
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.name = subnet;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  private get _subnetsObservable(): Observable<KubeVirtSubnet[]> {
+    return this._nodeDataService.kubeVirt.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
+  }
+
+  private _onSubnetLoading(): void {
+    this.subnetLabel = SubnetState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearSubnet(): void {
+    this.selectedSubnet = '';
+    this.subnets = [];
+    this.subnetLabel = SubnetState.Empty;
+    this._subnetCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultSubnet(subnets: KubeVirtSubnet[]): void {
+    this.subnets = subnets;
+    // TODO(@ahmedwaleedmalik): We come back to the struct later
+    this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.kubevirt.name;
+
+    if (this.selectedSubnet && !subnets?.find(subnet => subnet.name === this.selectedSubnet)) {
+      this.selectedSubnet = '';
+      this._clearSubnet();
+    }
+
+    // If no subnet is selected, set the first subnet in the list
+    if (!this.selectedSubnet && subnets?.length) {
+      this.selectedSubnet = subnets[0].name;
+    }
+
+    this.subnetLabel = subnets?.length ? SubnetState.Ready : SubnetState.Empty;
+    this._cdr.detectChanges();
   }
 
   private get _instanceTypesObservable(): Observable<KubeVirtInstanceTypeList> {
