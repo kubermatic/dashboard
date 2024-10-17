@@ -1737,6 +1737,26 @@ type KubeVirtImages struct {
 	OperatingSystems kubermaticv1.ImageListWithVersions `json:"operatingSystems"`
 }
 
+// KubeVirtVPC represents a KubeVirt VPC.
+// swagger:model KubeVirtVPC
+type KubeVirtVPC struct {
+	Name string `json:"name"`
+}
+
+// KubeVirtVPCList represents an array of KubeVirt VPCs.
+// swagger:model KubeVirtVPCList
+type KubeVirtVPCList []KubeVirtVPC
+
+// KubeVirtSubnet represents a KubeVirt Subnet.
+// swagger:model KubeVirtSubnet
+type KubeVirtSubnet struct {
+	Name string `json:"name"`
+}
+
+// KubeVirtSubnetList represents an array of KubeVirt Subnets.
+// swagger:model KubeVirtSubnetList
+type KubeVirtSubnetList []KubeVirtSubnet
+
 // StorageClassList represents a list of Kubernetes StorageClass.
 // swagger:model StorageClassList
 type StorageClassList []StorageClass
