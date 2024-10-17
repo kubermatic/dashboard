@@ -19,12 +19,14 @@ package kubevirt
 import (
 	"encoding/base64"
 
+	kubeovnv1 "github.com/kubeovn/kube-ovn/pkg/apis/kubeovn/v1"
 	kubevirtv1 "kubevirt.io/api/core/v1"
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 	cdiv1beta1 "kubevirt.io/containerized-data-importer-api/pkg/apis/core/v1beta1"
 
 	"k8c.io/kubermatic/v2/pkg/test/fake"
 
+	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	nativescheme "k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
@@ -32,13 +34,16 @@ import (
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var scheme = fake.NewScheme()
+var (
+	scheme = runtime.NewScheme()
+)
 
 func init() {
 	utilruntime.Must(nativescheme.AddToScheme(scheme))
 	utilruntime.Must(kubevirtv1.AddToScheme(scheme))
 	utilruntime.Must(kvinstancetypev1alpha1.AddToScheme(scheme))
 	utilruntime.Must(cdiv1beta1.AddToScheme(scheme))
+	utilruntime.Must(kubeovnv1.AddToScheme(scheme))
 }
 
 // Client represents a struct that includes controller runtime client and rest configuration

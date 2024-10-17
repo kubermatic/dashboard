@@ -29,4 +29,18 @@ limitations under the License.
       <strong>Required</strong>
     </mat-error>
   </mat-form-field>
+
+  <km-combobox #vpcCombobox
+               [grouped]="false"
+               [isDisabled]="isPresetSelected"
+               [options]="vpcList"
+               [selected]="selectedVPC"
+               [hint]="getHint(Controls.VPC)"
+               [formControlName]="Controls.VPC"
+               [label]="vpcLabel"
+               (changed)="onVPCChange($event)"
+               inputLabel="Select VPC..."
+               filterBy="name">
+    <div *option="let vpc">{{vpc.name}}</div>
+  </km-combobox>
 </form>
