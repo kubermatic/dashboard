@@ -725,6 +725,14 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/kubevirt/storageclasses").
 		Handler(r.listProjectKubevirtStorageClasses())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/vpcs").
+		Handler(r.listProjectKubevirtVPCs())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/kubevirt/subnets").
+		Handler(r.listProjectKubevirtSubnets())
+
 	// Azure endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/azure/sizes").
@@ -1075,6 +1083,14 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses").
 		Handler(r.listKubevirtStorageClassesNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs").
+		Handler(r.listKubeVirtVPCsNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets").
+		Handler(r.listKubeVirtSubnetsNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/subnets").
@@ -4899,6 +4915,54 @@ func (r Routing) listKubevirtStorageClassesNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs kubevirt listKubeVirtVPCsNoCredentials
+//
+// List VPCs for a cluster
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtVPCList
+func (r Routing) listKubeVirtVPCsNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.KubeVirtVPCsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		provider.DecodeKubeVirtGenericNoCredentialReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs kubevirt listKubeVirtSubnetsNoCredentials
+//
+// List Subnets for a VPC associated with a cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtSubnetList
+func (r Routing) listKubeVirtSubnetsNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.KubeVirtSubnetsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		provider.DecodeKubeVirtGenericNoCredentialReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/subnets nutanix listNutanixSubnetsNoCredentials
 //
 // Lists available Nutanix Subnets
@@ -6278,6 +6342,50 @@ func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs kubevirt listProjectKubevirtVPCs
+//
+// Lists available VPCs in the Kubevirt cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtVPCList
+func (r Routing) listProjectKubevirtVPCs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtVPCsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeKubeVirtProjectGenericReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets kubevirt listProjectKubevirtSubnets
+//
+// Lists available subnets in the Kubevirt cluster.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: KubeVirtSubnetList
+func (r Routing) listProjectKubevirtSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.KubeVirtSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeKubeVirtVPCSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
