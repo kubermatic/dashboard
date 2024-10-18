@@ -67,11 +67,11 @@ type ListProjectKubevirtSubnetsParams struct {
 	// Kubeconfig.
 	Kubeconfig *string
 
+	// VPCName.
+	VPCName *string
+
 	// ProjectID.
 	ProjectID string
-
-	// VpcName.
-	VPCName string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -148,6 +148,17 @@ func (o *ListProjectKubevirtSubnetsParams) SetKubeconfig(kubeconfig *string) {
 	o.Kubeconfig = kubeconfig
 }
 
+// WithVPCName adds the vPCName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) WithVPCName(vPCName *string) *ListProjectKubevirtSubnetsParams {
+	o.SetVPCName(vPCName)
+	return o
+}
+
+// SetVPCName adds the vPCName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) SetVPCName(vPCName *string) {
+	o.VPCName = vPCName
+}
+
 // WithProjectID adds the projectID to the list project kubevirt subnets params
 func (o *ListProjectKubevirtSubnetsParams) WithProjectID(projectID string) *ListProjectKubevirtSubnetsParams {
 	o.SetProjectID(projectID)
@@ -157,17 +168,6 @@ func (o *ListProjectKubevirtSubnetsParams) WithProjectID(projectID string) *List
 // SetProjectID adds the projectId to the list project kubevirt subnets params
 func (o *ListProjectKubevirtSubnetsParams) SetProjectID(projectID string) {
 	o.ProjectID = projectID
-}
-
-// WithVPCName adds the vpcName to the list project kubevirt subnets params
-func (o *ListProjectKubevirtSubnetsParams) WithVPCName(vpcName string) *ListProjectKubevirtSubnetsParams {
-	o.SetVPCName(vpcName)
-	return o
-}
-
-// SetVPCName adds the vpcName to the list project kubevirt subnets params
-func (o *ListProjectKubevirtSubnetsParams) SetVPCName(vpcName string) {
-	o.VPCName = vpcName
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -194,13 +194,16 @@ func (o *ListProjectKubevirtSubnetsParams) WriteToRequest(r runtime.ClientReques
 		}
 	}
 
-	// path param project_id
-	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
-		return err
+	if o.VPCName != nil {
+
+		// header param VPCName
+		if err := r.SetHeaderParam("VPCName", *o.VPCName); err != nil {
+			return err
+		}
 	}
 
-	// path param vpc_name
-	if err := r.SetPathParam("vpc_name", o.VPCName); err != nil {
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
 		return err
 	}
 

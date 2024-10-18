@@ -81,9 +81,7 @@ export class KubeVirtProviderBasicComponent extends BaseFormValidator implements
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.KUBEVIRT))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
-      );
+      .subscribe(_ => this._presets.enablePresets(this._areAllControlsEmpty()));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls)
@@ -181,6 +179,17 @@ export class KubeVirtProviderBasicComponent extends BaseFormValidator implements
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private _areAllControlsEmpty(): boolean {
+    return Object.values(Controls).every(control => {
+      const value = this.form.get(control).value;
+      if (control === Controls.VPC) {
+        // For VPC, check if the selected value is empty
+        return !value || value === '' || !value?.select;
+      }
+      return !value;
+    });
   }
 
   private _getClusterEntity(): Cluster {

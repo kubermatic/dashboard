@@ -114,7 +114,8 @@ limitations under the License.
                [options]="subnets"
                [formControlName]="Controls.Subnet"
                [label]="subnetLabel"
-               [required]="true"
+               hint="Optional: Use specific subnet for the machines. VPC needs to be selected first to use this option."
+               [required]="false"
                (changed)="onSubnetChange($event)"
                inputLabel="Select Subnet..."
                filterBy="name">

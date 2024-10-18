@@ -54,9 +54,9 @@ type KubeVirtProjectGenericReq struct {
 type KubeVirtVPCSubnetsReq struct {
 	common.ProjectReq
 	KubeVirtGenericReq
-	// in: path
-	// required: true
-	VPCName string `json:"vpc_name"`
+	// in: header
+	// name: VPCName
+	VPCName string
 }
 
 // KubeVirtListInstanceReq represent a request to list presets or instance types for KubeVirt.
@@ -114,6 +114,24 @@ func getKubeconfig(ctx context.Context, kubeconfig, credential, projectID string
 		}
 	}
 	return kubeconfig, nil
+}
+
+func getKubeconfigAndVPCName(ctx context.Context, kubeconfig, vpcName, credential, projectID string, presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) (string, string, error) {
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return "", "", common.KubernetesErrorToHTTPError(err)
+	}
+	if len(credential) > 0 {
+		preset, err := presetsProvider.GetPreset(ctx, userInfo, ptr.To(projectID), credential)
+		if err != nil {
+			return "", "", utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", credential, userInfo.Email))
+		}
+		if credentials := preset.Spec.Kubevirt; credentials != nil {
+			kubeconfig = credentials.Kubeconfig
+			vpcName = credentials.VPCName
+		}
+	}
+	return kubeconfig, vpcName, nil
 }
 
 // KubeVirtInstancetypesEndpoint handles the request to list available KubeVirtInstancetypes (provided credentials).
@@ -301,7 +319,8 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 			vpcName = vpcSubnetsReq.VPCName
 		}
 
-		kubeconfig, err := getKubeconfig(ctx, req.Kubeconfig, req.Credential, projectID, presetsProvider, userInfoGetter)
+		// If preset was used, vpcName will be empty and returned by the function instead.
+		kubeconfig, vpcName, err := getKubeconfigAndVPCName(ctx, req.Kubeconfig, vpcName, req.Credential, projectID, presetsProvider, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
@@ -391,11 +410,7 @@ func DecodeKubeVirtVPCSubnetsReq(c context.Context, r *http.Request) (interface{
 		return nil, err
 	}
 
-	vpcName := mux.Vars(r)["vpc_name"]
-	if vpcName == "" {
-		return nil, fmt.Errorf("'vpc_name' parameter is required but was not provided")
-	}
-
+	vpcName := r.Header.Get("VPCName")
 	return KubeVirtVPCSubnetsReq{
 		ProjectReq:         projectReq.(common.ProjectReq),
 		KubeVirtGenericReq: kubevirtReq.(KubeVirtGenericReq),

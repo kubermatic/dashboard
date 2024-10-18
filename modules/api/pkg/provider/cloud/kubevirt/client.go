@@ -80,6 +80,7 @@ func newClient(kubeconfig string, opts ClientOptions) (*Client, error) {
 	}
 
 	if opts.loadFakeClient {
+		scheme = fake.NewScheme()
 		client = fake.NewClientBuilder().WithScheme(scheme).WithObjects(opts.FakeObjects...).Build()
 	} else {
 		client, err = ctrlruntimeclient.New(restConfig, opts.ControllerRuntimeOptions)

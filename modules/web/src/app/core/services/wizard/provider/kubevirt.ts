@@ -104,7 +104,12 @@ export class KubeVirt extends Provider {
   }
 
   subnets(vpcName: string, onLoadingCb: () => void = null): Observable<KubeVirtSubnet[]> {
-    if (!this._hasRequiredHeaders() || !vpcName) {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    // Either credential header is present or vpcName is not empty
+    if (!this._headers.has(Provider.SharedHeader.Credential) && !vpcName) {
       return EMPTY;
     }
 
@@ -112,8 +117,10 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/vpcs/${vpcName}/subnets`;
-    return this._http.get<KubeVirtSubnet[]>(url, {headers: this._headers});
+    const headers = vpcName ? this._headers.set(KubeVirt.Header.VPCName, vpcName) : this._headers;
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/subnets`;
+    return this._http.get<KubeVirtSubnet[]>(url, {headers});
   }
 
   osImages(dc: string, onLoadingCb: () => void = null): Observable<KubeVirtOSImageList> {
@@ -133,5 +140,6 @@ export namespace KubeVirt {
   export enum Header {
     Kubeconfig = 'Kubeconfig',
     DatacenterName = 'DatacenterName',
+    VPCName = 'VPCName',
   }
 }
