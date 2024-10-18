@@ -6369,9 +6369,9 @@ func (r Routing) listProjectKubevirtVPCs() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets kubevirt listProjectKubevirtSubnets
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/subnets kubevirt listProjectKubevirtSubnets
 //
-// Lists available subnets in the Kubevirt cluster.
+// Lists available subnets in the KubeVirt cluster.
 //
 //	Produces:
 //	- application/json

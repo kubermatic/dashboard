@@ -476,7 +476,7 @@ func (a *Client) ListProjectKubeVirtStorageClasses(params *ListProjectKubeVirtSt
 }
 
 /*
-ListProjectKubevirtSubnets lists available subnets in the kubevirt cluster
+ListProjectKubevirtSubnets lists available subnets in the kube virt cluster
 */
 func (a *Client) ListProjectKubevirtSubnets(params *ListProjectKubevirtSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubevirtSubnetsOK, error) {
 	// TODO: Validate the params before sending
@@ -486,7 +486,7 @@ func (a *Client) ListProjectKubevirtSubnets(params *ListProjectKubevirtSubnetsPa
 	op := &runtime.ClientOperation{
 		ID:                 "listProjectKubevirtSubnets",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/subnets",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

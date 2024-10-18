@@ -380,6 +380,10 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		for _, np := range config.Affinity.NodeAffinityPreset.Values {
 			cloudSpec.Kubevirt.NodeAffinityPreset.Values = append(cloudSpec.Kubevirt.NodeAffinityPreset.Values, np.Value)
 		}
+		if config.VirtualMachine.ProviderNetwork != nil && config.VirtualMachine.ProviderNetwork.VPC.Subnet != nil {
+			cloudSpec.Kubevirt.Subnet = config.VirtualMachine.ProviderNetwork.VPC.Subnet.Name
+		}
+
 		cloudSpec.Kubevirt.TopologySpreadConstraints = make([]apiv1.TopologySpreadConstraint, 0, len(config.TopologySpreadConstraints))
 		for _, tsc := range config.TopologySpreadConstraints {
 			maxSkew, err := strconv.ParseInt(tsc.MaxSkew.Value, 10, 32)

@@ -20076,6 +20076,56 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/kubevirt/subnets": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available subnets in the KubeVirt cluster.",
+        "operationId": "listProjectKubevirtSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPCName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtSubnetList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/kubevirt/vpcs": {
       "get": {
         "produces": [
@@ -20110,58 +20160,6 @@
             "description": "KubeVirtVPCList",
             "schema": {
               "$ref": "#/definitions/KubeVirtVPCList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "kubevirt"
-        ],
-        "summary": "Lists available subnets in the Kubevirt cluster.",
-        "operationId": "listProjectKubevirtSubnets",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "Kubeconfig",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "x-go-name": "VPCName",
-            "name": "vpc_name",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "KubeVirtSubnetList",
-            "schema": {
-              "$ref": "#/definitions/KubeVirtSubnetList"
             }
           },
           "default": {
@@ -34657,6 +34655,11 @@
             "$ref": "#/definitions/SecondaryDisks"
           },
           "x-go-name": "SecondaryDisks"
+        },
+        "subnet": {
+          "description": "Subnet is the name of the subnet to use for the VM.",
+          "type": "string",
+          "x-go-name": "Subnet"
         },
         "topologySpreadConstraints": {
           "description": "TopologySpreadConstraints describes topology spread constraints for VMs.",

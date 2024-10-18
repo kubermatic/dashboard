@@ -94,7 +94,7 @@ enum StorageClassState {
 enum SubnetState {
   Ready = 'Subnet',
   Loading = 'Loading...',
-  Empty = 'No Subnets available',
+  Empty = 'No Subnets available or VPC not selected',
 }
 
 class OSImageState {
@@ -446,8 +446,7 @@ export class KubeVirtBasicNodeDataComponent
 
   onSubnetChange(subnet: string): void {
     this.selectedSubnet = subnet;
-    // TODO(@ahmedwaleedmalik): We come back to the struct later
-    this._nodeDataService.nodeData.spec.cloud.kubevirt.name = subnet;
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.subnet = subnet;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -470,17 +469,11 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultSubnet(subnets: KubeVirtSubnet[]): void {
     this.subnets = subnets;
-    // TODO(@ahmedwaleedmalik): We come back to the struct later
-    this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.kubevirt.name;
+    this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.kubevirt.subnet;
 
     if (this.selectedSubnet && !subnets?.find(subnet => subnet.name === this.selectedSubnet)) {
       this.selectedSubnet = '';
       this._clearSubnet();
-    }
-
-    // If no subnet is selected, set the first subnet in the list
-    if (!this.selectedSubnet && subnets?.length) {
-      this.selectedSubnet = subnets[0].name;
     }
 
     this.subnetLabel = subnets?.length ? SubnetState.Ready : SubnetState.Empty;

@@ -81,11 +81,11 @@ func (o *ListProjectKubevirtSubnetsOK) IsCode(code int) bool {
 }
 
 func (o *ListProjectKubevirtSubnetsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets][%d] listProjectKubevirtSubnetsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/subnets][%d] listProjectKubevirtSubnetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectKubevirtSubnetsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets][%d] listProjectKubevirtSubnetsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/subnets][%d] listProjectKubevirtSubnetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectKubevirtSubnetsOK) GetPayload() models.KubeVirtSubnetList {
@@ -151,11 +151,11 @@ func (o *ListProjectKubevirtSubnetsDefault) IsCode(code int) bool {
 }
 
 func (o *ListProjectKubevirtSubnetsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets][%d] listProjectKubevirtSubnets default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/subnets][%d] listProjectKubevirtSubnets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectKubevirtSubnetsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/vpcs/{vpc_name}/subnets][%d] listProjectKubevirtSubnets default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/subnets][%d] listProjectKubevirtSubnets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectKubevirtSubnetsDefault) GetPayload() *models.ErrorResponse {
