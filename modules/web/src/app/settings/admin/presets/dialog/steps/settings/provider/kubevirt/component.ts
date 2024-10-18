@@ -18,10 +18,11 @@ import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/serv
 import {KubevirtPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Kubeconfig = 'kubeconfig',
+  VPC = 'vpc',
 }
 
 @Component({
@@ -53,11 +54,10 @@ export class KubevirtSettingsComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Kubeconfig]: this._builder.control('', Validators.required),
+      [Controls.VPC]: this._builder.control(''),
     });
 
-    this.form
-      .get(Controls.Kubeconfig)
-      .valueChanges.pipe(distinctUntilChanged())
+    merge(this.form.get(Controls.Kubeconfig).valueChanges, this.form.get(Controls.VPC).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
 
@@ -75,6 +75,7 @@ export class KubevirtSettingsComponent extends BaseFormValidator implements OnIn
   private _update(): void {
     this._presetDialogService.preset.spec.kubevirt = {
       kubeconfig: this.form.get(Controls.Kubeconfig).value,
+      vpcName: this.form.get(Controls.VPC).value ? this.form.get(Controls.VPC).value : undefined,
     } as KubevirtPresetSpec;
   }
 }

@@ -29,4 +29,14 @@ limitations under the License.
       <strong>Required</strong>
     </mat-error>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>VPC Name</mat-label>
+    <input matInput
+           [formControlName]="Controls.VPC"
+           [name]="Controls.VPC"
+           type="text"
+           autocomplete="off"
+           kmValueChangedIndicator />
+  </mat-form-field>
 </form>

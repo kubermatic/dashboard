@@ -241,6 +241,7 @@ export class KubeVirtNodeSpec {
   name: string;
   instancetype?: KubeVirtNodeInstanceType;
   preference?: KubeVirtNodePreference;
+  subnet?: string;
   flavorProfile: string;
   cpus?: string;
   memory?: string;

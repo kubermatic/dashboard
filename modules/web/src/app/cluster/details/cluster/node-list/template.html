@@ -313,6 +313,10 @@ limitations under the License.
                 <div key>Size</div>
                 <div value>{{element.spec.cloud.kubevirt.primaryDiskSize}}</div>
               </km-property>
+              <km-property *ngIf="element.spec.cloud.kubevirt?.subnet">
+                <div key>Subnet</div>
+                <div value>{{element.spec.cloud.kubevirt.subnet}}</div>
+              </km-property>
               <ng-container *ngIf="element.spec.cloud.kubevirt.nodeAffinityPreset as nodeAffinityPreset">
                 <km-property>
                   <div key>Node Affinity Preset</div>

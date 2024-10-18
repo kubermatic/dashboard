@@ -20,6 +20,7 @@ import {
   KubeVirtOSImageList,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtSubnet,
 } from '@shared/entity/provider/kubevirt';
 import {Observable} from 'rxjs';
 
@@ -42,6 +43,11 @@ export class KubeVirtService {
   getStorageClasses(projectID: string, clusterID: string): Observable<KubeVirtStorageClass[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/storageclasses`;
     return this._httpClient.get<KubeVirtStorageClass[]>(url);
+  }
+
+  getSubnets(projectID: string, clusterID: string): Observable<KubeVirtSubnet[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/vpcs/`;
+    return this._httpClient.get<KubeVirtSubnet[]>(url);
   }
 
   getOSImages(dc: string): Observable<KubeVirtOSImageList> {

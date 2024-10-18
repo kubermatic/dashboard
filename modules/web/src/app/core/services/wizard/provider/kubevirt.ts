@@ -18,6 +18,8 @@ import {
   KubeVirtOSImageList,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtSubnet,
+  KubeVirtVPC,
 } from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
@@ -75,6 +77,19 @@ export class KubeVirt extends Provider {
     return this._http.get<KubeVirtPreferenceList>(url, {headers: this._headers});
   }
 
+  vpcs(onLoadingCb: () => void = null): Observable<KubeVirtVPC[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/vpcs`;
+    return this._http.get<KubeVirtVPC[]>(url, {headers: this._headers});
+  }
+
   storageClass(onLoadingCb: () => void = null): Observable<KubeVirtStorageClass[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -86,6 +101,26 @@ export class KubeVirt extends Provider {
 
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/storageclasses`;
     return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
+  }
+
+  subnets(vpcName: string, onLoadingCb: () => void = null): Observable<KubeVirtSubnet[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    // Either credential header is present or vpcName is not empty
+    if (!this._headers.has(Provider.SharedHeader.Credential) && !vpcName) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const headers = vpcName ? this._headers.set(KubeVirt.Header.VPCName, vpcName) : this._headers;
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/subnets`;
+    return this._http.get<KubeVirtSubnet[]>(url, {headers});
   }
 
   osImages(dc: string, onLoadingCb: () => void = null): Observable<KubeVirtOSImageList> {
@@ -105,5 +140,6 @@ export namespace KubeVirt {
   export enum Header {
     Kubeconfig = 'Kubeconfig',
     DatacenterName = 'DatacenterName',
+    VPCName = 'VPCName',
   }
 }
