@@ -68,7 +68,7 @@ require (
 	golang.org/x/oauth2 v0.23.0
 	google.golang.org/api v0.201.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8c.io/kubeone v1.8.3
+	k8c.io/kubeone v1.7.3
 	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241018115218-ea74cd0ffa94
 	k8c.io/machine-controller v1.60.1-0.20241018083317-22c1174dadda
 	k8c.io/operating-system-manager v1.6.1-0.20241018085418-09781bfca22f
@@ -271,8 +271,6 @@ require (
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.31.1 // indirect
 	k8s.io/kube-openapi v0.30.0 // indirect
-	k8s.io/kube-proxy v0.31.1 // indirect
-	k8s.io/kubelet v0.31.1 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.2.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
