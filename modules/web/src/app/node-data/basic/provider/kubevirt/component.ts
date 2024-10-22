@@ -203,6 +203,7 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.NodeAffinityPresetKey]: this._builder.control('', Validators.required),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
       [Controls.TopologySpreadConstraints]: this._builder.control(''),
+      [Controls.Subnet]: this._builder.control(''),
     });
 
     this.form.get(Controls.Preference).disable();

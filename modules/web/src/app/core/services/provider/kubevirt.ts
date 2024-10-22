@@ -46,7 +46,7 @@ export class KubeVirtService {
   }
 
   getSubnets(projectID: string, clusterID: string): Observable<KubeVirtSubnet[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/vpcs/`;
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/subnets`;
     return this._httpClient.get<KubeVirtSubnet[]>(url);
   }
 

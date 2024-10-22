@@ -119,7 +119,7 @@ export class KubeVirtProviderBasicComponent extends BaseFormValidator implements
     switch (control) {
       case Controls.VPC:
         return this._hasRequiredCredentials()
-          ? 'When specified, this VPC. will be used for the cluster. If not specified, the default VPC will be used.'
+          ? 'When specified, this VPC will be used for the cluster. If not specified, the default VPC will be used.'
           : 'Please enter your credentials first.';
     }
 
