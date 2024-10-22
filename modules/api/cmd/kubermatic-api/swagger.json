@@ -12441,6 +12441,48 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "List Subnets for a VPC associated with a cluster.",
+        "operationId": "listKubeVirtSubnetsNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtSubnetList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories": {
       "get": {
         "description": "Lists available Nutanix categories",
@@ -20023,6 +20065,101 @@
             "description": "StorageClassList",
             "schema": {
               "$ref": "#/definitions/StorageClassList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/kubevirt/subnets": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available subnets in the KubeVirt cluster.",
+        "operationId": "listProjectKubevirtSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPCName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtSubnetList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/kubevirt/vpcs": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "summary": "Lists available VPCs in the Kubevirt cluster.",
+        "operationId": "listProjectKubevirtVPCs",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtVPCList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtVPCList"
             }
           },
           "default": {
@@ -34256,6 +34393,44 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "KubeVirtSubnet": {
+      "type": "object",
+      "title": "KubeVirtSubnet represents a KubeVirt Subnet.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtSubnetList": {
+      "type": "array",
+      "title": "KubeVirtSubnetList represents an array of KubeVirt Subnets.",
+      "items": {
+        "$ref": "#/definitions/KubeVirtSubnet"
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtVPC": {
+      "type": "object",
+      "title": "KubeVirtVPC represents a KubeVirt VPC.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtVPCList": {
+      "type": "array",
+      "title": "KubeVirtVPCList represents an array of KubeVirt VPCs.",
+      "items": {
+        "$ref": "#/definitions/KubeVirtVPC"
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "KubermaticVersions": {
       "type": "object",
       "title": "KubermaticVersions describes the versions of running Kubermatic components.",
@@ -34480,6 +34655,11 @@
             "$ref": "#/definitions/SecondaryDisks"
           },
           "x-go-name": "SecondaryDisks"
+        },
+        "subnet": {
+          "description": "Subnet is the name of the subnet to use for the VM.",
+          "type": "string",
+          "x-go-name": "Subnet"
         },
         "topologySpreadConstraints": {
           "description": "TopologySpreadConstraints describes topology spread constraints for VMs.",

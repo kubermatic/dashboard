@@ -66,6 +66,9 @@ type KubevirtNodeSpec struct {
 	// SecondaryDisks contains list of secondary-disks
 	SecondaryDisks []*SecondaryDisks `json:"secondaryDisks"`
 
+	// Subnet is the name of the subnet to use for the VM.
+	Subnet string `json:"subnet,omitempty"`
+
 	// TopologySpreadConstraints describes topology spread constraints for VMs.
 	TopologySpreadConstraints []*TopologySpreadConstraint `json:"topologySpreadConstraints"`
 

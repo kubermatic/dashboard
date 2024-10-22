@@ -2205,6 +2205,9 @@ type KubevirtNodeSpec struct {
 	// Memory states the memory that kubevirt node will have.
 	// required: true
 	Memory string `json:"memory"`
+	// Subnet is the name of the subnet to use for the VM.
+	// required: false
+	Subnet string `json:"subnet,omitempty"`
 
 	// PrimaryDiskOSImage states the source from which the imported image will be downloaded.
 	// This field contains:
@@ -2328,6 +2331,7 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		PodAntiAffinityPreset       string                          `json:"podAntiAffinityPreset"`
 		NodeAffinityPreset          NodeAffinityPreset              `json:"nodeAffinityPreset"`
 		TopologySpreadConstraints   []TopologySpreadConstraint      `json:"topologySpreadConstraints"`
+		Subnet                      string                          `json:"subnet,omitempty"`
 	}{
 		FlavorName:                  spec.FlavorName,
 		FlavorProfile:               spec.FlavorProfile,
@@ -2343,6 +2347,7 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		PodAntiAffinityPreset:       spec.PodAntiAffinityPreset,
 		NodeAffinityPreset:          spec.NodeAffinityPreset,
 		TopologySpreadConstraints:   spec.TopologySpreadConstraints,
+		Subnet:                      spec.Subnet,
 	}
 
 	return json.Marshal(&res)

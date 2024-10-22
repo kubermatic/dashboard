@@ -38,6 +38,8 @@ type ClientService interface {
 
 	ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtStorageClassesOK, error)
 
+	ListKubeVirtSubnetsNoCredentials(params *ListKubeVirtSubnetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtSubnetsNoCredentialsOK, error)
+
 	ListKubevirtImages(params *ListKubevirtImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtImagesOK, error)
 
 	ListKubevirtStorageClassesNoCredentials(params *ListKubevirtStorageClassesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesNoCredentialsOK, error)
@@ -47,6 +49,10 @@ type ClientService interface {
 	ListProjectKubeVirtPreferences(params *ListProjectKubeVirtPreferencesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtPreferencesOK, error)
 
 	ListProjectKubeVirtStorageClasses(params *ListProjectKubeVirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubeVirtStorageClassesOK, error)
+
+	ListProjectKubevirtSubnets(params *ListProjectKubevirtSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubevirtSubnetsOK, error)
+
+	ListProjectKubevirtVPCs(params *ListProjectKubevirtVPCsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubevirtVPCsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -242,6 +248,44 @@ func (a *Client) ListKubeVirtStorageClasses(params *ListKubeVirtStorageClassesPa
 }
 
 /*
+ListKubeVirtSubnetsNoCredentials lists subnets for a v p c associated with a cluster
+*/
+func (a *Client) ListKubeVirtSubnetsNoCredentials(params *ListKubeVirtSubnetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtSubnetsNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListKubeVirtSubnetsNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listKubeVirtSubnetsNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListKubeVirtSubnetsNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListKubeVirtSubnetsNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListKubeVirtSubnetsNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListKubevirtImages List KubeVirt images
 */
 func (a *Client) ListKubevirtImages(params *ListKubevirtImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtImagesOK, error) {
@@ -428,6 +472,82 @@ func (a *Client) ListProjectKubeVirtStorageClasses(params *ListProjectKubeVirtSt
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectKubeVirtStorageClassesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectKubevirtSubnets lists available subnets in the kube virt cluster
+*/
+func (a *Client) ListProjectKubevirtSubnets(params *ListProjectKubevirtSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubevirtSubnetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectKubevirtSubnetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectKubevirtSubnets",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/subnets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectKubevirtSubnetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectKubevirtSubnetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectKubevirtSubnetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectKubevirtVPCs lists available v p cs in the kubevirt cluster
+*/
+func (a *Client) ListProjectKubevirtVPCs(params *ListProjectKubevirtVPCsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectKubevirtVPCsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectKubevirtVPCsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectKubevirtVPCs",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/kubevirt/vpcs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectKubevirtVPCsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectKubevirtVPCsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectKubevirtVPCsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
