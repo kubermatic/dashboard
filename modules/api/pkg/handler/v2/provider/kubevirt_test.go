@@ -170,11 +170,12 @@ func TestListInstanceTypeEndpoint(t *testing.T) {
 			Name:               "scenario 1: kubevirt kubeconfig provided",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/instancetypes",
-			HTTPRequestHeaders: []KeyValue{{Key: "Kubeconfig", Value: fakeKvConfig}},
+			HTTPRequestHeaders: []KeyValue{{Key: "Kubeconfig", Value: fakeKvConfig}, {Key: "DatacenterName", Value: kubevirtDatacenterName}},
 			Body:               ``,
 			HTTPStatus:         http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				test.GenDefaultProject(),
+				test.GenTestSeed(),
 			},
 			ExistingKubevirtObjects: []ctrlruntimeclient.Object{instancetypeOk1, instancetypeOk2, instancetypeNotInQuotaLimit},
 
@@ -185,10 +186,11 @@ func TestListInstanceTypeEndpoint(t *testing.T) {
 			Name:               "scenario 2: kubevirt kubeconfig from kubermatic preset",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/instancetypes",
-			HTTPRequestHeaders: []KeyValue{{Key: "Credential", Value: "kubermatic-preset"}},
+			HTTPRequestHeaders: []KeyValue{{Key: "Credential", Value: "kubermatic-preset"}, {Key: "DatacenterName", Value: kubevirtDatacenterName}},
 			Body:               ``,
 			HTTPStatus:         http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
+				test.GenTestSeed(),
 				test.GenDefaultProject(),
 				GenKubeVirtKubermaticPreset(),
 			},
@@ -361,11 +363,12 @@ func TestPreferenceEndpoint(t *testing.T) {
 			Name:               "scenario 1: kubevirt kubeconfig provided",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/preferences",
-			HTTPRequestHeaders: []KeyValue{{Key: "Kubeconfig", Value: fakeKvConfig}},
+			HTTPRequestHeaders: []KeyValue{{Key: "Kubeconfig", Value: fakeKvConfig}, {Key: "DatacenterName", Value: kubevirtDatacenterName}},
 			Body:               ``,
 			HTTPStatus:         http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
 				test.GenDefaultProject(),
+				test.GenTestSeed(),
 			},
 			ExistingKubevirtObjects: []ctrlruntimeclient.Object{preferenceCores, preferenceSockets},
 
@@ -376,10 +379,11 @@ func TestPreferenceEndpoint(t *testing.T) {
 			Name:               "scenario 2: kubevirt kubeconfig from kubermatic preset",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/preferences",
-			HTTPRequestHeaders: []KeyValue{{Key: "Credential", Value: "kubermatic-preset"}},
+			HTTPRequestHeaders: []KeyValue{{Key: "Credential", Value: "kubermatic-preset"}, {Key: "DatacenterName", Value: kubevirtDatacenterName}},
 			Body:               ``,
 			HTTPStatus:         http.StatusOK,
 			ExistingKubermaticObjects: []ctrlruntimeclient.Object{
+				test.GenTestSeed(),
 				test.GenDefaultProject(),
 				GenKubeVirtKubermaticPreset(),
 			},

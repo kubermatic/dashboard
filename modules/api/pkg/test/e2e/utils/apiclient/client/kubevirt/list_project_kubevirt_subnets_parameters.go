@@ -64,6 +64,9 @@ type ListProjectKubevirtSubnetsParams struct {
 	// Credential.
 	Credential *string
 
+	// DatacenterName.
+	DatacenterName *string
+
 	// Kubeconfig.
 	Kubeconfig *string
 
@@ -137,6 +140,17 @@ func (o *ListProjectKubevirtSubnetsParams) SetCredential(credential *string) {
 	o.Credential = credential
 }
 
+// WithDatacenterName adds the datacenterName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) WithDatacenterName(datacenterName *string) *ListProjectKubevirtSubnetsParams {
+	o.SetDatacenterName(datacenterName)
+	return o
+}
+
+// SetDatacenterName adds the datacenterName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) SetDatacenterName(datacenterName *string) {
+	o.DatacenterName = datacenterName
+}
+
 // WithKubeconfig adds the kubeconfig to the list project kubevirt subnets params
 func (o *ListProjectKubevirtSubnetsParams) WithKubeconfig(kubeconfig *string) *ListProjectKubevirtSubnetsParams {
 	o.SetKubeconfig(kubeconfig)
@@ -182,6 +196,14 @@ func (o *ListProjectKubevirtSubnetsParams) WriteToRequest(r runtime.ClientReques
 
 		// header param Credential
 		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DatacenterName != nil {
+
+		// header param DatacenterName
+		if err := r.SetHeaderParam("DatacenterName", *o.DatacenterName); err != nil {
 			return err
 		}
 	}

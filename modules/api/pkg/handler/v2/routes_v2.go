@@ -4861,7 +4861,7 @@ func (r Routing) listKubeVirtInstancetypesNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.KubeVirtInstancetypesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstancesNoCredentialReq,
+		provider.DecodeKubeVirtGenericNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6297,7 +6297,7 @@ func (r Routing) listProjectKubeVirtInstancetypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, true)),
-		provider.DecodeKubeVirtProjectListInstanceReq,
+		provider.DecodeKubeVirtProjectGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6318,7 +6318,7 @@ func (r Routing) listProjectKubeVirtPreferences() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, true)),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -9395,7 +9395,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, false)),
-		provider.DecodeKubeVirtListInstanceReq,
+		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -9416,7 +9416,7 @@ func (r Routing) listKubeVirtPreferences() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, false)),
+		)(provider.KubeVirtPreferencesEndpoint(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

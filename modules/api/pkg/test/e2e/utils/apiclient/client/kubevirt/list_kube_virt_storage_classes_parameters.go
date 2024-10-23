@@ -64,6 +64,9 @@ type ListKubeVirtStorageClassesParams struct {
 	// Credential.
 	Credential *string
 
+	// DatacenterName.
+	DatacenterName *string
+
 	// Kubeconfig.
 	Kubeconfig *string
 
@@ -131,6 +134,17 @@ func (o *ListKubeVirtStorageClassesParams) SetCredential(credential *string) {
 	o.Credential = credential
 }
 
+// WithDatacenterName adds the datacenterName to the list kube virt storage classes params
+func (o *ListKubeVirtStorageClassesParams) WithDatacenterName(datacenterName *string) *ListKubeVirtStorageClassesParams {
+	o.SetDatacenterName(datacenterName)
+	return o
+}
+
+// SetDatacenterName adds the datacenterName to the list kube virt storage classes params
+func (o *ListKubeVirtStorageClassesParams) SetDatacenterName(datacenterName *string) {
+	o.DatacenterName = datacenterName
+}
+
 // WithKubeconfig adds the kubeconfig to the list kube virt storage classes params
 func (o *ListKubeVirtStorageClassesParams) WithKubeconfig(kubeconfig *string) *ListKubeVirtStorageClassesParams {
 	o.SetKubeconfig(kubeconfig)
@@ -154,6 +168,14 @@ func (o *ListKubeVirtStorageClassesParams) WriteToRequest(r runtime.ClientReques
 
 		// header param Credential
 		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DatacenterName != nil {
+
+		// header param DatacenterName
+		if err := r.SetHeaderParam("DatacenterName", *o.DatacenterName); err != nil {
 			return err
 		}
 	}
