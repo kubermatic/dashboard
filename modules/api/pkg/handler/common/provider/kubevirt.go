@@ -72,7 +72,7 @@ func getKvKubeConfigFromCredentials(ctx context.Context, projectProvider provide
 }
 
 func KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	projectID, clusterID, datacenterName string, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	projectID, clusterID string, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx context.Context, us
 		return nil, err
 	}
 
-	return KubeVirtInstancetypes(ctx, projectID, kvKubeconfig, datacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
+	return KubeVirtInstancetypes(ctx, projectID, kvKubeconfig, cluster.Spec.Cloud.DatacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
 }
 
 func KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
@@ -239,9 +239,10 @@ func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacente
 		infraNS = cluster.Status.NamespaceName
 	}
 
-	if datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
 		infraNS = datacenter.Spec.Kubevirt.NamespacedMode.Namespace
 	}
+
 	// Reconcile Kubermatic Standard (update flow)
 	for _, it := range instancetypes.items {
 		if it.Category() == apiv2.InstancetypeKubermatic {
@@ -335,7 +336,7 @@ func KubeVirtPreferences(ctx context.Context, projectID, kubeconfig, datacenterN
 		infraNS = cluster.Status.NamespaceName
 	}
 
-	if datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
 		infraNS = datacenter.Spec.Kubevirt.NamespacedMode.Namespace
 	}
 

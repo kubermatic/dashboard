@@ -696,6 +696,15 @@ func GenTestSeed(modifiers ...func(seed *kubermaticv1.Seed)) *kubermaticv1.Seed 
 						},
 					},
 				},
+				"KubevirtDC": {
+					Country:  "NL",
+					Location: "Amsterdam",
+					Spec: kubermaticv1.DatacenterSpec{
+						Kubevirt: &kubermaticv1.DatacenterSpecKubevirt{
+							DNSPolicy: "ClusterFirst",
+						},
+					},
+				},
 				"restricted-fake-dc": {
 					Country:  "NL",
 					Location: "Amsterdam",

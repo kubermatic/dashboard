@@ -12334,11 +12334,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {

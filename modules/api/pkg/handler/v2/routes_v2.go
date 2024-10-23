@@ -4861,7 +4861,7 @@ func (r Routing) listKubeVirtInstancetypesNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.KubeVirtInstancetypesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtGenericReq,
+		provider.DecodeKubeVirtGenericNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6297,7 +6297,7 @@ func (r Routing) listProjectKubeVirtInstancetypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider, true)),
-		provider.DecodeKubeVirtProjectListInstanceReq,
+		provider.DecodeKubeVirtProjectGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
