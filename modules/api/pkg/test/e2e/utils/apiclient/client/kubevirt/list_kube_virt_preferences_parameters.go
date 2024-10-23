@@ -64,6 +64,9 @@ type ListKubeVirtPreferencesParams struct {
 	// Credential.
 	Credential *string
 
+	// DatacenterName.
+	DatacenterName *string
+
 	// Kubeconfig.
 	Kubeconfig *string
 
@@ -131,6 +134,17 @@ func (o *ListKubeVirtPreferencesParams) SetCredential(credential *string) {
 	o.Credential = credential
 }
 
+// WithDatacenterName adds the datacenterName to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) WithDatacenterName(datacenterName *string) *ListKubeVirtPreferencesParams {
+	o.SetDatacenterName(datacenterName)
+	return o
+}
+
+// SetDatacenterName adds the datacenterName to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) SetDatacenterName(datacenterName *string) {
+	o.DatacenterName = datacenterName
+}
+
 // WithKubeconfig adds the kubeconfig to the list kube virt preferences params
 func (o *ListKubeVirtPreferencesParams) WithKubeconfig(kubeconfig *string) *ListKubeVirtPreferencesParams {
 	o.SetKubeconfig(kubeconfig)
@@ -154,6 +168,14 @@ func (o *ListKubeVirtPreferencesParams) WriteToRequest(r runtime.ClientRequest, 
 
 		// header param Credential
 		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DatacenterName != nil {
+
+		// header param DatacenterName
+		if err := r.SetHeaderParam("DatacenterName", *o.DatacenterName); err != nil {
 			return err
 		}
 	}

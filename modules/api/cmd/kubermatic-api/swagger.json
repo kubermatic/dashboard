@@ -12334,11 +12334,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {
@@ -20013,6 +20008,11 @@
             "type": "string",
             "name": "Credential",
             "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -20058,6 +20058,11 @@
             "type": "string",
             "name": "Credential",
             "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -20102,6 +20107,11 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
             "in": "header"
           },
           {
@@ -20152,6 +20162,11 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
             "in": "header"
           }
         ],
@@ -23597,6 +23612,11 @@
             "type": "string",
             "name": "Credential",
             "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
           }
         ],
         "responses": {
@@ -23634,6 +23654,11 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
             "in": "header"
           }
         ],

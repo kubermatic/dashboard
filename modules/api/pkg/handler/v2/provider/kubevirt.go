@@ -34,7 +34,7 @@ import (
 )
 
 // KubeVirtGenericReq represent a request with common parameters for KubeVirt.
-// swagger:parameters listKubeVirtStorageClasses listKubeVirtPreferences
+// swagger:parameters listKubeVirtStorageClasses listKubeVirtPreferences listKubeVirtInstancetypes
 type KubeVirtGenericReq struct {
 	// in: header
 	// name: Kubeconfig (provided credential)
@@ -42,9 +42,13 @@ type KubeVirtGenericReq struct {
 	// in: header
 	// name: Credential (predefined Kubermatic credential name from the Kubermatic presets)
 	Credential string
+	// in: header
+	// required: false
+	// DatacenterName datacenter name
+	DatacenterName string
 }
 
-// swagger:parameters listProjectKubeVirtStorageClasses listProjectKubeVirtPreferences listProjectKubevirtVPCs
+// swagger:parameters listProjectKubeVirtStorageClasses listProjectKubeVirtPreferences listProjectKubevirtVPCs listProjectKubeVirtInstancetypes
 type KubeVirtProjectGenericReq struct {
 	common.ProjectReq
 	KubeVirtGenericReq
@@ -59,22 +63,6 @@ type KubeVirtVPCSubnetsReq struct {
 	VPCName string
 }
 
-// KubeVirtListInstanceReq represent a request to list presets or instance types for KubeVirt.
-// swagger:parameters listKubeVirtInstancetypes
-type KubeVirtListInstanceReq struct {
-	KubeVirtGenericReq
-
-	// in: header
-	// DatacenterName datacenter name
-	DatacenterName string
-}
-
-// swagger:parameters listProjectKubeVirtInstancetypes
-type KubeVirtProjectListInstanceReq struct {
-	common.ProjectReq
-	KubeVirtListInstanceReq
-}
-
 // KubeVirtListImagesReq represents a request to list KubeVirt images
 // swagger:parameters listKubevirtImages
 type KubeVirtListImagesReq struct {
@@ -84,19 +72,9 @@ type KubeVirtListImagesReq struct {
 }
 
 // KubeVirtGenericNoCredentialReq represent a generic KubeVirt request with cluster credentials.
-// swagger:parameters listKubevirtStorageClassesNoCredentials listKubeVirtPreferencesNoCredentials
+// swagger:parameters listKubevirtStorageClassesNoCredentials listKubeVirtPreferencesNoCredentials listKubeVirtInstancetypesNoCredentials
 type KubeVirtGenericNoCredentialReq struct {
 	cluster.GetClusterReq
-}
-
-// KubeVirtListInstancesNoCredentialReq represent a request to list presets or instance types for KubeVirt.
-// swagger:parameters listKubeVirtInstancetypesNoCredentials
-type KubeVirtListInstancesNoCredentialReq struct {
-	cluster.GetClusterReq
-
-	// in: header
-	// DatacenterName datacenter name
-	DatacenterName string
 }
 
 func getKubeconfig(ctx context.Context, kubeconfig, credential, projectID string, presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) (string, error) {
@@ -138,24 +116,24 @@ func getKubeconfigAndVPCName(ctx context.Context, kubeconfig, vpcName, credentia
 func KubeVirtInstancetypesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
-			req       KubeVirtListInstanceReq
+			req       KubeVirtGenericReq
 			projectID string
 		)
 
 		if !withProject {
-			kubevirtReq, ok := request.(KubeVirtListInstanceReq)
+			kubevirtReq, ok := request.(KubeVirtGenericReq)
 			if !ok {
 				return "", utilerrors.NewBadRequest("invalid request")
 			}
 
 			req = kubevirtReq
 		} else {
-			projectReq, ok := request.(KubeVirtProjectListInstanceReq)
+			projectReq, ok := request.(KubeVirtProjectGenericReq)
 			if !ok {
 				return "", utilerrors.NewBadRequest("invalid request")
 			}
 
-			req = projectReq.KubeVirtListInstanceReq
+			req = projectReq.KubeVirtGenericReq
 			projectID = projectReq.GetProjectID()
 		}
 
@@ -164,12 +142,12 @@ func KubeVirtInstancetypesEndpoint(presetsProvider provider.PresetProvider, user
 			return nil, err
 		}
 
-		return providercommon.KubeVirtInstancetypes(ctx, kubeconfig, req.DatacenterName, nil, settingsProvider, userInfoGetter, seedsGetter)
+		return providercommon.KubeVirtInstancetypes(ctx, projectID, kubeconfig, req.DatacenterName, nil, settingsProvider, userInfoGetter, seedsGetter)
 	}
 }
 
 // KubeVirtPreferencesEndpoint handles the request to list available KubeVirtPreferences (provided credentials).
-func KubeVirtPreferencesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, withProject bool) endpoint.Endpoint {
+func KubeVirtPreferencesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, seedsGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       KubeVirtGenericReq
@@ -198,18 +176,18 @@ func KubeVirtPreferencesEndpoint(presetsProvider provider.PresetProvider, userIn
 			return nil, err
 		}
 
-		return providercommon.KubeVirtPreferences(ctx, kubeconfig, nil, settingsProvider)
+		return providercommon.KubeVirtPreferences(ctx, projectID, kubeconfig, req.DatacenterName, nil, settingsProvider, userInfoGetter, seedsGetter)
 	}
 }
 
 // KubeVirtInstacetypesWithClusterCredentialsEndpoint handles the request to list available KubeVirtInstancetypes (cluster credentials).
 func KubeVirtInstancetypesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(KubeVirtListInstancesNoCredentialReq)
+		req, ok := request.(KubeVirtGenericNoCredentialReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID, req.DatacenterName, settingsProvider)
+		return providercommon.KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID, settingsProvider)
 	}
 }
 
@@ -220,7 +198,7 @@ func KubeVirtPreferencesWithClusterCredentialsEndpoint(projectProvider provider.
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID, settingsProvider)
+		return providercommon.KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx, userInfoGetter, seedsGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID, settingsProvider)
 	}
 }
 
@@ -378,6 +356,7 @@ func DecodeKubeVirtGenericReq(c context.Context, r *http.Request) (interface{}, 
 	var req KubeVirtGenericReq
 	req.Kubeconfig = r.Header.Get("Kubeconfig")
 	req.Credential = r.Header.Get("Credential")
+	req.DatacenterName = r.Header.Get("DatacenterName")
 
 	return req, nil
 }
@@ -418,32 +397,6 @@ func DecodeKubeVirtVPCSubnetsReq(c context.Context, r *http.Request) (interface{
 	}, nil
 }
 
-func DecodeKubeVirtListInstanceReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req KubeVirtListInstanceReq
-	req.Kubeconfig = r.Header.Get("Kubeconfig")
-	req.Credential = r.Header.Get("Credential")
-	req.DatacenterName = r.Header.Get("DatacenterName")
-
-	return req, nil
-}
-
-func DecodeKubeVirtProjectListInstanceReq(c context.Context, r *http.Request) (interface{}, error) {
-	projectReq, err := common.DecodeProjectRequest(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	kubevirtReq, err := DecodeKubeVirtListInstanceReq(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	return KubeVirtProjectListInstanceReq{
-		ProjectReq:              projectReq.(common.ProjectReq),
-		KubeVirtListInstanceReq: kubevirtReq.(KubeVirtListInstanceReq),
-	}, nil
-}
-
 func DecodeKubeVirtGenericNoCredentialReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req KubeVirtGenericNoCredentialReq
 	clusterID, err := common.DecodeClusterID(c, r)
@@ -459,26 +412,6 @@ func DecodeKubeVirtGenericNoCredentialReq(c context.Context, r *http.Request) (i
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	return req, nil
-}
-
-func DecodeKubeVirtListInstancesNoCredentialReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req KubeVirtListInstancesNoCredentialReq
-	clusterID, err := common.DecodeClusterID(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	req.ClusterID = clusterID
-
-	pr, err := common.DecodeProjectRequest(c, r)
-	if err != nil {
-		return nil, err
-	}
-
-	req.ProjectReq = pr.(common.ProjectReq)
-	req.DatacenterName = r.Header.Get("DatacenterName")
-
 	return req, nil
 }
 
