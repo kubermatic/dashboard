@@ -21,8 +21,6 @@ before(() => {
 });
 
 beforeEach(() => {
-  Cypress.Cookies.preserveOnce('token', 'nonce');
-
   if (Mocks.enabled()) {
     Mocks.register();
   }
