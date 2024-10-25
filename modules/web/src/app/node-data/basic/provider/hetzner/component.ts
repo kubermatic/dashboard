@@ -12,24 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {DynamicModule} from '@app/dynamic/module-registry';
+import {FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {GlobalModule} from '@core/services/global/module';
 import {NodeDataService} from '@core/services/node-data/service';
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
+import {HetznerImage, HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {ResourceQuotaCalculationPayload} from '@shared/entity/quota';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import _ from 'lodash';
+import _, {merge} from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Type = 'type',
+  Image = 'image',
 }
 
 enum GroupTypes {
@@ -41,6 +51,12 @@ enum TypeState {
   Ready = 'Node Type',
   Loading = 'Loading...',
   Empty = 'No Node Types Available',
+}
+
+enum ImageState {
+  Ready = 'Image',
+  Loading = 'Loading...',
+  Empty = 'No Images Available',
 }
 
 @Component({
@@ -61,14 +77,20 @@ enum TypeState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HetznerBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  @ViewChild('imagesCombobox')
+  private readonly _imagesCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private _quotaCalculationService: QuotaCalculationService;
   private _types: HetznerTypes = HetznerTypes.newHetznerTypes();
+  images: HetznerImage[] = [];
   private _initialQuotaCalculationPayload: ResourceQuotaCalculationPayload;
 
   selectedType = '';
+  selectedImage = '';
   typeLabel = TypeState.Empty;
+  imageLabel = ImageState.Empty;
 
   get groups(): string[] {
     return Object.values(GroupTypes);
@@ -76,6 +98,10 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   private get _typesObservable(): Observable<HetznerTypes> {
     return this._nodeDataService.hetzner.flavors(this._clearType.bind(this), this._onTypeLoading.bind(this));
+  }
+
+  private get _imagesObservable(): Observable<HetznerImage[]> {
+    return this._nodeDataService.hetzner.images(this._clearImage.bind(this), this._onImageLoading.bind(this));
   }
 
   constructor(
@@ -94,15 +120,16 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Type]: this._builder.control('', Validators.required),
+      [Controls.Image]: this._builder.control(''),
     });
 
     this._typesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultType.bind(this));
+    this._imagesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultImage.bind(this));
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form
-      .get(Controls.Type)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(this.form.get(Controls.Type).valueChanges, this.form.get(Controls.Image).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._nodeDataService.nodeData = this._getNodeData();
         if (this.isEnterpriseEdition) {
@@ -124,6 +151,12 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
   onTypeChange(type: string): void {
     this._nodeDataService.nodeData.spec.cloud.hetzner.type = type;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onImageChange(image: string): void {
+    this.selectedImage = image;
+    this._nodeDataService.nodeData.spec.cloud.hetzner.image = image;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -156,6 +189,34 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
     }
 
     this.typeLabel = this.selectedType ? TypeState.Ready : TypeState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onImageLoading(): void {
+    this.imageLabel = ImageState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearImage(): void {
+    this.selectedImage = '';
+    this.images = [];
+    this._imagesCombobox.reset();
+    this.imageLabel = ImageState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultImage(images: HetznerImage[]): void {
+    this.images = images;
+
+    // Sort images by name
+    this.images.sort((a, b) => a.name.localeCompare(b.name));
+
+    this.selectedImage = this._nodeDataService.nodeData.spec.cloud.hetzner?.image;
+    if (this.selectedImage && !this.images.find(image => image.name === this.selectedImage)) {
+      this.onImageChange('');
+    }
+
+    this.imageLabel = this.images ? ImageState.Ready : ImageState.Empty;
     this._cdr.detectChanges();
   }
 

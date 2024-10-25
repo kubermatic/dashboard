@@ -15,8 +15,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
+import {HetznerImage, HetznerTypes} from '@shared/entity/provider/hetzner';
 import {Observable} from 'rxjs';
-import {HetznerTypes} from '@shared/entity/provider/hetzner';
 
 @Injectable()
 export class HetznerService {
@@ -27,5 +27,10 @@ export class HetznerService {
   getTypes(projectID: string, clusterID: string): Observable<HetznerTypes> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/hetzner/sizes`;
     return this._httpClient.get<HetznerTypes>(url);
+  }
+
+  getImages(projectID: string, clusterID: string): Observable<HetznerImage[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/hetzner/images`;
+    return this._httpClient.get<HetznerImage[]>(url);
   }
 }

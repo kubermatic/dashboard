@@ -412,6 +412,22 @@ type HetznerSizeList struct {
 	Dedicated []HetznerSize `json:"dedicated"`
 }
 
+// HetznerImageList represents an array of Hetzner images.
+// swagger:model HetznerImageList
+type HetznerImageList []HetznerImage
+
+// HetznerImage is the object representing Hetzner images.
+// swagger:model HetznerImage
+type HetznerImage struct {
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Type         string `json:"type"`
+	OSFlavor     string `json:"osFlavor"`
+	OSVersion    string `json:"osVersion"`
+	Architecture string `json:"architecture"`
+}
+
 // HetznerSize is the object representing Hetzner sizes.
 // swagger:model HetznerSize
 type HetznerSize struct {
@@ -1677,6 +1693,9 @@ type HetznerNodeSpec struct {
 	// network name
 	// required: false
 	Network string `json:"network"`
+	// image name
+	// required: false
+	Image string `json:"image"`
 }
 
 func (spec *HetznerNodeSpec) MarshalJSON() ([]byte, error) {
@@ -1693,9 +1712,11 @@ func (spec *HetznerNodeSpec) MarshalJSON() ([]byte, error) {
 	res := struct {
 		Network string `json:"network,omitempty"`
 		Type    string `json:"type"`
+		Image   string `json:"image"`
 	}{
 		Network: spec.Network,
 		Type:    spec.Type,
+		Image:   spec.Image,
 	}
 
 	return json.Marshal(&res)

@@ -13,15 +13,15 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ProjectService} from '@core/services/project';
-import {PresetsService} from '@core/services/wizard/presets';
-import {HetznerTypes} from '@shared/entity/provider/hetzner';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {ProjectService} from '@core/services/project';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {PresetsService} from '@core/services/wizard/presets';
+import {HetznerImage, HetznerTypes} from '@shared/entity/provider/hetzner';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
-import {HetznerService} from '@core/services/provider/hetzner';
 
 export class NodeDataHetznerProvider {
   private readonly _debounce = 500;
@@ -73,6 +73,51 @@ export class NodeDataHetznerProvider {
               }
 
               return onErrorResumeNext(of(HetznerTypes.newHetznerTypes()));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  images(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<HetznerImage[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.HETZNER))
+          .pipe(debounceTime(this._debounce))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.HETZNER)
+                .token(cluster.spec.cloud.hetzner.token)
+                .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
+                .images(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(switchMap(_ => this._hetznerService.getImages(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+              return onErrorResumeNext(of([]));
             })
           )
           .pipe(take(1));

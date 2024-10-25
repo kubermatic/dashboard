@@ -84,6 +84,63 @@ func HetznerSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGett
 	return HetznerSize(ctx, filter, hetznerToken)
 }
 
+func HetznerImageWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID string) (interface{}, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return nil, err
+	}
+
+	if cluster.Spec.Cloud.Hetzner == nil {
+		return nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
+	}
+
+	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
+	if !ok {
+		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
+	}
+
+	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
+	hetznerToken, err := hetzner.GetCredentialsForCluster(cluster.Spec.Cloud, secretKeySelector)
+	if err != nil {
+		return nil, err
+	}
+
+	return HetznerImage(ctx, hetznerToken)
+}
+
+func HetznerImage(ctx context.Context, token string) (apiv1.HetznerImageList, error) {
+	client := hcloud.NewClient(hcloud.WithToken(token))
+
+	listOptions := hcloud.ImageListOpts{
+		ListOpts: hcloud.ListOpts{
+			Page:    1,
+			PerPage: 1000,
+		},
+	}
+
+	images, _, err := client.Image.List(ctx, listOptions)
+	if err != nil {
+		return apiv1.HetznerImageList{}, fmt.Errorf("failed to list images: %w", err)
+	}
+
+	imageList := apiv1.HetznerImageList{}
+	for _, image := range images {
+		imageList = append(imageList, apiv1.HetznerImage{
+			ID:           image.ID,
+			Name:         image.Name,
+			Description:  image.Description,
+			Type:         string(image.Type),
+			OSFlavor:     image.OSFlavor,
+			OSVersion:    image.OSVersion,
+			Architecture: string(image.Architecture),
+		})
+	}
+
+	return imageList, nil
+}
+
 func HetznerSize(ctx context.Context, machineFilter kubermaticv1.MachineFlavorFilter, token string) (apiv1.HetznerSizeList, error) {
 	client := hcloud.NewClient(hcloud.WithToken(token))
 

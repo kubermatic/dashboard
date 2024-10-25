@@ -13,12 +13,14 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {EMPTY, Observable} from 'rxjs';
+import {HetznerImage, HetznerTypes} from '@shared/entity/provider/hetzner';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
-import {HetznerTypes} from '@shared/entity/provider/hetzner';
 
 export class Hetzner extends Provider {
+  protected readonly _imagesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/images`;
+
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
     super(http, projectID, provider);
 
@@ -54,6 +56,18 @@ export class Hetzner extends Provider {
     }
 
     return this._http.get<HetznerTypes>(this._url, {headers: this._headers});
+  }
+
+  images(onLoadingCb: () => void = null): Observable<HetznerImage[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<HetznerImage[]>(this._imagesUrl, {headers: this._headers});
   }
 }
 

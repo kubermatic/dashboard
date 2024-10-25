@@ -19,6 +19,9 @@ import (
 // swagger:model HetznerNodeSpec
 type HetznerNodeSpec struct {
 
+	// image name
+	Image string `json:"image,omitempty"`
+
 	// network name
 	Network string `json:"network,omitempty"`
 

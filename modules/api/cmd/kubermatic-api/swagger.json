@@ -12268,6 +12268,48 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/images": {
+      "get": {
+        "description": "Lists images from hetzner",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "hetzner"
+        ],
+        "operationId": "listHetznerImagesNoCredentialsV2",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "HetznerImageList",
+            "schema": {
+              "$ref": "#/definitions/HetznerImageList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes": {
       "get": {
         "description": "Lists sizes from hetzner",
@@ -19870,6 +19912,56 @@
             "description": "GKEZoneList",
             "schema": {
               "$ref": "#/definitions/GKEZoneList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/hetzner/images": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "hetzner"
+        ],
+        "summary": "Lists images from Hetzner.",
+        "operationId": "listProjectHetznerImages",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "HetznerToken",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "HetznerImageList",
+            "schema": {
+              "$ref": "#/definitions/HetznerImageList"
             }
           },
           "default": {
@@ -33422,6 +33514,50 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "HetznerImage": {
+      "type": "object",
+      "title": "HetznerImage is the object representing Hetzner images.",
+      "properties": {
+        "architecture": {
+          "type": "string",
+          "x-go-name": "Architecture"
+        },
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "osFlavor": {
+          "type": "string",
+          "x-go-name": "OSFlavor"
+        },
+        "osVersion": {
+          "type": "string",
+          "x-go-name": "OSVersion"
+        },
+        "type": {
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "HetznerImageList": {
+      "type": "array",
+      "title": "HetznerImageList represents an array of Hetzner images.",
+      "items": {
+        "$ref": "#/definitions/HetznerImage"
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
     "HetznerNodeSpec": {
       "description": "HetznerNodeSpec Hetzner node settings",
       "type": "object",
@@ -33429,6 +33565,11 @@
         "type"
       ],
       "properties": {
+        "image": {
+          "description": "image name",
+          "type": "string",
+          "x-go-name": "Image"
+        },
         "network": {
           "description": "network name",
           "type": "string",

@@ -24,6 +24,16 @@ export class HetznerTypes {
   }
 }
 
+export class HetznerImage {
+  id: number;
+  name: string;
+  description: string;
+  type: string;
+  osFlavor: string;
+  osVersion: string;
+  architecture: string;
+}
+
 export class Type {
   id: number;
   name: string;

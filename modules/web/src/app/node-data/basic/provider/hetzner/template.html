@@ -29,4 +29,16 @@ limitations under the License.
                filterBy="name">
     <div *option="let type">{{type.name}} ({{type.cores}} vCPU, {{type.memory}} GB RAM)</div>
   </km-combobox>
+
+  <km-combobox #imagesCombobox
+               [selected]="selectedImage"
+               [options]="images"
+               [formControlName]="Controls.Image"
+               (changed)="onImageChange($event)"
+               hint="Optional: leave empty to use the default image for the selected operating system"
+               [label]="imageLabel"
+               inputLabel="Select image..."
+               filterBy="name">
+    <div *option="let image">{{image.name}} ({{image.osFlavor}} {{image.osVersion}} - {{image.architecture}})</div>
+  </km-combobox>
 </form>

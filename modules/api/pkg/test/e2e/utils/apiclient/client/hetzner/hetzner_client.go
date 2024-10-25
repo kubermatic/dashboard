@@ -28,11 +28,53 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	ListHetznerImagesNoCredentialsV2(params *ListHetznerImagesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListHetznerImagesNoCredentialsV2OK, error)
+
 	ListHetznerSizesNoCredentialsV2(params *ListHetznerSizesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListHetznerSizesNoCredentialsV2OK, error)
+
+	ListProjectHetznerImages(params *ListProjectHetznerImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectHetznerImagesOK, error)
 
 	ListProjectHetznerSizes(params *ListProjectHetznerSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectHetznerSizesOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+ListHetznerImagesNoCredentialsV2 Lists images from hetzner
+*/
+func (a *Client) ListHetznerImagesNoCredentialsV2(params *ListHetznerImagesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListHetznerImagesNoCredentialsV2OK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListHetznerImagesNoCredentialsV2Params()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listHetznerImagesNoCredentialsV2",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListHetznerImagesNoCredentialsV2Reader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListHetznerImagesNoCredentialsV2OK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListHetznerImagesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*
@@ -70,6 +112,44 @@ func (a *Client) ListHetznerSizesNoCredentialsV2(params *ListHetznerSizesNoCrede
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListHetznerSizesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectHetznerImages lists images from hetzner
+*/
+func (a *Client) ListProjectHetznerImages(params *ListProjectHetznerImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectHetznerImagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectHetznerImagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectHetznerImages",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/hetzner/images",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectHetznerImagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectHetznerImagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectHetznerImagesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

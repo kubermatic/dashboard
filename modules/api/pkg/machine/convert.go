@@ -231,7 +231,8 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			return nil, fmt.Errorf("failed to parse hetzner config: %w", err)
 		}
 		cloudSpec.Hetzner = &apiv1.HetznerNodeSpec{
-			Type: config.ServerType.Value,
+			Type:  config.ServerType.Value,
+			Image: config.Image.Value,
 		}
 		// MachineDeployments created by KKP will only ever have a single network
 		// set, but users might have created ones with many; we have to make a choice

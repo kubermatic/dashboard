@@ -467,6 +467,10 @@ func GetHetznerProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, 
 		ServerType: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Hetzner.Type},
 	}
 
+	if nodeSpec.Cloud.Hetzner.Image != "" {
+		config.Image = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Hetzner.Image}
+	}
+
 	return config, nil
 }
 

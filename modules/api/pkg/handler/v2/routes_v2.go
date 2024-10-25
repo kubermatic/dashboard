@@ -915,6 +915,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/hetzner/sizes").
 		Handler(r.listProjectHetznerSizes())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/hetzner/images").
+		Handler(r.listProjectHetznerImages())
+
 	// Alibaba endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/alibaba/instancetypes").
@@ -975,6 +979,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes").
 		Handler(r.listHetznerSizesNoCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/images").
+		Handler(r.listHetznerImagesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes").
@@ -4240,6 +4248,30 @@ func (r Routing) listHetznerSizesNoCredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/images hetzner listHetznerImagesNoCredentialsV2
+//
+// Lists images from hetzner
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: HetznerImageList
+func (r Routing) listHetznerImagesNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.HetznerImageWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
+		cluster.DecodeGetClusterReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes digitalocean listDigitaloceanSizesNoCredentialsV2
 //
 // Lists sizes from digitalocean
@@ -7067,7 +7099,29 @@ func (r Routing) listProjectHetznerSizes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.HetznerProjectSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeHetznerProjectSizesReq,
+		provider.DecodeHetznerProjectsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/hetzner/images hetzner listProjectHetznerImages
+//
+// Lists images from Hetzner.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: HetznerImageList
+func (r Routing) listProjectHetznerImages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.HetznerProjectImageEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeHetznerProjectsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

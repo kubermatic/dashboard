@@ -853,6 +853,10 @@ limitations under the License.
                 <div key>Node Type</div>
                 <div value>{{machineDeployment.spec.template.cloud?.hetzner?.type}}</div>
               </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.hetzner?.image">
+                <div key>Image</div>
+                <div value>{{machineDeployment.spec.template.cloud?.hetzner?.image}}</div>
+              </km-property>
             </ng-container>
 
             <!-- KubeVirt Nodes -->

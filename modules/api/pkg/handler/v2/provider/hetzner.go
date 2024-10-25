@@ -40,9 +40,16 @@ func HetznerSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectP
 	}
 }
 
+func HetznerImageWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(cluster.GetClusterReq)
+		return providercommon.HetznerImageWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+	}
+}
+
 func HetznerProjectSizeEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(HetznerProjectSizesReq)
+		req := request.(HetznerProjectReq)
 		token := req.HetznerToken
 
 		userInfo, err := userInfoGetter(ctx, "")
@@ -79,9 +86,32 @@ func HetznerProjectSizeEndpoint(presetProvider provider.PresetProvider, userInfo
 	}
 }
 
-// HetznerProjectSizesReq represent a request for Hetzner sizes.
-// swagger:parameters listProjectHetznerSizes
-type HetznerProjectSizesReq struct {
+func HetznerProjectImageEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(HetznerProjectReq)
+		token := req.HetznerToken
+
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, ptr.To(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.Hetzner; credentials != nil {
+				token = credentials.Token
+			}
+		}
+		return providercommon.HetznerImage(ctx, token)
+	}
+}
+
+// HetznerProjectReq represent a generic project scoped request for Hetzner.
+// swagger:parameters listProjectHetznerSizes listProjectHetznerImages
+type HetznerProjectReq struct {
 	common.ProjectReq
 	// in: header
 	// HetznerToken Hetzner token
@@ -94,8 +124,8 @@ type HetznerProjectSizesReq struct {
 	DatacenterName string
 }
 
-func DecodeHetznerProjectSizesReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req HetznerProjectSizesReq
+func DecodeHetznerProjectsReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req HetznerProjectReq
 
 	req.HetznerToken = r.Header.Get("HetznerToken")
 	req.Credential = r.Header.Get("Credential")
