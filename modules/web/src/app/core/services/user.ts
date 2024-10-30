@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, iif, Observable, of, timer} from 'rxjs';
 import {catchError, delay, filter, take, map, retryWhen, switchMap, shareReplay} from 'rxjs/operators';

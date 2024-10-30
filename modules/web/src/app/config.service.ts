@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {environment} from '@environments/environment';

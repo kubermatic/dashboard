@@ -66,17 +66,17 @@ $colors-light: (
   slide-toggle-handle-color: #fafafa,
   hint-color: #7e868f99
 );
-$colors-light-palette: mat.$blue-palette;
+$colors-light-palette: mat.$m2-blue-palette;
 $colors-light-palette: map.merge(
   $colors-light-palette,
   (
     500: #00517d,
   )
 );
-$theme-light: mat.define-light-theme(
-  mat.define-palette($colors-light-palette),
-  mat.define-palette(mat.$light-blue-palette),
-  mat.define-palette(mat.$pink-palette)
+$theme-light: mat.m2-define-light-theme(
+  mat.m2-define-palette($colors-light-palette),
+  mat.m2-define-palette(mat.$m2-light-blue-palette),
+  mat.m2-define-palette(mat.$m2-pink-palette)
 );
 $background: map.get($theme-light, background);
 $background: map.merge(

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AnnotationFormComponent} from '@app/shared/components/annotation-form/component';
 import {environment} from '@environments/environment';

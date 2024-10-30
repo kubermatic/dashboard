@@ -59,7 +59,7 @@ export class Wizard extends PageOptions implements Page {
       this.Buttons.overlayContainer.click({force: true});
     }
 
-    this.Buttons.nextStep(WizardStep.Cluster).click();
+    this.Buttons.nextStep(WizardStep.Cluster).click({multiple: true});
 
     // kubeadm does not have additional steps
     if (provider === Provider.kubeadm) {

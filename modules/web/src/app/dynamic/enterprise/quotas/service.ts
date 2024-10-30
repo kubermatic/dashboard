@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';

@@ -59,6 +59,7 @@ cypress/screenshots
 cypress/videos
 cypress/plugins/index.js
 cypress/plugins/cy-ts-preprocessor.js
+cypress/downloads
 
 # GO
 /vendor
