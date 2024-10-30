@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {retry} from 'rxjs/operators';

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {
   OpenstackAvailabilityZone,
   OpenstackFlavor,

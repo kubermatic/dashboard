@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import _ from 'lodash';
 import {merge, Observable, Subject} from 'rxjs';
