@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {CommonModule} from '@angular/common';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
@@ -172,10 +172,15 @@ const interceptors = [
 ];
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, RouterModule, SharedModule, GlobalModule, BrowserAnimationsModule],
   declarations: [...components],
-  providers: [...services, ...interceptors, {provide: COOKIE_DI_TOKEN, useValue: COOKIE}],
   exports: [...components],
+  imports: [CommonModule, RouterModule, SharedModule, GlobalModule, BrowserAnimationsModule],
+  providers: [
+    ...services,
+    ...interceptors,
+    {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
 export class CoreModule {
   static injector: Injector;

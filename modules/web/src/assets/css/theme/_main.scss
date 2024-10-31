@@ -19,7 +19,7 @@
 @import 'global/theme';
 @import 'component';
 
-$my-typography: mat.define-typography-config(
+$my-typography: mat.m2-define-typography-config(
   $font-family: 'Roboto, sans-serif',
 );
 
@@ -30,21 +30,21 @@ $my-typography: mat.define-typography-config(
   $palette-background: map.get($theme, background);
   $palette-foreground: map.get($theme, foreground);
   $theme-colors: (
-    background-app-bar: mat.get-color-from-palette($palette-background, app-bar),
-    background-card: mat.get-color-from-palette($palette-background, card),
-    background-dialog: mat.get-color-from-palette($palette-background, dialog),
-    background-disabled-button: mat.get-color-from-palette($palette-background, disabled-button),
-    background-hover: mat.get-color-from-palette($palette-background, hover),
-    background: mat.get-color-from-palette($palette-background, background),
-    checkbox-disabled: mat.get-color-from-palette($palette-foreground, disabled-checkbox),
-    checkbox-disabled-checked: mat.get-color-from-palette($palette-foreground, disabled-checkbox-checked),
-    checkbox-disabled-border: mat.get-color-from-palette($palette-foreground, disabled-checkbox-border),
-    divider-disabled: mat.get-color-from-palette($palette-foreground, disabled-divider),
-    divider: mat.get-color-from-palette($palette-foreground, divider),
-    project-switch: color.adjust(mat.get-color-from-palette($palette-foreground, secondary-text), $alpha: 0.7),
-    text-disabled: mat.get-color-from-palette($palette-foreground, disabled-text),
-    text-secondary: mat.get-color-from-palette($palette-foreground, secondary-text),
-    text: mat.get-color-from-palette($palette-foreground, text),
+    background-app-bar: mat.m2-get-color-from-palette($palette-background, app-bar),
+    background-card: mat.m2-get-color-from-palette($palette-background, card),
+    background-dialog: mat.m2-get-color-from-palette($palette-background, dialog),
+    background-disabled-button: mat.m2-get-color-from-palette($palette-background, disabled-button),
+    background-hover: mat.m2-get-color-from-palette($palette-background, hover),
+    background: mat.m2-get-color-from-palette($palette-background, background),
+    checkbox-disabled: mat.m2-get-color-from-palette($palette-foreground, disabled-checkbox),
+    checkbox-disabled-checked: mat.m2-get-color-from-palette($palette-foreground, disabled-checkbox-checked),
+    checkbox-disabled-border: mat.m2-get-color-from-palette($palette-foreground, disabled-checkbox-border),
+    divider-disabled: mat.m2-get-color-from-palette($palette-foreground, disabled-divider),
+    divider: mat.m2-get-color-from-palette($palette-foreground, divider),
+    project-switch: color.adjust(mat.m2-get-color-from-palette($palette-foreground, secondary-text), $alpha: 0.7),
+    text-disabled: mat.m2-get-color-from-palette($palette-foreground, disabled-text),
+    text-secondary: mat.m2-get-color-from-palette($palette-foreground, secondary-text),
+    text: mat.m2-get-color-from-palette($palette-foreground, text),
   );
 
   // Create merged colors map from custom and theme colors

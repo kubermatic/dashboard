@@ -70,17 +70,17 @@ $colors-dark: (
   slide-toggle-handle-color: #bdbdbd,
   hint-color: #b8b8b8b3
 );
-$colors-dark-palette: mat.$blue-palette;
+$colors-dark-palette: mat.$m2-blue-palette;
 $colors-dark-palette: map.merge(
   $colors-dark-palette,
   (
     500: #0072b0,
   )
 );
-$theme-dark: mat.define-dark-theme(
-  mat.define-palette($colors-dark-palette),
-  mat.define-palette(mat.$light-blue-palette),
-  mat.define-palette(mat.$pink-palette)
+$theme-dark: mat.m2-define-dark-theme(
+  mat.m2-define-palette($colors-dark-palette),
+  mat.m2-define-palette(mat.$m2-light-blue-palette),
+  mat.m2-define-palette(mat.$m2-pink-palette)
 );
 $background: map.get($theme-dark, background);
 $background: map.merge(

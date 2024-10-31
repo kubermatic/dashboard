@@ -24,13 +24,14 @@ ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-
 #   - btoa (dependency of swagger-ui)
 # CC0-1.0 license:
 #   - encode-3986 (dependency of swagger-ui)
+#   - highlightjs-vue (dependency of swagger-ui)
 # Unlicense license:
 #   - zenscroll (dependency of swagger-ui)
 # Python-2.0 license:
 #   - argparse (dependency of js-yaml)
 # CC-BY-4.0 license:
 #   - caniuse-lite (dependency of multiple dependencies)
-EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse;caniuse-lite"
+EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse;caniuse-lite;highlightjs-vue"
 
 LICENSE_CHECK_OUTPUT=$(npx license-compliance --production --allow ${ALLOWED_LICENSES} -e ${EXCLUDED_PACKAGES} -r detailed)
 
