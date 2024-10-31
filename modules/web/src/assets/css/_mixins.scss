@@ -21,7 +21,7 @@ $breakpoints: (
 ) !default;
 
 @mixin breakpoint($breakpoint) {
-  @if map-has-key($breakpoints, $breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
     @media (max-width: map.get($breakpoints, $breakpoint)) {
       @content;
     }

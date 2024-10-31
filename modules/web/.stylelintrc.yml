@@ -39,5 +39,4 @@ rules:
     - true
     - severity: warning
   scss/comment-no-empty:
-  string-quotes: single
   selector-not-notation: simple
