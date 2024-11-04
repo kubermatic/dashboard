@@ -28,6 +28,7 @@ import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AppConfigService} from '@app/config.service';
 import {UserMockService} from '@test/services/user-mock';
 import {UserService} from '@app/core/services/user';
+import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
@@ -54,6 +55,7 @@ describe('EditProjectComponent', () => {
     fixture = TestBed.createComponent(EditProjectComponent);
     component = fixture.componentInstance;
     component.project = fakeProject();
+    component.adminAllowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
     component.labels = {};
     component.asyncLabelValidators = [];
     fixture.detectChanges();

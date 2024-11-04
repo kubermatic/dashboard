@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
@@ -24,7 +24,7 @@ import {take} from 'rxjs/operators';
 import {AsyncValidators} from '../../validators/async.validators';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import _ from 'lodash';
-import {AllowedOperatingSystems, DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
+import {AllowedOperatingSystems} from '@app/shared/entity/settings';
 
 enum Controls {
   Name = 'name',
@@ -37,12 +37,13 @@ enum Controls {
   templateUrl: './template.html',
 })
 export class AddProjectDialogComponent implements OnInit {
+  @Input() adminAllowedOperatingSystems: AllowedOperatingSystems;
   readonly Controls = Controls;
   form: FormGroup;
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
   adding = false;
-  allowedOperatingSystems: AllowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
+  projectAllowedOperatingSystems: AllowedOperatingSystems;
   OperatingSystem = OperatingSystem;
 
   constructor(
@@ -55,13 +56,15 @@ export class AddProjectDialogComponent implements OnInit {
     this.form = new FormGroup({
       [Controls.Name]: new FormControl('', [Validators.required]),
       [Controls.Labels]: new FormControl(''),
-      [Controls.AllowedOperatingSystems]: new FormControl(Object.keys(this.allowedOperatingSystems)),
+      [Controls.AllowedOperatingSystems]: new FormControl(
+        Object.keys(this.adminAllowedOperatingSystems).filter(os => this.adminAllowedOperatingSystems[os])
+      ),
     });
   }
 
   onOperatingSystemChange(operatingSystems: string[]): void {
-    this.allowedOperatingSystems = {};
-    operatingSystems.forEach((os: string) => (this.allowedOperatingSystems[os] = true));
+    this.projectAllowedOperatingSystems = {};
+    operatingSystems.forEach((os: string) => (this.projectAllowedOperatingSystems[os] = true));
   }
 
   getObservable(): Observable<Project> {
@@ -69,7 +72,7 @@ export class AddProjectDialogComponent implements OnInit {
       name: this.form.controls.name.value,
       labels: this.labels,
       spec: {
-        allowedOperatingSystems: this.allowedOperatingSystems,
+        allowedOperatingSystems: this.projectAllowedOperatingSystems,
       },
     };
     return this._projectService.create(project).pipe(take(1));

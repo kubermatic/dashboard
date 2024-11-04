@@ -49,28 +49,34 @@ limitations under the License.
                                  multiple
                                  fxLayout="row wrap"
                                  kmValueChangedIndicator>
-          <mat-button-toggle [value]="OperatingSystem.Ubuntu">
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.ubuntu"
+                             [value]="OperatingSystem.Ubuntu">
             <i class="km-os-image-ubuntu"></i>
             Ubuntu
           </mat-button-toggle>
-          <mat-button-toggle [value]="OperatingSystem.CentOS">
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.centos"
+                             [value]="OperatingSystem.CentOS">
             <i class="km-os-image-centos"></i>
             CentOS
           </mat-button-toggle>
-          <mat-button-toggle [value]="OperatingSystem.Flatcar">
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.flatcar"
+                             [value]="OperatingSystem.Flatcar">
             <i class="km-os-image-flatcar"></i>
             Flatcar
           </mat-button-toggle>
-          <mat-button-toggle [value]="OperatingSystem.AmazonLinux2">
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.amzn2"
+                             [value]="OperatingSystem.AmazonLinux2">
             <i class="km-os-image-amazon-linux-2"></i>
             Amazon Linux 2
           </mat-button-toggle>
-          <mat-button-toggle [value]="OperatingSystem.RHEL"
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rhel"
+                             [value]="OperatingSystem.RHEL"
                              #rhelToggle>
             <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
             RHEL
           </mat-button-toggle>
-          <mat-button-toggle [value]="OperatingSystem.RockyLinux">
+          <mat-button-toggle *ngIf="adminAllowedOperatingSystems.rockylinux"
+                             [value]="OperatingSystem.RockyLinux">
             <i class="km-os-image-rockylinux"></i>
             Rocky Linux
           </mat-button-toggle>

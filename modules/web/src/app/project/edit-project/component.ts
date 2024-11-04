@@ -29,6 +29,7 @@ import {QuotaDetails} from '@app/shared/entity/quota';
 import {UserService} from '@app/core/services/user';
 import {Member} from '@app/shared/entity/member';
 import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
+import {AllowedOperatingSystems} from '@app/shared/entity/settings';
 
 enum Controls {
   Name = 'name',
@@ -45,6 +46,7 @@ enum Controls {
 })
 export class EditProjectComponent implements OnInit {
   @Input() project: Project;
+  @Input() adminAllowedOperatingSystems: AllowedOperatingSystems;
 
   readonly Controls = Controls;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
@@ -126,12 +128,14 @@ export class EditProjectComponent implements OnInit {
       [Controls.CPUQuota]: new FormControl(''),
       [Controls.MemoryQuota]: new FormControl(''),
       [Controls.StorageQuota]: new FormControl(''),
-      [Controls.AllowedOperatingSystems]: new FormControl(Object.values(this.OperatingSystem)),
+      [Controls.AllowedOperatingSystems]: new FormControl(Object.values(this.adminAllowedOperatingSystems)),
     });
 
     const projectOS = this.project.spec?.allowedOperatingSystems;
     if (!_.isEmpty(projectOS)) {
-      const allowedOSValue = Object.keys(projectOS).filter(os => projectOS[os]);
+      const allowedOSValue = Object.keys(projectOS).filter(
+        os => projectOS[os] && this.adminAllowedOperatingSystems[os]
+      );
       this.form.get(Controls.AllowedOperatingSystems).setValue(allowedOSValue);
     }
 
