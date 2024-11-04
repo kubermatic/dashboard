@@ -24,6 +24,7 @@ import {CoreModule} from '@core/module';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {AddProjectDialogComponent} from './component';
+import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
 
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
@@ -44,6 +45,7 @@ describe('AddProjectDialogComponent', () => {
   beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(AddProjectDialogComponent);
     component = fixture.componentInstance;
+    component.adminAllowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
     component.labels = {};
     component.asyncLabelValidators = [];
     fixture.detectChanges();

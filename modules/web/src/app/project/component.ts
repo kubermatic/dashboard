@@ -42,7 +42,7 @@ import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/c
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project, ProjectOwner, ProjectStatus} from '@shared/entity/project';
-import {UserSettings} from '@shared/entity/settings';
+import {AllowedOperatingSystems, UserSettings} from '@shared/entity/settings';
 import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
@@ -78,6 +78,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   hasQuota: boolean;
   isProjectsLoading: boolean;
   editionVersion: string = getEditionVersion();
+  allowedOperatingSystems: AllowedOperatingSystems;
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
@@ -185,6 +186,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.restrictProjectCreation = settings.restrictProjectCreation;
       this.restrictProjectDeletion = settings.restrictProjectDeletion;
+      this.allowedOperatingSystems = settings.allowedOperatingSystems;
     });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
@@ -493,8 +495,9 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addProject(): void {
-    this._matDialog
-      .open(AddProjectDialogComponent)
+    const modal = this._matDialog.open(AddProjectDialogComponent);
+    modal.componentInstance.adminAllowedOperatingSystems = this.allowedOperatingSystems;
+    modal
       .afterClosed()
       .pipe(take(1))
       .subscribe(isAdded => {
@@ -521,6 +524,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditProjectComponent);
     modal.componentInstance.project = project;
+    modal.componentInstance.adminAllowedOperatingSystems = this.allowedOperatingSystems;
     modal
       .afterClosed()
       .pipe(take(1))
