@@ -69,6 +69,9 @@ func TestGetSeedOverview(t *testing.T) {
 						"restricted-fake-dc":  0,
 						"restricted-fake-dc2": 0,
 					},
+					"kubevirt": apiv2.ClustersByDatacenter{
+						"KubevirtDC": 0,
+					},
 				},
 			},
 		},

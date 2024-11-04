@@ -72,21 +72,6 @@ func getKvKubeConfigFromCredentials(ctx context.Context, projectProvider provide
 }
 
 func KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	projectID, clusterID, datacenterName string, settingsProvider provider.SettingsProvider) (interface{}, error) {
-	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
-	if err != nil {
-		return nil, err
-	}
-
-	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
-	if err != nil {
-		return nil, err
-	}
-
-	return KubeVirtInstancetypes(ctx, kvKubeconfig, datacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
-}
-
-func KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
 	projectID, clusterID string, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
 	if err != nil {
@@ -98,7 +83,22 @@ func KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx context.Context, user
 		return nil, err
 	}
 
-	return KubeVirtPreferences(ctx, kvKubeconfig, cluster, settingsProvider)
+	return KubeVirtInstancetypes(ctx, projectID, kvKubeconfig, cluster.Spec.Cloud.DatacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
+}
+
+func KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	projectID, clusterID string, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return nil, err
+	}
+
+	return KubeVirtPreferences(ctx, projectID, kvKubeconfig, cluster.Spec.Cloud.DatacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
 }
 
 func KubeVirtStorageClasses(ctx context.Context, kubeconfig string) (apiv2.StorageClassList, error) {
@@ -207,7 +207,7 @@ func newAPIPreference(w preferenceWrapper) (*apiv2.VirtualMachinePreference, err
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests
 // The list is filtered based on the Resource Quota.
-func KubeVirtInstancetypes(ctx context.Context, kubeconfig string, datacenterName string, cluster *kubermaticv1.Cluster, settingsProvider provider.SettingsProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.VirtualMachineInstancetypeList, error) {
+func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacenterName string, cluster *kubermaticv1.Cluster, settingsProvider provider.SettingsProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.VirtualMachineInstancetypeList, error) {
 	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
 	if err != nil {
 		return nil, err
@@ -224,6 +224,25 @@ func KubeVirtInstancetypes(ctx context.Context, kubeconfig string, datacenterNam
 		return nil, err
 	}
 
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	var infraNS string
+	if cluster != nil {
+		infraNS = cluster.Status.NamespaceName
+	}
+
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
+		infraNS = datacenter.Spec.Kubevirt.NamespacedMode.Namespace
+	}
+
 	// Reconcile Kubermatic Standard (update flow)
 	for _, it := range instancetypes.items {
 		if it.Category() == apiv2.InstancetypeKubermatic {
@@ -231,7 +250,7 @@ func KubeVirtInstancetypes(ctx context.Context, kubeconfig string, datacenterNam
 				instancetypeReconcilers := []reconciling.NamedVirtualMachineInstancetypeReconcilerFactory{
 					instancetypeReconciler(it),
 				}
-				if err := reconciling.ReconcileVirtualMachineInstancetypes(ctx, instancetypeReconcilers, cluster.Status.NamespaceName, client); err != nil {
+				if err := reconciling.ReconcileVirtualMachineInstancetypes(ctx, instancetypeReconcilers, infraNS, client); err != nil {
 					return nil, err
 				}
 			}
@@ -245,15 +264,6 @@ func KubeVirtInstancetypes(ctx context.Context, kubeconfig string, datacenterNam
 
 	filter := *settings.Spec.MachineDeploymentVMResourceQuota
 	if datacenterName != "" {
-		userInfo, err := userInfoGetter(ctx, "")
-		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
-		}
-
-		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
-		if err != nil {
-			return nil, fmt.Errorf("error getting dc: %w", err)
-		}
 		filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
 	}
 
@@ -294,7 +304,7 @@ func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, k
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
 // No filtering due to quota is needed.
-func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kubermaticv1.Cluster, settingsProvider provider.SettingsProvider) (*apiv2.VirtualMachinePreferenceList, error) {
+func KubeVirtPreferences(ctx context.Context, projectID, kubeconfig, datacenterName string, cluster *kubermaticv1.Cluster, _ provider.SettingsProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.VirtualMachinePreferenceList, error) {
 	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
 	if err != nil {
 		return nil, err
@@ -311,6 +321,25 @@ func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kuberm
 		return nil, err
 	}
 
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	var infraNS string
+	if cluster != nil {
+		infraNS = cluster.Status.NamespaceName
+	}
+
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.NamespacedMode != nil && datacenter.Spec.Kubevirt.NamespacedMode.Enabled {
+		infraNS = datacenter.Spec.Kubevirt.NamespacedMode.Namespace
+	}
+
 	// Reconcile Kubermatic Standard (update flow)
 	for _, it := range preferences.items {
 		if it.Category() == apiv2.InstancetypeKubermatic {
@@ -318,7 +347,7 @@ func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kuberm
 				preferenceReconcilers := []reconciling.NamedVirtualMachinePreferenceReconcilerFactory{
 					preferenceReconciler(it),
 				}
-				if err := reconciling.ReconcileVirtualMachinePreferences(ctx, preferenceReconcilers, cluster.Status.NamespaceName, client); err != nil {
+				if err := reconciling.ReconcileVirtualMachinePreferences(ctx, preferenceReconcilers, infraNS, client); err != nil {
 					return nil, err
 				}
 			}
