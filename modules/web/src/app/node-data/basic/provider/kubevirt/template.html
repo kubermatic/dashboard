@@ -53,6 +53,7 @@ limitations under the License.
                  fxFlex>
       <div *option="let preference">{{preference.name}}</div>
     </km-combobox>
+
     <button mat-flat-button
             type="button"
             color="tertiary"
@@ -82,7 +83,7 @@ limitations under the License.
              [value]="selectedInstanceTypeCpus"
              type="text"
              disabled
-             autocomplete="off">
+             autocomplete="off" />
     </mat-form-field>
   </ng-template>
 
@@ -104,9 +105,22 @@ limitations under the License.
              [value]="selectedInstanceTypeMemory"
              type="text"
              disabled
-             autocomplete="off">
+             autocomplete="off" />
     </mat-form-field>
   </ng-template>
+
+  <km-combobox #subnetCombobox
+               [selected]="selectedSubnet"
+               [options]="subnets"
+               [formControlName]="Controls.Subnet"
+               [label]="subnetLabel"
+               hint="Optional: Use specific subnet for the machines. VPC needs to be selected first to use this option."
+               [required]="false"
+               (changed)="onSubnetChange($event)"
+               inputLabel="Select Subnet..."
+               filterBy="name">
+    <div *option="let subnet">{{subnet.name}}</div>
+  </km-combobox>
 
   <mat-card-header class="km-no-padding">
     <mat-card-title>Primary Disk</mat-card-title>
@@ -162,7 +176,7 @@ limitations under the License.
              [formControlName]="Controls.NodeAffinityPresetKey"
              type="text"
              autocomplete="off"
-             kmValueChangedIndicator>
+             kmValueChangedIndicator />
       <mat-error *ngIf="form.get(Controls.NodeAffinityPresetKey).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -191,9 +205,7 @@ limitations under the License.
                     disableOptionCentering
                     kmValueChangedIndicator>
           <mat-option *ngFor="let preset of affinityPresetOptions"
-                      [value]="preset">
-            {{preset}}
-          </mat-option>
+                      [value]="preset"> {{preset}} </mat-option>
           <mat-select-trigger fxLayout="row">
             <div>{{form.get(controlName).value}}</div>
 

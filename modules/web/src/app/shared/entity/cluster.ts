@@ -213,6 +213,7 @@ export class HetznerCloudSpec {
 
 export class KubeVirtCloudSpec {
   kubeconfig: string;
+  vpcName?: string;
   preAllocatedDataVolumes: KubeVirtPreAllocatedDataVolume[];
 }
 
