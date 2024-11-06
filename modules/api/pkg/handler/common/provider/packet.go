@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/equinix/equinix-sdk-go/services/metalv1"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"

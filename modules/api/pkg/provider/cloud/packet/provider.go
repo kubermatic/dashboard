@@ -22,6 +22,7 @@ import (
 	"fmt"
 
 	"github.com/equinix/equinix-sdk-go/services/metalv1"
+
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -79,7 +80,7 @@ func ValidateCredentials(ctx context.Context, apiKey, projectID string) error {
 
 func GetClient(apiKey string) *metalv1.APIClient {
 	configuration := metalv1.NewConfiguration()
-	configuration.UserAgent = fmt.Sprintf("kubermatic %s", configuration.UserAgent)
+	configuration.UserAgent = fmt.Sprintf("kubermatic/api %s", configuration.UserAgent)
 	configuration.AddDefaultHeader("X-Auth-Token", apiKey)
 
 	return metalv1.NewAPIClient(configuration)
