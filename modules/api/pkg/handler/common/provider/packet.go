@@ -23,8 +23,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/packethost/packngo"
-
+	"github.com/equinix/equinix-sdk-go/services/metalv1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -36,11 +35,6 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
-
-// Used to decode response object.
-type plansRoot struct {
-	Plans []packngo.Plan `json:"plans"`
-}
 
 func PacketSizesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, projectID, clusterID string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
@@ -82,12 +76,11 @@ func PacketSizesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGett
 
 	filter := handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
 
-	return PacketSizes(apiKey, projectID, filter)
+	return PacketSizes(ctx, apiKey, projectID, filter)
 }
 
-func PacketSizes(apiKey, projectID string, machineFilter kubermaticv1.MachineFlavorFilter) (apiv1.PacketSizeList, error) {
+func PacketSizes(ctx context.Context, apiKey, projectID string, machineFilter kubermaticv1.MachineFlavorFilter) (apiv1.PacketSizeList, error) {
 	sizes := apiv1.PacketSizeList{}
-	root := new(plansRoot)
 
 	if len(apiKey) == 0 {
 		return sizes, fmt.Errorf("missing required parameter: apiKey")
@@ -98,18 +91,15 @@ func PacketSizes(apiKey, projectID string, machineFilter kubermaticv1.MachineFla
 	}
 
 	client := packet.GetClient(apiKey)
-	req, err := client.NewRequest(http.MethodGet, "/projects/"+projectID+"/plans", nil)
-	if err != nil {
-		return sizes, err
-	}
+	request := client.PlansApi.FindPlansByProject(ctx, projectID)
 
-	_, err = client.Do(req, root)
+	plans, response, err := client.PlansApi.FindPlansByProjectExecute(request)
 	if err != nil {
-		return sizes, err
+		return nil, err
 	}
+	defer response.Body.Close()
 
-	plans := root.Plans
-	for _, plan := range plans {
+	for _, plan := range plans.Plans {
 		sizes = append(sizes, toPacketSize(plan))
 	}
 
@@ -144,31 +134,35 @@ func filterMachineFlavorsForPacket(instances apiv1.PacketSizeList, machineFilter
 	return filteredRecords
 }
 
-func toPacketSize(plan packngo.Plan) apiv1.PacketSize {
+func toPacketSize(plan metalv1.Plan) apiv1.PacketSize {
 	drives := make([]apiv1.PacketDrive, 0)
 	for _, drive := range plan.Specs.Drives {
+		count := *drive.Count
+
 		drives = append(drives, apiv1.PacketDrive{
-			Count: drive.Count,
-			Size:  drive.Size,
-			Type:  drive.Type,
+			Count: int(count),
+			Size:  *drive.Size,
+			Type:  *drive.Type,
 		})
 	}
 
 	memory := "N/A"
 	if plan.Specs.Memory != nil {
-		memory = plan.Specs.Memory.Total
+		memory = *plan.Specs.Memory.Total
 	}
 
 	cpus := make([]apiv1.PacketCPU, 0)
 	for _, cpu := range plan.Specs.Cpus {
+		count := *cpu.Count
+
 		cpus = append(cpus, apiv1.PacketCPU{
-			Count: cpu.Count,
-			Type:  cpu.Type,
+			Count: int(count),
+			Type:  *cpu.Type,
 		})
 	}
 
 	return apiv1.PacketSize{
-		Name:   plan.Name,
+		Name:   *plan.Name,
 		CPUs:   cpus,
 		Memory: memory,
 		Drives: drives,

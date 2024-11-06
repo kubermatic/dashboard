@@ -31,6 +31,7 @@ require (
 	github.com/cristim/ec2-instances-info v0.0.0-20221130144415-da4474e2a3d1
 	github.com/digitalocean/godo v1.124.0
 	github.com/embik/nutanix-client-go v0.1.0
+	github.com/equinix/equinix-sdk-go v0.46.0
 	github.com/evanphx/json-patch v5.9.0+incompatible
 	github.com/go-jose/go-jose/v4 v4.0.2
 	github.com/go-kit/kit v0.13.0
@@ -50,11 +51,11 @@ require (
 	github.com/gorilla/securecookie v1.1.2
 	github.com/gorilla/websocket v1.5.3
 	github.com/hetznercloud/hcloud-go v1.57.0
+	github.com/kubeovn/kube-ovn v1.12.27
 	github.com/minio/minio-go/v7 v7.0.69
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20240206175643-9de2e6ab07f8 // v0.9.0+
 	github.com/open-policy-agent/gatekeeper/v3 v3.15.1
-	github.com/packethost/packngo v0.31.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.3
 	github.com/spf13/cobra v1.8.1
@@ -69,9 +70,9 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241009231712-d65d7675e446
-	k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c
-	k8c.io/operating-system-manager v1.5.1-0.20241011111004-2e98e5667070
+	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241106111234-822df3915331
+	k8c.io/machine-controller v1.60.1-0.20241104231631-36a68f1ae069
+	k8c.io/operating-system-manager v1.6.0
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.1
 	k8s.io/apiextensions-apiserver v0.31.1
@@ -99,8 +100,6 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
 replace k8s.io/client-go => k8s.io/client-go v0.31.1
-
-require github.com/kubeovn/kube-ovn v1.12.27
 
 require (
 	cloud.google.com/go/auth v0.9.4 // indirect

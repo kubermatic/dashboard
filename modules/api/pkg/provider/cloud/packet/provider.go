@@ -17,11 +17,11 @@ limitations under the License.
 package packet
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
-	"github.com/packethost/packngo"
-
+	"github.com/equinix/equinix-sdk-go/services/metalv1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -67,14 +67,20 @@ func GetCredentialsForCluster(cloudSpec kubermaticv1.CloudSpec, secretKeySelecto
 	return apiKey, projectID, nil
 }
 
-func ValidateCredentials(apiKey, projectID string) error {
+func ValidateCredentials(ctx context.Context, apiKey, projectID string) error {
 	client := GetClient(apiKey)
-	_, _, err := client.Projects.Get(projectID, nil)
+	request := client.ProjectsApi.FindProjectById(ctx, projectID)
+
+	_, response, err := client.ProjectsApi.FindProjectByIdExecute(request)
+	defer response.Body.Close()
+
 	return err
 }
 
-func GetClient(apiKey string) *packngo.Client {
-	client := packngo.NewClientWithAuth("kubermatic", apiKey, nil)
-	client.UserAgent = fmt.Sprintf("kubermatic/api %s", client.UserAgent)
-	return client
+func GetClient(apiKey string) *metalv1.APIClient {
+	configuration := metalv1.NewConfiguration()
+	configuration.UserAgent = fmt.Sprintf("kubermatic %s", configuration.UserAgent)
+	configuration.AddDefaultHeader("X-Auth-Token", apiKey)
+
+	return metalv1.NewAPIClient(configuration)
 }

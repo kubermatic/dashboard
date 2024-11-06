@@ -144,6 +144,6 @@ func EquinixMetalProjectSizesEndpoint(presetProvider provider.PresetProvider, us
 			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
 		}
 
-		return providercommon.PacketSizes(apiKey, projectID, filter)
+		return providercommon.PacketSizes(ctx, apiKey, projectID, filter)
 	}
 }
