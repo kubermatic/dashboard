@@ -19,7 +19,7 @@ limitations under the License.
 // This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.
 //
 //	Schemes: https
-//	Version: 2.23
+//	Version: 2.27
 //
 //	Consumes:
 //	- application/json
