@@ -12,7 +12,7 @@
   "info": {
     "description": "This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.",
     "title": "Kubermatic Kubernetes Platform API",
-    "version": "2.23"
+    "version": "2.27"
   },
   "paths": {
     "/api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}": {
