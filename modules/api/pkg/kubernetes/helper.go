@@ -27,6 +27,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"
 	"k8s.io/utils/ptr"
@@ -92,4 +93,8 @@ func GetContainerRuntime(ctx context.Context,
 		}
 	}
 	return "", fmt.Errorf("failed to get container runtime from node")
+}
+
+func IsEmptySelector(s *metav1.LabelSelector) bool {
+	return s == nil || (len(s.MatchExpressions) == 0 && len(s.MatchLabels) == 0)
 }

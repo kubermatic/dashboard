@@ -39,6 +39,7 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	"k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -87,6 +88,11 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
+	}
+	// Velero does not work well with existing, but empty label selectors:
+	// https://github.com/vmware-tanzu/velero/issues/2083
+	if kubernetes.IsEmptySelector(restore.Spec.LabelSelector) {
+		restore.Spec.LabelSelector = nil
 	}
 	if err := client.Create(ctx, restore); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
