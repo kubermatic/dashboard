@@ -25,6 +25,7 @@ import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AppConfigService} from '@app/config.service';
 
 @Injectable()
 export class PageTitleService {
@@ -38,11 +39,15 @@ export class PageTitleService {
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
     private readonly _machineDeploymentService: MachineDeploymentService,
-    private readonly _auth: Auth
+    private readonly _auth: Auth,
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   setTitle(url: string): void {
-    const viewName = this._getViewName(url.split('/').reverse());
+    const config = this._appConfigService.getConfig();
+    const viewName = config.prefix_page_title
+      ? `${config.prefix_page_title}-${this._getViewName(url.split('/').reverse())}`
+      : this._getViewName(url.split('/').reverse());
     this._titleService.setTitle(viewName);
 
     if (!this._auth.authenticated()) {
