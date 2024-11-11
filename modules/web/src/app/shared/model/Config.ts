@@ -36,7 +36,7 @@ export interface Config {
   themes?: Theme[];
   enforced_theme?: string;
   end_of_life?: EndOfLife;
-  prefix_page_title?: string;
+  postfix_page_title?: string;
 }
 
 export interface UserGroupConfig {

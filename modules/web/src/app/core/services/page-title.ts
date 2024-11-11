@@ -25,7 +25,6 @@ import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {AppConfigService} from '@app/config.service';
 
 @Injectable()
 export class PageTitleService {
@@ -39,16 +38,12 @@ export class PageTitleService {
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
     private readonly _machineDeploymentService: MachineDeploymentService,
-    private readonly _auth: Auth,
-    private readonly _appConfigService: AppConfigService
+    private readonly _auth: Auth
   ) {}
 
-  setTitle(url: string): void {
-    const config = this._appConfigService.getConfig();
-    const viewName = config.prefix_page_title
-      ? `${config.prefix_page_title}-${this._getViewName(url.split('/').reverse())}`
-      : this._getViewName(url.split('/').reverse());
-    this._titleService.setTitle(viewName);
+  setTitle(url: string, postfix?: string): void {
+    const viewName = this._getViewName(url.split('/').reverse());
+    this._titleService.setTitle(postfix ? `${viewName} | ${postfix}` : viewName);
 
     if (!this._auth.authenticated()) {
       return;
@@ -62,12 +57,18 @@ export class PageTitleService {
       .pipe(tap(md => (this.mdName = md ? md.name : '')))
       .pipe(take(1))
       .subscribe(_ => {
-        this._titleService.setTitle(this._generateTitle(viewName));
+        this._titleService.setTitle(
+          postfix ? `${this._generateTitle(viewName)} | ${postfix}` : this._generateTitle(viewName)
+        );
       });
   }
 
   private _getViewName(urlArray: string[]): string {
-    const viewName = urlArray.find(partial => Object.values(View).find(view => view === partial));
+    const filteredUrlArray = urlArray.filter(url => !!url);
+    if (!filteredUrlArray.length) {
+      return getViewDisplayName(View.SignIn);
+    }
+    const viewName = filteredUrlArray.find(partial => Object.values(View).find(view => view === partial));
     return viewName ? getViewDisplayName(viewName) : '';
   }
 

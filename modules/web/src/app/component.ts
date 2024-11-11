@@ -58,12 +58,12 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private readonly _document: Document
   ) {
     this.version = this.appConfigService.getGitVersion();
+    this.config = this.appConfigService.getConfig();
     this._registerRouterWatch();
     this._loadDefaultTheme();
   }
 
   ngOnInit(): void {
-    this.config = this.appConfigService.getConfig();
     if (this.config.google_analytics_code) {
       this.googleAnalyticsService.activate(
         this.config.google_analytics_code,
@@ -91,7 +91,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   private _registerRouterWatch(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this._pageTitleService.setTitle(event.urlAfterRedirects);
+        this._pageTitleService.setTitle(event.urlAfterRedirects, this.config.postfix_page_title);
         this._handleSidenav(event.urlAfterRedirects);
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
       }
