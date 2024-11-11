@@ -63,6 +63,8 @@ export enum View {
   ClusterRestore = 'clusterrestores',
   BackupStorageLocation = 'backupstoragelocations',
   Access = 'access',
+  RestAPI = 'rest-api',
+  SignIn = 'signIn',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
@@ -89,6 +91,8 @@ export enum ViewDisplayName {
   ClusterRestore = 'Cluster Restores',
   BackupStorageLocation = 'Backup Storage Locations',
   Access = 'Access',
+  RestAPI = 'Rest API',
+  SignIn = 'SignIn',
 }
 
 export enum ProjectSidenavSection {
