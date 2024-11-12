@@ -69,9 +69,9 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241009231712-d65d7675e446
-	k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c
-	k8c.io/operating-system-manager v1.5.1-0.20241011111004-2e98e5667070
+	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241108105135-9605363a38ac
+	k8c.io/machine-controller v1.60.1-0.20241104231631-36a68f1ae069
+	k8c.io/operating-system-manager v1.6.0
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.1
 	k8s.io/apiextensions-apiserver v0.31.1
@@ -145,6 +145,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
+	github.com/equinix/equinix-sdk-go v0.46.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.0 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
