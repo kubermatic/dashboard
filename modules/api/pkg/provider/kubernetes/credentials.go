@@ -396,7 +396,7 @@ func createOrUpdatePacketSecret(ctx context.Context, seedClient ctrlruntimeclien
 	}
 
 	if validate != nil {
-		if err := packet.ValidateCredentials(spec.APIKey, spec.ProjectID); err != nil {
+		if err := packet.ValidateCredentials(ctx, spec.APIKey, spec.ProjectID); err != nil {
 			return false, fmt.Errorf("invalid Equinixmetal credentials: %w", err)
 		}
 	}
@@ -861,7 +861,7 @@ func createOrUpdateKubeOneEquinixSecret(ctx context.Context, cloud apiv2.KubeOne
 		return utilerrors.NewBadRequest("kubeone Packet credentials missing")
 	}
 
-	if err := packet.ValidateCredentials(apiKey, projectID); err != nil {
+	if err := packet.ValidateCredentials(ctx, apiKey, projectID); err != nil {
 		return fmt.Errorf("invalid Packet credentials: %w", err)
 	}
 
