@@ -13,6 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
+<mat-card *ngIf="cluster?.spec?.opaIntegration?.enabled">
+  <mat-card-content>
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         class="warning-container">
+      <i class="km-icon-warning"></i>
+      <div>OPA (Open Policy Agent) will be deprecated in KKP 2.28, Kyverno will replace it as an EE-only feature for policy management.</div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
 <div *ngIf="isLoaded()"
      fxLayout="column">
   <div fxFlex

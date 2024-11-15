@@ -37,8 +37,7 @@
     margin-right: 48px;
   }
 
-  .km-pointer,
-  .km-icon-warning {
+  .km-pointer {
     @include mixins.size(16);
 
     margin-left: 4px;

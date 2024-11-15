@@ -82,3 +82,8 @@ km-button {
     }
   }
 }
+
+.mat-mdc-card:has(.km-icon-warning) {
+  margin: 0 0 20px;
+  padding: 0;
+}
