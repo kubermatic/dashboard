@@ -13,6 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<mat-card>
+  <mat-card-content>
+    <div fxLayout="row"
+         fxLayoutAlign=" center"
+         class="warning-container">
+      <i class="km-icon-warning"></i>
+      <div>OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be removed in the future, Kyverno has replaced it as an Enterprise Edition feature for policy management.</div>
+    </div>
+  </mat-card-content>
+</mat-card>
 <km-tab-card id="km-admin-opa-card"
              [dynamicTabs]="dynamicTabs">
   <km-tab label="Constraint Templates">
