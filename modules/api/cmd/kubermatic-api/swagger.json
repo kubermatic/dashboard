@@ -34414,6 +34414,9 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "volumeBindingMode": {
+          "$ref": "#/definitions/VolumeBindingMode"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -40289,6 +40292,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "VolumeBindingMode": {
+      "description": "+enum",
+      "type": "string",
+      "title": "VolumeBindingMode indicates how PersistentVolumeClaims should be bound.",
+      "x-go-package": "k8s.io/api/storage/v1"
     },
     "VpcConfigRequest": {
       "type": "object",

@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -25,15 +26,67 @@ type KubeVirtInfraStorageClass struct {
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	// volume binding mode
+	VolumeBindingMode VolumeBindingMode `json:"volumeBindingMode,omitempty"`
 }
 
 // Validate validates this kube virt infra storage class
 func (m *KubeVirtInfraStorageClass) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateVolumeBindingMode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this kube virt infra storage class based on context it is used
+func (m *KubeVirtInfraStorageClass) validateVolumeBindingMode(formats strfmt.Registry) error {
+	if swag.IsZero(m.VolumeBindingMode) { // not required
+		return nil
+	}
+
+	if err := m.VolumeBindingMode.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("volumeBindingMode")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("volumeBindingMode")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// ContextValidate validate this kube virt infra storage class based on the context it is used
 func (m *KubeVirtInfraStorageClass) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateVolumeBindingMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *KubeVirtInfraStorageClass) contextValidateVolumeBindingMode(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.VolumeBindingMode.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("volumeBindingMode")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("volumeBindingMode")
+		}
+		return err
+	}
+
 	return nil
 }
 
