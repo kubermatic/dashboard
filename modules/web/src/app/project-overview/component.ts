@@ -50,6 +50,8 @@ import {GlobalModule} from '@core/services/global/module';
 import {PathParam, ParamsService} from '@core/services/params';
 import {EditProjectComponent} from '@app/project/edit-project/component';
 import {MatDialog} from '@angular/material/dialog';
+import {AllowedOperatingSystems} from '@app/shared/entity/settings';
+import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
   selector: 'km-project-overview',
@@ -80,6 +82,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   isLoadingClusters = true;
   isLoadingExternalClusters = true;
+  allowedOperatingSystems: AllowedOperatingSystems;
   private _quotaWidgetComponent: QuotaWidgetComponent | null;
   private _quotaService: QuotaService;
   private _groupService: GroupService;
@@ -102,7 +105,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _appConfigService: AppConfigService,
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _params: ParamsService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _dialogModeService: DialogModeService
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
@@ -146,8 +150,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   editProject(): void {
+    this._dialogModeService.isEditDialog = true;
     const modal = this._matDialog.open(EditProjectComponent);
     modal.componentInstance.project = this.project;
+    modal.componentInstance.adminAllowedOperatingSystems = this.allowedOperatingSystems;
+
     modal
       .afterClosed()
       .pipe(take(1))
@@ -208,6 +215,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.etcdBackupEnabled = settings.enableEtcdBackup;
       this.externalClustersEnabled = settings.enableExternalClusterImport;
+      this.allowedOperatingSystems = settings.allowedOperatingSystems;
       if (this.etcdBackupEnabled) {
         this._loadBackups();
       }
