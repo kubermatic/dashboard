@@ -239,6 +239,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.aws) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
+      this.form.get(Controls.AMI).setValue(this._nodeDataService.nodeData.spec.cloud.aws.ami);
 
       this._cdr.detectChanges();
     }
