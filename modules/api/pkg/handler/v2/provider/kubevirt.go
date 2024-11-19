@@ -205,7 +205,7 @@ func KubeVirtPreferencesWithClusterCredentialsEndpoint(projectProvider provider.
 }
 
 // KubeVirtStorageClassesEndpoint handles the request to list available k8s StorageClasses (provided credentials).
-func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       KubeVirtGenericReq
@@ -234,7 +234,7 @@ func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, use
 			return nil, err
 		}
 
-		return providercommon.KubeVirtStorageClasses(ctx, kubeconfig)
+		return providercommon.KubeVirtStorageClasses(ctx, kubeconfig, req.DatacenterName, userInfoGetter, seedsGetter)
 	}
 }
 
@@ -345,7 +345,7 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(projectProvider provid
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+		return providercommon.KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
 }
 
