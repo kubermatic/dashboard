@@ -101,7 +101,25 @@ func KubeVirtPreferencesWithClusterCredentialsEndpoint(ctx context.Context, user
 	return KubeVirtPreferences(ctx, projectID, kvKubeconfig, cluster.Spec.Cloud.DatacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
 }
 
-func KubeVirtStorageClasses(ctx context.Context, kubeconfig string) (apiv2.StorageClassList, error) {
+func KubeVirtStorageClasses(ctx context.Context, kubeconfig, datacenterName string, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (apiv2.StorageClassList, error) {
+	userInfo, err := userInfoGetter(ctx, "")
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	storageClasses := apiv2.StorageClassList{}
+	for _, sc := range datacenter.Spec.Kubevirt.InfraStorageClasses {
+		storageClasses = append(storageClasses, apiv2.StorageClass{Name: sc.Name})
+	}
+	if len(storageClasses) > 0 {
+		return storageClasses, nil
+	}
+
 	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
 	if err != nil {
 		return nil, err
@@ -111,13 +129,23 @@ func KubeVirtStorageClasses(ctx context.Context, kubeconfig string) (apiv2.Stora
 }
 
 func KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	projectID, clusterID string) (interface{}, error) {
+	seedsGetter provider.SeedsGetter, projectID, clusterID string) (interface{}, error) {
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	var datacenterName string
+	if cluster != nil {
+		datacenterName = cluster.Spec.Cloud.DatacenterName
+	}
+
 	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
 	if err != nil {
 		return nil, err
 	}
 
-	return KubeVirtStorageClasses(ctx, kvKubeconfig)
+	return KubeVirtStorageClasses(ctx, kvKubeconfig, datacenterName, userInfoGetter, seedsGetter)
 }
 
 func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
