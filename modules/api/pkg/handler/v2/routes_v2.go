@@ -6340,7 +6340,7 @@ func (r Routing) listProjectKubevirtStorageClasses() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6362,7 +6362,7 @@ func (r Routing) listProjectKubevirtVPCs() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtVPCsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.KubeVirtVPCsEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, true)),
 		provider.DecodeKubeVirtProjectGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6384,7 +6384,7 @@ func (r Routing) listProjectKubevirtSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.KubeVirtSubnetsEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, true)),
 		provider.DecodeKubeVirtVPCSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -9438,7 +9438,7 @@ func (r Routing) listKubevirtStorageClasses() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		)(provider.KubeVirtStorageClassesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, false)),
 		provider.DecodeKubeVirtGenericReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

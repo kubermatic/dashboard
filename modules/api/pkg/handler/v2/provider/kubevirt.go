@@ -24,10 +24,12 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	"github.com/gorilla/mux"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/utils/ptr"
@@ -203,7 +205,7 @@ func KubeVirtPreferencesWithClusterCredentialsEndpoint(projectProvider provider.
 }
 
 // KubeVirtStorageClassesEndpoint handles the request to list available k8s StorageClasses (provided credentials).
-func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       KubeVirtGenericReq
@@ -232,12 +234,12 @@ func KubeVirtStorageClassesEndpoint(presetsProvider provider.PresetProvider, use
 			return nil, err
 		}
 
-		return providercommon.KubeVirtStorageClasses(ctx, kubeconfig)
+		return providercommon.KubeVirtStorageClasses(ctx, kubeconfig, req.DatacenterName, userInfoGetter, seedsGetter)
 	}
 }
 
 // KubeVirtVPCsEndpoint handles the request to list available VPCs.
-func KubeVirtVPCsEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func KubeVirtVPCsEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, _ kubermaticprovider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       KubeVirtGenericReq
@@ -271,7 +273,7 @@ func KubeVirtVPCsEndpoint(presetsProvider provider.PresetProvider, userInfoGette
 }
 
 // KubeVirtSubnetsEndpoint handles the request to list available subnets.
-func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       KubeVirtGenericReq
@@ -297,10 +299,39 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 			vpcName = vpcSubnetsReq.VPCName
 		}
 
+		userInfo, err := userInfoGetter(ctx, projectID)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, req.DatacenterName)
+		if err != nil {
+			return nil, fmt.Errorf("error getting dc: %w", err)
+		}
+
 		// If preset was used, vpcName will be empty and returned by the function instead.
 		kubeconfig, vpcName, err := getKubeconfigAndVPCName(ctx, req.Kubeconfig, vpcName, req.Credential, projectID, presetsProvider, userInfoGetter)
 		if err != nil {
 			return nil, err
+		}
+
+		if datacenter.Spec.Kubevirt != nil &&
+			datacenter.Spec.Kubevirt.ProviderNetwork != nil &&
+			len(datacenter.Spec.Kubevirt.ProviderNetwork.VPCs) > 0 {
+			kvSubnets := apiv2.KubeVirtSubnetList{}
+			for _, vpc := range datacenter.Spec.Kubevirt.ProviderNetwork.VPCs {
+				if vpc.Name == vpcName {
+					for _, subnet := range vpc.Subnets {
+						kvSubnet := apiv2.KubeVirtSubnet{
+							Name: subnet.Name,
+						}
+
+						kvSubnets = append(kvSubnets, kvSubnet)
+					}
+				}
+			}
+
+			return kvSubnets, nil
 		}
 
 		return providercommon.KubeVirtVPCSubnets(ctx, kubeconfig, vpcName)
@@ -314,7 +345,7 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(projectProvider provid
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+		return providercommon.KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
 }
 
@@ -325,7 +356,7 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(projectProvider provider.Project
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtVPCsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+		return providercommon.KubeVirtVPCsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
 }
 
@@ -336,7 +367,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(projectProvider provider.Proj
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
 		}
-		return providercommon.KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
+		return providercommon.KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
 }
 

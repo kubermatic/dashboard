@@ -30504,6 +30504,9 @@
         },
         "namespacedMode": {
           "$ref": "#/definitions/NamespacedMode"
+        },
+        "providerNetwork": {
+          "$ref": "#/definitions/ProviderNetwork"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -34411,9 +34414,36 @@
           "type": "boolean",
           "x-go-name": "IsDefaultClass"
         },
+        "labels": {
+          "description": "Labels is a map of string keys and values that can be used to organize and categorize\n(scope and select) objects. May match selectors of replication controllers\nand services.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "regions": {
+          "description": "Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters\nto span multiple regions",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Regions"
+        },
+        "volumeBindingMode": {
+          "$ref": "#/definitions/VolumeBindingMode"
+        },
+        "zones": {
+          "description": "Zones represent a logical failure domain. It is common for Kubernetes clusters to span multiple zones\nfor increased availability",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Zones"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -37867,6 +37897,24 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "ProviderNetwork": {
+      "type": "object",
+      "title": "ProviderNetwork describes the infra cluster network fabric that is being used.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "vpcs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VPC"
+          },
+          "x-go-name": "VPCs"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ProviderPreset": {
       "type": "object",
       "properties": {
@@ -39136,6 +39184,17 @@
       },
       "x-go-package": "k8s.io/api/rbac/v1"
     },
+    "Subnet": {
+      "type": "object",
+      "title": "Subnet a smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "SubnetCIDR": {
       "description": "SubnetCIDR is used to store IPv4/IPv6 CIDR.",
       "type": "string",
@@ -39834,6 +39893,24 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "VPC": {
+      "description": "VPC  is a virtual network dedicated to a single tenant within a KubeVirt, where the resources in the VPC\nis isolated from any other resources within the KubeVirt infra cluster.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "subnets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Subnet"
+          },
+          "x-go-name": "Subnets"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "VSphere": {
       "type": "object",
       "properties": {
@@ -40289,6 +40366,12 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "VolumeBindingMode": {
+      "description": "+enum",
+      "type": "string",
+      "title": "VolumeBindingMode indicates how PersistentVolumeClaims should be bound.",
+      "x-go-package": "k8s.io/api/storage/v1"
     },
     "VpcConfigRequest": {
       "type": "object",
