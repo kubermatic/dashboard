@@ -69,19 +69,19 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241108105135-9605363a38ac
+	k8c.io/kubermatic/v2 v2.26.1-0.20241121112806-f5f8eb1457bc
 	k8c.io/machine-controller v1.60.1-0.20241104231631-36a68f1ae069
 	k8c.io/operating-system-manager v1.6.0
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.31.1
+	k8s.io/api v0.31.2
 	k8s.io/apiextensions-apiserver v0.31.1
-	k8s.io/apimachinery v0.31.1
-	k8s.io/apiserver v0.31.1
+	k8s.io/apimachinery v0.31.2
+	k8s.io/apiserver v0.31.2
 	k8s.io/client-go v1.5.2
-	k8s.io/code-generator v0.31.1
+	k8s.io/code-generator v0.31.2
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.31.1
-	k8s.io/metrics v0.31.1
+	k8s.io/metrics v0.31.2
 	k8s.io/utils v0.0.0-20240902221715-702e33fdd3c3
 	kubevirt.io/api v1.3.1
 	kubevirt.io/containerized-data-importer-api v1.60.3
@@ -100,7 +100,7 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beec
 
 replace k8s.io/client-go => k8s.io/client-go v0.31.1
 
-require github.com/kubeovn/kube-ovn v1.12.27
+require github.com/kubeovn/kube-ovn v1.12.28
 
 require (
 	cloud.google.com/go/auth v0.9.4 // indirect
@@ -145,7 +145,6 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
-	github.com/equinix/equinix-sdk-go v0.46.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.0 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -269,7 +268,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	helm.sh/helm/v3 v3.14.3 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.0.0 // indirect
-	k8s.io/component-base v0.31.1 // indirect
+	k8s.io/component-base v0.31.2 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.31.1 // indirect

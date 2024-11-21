@@ -30470,6 +30470,11 @@
       "type": "object",
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
+        "ccmZoneAndRegionEnabled": {
+          "description": "Optional: indicates if region and zone labels from the cloud provider should be fetched.",
+          "type": "boolean",
+          "x-go-name": "CCMZoneAndRegionEnabled"
+        },
         "customNetworkPolicies": {
           "description": "Optional: CustomNetworkPolicies allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
           "type": "array",
@@ -37904,6 +37909,10 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "networkPolicyEnabled": {
+          "type": "boolean",
+          "x-go-name": "NetworkPolicyEnabled"
         },
         "vpcs": {
           "type": "array",
