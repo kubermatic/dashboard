@@ -46,6 +46,9 @@ type DatacenterSpecKubevirt struct {
 
 	// namespaced mode
 	NamespacedMode *NamespacedMode `json:"namespacedMode,omitempty"`
+
+	// provider network
+	ProviderNetwork *ProviderNetwork `json:"providerNetwork,omitempty"`
 }
 
 // Validate validates this datacenter spec kubevirt
@@ -69,6 +72,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateNamespacedMode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateProviderNetwork(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -187,6 +194,25 @@ func (m *DatacenterSpecKubevirt) validateNamespacedMode(formats strfmt.Registry)
 	return nil
 }
 
+func (m *DatacenterSpecKubevirt) validateProviderNetwork(formats strfmt.Registry) error {
+	if swag.IsZero(m.ProviderNetwork) { // not required
+		return nil
+	}
+
+	if m.ProviderNetwork != nil {
+		if err := m.ProviderNetwork.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerNetwork")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerNetwork")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this datacenter spec kubevirt based on the context it is used
 func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -208,6 +234,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateNamespacedMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProviderNetwork(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -297,6 +327,22 @@ func (m *DatacenterSpecKubevirt) contextValidateNamespacedMode(ctx context.Conte
 				return ve.ValidateName("namespacedMode")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("namespacedMode")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateProviderNetwork(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProviderNetwork != nil {
+		if err := m.ProviderNetwork.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerNetwork")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerNetwork")
 			}
 			return err
 		}

@@ -149,7 +149,7 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx context.Context, u
 }
 
 func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	projectID, clusterID string) (interface{}, error) {
+	_ provider.SeedsGetter, projectID, clusterID string) (interface{}, error) {
 	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
 	if err != nil {
 		return nil, err
@@ -159,15 +159,43 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGet
 }
 
 func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	projectID, clusterID string) (interface{}, error) {
-	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	seedsGetter provider.SeedsGetter, projectID, clusterID string) (interface{}, error) {
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
-		return nil, err
+		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
 	if err != nil {
 		return "", err
+	}
+
+	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, cluster.Spec.Cloud.DatacenterName)
+	if err != nil {
+		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	if datacenter.Spec.Kubevirt != nil &&
+		datacenter.Spec.Kubevirt.ProviderNetwork != nil &&
+		len(datacenter.Spec.Kubevirt.ProviderNetwork.VPCs) > 0 {
+		kvSubnets := apiv2.KubeVirtSubnetList{}
+		for _, vpc := range datacenter.Spec.Kubevirt.ProviderNetwork.VPCs {
+			if cluster.Spec.Cloud.Kubevirt.VPCName == vpc.Name {
+				for _, subnet := range vpc.Subnets {
+					kvSubnet := apiv2.KubeVirtSubnet{
+						Name: subnet.Name,
+					}
+					kvSubnets = append(kvSubnets, kvSubnet)
+				}
+			}
+		}
+
+		return kvSubnets, nil
+	}
+
+	kvKubeconfig, err := getKvKubeConfigFromCredentials(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
 	}
 
 	if cluster.Spec.Cloud.Kubevirt == nil {

@@ -69,8 +69,8 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.1-0.20241111090057-8cc249733007
-	k8c.io/machine-controller v1.60.0
+	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20241108105135-9605363a38ac
+	k8c.io/machine-controller v1.60.1-0.20241104231631-36a68f1ae069
 	k8c.io/operating-system-manager v1.6.0
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.1
@@ -145,6 +145,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
+	github.com/equinix/equinix-sdk-go v0.46.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.0 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -161,7 +162,7 @@ require (
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/gobuffalo/flect v1.0.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect

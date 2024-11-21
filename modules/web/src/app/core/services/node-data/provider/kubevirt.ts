@@ -198,6 +198,7 @@ export class NodeDataKubeVirtProvider {
                 .provider(NodeProvider.KUBEVIRT)
                 .kubeconfig(cluster.spec.cloud.kubevirt.kubeconfig)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .subnets(cluster.spec.cloud.kubevirt?.vpcName, onLoadingCb)
                 .pipe(
                   catchError(_ => {
