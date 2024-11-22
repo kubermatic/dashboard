@@ -120,7 +120,7 @@ func (l *loginHandler) redirectHandler() http.Handler {
 func (l *loginHandler) redirect(ctx context.Context, request interface{}) (response interface{}, err error) {
 	loginRequest := request.(*InitialRequest)
 	nonce := rand.String(rand.IntnRange(10, 15))
-	scopes := []string{"openid", "email"}
+	scopes := []string{"openid", "groups", "email"}
 
 	// Make sure the global settings have the Dashboard integration enabled.
 	if err := isEnabled(ctx, l.settingsProvider); err != nil {
