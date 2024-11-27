@@ -1,0 +1,25 @@
+.date-and-time {
+  display: flex;
+  align-items: center;
+
+  .time-pick {
+    position: relative;
+    top: -17px;
+    height: 45px;
+    border: 0.5px solid #4f4949;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: inherit;
+    width: 50%;
+    color: white;
+  }
+
+  .time-pick::-webkit-calendar-picker-indicator {
+    color: white;
+}
+
+  .date-pick {
+    width: 50%;
+    margin-right: 10px;
+  }
+}

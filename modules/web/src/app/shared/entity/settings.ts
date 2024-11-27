@@ -65,6 +65,14 @@ export interface AdminSettingsAnnotations {
   protectedAnnotations?: string[];
 }
 
+export interface AdminAnnouncement {
+  id: string;
+  message: string;
+  status: boolean;
+  expires?: string;
+  createdAt: string;
+}
+
 export interface StaticLabel {
   key: string;
   values: string[];

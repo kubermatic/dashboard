@@ -117,6 +117,7 @@ export enum AdminPanelView {
   Accounts = 'accounts',
   Administrators = 'administrators',
   Applications = 'applications',
+  Announcement = 'announcement',
 }
 
 export enum AdminPanelViewDisplayName {
@@ -134,6 +135,7 @@ export enum AdminPanelViewDisplayName {
   Accounts = 'Accounts',
   Administrators = 'Administrators',
   Applications = 'Applications',
+  Announcement = 'Announcement',
 }
 
 export enum AdminPanelSections {

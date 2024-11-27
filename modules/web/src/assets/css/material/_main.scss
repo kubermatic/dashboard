@@ -135,6 +135,11 @@ km-wizard {
       display: flex;
       margin: 16px 0;
     }
+
+    .mat-datepicker-toggle-default-icon {
+      transform: scale(3);
+    }
+
   }
 
   .mat-mdc-dialog-actions {
