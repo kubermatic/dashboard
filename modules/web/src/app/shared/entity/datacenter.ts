@@ -79,7 +79,6 @@ export class KubeLB {
 
 export class DatacenterOperatingSystemOptions {
   amzn2?: string;
-  centos: string;
   flatcar?: string;
   rhel?: string;
   rockylinux?: string;

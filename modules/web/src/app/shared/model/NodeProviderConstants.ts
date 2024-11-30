@@ -52,7 +52,6 @@ export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROV
 
 export enum OperatingSystem {
   AmazonLinux2 = 'amzn2',
-  CentOS = 'centos',
   Flatcar = 'flatcar',
   RHEL = 'rhel',
   RockyLinux = 'rockylinux',
@@ -92,8 +91,6 @@ export namespace NodeProviderConstants {
     switch (os) {
       case OperatingSystem.AmazonLinux2:
         return 'Amazon Linux 2';
-      case OperatingSystem.CentOS:
-        return 'CentOS';
       case OperatingSystem.Flatcar:
         return 'Flatcar';
       case OperatingSystem.RHEL:
@@ -123,8 +120,6 @@ export namespace NodeProviderConstants {
   export function getOperatingSystemSpecName(spec: NodeSpec) {
     if (spec.operatingSystem.ubuntu) {
       return OperatingSystem.Ubuntu;
-    } else if (spec.operatingSystem.centos) {
-      return OperatingSystem.CentOS;
     } else if (spec.operatingSystem.rhel) {
       return OperatingSystem.RHEL;
     } else if (spec.operatingSystem.flatcar) {

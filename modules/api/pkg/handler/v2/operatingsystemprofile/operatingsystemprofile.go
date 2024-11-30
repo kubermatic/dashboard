@@ -47,11 +47,6 @@ var defaultOperatingSystemProfiles = []apiv2.OperatingSystemProfile{
 		SupportedCloudProviders: []string{"aws"},
 	},
 	{
-		Name:                    "osp-centos",
-		OperatingSystem:         "centos",
-		SupportedCloudProviders: []string{"alibaba", "aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "nutanix", "openstack", "vsphere"},
-	},
-	{
 		Name:                    "osp-flatcar",
 		OperatingSystem:         "flatcar",
 		SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "gce", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},

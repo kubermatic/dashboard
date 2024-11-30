@@ -439,8 +439,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
 
   private _getDefaultImage(os: OperatingSystem): string {
     switch (os) {
-      case OperatingSystem.CentOS:
-        return this._images?.centos;
       case OperatingSystem.Ubuntu:
         return this._images?.ubuntu;
       case OperatingSystem.RHEL:

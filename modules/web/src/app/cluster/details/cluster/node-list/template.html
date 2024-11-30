@@ -496,10 +496,6 @@ limitations under the License.
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.centos"
-                                 label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.centos.distUpgradeOnBoot">
-            </km-property-boolean>
             <km-property-boolean *ngIf="!!element.spec.operatingSystem.flatcar"
                                  label="Disable auto-update"
                                  [value]="element.spec.operatingSystem.flatcar.disableAutoUpdate">

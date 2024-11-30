@@ -1519,12 +1519,6 @@ type UbuntuSpec struct {
 	DistUpgradeOnBoot bool `json:"distUpgradeOnBoot"`
 }
 
-// CentOSSpec contains CentOS specific settings.
-type CentOSSpec struct {
-	// do a dist-upgrade on boot and reboot it required afterwards
-	DistUpgradeOnBoot bool `json:"distUpgradeOnBoot"`
-}
-
 // FlatcarSpec contains Flatcar Linux specific settings
 // swagger:model FlatcarSpec
 type FlatcarSpec struct {
@@ -1565,7 +1559,6 @@ type AmazonLinuxSpec struct {
 type OperatingSystemSpec struct {
 	Ubuntu      *UbuntuSpec      `json:"ubuntu,omitempty"`
 	AmazonLinux *AmazonLinuxSpec `json:"amzn2,omitempty"`
-	CentOS      *CentOSSpec      `json:"centos,omitempty"`
 	RHEL        *RHELSpec        `json:"rhel,omitempty"`
 	Flatcar     *FlatcarSpec     `json:"flatcar,omitempty"`
 	RockyLinux  *RockyLinuxSpec  `json:"rockylinux,omitempty"`
