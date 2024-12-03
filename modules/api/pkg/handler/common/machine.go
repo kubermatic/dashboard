@@ -916,9 +916,6 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 	if os.AmazonLinux != nil {
 		counter++
 	}
-	if os.CentOS != nil {
-		counter++
-	}
 	if os.Flatcar != nil {
 		counter++
 	}

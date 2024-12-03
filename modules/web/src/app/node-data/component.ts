@@ -365,14 +365,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         );
       case OperatingSystem.Ubuntu:
         return !this.isProvider(NodeProvider.ANEXIA);
-      case OperatingSystem.CentOS:
-        return !this.isProvider(
-          NodeProvider.ANEXIA,
-          NodeProvider.BAREMETAL,
-          NodeProvider.GCP,
-          NodeProvider.VMWARECLOUDDIRECTOR,
-          NodeProvider.EDGE
-        );
       case OperatingSystem.RockyLinux:
         return this.isProvider(
           NodeProvider.AWS,
@@ -439,7 +431,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     switch (this._nodeDataService.operatingSystem) {
       case OperatingSystem.Ubuntu:
-      case OperatingSystem.CentOS:
       case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RHEL:
       case OperatingSystem.RockyLinux:
@@ -517,7 +508,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getOperatingSystemSpec(): OperatingSystemSpec {
     switch (this.form.get(Controls.OperatingSystem).value) {
       case OperatingSystem.Ubuntu:
-      case OperatingSystem.CentOS:
       case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RockyLinux:
         return {

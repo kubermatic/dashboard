@@ -28955,18 +28955,6 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/clusterbackup/storage-location"
     },
-    "CentOSSpec": {
-      "type": "object",
-      "title": "CentOSSpec contains CentOS specific settings.",
-      "properties": {
-        "distUpgradeOnBoot": {
-          "description": "do a dist-upgrade on boot and reboot it required afterwards",
-          "type": "boolean",
-          "x-go-name": "DistUpgradeOnBoot"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
     "CleanupOptions": {
       "type": "object",
       "properties": {
@@ -37219,9 +37207,6 @@
       "properties": {
         "amzn2": {
           "$ref": "#/definitions/AmazonLinuxSpec"
-        },
-        "centos": {
-          "$ref": "#/definitions/CentOSSpec"
         },
         "flatcar": {
           "$ref": "#/definitions/FlatcarSpec"

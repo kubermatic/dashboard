@@ -48,7 +48,6 @@ import (
 	vsphere "k8c.io/machine-controller/pkg/cloudprovider/provider/vsphere/types"
 	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 	"k8c.io/machine-controller/pkg/userdata/amzn2"
-	"k8c.io/machine-controller/pkg/userdata/centos"
 	"k8c.io/machine-controller/pkg/userdata/flatcar"
 	"k8c.io/machine-controller/pkg/userdata/rhel"
 	"k8c.io/machine-controller/pkg/userdata/rockylinux"
@@ -61,9 +60,6 @@ import (
 )
 
 func getOsName(nodeSpec apiv1.NodeSpec) (providerconfig.OperatingSystem, error) {
-	if nodeSpec.OperatingSystem.CentOS != nil {
-		return providerconfig.OperatingSystemCentOS, nil
-	}
 	if nodeSpec.OperatingSystem.Ubuntu != nil {
 		return providerconfig.OperatingSystemUbuntu, nil
 	}
@@ -799,12 +795,6 @@ func getNutanixProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc
 	}
 
 	return EncodeAsRawExtension(config)
-}
-
-func getCentOSOperatingSystemSpec(nodeSpec apiv1.NodeSpec) (*runtime.RawExtension, error) {
-	return EncodeAsRawExtension(centos.Config{
-		DistUpgradeOnBoot: nodeSpec.OperatingSystem.CentOS.DistUpgradeOnBoot,
-	})
 }
 
 func getUbuntuOperatingSystemSpec(nodeSpec apiv1.NodeSpec) (*runtime.RawExtension, error) {

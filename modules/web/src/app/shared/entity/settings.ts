@@ -89,7 +89,6 @@ export interface MachineDeploymentVMResourceQuota {
 
 export interface AllowedOperatingSystems {
   ubuntu?: boolean;
-  centos?: boolean;
   amzn2?: boolean;
   rhel?: boolean;
   flatcar?: boolean;
@@ -202,7 +201,6 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   allowedOperatingSystems: {
     ubuntu: true,
-    centos: true,
     amzn2: true,
     rhel: true,
     flatcar: true,

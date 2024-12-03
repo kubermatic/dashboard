@@ -632,12 +632,7 @@ limitations under the License.
                                  label="Upgrade system on the first boot"
                                  [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot">
             </km-property-boolean>
-
-            <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.centos?.distUpgradeOnBoot"
-                                 label="Upgrade system on the first boot"
-                                 [value]="machineDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot">
-            </km-property-boolean>
-
+            
             <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.amzn2?.distUpgradeOnBoot"
                                  label="Upgrade system on the first boot"
                                  [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot">
@@ -991,10 +986,6 @@ limitations under the License.
                 <div key>Instance Ready Check Timeout</div>
                 <div value>{{machineDeployment.spec.template.cloud?.openstack.instanceReadyCheckTimeout}}</div>
               </km-property>
-              <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.centos"
-                                   label="Allocate Floating IP"
-                                   [value]="machineDeployment.spec.template.cloud?.openstack?.useFloatingIP">
-              </km-property-boolean>
             </ng-container>
 
             <!-- Equinix Nodes -->
