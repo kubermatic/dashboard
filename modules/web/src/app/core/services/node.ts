@@ -73,7 +73,6 @@ export class NodeService {
     // and replaced by the values from patch. That's why we need to set undefined fields to null.
     // It is not part of API service as it is not required in all cases (i.e. replicas count change).
     patch.spec.template.operatingSystem.ubuntu = patch.spec.template.operatingSystem.ubuntu || null;
-    patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
     patch.spec.template.operatingSystem.flatcar = patch.spec.template.operatingSystem.flatcar || null;
     patch.spec.template.operatingSystem.rockylinux = patch.spec.template.operatingSystem.rockylinux || null;
     patch.spec.template.operatingSystem.amzn2 = patch.spec.template.operatingSystem.amzn2 || null;

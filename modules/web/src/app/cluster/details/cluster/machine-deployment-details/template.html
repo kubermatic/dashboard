@@ -229,9 +229,6 @@ limitations under the License.
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu"
                                [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot"
                                label="Upgrade system on the first boot"></km-property-boolean>
-          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.centos"
-                               [value]="machineDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot"
-                               label="Upgrade system on the first boot"></km-property-boolean>
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rhel"
                                [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot"
                                label="Upgrade system on the first boot"></km-property-boolean>

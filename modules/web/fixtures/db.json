@@ -216,7 +216,6 @@
             "68.123.44.117"
           ],
           "images": {
-            "centos": "kubermatic-e2e-centos",
             "coreos": "kubermatic-e2e-coreos",
             "ubuntu": "kubermatic-e2e-ubuntu"
           },
@@ -252,7 +251,6 @@
           "storageSolicy": "",
           "rootPath": "/dc-1/vm/test",
           "templates": {
-            "centos": "machine-controller-e2e-centos",
             "coreos": "machine-controller-e2e-coreos",
             "ubuntu": "machine-controller-e2e-ubuntu"
           }
@@ -275,7 +273,6 @@
           "endpoint": "10.20.128.43",
           "allowInsecure": true,
           "images": {
-            "centos": "machine-controller-e2e-centos",
             "ubuntu": "machine-controller-e2e-ubuntu"
           }
         },

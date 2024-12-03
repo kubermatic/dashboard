@@ -42,17 +42,6 @@ func TestCredentialEndpoint(t *testing.T) {
 			},
 			expectedResult: "ubuntu",
 		},
-		{
-			name: "test SSH login name for Openstack:CentOS",
-			distribution: &apiv1.OperatingSystemSpec{
-				CentOS: &apiv1.CentOSSpec{},
-			},
-
-			cloudProvider: &apiv1.NodeCloudSpec{
-				Openstack: &apiv1.OpenstackNodeSpec{},
-			},
-			expectedResult: "centos",
-		},
 	}
 
 	for _, tc := range testcases {

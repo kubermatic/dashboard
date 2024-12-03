@@ -325,8 +325,6 @@ func getOperatingSystemProfile(nd *apiv1.NodeDeployment, dc *kubermaticv1.Datace
 	switch {
 	case nd.Spec.Template.OperatingSystem.Ubuntu != nil:
 		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemUbuntu]
-	case nd.Spec.Template.OperatingSystem.CentOS != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemCentOS]
 	case nd.Spec.Template.OperatingSystem.RHEL != nil:
 		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRHEL]
 	case nd.Spec.Template.OperatingSystem.Flatcar != nil:
@@ -351,12 +349,6 @@ func getProviderOS(config *providerconfig.Config, nd *apiv1.NodeDeployment) erro
 	case nd.Spec.Template.OperatingSystem.Ubuntu != nil:
 		config.OperatingSystem = providerconfig.OperatingSystemUbuntu
 		osExt, err = getUbuntuOperatingSystemSpec(nd.Spec.Template)
-		if err != nil {
-			return err
-		}
-	case nd.Spec.Template.OperatingSystem.CentOS != nil:
-		config.OperatingSystem = providerconfig.OperatingSystemCentOS
-		osExt, err = getCentOSOperatingSystemSpec(nd.Spec.Template)
 		if err != nil {
 			return err
 		}
@@ -481,10 +473,6 @@ func validateAutoUpdateMDEnforcement(ctx context.Context, nd *apiv1.NodeDeployme
 		switch {
 		case osSpec.Ubuntu != nil:
 			if !osSpec.Ubuntu.DistUpgradeOnBoot {
-				return errorMessage
-			}
-		case osSpec.CentOS != nil:
-			if !osSpec.CentOS.DistUpgradeOnBoot {
 				return errorMessage
 			}
 		case osSpec.RHEL != nil:

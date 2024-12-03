@@ -88,11 +88,6 @@ limitations under the License.
           <i class="km-os-image-ubuntu"></i>
           Ubuntu
         </mat-button-toggle>
-        <mat-button-toggle [value]="OperatingSystem.CentOS"
-                           *ngIf="isOperatingSystemAllowed(OperatingSystem.CentOS)">
-          <i class="km-os-image-centos"></i>
-          CentOS
-        </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.Flatcar"
                            *ngIf="isOperatingSystemAllowed(OperatingSystem.Flatcar)">
           <i class="km-os-image-flatcar"></i>
@@ -201,7 +196,7 @@ limitations under the License.
       <div fxLayout="row"
            fxLayoutGap="36px">
         <!-- Options for Ubuntu, CenOS, RHEL, Rocky Linux, and Amazon Linux 2 -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
              class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot"

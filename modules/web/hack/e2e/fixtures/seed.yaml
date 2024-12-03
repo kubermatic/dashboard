@@ -87,7 +87,6 @@ spec:
           rootPath: "/dc-1/vm/e2e-tests"
           templates:
             ubuntu: "machine-controller-e2e-ubuntu"
-            centos: "machine-controller-e2e-centos"
             coreos: "machine-controller-e2e-coreos"
     azure-westeurope:
       location: "Azure West europe"
@@ -143,7 +142,6 @@ spec:
           enforceFloatingIP: true
           ignoreVolumeAZ: false
           images:
-            centos: kubermatic-e2e-centos
             coreos: kubermatic-e2e-coreos
             ubuntu: kubermatic-e2e-ubuntu
           nodeSizeRequirements:
@@ -158,7 +156,6 @@ spec:
           endpoint: "__NUTANIX_ENDPOINT__"
           allowInsecure: true
           images:
-            centos: machine-controller-e2e-centos
             ubuntu: machine-controller-e2e-ubuntu
     dc-to-delete:
       location: Amsterdam

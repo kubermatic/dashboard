@@ -41,7 +41,6 @@ import (
 	vsphere "k8c.io/machine-controller/pkg/cloudprovider/provider/vsphere/types"
 	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 	"k8c.io/machine-controller/pkg/userdata/amzn2"
-	"k8c.io/machine-controller/pkg/userdata/centos"
 	"k8c.io/machine-controller/pkg/userdata/flatcar"
 	"k8c.io/machine-controller/pkg/userdata/rhel"
 	"k8c.io/machine-controller/pkg/userdata/rockylinux"
@@ -80,15 +79,6 @@ func GetAPIV1OperatingSystemSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv
 			return nil, fmt.Errorf("failed to parse ubuntu config: %w", err)
 		}
 		operatingSystemSpec.Ubuntu = &apiv1.UbuntuSpec{
-			DistUpgradeOnBoot: config.DistUpgradeOnBoot,
-		}
-
-	case providerconfig.OperatingSystemCentOS:
-		config := &centos.Config{}
-		if err := json.Unmarshal(decodedProviderSpec.OperatingSystemSpec.Raw, &config); err != nil {
-			return nil, fmt.Errorf("failed to parse centos config: %w", err)
-		}
-		operatingSystemSpec.CentOS = &apiv1.CentOSSpec{
 			DistUpgradeOnBoot: config.DistUpgradeOnBoot,
 		}
 
