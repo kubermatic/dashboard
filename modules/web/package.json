@@ -71,7 +71,7 @@
     "@angular/router": "18.2.12",
     "@fontsource/inconsolata": "4.5.10",
     "@fontsource/roboto": "5.0.13",
-    "@fontsource/roboto-mono": "5.0.18",
+    "@fontsource/roboto-mono": "5.1.0",
     "@fontsource/ubuntu": "4.5.11",
     "@swimlane/ngx-charts": "21.0.0",
     "@xterm/addon-fit": "^0.10.0",
