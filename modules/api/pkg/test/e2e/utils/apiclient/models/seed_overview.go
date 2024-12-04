@@ -21,9 +21,6 @@ type SeedOverview struct {
 	// created
 	Created string `json:"created,omitempty"`
 
-	// datacenters by provider
-	DatacentersByProvider map[string]map[string]int64 `json:"providers,omitempty"`
-
 	// location
 	Location string `json:"location,omitempty"`
 

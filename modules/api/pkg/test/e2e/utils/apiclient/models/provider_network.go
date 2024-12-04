@@ -22,6 +22,9 @@ type ProviderNetwork struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// network policy enabled
+	NetworkPolicyEnabled bool `json:"networkPolicyEnabled,omitempty"`
+
 	// v p cs
 	VPCs []*VPC `json:"vpcs"`
 }
