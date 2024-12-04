@@ -19,6 +19,9 @@ import (
 // swagger:model DatacenterSpecKubevirt
 type DatacenterSpecKubevirt struct {
 
+	// Optional: indicates if region and zone labels from the cloud provider should be fetched.
+	CCMZoneAndRegionEnabled bool `json:"ccmZoneAndRegionEnabled,omitempty"`
+
 	// Optional: CustomNetworkPolicies allows to add some extra custom NetworkPolicies, that are deployed
 	// in the dedicated infra KubeVirt cluster. They are added to the defaults.
 	CustomNetworkPolicies []*CustomNetworkPolicy `json:"customNetworkPolicies"`

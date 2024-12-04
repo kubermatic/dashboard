@@ -2130,11 +2130,14 @@ type ClustersByDatacenter = map[string]int
 // SeedOverview stores details about a requested Seed object.
 // swagger:model SeedOverview
 type SeedOverview struct {
-	Name                  string                 `json:"name"`
-	Location              string                 `json:"location"`
-	Phase                 kubermaticv1.SeedPhase `json:"phase"`
-	Created               metav1.Time            `json:"created"`
-	DatacentersByProvider DatacentersByProvider  `json:"providers"`
+	Name     string                 `json:"name"`
+	Location string                 `json:"location"`
+	Phase    kubermaticv1.SeedPhase `json:"phase"`
+	Created  metav1.Time            `json:"created"`
+
+	// TODO: Remove the ignore marker when https://github.com/go-swagger/go-swagger/issues/3131 is released.
+	// swagger:ignore
+	DatacentersByProvider DatacentersByProvider `json:"providers"`
 }
 
 // SeedStatus stores the current status of a Seed.
