@@ -65,14 +65,8 @@ linters:
 issues:
   exclude:
     # gocyclo
-    - cyclomatic complexity [0-9]+ of func `DefaultConfiguration` is high
     - cyclomatic complexity [0-9]+ of func `initTestEndpoint` is high
-    - cyclomatic complexity [0-9]+ of func `\(\*Provider\)\.InitializeCloudProvider` is high
     - cyclomatic complexity [0-9]+ of func `GetAPIV2NodeCloudSpec` is high
-    - cyclomatic complexity [0-9]+ of func `validateOpenStackCloudSpec` is high
-    # gocritic
-    - singleCaseSwitch # in most cases this is the beginning of a lookup table and should be kept an obvious table
-    # govet
     - loop variable tc captured by func literal
     # TODO (sig-api): fix the following issues
     - cfg.EndpointResolverWithOptions is deprecated

@@ -319,8 +319,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			return nil, fmt.Errorf("failed to parse baremetal config: %w", err)
 		}
 
-		switch config.Driver.Value {
-		case string(plugins.Tinkerbell):
+		if config.Driver.Value == string(plugins.Tinkerbell) {
 			var tinkerbellSpec apiv1.TinkerbellNodeSpec
 			if config.DriverSpec.Raw == nil {
 				return nil, fmt.Errorf("driver spec is empty")
