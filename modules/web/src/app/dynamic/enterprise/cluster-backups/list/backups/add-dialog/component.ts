@@ -196,7 +196,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     };
 
     if (this.form.get(Controls.AllNamespaces).value) {
-      backup.spec.includedNamespaces = this.nameSpaces;
+      delete backup.spec?.includedNamespaces;
     } else {
       backup.spec.includedNamespaces = this.form.get(Controls.Namespaces).value;
     }
@@ -226,7 +226,7 @@ export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
     };
 
     if (this.form.get(Controls.AllNamespaces).value) {
-      scheduleBackup.spec.template.includedNamespaces = this.nameSpaces;
+      delete scheduleBackup.spec?.template.includedNamespaces;
     } else {
       scheduleBackup.spec.template.includedNamespaces = this.form.get(Controls.Namespaces).value;
     }
