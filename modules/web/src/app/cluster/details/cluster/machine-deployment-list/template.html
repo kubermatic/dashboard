@@ -38,7 +38,8 @@ limitations under the License.
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div *ngIf="!!cluster.spec.cloud.edge" class="kubeadm-manual">
+      <div *ngIf="!!cluster.spec.cloud.edge"
+           class="kubeadm-manual">
         To interact with cluster pods (reading logs, exec into containers, etc…), cluster CSRs must be approved manually per worker node:
         <div class="km-code-block km-copy"
              fxLayoutAlign=" center"
