@@ -87,7 +87,6 @@ export class NodeCloudSpec {
 
 export class OperatingSystemSpec {
   amzn2?: Amzn2Spec;
-  centos?: CentosSpec;
   flatcar?: FlatcarSpec;
   rhel?: RHELSpec;
   rockylinux?: RockyLinuxSpec;
@@ -99,10 +98,6 @@ export class OperatingSystemSpec {
 }
 
 export class UbuntuSpec {
-  distUpgradeOnBoot: boolean;
-}
-
-export class CentosSpec {
   distUpgradeOnBoot: boolean;
 }
 
@@ -470,8 +465,6 @@ export function getEmptyNodeVersionSpec(): NodeVersionInfo {
 export function getOperatingSystem(spec: NodeSpec): string {
   if (spec.operatingSystem.ubuntu) {
     return 'Ubuntu';
-  } else if (spec.operatingSystem.centos) {
-    return 'CentOS';
   } else if (spec.operatingSystem.rhel) {
     return 'RHEL';
   } else if (spec.operatingSystem.flatcar) {
@@ -487,8 +480,6 @@ export function getOperatingSystem(spec: NodeSpec): string {
 export function getOperatingSystemLogoClass(spec: NodeSpec): string {
   if (spec.operatingSystem.ubuntu) {
     return 'ubuntu';
-  } else if (spec.operatingSystem.centos) {
-    return 'centos';
   } else if (spec.operatingSystem.rhel) {
     return 'rhel';
   } else if (spec.operatingSystem.flatcar) {

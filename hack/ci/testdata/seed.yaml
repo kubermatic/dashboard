@@ -103,7 +103,6 @@ spec:
           ipv6Enabled: true
           rootPath: /Hamburg/vm/Kubermatic-ci
           templates:
-            centos: kkp-centos-7
             flatcar: kkp-flatcar-3033.2.2
             rhel: kkp-rhel-8.6
             ubuntu: kkp-ubuntu-22.04
@@ -161,7 +160,6 @@ spec:
           enforceFloatingIP: true
           ignoreVolumeAZ: false
           images:
-            centos: kubermatic-e2e-centos
             coreos: kubermatic-e2e-coreos
             ubuntu: kubermatic-ubuntu
           nodeSizeRequirements:
@@ -180,7 +178,6 @@ spec:
             - 37.123.105.117
           enforceFloatingIP: true
           images:
-            centos: "CentOS 8 (2021-07-05)"
             ubuntu: "kubermatic-ubuntu"
             flatcar: "Flatcar Stable (2022-08-05)"
           nodeSizeRequirements:
@@ -196,7 +193,6 @@ spec:
           endpoint: "__NUTANIX_ENDPOINT__"
           allowInsecure: true
           images:
-            centos: machine-controller-e2e-centos
             ubuntu: machine-controller-e2e-ubuntu
     dc-to-delete:
       location: Amsterdam

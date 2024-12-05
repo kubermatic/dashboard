@@ -195,9 +195,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
     this.initiallySelectedOS = null;
 
     switch (os) {
-      case OperatingSystem.CentOS:
-        this._defaultTemplate = this._templates.centos;
-        break;
       case OperatingSystem.Ubuntu:
         this._defaultTemplate = this._templates.ubuntu;
         break;
@@ -220,8 +217,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
   private _getFirstAvailableOS(): OperatingSystem {
     if (this._templates.ubuntu && this.allowedOperatingSystems.ubuntu) {
       return OperatingSystem.Ubuntu;
-    } else if (this._templates.centos && this.allowedOperatingSystems.centos) {
-      return OperatingSystem.CentOS;
     } else if (this._templates.flatcar && this.allowedOperatingSystems.flatcar) {
       return OperatingSystem.Flatcar;
     } else if (this._templates.rockylinux && this.allowedOperatingSystems.rockylinux) {

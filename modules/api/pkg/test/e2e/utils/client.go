@@ -532,7 +532,7 @@ func (r *TestClient) CreateKubevirtCluster(projectID, dc, name, credential, vers
 		cpu := "1"
 		memory := "2Gi"
 		pvcSize := "20Gi"
-		sourceURL := "http://vm-repo.default.svc.cluster.local/CentOS-7-x86_64-GenericCloud.qcow2"
+		sourceURL := "http://vm-repo.default.svc.cluster.local/Ubuntu-7-x86_64-GenericCloud.qcow2"
 		storageClassName := "standard"
 
 		clusterSpec.NodeDeployment = &models.NodeDeployment{
@@ -549,7 +549,7 @@ func (r *TestClient) CreateKubevirtCluster(projectID, dc, name, credential, vers
 						},
 					},
 					OperatingSystem: &models.OperatingSystemSpec{
-						Centos: &models.CentOSSpec{
+						Ubuntu: &models.UbuntuSpec{
 							DistUpgradeOnBoot: false,
 						},
 					},

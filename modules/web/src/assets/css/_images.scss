@@ -570,10 +570,6 @@
   @include mixins.provider-image('/assets/images/clouds/kubeone.svg', 130px, 30px);
 }
 
-.km-os-image-centos {
-  @include mixins.background-image('/assets/images/os/centos.svg', 24px);
-}
-
 .km-os-image-container-linux {
   @include mixins.background-image('/assets/images/os/container-linux.svg', 24px);
 }
