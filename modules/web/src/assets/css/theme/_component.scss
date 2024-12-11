@@ -38,6 +38,7 @@
 @import 'app/shared/components/openstack-credentials/theme';
 @import 'app/shared/components/terminal/terminal-toolbar/theme';
 @import 'app/shared/components/terminal/terminal-status-bar/theme';
+@import 'app/shared/components/announcement-banner/theme';
 @import 'app/cluster/details/cluster/overlay-terminal/theme';
 @import 'app/cluster/details/cluster/rbac/add-binding-dialog/theme';
 @import 'app/settings/admin/bucket-settings/destinations/theme';
@@ -92,4 +93,5 @@
   @include theme-annotation-form-component($colors);
   @include theme-topology-spread-constraint-form-component($colors);
   @include theme-nutanix-basic-node-data-component($colors);
+  @include theme-announcement-banner-component($colors);
 }

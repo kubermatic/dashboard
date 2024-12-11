@@ -108,4 +108,9 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
       this.settings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
     );
   }
+
+  openAnnouncementDialog(): void {
+    console.log("Announcement Dialog");
+
+  }
 }
