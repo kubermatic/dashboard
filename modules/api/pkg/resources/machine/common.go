@@ -291,7 +291,6 @@ func getBaremetalProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.No
 	tinkerbellSpec := &tink.TinkerbellPluginSpec{
 		ClusterName: providerconfig.ConfigVarString{Value: cluster.Name},
 		HardwareRef: tinkerbellConfig.HardwareRef,
-		Auth:        tink.Auth{Kubeconfig: providerconfig.ConfigVarString{Value: cluster.Spec.Cloud.Baremetal.Tinkerbell.Kubeconfig}},
 		OSImageURL:  providerconfig.ConfigVarString{Value: tinkerbellConfig.OsImageUrl},
 	}
 
