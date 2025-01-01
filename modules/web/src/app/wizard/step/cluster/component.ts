@@ -269,6 +269,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+
+          if (datacenter.spec.kubelb?.enableGatewayAPI) {
+            this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(true);
+          }
+
+          if (datacenter.spec.kubelb?.useLoadBalancerClass) {
+            this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(true);
+          }
+
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
