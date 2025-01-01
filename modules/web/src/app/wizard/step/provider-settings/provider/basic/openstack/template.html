@@ -23,7 +23,7 @@ limitations under the License.
            [formControlName]="Controls.Domain"
            [name]="Controls.Domain"
            [matAutocomplete]="autoDomain"
-           required>
+           [required]="isRequired(Controls.Domain)">
     <mat-autocomplete #autoDomain="matAutocomplete">
       <mat-option *ngFor="let domain of domains"
                   [value]="domain.name">

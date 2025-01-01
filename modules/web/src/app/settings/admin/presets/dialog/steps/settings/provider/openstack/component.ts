@@ -115,7 +115,7 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
   private _update(): void {
     this._presetDialogService.preset.spec.openstack = {
       ...this._presetDialogService.preset.spec.openstack,
-      domain: this.form.get(Controls.Domain).value,
+      domain: this.form.get(Controls.Domain).value || null,
       network: this.form.get(Controls.Network).value,
       securityGroups: this.form.get(Controls.SecurityGroups).value,
       floatingIPPool: this.form.get(Controls.FloatingIPPool).value,
