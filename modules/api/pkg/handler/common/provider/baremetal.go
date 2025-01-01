@@ -60,6 +60,10 @@ func TinkerbellImages(ctx context.Context, datacenterName string, userInfoGetter
 	httpSource := datacenter.Spec.Baremetal.Tinkerbell.Images.HTTP
 	if httpSource != nil {
 		for os, versions := range httpSource.OperatingSystems {
+			// Ensure the sub-map for the operating system is initialized
+			if _, ok := res.Standard.OperatingSystems[os]; !ok {
+				res.Standard.OperatingSystems[os] = map[string]string{}
+			}
 			for version, link := range versions {
 				res.Standard.OperatingSystems[os][version] = link
 			}
