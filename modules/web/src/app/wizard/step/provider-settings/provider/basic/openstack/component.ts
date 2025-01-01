@@ -22,7 +22,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
+import {
+  CredentialsType,
+  OpenstackCredentialsTypeService,
+} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -89,7 +92,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Domain]: this._builder.control('', Validators.required),
+      [Controls.Domain]: this._builder.control(''),
       [Controls.Credentials]: this._builder.control(''),
       [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
     });
@@ -122,6 +125,15 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc?.spec.openstack.enforceFloatingIP)))
+      .pipe(
+        tap(_ => {
+          if (this._credentialsTypeService.credentialsType === CredentialsType.Default) {
+            this.form.get(Controls.Domain).setValidators(Validators.required);
+          } else {
+            this.form.get(Controls.Domain).clearValidators();
+          }
+        })
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
   }
@@ -133,6 +145,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   isRequired(control: Controls): boolean {
     switch (control) {
+      case Controls.Domain:
+        return this.form.get(Controls.Domain).hasValidator(Validators.required);
       case Controls.FloatingIPPool:
         return this._isFloatingPoolIPEnforced;
       default:
