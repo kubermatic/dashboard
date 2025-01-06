@@ -46,7 +46,7 @@ import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
   Message = 'message',
-  Status = 'status',
+  IsActive = 'isActive',
   ExpireDate = 'expireDate',
   ExpireTime = 'expireTime',
 }
@@ -65,7 +65,7 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     public _matDialogRef: MatDialogRef<AdminAnnouncementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AdminAnnouncement,
+    @Inject(MAT_DIALOG_DATA) public data: Map<string,AdminAnnouncement>,
     private readonly _dialogModeService: DialogModeService,
     private readonly _dialogRef: MatDialogRef<AdminAnnouncementDialogComponent>,
     private readonly _notificationService: NotificationService
@@ -85,15 +85,18 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isEditDialog = this._dialogModeService.isEditDialog;
-
+    let announcement: AdminAnnouncement;
+    if (this.data) {
+      announcement = Object.values(this.data)[0]
+    }
     this.form = new FormGroup({
-      [Controls.Message]: new FormControl(this.data?.message ?? '', [Validators.required]),
-      [Controls.Status]: new FormControl(this.data?.status ?? true),
-      [Controls.ExpireDate]: new FormControl(this.data?.expires ? new Date(this.data?.expires) : new Date()),
-      [Controls.ExpireTime]: new FormControl(this.getTime(this.data?.expires)),
+      [Controls.Message]: new FormControl(announcement?.message ?? '', [Validators.required]),
+      [Controls.IsActive]: new FormControl(announcement?.isActive ?? true),
+      [Controls.ExpireDate]: new FormControl(announcement?.expires ? new Date(announcement?.expires) : new Date()),
+      [Controls.ExpireTime]: new FormControl(this.getTime(announcement?.expires)),
     });
 
-    this.form.get(Controls.ExpireTime).setValue(this.getTime(this.data?.expires));
+    this.form.get(Controls.ExpireTime).setValue(this.getTime(announcement?.expires));
   }
 
   ngOnDestroy(): void {
@@ -102,6 +105,9 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   }
 
   getObservable(): Observable<AdminAnnouncement> {
+    if (!this.form) {
+      return of({} as AdminAnnouncement)
+    }
     const expiresDate = new Date(this.form.get(Controls.ExpireDate).value);
     const expiresTime = this.form.get(Controls.ExpireTime).value;
 
@@ -109,11 +115,10 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
     expiresDate.setHours(hours, minutes);
 
     const announcement: AdminAnnouncement = {
-      id: this.data?.id ?? crypto.randomUUID(),
-      message: this.form?.get(Controls.Message).value,
-      status: this.form?.get(Controls.Status).value,
-      expires: expiresDate.toString(),
-      createdAt: new Date().toUTCString(),
+      message: this.form.get(Controls.Message).value,
+      isActive: this.form.get(Controls.IsActive).value,
+      expires: expiresDate.toISOString(),
+      createdAt: new Date().toISOString(),
     };
     return of(announcement);
   }

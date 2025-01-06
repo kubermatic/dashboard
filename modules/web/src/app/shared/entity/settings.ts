@@ -58,6 +58,7 @@ export interface AdminSettings {
   webTerminalOptions?: WebTerminalOptions;
   staticLabels?: StaticLabel[];
   annotations?: AdminSettingsAnnotations;
+  announcements?: object;
 }
 
 export interface AdminSettingsAnnotations {
@@ -66,12 +67,12 @@ export interface AdminSettingsAnnotations {
 }
 
 export interface AdminAnnouncement {
-  id: string;
-  message: string;
-  status: boolean;
-  expires?: string;
   createdAt: string;
+  isActive: boolean;
+  message: string;
+  expires?: string;
 }
+
 
 export interface StaticLabel {
   key: string;
@@ -119,6 +120,7 @@ export interface MLAOptions {
   monitoringEnabled: boolean;
   monitoringEnforced: boolean;
 }
+
 
 export interface NotificationOptions {
   hideErrors: boolean;
@@ -273,3 +275,41 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     enabled: false,
   },
 };
+
+export const mockAnnouncements = new Map<string, AdminAnnouncement>([
+  [
+    "c6b2d8e2-5f30-4f64-a3a9-1d9b7a6909e7",
+    {
+      createdAt: "2024-12-01T10:00:00.000Z",
+      isActive: true,
+      message: "System maintenance scheduled for December 5th.",
+      expires: "2024-12-06T00:00:00.000Z",
+    },
+  ],
+  [
+    "f7a3c6e4-9c34-4d83-8f72-239d9fa75e21",
+    {
+      createdAt: "2024-12-10T08:30:00.000Z",
+      isActive: true,
+      message: "New feature released: Dark Mode is now available!",
+      expires: "2024-12-20T00:00:00.000Z",
+    },
+  ],
+  [
+    "a3e29d8f-12c3-4d92-a8b5-3f7e6c4a2d17",
+    {
+      createdAt: "2024-11-25T14:15:00.000Z",
+      isActive: false,
+      message: "Thanksgiving sale ended.",
+      expires: "2024-11-30T23:59:59.000Z",
+    },
+  ],
+  [
+    "e8f3a6b9-7d24-4c8e-b7a1-4d2f7c8e1b39",
+    {
+      createdAt: "2024-12-15T12:00:00.000Z",
+      isActive: true,
+      message: "Holiday season greetings from our team!",
+    },
+  ],
+]);

@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {CookieService} from 'ngx-cookie-service';
 import {AdminAnnouncementDialogComponent} from './announcement-dialog/component';
 import {DialogModeService} from '@app/core/services/dialog-mode';
-import {take} from 'rxjs/operators';
-import {AdminAnnouncement} from '@app/shared/entity/settings';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {AdminAnnouncement, AdminSettings} from '@app/shared/entity/settings';
 import {StatusIcon} from '@app/shared/utils/health-status';
+import { Subject } from 'rxjs';
+import { SettingsService } from '@app/core/services/settings';
 
 enum Column {
   Status = 'status',
@@ -39,33 +40,43 @@ interface adminAnnouncementStatus {
   selector: 'km-admin-announcement',
   templateUrl: 'template.html',
 })
-export class AdminAnnouncementComponent implements OnInit {
+export class AdminAnnouncementComponent implements OnInit, OnDestroy {
   readonly Column = Column;
-  dataSource = new MatTableDataSource<AdminAnnouncement>();
+  private _unsubscribe = new Subject<void>();
+  adminSettings: AdminSettings;
+  dataSource = new MatTableDataSource<Map<string,AdminAnnouncement>>();
   displayedColumns: string[] = Object.values(Column);
-  announcements: AdminAnnouncement[] = [];
+  announcements = new Map<string, AdminAnnouncement>();
 
   constructor(
-    private readonly _cookieService: CookieService,
+    private readonly _settingsService: SettingsService,
     private readonly _matDialog: MatDialog,
     private readonly _dialogModeService: DialogModeService
-  ) {
-    if (!this._cookieService.check('announcements')) {
-      this._saveMockDataToCookie();
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
-    this._getAnnouncements();
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.adminSettings = settings
+      if (settings.announcements) {
+        Object.keys(settings.announcements).forEach(id => {
+          this.announcements.set(id, settings.announcements[id])
+        })
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   removeAnnouncement(removedMessage: string): void {
-    this.announcements = this.announcements.filter(announcement => announcement.id !== removedMessage);
-    this._saveMockDataToCookie();
-    this._getAnnouncements();
+    console.log(removedMessage);
+
   }
 
   addAnnouncementDialog(announcement?: AdminAnnouncement): void {
+
     if (announcement) {
       this._dialogModeService.isEditDialog = true;
     }
@@ -74,14 +85,14 @@ export class AdminAnnouncementComponent implements OnInit {
       .open(AdminAnnouncementDialogComponent, {data: announcement} as MatDialogConfig)
       .afterClosed()
       .pipe(take(1))
-      .subscribe(newAnnouncement => {
+      .pipe(switchMap(announcement => {
         this._dialogModeService.isEditDialog = false;
-        if (newAnnouncement) {
-          this.removeAnnouncement(newAnnouncement.id);
-          this.announcements.push(newAnnouncement);
-          this._saveMockDataToCookie();
-          this._getAnnouncements();
-        }
+        this.announcements.set("dsfsfsdfs",announcement )
+
+       return this._settingsService.patchAdminSettings({...this.adminSettings, announcements: Object.fromEntries(this.announcements)})
+      }))
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
       });
   }
 
@@ -89,23 +100,10 @@ export class AdminAnnouncementComponent implements OnInit {
     if (new Date(announcement.expires) < new Date()) {
       return {message: 'Expired', icon: StatusIcon.Unknown};
     }
-    if (!announcement.status) {
+    if (!announcement.isActive) {
       return {message: 'Paused', icon: StatusIcon.Stopped};
     }
     return {message: 'Active', icon: StatusIcon.Running};
   }
 
-  private _saveMockDataToCookie(): void {
-    const serializedAnnouncements = JSON.stringify(this.announcements);
-    const numOfDays = 7;
-    this._cookieService.set('announcements', serializedAnnouncements, numOfDays, '/');
-  }
-
-  private _getAnnouncements(): void {
-    const cookieValue = this._cookieService.get('announcements');
-    if (cookieValue) {
-      this.announcements = JSON.parse(cookieValue);
-      this.dataSource.data = this.announcements;
-    }
-  }
 }

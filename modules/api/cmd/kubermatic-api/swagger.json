@@ -27479,6 +27479,33 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "Announcement": {
+      "type": "object",
+      "title": "The announcement feature allows administrators to broadcast important messages to all users.",
+      "properties": {
+        "createdAt": {
+          "description": "Timestamp when the announcement was created.",
+          "type": "string",
+          "x-go-name": "CreatedAt"
+        },
+        "expires": {
+          "description": "Expiration date for the announcement.\n+optional",
+          "type": "string",
+          "x-go-name": "Expires"
+        },
+        "isActive": {
+          "description": "Indicates whether the announcement is active.",
+          "type": "boolean",
+          "x-go-name": "IsActive"
+        },
+        "message": {
+          "description": "The message content of the announcement.",
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "Anything": {
       "description": "Anything is a struct wrapper around a field of type `interface{}`\nthat plays nicely with controller-gen\n+kubebuilder:object:generate=false\n+kubebuilder:validation:Type=\"\"",
       "type": "object",
@@ -33179,6 +33206,14 @@
         },
         "annotations": {
           "$ref": "#/definitions/AnnotationSettings"
+        },
+        "announcements": {
+          "description": "The announcement feature allows administrators to broadcast important messages to all users.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Announcement"
+          },
+          "x-go-name": "Announcements"
         },
         "cleanupOptions": {
           "$ref": "#/definitions/CleanupOptions"

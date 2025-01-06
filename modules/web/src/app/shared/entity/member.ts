@@ -25,6 +25,7 @@ export class Member {
   userSettings?: UserSettings;
   projects: MemberProject[];
   lastSeen?: Date;
+  readAnnouncements?: string[];
 }
 
 export class MemberProject {

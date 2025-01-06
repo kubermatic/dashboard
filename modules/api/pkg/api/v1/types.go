@@ -593,6 +593,10 @@ type User struct {
 	// LastSeen holds a time in UTC format when the user has been using the API last time
 	// swagger:strfmt date-time
 	LastSeen *Time `json:"lastSeen,omitempty"`
+
+	// ReadAnnouncements holds the IDs of admin announcements that the user has read.
+	// +optional
+	ReadAnnouncements []string `json:"readAnnouncements,omitempty"`
 }
 
 var RolePriority = map[string]int{
@@ -618,10 +622,11 @@ func ConvertInternalUserToExternal(internalUser *kubermaticv1.User, includeSetti
 				return nil
 			}(),
 		},
-		Email:    internalUser.Spec.Email,
-		Groups:   internalUser.Spec.Groups,
-		IsAdmin:  internalUser.Spec.IsAdmin,
-		Projects: []ProjectGroup{},
+		Email:             internalUser.Spec.Email,
+		Groups:            internalUser.Spec.Groups,
+		IsAdmin:           internalUser.Spec.IsAdmin,
+		Projects:          []ProjectGroup{},
+		ReadAnnouncements: internalUser.Spec.ReadAnnouncements,
 	}
 
 	if !internalUser.Status.LastSeen.IsZero() {

@@ -26,7 +26,20 @@ limitations under the License.
           class="km-header-cell"></th>
       <td mat-cell
           class="events-long-text"
-          *matCellDef="let element">{{element.message}}</td>
+          *matCellDef="let element">{{announcements[element]?.message}}</td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Read">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell"></th>
+      <td mat-cell
+          class="events-long-text"
+          *matCellDef="let element"><button *ngIf="isMessageRead(element)"
+          mat-icon-button
+          (click)="markAsRead(element)"
+          fxLayoutAlign="center center">
+    <i [ngClass]="element.enabled ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-hide'"></i>
+  </button></td>
     </ng-container>
     <tr mat-header-row
         class="km-header-row"
@@ -36,7 +49,7 @@ limitations under the License.
         class="km-mat-row"></tr>
   </table>
   <div class="km-row km-empty-list-msg"
-       *ngIf="!announcements.length ">No backups available.</div>
+       *ngIf="hasAnnouncements()">No backups available.</div>
 </mat-dialog-content>
 
 

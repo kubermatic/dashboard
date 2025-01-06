@@ -390,8 +390,23 @@ func PatchSettingsEndpoint(userProvider provider.UserProvider) endpoint.Endpoint
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-
 		return updatedUser.Spec.Settings, nil
+	}
+}
+
+// PatchReadAnnouncementsEndpoint Updates read announcements of the current user.
+func PatchReadAnnouncementsEndpoint(userProvider provider.UserProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(PatchReadAnnouncementsReq)
+		existingUser := ctx.Value(middleware.UserCRContextKey).(*kubermaticv1.User)
+		existingUser.Spec.ReadAnnouncements = req.Body
+		updatedUser, err := userProvider.UpdateUser(ctx, existingUser)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		return updatedUser.Spec.ReadAnnouncements, nil
+
 	}
 }
 
@@ -563,12 +578,30 @@ type PatchSettingsReq struct {
 	Patch json.RawMessage
 }
 
+// PatchReadAnnouncementsReq defines HTTP request for patchCurrentUserReadAnnouncements
+// swagger:parameters patchCurrentUserReadAnnouncements
+type PatchReadAnnouncementsReq struct {
+	// in: body
+	Body []string
+}
+
 // DecodePatchSettingsReq  decodes an HTTP request into PatchSettingsReq.
 func DecodePatchSettingsReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req PatchSettingsReq
 	var err error
 
 	if req.Patch, err = io.ReadAll(r.Body); err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// DecodePatchReadAnnouncementsReq  decodes an HTTP request into PatchReadAnnouncementsReq.
+func DecodePatchReadAnnouncementsReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req PatchReadAnnouncementsReq
+
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
 

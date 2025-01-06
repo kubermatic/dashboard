@@ -12,44 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnChanges, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {AdminAnnouncement} from '@app/shared/entity/settings';
-import {CookieService} from 'ngx-cookie-service';
+import { SettingsService } from '@app/core/services/settings';
+import { UserService } from '@app/core/services/user';
+import {AdminAnnouncement, AdminSettings, mockAnnouncements} from '@app/shared/entity/settings';
+import { take } from 'rxjs';
 
 enum Column {
   Message = 'message',
-  // Actions = 'actions',
+  Read = 'read',
 }
 
 @Component({
+  // check the name
   selector: 'km-announcement',
   templateUrl: './template.html',
 })
-export class AnnouncementDialogComponent implements OnInit {
+export class AnnouncementDialogComponent implements OnInit, OnChanges {
   readonly Column = Column;
-  dataSource = new MatTableDataSource<AdminAnnouncement>();
+  dataSource = new MatTableDataSource<string>();
   displayedColumns: string[] = Object.values(Column);
-  announcements: AdminAnnouncement[] = [];
+  announcements = new Map<string, AdminAnnouncement>();
+  readAnnouncements: string[] = [];
 
   constructor(
-    private readonly _cookieService: CookieService,
+    private readonly _settingsService: SettingsService,
     public _matDialogRef: MatDialogRef<AnnouncementDialogComponent>,
+    private readonly _userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: AdminAnnouncement[],
+    private readonly _cdr: ChangeDetectorRef,
+
   ) {}
 
   ngOnInit(): void {
+
+    console.log(this.announcements);
+  }
+
+  ngOnChanges(): void {
     this._getAnnouncements();
+    this._getReadAnnouncements();
+    console.log(this.announcements);
+
+  }
+
+  hasAnnouncements(): boolean {
+    return !!Object.keys(this.announcements).length
+  }
+
+  markAsRead(announcement: string): void {
+    this.readAnnouncements.push(announcement)
+  }
+
+  isMessageRead(announcement: string): boolean {
+    return this.readAnnouncements.includes(announcement)
   }
 
   private _getAnnouncements(): void {
-    const cookieValue = this._cookieService.get('announcements');
-    if (cookieValue?.length) {
-      this.announcements = JSON.parse(cookieValue)
-        .filter((ann: AdminAnnouncement) => ann.status && (!ann.expires || new Date(ann.expires) > new Date()))
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      this.dataSource.data = this.announcements;
-    }
+    this._settingsService.adminSettings.pipe(take(1)).subscribe((settings: AdminSettings) => {
+
+      if (settings.announcements) {
+        Object.keys(mockAnnouncements).forEach(id => {
+          this.announcements.set(id, mockAnnouncements[id])
+        })
+        this.dataSource.data = Object.keys(this.announcements)
+      }
+    })
+    this._cdr.detectChanges();
+  }
+
+  private _getReadAnnouncements(): void {
+    this._userService.currentUser.pipe(take(1)).subscribe(settings => this.readAnnouncements = settings.readAnnouncements)
   }
 }

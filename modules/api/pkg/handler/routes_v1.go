@@ -433,6 +433,10 @@ func (r Routing) RegisterV1(mux *mux.Router, metrics common.ServerMetrics) {
 		Path("/me/settings").
 		Handler(r.patchCurrentUserSettings())
 
+	mux.Methods(http.MethodPatch).
+		Path("/me/readannouncements").
+		Handler(r.patchCurrentUserReadAnnouncements())
+
 	mux.Methods(http.MethodGet).
 		Path("/labels/system").
 		Handler(r.listSystemLabels())
@@ -1639,6 +1643,32 @@ func (r Routing) patchCurrentUserSettings() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(user.PatchSettingsEndpoint(r.userProvider)),
 		user.DecodePatchSettingsReq,
+		EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v1/me/readannouncements readannouncements patchCurrentUserReadAnnouncements
+//
+//	    Updates read announcements of the current user.
+//
+//		   Consumes:
+//	    - application/json
+//
+//	    Produces:
+//	    - application/json
+//
+//	    Responses:
+//	      default: errorResponse
+//	      200: []string
+//	      401: empty
+func (r Routing) patchCurrentUserReadAnnouncements() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(user.PatchReadAnnouncementsEndpoint(r.userProvider)),
+		user.DecodePatchReadAnnouncementsReq,
 		EncodeJSON,
 		r.defaultServerOptions()...,
 	)

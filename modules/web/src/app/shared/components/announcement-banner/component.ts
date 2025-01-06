@@ -50,7 +50,7 @@ export class AnnouncementbannerComponent implements OnInit {
   ) {}
 
   get checkPages(): boolean {
-    return this._showAnnouncementBanner && !!this.announcements.length;
+    return this._showAnnouncementBanner && !!this.announcements?.length;
   }
 
   ngOnInit(): void {
@@ -72,7 +72,7 @@ export class AnnouncementbannerComponent implements OnInit {
     const cookieValue = this._cookieService.get('announcements');
     if (cookieValue?.length) {
       const announcements: AdminAnnouncement[] = JSON.parse(cookieValue).filter(
-        (ann: AdminAnnouncement) => ann.status && (!ann.expires || new Date(ann.expires) > new Date())
+        (ann: AdminAnnouncement) => ann.isActive && (!ann.expires || new Date(ann.expires) > new Date())
       );
       this.announcements = announcements.sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -83,7 +83,6 @@ export class AnnouncementbannerComponent implements OnInit {
   openAnnouncementsDialog(): void {
     this._dialogModeService.isEditDialog = true;
 
-    console.log("annoncement dialog")
     this._matDialog
     .open(AnnouncementDialogComponent, {data: this.announcements})
     .afterClosed()
@@ -94,10 +93,6 @@ export class AnnouncementbannerComponent implements OnInit {
   }
 
   closeBanner(): void {
-    console.log("closeBanner");
     console.log("before",this.announcements);
-    this.announcements.shift()
-    console.log("after",this.announcements);
-
   }
 }

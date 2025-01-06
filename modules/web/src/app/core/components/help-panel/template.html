@@ -21,7 +21,7 @@ limitations under the License.
           fxLayoutAlign="center center"
           (click)="toggle()">
     <i class="km-icon-mask km-icon-help"></i>
-    <i *ngIf="!settings?.disableChangelogPopup && hasNewChangelog()"
+    <i *ngIf="!adminSettings?.disableChangelogPopup && hasNewChangelog()"
        class="km-icon-circle km-new-bg"></i>
   </button>
 
@@ -41,7 +41,7 @@ limitations under the License.
 
     <div class="menu"
          fxLayout="column">
-      <div *ngIf="!settings?.disableChangelogPopup"
+      <div *ngIf="!adminSettings?.disableChangelogPopup"
            class="km-option-hover-bg"
            matRipple
            (click)="openChangelog()"
@@ -56,7 +56,7 @@ limitations under the License.
            class="km-icon-sparkles"></i>
       </div>
 
-      <div *ngIf="settings?.displayAPIDocs"
+      <div *ngIf="adminSettings?.displayAPIDocs"
            class="km-option-hover-bg"
            id="km-navbar-api-docs-btn"
            matRipple
@@ -64,14 +64,14 @@ limitations under the License.
         API Documentation
       </div>
 
-      <div *ngIf="settings?.displayAPIDocs"
+      <div *ngIf="adminSettings?.displayAPIDocs"
            class="km-option-hover-bg"
            matRipple
-           (click)="openAnnouncementDialog()">
+           (click)="openAnnouncementsDialog()">
         Announcement
       </div>
 
-      <div *ngFor="let link of settings?.customLinks | kmLinkLocation: 'HelpPanel'"
+      <div *ngFor="let link of adminSettings?.customLinks | kmLinkLocation: 'HelpPanel'"
            class="km-option-hover-bg">
         <a [href]="link.url"
            class="custom-link"

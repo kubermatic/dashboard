@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // GlobalSettings GlobalSettings defines global settings
@@ -21,6 +22,9 @@ type GlobalSettings struct {
 
 	// AllowedOperatingSystems shows the available operating systems to use in the machine deployment.
 	AllowedOperatingSystems map[string]bool `json:"allowedOperatingSystems,omitempty"`
+
+	// The announcement feature allows administrators to broadcast important messages to all users.
+	Announcements map[string]Announcement `json:"announcements,omitempty"`
 
 	// DefaultNodeCount is the default number of replicas for the initial MachineDeployment.
 	DefaultNodeCount int8 `json:"defaultNodeCount,omitempty"`
@@ -117,6 +121,10 @@ type GlobalSettings struct {
 func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAnnouncements(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateStaticLabels(formats); err != nil {
 		res = append(res, err)
 	}
@@ -168,6 +176,32 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *GlobalSettings) validateAnnouncements(formats strfmt.Registry) error {
+	if swag.IsZero(m.Announcements) { // not required
+		return nil
+	}
+
+	for k := range m.Announcements {
+
+		if err := validate.Required("announcements"+"."+k, "body", m.Announcements[k]); err != nil {
+			return err
+		}
+		if val, ok := m.Announcements[k]; ok {
+			if err := val.Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("announcements" + "." + k)
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("announcements" + "." + k)
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -408,6 +442,10 @@ func (m *GlobalSettings) validateWebTerminalOptions(formats strfmt.Registry) err
 func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateAnnouncements(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateStaticLabels(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -459,6 +497,21 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateAnnouncements(ctx context.Context, formats strfmt.Registry) error {
+
+	for k := range m.Announcements {
+
+		if val, ok := m.Announcements[k]; ok {
+			if err := val.ContextValidate(ctx, formats); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
