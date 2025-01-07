@@ -92,7 +92,7 @@
     "monaco-editor": "0.52.0",
     "ngx-clipboard": "16.0.0",
     "ngx-cookie-service": "18.0.0",
-    "ngx-monaco-editor-v2": "^18.1.0",
+    "ngx-monaco-editor-v2": "^19.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rxjs": "7.8.1",
