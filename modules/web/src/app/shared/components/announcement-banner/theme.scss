@@ -17,16 +17,19 @@
 @mixin theme-announcement-banner-component($colors) {
   .announcement {
     background-color: map.get($colors, primary);
+
     p {
       color: map.get($colors, announcement-banner-text);
     }
+
     div {
       a {
         color: map.get($colors, announcement-banner-text);
+        cursor: pointer;
+
         &:hover {
           color: map.get($colors, primary-hover);
         }
-        cursor: pointer;
       }
 
       .mat-mdc-icon-button {

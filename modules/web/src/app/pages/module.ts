@@ -24,12 +24,7 @@ import {TermsOfServiceComponent} from './terms-of-service/component';
 
 @NgModule({
   imports: [PagesRoutingModule, SharedModule],
-  declarations: [
-    PageNotFoundComponent,
-    FrontpageComponent,
-    TermsOfServiceComponent,
-    ApiDocsComponent,
-  ],
+  declarations: [PageNotFoundComponent, FrontpageComponent, TermsOfServiceComponent, ApiDocsComponent],
   exports: [],
 })
 export class PagesModule {}

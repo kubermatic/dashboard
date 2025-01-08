@@ -17,13 +17,13 @@ limitations under the License.
      class="announcement"
      fxflex
      fxLayoutAlign="space-between center">
-  <p>{{announcements[0].message}}</p>
+  <p>{{bannerMessage}}</p>
   <div fxflex
-  fxLayoutAlign="space-between center">
-    <a  (click)="openAnnouncementsDialog()">see all announcement</a>
+       fxLayoutAlign="space-between center">
+    <a (click)="openAnnouncementsDialog()">see all announcement</a>
     <button mat-icon-button
-      matTooltip="Close"
-      (click)="closeBanner()">
+            matTooltip="Close"
+            (click)="closeBanner(announcements.keys().next().value)">
       <i class="km-icon-mask km-icon-close"></i>
     </button>
   </div>

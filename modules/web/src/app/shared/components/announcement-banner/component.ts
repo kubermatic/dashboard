@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import {Component, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {NavigationEnd, Router} from '@angular/router';
 import {AdminAnnouncement} from '@app/shared/entity/settings';
-import {CookieService} from 'ngx-cookie-service';
-import {filter, Subject, take, takeUntil} from 'rxjs';
-import { AnnouncementDialogComponent } from '../announcement/component';
-import { DialogModeService } from '@app/core/services/dialog-mode';
+import {filter, retry, Subject, take, takeUntil} from 'rxjs';
+import {AnnouncementDialogComponent} from '../announcement/component';
+import {SettingsService} from '@app/core/services/settings';
+import {UserService} from '@app/core/services/user';
 
 const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api', '/terms-of-service$', '/404$'];
 @Component({
@@ -27,30 +27,27 @@ const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api',
   templateUrl: './template.html',
   styleUrl: './style.scss',
 })
-//
-//
-//
-//
-// check the authourization
-//
-//
-//
-//
 export class AnnouncementbannerComponent implements OnInit {
   curentPath: string;
-  announcements: AdminAnnouncement[];
+  readAnnouncements: string[] = [];
+  announcements = new Map<string, AdminAnnouncement>();
   private _showAnnouncementBanner: boolean = false;
   private _unsubscribe = new Subject<void>();
 
   constructor(
+    private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
     private _router: Router,
-    private readonly _cookieService: CookieService,
-    private readonly _matDialog: MatDialog,
-    private readonly _dialogModeService: DialogModeService,
+    private readonly _matDialog: MatDialog
   ) {}
 
   get checkPages(): boolean {
-    return this._showAnnouncementBanner && !!this.announcements?.length;
+    return this._showAnnouncementBanner && !!this.announcements?.size;
+  }
+
+  get bannerMessage(): string {
+    const messageKey = Array.from(this.announcements.keys()).find(id => !this.readAnnouncements.includes(id));
+    return this.announcements.get(messageKey)?.message;
   }
 
   ngOnInit(): void {
@@ -64,35 +61,61 @@ export class AnnouncementbannerComponent implements OnInit {
           this._showAnnouncementBanner = true;
         }
       });
-
+    this._getReadAnnouncements();
     this._getAnnouncements();
   }
 
-  private _getAnnouncements(): void {
-    const cookieValue = this._cookieService.get('announcements');
-    if (cookieValue?.length) {
-      const announcements: AdminAnnouncement[] = JSON.parse(cookieValue).filter(
-        (ann: AdminAnnouncement) => ann.isActive && (!ann.expires || new Date(ann.expires) > new Date())
-      );
-      this.announcements = announcements.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-    }
-  }
-
   openAnnouncementsDialog(): void {
-    this._dialogModeService.isEditDialog = true;
-
     this._matDialog
-    .open(AnnouncementDialogComponent, {data: this.announcements})
-    .afterClosed()
-    .pipe(take(1))
-    .subscribe(_ => {
-      this._dialogModeService.isEditDialog = false;
-    })
+      .open(AnnouncementDialogComponent, {data: Object.fromEntries(this.announcements)})
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data) {
+          const readAnnouncements = data.filter((value, index, self) => self.indexOf(value) === index);
+          this._updateUserReadAnnouncements(readAnnouncements);
+        }
+      });
   }
 
-  closeBanner(): void {
-    console.log("before",this.announcements);
+  closeBanner(id: string): void {
+    this.readAnnouncements.push(id);
+    this.readAnnouncements = this.readAnnouncements.filter((value, index, self) => self.indexOf(value) === index);
+    this._userService.patchReadAnnouncements(this.readAnnouncements).subscribe(announcements => {
+      this.readAnnouncements = announcements;
+    });
+  }
+
+  private _getAnnouncements(): void {
+    const retryTimes = 4;
+    this._settingsService.adminSettings.pipe(retry(retryTimes), take(1)).subscribe(adminSettings => {
+      const announcements = adminSettings?.announcements;
+      if (announcements) {
+        Object.keys(announcements)
+          .sort(
+            (a, b) => new Date(announcements[b].createdAt).getTime() - new Date(announcements[a].createdAt).getTime()
+          )
+          .forEach(id => {
+            if (
+              announcements[id]?.isActive &&
+              (!announcements[id]?.expires || new Date(announcements[id]?.expires) > new Date())
+            ) {
+              this.announcements.set(id, announcements[id]);
+            }
+          });
+      }
+    });
+  }
+
+  private _getReadAnnouncements(): void {
+    this._userService.currentUser.pipe(take(1)).subscribe(settings => {
+      if (settings.readAnnouncements) {
+        this.readAnnouncements = settings.readAnnouncements;
+      }
+    });
+  }
+
+  private _updateUserReadAnnouncements(announcements: string[]): void {
+    this._userService.patchReadAnnouncements(announcements).pipe(take(1)).subscribe();
   }
 }

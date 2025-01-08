@@ -96,23 +96,12 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   }
 
   isAdminSettingsExpandedActive(): boolean {
+    // fix the complexity of this function by extracting the logic to a separate function.
     switch (this.label) {
       case AdminPanelSections.Interface:
-        return (
-          this.checkUrl(AdminPanelView.Defaults) ||
-          this.checkUrl(AdminPanelView.Limits) ||
-          this.checkUrl(AdminPanelView.Customization)
-        );
+        return this.checkAdminInterfaceUrl();
       case AdminPanelSections.ManageResources:
-        return (
-          this.checkUrl(AdminPanelView.Datacenters) ||
-          this.checkUrl(AdminPanelView.ProviderPresets) ||
-          this.checkUrl(AdminPanelView.BackupDestinations) ||
-          this.checkUrl(AdminPanelView.ProjectQuotas) ||
-          this.checkUrl(AdminPanelView.OPA) ||
-          this.checkUrl(AdminPanelView.SeedConfiguration) ||
-          this.checkUrl(AdminPanelView.Applications)
-        );
+        return this.checkAdminManageResourcesUrl();
       case AdminPanelSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
       case AdminPanelSections.Users:
@@ -137,6 +126,27 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
       return urlExists || !!urlArray.find(x => x === View.KubeOneWizard);
     }
     return urlExists;
+  }
+
+  checkAdminInterfaceUrl(): boolean {
+    return (
+      this.checkUrl(AdminPanelView.Defaults) ||
+      this.checkUrl(AdminPanelView.Limits) ||
+      this.checkUrl(AdminPanelView.Customization) ||
+      this.checkUrl(AdminPanelView.Announcement)
+    );
+  }
+
+  checkAdminManageResourcesUrl(): boolean {
+    return (
+      this.checkUrl(AdminPanelView.Datacenters) ||
+      this.checkUrl(AdminPanelView.ProviderPresets) ||
+      this.checkUrl(AdminPanelView.BackupDestinations) ||
+      this.checkUrl(AdminPanelView.ProjectQuotas) ||
+      this.checkUrl(AdminPanelView.OPA) ||
+      this.checkUrl(AdminPanelView.SeedConfiguration) ||
+      this.checkUrl(AdminPanelView.Applications)
+    );
   }
 
   onClick(): void {

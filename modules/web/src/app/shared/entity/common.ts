@@ -106,6 +106,7 @@ export enum AdminPanelView {
   Defaults = 'defaults',
   Limits = 'limits',
   Customization = 'customization',
+  Announcement = 'announcement',
   SeedConfiguration = 'seeds',
   Datacenters = 'datacenters',
   ProviderPresets = 'presets',
@@ -117,7 +118,6 @@ export enum AdminPanelView {
   Accounts = 'accounts',
   Administrators = 'administrators',
   Applications = 'applications',
-  Announcement = 'announcement',
 }
 
 export enum AdminPanelViewDisplayName {

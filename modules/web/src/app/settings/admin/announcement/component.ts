@@ -15,13 +15,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
-import {AdminAnnouncementDialogComponent} from './announcement-dialog/component';
+import {AdminAnnouncementDialogComponent, AdminAnnouncementDialogConfig} from './announcement-dialog/component';
 import {DialogModeService} from '@app/core/services/dialog-mode';
-import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {AdminAnnouncement, AdminSettings} from '@app/shared/entity/settings';
 import {StatusIcon} from '@app/shared/utils/health-status';
-import { Subject } from 'rxjs';
-import { SettingsService } from '@app/core/services/settings';
+import {Subject} from 'rxjs';
+import {SettingsService} from '@app/core/services/settings';
 
 enum Column {
   Status = 'status',
@@ -44,7 +44,7 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
   readonly Column = Column;
   private _unsubscribe = new Subject<void>();
   adminSettings: AdminSettings;
-  dataSource = new MatTableDataSource<Map<string,AdminAnnouncement>>();
+  dataSource = new MatTableDataSource<string>();
   displayedColumns: string[] = Object.values(Column);
   announcements = new Map<string, AdminAnnouncement>();
 
@@ -56,13 +56,14 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.adminSettings = settings
+      this.adminSettings = settings;
       if (settings.announcements) {
         Object.keys(settings.announcements).forEach(id => {
-          this.announcements.set(id, settings.announcements[id])
-        })
+          this.announcements.set(id, settings.announcements[id]);
+        });
+        this.dataSource.data = Object.keys(settings.announcements);
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -70,40 +71,50 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  removeAnnouncement(removedMessage: string): void {
-    console.log(removedMessage);
-
-  }
-
-  addAnnouncementDialog(announcement?: AdminAnnouncement): void {
-
-    if (announcement) {
-      this._dialogModeService.isEditDialog = true;
-    }
-
-    this._matDialog
-      .open(AdminAnnouncementDialogComponent, {data: announcement} as MatDialogConfig)
-      .afterClosed()
-      .pipe(take(1))
-      .pipe(switchMap(announcement => {
-        this._dialogModeService.isEditDialog = false;
-        this.announcements.set("dsfsfsdfs",announcement )
-
-       return this._settingsService.patchAdminSettings({...this.adminSettings, announcements: Object.fromEntries(this.announcements)})
-      }))
-      .subscribe(_ => {
-        this._dialogModeService.isEditDialog = false;
+  removeAnnouncement(announcementID: string): void {
+    this.announcements.set(announcementID, null);
+    this._settingsService
+      .patchAdminSettings({announcements: this.announcements} as AdminSettings)
+      .subscribe(settings => {
+        if (settings.announcements) {
+          Object.keys(settings.announcements).forEach(id => {
+            this.announcements.set(id, settings.announcements[id]);
+          });
+          this.dataSource.data = Object.keys(settings.announcements);
+        } else {
+          this.dataSource.data = [];
+        }
       });
   }
 
-  getStatus(announcement: AdminAnnouncement): adminAnnouncementStatus {
-    if (new Date(announcement.expires) < new Date()) {
+  getStatus(announcementID: string): adminAnnouncementStatus {
+    const announcement = this.announcements.get(announcementID);
+    if (new Date(announcement?.expires) < new Date()) {
       return {message: 'Expired', icon: StatusIcon.Unknown};
     }
-    if (!announcement.isActive) {
+    if (!announcement?.isActive) {
       return {message: 'Paused', icon: StatusIcon.Stopped};
     }
     return {message: 'Active', icon: StatusIcon.Running};
   }
 
+  addAnnouncementDialog(announcementID?: string): void {
+    let config: AdminAnnouncementDialogConfig;
+    if (announcementID) {
+      this._dialogModeService.isEditDialog = true;
+      config = {
+        announcement: this.announcements.get(announcementID),
+        id: announcementID,
+      };
+    }
+
+    this._matDialog
+      .open(AdminAnnouncementDialogComponent, {data: config} as MatDialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+
+      .subscribe(_ => {
+        this._dialogModeService.isEditDialog = false;
+      });
+  }
 }

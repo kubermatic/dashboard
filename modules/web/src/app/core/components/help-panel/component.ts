@@ -13,11 +13,10 @@
 // limitations under the License.
 
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import { DialogModeService } from '@app/core/services/dialog-mode';
-import { AnnouncementDialogComponent } from '@app/shared/components/announcement/component';
+import {AnnouncementDialogComponent} from '@app/shared/components/announcement/component';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
@@ -45,8 +44,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _config: AppConfigService,
     private readonly _router: Router,
-    private readonly _matDialog: MatDialog,
-    private readonly _dialogModeService: DialogModeService,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -115,14 +113,22 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
   }
 
   openAnnouncementsDialog(): void {
-      this._dialogModeService.isEditDialog = true;
-
-      this._matDialog
-      .open(AnnouncementDialogComponent, {data: this.adminSettings.announcements})
+    const sortedAnnouncements = Object.entries(this.adminSettings.announcements).sort(
+      ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    this._matDialog
+      .open(AnnouncementDialogComponent, {data: Object.fromEntries(sortedAnnouncements)})
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => {
-        this._dialogModeService.isEditDialog = false;
-      })
-    }
+      .subscribe(data => {
+        if (data) {
+          const readAnnouncements = data.filter((value, index, self) => self.indexOf(value) === index);
+          this._updateUserReadAnnouncements(readAnnouncements);
+        }
+      });
+  }
+
+  private _updateUserReadAnnouncements(announcements: string[]): void {
+    this._userService.patchReadAnnouncements(announcements).pipe(take(1)).subscribe();
+  }
 }

@@ -90,6 +90,11 @@ export class UserService {
       .pipe(map(userSettings => this._defaultUserSettings(userSettings)));
   }
 
+  patchReadAnnouncements(patch: string[]): Observable<string[]> {
+    const url = `${this.restRoot}/me/readannouncements`;
+    return this._httpClient.patch<string[]>(url, patch);
+  }
+
   getCurrentUserGroup(projectID: string): Observable<string> {
     return this.currentUser.pipe(map(member => MemberUtils.getGroupInProject(member, projectID)));
   }

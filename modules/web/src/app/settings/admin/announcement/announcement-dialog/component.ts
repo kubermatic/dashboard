@@ -18,31 +18,14 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 import {NotificationService} from '@app/core/services/notification';
-import {AdminAnnouncement} from '@app/shared/entity/settings';
-import {Observable, of, Subject} from 'rxjs';
+import {SettingsService} from '@app/core/services/settings';
+import {AdminAnnouncement, AdminSettings} from '@app/shared/entity/settings';
+import {Observable, of, Subject, takeUntil} from 'rxjs';
 
-// announcements: string[] = [
-//   'Cluster maintenance scheduled for Nov 28 from 01:00 AM to 05:00 AM UTC.',
-//   'New Kubernetes 1.25 features are now available. Check the documentation for more details.',
-//   'Access to resource "X" is being deprecated on Dec 15. Please migrate to resource "Y".',
-//   'The monitoring system has been upgraded. Expect improved performance and new metrics.',
-//   'Reminder: API tokens created before Jan 2023 will expire on Dec 31, 2024.',
-//   'The control plane will undergo a brief restart on Nov 30 at 02:00 AM UTC. Expect minor interruptions.',
-//   'A security patch for CVE-2024-12345 has been applied across all clusters.',
-//   'We’ve updated the ingress configuration rules. Please verify your applications for compliance.',
-//   'Persistent volume storage quotas will increase to 1TB per namespace starting Dec 1.',
-//   'The default container runtime will switch to containerd on Jan 15, 2025.',
-//   'New node pool scaling features are live! Scale workloads dynamically based on usage.',
-//   'Upcoming webinar: "Optimizing Workloads in Kubernetes 1.25" on Dec 5. Register now.',
-//   'Reminder: Submit your feedback on the beta dashboard by Nov 30.',
-//   'Scheduled deprecation of PodSecurityPolicy on Jan 31, 2025. Adopt OPA or Kyverno policies.',
-//   'A new tutorial is available: "Configuring Horizontal Pod Autoscalers".',
-//   'Kubectl 1.27 is now supported. Upgrade your CLI for better compatibility.',
-//   'Load balancer limits per cluster are now set to 50. Contact support for higher quotas.',
-//   'Weekly backup snapshots will occur every Sunday at 03:00 AM UTC.',
-//   'New feature: Multi-cluster management is enabled for Enterprise-tier users.',
-//   'Cluster node pool scaling might be slower due to ongoing infrastructure upgrades.'
-// ];
+export interface AdminAnnouncementDialogConfig {
+  announcement: AdminAnnouncement;
+  id: string;
+}
 
 export enum Controls {
   Message = 'message',
@@ -59,16 +42,20 @@ export enum Controls {
 })
 export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _defaultExpireTime = '00:00';
   Controls = Controls;
   form: FormGroup;
   isEditDialog: boolean = false;
+  minDate = new Date();
+  expiresDate: Date;
 
   constructor(
     public _matDialogRef: MatDialogRef<AdminAnnouncementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Map<string,AdminAnnouncement>,
+    @Inject(MAT_DIALOG_DATA) private readonly _data: AdminAnnouncementDialogConfig,
     private readonly _dialogModeService: DialogModeService,
     private readonly _dialogRef: MatDialogRef<AdminAnnouncementDialogComponent>,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
 
   get dialogTitle(): string {
@@ -84,19 +71,47 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const endOfSlice = 5;
     this.isEditDialog = this._dialogModeService.isEditDialog;
-    let announcement: AdminAnnouncement;
-    if (this.data) {
-      announcement = Object.values(this.data)[0]
-    }
     this.form = new FormGroup({
-      [Controls.Message]: new FormControl(announcement?.message ?? '', [Validators.required]),
-      [Controls.IsActive]: new FormControl(announcement?.isActive ?? true),
-      [Controls.ExpireDate]: new FormControl(announcement?.expires ? new Date(announcement?.expires) : new Date()),
-      [Controls.ExpireTime]: new FormControl(this.getTime(announcement?.expires)),
+      [Controls.Message]: new FormControl(this._data?.announcement?.message ?? '', [Validators.required]),
+      [Controls.IsActive]: new FormControl(this._data?.announcement?.isActive ?? true),
+      [Controls.ExpireDate]: new FormControl(
+        this._data?.announcement?.expires ? new Date(this._data?.announcement?.expires) : ''
+      ),
+      [Controls.ExpireTime]: new FormControl(
+        this._data?.announcement?.expires ? this._data?.announcement?.expires.split('T')[1].slice(0, endOfSlice) : ''
+      ),
     });
+    if (!this._data?.announcement?.expires) {
+      this.form.get(Controls.ExpireTime).disable();
+    }
 
-    this.form.get(Controls.ExpireTime).setValue(this.getTime(announcement?.expires));
+    if (this._data?.announcement?.expires) {
+      this.expiresDate = new Date(this._data?.announcement.expires);
+    }
+
+    this.form
+      .get(Controls.ExpireDate)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(date => {
+        const expierTime = this.form.get(Controls.ExpireTime);
+        this.expiresDate = date;
+        if (!date) {
+          expierTime.setValue('');
+          expierTime.disable();
+          return;
+        }
+        this.form.get(Controls.ExpireTime).enable();
+        this.form.get(Controls.ExpireTime).setValue(this._defaultExpireTime);
+      });
+
+    this.form
+      .get(Controls.ExpireTime)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((time: string) => {
+        this.onDateChange(time);
+      });
   }
 
   ngOnDestroy(): void {
@@ -104,23 +119,29 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getObservable(): Observable<AdminAnnouncement> {
+  getObservable(): Observable<AdminSettings> {
     if (!this.form) {
-      return of({} as AdminAnnouncement)
+      return of({} as AdminSettings);
     }
-    const expiresDate = new Date(this.form.get(Controls.ExpireDate).value);
-    const expiresTime = this.form.get(Controls.ExpireTime).value;
-
-    const [hours, minutes] = expiresTime.split(':').map(Number);
-    expiresDate.setHours(hours, minutes);
-
     const announcement: AdminAnnouncement = {
       message: this.form.get(Controls.Message).value,
       isActive: this.form.get(Controls.IsActive).value,
-      expires: expiresDate.toISOString(),
-      createdAt: new Date().toISOString(),
+      expires: this.expiresDate ? this.expiresDate.toISOString() : null,
+      createdAt: this._data?.announcement?.createdAt
+        ? new Date(this._data?.announcement.createdAt).toISOString()
+        : new Date().toISOString(),
     };
-    return of(announcement);
+    const adminSettings: AdminSettings = {} as AdminSettings;
+    if (this._data?.id) {
+      adminSettings.announcements = {
+        [this._data.id]: announcement,
+      };
+    } else {
+      adminSettings.announcements = {
+        newAnnouncement: announcement,
+      };
+    }
+    return this._settingsService.patchAdminSettings(adminSettings);
   }
 
   onNext(announcement: AdminAnnouncement): void {
@@ -128,12 +149,10 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
     this._notificationService.success('created new announcement');
   }
 
-  getTime(date?: string): string {
-    if (!date) {
-      return '00:00';
+  onDateChange(time: string): void {
+    const [hours, minutes] = time.split(':').map(Number);
+    if (!isNaN(hours) && !isNaN(minutes)) {
+      this.expiresDate.setHours(hours, minutes, 0, 0);
     }
-    const newDate = new Date(date);
-    const numOfDigits = 2;
-    return `${newDate.getHours().toString().padStart(numOfDigits, '0')}:${newDate.getMinutes().toString().padStart(numOfDigits, '0')}`;
   }
 }

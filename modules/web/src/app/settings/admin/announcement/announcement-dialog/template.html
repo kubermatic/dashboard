@@ -20,37 +20,34 @@ limitations under the License.
       <mat-label>Message</mat-label>
       <textarea matInput
                 [formControlName]="Controls?.Message"
-                required
-                kmValueChangedIndicator></textarea>
+                required></textarea>
       <mat-hint>Add the announcement message</mat-hint>
       <mat-error *ngIf="form?.get(Controls.Message).hasError('required')">The announcement message is required</mat-error>
     </mat-form-field>
     <div>
       <div class="date-and-time">
         <mat-form-field class="date-pick">
-          <!--
-
-           TODO: restrict chosing dates before today's date
-
-           -->
           <mat-label>Expires in</mat-label>
           <input matInput
+                 [min]="minDate"
                  [matDatepicker]="picker"
-                 [formControlName]="Controls?.ExpireDate"
-                 kmValueChangedIndicator>
+                 [formControlName]="Controls?.ExpireDate">
           <mat-hint>Expires date MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix
                                  [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <input matInput
-        class="time-pick"
-               [formControlName]="Controls?.ExpireTime"
-               type="time">
+        <mat-form-field>
+          <mat-label>Time</mat-label>
+          <input matInput
+                 class="time-pick"
+                 [formControlName]="Controls?.ExpireTime"
+                 type="time">
+          <mat-hint>Expires time HH:MM</mat-hint>
+        </mat-form-field>
       </div>
 
-      <mat-checkbox [formControlName]="Controls?.IsActive"
-                    kmValueChangedIndicator>Activate</mat-checkbox>
+      <mat-checkbox [formControlName]="Controls?.IsActive">Activate</mat-checkbox>
     </div>
   </form>
 </mat-dialog-content>

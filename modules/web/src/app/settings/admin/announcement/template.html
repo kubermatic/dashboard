@@ -48,7 +48,7 @@ limitations under the License.
         </th>
         <td mat-cell
             class="events-long-text"
-            *matCellDef="let element">{{element.message}}</td>
+            *matCellDef="let element">{{announcements.get(element)?.message}}</td>
       </ng-container>
       <ng-container [matColumnDef]="Column.Expires">
         <th mat-header-cell
@@ -58,7 +58,8 @@ limitations under the License.
         <td mat-cell
             class="events-long-text"
             *matCellDef="let element">
-          <km-relative-time [date]="element.expires"></km-relative-time>
+          <km-relative-time *ngIf="announcements.get(element)?.expires"
+                            [date]="announcements.get(element)?.expires"></km-relative-time>
         </td>
       </ng-container>
       <ng-container [matColumnDef]="Column.CreatedAt">
@@ -69,7 +70,7 @@ limitations under the License.
         <td mat-cell
             class="events-long-text"
             *matCellDef="let element">
-          <km-relative-time [date]="element.createdAt"></km-relative-time>
+          <km-relative-time [date]="announcements.get(element)?.createdAt"></km-relative-time>
         </td>
       </ng-container>
       <ng-container [matColumnDef]="Column.Actions">
@@ -100,5 +101,9 @@ limitations under the License.
           *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row"></tr>
     </table>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!this.dataSource.data.length">
+      No Announcements available.
+    </div>
   </mat-card-content>
 </mat-card>

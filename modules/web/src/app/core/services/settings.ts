@@ -85,6 +85,10 @@ export class SettingsService {
 
   patchAdminSettings(patch: AdminSettings): Observable<AdminSettings> {
     const url = `${this._restRoot}/admin/settings`;
+    if (patch.announcements && patch.announcements instanceof Map) {
+      patch.announcements = Object.fromEntries(patch.announcements);
+    }
+
     return this._httpClient
       .patch<AdminSettings>(url, patch)
       .pipe(map(settings => this._defaultAdminSettings(settings)));
