@@ -54,6 +54,10 @@ type User struct {
 	// along with the group names
 	Projects []*ProjectGroup `json:"projects"`
 
+	// ReadAnnouncements holds the IDs of admin announcements that the user has read.
+	// +optional
+	ReadAnnouncements []string `json:"readAnnouncements"`
+
 	// user settings
 	UserSettings *UserSettings `json:"userSettings,omitempty"`
 }

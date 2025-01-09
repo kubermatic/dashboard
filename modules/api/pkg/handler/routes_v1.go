@@ -1634,7 +1634,7 @@ func (r Routing) getCurrentUserSettings() http.Handler {
 //
 //	    Responses:
 //	      default: errorResponse
-//	      200: UserSettings
+//	      200: User
 //	      401: empty
 func (r Routing) patchCurrentUserSettings() http.Handler {
 	return httptransport.NewServer(
@@ -1648,7 +1648,7 @@ func (r Routing) patchCurrentUserSettings() http.Handler {
 	)
 }
 
-// swagger:route PATCH /api/v1/me/readannouncements readannouncements patchCurrentUserReadAnnouncements
+// swagger:route PATCH /api/v1/me/readannouncements users patchCurrentUserReadAnnouncements
 //
 //	    Updates read announcements of the current user.
 //
@@ -1660,7 +1660,7 @@ func (r Routing) patchCurrentUserSettings() http.Handler {
 //
 //	    Responses:
 //	      default: errorResponse
-//	      200: []string
+//	      200: User
 //	      401: empty
 func (r Routing) patchCurrentUserReadAnnouncements() http.Handler {
 	return httptransport.NewServer(

@@ -138,8 +138,8 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
 import {PipesModule} from './pipes/ngx-filter-pipe/module';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {AnnouncementbannerComponent} from './components/announcement-banner/component';
-import {AnnouncementDialogComponent} from './components/announcement/component';
+import {AnnouncementBannerComponent} from './components/announcement-banner/component';
+import {AnnouncementsDialogComponent} from './components/announcements/component';
 
 const modules = [
   CommonModule,
@@ -270,8 +270,8 @@ const components = [
   TerminalStatusBarComponent,
   MachineFlavorFilterComponent,
   PaginationPageSizeComponent,
-  AnnouncementbannerComponent,
-  AnnouncementDialogComponent,
+  AnnouncementBannerComponent,
+  AnnouncementsDialogComponent,
 ];
 
 const directives = [

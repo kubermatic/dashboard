@@ -19,7 +19,7 @@ import {NavigationEnd, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {PageTitleService} from '@core/services/page-title';
 import {SettingsService} from '@core/services/settings';
-import {AdminSettings, CustomLink} from '@shared/entity/settings';
+import {AdminAnnouncement, AdminSettings, CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config} from '@shared/model/Config';
 import _ from 'lodash';
@@ -42,6 +42,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   config: Config = {};
   settings: AdminSettings;
+  adminAnnouncements = new Map<string, AdminAnnouncement>();
   customLinks: CustomLink[] = [];
   version: VersionInfo;
   showMenuSwitchAndProjectSelector = false;
@@ -79,6 +80,23 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(this.settings, settings)) {
         this.settings = settings;
+        const announcements = settings.announcements;
+        const updatedAnnouncements = new Map<string, any>();
+        if (announcements) {
+          Object.keys(announcements)
+            .sort(
+              (a, b) => new Date(announcements[b].createdAt).getTime() - new Date(announcements[a].createdAt).getTime()
+            )
+            .forEach(id => {
+              if (
+                announcements[id]?.isActive &&
+                (!announcements[id]?.expires || new Date(announcements[id]?.expires) > new Date())
+              ) {
+                updatedAnnouncements.set(id, announcements[id]);
+              }
+            });
+        }
+        this.adminAnnouncements = updatedAnnouncements;
       }
     });
   }

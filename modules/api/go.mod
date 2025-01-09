@@ -98,7 +98,10 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beec
 
 replace k8s.io/client-go => k8s.io/client-go v0.31.1
 
-require github.com/kubeovn/kube-ovn v1.13.0
+require (
+	github.com/google/uuid v1.6.0
+	github.com/kubeovn/kube-ovn v1.13.0
+)
 
 require (
 	cel.dev/expr v0.19.0 // indirect
@@ -172,7 +175,6 @@ require (
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.1-0.20210504230335-f78f29fc09ea // indirect
 	github.com/google/s2a-go v0.1.8 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.4 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect

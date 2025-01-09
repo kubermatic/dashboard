@@ -16,7 +16,7 @@ import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/c
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {AnnouncementDialogComponent} from '@app/shared/components/announcement/component';
+import {AnnouncementsDialogComponent} from '@app/shared/components/announcements/component';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
@@ -113,22 +113,12 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
   }
 
   openAnnouncementsDialog(): void {
-    const sortedAnnouncements = Object.entries(this.adminSettings.announcements).sort(
-      ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    this._matDialog
-      .open(AnnouncementDialogComponent, {data: Object.fromEntries(sortedAnnouncements)})
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data) {
-          const readAnnouncements = data.filter((value, index, self) => self.indexOf(value) === index);
-          this._updateUserReadAnnouncements(readAnnouncements);
-        }
-      });
-  }
-
-  private _updateUserReadAnnouncements(announcements: string[]): void {
-    this._userService.patchReadAnnouncements(announcements).pipe(take(1)).subscribe();
+    const sortedAnnouncements = this.adminSettings?.announcements
+      ? Object.entries(this.adminSettings?.announcements).sort(
+          ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+      : [];
+    const announcementsObject = Object.fromEntries(sortedAnnouncements);
+    this._matDialog.open(AnnouncementsDialogComponent, {data: announcementsObject});
   }
 }

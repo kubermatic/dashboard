@@ -68,9 +68,9 @@ export interface AdminSettingsAnnotations {
 }
 
 export interface AdminAnnouncement {
-  createdAt: string;
   isActive: boolean;
   message: string;
+  createdAt?: string;
   expires?: string;
 }
 

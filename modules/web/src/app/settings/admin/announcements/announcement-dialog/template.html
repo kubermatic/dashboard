@@ -1,5 +1,5 @@
 <!--
-Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,12 +27,12 @@ limitations under the License.
     <div>
       <div class="date-and-time">
         <mat-form-field class="date-pick">
-          <mat-label>Expires in</mat-label>
+          <mat-label>Expires at</mat-label>
           <input matInput
                  [min]="minDate"
                  [matDatepicker]="picker"
                  [formControlName]="Controls?.ExpireDate">
-          <mat-hint>Expires date MM/DD/YYYY</mat-hint>
+          <mat-hint>Expiry date MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix
                                  [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -43,7 +43,7 @@ limitations under the License.
                  class="time-pick"
                  [formControlName]="Controls?.ExpireTime"
                  type="time">
-          <mat-hint>Expires time HH:MM</mat-hint>
+          <mat-hint>Expiry time HH:MM</mat-hint>
         </mat-form-field>
       </div>
 

@@ -41,7 +41,7 @@ import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
-import {AdminAnnouncementDialogComponent} from './announcement/announcement-dialog/component';
+import {AdminAnnouncementDialogComponent} from './announcements/announcement-dialog/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],

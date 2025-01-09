@@ -96,7 +96,6 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   }
 
   isAdminSettingsExpandedActive(): boolean {
-    // fix the complexity of this function by extracting the logic to a separate function.
     switch (this.label) {
       case AdminPanelSections.Interface:
         return this.checkAdminInterfaceUrl();
@@ -133,7 +132,7 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
       this.checkUrl(AdminPanelView.Defaults) ||
       this.checkUrl(AdminPanelView.Limits) ||
       this.checkUrl(AdminPanelView.Customization) ||
-      this.checkUrl(AdminPanelView.Announcement)
+      this.checkUrl(AdminPanelView.Announcements)
     );
   }
 

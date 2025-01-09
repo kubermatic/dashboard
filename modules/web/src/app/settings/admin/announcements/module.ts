@@ -12,36 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.announcement {
-  align-items: center;
-  border-radius: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 5px 1%;
-  padding: 10px 20px;
-  width: 98%;
+import {NgModule} from '@angular/core';
+import {SharedModule} from '@shared/module';
+import {AdminSettingsAnnouncementsRoutingComponent} from './routing';
+import {AdminAnnouncementsComponent} from './component';
 
-  p {
-    flex: 1;
-    margin: 0;
-    text-align: left;
-    word-break: break-word;
-  }
-
-  div {
-    align-items: center;
-    display: flex;
-    padding-left: 10px;
-
-    .mdc-button {
-      height: 30px;
-      width: 30px;
-
-      .km-icon-close {
-        position: relative ;
-        top: 4px;
-      }
-    }
-  }
-}
+@NgModule({
+  imports: [SharedModule, AdminSettingsAnnouncementsRoutingComponent],
+  declarations: [AdminAnnouncementsComponent],
+})
+export class AdminSettingsAnnouncementsModule {}

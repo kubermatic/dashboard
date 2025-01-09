@@ -1,4 +1,4 @@
-// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,16 +31,17 @@ enum Column {
   Actions = 'actions',
 }
 
-interface adminAnnouncementStatus {
+interface AdminAnnouncementStatus {
   message: string;
   icon: StatusIcon;
 }
 
 @Component({
-  selector: 'km-admin-announcement',
+  selector: 'km-admin-announcements',
   templateUrl: 'template.html',
+  styleUrl: 'style.scss',
 })
-export class AdminAnnouncementComponent implements OnInit, OnDestroy {
+export class AdminAnnouncementsComponent implements OnInit, OnDestroy {
   readonly Column = Column;
   private _unsubscribe = new Subject<void>();
   adminSettings: AdminSettings;
@@ -57,12 +58,7 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.adminSettings = settings;
-      if (settings.announcements) {
-        Object.keys(settings.announcements).forEach(id => {
-          this.announcements.set(id, settings.announcements[id]);
-        });
-        this.dataSource.data = Object.keys(settings.announcements);
-      }
+      this._initAnnouncements(settings.announcements);
     });
   }
 
@@ -76,18 +72,11 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
     this._settingsService
       .patchAdminSettings({announcements: this.announcements} as AdminSettings)
       .subscribe(settings => {
-        if (settings.announcements) {
-          Object.keys(settings.announcements).forEach(id => {
-            this.announcements.set(id, settings.announcements[id]);
-          });
-          this.dataSource.data = Object.keys(settings.announcements);
-        } else {
-          this.dataSource.data = [];
-        }
+        this._initAnnouncements(settings.announcements);
       });
   }
 
-  getStatus(announcementID: string): adminAnnouncementStatus {
+  getStatus(announcementID: string): AdminAnnouncementStatus {
     const announcement = this.announcements.get(announcementID);
     if (new Date(announcement?.expires) < new Date()) {
       return {message: 'Expired', icon: StatusIcon.Unknown};
@@ -116,5 +105,16 @@ export class AdminAnnouncementComponent implements OnInit, OnDestroy {
       .subscribe(_ => {
         this._dialogModeService.isEditDialog = false;
       });
+  }
+
+  private _initAnnouncements(announcementsObject: object): void {
+    if (announcementsObject) {
+      Object.keys(announcementsObject).forEach(id => {
+        this.announcements.set(id, announcementsObject[id]);
+      });
+      this.dataSource.data = Object.keys(announcementsObject);
+    } else {
+      this.dataSource.data = [];
+    }
   }
 }

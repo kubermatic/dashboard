@@ -1,4 +1,4 @@
-// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,34 +25,35 @@ enum Column {
 }
 
 @Component({
-  // check the name
-  selector: 'km-announcement',
+  selector: 'km-announcements-dialog',
   templateUrl: './template.html',
+  styleUrl: './style.scss',
 })
-export class AnnouncementDialogComponent implements OnInit {
+export class AnnouncementsDialogComponent implements OnInit {
   readonly Column = Column;
   dataSource = new MatTableDataSource<string>();
   displayedColumns: string[] = Object.values(Column);
   announcements = new Map<string, AdminAnnouncement>();
   readAnnouncements: string[] = [];
+  awaitedAnnouncementID: string = '';
 
   constructor(
-    public _matDialogRef: MatDialogRef<AnnouncementDialogComponent>,
+    public _matDialogRef: MatDialogRef<AnnouncementsDialogComponent>,
     private readonly _userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: Map<string, AdminAnnouncement>
   ) {}
 
   ngOnInit(): void {
     this._getAnnouncements();
-    this._getReadAnnouncements();
   }
 
   hasAnnouncements(): boolean {
-    return !!Object.keys(this.announcements).length;
+    return !!this.announcements?.size;
   }
 
   markAsRead(announcement: string): void {
-    this.readAnnouncements?.push(announcement);
+    this.awaitedAnnouncementID = announcement;
+    this._updateUserReadAnnouncements([...this.readAnnouncements, announcement]);
   }
 
   isMessageRead(announcementId: string): boolean {
@@ -64,7 +65,7 @@ export class AnnouncementDialogComponent implements OnInit {
   }
 
   closeDialog(): void {
-    this._matDialogRef.close(this.readAnnouncements);
+    this._matDialogRef.close();
   }
 
   private _getAnnouncements(): void {
@@ -79,13 +80,26 @@ export class AnnouncementDialogComponent implements OnInit {
       }
     });
     this.dataSource.data = Array.from(this.announcements.keys());
+    this._getReadAnnouncements();
   }
 
   private _getReadAnnouncements(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(settings => {
       if (settings.readAnnouncements) {
-        this.readAnnouncements = settings.readAnnouncements;
+        this.readAnnouncements = settings.readAnnouncements.filter(id =>
+          Array.from(this.announcements.keys()).includes(id)
+        );
       }
     });
+  }
+
+  private _updateUserReadAnnouncements(announcements: string[]): void {
+    this._userService
+      .patchReadAnnouncements(announcements)
+      .pipe(take(1))
+      .subscribe(announcements => {
+        this.readAnnouncements = announcements;
+        this.awaitedAnnouncementID = '';
+      });
   }
 }

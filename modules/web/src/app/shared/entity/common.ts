@@ -106,7 +106,7 @@ export enum AdminPanelView {
   Defaults = 'defaults',
   Limits = 'limits',
   Customization = 'customization',
-  Announcement = 'announcement',
+  Announcements = 'announcements',
   SeedConfiguration = 'seeds',
   Datacenters = 'datacenters',
   ProviderPresets = 'presets',
@@ -135,7 +135,7 @@ export enum AdminPanelViewDisplayName {
   Accounts = 'Accounts',
   Administrators = 'Administrators',
   Applications = 'Applications',
-  Announcement = 'Announcement',
+  Announcements = 'Announcements',
 }
 
 export enum AdminPanelSections {

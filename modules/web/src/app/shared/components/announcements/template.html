@@ -1,5 +1,5 @@
 <!--
-Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>Announcement</km-dialog-title>
+<km-dialog-title>Announcements</km-dialog-title>
 <mat-dialog-content>
-  <table class="km-table"
-         mat-table
-         [dataSource]="dataSource"
-         matSort>
+  <table mat-table
+         matSort
+         *ngIf="hasAnnouncements()"
+         class="km-table"
+         [dataSource]="dataSource">
     <ng-container [matColumnDef]="Column.Message">
       <th mat-header-cell
           *matHeaderCellDef
-          class="km-header-cell">Message</th>
+          class="km-header-cell p-85">Message</th>
       <td mat-cell
           class="events-long-text"
           *matCellDef="let element">{{getMessage(element)}}</td>
@@ -33,23 +34,27 @@ limitations under the License.
           *matHeaderCellDef
           class="km-header-cell"></th>
       <td mat-cell
-          class="events-long-text"
-          *matCellDef="let element"><button *ngIf="!isMessageRead(element)"
+          *matCellDef="let element">
+        <button *ngIf="!isMessageRead(element) && !isWaiting"
                 mat-icon-button
                 (click)="markAsRead(element)"
+                matTooltip="mark as read"
                 fxLayoutAlign="center center">
-          <i Class="km-icon-mask km-icon-show"></i>
-        </button></td>
+          <i Class="km-icon-mask km-icon-check"></i>
+        </button>
+        <km-spinner-with-confirmation [isSaved]="!(element === awaitedAnnouncementID) "></km-spinner-with-confirmation>
+      </td>
     </ng-container>
     <tr mat-header-row
         class="km-header-row"
         *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row
         *matRowDef="let row; columns: displayedColumns"
-        class="km-mat-row"></tr>
+        class="km-mat-row
+        "></tr>
   </table>
   <div class="km-row km-empty-list-msg"
-       *ngIf="hasAnnouncements()">No backups available.</div>
+       *ngIf="!hasAnnouncements()">No announcements available.</div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button

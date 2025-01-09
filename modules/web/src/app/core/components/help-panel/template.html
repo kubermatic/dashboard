@@ -64,11 +64,10 @@ limitations under the License.
         API Documentation
       </div>
 
-      <div *ngIf="adminSettings?.displayAPIDocs"
-           class="km-option-hover-bg"
+      <div class="km-option-hover-bg"
            matRipple
            (click)="openAnnouncementsDialog()">
-        Announcement
+        Announcements
       </div>
 
       <div *ngFor="let link of adminSettings?.customLinks | kmLinkLocation: 'HelpPanel'"

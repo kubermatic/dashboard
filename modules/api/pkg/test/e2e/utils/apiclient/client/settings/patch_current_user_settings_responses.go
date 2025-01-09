@@ -55,10 +55,10 @@ func NewPatchCurrentUserSettingsOK() *PatchCurrentUserSettingsOK {
 /*
 PatchCurrentUserSettingsOK describes a response with status code 200, with default header values.
 
-UserSettings
+User
 */
 type PatchCurrentUserSettingsOK struct {
-	Payload *models.UserSettings
+	Payload *models.User
 }
 
 // IsSuccess returns true when this patch current user settings o k response has a 2xx status code
@@ -94,13 +94,13 @@ func (o *PatchCurrentUserSettingsOK) String() string {
 	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
 
-func (o *PatchCurrentUserSettingsOK) GetPayload() *models.UserSettings {
+func (o *PatchCurrentUserSettingsOK) GetPayload() *models.User {
 	return o.Payload
 }
 
 func (o *PatchCurrentUserSettingsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.UserSettings)
+	o.Payload = new(models.User)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

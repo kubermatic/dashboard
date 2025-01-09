@@ -1,4 +1,4 @@
-// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,7 +71,6 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const endOfSlice = 5;
     this.isEditDialog = this._dialogModeService.isEditDialog;
     this.form = new FormGroup({
       [Controls.Message]: new FormControl(this._data?.announcement?.message ?? '', [Validators.required]),
@@ -80,7 +79,13 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
         this._data?.announcement?.expires ? new Date(this._data?.announcement?.expires) : ''
       ),
       [Controls.ExpireTime]: new FormControl(
-        this._data?.announcement?.expires ? this._data?.announcement?.expires.split('T')[1].slice(0, endOfSlice) : ''
+        this._data?.announcement?.expires
+          ? new Date(this._data.announcement.expires).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            })
+          : ''
       ),
     });
     if (!this._data?.announcement?.expires) {
@@ -110,7 +115,7 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
       .get(Controls.ExpireTime)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((time: string) => {
-        this.onDateChange(time);
+        this.onTimeChange(time);
       });
   }
 
@@ -127,9 +132,6 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
       message: this.form.get(Controls.Message).value,
       isActive: this.form.get(Controls.IsActive).value,
       expires: this.expiresDate ? this.expiresDate.toISOString() : null,
-      createdAt: this._data?.announcement?.createdAt
-        ? new Date(this._data?.announcement.createdAt).toISOString()
-        : new Date().toISOString(),
     };
     const adminSettings: AdminSettings = {} as AdminSettings;
     if (this._data?.id) {
@@ -149,7 +151,7 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
     this._notificationService.success('created new announcement');
   }
 
-  onDateChange(time: string): void {
+  onTimeChange(time: string): void {
     const [hours, minutes] = time.split(':').map(Number);
     if (!isNaN(hours) && !isNaN(minutes)) {
       this.expiresDate.setHours(hours, minutes, 0, 0);

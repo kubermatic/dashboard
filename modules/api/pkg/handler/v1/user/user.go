@@ -404,9 +404,7 @@ func PatchReadAnnouncementsEndpoint(userProvider provider.UserProvider) endpoint
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-
 		return updatedUser.Spec.ReadAnnouncements, nil
-
 	}
 }
 
@@ -579,7 +577,7 @@ type PatchSettingsReq struct {
 }
 
 // PatchReadAnnouncementsReq defines HTTP request for patchCurrentUserReadAnnouncements
-// swagger:parameters patchCurrentUserReadAnnouncements
+// swagger:parameters readAnnouncements
 type PatchReadAnnouncementsReq struct {
 	// in: body
 	Body []string

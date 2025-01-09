@@ -1453,6 +1453,38 @@
         }
       }
     },
+    "/api/v1/me/readannouncements": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Updates read announcements of the current user.",
+        "operationId": "patchCurrentUserReadAnnouncements",
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/me/settings": {
       "get": {
         "produces": [
@@ -1504,9 +1536,9 @@
         ],
         "responses": {
           "200": {
-            "description": "UserSettings",
+            "description": "User",
             "schema": {
-              "$ref": "#/definitions/UserSettings"
+              "$ref": "#/definitions/User"
             }
           },
           "401": {
@@ -39563,6 +39595,14 @@
             "$ref": "#/definitions/ProjectGroup"
           },
           "x-go-name": "Projects"
+        },
+        "readAnnouncements": {
+          "description": "ReadAnnouncements holds the IDs of admin announcements that the user has read.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ReadAnnouncements"
         },
         "userSettings": {
           "$ref": "#/definitions/UserSettings"

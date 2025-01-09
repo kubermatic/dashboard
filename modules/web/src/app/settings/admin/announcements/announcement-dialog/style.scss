@@ -1,4 +1,4 @@
-// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {SharedModule} from '@shared/module';
-import {AdminSettingsAnnouncementRoutingComponent} from './routing';
-import {AdminAnnouncementComponent} from './component';
+.date-and-time {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 
-@NgModule({
-  imports: [SharedModule, AdminSettingsAnnouncementRoutingComponent],
-  declarations: [AdminAnnouncementComponent],
-})
-export class AdminSettingsAnnouncementModule {}
+  .mat-mdc-form-field {
+    width: 50%;
+  }
+
+  .time-pick::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+  .date-pick {
+    margin-right: 10px;
+    width: 50%;
+  }
+}
