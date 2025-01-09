@@ -17,3 +17,14 @@
     background-color: transparent;
   }
 }
+
+input.search-input {
+  background: none;
+  border: 0;
+  box-sizing: content-box;
+  color: currentcolor;
+  height: 24px;
+  outline: none;
+  padding: 16px 0 16px 16px;
+  width: calc(100% - 16px);
+}
