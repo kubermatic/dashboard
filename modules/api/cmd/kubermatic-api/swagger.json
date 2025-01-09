@@ -27484,6 +27484,40 @@
       "type": "object",
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/core/templates"
     },
+    "AppNamespaceSpec": {
+      "type": "object",
+      "title": "AppNamespaceSpec describe the desired state of the namespace where application will be created.",
+      "properties": {
+        "annotations": {
+          "description": "Annotations of the namespace\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "create": {
+          "description": "Create defines whether the namespace should be created if it does not exist. Defaults to true",
+          "type": "boolean",
+          "x-go-name": "Create"
+        },
+        "labels": {
+          "description": "Labels of the namespace\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
+        "name": {
+          "description": "Name is the namespace to deploy the Application into.\nShould be a valid lowercase RFC1123 domain name",
+          "type": "string",
+          "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+    },
     "Application": {
       "description": "Application represents a set of applications that are to be installed for the cluster",
       "type": "object",
@@ -27712,6 +27746,9 @@
         },
         "defaultDeployOptions": {
           "$ref": "#/definitions/DeployOptions"
+        },
+        "defaultNamespace": {
+          "$ref": "#/definitions/AppNamespaceSpec"
         },
         "defaultValues": {
           "$ref": "#/definitions/RawExtension"
@@ -30361,6 +30398,9 @@
       "type": "object",
       "title": "DatacenterSpecAzure describes an Azure cloud datacenter.",
       "properties": {
+        "images": {
+          "$ref": "#/definitions/ImageList"
+        },
         "location": {
           "description": "Region to use, for example \"westeurope\". A list of available regions can be\nfound at https://azure.microsoft.com/en-us/global-infrastructure/locations/",
           "type": "string",
