@@ -27,7 +27,7 @@ limitations under the License.
     <mat-spinner matSuffix
                  *ngIf="isLoading && !form.disabled"
                  [diameter]="20"></mat-spinner>
-    <button *ngIf="!isLoading && options"
+    <button *ngIf="!isLoading && options?.length"
             mat-icon-button
             [disabled]="disabled"
             matSuffix
@@ -37,14 +37,25 @@ limitations under the License.
       <i class="km-icon-mask i-14"
          [ngClass]="isDropdownOpen ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
     </button>
-    <mat-autocomplete autoActiveFirstOption
-                      #auto="matAutocomplete"
+    <mat-autocomplete #auto="matAutocomplete"
                       (opened)="onDropdownOpened()"
                       (closed)="onDropdownClosed()">
-      <mat-option *ngFor="let option of options | filterBy: form.get(controls.Main).value"
-                  [value]="option">
-        {{option}}
-      </mat-option>
+      <input name="search"
+             class="search-input"
+             placeholder="Search..."
+             type="text"
+             autocomplete="off"
+             [(ngModel)]="search"
+             [ngModelOptions]="{standalone: true}"
+             kmAutofocus>
+      <ng-container *ngIf="options | filterBy: search as filteredOptions">
+        <mat-option *ngIf="options?.length && !filteredOptions?.length"
+                    [disabled]="true">No options available</mat-option>
+        <mat-option *ngFor="let option of filteredOptions"
+                    [value]="option">
+          {{ option }}
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
     <mat-hint>
       <ng-content select="[hint]"></ng-content>
