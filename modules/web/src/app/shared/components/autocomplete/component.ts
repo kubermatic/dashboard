@@ -50,6 +50,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() disabled: boolean;
   controls = AutocompleteControls;
   isDropdownOpen: boolean;
+  search: string = '';
 
   constructor(private readonly _builder: FormBuilder) {
     super();
@@ -81,6 +82,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
 
   onDropdownOpened(): void {
     this.isDropdownOpen = true;
+    this.search = '';
   }
 
   onDropdownClosed(): void {
