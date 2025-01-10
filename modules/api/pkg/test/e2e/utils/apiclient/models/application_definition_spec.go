@@ -64,6 +64,9 @@ type ApplicationDefinitionSpec struct {
 	// default deploy options
 	DefaultDeployOptions *DeployOptions `json:"defaultDeployOptions,omitempty"`
 
+	// default namespace
+	DefaultNamespace *AppNamespaceSpec `json:"defaultNamespace,omitempty"`
+
 	// default values
 	DefaultValues RawExtension `json:"defaultValues,omitempty"`
 
@@ -83,6 +86,10 @@ func (m *ApplicationDefinitionSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDefaultDeployOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDefaultNamespace(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -145,6 +152,25 @@ func (m *ApplicationDefinitionSpec) validateDefaultDeployOptions(formats strfmt.
 	return nil
 }
 
+func (m *ApplicationDefinitionSpec) validateDefaultNamespace(formats strfmt.Registry) error {
+	if swag.IsZero(m.DefaultNamespace) { // not required
+		return nil
+	}
+
+	if m.DefaultNamespace != nil {
+		if err := m.DefaultNamespace.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultNamespace")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultNamespace")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *ApplicationDefinitionSpec) validateMethod(formats strfmt.Registry) error {
 	if swag.IsZero(m.Method) { // not required
 		return nil
@@ -193,6 +219,10 @@ func (m *ApplicationDefinitionSpec) ContextValidate(ctx context.Context, formats
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDefaultNamespace(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateMethod(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -235,6 +265,22 @@ func (m *ApplicationDefinitionSpec) contextValidateDefaultDeployOptions(ctx cont
 				return ve.ValidateName("defaultDeployOptions")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("defaultDeployOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ApplicationDefinitionSpec) contextValidateDefaultNamespace(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DefaultNamespace != nil {
+		if err := m.DefaultNamespace.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultNamespace")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultNamespace")
 			}
 			return err
 		}

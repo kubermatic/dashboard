@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -20,15 +21,69 @@ type DatacenterSpecAzure struct {
 	// Region to use, for example "westeurope". A list of available regions can be
 	// found at https://azure.microsoft.com/en-us/global-infrastructure/locations/
 	Location string `json:"location,omitempty"`
+
+	// images
+	Images ImageList `json:"images,omitempty"`
 }
 
 // Validate validates this datacenter spec azure
 func (m *DatacenterSpecAzure) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateImages(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this datacenter spec azure based on context it is used
+func (m *DatacenterSpecAzure) validateImages(formats strfmt.Registry) error {
+	if swag.IsZero(m.Images) { // not required
+		return nil
+	}
+
+	if m.Images != nil {
+		if err := m.Images.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("images")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("images")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this datacenter spec azure based on the context it is used
 func (m *DatacenterSpecAzure) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateImages(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *DatacenterSpecAzure) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Images.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("images")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("images")
+		}
+		return err
+	}
+
 	return nil
 }
 
