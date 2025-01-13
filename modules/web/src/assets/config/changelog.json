@@ -1,9 +1,17 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v22511",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.25.md#v22513",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix reconciling loop when resetting Application values to an empty value"
+      "description": "Fix a bug where groups scope was missing in authentication request for kubernetes-dashboard"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix missing AMI value in edit machine deployment dialog"
+    },
+    {
+      "category": "fixed",
+      "description": "Make Domain field optional when using application credentials for Openstack provider"
     }
   ]
 }
