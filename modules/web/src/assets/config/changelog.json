@@ -1,13 +1,17 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v22413",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.24.md#v22415",
   "entries": [
     {
       "category": "fixed",
-      "description": "Fix vSphere degradation because of missing CCM/CSI container images"
+      "description": "Fix a bug where groups scope was missing in authentication request for kubernetes-dashboard"
     },
     {
       "category": "fixed",
-      "description": "When deleting a cluster, the Kubevirt provider waits for the etcd backups to get deleted before removing the namespace"
+      "description": "Fix missing AMI value in edit machine deployment dialog"
+    },
+    {
+      "category": "fixed",
+      "description": "Make Domain field optional when using application credentials for Openstack provider"
     }
   ]
 }
