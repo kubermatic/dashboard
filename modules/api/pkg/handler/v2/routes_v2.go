@@ -53,6 +53,8 @@ import (
 	groupprojectbinding "k8c.io/dashboard/v2/pkg/handler/v2/group-project-binding"
 	ipampool "k8c.io/dashboard/v2/pkg/handler/v2/ipampool"
 	kubernetesdashboard "k8c.io/dashboard/v2/pkg/handler/v2/kubernetes-dashboard"
+	policyinstance "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-instance"
+	policytemplate "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/machine"
 	mlaadminsetting "k8c.io/dashboard/v2/pkg/handler/v2/mla_admin_setting"
 	"k8c.io/dashboard/v2/pkg/handler/v2/networkdefaults"
@@ -1713,6 +1715,47 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/seeds/status").
 		Handler(r.listSeedStatus())
+
+	// Define endpoints to manage kyverno policies
+	mux.Methods(http.MethodGet).
+		Path("/policytemplate").
+		Handler(r.listKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodPost).
+		Path("/policytemplate").
+		Handler(r.createKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodGet).
+		Path("/policytemplate/{template_name}").
+		Handler(r.getKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodPatch).
+		Path("/policytemplate/{template_name}").
+		Handler(r.patchKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodDelete).
+		Path("/policytemplate/{template_name}").
+		Handler(r.deleteKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodGet).
+		Path("/policyinstance").
+		Handler(r.listKyvernoPolicyInstance())
+
+	mux.Methods(http.MethodGet).
+		Path("/policyinstance/{instance_name}").
+		Handler(r.getKyvernoPolicyInstance())
+
+	mux.Methods(http.MethodPost).
+		Path("/policyinstance").
+		Handler(r.createKyvernoPolicyInstance())
+
+	mux.Methods(http.MethodPatch).
+		Path("/policyinstance/{instance_name}").
+		Handler(r.patchKyvernoPolicyInstance())
+
+	mux.Methods(http.MethodDelete).
+		Path("/policyinstance/{instance_name}").
+		Handler(r.deleteKyvernoPolicyInstance())
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
@@ -11179,6 +11222,128 @@ func (r Routing) listSeedStatus() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(seedoverview.ListSeedStatus(r.seedsGetter)),
 		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Define endpoints to manage kyverno policies
+
+func (r Routing) listKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.ListEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.GetEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeGetPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) createKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.CreateEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeCreatePolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.PatchEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodePatchPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.DeleteEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeGetPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listKyvernoPolicyInstance() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policyinstance.ListEndpoint(r.userInfoGetter)),
+		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getKyvernoPolicyInstance() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policyinstance.GetEndpoint(r.userInfoGetter)),
+		policyinstance.DecodeGetPolicyInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) createKyvernoPolicyInstance() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policyinstance.CreateEndpoint(r.userInfoGetter)),
+		policyinstance.DecodeCreatePolicyInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) patchKyvernoPolicyInstance() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policyinstance.PatchEndpoint(r.userInfoGetter)),
+		policyinstance.DecodePatchPolicyInstanceReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteKyvernoPolicyInstance() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policyinstance.DeleteEndpoint(r.userInfoGetter)),
+		policyinstance.DecodeGetPolicyInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

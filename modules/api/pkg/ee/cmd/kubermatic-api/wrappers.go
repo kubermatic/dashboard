@@ -29,6 +29,7 @@ import (
 
 	backupstorage "k8c.io/dashboard/v2/pkg/ee/clusterbackup/storage-location"
 	groupprojectbinding "k8c.io/dashboard/v2/pkg/ee/group-project-binding/provider"
+	policytemplate "k8c.io/dashboard/v2/pkg/ee/kyverno/policy-template"
 	eeprovider "k8c.io/dashboard/v2/pkg/ee/provider"
 	resourcequotas "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -55,4 +56,8 @@ func GroupProjectBindingProviderFactory(createMasterImpersonatedClient kubernete
 
 func BackupStorageProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.BackupStorageProvider {
 	return backupstorage.NewBackupStorageProvider(createMasterImpersonatedClient, privilegedClient)
+}
+
+func PolicyTemplateProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
+	return policytemplate.NewPolicyTemplateProvider(createMasterImpersonatedClient, privilegedClient)
 }
