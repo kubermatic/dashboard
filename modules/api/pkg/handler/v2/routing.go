@@ -91,6 +91,7 @@ type Routing struct {
 	etcdRestoreProjectProviderGetter               provider.EtcdRestoreProjectProviderGetter
 	backupStorageProvider                          provider.BackupStorageProvider
 	backupCredentialsProviderGetter                provider.BackupCredentialsProviderGetter
+	policyTemplateProvider                         provider.PolicyTemplateProvider
 	privilegedMLAAdminSettingProviderGetter        provider.PrivilegedMLAAdminSettingProviderGetter
 	seedProvider                                   provider.SeedProvider
 	resourceQuotaProvider                          provider.ResourceQuotaProvider

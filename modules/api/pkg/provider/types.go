@@ -1373,3 +1373,12 @@ type BackupStorageProvider interface {
 
 	GetStorageLocationCreds(ctx context.Context, secretName string) (map[string][]byte, error)
 }
+
+type PolicyTemplateProvider interface {
+	// Create creates a new PolicyTemplate.
+	Create(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error)
+	Get(ctx context.Context, name string) (*kubermaticv1.PolicyTemplate, error)
+	List(ctx context.Context) (*kubermaticv1.PolicyTemplateList, error)
+	Patch(ctx context.Context, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error)
+	Delete(ctx context.Context, name string) error
+}

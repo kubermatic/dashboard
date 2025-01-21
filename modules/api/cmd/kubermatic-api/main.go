@@ -414,6 +414,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	backupStorageProvider := backupStorageProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
 
+	policyTemplateProvider := policyTemplateProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,
@@ -457,6 +458,7 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		etcdBackupConfigProjectProviderGetter:          etcdBackupConfigProjectProviderGetter,
 		etcdRestoreProjectProviderGetter:               etcdRestoreProjectProviderGetter,
 		backupStorageProvider:                          backupStorageProvider,
+		policyTemplateProvider:                         policyTemplateProvider,
 		backupCredentialsProviderGetter:                backupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        privilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   seedProvider,
