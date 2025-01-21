@@ -1,6 +1,6 @@
 SHELL = /bin/bash -eu -o pipefail
 export KUBERMATIC_EDITION ?= ee
-KUBERMATIC_VERSION?=v2.26.0-rc.0
+KUBERMATIC_VERSION?=v2.27.0-alpha.0
 CC=npm
 GOOS ?= $(shell go env GOOS)
 export GOOS

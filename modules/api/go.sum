@@ -684,8 +684,9 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
+github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
 github.com/tidwall/gjson v1.14.0 h1:6aeJ0bzojgWLa82gDQHcx3S0Lr/O51I9bJ5nv6JFx5w=
@@ -1108,10 +1109,10 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 k8c.io/kubeone v1.9.0 h1:+CPaUwOWHyw+dJmy3tR/KtRbVP0CuYPQpfaaEXeEIYU=
 k8c.io/kubeone v1.9.0/go.mod h1:l5ehlxg5fE900c2JBL6by6oN9a/TV+T0zunwlO7FNtY=
-k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250108204244-266fa5d264c1 h1:c4vjOw2GG9c5m5fF4UvIi8KcEGEaaLChBemsK6/42G4=
-k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250108204244-266fa5d264c1/go.mod h1:kBRStqhpogxx4pLo2X15++pCi+ZC+sHMZCUwHKgGpQY=
-k8c.io/machine-controller v1.60.1-0.20241118073303-4f251c4bc5a3 h1:1cm25uLinNABgDhOAGXACa0HLI0alf678QsVfw/Rt2s=
-k8c.io/machine-controller v1.60.1-0.20241118073303-4f251c4bc5a3/go.mod h1:Xn3sAXDb3eIQFvyPgMxG3auvMfOJxP6rXGPT/STpzJM=
+k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250120161355-5a04ba5eb708 h1:EgMXWrTZwX1gFA9UY/AAxvsltZOzRQnpuTPP8xEEMAk=
+k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250120161355-5a04ba5eb708/go.mod h1:SztOkeKdL5VtgpyDW7Ex9DpWA2DQXccQ+irqTO/3A9s=
+k8c.io/machine-controller v1.60.1-0.20250113105754-d6ee7f43eac2 h1:A9vCpH3jF0L5FROxdHgHPhpBiyq5MdgcpTUPkKhWBgs=
+k8c.io/machine-controller v1.60.1-0.20250113105754-d6ee7f43eac2/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
 k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108 h1:xiKGpydY/jsBVD5XT3zvAxW2pPKEtgcv526zdVFzbuw=
 k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108/go.mod h1:Dh9IZp5pb5G3s2r6ZrHUb+gTuHw5AmbIFYuFxIcgU7o=
 k8c.io/reconciler v0.5.0 h1:BHpelg1UfI/7oBFctqOq8sX6qzflXpl3SlvHe7e8wak=
