@@ -57,7 +57,7 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.6-0.20210604193023-d5e0c0615ace
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/vmware-tanzu/velero v1.15.0
 	github.com/vmware/go-vcloud-director/v2 v2.26.0
 	github.com/vmware/govmomi v0.46.2
@@ -67,8 +67,8 @@ require (
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.9.0
-	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250108204244-266fa5d264c1
-	k8c.io/machine-controller v1.60.1-0.20241118073303-4f251c4bc5a3
+	k8c.io/kubermatic/v2 v2.26.0-rc.0.0.20250120161355-5a04ba5eb708
+	k8c.io/machine-controller v1.60.1-0.20250113105754-d6ee7f43eac2
 	k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.3
