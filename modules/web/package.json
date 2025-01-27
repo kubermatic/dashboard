@@ -69,7 +69,7 @@
     "@angular/platform-browser": "18.2.12",
     "@angular/platform-browser-dynamic": "18.2.12",
     "@angular/router": "18.2.12",
-    "@fontsource/inconsolata": "4.5.10",
+    "@fontsource/inconsolata": "5.1.1",
     "@fontsource/roboto": "5.1.1",
     "@fontsource/roboto-mono": "5.1.0",
     "@fontsource/ubuntu": "4.5.11",
