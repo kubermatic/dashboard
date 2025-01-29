@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PostBackupDownloadURLCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the post backup download Url created response
+func (o *PostBackupDownloadURLCreated) Code() int {
+	return 201
+}
+
 func (o *PostBackupDownloadURLCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlCreated %s", 201, payload)
 }
 
 func (o *PostBackupDownloadURLCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlCreated %s", 201, payload)
 }
 
 func (o *PostBackupDownloadURLCreated) GetPayload() *models.BackupDownloadURL {
@@ -154,12 +162,17 @@ func (o *PostBackupDownloadURLUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the post backup download Url unauthorized response
+func (o *PostBackupDownloadURLUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PostBackupDownloadURLUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlUnauthorized", 401)
 }
 
 func (o *PostBackupDownloadURLUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlUnauthorized", 401)
 }
 
 func (o *PostBackupDownloadURLUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PostBackupDownloadURLForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the post backup download Url forbidden response
+func (o *PostBackupDownloadURLForbidden) Code() int {
+	return 403
+}
+
 func (o *PostBackupDownloadURLForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlForbidden", 403)
 }
 
 func (o *PostBackupDownloadURLForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrlForbidden", 403)
 }
 
 func (o *PostBackupDownloadURLForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PostBackupDownloadURLDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the post backup download Url default response
-func (o *PostBackupDownloadURLDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this post backup download Url default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PostBackupDownloadURLDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the post backup download Url default response
+func (o *PostBackupDownloadURLDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PostBackupDownloadURLDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrl default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrl default %s", o._statusCode, payload)
 }
 
 func (o *PostBackupDownloadURLDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrl default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbackup/{cluster_backup}/downloadurl][%d] postBackupDownloadUrl default %s", o._statusCode, payload)
 }
 
 func (o *PostBackupDownloadURLDefault) GetPayload() *models.ErrorResponse {

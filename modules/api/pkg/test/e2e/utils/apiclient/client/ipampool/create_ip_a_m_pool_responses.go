@@ -6,6 +6,7 @@ package ipampool
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *CreateIPAMPoolCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create Ip a m pool created response
+func (o *CreateIPAMPoolCreated) Code() int {
+	return 201
+}
+
 func (o *CreateIPAMPoolCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolCreated ", 201)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolCreated", 201)
 }
 
 func (o *CreateIPAMPoolCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolCreated ", 201)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolCreated", 201)
 }
 
 func (o *CreateIPAMPoolCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *CreateIPAMPoolUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create Ip a m pool unauthorized response
+func (o *CreateIPAMPoolUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateIPAMPoolUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolUnauthorized", 401)
 }
 
 func (o *CreateIPAMPoolUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolUnauthorized", 401)
 }
 
 func (o *CreateIPAMPoolUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *CreateIPAMPoolForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create Ip a m pool forbidden response
+func (o *CreateIPAMPoolForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateIPAMPoolForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolForbidden", 403)
 }
 
 func (o *CreateIPAMPoolForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIpAMPoolForbidden", 403)
 }
 
 func (o *CreateIPAMPoolForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type CreateIPAMPoolDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create IP a m pool default response
-func (o *CreateIPAMPoolDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create IP a m pool default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *CreateIPAMPoolDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create IP a m pool default response
+func (o *CreateIPAMPoolDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateIPAMPoolDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIPAMPool default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIPAMPool default %s", o._statusCode, payload)
 }
 
 func (o *CreateIPAMPoolDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIPAMPool default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/seeds/{seed_name}/ipampools][%d] createIPAMPool default %s", o._statusCode, payload)
 }
 
 func (o *CreateIPAMPoolDefault) GetPayload() *models.ErrorResponse {

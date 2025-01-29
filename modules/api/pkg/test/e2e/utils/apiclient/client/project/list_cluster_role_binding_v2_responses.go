@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListClusterRoleBindingV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list cluster role binding v2 o k response
+func (o *ListClusterRoleBindingV2OK) Code() int {
+	return 200
+}
+
 func (o *ListClusterRoleBindingV2OK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2OK %s", 200, payload)
 }
 
 func (o *ListClusterRoleBindingV2OK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2OK %s", 200, payload)
 }
 
 func (o *ListClusterRoleBindingV2OK) GetPayload() []*models.ClusterRoleBinding {
@@ -152,12 +160,17 @@ func (o *ListClusterRoleBindingV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list cluster role binding v2 unauthorized response
+func (o *ListClusterRoleBindingV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *ListClusterRoleBindingV2Unauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Unauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Unauthorized", 401)
 }
 
 func (o *ListClusterRoleBindingV2Unauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Unauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Unauthorized", 401)
 }
 
 func (o *ListClusterRoleBindingV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListClusterRoleBindingV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list cluster role binding v2 forbidden response
+func (o *ListClusterRoleBindingV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *ListClusterRoleBindingV2Forbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Forbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Forbidden", 403)
 }
 
 func (o *ListClusterRoleBindingV2Forbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Forbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2Forbidden", 403)
 }
 
 func (o *ListClusterRoleBindingV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListClusterRoleBindingV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list cluster role binding v2 default response
-func (o *ListClusterRoleBindingV2Default) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list cluster role binding v2 default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListClusterRoleBindingV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list cluster role binding v2 default response
+func (o *ListClusterRoleBindingV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *ListClusterRoleBindingV2Default) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListClusterRoleBindingV2Default) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/clusterbindings][%d] listClusterRoleBindingV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListClusterRoleBindingV2Default) GetPayload() *models.ErrorResponse {

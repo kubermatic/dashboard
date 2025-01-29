@@ -6,6 +6,7 @@ package digitalocean
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListDigitaloceanSizesNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list digitalocean sizes no credentials v2 o k response
+func (o *ListDigitaloceanSizesNoCredentialsV2OK) Code() int {
+	return 200
+}
+
 func (o *ListDigitaloceanSizesNoCredentialsV2OK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListDigitaloceanSizesNoCredentialsV2OK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListDigitaloceanSizesNoCredentialsV2OK) GetPayload() *models.DigitaloceanSizeList {
@@ -122,11 +130,6 @@ type ListDigitaloceanSizesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list digitalocean sizes no credentials v2 default response
-func (o *ListDigitaloceanSizesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list digitalocean sizes no credentials v2 default response has a 2xx status code
 func (o *ListDigitaloceanSizesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListDigitaloceanSizesNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list digitalocean sizes no credentials v2 default response
+func (o *ListDigitaloceanSizesNoCredentialsV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *ListDigitaloceanSizesNoCredentialsV2Default) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListDigitaloceanSizesNoCredentialsV2Default) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/digitalocean/sizes][%d] listDigitaloceanSizesNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListDigitaloceanSizesNoCredentialsV2Default) GetPayload() *models.ErrorResponse {

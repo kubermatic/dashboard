@@ -6,6 +6,7 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update application definition o k response
+func (o *UpdateApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *UpdateApplicationDefinitionOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *UpdateApplicationDefinitionOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *UpdateApplicationDefinitionOK) GetPayload() *models.ApplicationDefinition {
@@ -154,12 +162,17 @@ func (o *UpdateApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update application definition unauthorized response
+func (o *UpdateApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateApplicationDefinitionUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *UpdateApplicationDefinitionUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *UpdateApplicationDefinitionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update application definition forbidden response
+func (o *UpdateApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateApplicationDefinitionForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionForbidden", 403)
 }
 
 func (o *UpdateApplicationDefinitionForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinitionForbidden", 403)
 }
 
 func (o *UpdateApplicationDefinitionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateApplicationDefinitionDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update application definition default response
-func (o *UpdateApplicationDefinitionDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update application definition default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update application definition default response
+func (o *UpdateApplicationDefinitionDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateApplicationDefinitionDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *UpdateApplicationDefinitionDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/applicationdefinitions/{appdef_name}][%d] updateApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *UpdateApplicationDefinitionDefault) GetPayload() *models.ErrorResponse {

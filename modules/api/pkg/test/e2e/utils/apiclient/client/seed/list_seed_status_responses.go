@@ -6,6 +6,7 @@ package seed
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListSeedStatusOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list seed status o k response
+func (o *ListSeedStatusOK) Code() int {
+	return 200
+}
+
 func (o *ListSeedStatusOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusOK %s", 200, payload)
 }
 
 func (o *ListSeedStatusOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusOK %s", 200, payload)
 }
 
 func (o *ListSeedStatusOK) GetPayload() []*models.SeedStatus {
@@ -152,12 +160,17 @@ func (o *ListSeedStatusUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list seed status unauthorized response
+func (o *ListSeedStatusUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSeedStatusUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusUnauthorized", 401)
 }
 
 func (o *ListSeedStatusUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusUnauthorized", 401)
 }
 
 func (o *ListSeedStatusUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListSeedStatusForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list seed status forbidden response
+func (o *ListSeedStatusForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSeedStatusForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusForbidden", 403)
 }
 
 func (o *ListSeedStatusForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatusForbidden", 403)
 }
 
 func (o *ListSeedStatusForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListSeedStatusDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list seed status default response
-func (o *ListSeedStatusDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list seed status default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListSeedStatusDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list seed status default response
+func (o *ListSeedStatusDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListSeedStatusDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatus default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatus default %s", o._statusCode, payload)
 }
 
 func (o *ListSeedStatusDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatus default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/status][%d] listSeedStatus default %s", o._statusCode, payload)
 }
 
 func (o *ListSeedStatusDefault) GetPayload() *models.ErrorResponse {

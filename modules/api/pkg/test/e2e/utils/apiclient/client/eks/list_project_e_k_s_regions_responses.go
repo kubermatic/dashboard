@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListProjectEKSRegionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s regions o k response
+func (o *ListProjectEKSRegionsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSRegionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSRegionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSRegionsOK) GetPayload() []models.EKSRegionList {
@@ -152,12 +160,17 @@ func (o *ListProjectEKSRegionsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s regions unauthorized response
+func (o *ListProjectEKSRegionsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSRegionsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsUnauthorized", 401)
 }
 
 func (o *ListProjectEKSRegionsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsUnauthorized", 401)
 }
 
 func (o *ListProjectEKSRegionsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListProjectEKSRegionsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s regions forbidden response
+func (o *ListProjectEKSRegionsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSRegionsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsForbidden", 403)
 }
 
 func (o *ListProjectEKSRegionsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegionsForbidden", 403)
 }
 
 func (o *ListProjectEKSRegionsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListProjectEKSRegionsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list project e k s regions default response
-func (o *ListProjectEKSRegionsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list project e k s regions default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListProjectEKSRegionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project e k s regions default response
+func (o *ListProjectEKSRegionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectEKSRegionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegions default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSRegionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/regions][%d] listProjectEKSRegions default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSRegionsDefault) GetPayload() *models.ErrorResponse {

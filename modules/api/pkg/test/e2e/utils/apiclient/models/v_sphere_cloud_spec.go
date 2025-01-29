@@ -180,6 +180,11 @@ func (m *VSphereCloudSpec) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *VSphereCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
+
+		if swag.IsZero(m.CredentialsReference) { // not required
+			return nil
+		}
+
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")
@@ -196,6 +201,11 @@ func (m *VSphereCloudSpec) contextValidateCredentialsReference(ctx context.Conte
 func (m *VSphereCloudSpec) contextValidateInfraManagementUser(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InfraManagementUser != nil {
+
+		if swag.IsZero(m.InfraManagementUser) { // not required
+			return nil
+		}
+
 		if err := m.InfraManagementUser.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("infraManagementUser")
@@ -212,6 +222,11 @@ func (m *VSphereCloudSpec) contextValidateInfraManagementUser(ctx context.Contex
 func (m *VSphereCloudSpec) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Tags != nil {
+
+		if swag.IsZero(m.Tags) { // not required
+			return nil
+		}
+
 		if err := m.Tags.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("tags")

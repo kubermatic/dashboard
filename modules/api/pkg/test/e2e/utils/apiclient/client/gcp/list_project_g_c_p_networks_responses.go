@@ -6,6 +6,7 @@ package gcp
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectGCPNetworksOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project g c p networks o k response
+func (o *ListProjectGCPNetworksOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectGCPNetworksOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworksOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworksOK %s", 200, payload)
 }
 
 func (o *ListProjectGCPNetworksOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworksOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworksOK %s", 200, payload)
 }
 
 func (o *ListProjectGCPNetworksOK) GetPayload() models.GCPNetworkList {
@@ -120,11 +128,6 @@ type ListProjectGCPNetworksDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project g c p networks default response
-func (o *ListProjectGCPNetworksDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project g c p networks default response has a 2xx status code
 func (o *ListProjectGCPNetworksDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectGCPNetworksDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project g c p networks default response
+func (o *ListProjectGCPNetworksDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectGCPNetworksDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworks default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworks default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectGCPNetworksDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworks default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gcp/networks][%d] listProjectGCPNetworks default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectGCPNetworksDefault) GetPayload() *models.ErrorResponse {

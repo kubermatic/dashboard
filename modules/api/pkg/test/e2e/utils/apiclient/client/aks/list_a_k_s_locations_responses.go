@@ -6,6 +6,7 @@ package aks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListAKSLocationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list a k s locations o k response
+func (o *ListAKSLocationsOK) Code() int {
+	return 200
+}
+
 func (o *ListAKSLocationsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocationsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocationsOK %s", 200, payload)
 }
 
 func (o *ListAKSLocationsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocationsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocationsOK %s", 200, payload)
 }
 
 func (o *ListAKSLocationsOK) GetPayload() models.AKSLocationList {
@@ -120,11 +128,6 @@ type ListAKSLocationsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list a k s locations default response
-func (o *ListAKSLocationsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list a k s locations default response has a 2xx status code
 func (o *ListAKSLocationsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListAKSLocationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list a k s locations default response
+func (o *ListAKSLocationsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListAKSLocationsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocations default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocations default %s", o._statusCode, payload)
 }
 
 func (o *ListAKSLocationsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocations default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/locations][%d] listAKSLocations default %s", o._statusCode, payload)
 }
 
 func (o *ListAKSLocationsDefault) GetPayload() *models.ErrorResponse {

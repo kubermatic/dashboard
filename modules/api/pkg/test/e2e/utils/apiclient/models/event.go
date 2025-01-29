@@ -151,6 +151,11 @@ func (m *Event) ContextValidate(ctx context.Context, formats strfmt.Registry) er
 func (m *Event) contextValidateInvolvedObject(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InvolvedObject != nil {
+
+		if swag.IsZero(m.InvolvedObject) { // not required
+			return nil
+		}
+
 		if err := m.InvolvedObject.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("involvedObject")

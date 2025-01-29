@@ -7,6 +7,7 @@ package resource_quota
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -94,12 +95,17 @@ func (o *CreateResourceQuotaCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create resource quota created response
+func (o *CreateResourceQuotaCreated) Code() int {
+	return 201
+}
+
 func (o *CreateResourceQuotaCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaCreated ", 201)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaCreated", 201)
 }
 
 func (o *CreateResourceQuotaCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaCreated ", 201)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaCreated", 201)
 }
 
 func (o *CreateResourceQuotaCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -145,12 +151,17 @@ func (o *CreateResourceQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create resource quota unauthorized response
+func (o *CreateResourceQuotaUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateResourceQuotaUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaUnauthorized", 401)
 }
 
 func (o *CreateResourceQuotaUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaUnauthorized", 401)
 }
 
 func (o *CreateResourceQuotaUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -196,12 +207,17 @@ func (o *CreateResourceQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create resource quota forbidden response
+func (o *CreateResourceQuotaForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateResourceQuotaForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaForbidden", 403)
 }
 
 func (o *CreateResourceQuotaForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuotaForbidden", 403)
 }
 
 func (o *CreateResourceQuotaForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -225,11 +241,6 @@ type CreateResourceQuotaDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create resource quota default response
-func (o *CreateResourceQuotaDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create resource quota default response has a 2xx status code
@@ -257,12 +268,19 @@ func (o *CreateResourceQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create resource quota default response
+func (o *CreateResourceQuotaDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateResourceQuotaDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuota default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuota default %s", o._statusCode, payload)
 }
 
 func (o *CreateResourceQuotaDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuota default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/quotas][%d] createResourceQuota default %s", o._statusCode, payload)
 }
 
 func (o *CreateResourceQuotaDefault) GetPayload() *models.ErrorResponse {
@@ -347,6 +365,11 @@ func (o *CreateResourceQuotaBody) ContextValidate(ctx context.Context, formats s
 func (o *CreateResourceQuotaBody) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Quota != nil {
+
+		if swag.IsZero(o.Quota) { // not required
+			return nil
+		}
+
 		if err := o.Quota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "quota")

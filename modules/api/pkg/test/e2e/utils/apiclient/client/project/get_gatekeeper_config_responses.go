@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetGatekeeperConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get gatekeeper config o k response
+func (o *GetGatekeeperConfigOK) Code() int {
+	return 200
+}
+
 func (o *GetGatekeeperConfigOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigOK %s", 200, payload)
 }
 
 func (o *GetGatekeeperConfigOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigOK %s", 200, payload)
 }
 
 func (o *GetGatekeeperConfigOK) GetPayload() *models.GatekeeperConfig {
@@ -154,12 +162,17 @@ func (o *GetGatekeeperConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get gatekeeper config unauthorized response
+func (o *GetGatekeeperConfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetGatekeeperConfigUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigUnauthorized", 401)
 }
 
 func (o *GetGatekeeperConfigUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigUnauthorized", 401)
 }
 
 func (o *GetGatekeeperConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetGatekeeperConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get gatekeeper config forbidden response
+func (o *GetGatekeeperConfigForbidden) Code() int {
+	return 403
+}
+
 func (o *GetGatekeeperConfigForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigForbidden", 403)
 }
 
 func (o *GetGatekeeperConfigForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfigForbidden", 403)
 }
 
 func (o *GetGatekeeperConfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetGatekeeperConfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get gatekeeper config default response
-func (o *GetGatekeeperConfigDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get gatekeeper config default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetGatekeeperConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get gatekeeper config default response
+func (o *GetGatekeeperConfigDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetGatekeeperConfigDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfig default %s", o._statusCode, payload)
 }
 
 func (o *GetGatekeeperConfigDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] getGatekeeperConfig default %s", o._statusCode, payload)
 }
 
 func (o *GetGatekeeperConfigDefault) GetPayload() *models.ErrorResponse {

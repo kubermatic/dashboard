@@ -6,6 +6,7 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListOpenstackNetworksNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list openstack networks no credentials v2 o k response
+func (o *ListOpenstackNetworksNoCredentialsV2OK) Code() int {
+	return 200
+}
+
 func (o *ListOpenstackNetworksNoCredentialsV2OK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListOpenstackNetworksNoCredentialsV2OK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListOpenstackNetworksNoCredentialsV2OK) GetPayload() []*models.OpenstackNetwork {
@@ -120,11 +128,6 @@ type ListOpenstackNetworksNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list openstack networks no credentials v2 default response
-func (o *ListOpenstackNetworksNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list openstack networks no credentials v2 default response has a 2xx status code
 func (o *ListOpenstackNetworksNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListOpenstackNetworksNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list openstack networks no credentials v2 default response
+func (o *ListOpenstackNetworksNoCredentialsV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *ListOpenstackNetworksNoCredentialsV2Default) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListOpenstackNetworksNoCredentialsV2Default) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/networks][%d] listOpenstackNetworksNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListOpenstackNetworksNoCredentialsV2Default) GetPayload() *models.ErrorResponse {

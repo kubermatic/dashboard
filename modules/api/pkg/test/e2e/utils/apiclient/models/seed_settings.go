@@ -105,6 +105,11 @@ func (m *SeedSettings) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *SeedSettings) contextValidateMetering(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Metering != nil {
+
+		if swag.IsZero(m.Metering) { // not required
+			return nil
+		}
+
 		if err := m.Metering.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("metering")
@@ -121,6 +126,11 @@ func (m *SeedSettings) contextValidateMetering(ctx context.Context, formats strf
 func (m *SeedSettings) contextValidateMla(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Mla != nil {
+
+		if swag.IsZero(m.Mla) { // not required
+			return nil
+		}
+
 		if err := m.Mla.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mla")

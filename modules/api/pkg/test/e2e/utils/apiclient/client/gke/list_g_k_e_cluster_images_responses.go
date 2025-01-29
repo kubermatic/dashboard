@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListGKEClusterImagesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e cluster images o k response
+func (o *ListGKEClusterImagesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEClusterImagesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterImagesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterImagesOK) GetPayload() models.GKEImageList {
@@ -152,12 +160,17 @@ func (o *ListGKEClusterImagesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list g k e cluster images unauthorized response
+func (o *ListGKEClusterImagesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListGKEClusterImagesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterImagesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterImagesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListGKEClusterImagesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list g k e cluster images forbidden response
+func (o *ListGKEClusterImagesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListGKEClusterImagesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesForbidden", 403)
 }
 
 func (o *ListGKEClusterImagesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImagesForbidden", 403)
 }
 
 func (o *ListGKEClusterImagesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListGKEClusterImagesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list g k e cluster images default response
-func (o *ListGKEClusterImagesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list g k e cluster images default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListGKEClusterImagesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e cluster images default response
+func (o *ListGKEClusterImagesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEClusterImagesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImages default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImages default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterImagesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImages default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/images][%d] listGKEClusterImages default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterImagesDefault) GetPayload() *models.ErrorResponse {

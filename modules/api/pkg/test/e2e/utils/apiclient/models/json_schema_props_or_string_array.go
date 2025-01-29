@@ -75,6 +75,11 @@ func (m *JSONSchemaPropsOrStringArray) ContextValidate(ctx context.Context, form
 func (m *JSONSchemaPropsOrStringArray) contextValidateSchema(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Schema != nil {
+
+		if swag.IsZero(m.Schema) { // not required
+			return nil
+		}
+
 		if err := m.Schema.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Schema")

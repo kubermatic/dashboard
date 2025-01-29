@@ -6,6 +6,7 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectAzureVnetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project azure vnets o k response
+func (o *ListProjectAzureVnetsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAzureVnetsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnetsOK %s", 200, payload)
 }
 
 func (o *ListProjectAzureVnetsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnetsOK %s", 200, payload)
 }
 
 func (o *ListProjectAzureVnetsOK) GetPayload() *models.AzureVirtualNetworksList {
@@ -122,11 +130,6 @@ type ListProjectAzureVnetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project azure vnets default response
-func (o *ListProjectAzureVnetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project azure vnets default response has a 2xx status code
 func (o *ListProjectAzureVnetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListProjectAzureVnetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project azure vnets default response
+func (o *ListProjectAzureVnetsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectAzureVnetsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnets default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAzureVnetsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/vnets][%d] listProjectAzureVnets default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAzureVnetsDefault) GetPayload() *models.ErrorResponse {

@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete constraint o k response
+func (o *DeleteConstraintOK) Code() int {
+	return 200
+}
+
 func (o *DeleteConstraintOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintOK", 200)
 }
 
 func (o *DeleteConstraintOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintOK", 200)
 }
 
 func (o *DeleteConstraintOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete constraint unauthorized response
+func (o *DeleteConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteConstraintUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintUnauthorized", 401)
 }
 
 func (o *DeleteConstraintUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintUnauthorized", 401)
 }
 
 func (o *DeleteConstraintUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete constraint forbidden response
+func (o *DeleteConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteConstraintForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintForbidden", 403)
 }
 
 func (o *DeleteConstraintForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraintForbidden", 403)
 }
 
 func (o *DeleteConstraintForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteConstraintDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete constraint default response
-func (o *DeleteConstraintDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete constraint default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete constraint default response
+func (o *DeleteConstraintDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteConstraintDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraint default %s", o._statusCode, payload)
 }
 
 func (o *DeleteConstraintDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] deleteConstraint default %s", o._statusCode, payload)
 }
 
 func (o *DeleteConstraintDefault) GetPayload() *models.ErrorResponse {

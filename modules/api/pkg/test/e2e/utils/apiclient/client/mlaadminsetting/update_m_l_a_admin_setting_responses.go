@@ -6,6 +6,7 @@ package mlaadminsetting
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateMLAAdminSettingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update m l a admin setting o k response
+func (o *UpdateMLAAdminSettingOK) Code() int {
+	return 200
+}
+
 func (o *UpdateMLAAdminSettingOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingOK %s", 200, payload)
 }
 
 func (o *UpdateMLAAdminSettingOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingOK %s", 200, payload)
 }
 
 func (o *UpdateMLAAdminSettingOK) GetPayload() *models.MLAAdminSetting {
@@ -154,12 +162,17 @@ func (o *UpdateMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update m l a admin setting unauthorized response
+func (o *UpdateMLAAdminSettingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateMLAAdminSettingUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingUnauthorized", 401)
 }
 
 func (o *UpdateMLAAdminSettingUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingUnauthorized", 401)
 }
 
 func (o *UpdateMLAAdminSettingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update m l a admin setting forbidden response
+func (o *UpdateMLAAdminSettingForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateMLAAdminSettingForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingForbidden", 403)
 }
 
 func (o *UpdateMLAAdminSettingForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSettingForbidden", 403)
 }
 
 func (o *UpdateMLAAdminSettingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateMLAAdminSettingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update m l a admin setting default response
-func (o *UpdateMLAAdminSettingDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update m l a admin setting default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update m l a admin setting default response
+func (o *UpdateMLAAdminSettingDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateMLAAdminSettingDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSetting default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSetting default %s", o._statusCode, payload)
 }
 
 func (o *UpdateMLAAdminSettingDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSetting default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] updateMLAAdminSetting default %s", o._statusCode, payload)
 }
 
 func (o *UpdateMLAAdminSettingDefault) GetPayload() *models.ErrorResponse {

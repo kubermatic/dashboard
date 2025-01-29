@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetClusterServiceAccountPermissionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster service account permissions o k response
+func (o *GetClusterServiceAccountPermissionsOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterServiceAccountPermissionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsOK %s", 200, payload)
 }
 
 func (o *GetClusterServiceAccountPermissionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsOK %s", 200, payload)
 }
 
 func (o *GetClusterServiceAccountPermissionsOK) GetPayload() []*models.Permission {
@@ -152,12 +160,17 @@ func (o *GetClusterServiceAccountPermissionsUnauthorized) IsCode(code int) bool 
 	return code == 401
 }
 
+// Code gets the status code for the get cluster service account permissions unauthorized response
+func (o *GetClusterServiceAccountPermissionsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterServiceAccountPermissionsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsUnauthorized", 401)
 }
 
 func (o *GetClusterServiceAccountPermissionsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsUnauthorized", 401)
 }
 
 func (o *GetClusterServiceAccountPermissionsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *GetClusterServiceAccountPermissionsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster service account permissions forbidden response
+func (o *GetClusterServiceAccountPermissionsForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterServiceAccountPermissionsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsForbidden", 403)
 }
 
 func (o *GetClusterServiceAccountPermissionsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissionsForbidden", 403)
 }
 
 func (o *GetClusterServiceAccountPermissionsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type GetClusterServiceAccountPermissionsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get cluster service account permissions default response
-func (o *GetClusterServiceAccountPermissionsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster service account permissions default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *GetClusterServiceAccountPermissionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get cluster service account permissions default response
+func (o *GetClusterServiceAccountPermissionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetClusterServiceAccountPermissionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissions default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterServiceAccountPermissionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions][%d] getClusterServiceAccountPermissions default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterServiceAccountPermissionsDefault) GetPayload() *models.ErrorResponse {

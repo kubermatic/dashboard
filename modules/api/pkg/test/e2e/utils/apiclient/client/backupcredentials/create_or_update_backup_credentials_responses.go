@@ -6,6 +6,7 @@ package backupcredentials
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *CreateOrUpdateBackupCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create or update backup credentials o k response
+func (o *CreateOrUpdateBackupCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *CreateOrUpdateBackupCredentialsOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsOK", 200)
 }
 
 func (o *CreateOrUpdateBackupCredentialsOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsOK", 200)
 }
 
 func (o *CreateOrUpdateBackupCredentialsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *CreateOrUpdateBackupCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create or update backup credentials unauthorized response
+func (o *CreateOrUpdateBackupCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateOrUpdateBackupCredentialsUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsUnauthorized", 401)
 }
 
 func (o *CreateOrUpdateBackupCredentialsUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsUnauthorized", 401)
 }
 
 func (o *CreateOrUpdateBackupCredentialsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *CreateOrUpdateBackupCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create or update backup credentials forbidden response
+func (o *CreateOrUpdateBackupCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOrUpdateBackupCredentialsForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsForbidden", 403)
 }
 
 func (o *CreateOrUpdateBackupCredentialsForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentialsForbidden", 403)
 }
 
 func (o *CreateOrUpdateBackupCredentialsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type CreateOrUpdateBackupCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create or update backup credentials default response
-func (o *CreateOrUpdateBackupCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create or update backup credentials default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *CreateOrUpdateBackupCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create or update backup credentials default response
+func (o *CreateOrUpdateBackupCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateOrUpdateBackupCredentialsDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentials default %s", o._statusCode, payload)
 }
 
 func (o *CreateOrUpdateBackupCredentialsDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/backupcredentials][%d] createOrUpdateBackupCredentials default %s", o._statusCode, payload)
 }
 
 func (o *CreateOrUpdateBackupCredentialsDefault) GetPayload() *models.ErrorResponse {
