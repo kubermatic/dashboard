@@ -11253,6 +11253,21 @@ func (r Routing) getKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
+// swagger:route PUT /api/v2/policytemplate admin createKyvernoPolicyTemplate
+//
+//	Create Policy Template. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+//	  401: empty
+//	  403: empty
 func (r Routing) createKyvernoPolicyTemplate() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
