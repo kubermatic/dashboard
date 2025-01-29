@@ -56,3 +56,7 @@ func DecodePatchPolicyTemplateReq(_ context.Context, _ *http.Request) (interface
 func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyTemplateProvider) error {
 	return nil
 }
+
+func DecodeDeletePolicyTemplateReq(_ context.Context, _ *http.Request) (interface{}, error) {
+	return nil, nil
+}
