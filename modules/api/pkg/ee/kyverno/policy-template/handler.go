@@ -157,16 +157,16 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 			Name: req.Name,
 		},
 		Spec: kubermaticv1.PolicyTemplateSpec{
-			Title: 	 policyTemplateSpec.Title,
+			Title:       policyTemplateSpec.Title,
 			Description: policyTemplateSpec.Description,
-			Category: policyTemplateSpec.Category,
-			Severity: policyTemplateSpec.Severity,
-			Visibility: policyTemplateSpec.Visibility,
-			Enforced: policyTemplateSpec.Enforced,
+			Category:    policyTemplateSpec.Category,
+			Severity:    policyTemplateSpec.Severity,
+			Visibility:  policyTemplateSpec.Visibility,
+			Enforced:    policyTemplateSpec.Enforced,
 			Spec: kyvernov1.Spec{
 				ValidationFailureAction: policyTemplateSpec.ValidationFailureAction,
-				Background: policyTemplateSpec.Background,
-				Rules: policyTemplateSpec.Rules,
+				Background:              policyTemplateSpec.Background,
+				Rules:                   policyTemplateSpec.Rules,
 			},
 		},
 	}

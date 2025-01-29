@@ -584,6 +584,7 @@ func createAPIHandler(
 		EtcdBackupConfigProjectProviderGetter:          prov.etcdBackupConfigProjectProviderGetter,
 		EtcdRestoreProjectProviderGetter:               prov.etcdRestoreProjectProviderGetter,
 		BackupStorageProvider:                          prov.backupStorageProvider,
+		PolicyTemplateProvider:                         prov.policyTemplateProvider,
 		BackupCredentialsProviderGetter:                prov.backupCredentialsProviderGetter,
 		PrivilegedMLAAdminSettingProviderGetter:        prov.privilegedMLAAdminSettingProviderGetter,
 		SeedProvider:                                   prov.seedProvider,
