@@ -1368,4 +1368,6 @@ type BackupStorageProvider interface {
 
 	// Patch patches an existing GroupProjectBinding.
 	Patch(ctx context.Context, userInfo *UserInfo, cbslName string, updatedCBSL *kubermaticv1.ClusterBackupStorageLocation, UpdatedCreds apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
+
+	GetStorageLocationCreds(ctx context.Context, secretName string) (map[string][]byte, error)
 }

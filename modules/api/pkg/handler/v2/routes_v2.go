@@ -38,6 +38,7 @@ import (
 	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
 	clusterbackup "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/backup"
+	"k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/backupstoragelocation"
 	clusterrestore "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/restore"
 	clusterbackupschedule "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/schedule"
 	storagelocation "k8c.io/dashboard/v2/pkg/handler/v2/clusterbackup/storage-location"
@@ -1344,6 +1345,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodPatch).
 		Path("/allowedregistries/{allowed_registry}").
 		Handler(r.patchAllowedRegistry())
+
+	// Defines a set of HTTP endpoints for creating backup storage location
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
+		Handler(r.createBackupStorageLocation())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
+		Handler(r.getBackupStorageLocation())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}").
+		Handler(r.listBackupStorageLocation())
+
+	mux.Methods(http.MethodDelete).
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
+		Handler(r.deleteBackupStorageLocation())
 
 	// Defines a set of HTTP endpoints for managing cluster backup configs
 	mux.Methods(http.MethodPost).
@@ -8028,6 +8046,58 @@ func (r Routing) clusterBackupDownloadURL() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(clusterbackup.DownloadURLEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
 		clusterbackup.DecodeDownloadURLReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Backup storage location.
+func (r Routing) createBackupStorageLocation() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(backupstoragelocation.CreateEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
+		backupstoragelocation.DecodeCreateBSLReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) listBackupStorageLocation() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(backupstoragelocation.ListEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
+		backupstoragelocation.DecodeListBSLReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) getBackupStorageLocation() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(backupstoragelocation.GetEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
+		backupstoragelocation.DecodeGetBSLReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+func (r Routing) deleteBackupStorageLocation() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter))(backupstoragelocation.DeleteEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.settingsProvider)),
+		backupstoragelocation.DecodeDeleteBSLReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

@@ -107,7 +107,7 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		return nil, errors.New("a user is missing but required")
 	}
 	cbslFullName := fmt.Sprintf("%s-%s", cbslName, projectID)
-	secretName := fmt.Sprintf("credential-%s-", cbslFullName)
+	secretName := fmt.Sprintf("credential-%s", cbslFullName)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
@@ -260,4 +260,12 @@ func (p *BackupStorageProvider) getImpersonatedClient(userInfo *provider.UserInf
 		Groups:   userInfo.Groups,
 	}
 	return p.createMasterImpersonatedClient(impersonationCfg)
+}
+
+func (p *BackupStorageProvider) GetStorageLocationCreds(ctx context.Context, secretName string) (map[string][]byte, error) {
+	secret := &corev1.Secret{}
+	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: secretName, Namespace: resources.KubermaticNamespace}, secret); err != nil {
+		return nil, err
+	}
+	return secret.Data, nil
 }
