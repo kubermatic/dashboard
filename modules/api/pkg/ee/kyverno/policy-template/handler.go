@@ -31,6 +31,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	kyvernov1 "github.com/kyverno/kyverno/api/kyverno/v1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -146,34 +147,29 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, fmt.Errorf("policyTemplateSpec is nil")
 	}
 
-	policyTemplate := &kubermaticv1.PolicyTemplate{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: req.Name,
-		},
-		Spec: *policyTemplateSpec,
-	}
-
 	//
 	//
 	// when i uncomment the below code, the values (ValidationFailureAction, Background, Rules) give unknown field error they are part of kyvernov1.Spec wich is embedded in kubermaticv1.PolicyTemplateSpec maybe that is the issue
 	//
 	//
-	// policyTemplate := &kubermaticv1.PolicyTemplate{
-	// 	ObjectMeta: metav1.ObjectMeta{
-	// 		Name: req.Name,
-	// 	},
-	// 	Spec: kubermaticv1.PolicyTemplateSpec{
-	// 		Title: 	 policyTemplateSpec.Title,
-	// 		Description: policyTemplateSpec.Description,
-	// 		Category: policyTemplateSpec.Category,
-	// 		Severity: policyTemplateSpec.Severity,
-	// 		Visibility: policyTemplateSpec.Visibility,
-	// 		Enforced: policyTemplateSpec.Enforced,
-	// 		ValidationFailureAction: policyTemplateSpec.ValidationFailureAction,
-	// 		Background: policyTemplateSpec.Background,
-	// 		Rules: policyTemplateSpec.Rules,
-	// 	},
-	// }
+	policyTemplate := &kubermaticv1.PolicyTemplate{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: req.Name,
+		},
+		Spec: kubermaticv1.PolicyTemplateSpec{
+			Title: 	 policyTemplateSpec.Title,
+			Description: policyTemplateSpec.Description,
+			Category: policyTemplateSpec.Category,
+			Severity: policyTemplateSpec.Severity,
+			Visibility: policyTemplateSpec.Visibility,
+			Enforced: policyTemplateSpec.Enforced,
+			Spec: kyvernov1.Spec{
+				ValidationFailureAction: policyTemplateSpec.ValidationFailureAction,
+				Background: policyTemplateSpec.Background,
+				Rules: policyTemplateSpec.Rules,
+			},
+		},
+	}
 	policyTemplateJSON, err := json.MarshalIndent(policyTemplateSpec, "", "  ")
 	if err != nil {
 		return nil, err
