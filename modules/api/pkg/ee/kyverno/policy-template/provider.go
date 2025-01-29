@@ -26,13 +26,10 @@ package policytemplate
 
 import (
 	"context"
-	"fmt"
 
-	// apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 
-	// "k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	restclient "k8s.io/client-go/rest"
@@ -52,11 +49,6 @@ func NewPolicyTemplateProvider(createMasterImpersonatedClient kubernetes.Imperso
 }
 
 func (p *PolicyTemplateProvider) Create(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyTemplate")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	client := p.privilegedClient
 
 	if err := client.Create(ctx, policyTemplate); err != nil {
@@ -67,11 +59,6 @@ func (p *PolicyTemplateProvider) Create(ctx context.Context, policyTemplate *kub
 }
 
 func (p *PolicyTemplateProvider) List(ctx context.Context) (*kubermaticv1.PolicyTemplateList, error) {
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("LIST")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	client := p.privilegedClient
 
 	policyTemplateList := &kubermaticv1.PolicyTemplateList{}
@@ -83,11 +70,6 @@ func (p *PolicyTemplateProvider) List(ctx context.Context) (*kubermaticv1.Policy
 }
 
 func (p *PolicyTemplateProvider) Get(ctx context.Context, policyTemplateName string) (*kubermaticv1.PolicyTemplate, error) {
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("GETpolicyTemplateName")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	client := p.privilegedClient
 
 	policyTemplate := &kubermaticv1.PolicyTemplate{}
@@ -99,11 +81,7 @@ func (p *PolicyTemplateProvider) Get(ctx context.Context, policyTemplateName str
 }
 
 func (p *PolicyTemplateProvider) Patch(ctx context.Context, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("Patch")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
+
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyTemplate{}
@@ -112,7 +90,10 @@ func (p *PolicyTemplateProvider) Patch(ctx context.Context, updatedpolicyTemplat
 		return nil, err
 	}
 
-	if err := client.Patch(ctx, updatedpolicyTemplate, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+	updated := existing.DeepCopy()
+	updated.Spec = updatedpolicyTemplate.Spec
+
+	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
 		return nil, err
 	}
 
@@ -120,11 +101,6 @@ func (p *PolicyTemplateProvider) Patch(ctx context.Context, updatedpolicyTemplat
 }
 
 func (p *PolicyTemplateProvider) Delete(ctx context.Context, policyTemplateName string) error {
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("Delete")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	client := p.privilegedClient
 
 	policyTemplate := &kubermaticv1.PolicyTemplate{}
