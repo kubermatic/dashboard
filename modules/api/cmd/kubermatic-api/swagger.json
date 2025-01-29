@@ -7248,7 +7248,40 @@
       }
     },
     "/api/v2/policytemplate": {
-      "put": {
+      "get": {
+        "description": "List all Policy Templates. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "listPolicyTemplate",
+        "responses": {
+          "200": {
+            "description": "PolicyTemplate",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PolicyTemplate"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "post": {
         "description": "Create Policy Template. Only available in Kubermatic Enterprise Edition",
         "consumes": [
           "application/json"
@@ -7259,10 +7292,146 @@
         "tags": [
           "admin"
         ],
-        "operationId": "createKyvernoPolicyTemplate",
+        "operationId": "createPolicyTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyTemplate",
+            "schema": {
+              "$ref": "#/definitions/PolicyTemplate"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/policytemplate/{template_name}": {
+      "get": {
+        "description": "Get Policy Template. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "getPolicyTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PolicyTemplateName",
+            "name": "template_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyTemplate",
+            "schema": {
+              "$ref": "#/definitions/PolicyTemplate"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete Policy Template. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "deletePolicyTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PolicyTemplateName",
+            "name": "template_name",
+            "in": "path",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/responses/empty"
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Patch Policy Template. Only available in Kubermatic Enterprise Edition",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "patchpolicyTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "PolicyTemplateName",
+            "name": "template_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyTemplate",
+            "schema": {
+              "$ref": "#/definitions/PolicyTemplate"
+            }
           },
           "401": {
             "$ref": "#/responses/empty"
@@ -38246,6 +38415,17 @@
         }
       },
       "x-go-package": "k8s.io/api/rbac/v1"
+    },
+    "PolicyTemplate": {
+      "type": "object",
+      "title": "PolicyTemplate defines a reusable blueprint of a Kyverno policy.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "PolicyType": {
       "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",

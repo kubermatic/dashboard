@@ -31,7 +31,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	kyvernov1 "github.com/kyverno/kyverno/api/kyverno/v1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -41,18 +40,24 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// getPolicyTemplateReq defines HTTP request for getting a policy template
+// swagger:parameters getPolicyTemplate
 type getPolicyTemplateReq struct {
 	// in: path
 	// required: true
 	PolicyTemplateName string `json:"template_name"`
 }
 
+// createPolicyTemplateReq defines HTTP request for creating a policy template
+// swagger:parameters createPolicyTemplate
 type createPolicyTemplateReq struct {
 	// in: body
 	// required: true
 	apiv2.PolicyTemplate
 }
 
+// patchPolicyTemplateReq defines HTTP request for patching a policy template
+// swagger:parameters patchpolicyTemplate
 type patchPolicyTemplateReq struct {
 	// in: path
 	// required: true
@@ -60,6 +65,14 @@ type patchPolicyTemplateReq struct {
 	// in: body
 	// required: true
 	apiv2.PolicyTemplate
+}
+
+// deletePolicyTemplateReq defines HTTP request for deleting a policy template
+// swagger:parameters deletePolicyTemplate
+type deletePolicyTemplateReq struct {
+	// in: path
+	// required: true
+	PolicyTemplateName string `json:"template_name"`
 }
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) (interface{}, error) {
@@ -72,11 +85,6 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	if !userInfo.IsAdmin {
 		return nil, utilerrors.NewNotAuthorized()
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("ListEndpoint")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	policyTemplateList, err := provider.List(ctx)
 
 	return policyTemplateList, nil
@@ -96,11 +104,6 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	if !userInfo.IsAdmin {
 		return nil, utilerrors.NewNotAuthorized()
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("GetEndpoint")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	policytemplate, err := provider.Get(ctx, req.PolicyTemplateName)
 
 	if err != nil {
@@ -147,46 +150,12 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, fmt.Errorf("policyTemplateSpec is nil")
 	}
 
-	//
-	//
-	// when i uncomment the below code, the values (ValidationFailureAction, Background, Rules) give unknown field error they are part of kyvernov1.Spec wich is embedded in kubermaticv1.PolicyTemplateSpec maybe that is the issue
-	//
-	//
 	policyTemplate := &kubermaticv1.PolicyTemplate{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: req.Name,
 		},
-		Spec: kubermaticv1.PolicyTemplateSpec{
-			Title:       policyTemplateSpec.Title,
-			Description: policyTemplateSpec.Description,
-			Category:    policyTemplateSpec.Category,
-			Severity:    policyTemplateSpec.Severity,
-			Visibility:  policyTemplateSpec.Visibility,
-			Enforced:    policyTemplateSpec.Enforced,
-			Spec: kyvernov1.Spec{
-				ValidationFailureAction: policyTemplateSpec.ValidationFailureAction,
-				Background:              policyTemplateSpec.Background,
-				Rules:                   policyTemplateSpec.Rules,
-			},
-		},
+		Spec: *policyTemplateSpec,
 	}
-	policyTemplateJSON, err := json.MarshalIndent(policyTemplateSpec, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("====================Created policyTemplateSpec (JSON):")
-	fmt.Println(string(policyTemplateJSON))
-
-	reqJSON, err := json.MarshalIndent(req.Spec, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("=======================request (JSON):")
-	fmt.Println(string(reqJSON))
-	fmt.Println("=======================policyTemplate:")
-	fmt.Println(policyTemplate)
 
 	created, err := provider.Create(ctx, policyTemplate)
 	if err != nil {
@@ -225,18 +194,13 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		return nil, utilerrors.NewNotAuthorized()
 	}
 
-	policyTemplate := kubermaticv1.PolicyTemplate{
+	policyTemplate := &kubermaticv1.PolicyTemplate{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: req.Name,
 		},
 		Spec: req.Spec,
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("PatchEndpoint")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	patchedPolicyTemplate, err := provider.Patch(ctx, &policyTemplate)
+	patchedPolicyTemplate, err := provider.Patch(ctx, policyTemplate)
 
 	return patchedPolicyTemplate, nil
 }
@@ -257,7 +221,7 @@ func DecodePatchPolicyTemplateReq(ctx context.Context, r *http.Request) (interfa
 }
 
 func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) error {
-	req, ok := request.(getPolicyTemplateReq)
+	req, ok := request.(deletePolicyTemplateReq)
 	if !ok {
 		return utilerrors.NewBadRequest("invalid request")
 	}
@@ -270,11 +234,6 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !userInfo.IsAdmin {
 		return utilerrors.NewNotAuthorized()
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("DeleteEndpoint")
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 
 	err = provider.Delete(ctx, req.PolicyTemplateName)
 
@@ -283,4 +242,15 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	}
 
 	return nil
+}
+
+func DecodeDeletePolicyTemplateReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	var req deletePolicyTemplateReq
+
+	req.PolicyTemplateName = mux.Vars(r)["template_name"]
+	if req.PolicyTemplateName == "" {
+		return "", fmt.Errorf("'template_name' parameter is required but was not provided")
+	}
+
+	return req, nil
 }

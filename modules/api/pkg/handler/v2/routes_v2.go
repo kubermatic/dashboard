@@ -11228,7 +11228,18 @@ func (r Routing) listSeedStatus() http.Handler {
 }
 
 // Define endpoints to manage kyverno policies
-
+// swagger:route GET /api/v2/policytemplate admin listPolicyTemplate
+//
+//	List all Policy Templates. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []PolicyTemplate
+//	  401: empty
+//	  403: empty
 func (r Routing) listKyvernoPolicyTemplate() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -11240,6 +11251,19 @@ func (r Routing) listKyvernoPolicyTemplate() http.Handler {
 		r.defaultServerOptions()...,
 	)
 }
+
+// swagger:route GET /api/v2/policytemplate/{template_name} admin getPolicyTemplate
+//
+//	Get Policy Template. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyTemplate
+//	  401: empty
+//	  403: empty
 
 func (r Routing) getKyvernoPolicyTemplate() http.Handler {
 	return httptransport.NewServer(
@@ -11253,7 +11277,7 @@ func (r Routing) getKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
-// swagger:route PUT /api/v2/policytemplate admin createKyvernoPolicyTemplate
+// swagger:route post /api/v2/policytemplate admin createPolicyTemplate
 //
 //	Create Policy Template. Only available in Kubermatic Enterprise Edition
 //
@@ -11265,7 +11289,7 @@ func (r Routing) getKyvernoPolicyTemplate() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: empty
+//	  200: PolicyTemplate
 //	  401: empty
 //	  403: empty
 func (r Routing) createKyvernoPolicyTemplate() http.Handler {
@@ -11280,6 +11304,22 @@ func (r Routing) createKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
+// swagger:route PATCH /api/v2/policytemplate/{template_name} admin patchpolicyTemplate
+//
+//	Patch Policy Template. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyTemplate
+//	  401: empty
+//	  403: empty
+
 func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -11292,13 +11332,26 @@ func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
+// swagger:route DELETE /api/v2/policytemplate/{template_name} admin deletePolicyTemplate
+//
+//	Delete Policy Template. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+//	  401: empty
+//	  403: empty
+
 func (r Routing) deleteKyvernoPolicyTemplate() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(policytemplate.DeleteEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
-		policytemplate.DecodeGetPolicyTemplateReq,
+		policytemplate.DecodeDeletePolicyTemplateReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

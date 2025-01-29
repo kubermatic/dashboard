@@ -2327,39 +2327,12 @@ type BackupStorageLocationOverview struct {
 type BackupStorageLocationList struct {
 	Items []BackupStorageLocationOverview `json:"items"`
 // PolicyTemplate defines a reusable blueprint of a Kyverno policy.
+// swagger:model PolicyTemplate
 type PolicyTemplate struct {
-	Name string                          `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+	// swagger:ignore
 	Spec kubermaticv1.PolicyTemplateSpec `json:"spec,omitempty"`
 }
-
-// type PolicyTemplateSpec struct {
-// 	// the title of the policy, specified as an annotation in the Kyverno policy
-// 	Title string `json:"title,omitempty"`
-// 	// the category of the policy, specified as an annotation in the Kyverno policy
-// 	Category string `json:"category,omitempty"`
-// 	// the description of the policy, specified as an annotation in the Kyverno policy
-// 	Description string `json:"description,omitempty"`
-// 	// Severity indicates the severity level of the policy
-// 	Severity string `json:"severity,omitempty"`
-
-// 	// Visibility specifies where the policy is visible.
-// 	// Can be one of: global, project, or cluster
-// 	Visibility string `json:"visibility"`
-
-// 	// ProjectID is the ID of the project for which the policy template is created
-// 	// Relevant only for project visibility policies
-// 	ProjectID string `json:"projectID,omitempty"`
-
-// 	// Default determines whether we apply the policy (create policy binding)
-// 	Default bool `json:"default,omitempty"`
-
-// 	// Enforced indicates whether this policy is mandatory
-// 	// If true, this policy is mandatory
-// 	// A PolicyBinding referencing it cannot disable it
-// 	Enforced bool `json:"enforced"`
-// 	// the Kyverno specification
-// 	kyvernov1.Spec `json:"kyvernoSpec,omitempty"`
-// }
 
 // PolicyInstanceSpec describes how and where to apply the referenced PolicyTemplate.
 type PolicyInstance struct {
