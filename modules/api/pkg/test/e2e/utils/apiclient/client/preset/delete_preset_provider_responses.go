@@ -6,6 +6,7 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,12 +98,17 @@ func (o *DeletePresetProviderOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete preset provider o k response
+func (o *DeletePresetProviderOK) Code() int {
+	return 200
+}
+
 func (o *DeletePresetProviderOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderOK", 200)
 }
 
 func (o *DeletePresetProviderOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderOK", 200)
 }
 
 func (o *DeletePresetProviderOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,12 +154,17 @@ func (o *DeletePresetProviderUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete preset provider unauthorized response
+func (o *DeletePresetProviderUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeletePresetProviderUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderUnauthorized", 401)
 }
 
 func (o *DeletePresetProviderUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderUnauthorized", 401)
 }
 
 func (o *DeletePresetProviderUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -199,12 +210,17 @@ func (o *DeletePresetProviderForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete preset provider forbidden response
+func (o *DeletePresetProviderForbidden) Code() int {
+	return 403
+}
+
 func (o *DeletePresetProviderForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderForbidden", 403)
 }
 
 func (o *DeletePresetProviderForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderForbidden", 403)
 }
 
 func (o *DeletePresetProviderForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,12 +266,17 @@ func (o *DeletePresetProviderNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the delete preset provider not found response
+func (o *DeletePresetProviderNotFound) Code() int {
+	return 404
+}
+
 func (o *DeletePresetProviderNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderNotFound ", 404)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderNotFound", 404)
 }
 
 func (o *DeletePresetProviderNotFound) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderNotFound ", 404)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProviderNotFound", 404)
 }
 
 func (o *DeletePresetProviderNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -279,11 +300,6 @@ type DeletePresetProviderDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete preset provider default response
-func (o *DeletePresetProviderDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete preset provider default response has a 2xx status code
@@ -311,12 +327,19 @@ func (o *DeletePresetProviderDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete preset provider default response
+func (o *DeletePresetProviderDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeletePresetProviderDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProvider default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProvider default %s", o._statusCode, payload)
 }
 
 func (o *DeletePresetProviderDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProvider default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/presets/{preset_name}/provider/{provider_name}][%d] deletePresetProvider default %s", o._statusCode, payload)
 }
 
 func (o *DeletePresetProviderDefault) GetPayload() *models.ErrorResponse {

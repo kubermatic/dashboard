@@ -6,6 +6,7 @@ package default_cluster
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetDefaultClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get default cluster o k response
+func (o *GetDefaultClusterOK) Code() int {
+	return 200
+}
+
 func (o *GetDefaultClusterOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK %s", 200, payload)
 }
 
 func (o *GetDefaultClusterOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK %s", 200, payload)
 }
 
 func (o *GetDefaultClusterOK) GetPayload() *models.Cluster {
@@ -154,12 +162,17 @@ func (o *GetDefaultClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get default cluster unauthorized response
+func (o *GetDefaultClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetDefaultClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized", 401)
 }
 
 func (o *GetDefaultClusterUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized", 401)
 }
 
 func (o *GetDefaultClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetDefaultClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get default cluster forbidden response
+func (o *GetDefaultClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *GetDefaultClusterForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden", 403)
 }
 
 func (o *GetDefaultClusterForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden", 403)
 }
 
 func (o *GetDefaultClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetDefaultClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get default cluster default response
-func (o *GetDefaultClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get default cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetDefaultClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get default cluster default response
+func (o *GetDefaultClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetDefaultClusterDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default %s", o._statusCode, payload)
 }
 
 func (o *GetDefaultClusterDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default %s", o._statusCode, payload)
 }
 
 func (o *GetDefaultClusterDefault) GetPayload() *models.ErrorResponse {

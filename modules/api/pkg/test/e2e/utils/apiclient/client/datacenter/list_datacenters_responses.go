@@ -6,6 +6,7 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListDatacentersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list datacenters o k response
+func (o *ListDatacentersOK) Code() int {
+	return 200
+}
+
 func (o *ListDatacentersOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacentersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacentersOK %s", 200, payload)
 }
 
 func (o *ListDatacentersOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacentersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacentersOK %s", 200, payload)
 }
 
 func (o *ListDatacentersOK) GetPayload() models.DatacenterList {
@@ -120,11 +128,6 @@ type ListDatacentersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list datacenters default response
-func (o *ListDatacentersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list datacenters default response has a 2xx status code
 func (o *ListDatacentersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListDatacentersDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list datacenters default response
+func (o *ListDatacentersDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListDatacentersDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacenters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacenters default %s", o._statusCode, payload)
 }
 
 func (o *ListDatacentersDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacenters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/dc][%d] listDatacenters default %s", o._statusCode, payload)
 }
 
 func (o *ListDatacentersDefault) GetPayload() *models.ErrorResponse {

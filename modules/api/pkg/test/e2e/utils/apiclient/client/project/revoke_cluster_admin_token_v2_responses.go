@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *RevokeClusterAdminTokenV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the revoke cluster admin token v2 o k response
+func (o *RevokeClusterAdminTokenV2OK) Code() int {
+	return 200
+}
+
 func (o *RevokeClusterAdminTokenV2OK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2OK ", 200)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2OK", 200)
 }
 
 func (o *RevokeClusterAdminTokenV2OK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2OK ", 200)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2OK", 200)
 }
 
 func (o *RevokeClusterAdminTokenV2OK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *RevokeClusterAdminTokenV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the revoke cluster admin token v2 unauthorized response
+func (o *RevokeClusterAdminTokenV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *RevokeClusterAdminTokenV2Unauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Unauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Unauthorized", 401)
 }
 
 func (o *RevokeClusterAdminTokenV2Unauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Unauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Unauthorized", 401)
 }
 
 func (o *RevokeClusterAdminTokenV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *RevokeClusterAdminTokenV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the revoke cluster admin token v2 forbidden response
+func (o *RevokeClusterAdminTokenV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *RevokeClusterAdminTokenV2Forbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Forbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Forbidden", 403)
 }
 
 func (o *RevokeClusterAdminTokenV2Forbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Forbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2Forbidden", 403)
 }
 
 func (o *RevokeClusterAdminTokenV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type RevokeClusterAdminTokenV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the revoke cluster admin token v2 default response
-func (o *RevokeClusterAdminTokenV2Default) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this revoke cluster admin token v2 default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *RevokeClusterAdminTokenV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the revoke cluster admin token v2 default response
+func (o *RevokeClusterAdminTokenV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *RevokeClusterAdminTokenV2Default) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2 default %s", o._statusCode, payload)
 }
 
 func (o *RevokeClusterAdminTokenV2Default) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/token][%d] revokeClusterAdminTokenV2 default %s", o._statusCode, payload)
 }
 
 func (o *RevokeClusterAdminTokenV2Default) GetPayload() *models.ErrorResponse {

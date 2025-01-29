@@ -6,6 +6,7 @@ package nutanix
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListNutanixClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list nutanix clusters o k response
+func (o *ListNutanixClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListNutanixClustersOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClustersOK %s", 200, payload)
 }
 
 func (o *ListNutanixClustersOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClustersOK %s", 200, payload)
 }
 
 func (o *ListNutanixClustersOK) GetPayload() models.NutanixClusterList {
@@ -120,11 +128,6 @@ type ListNutanixClustersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list nutanix clusters default response
-func (o *ListNutanixClustersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list nutanix clusters default response has a 2xx status code
 func (o *ListNutanixClustersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListNutanixClustersDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list nutanix clusters default response
+func (o *ListNutanixClustersDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListNutanixClustersDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClusters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClusters default %s", o._statusCode, payload)
 }
 
 func (o *ListNutanixClustersDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClusters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/clusters][%d] listNutanixClusters default %s", o._statusCode, payload)
 }
 
 func (o *ListNutanixClustersDefault) GetPayload() *models.ErrorResponse {

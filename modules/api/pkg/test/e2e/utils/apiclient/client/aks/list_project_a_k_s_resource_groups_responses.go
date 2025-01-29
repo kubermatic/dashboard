@@ -6,6 +6,7 @@ package aks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectAKSResourceGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project a k s resource groups o k response
+func (o *ListProjectAKSResourceGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAKSResourceGroupsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroupsOK %s", 200, payload)
 }
 
 func (o *ListProjectAKSResourceGroupsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroupsOK %s", 200, payload)
 }
 
 func (o *ListProjectAKSResourceGroupsOK) GetPayload() models.AzureResourceGroupList {
@@ -120,11 +128,6 @@ type ListProjectAKSResourceGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project a k s resource groups default response
-func (o *ListProjectAKSResourceGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project a k s resource groups default response has a 2xx status code
 func (o *ListProjectAKSResourceGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectAKSResourceGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project a k s resource groups default response
+func (o *ListProjectAKSResourceGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectAKSResourceGroupsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAKSResourceGroupsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aks/resourcegroups][%d] listProjectAKSResourceGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAKSResourceGroupsDefault) GetPayload() *models.ErrorResponse {

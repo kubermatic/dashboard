@@ -6,6 +6,7 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -97,12 +98,17 @@ func (o *CreateOIDCKubeconfigSecretOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret o k response
+func (o *CreateOIDCKubeconfigSecretOK) Code() int {
+	return 200
+}
+
 func (o *CreateOIDCKubeconfigSecretOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretOK ", 200)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretOK", 200)
 }
 
 func (o *CreateOIDCKubeconfigSecretOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretOK ", 200)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretOK", 200)
 }
 
 func (o *CreateOIDCKubeconfigSecretOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,12 +154,17 @@ func (o *CreateOIDCKubeconfigSecretCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret created response
+func (o *CreateOIDCKubeconfigSecretCreated) Code() int {
+	return 201
+}
+
 func (o *CreateOIDCKubeconfigSecretCreated) Error() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretCreated ", 201)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretCreated", 201)
 }
 
 func (o *CreateOIDCKubeconfigSecretCreated) String() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretCreated ", 201)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretCreated", 201)
 }
 
 func (o *CreateOIDCKubeconfigSecretCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -199,12 +210,17 @@ func (o *CreateOIDCKubeconfigSecretUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret unauthorized response
+func (o *CreateOIDCKubeconfigSecretUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateOIDCKubeconfigSecretUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretUnauthorized", 401)
 }
 
 func (o *CreateOIDCKubeconfigSecretUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretUnauthorized", 401)
 }
 
 func (o *CreateOIDCKubeconfigSecretUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,12 +266,17 @@ func (o *CreateOIDCKubeconfigSecretForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create o Id c kubeconfig secret forbidden response
+func (o *CreateOIDCKubeconfigSecretForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOIDCKubeconfigSecretForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretForbidden", 403)
 }
 
 func (o *CreateOIDCKubeconfigSecretForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIdCKubeconfigSecretForbidden", 403)
 }
 
 func (o *CreateOIDCKubeconfigSecretForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -279,11 +300,6 @@ type CreateOIDCKubeconfigSecretDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create o ID c kubeconfig secret default response
-func (o *CreateOIDCKubeconfigSecretDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create o ID c kubeconfig secret default response has a 2xx status code
@@ -311,12 +327,19 @@ func (o *CreateOIDCKubeconfigSecretDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create o ID c kubeconfig secret default response
+func (o *CreateOIDCKubeconfigSecretDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateOIDCKubeconfigSecretDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIDCKubeconfigSecret default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIDCKubeconfigSecret default %s", o._statusCode, payload)
 }
 
 func (o *CreateOIDCKubeconfigSecretDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIDCKubeconfigSecret default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/kubeconfig/secret][%d] createOIDCKubeconfigSecret default %s", o._statusCode, payload)
 }
 
 func (o *CreateOIDCKubeconfigSecretDefault) GetPayload() *models.ErrorResponse {

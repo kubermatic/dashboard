@@ -6,6 +6,7 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteDCOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete d c o k response
+func (o *DeleteDCOK) Code() int {
+	return 200
+}
+
 func (o *DeleteDCOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCOK", 200)
 }
 
 func (o *DeleteDCOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCOK", 200)
 }
 
 func (o *DeleteDCOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete d c unauthorized response
+func (o *DeleteDCUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteDCUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCUnauthorized", 401)
 }
 
 func (o *DeleteDCUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCUnauthorized", 401)
 }
 
 func (o *DeleteDCUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete d c forbidden response
+func (o *DeleteDCForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteDCForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCForbidden", 403)
 }
 
 func (o *DeleteDCForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDCForbidden", 403)
 }
 
 func (o *DeleteDCForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteDCDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete d c default response
-func (o *DeleteDCDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete d c default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete d c default response
+func (o *DeleteDCDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteDCDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDC default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDC default %s", o._statusCode, payload)
 }
 
 func (o *DeleteDCDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDC default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/seed/{seed_name}/dc/{dc}][%d] deleteDC default %s", o._statusCode, payload)
 }
 
 func (o *DeleteDCDefault) GetPayload() *models.ErrorResponse {

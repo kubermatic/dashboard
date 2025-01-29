@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListGKEImagesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e images o k response
+func (o *ListGKEImagesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEImagesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImagesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImagesOK %s", 200, payload)
 }
 
 func (o *ListGKEImagesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImagesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImagesOK %s", 200, payload)
 }
 
 func (o *ListGKEImagesOK) GetPayload() models.GKEImageList {
@@ -120,11 +128,6 @@ type ListGKEImagesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g k e images default response
-func (o *ListGKEImagesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g k e images default response has a 2xx status code
 func (o *ListGKEImagesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListGKEImagesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e images default response
+func (o *ListGKEImagesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEImagesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImages default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImages default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEImagesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImages default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/images][%d] listGKEImages default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEImagesDefault) GetPayload() *models.ErrorResponse {

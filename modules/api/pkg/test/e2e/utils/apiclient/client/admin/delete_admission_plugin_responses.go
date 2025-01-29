@@ -6,6 +6,7 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete admission plugin o k response
+func (o *DeleteAdmissionPluginOK) Code() int {
+	return 200
+}
+
 func (o *DeleteAdmissionPluginOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginOK", 200)
 }
 
 func (o *DeleteAdmissionPluginOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginOK", 200)
 }
 
 func (o *DeleteAdmissionPluginOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete admission plugin unauthorized response
+func (o *DeleteAdmissionPluginUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteAdmissionPluginUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginUnauthorized", 401)
 }
 
 func (o *DeleteAdmissionPluginUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginUnauthorized", 401)
 }
 
 func (o *DeleteAdmissionPluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete admission plugin forbidden response
+func (o *DeleteAdmissionPluginForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteAdmissionPluginForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginForbidden", 403)
 }
 
 func (o *DeleteAdmissionPluginForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPluginForbidden", 403)
 }
 
 func (o *DeleteAdmissionPluginForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteAdmissionPluginDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete admission plugin default response
-func (o *DeleteAdmissionPluginDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete admission plugin default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete admission plugin default response
+func (o *DeleteAdmissionPluginDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteAdmissionPluginDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPlugin default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPlugin default %s", o._statusCode, payload)
 }
 
 func (o *DeleteAdmissionPluginDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPlugin default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/admission/plugins/{name}][%d] deleteAdmissionPlugin default %s", o._statusCode, payload)
 }
 
 func (o *DeleteAdmissionPluginDefault) GetPayload() *models.ErrorResponse {

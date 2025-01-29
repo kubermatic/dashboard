@@ -6,6 +6,7 @@ package tokens
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchServiceAccountTokenOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch service account token o k response
+func (o *PatchServiceAccountTokenOK) Code() int {
+	return 200
+}
+
 func (o *PatchServiceAccountTokenOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenOK %s", 200, payload)
 }
 
 func (o *PatchServiceAccountTokenOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenOK %s", 200, payload)
 }
 
 func (o *PatchServiceAccountTokenOK) GetPayload() *models.PublicServiceAccountToken {
@@ -154,12 +162,17 @@ func (o *PatchServiceAccountTokenUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch service account token unauthorized response
+func (o *PatchServiceAccountTokenUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchServiceAccountTokenUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenUnauthorized", 401)
 }
 
 func (o *PatchServiceAccountTokenUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenUnauthorized", 401)
 }
 
 func (o *PatchServiceAccountTokenUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchServiceAccountTokenForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch service account token forbidden response
+func (o *PatchServiceAccountTokenForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchServiceAccountTokenForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenForbidden", 403)
 }
 
 func (o *PatchServiceAccountTokenForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountTokenForbidden", 403)
 }
 
 func (o *PatchServiceAccountTokenForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchServiceAccountTokenDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch service account token default response
-func (o *PatchServiceAccountTokenDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch service account token default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchServiceAccountTokenDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch service account token default response
+func (o *PatchServiceAccountTokenDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchServiceAccountTokenDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountToken default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountToken default %s", o._statusCode, payload)
 }
 
 func (o *PatchServiceAccountTokenDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountToken default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] patchServiceAccountToken default %s", o._statusCode, payload)
 }
 
 func (o *PatchServiceAccountTokenDefault) GetPayload() *models.ErrorResponse {

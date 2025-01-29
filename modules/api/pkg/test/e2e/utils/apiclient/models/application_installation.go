@@ -158,6 +158,11 @@ func (m *ApplicationInstallation) ContextValidate(ctx context.Context, formats s
 func (m *ApplicationInstallation) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
+
+		if swag.IsZero(m.Spec) { // not required
+			return nil
+		}
+
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")
@@ -174,6 +179,11 @@ func (m *ApplicationInstallation) contextValidateSpec(ctx context.Context, forma
 func (m *ApplicationInstallation) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
+
+		if swag.IsZero(m.Status) { // not required
+			return nil
+		}
+
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")

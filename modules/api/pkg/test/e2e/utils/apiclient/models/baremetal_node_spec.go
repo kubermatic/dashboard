@@ -72,6 +72,11 @@ func (m *BaremetalNodeSpec) ContextValidate(ctx context.Context, formats strfmt.
 func (m *BaremetalNodeSpec) contextValidateTinkerbell(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Tinkerbell != nil {
+
+		if swag.IsZero(m.Tinkerbell) { // not required
+			return nil
+		}
+
 		if err := m.Tinkerbell.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("tinkerbell")

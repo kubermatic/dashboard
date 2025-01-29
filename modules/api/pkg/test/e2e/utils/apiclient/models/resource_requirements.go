@@ -153,6 +153,11 @@ func (m *ResourceRequirements) contextValidateClaims(ctx context.Context, format
 	for i := 0; i < len(m.Claims); i++ {
 
 		if m.Claims[i] != nil {
+
+			if swag.IsZero(m.Claims[i]) { // not required
+				return nil
+			}
+
 			if err := m.Claims[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("claims" + "." + strconv.Itoa(i))
@@ -170,6 +175,10 @@ func (m *ResourceRequirements) contextValidateClaims(ctx context.Context, format
 
 func (m *ResourceRequirements) contextValidateLimits(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Limits) { // not required
+		return nil
+	}
+
 	if err := m.Limits.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("limits")
@@ -183,6 +192,10 @@ func (m *ResourceRequirements) contextValidateLimits(ctx context.Context, format
 }
 
 func (m *ResourceRequirements) contextValidateRequests(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Requests) { // not required
+		return nil
+	}
 
 	if err := m.Requests.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

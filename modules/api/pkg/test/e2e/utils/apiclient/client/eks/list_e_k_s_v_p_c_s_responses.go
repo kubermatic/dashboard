@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListEKSVPCSOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s v p c s o k response
+func (o *ListEKSVPCSOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSVPCSOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCSOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCSOK %s", 200, payload)
 }
 
 func (o *ListEKSVPCSOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCSOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCSOK %s", 200, payload)
 }
 
 func (o *ListEKSVPCSOK) GetPayload() models.EKSVPCList {
@@ -120,11 +128,6 @@ type ListEKSVPCSDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s v p c s default response
-func (o *ListEKSVPCSDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s v p c s default response has a 2xx status code
 func (o *ListEKSVPCSDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListEKSVPCSDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s v p c s default response
+func (o *ListEKSVPCSDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSVPCSDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCS default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCS default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSVPCSDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCS default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/vpcs][%d] listEKSVPCS default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSVPCSDefault) GetPayload() *models.ErrorResponse {

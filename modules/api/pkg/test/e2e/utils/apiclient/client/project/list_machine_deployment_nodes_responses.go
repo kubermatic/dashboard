@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListMachineDeploymentNodesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list machine deployment nodes o k response
+func (o *ListMachineDeploymentNodesOK) Code() int {
+	return 200
+}
+
 func (o *ListMachineDeploymentNodesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesOK %s", 200, payload)
 }
 
 func (o *ListMachineDeploymentNodesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesOK %s", 200, payload)
 }
 
 func (o *ListMachineDeploymentNodesOK) GetPayload() []*models.Node {
@@ -152,12 +160,17 @@ func (o *ListMachineDeploymentNodesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list machine deployment nodes unauthorized response
+func (o *ListMachineDeploymentNodesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListMachineDeploymentNodesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesUnauthorized", 401)
 }
 
 func (o *ListMachineDeploymentNodesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesUnauthorized", 401)
 }
 
 func (o *ListMachineDeploymentNodesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListMachineDeploymentNodesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list machine deployment nodes forbidden response
+func (o *ListMachineDeploymentNodesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListMachineDeploymentNodesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesForbidden", 403)
 }
 
 func (o *ListMachineDeploymentNodesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodesForbidden", 403)
 }
 
 func (o *ListMachineDeploymentNodesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListMachineDeploymentNodesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list machine deployment nodes default response
-func (o *ListMachineDeploymentNodesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list machine deployment nodes default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListMachineDeploymentNodesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list machine deployment nodes default response
+func (o *ListMachineDeploymentNodesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListMachineDeploymentNodesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodes default %s", o._statusCode, payload)
 }
 
 func (o *ListMachineDeploymentNodesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/nodes][%d] listMachineDeploymentNodes default %s", o._statusCode, payload)
 }
 
 func (o *ListMachineDeploymentNodesDefault) GetPayload() *models.ErrorResponse {

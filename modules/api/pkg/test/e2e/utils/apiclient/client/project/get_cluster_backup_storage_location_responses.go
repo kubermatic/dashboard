@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,6 +93,11 @@ func (o *GetClusterBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster backup storage location o k response
+func (o *GetClusterBackupStorageLocationOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterBackupStorageLocationOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationOK  %+v", 200, o.Payload)
 }
@@ -154,6 +160,11 @@ func (o *GetClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster backup storage location unauthorized response
+func (o *GetClusterBackupStorageLocationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterBackupStorageLocationUnauthorized) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationUnauthorized ", 401)
 }
@@ -205,6 +216,11 @@ func (o *GetClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster backup storage location forbidden response
+func (o *GetClusterBackupStorageLocationForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterBackupStorageLocationForbidden) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationForbidden ", 403)
 }
@@ -236,11 +252,6 @@ type GetClusterBackupStorageLocationDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get cluster backup storage location default response
-func (o *GetClusterBackupStorageLocationDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get cluster backup storage location default response has a 2xx status code
 func (o *GetClusterBackupStorageLocationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -264,6 +275,11 @@ func (o *GetClusterBackupStorageLocationDefault) IsServerError() bool {
 // IsCode returns true when this get cluster backup storage location default response a status code equal to that given
 func (o *GetClusterBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
+}
+
+// Code gets the status code for the get cluster backup storage location default response
+func (o *GetClusterBackupStorageLocationDefault) Code() int {
+	return o._statusCode
 }
 
 func (o *GetClusterBackupStorageLocationDefault) Error() string {

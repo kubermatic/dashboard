@@ -6,6 +6,7 @@ package seed
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListSeedNamesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list seed names o k response
+func (o *ListSeedNamesOK) Code() int {
+	return 200
+}
+
 func (o *ListSeedNamesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNamesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNamesOK %s", 200, payload)
 }
 
 func (o *ListSeedNamesOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNamesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNamesOK %s", 200, payload)
 }
 
 func (o *ListSeedNamesOK) GetPayload() models.SeedNamesList {
@@ -120,11 +128,6 @@ type ListSeedNamesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list seed names default response
-func (o *ListSeedNamesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list seed names default response has a 2xx status code
 func (o *ListSeedNamesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListSeedNamesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list seed names default response
+func (o *ListSeedNamesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListSeedNamesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNames default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNames default %s", o._statusCode, payload)
 }
 
 func (o *ListSeedNamesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNames default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/seed][%d] listSeedNames default %s", o._statusCode, payload)
 }
 
 func (o *ListSeedNamesDefault) GetPayload() *models.ErrorResponse {

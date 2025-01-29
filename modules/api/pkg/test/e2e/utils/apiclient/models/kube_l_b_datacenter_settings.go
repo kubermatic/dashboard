@@ -97,6 +97,11 @@ func (m *KubeLBDatacenterSettings) ContextValidate(ctx context.Context, formats 
 func (m *KubeLBDatacenterSettings) contextValidateKubeconfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubeconfig != nil {
+
+		if swag.IsZero(m.Kubeconfig) { // not required
+			return nil
+		}
+
 		if err := m.Kubeconfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubeconfig")

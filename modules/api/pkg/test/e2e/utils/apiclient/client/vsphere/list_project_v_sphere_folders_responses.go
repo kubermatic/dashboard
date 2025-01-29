@@ -6,6 +6,7 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectVSphereFoldersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project v sphere folders o k response
+func (o *ListProjectVSphereFoldersOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectVSphereFoldersOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFoldersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFoldersOK %s", 200, payload)
 }
 
 func (o *ListProjectVSphereFoldersOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFoldersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFoldersOK %s", 200, payload)
 }
 
 func (o *ListProjectVSphereFoldersOK) GetPayload() []*models.VSphereFolder {
@@ -120,11 +128,6 @@ type ListProjectVSphereFoldersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project v sphere folders default response
-func (o *ListProjectVSphereFoldersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project v sphere folders default response has a 2xx status code
 func (o *ListProjectVSphereFoldersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectVSphereFoldersDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project v sphere folders default response
+func (o *ListProjectVSphereFoldersDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectVSphereFoldersDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFolders default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFolders default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectVSphereFoldersDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFolders default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/folders][%d] listProjectVSphereFolders default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectVSphereFoldersDefault) GetPayload() *models.ErrorResponse {

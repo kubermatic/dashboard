@@ -112,6 +112,11 @@ func (m *OPAIntegrationSettings) ContextValidate(ctx context.Context, formats st
 func (m *OPAIntegrationSettings) contextValidateAuditResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AuditResources != nil {
+
+		if swag.IsZero(m.AuditResources) { // not required
+			return nil
+		}
+
 		if err := m.AuditResources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("auditResources")
@@ -128,6 +133,11 @@ func (m *OPAIntegrationSettings) contextValidateAuditResources(ctx context.Conte
 func (m *OPAIntegrationSettings) contextValidateControllerResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ControllerResources != nil {
+
+		if swag.IsZero(m.ControllerResources) { // not required
+			return nil
+		}
+
 		if err := m.ControllerResources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("controllerResources")

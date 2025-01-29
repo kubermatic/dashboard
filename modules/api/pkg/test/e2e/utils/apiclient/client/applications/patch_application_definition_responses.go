@@ -6,6 +6,7 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch application definition o k response
+func (o *PatchApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *PatchApplicationDefinitionOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *PatchApplicationDefinitionOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *PatchApplicationDefinitionOK) GetPayload() *models.ApplicationDefinition {
@@ -154,12 +162,17 @@ func (o *PatchApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch application definition unauthorized response
+func (o *PatchApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchApplicationDefinitionUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *PatchApplicationDefinitionUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *PatchApplicationDefinitionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch application definition forbidden response
+func (o *PatchApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchApplicationDefinitionForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionForbidden", 403)
 }
 
 func (o *PatchApplicationDefinitionForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinitionForbidden", 403)
 }
 
 func (o *PatchApplicationDefinitionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchApplicationDefinitionDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch application definition default response
-func (o *PatchApplicationDefinitionDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch application definition default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch application definition default response
+func (o *PatchApplicationDefinitionDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchApplicationDefinitionDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *PatchApplicationDefinitionDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/applicationdefinitions/{appdef_name}][%d] patchApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *PatchApplicationDefinitionDefault) GetPayload() *models.ErrorResponse {

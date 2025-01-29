@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteExternalClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete external cluster o k response
+func (o *DeleteExternalClusterOK) Code() int {
+	return 200
+}
+
 func (o *DeleteExternalClusterOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterOK", 200)
 }
 
 func (o *DeleteExternalClusterOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterOK", 200)
 }
 
 func (o *DeleteExternalClusterOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete external cluster unauthorized response
+func (o *DeleteExternalClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteExternalClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterUnauthorized", 401)
 }
 
 func (o *DeleteExternalClusterUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterUnauthorized", 401)
 }
 
 func (o *DeleteExternalClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete external cluster forbidden response
+func (o *DeleteExternalClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteExternalClusterForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterForbidden", 403)
 }
 
 func (o *DeleteExternalClusterForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalClusterForbidden", 403)
 }
 
 func (o *DeleteExternalClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteExternalClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete external cluster default response
-func (o *DeleteExternalClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete external cluster default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete external cluster default response
+func (o *DeleteExternalClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteExternalClusterDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalCluster default %s", o._statusCode, payload)
 }
 
 func (o *DeleteExternalClusterDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] deleteExternalCluster default %s", o._statusCode, payload)
 }
 
 func (o *DeleteExternalClusterDefault) GetPayload() *models.ErrorResponse {
