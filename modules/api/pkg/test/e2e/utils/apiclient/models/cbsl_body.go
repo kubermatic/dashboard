@@ -105,6 +105,11 @@ func (m *CbslBody) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *CbslBody) contextValidateCbslSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CbslSpec != nil {
+
+		if swag.IsZero(m.CbslSpec) { // not required
+			return nil
+		}
+
 		if err := m.CbslSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cbslSpec")
@@ -121,6 +126,11 @@ func (m *CbslBody) contextValidateCbslSpec(ctx context.Context, formats strfmt.R
 func (m *CbslBody) contextValidateCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credentials != nil {
+
+		if swag.IsZero(m.Credentials) { // not required
+			return nil
+		}
+
 		if err := m.Credentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentials")

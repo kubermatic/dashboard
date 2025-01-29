@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchClusterBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch cluster backup storage location o k response
+func (o *PatchClusterBackupStorageLocationOK) Code() int {
+	return 200
+}
+
 func (o *PatchClusterBackupStorageLocationOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK %s", 200, payload)
 }
 
 func (o *PatchClusterBackupStorageLocationOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK %s", 200, payload)
 }
 
 func (o *PatchClusterBackupStorageLocationOK) GetPayload() *models.ClusterBackupStorageLocation {
@@ -154,12 +162,17 @@ func (o *PatchClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch cluster backup storage location unauthorized response
+func (o *PatchClusterBackupStorageLocationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized", 401)
 }
 
 func (o *PatchClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized", 401)
 }
 
 func (o *PatchClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch cluster backup storage location forbidden response
+func (o *PatchClusterBackupStorageLocationForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden", 403)
 }
 
 func (o *PatchClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden", 403)
 }
 
 func (o *PatchClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchClusterBackupStorageLocationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch cluster backup storage location default response
-func (o *PatchClusterBackupStorageLocationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch cluster backup storage location default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchClusterBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch cluster backup storage location default response
+func (o *PatchClusterBackupStorageLocationDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchClusterBackupStorageLocationDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default %s", o._statusCode, payload)
 }
 
 func (o *PatchClusterBackupStorageLocationDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default %s", o._statusCode, payload)
 }
 
 func (o *PatchClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

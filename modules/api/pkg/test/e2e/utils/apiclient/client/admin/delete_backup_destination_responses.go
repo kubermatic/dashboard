@@ -6,6 +6,7 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteBackupDestinationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete backup destination o k response
+func (o *DeleteBackupDestinationOK) Code() int {
+	return 200
+}
+
 func (o *DeleteBackupDestinationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationOK", 200)
 }
 
 func (o *DeleteBackupDestinationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationOK", 200)
 }
 
 func (o *DeleteBackupDestinationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteBackupDestinationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete backup destination unauthorized response
+func (o *DeleteBackupDestinationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteBackupDestinationUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationUnauthorized", 401)
 }
 
 func (o *DeleteBackupDestinationUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationUnauthorized", 401)
 }
 
 func (o *DeleteBackupDestinationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteBackupDestinationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete backup destination forbidden response
+func (o *DeleteBackupDestinationForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteBackupDestinationForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationForbidden", 403)
 }
 
 func (o *DeleteBackupDestinationForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestinationForbidden", 403)
 }
 
 func (o *DeleteBackupDestinationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteBackupDestinationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete backup destination default response
-func (o *DeleteBackupDestinationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete backup destination default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteBackupDestinationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete backup destination default response
+func (o *DeleteBackupDestinationDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteBackupDestinationDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestination default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestination default %s", o._statusCode, payload)
 }
 
 func (o *DeleteBackupDestinationDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestination default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}/backupdestinations/{backup_destination}][%d] deleteBackupDestination default %s", o._statusCode, payload)
 }
 
 func (o *DeleteBackupDestinationDefault) GetPayload() *models.ErrorResponse {

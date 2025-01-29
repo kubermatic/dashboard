@@ -6,6 +6,7 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectAzureAvailabilityZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project azure availability zones o k response
+func (o *ListProjectAzureAvailabilityZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectAzureAvailabilityZonesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectAzureAvailabilityZonesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectAzureAvailabilityZonesOK) GetPayload() *models.AzureAvailabilityZonesList {
@@ -122,11 +130,6 @@ type ListProjectAzureAvailabilityZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project azure availability zones default response
-func (o *ListProjectAzureAvailabilityZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project azure availability zones default response has a 2xx status code
 func (o *ListProjectAzureAvailabilityZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListProjectAzureAvailabilityZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project azure availability zones default response
+func (o *ListProjectAzureAvailabilityZonesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectAzureAvailabilityZonesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAzureAvailabilityZonesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/azure/availabilityzones][%d] listProjectAzureAvailabilityZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectAzureAvailabilityZonesDefault) GetPayload() *models.ErrorResponse {

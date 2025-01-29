@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetProjectQuotaOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get project quota o k response
+func (o *GetProjectQuotaOK) Code() int {
+	return 200
+}
+
 func (o *GetProjectQuotaOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaOK %s", 200, payload)
 }
 
 func (o *GetProjectQuotaOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaOK %s", 200, payload)
 }
 
 func (o *GetProjectQuotaOK) GetPayload() *models.ResourceQuota {
@@ -154,12 +162,17 @@ func (o *GetProjectQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get project quota unauthorized response
+func (o *GetProjectQuotaUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetProjectQuotaUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaUnauthorized", 401)
 }
 
 func (o *GetProjectQuotaUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaUnauthorized", 401)
 }
 
 func (o *GetProjectQuotaUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetProjectQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get project quota forbidden response
+func (o *GetProjectQuotaForbidden) Code() int {
+	return 403
+}
+
 func (o *GetProjectQuotaForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaForbidden", 403)
 }
 
 func (o *GetProjectQuotaForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuotaForbidden", 403)
 }
 
 func (o *GetProjectQuotaForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetProjectQuotaDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get project quota default response
-func (o *GetProjectQuotaDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get project quota default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetProjectQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get project quota default response
+func (o *GetProjectQuotaDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetProjectQuotaDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuota default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuota default %s", o._statusCode, payload)
 }
 
 func (o *GetProjectQuotaDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuota default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/quota][%d] getProjectQuota default %s", o._statusCode, payload)
 }
 
 func (o *GetProjectQuotaDefault) GetPayload() *models.ErrorResponse {

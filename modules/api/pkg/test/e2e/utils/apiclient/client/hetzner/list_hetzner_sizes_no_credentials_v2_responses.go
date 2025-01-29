@@ -6,6 +6,7 @@ package hetzner
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListHetznerSizesNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list hetzner sizes no credentials v2 o k response
+func (o *ListHetznerSizesNoCredentialsV2OK) Code() int {
+	return 200
+}
+
 func (o *ListHetznerSizesNoCredentialsV2OK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListHetznerSizesNoCredentialsV2OK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2OK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2OK %s", 200, payload)
 }
 
 func (o *ListHetznerSizesNoCredentialsV2OK) GetPayload() *models.HetznerSizeList {
@@ -122,11 +130,6 @@ type ListHetznerSizesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list hetzner sizes no credentials v2 default response
-func (o *ListHetznerSizesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list hetzner sizes no credentials v2 default response has a 2xx status code
 func (o *ListHetznerSizesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListHetznerSizesNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list hetzner sizes no credentials v2 default response
+func (o *ListHetznerSizesNoCredentialsV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *ListHetznerSizesNoCredentialsV2Default) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListHetznerSizesNoCredentialsV2Default) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/hetzner/sizes][%d] listHetznerSizesNoCredentialsV2 default %s", o._statusCode, payload)
 }
 
 func (o *ListHetznerSizesNoCredentialsV2Default) GetPayload() *models.ErrorResponse {

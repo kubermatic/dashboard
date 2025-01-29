@@ -6,6 +6,7 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get application definition o k response
+func (o *GetApplicationDefinitionOK) Code() int {
+	return 200
+}
+
 func (o *GetApplicationDefinitionOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *GetApplicationDefinitionOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionOK %s", 200, payload)
 }
 
 func (o *GetApplicationDefinitionOK) GetPayload() *models.ApplicationDefinition {
@@ -154,12 +162,17 @@ func (o *GetApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get application definition unauthorized response
+func (o *GetApplicationDefinitionUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetApplicationDefinitionUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *GetApplicationDefinitionUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionUnauthorized", 401)
 }
 
 func (o *GetApplicationDefinitionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get application definition forbidden response
+func (o *GetApplicationDefinitionForbidden) Code() int {
+	return 403
+}
+
 func (o *GetApplicationDefinitionForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionForbidden", 403)
 }
 
 func (o *GetApplicationDefinitionForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinitionForbidden", 403)
 }
 
 func (o *GetApplicationDefinitionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetApplicationDefinitionDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get application definition default response
-func (o *GetApplicationDefinitionDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get application definition default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get application definition default response
+func (o *GetApplicationDefinitionDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetApplicationDefinitionDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *GetApplicationDefinitionDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinition default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions/{appdef_name}][%d] getApplicationDefinition default %s", o._statusCode, payload)
 }
 
 func (o *GetApplicationDefinitionDefault) GetPayload() *models.ErrorResponse {

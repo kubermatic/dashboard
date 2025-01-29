@@ -7,6 +7,7 @@ package admin
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,12 +96,19 @@ func (o *CreateSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create seed o k response
+func (o *CreateSeedOK) Code() int {
+	return 200
+}
+
 func (o *CreateSeedOK) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedOK %s", 200, payload)
 }
 
 func (o *CreateSeedOK) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedOK %s", 200, payload)
 }
 
 func (o *CreateSeedOK) GetPayload() *models.Seed {
@@ -157,12 +165,17 @@ func (o *CreateSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create seed unauthorized response
+func (o *CreateSeedUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateSeedUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedUnauthorized", 401)
 }
 
 func (o *CreateSeedUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedUnauthorized", 401)
 }
 
 func (o *CreateSeedUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -208,12 +221,17 @@ func (o *CreateSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create seed forbidden response
+func (o *CreateSeedForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateSeedForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedForbidden", 403)
 }
 
 func (o *CreateSeedForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeedForbidden", 403)
 }
 
 func (o *CreateSeedForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -237,11 +255,6 @@ type CreateSeedDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create seed default response
-func (o *CreateSeedDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create seed default response has a 2xx status code
@@ -269,12 +282,19 @@ func (o *CreateSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create seed default response
+func (o *CreateSeedDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateSeedDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeed default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeed default %s", o._statusCode, payload)
 }
 
 func (o *CreateSeedDefault) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeed default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/admin/seeds][%d] createSeed default %s", o._statusCode, payload)
 }
 
 func (o *CreateSeedDefault) GetPayload() *models.ErrorResponse {
@@ -356,6 +376,11 @@ func (o *CreateSeedBody) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (o *CreateSeedBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
+
+		if swag.IsZero(o.Spec) { // not required
+			return nil
+		}
+
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "spec")

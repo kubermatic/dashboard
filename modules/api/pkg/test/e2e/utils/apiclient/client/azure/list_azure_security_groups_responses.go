@@ -6,6 +6,7 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListAzureSecurityGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list azure security groups o k response
+func (o *ListAzureSecurityGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListAzureSecurityGroupsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroupsOK %s", 200, payload)
 }
 
 func (o *ListAzureSecurityGroupsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroupsOK %s", 200, payload)
 }
 
 func (o *ListAzureSecurityGroupsOK) GetPayload() *models.AzureSecurityGroupsList {
@@ -122,11 +130,6 @@ type ListAzureSecurityGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list azure security groups default response
-func (o *ListAzureSecurityGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list azure security groups default response has a 2xx status code
 func (o *ListAzureSecurityGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListAzureSecurityGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list azure security groups default response
+func (o *ListAzureSecurityGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListAzureSecurityGroupsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListAzureSecurityGroupsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/securitygroups][%d] listAzureSecurityGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListAzureSecurityGroupsDefault) GetPayload() *models.ErrorResponse {

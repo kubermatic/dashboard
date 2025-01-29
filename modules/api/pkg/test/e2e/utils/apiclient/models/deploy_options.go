@@ -72,6 +72,11 @@ func (m *DeployOptions) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *DeployOptions) contextValidateHelm(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Helm != nil {
+
+		if swag.IsZero(m.Helm) { // not required
+			return nil
+		}
+
 		if err := m.Helm.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("helm")

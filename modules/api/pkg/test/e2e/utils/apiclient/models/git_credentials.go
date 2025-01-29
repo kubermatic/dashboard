@@ -189,6 +189,10 @@ func (m *GitCredentials) ContextValidate(ctx context.Context, formats strfmt.Reg
 
 func (m *GitCredentials) contextValidateMethod(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Method) { // not required
+		return nil
+	}
+
 	if err := m.Method.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("method")
@@ -204,6 +208,11 @@ func (m *GitCredentials) contextValidateMethod(ctx context.Context, formats strf
 func (m *GitCredentials) contextValidatePassword(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Password != nil {
+
+		if swag.IsZero(m.Password) { // not required
+			return nil
+		}
+
 		if err := m.Password.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("password")
@@ -220,6 +229,11 @@ func (m *GitCredentials) contextValidatePassword(ctx context.Context, formats st
 func (m *GitCredentials) contextValidateSSHKey(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SSHKey != nil {
+
+		if swag.IsZero(m.SSHKey) { // not required
+			return nil
+		}
+
 		if err := m.SSHKey.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("sshKey")
@@ -236,6 +250,11 @@ func (m *GitCredentials) contextValidateSSHKey(ctx context.Context, formats strf
 func (m *GitCredentials) contextValidateToken(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Token != nil {
+
+		if swag.IsZero(m.Token) { // not required
+			return nil
+		}
+
 		if err := m.Token.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("token")
@@ -252,6 +271,11 @@ func (m *GitCredentials) contextValidateToken(ctx context.Context, formats strfm
 func (m *GitCredentials) contextValidateUsername(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Username != nil {
+
+		if swag.IsZero(m.Username) { // not required
+			return nil
+		}
+
 		if err := m.Username.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("username")

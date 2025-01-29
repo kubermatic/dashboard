@@ -135,6 +135,10 @@ func (m *PresetProvider) ContextValidate(ctx context.Context, formats strfmt.Reg
 
 func (m *PresetProvider) contextValidateName(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Name) { // not required
+		return nil
+	}
+
 	if err := m.Name.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("name")
@@ -150,6 +154,11 @@ func (m *PresetProvider) contextValidateName(ctx context.Context, formats strfmt
 func (m *PresetProvider) contextValidateOpenstack(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Openstack != nil {
+
+		if swag.IsZero(m.Openstack) { // not required
+			return nil
+		}
+
 		if err := m.Openstack.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openstack")
@@ -166,6 +175,11 @@ func (m *PresetProvider) contextValidateOpenstack(ctx context.Context, formats s
 func (m *PresetProvider) contextValidateVmwareCloudDirector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.VmwareCloudDirector != nil {
+
+		if swag.IsZero(m.VmwareCloudDirector) { // not required
+			return nil
+		}
+
 		if err := m.VmwareCloudDirector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmwareCloudDirector")

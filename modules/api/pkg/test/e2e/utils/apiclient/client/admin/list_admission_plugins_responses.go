@@ -6,6 +6,7 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListAdmissionPluginsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list admission plugins o k response
+func (o *ListAdmissionPluginsOK) Code() int {
+	return 200
+}
+
 func (o *ListAdmissionPluginsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsOK %s", 200, payload)
 }
 
 func (o *ListAdmissionPluginsOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsOK %s", 200, payload)
 }
 
 func (o *ListAdmissionPluginsOK) GetPayload() []*models.AdmissionPlugin {
@@ -152,12 +160,17 @@ func (o *ListAdmissionPluginsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list admission plugins unauthorized response
+func (o *ListAdmissionPluginsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAdmissionPluginsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsUnauthorized", 401)
 }
 
 func (o *ListAdmissionPluginsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsUnauthorized", 401)
 }
 
 func (o *ListAdmissionPluginsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListAdmissionPluginsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list admission plugins forbidden response
+func (o *ListAdmissionPluginsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAdmissionPluginsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsForbidden", 403)
 }
 
 func (o *ListAdmissionPluginsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPluginsForbidden", 403)
 }
 
 func (o *ListAdmissionPluginsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListAdmissionPluginsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list admission plugins default response
-func (o *ListAdmissionPluginsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list admission plugins default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListAdmissionPluginsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list admission plugins default response
+func (o *ListAdmissionPluginsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListAdmissionPluginsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPlugins default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPlugins default %s", o._statusCode, payload)
 }
 
 func (o *ListAdmissionPluginsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPlugins default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins][%d] listAdmissionPlugins default %s", o._statusCode, payload)
 }
 
 func (o *ListAdmissionPluginsDefault) GetPayload() *models.ErrorResponse {

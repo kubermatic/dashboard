@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectEKSVersionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s versions o k response
+func (o *ListProjectEKSVersionsOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSVersionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersionsOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSVersionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersionsOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSVersionsOK) GetPayload() []*models.MasterVersion {
@@ -120,11 +128,6 @@ type ListProjectEKSVersionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project e k s versions default response
-func (o *ListProjectEKSVersionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project e k s versions default response has a 2xx status code
 func (o *ListProjectEKSVersionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectEKSVersionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project e k s versions default response
+func (o *ListProjectEKSVersionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectEKSVersionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersions default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSVersionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/versions][%d] listProjectEKSVersions default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSVersionsDefault) GetPayload() *models.ErrorResponse {

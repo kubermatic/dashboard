@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListSSHKeysOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list Ssh keys o k response
+func (o *ListSSHKeysOK) Code() int {
+	return 200
+}
+
 func (o *ListSSHKeysOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysOK %s", 200, payload)
 }
 
 func (o *ListSSHKeysOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysOK %s", 200, payload)
 }
 
 func (o *ListSSHKeysOK) GetPayload() []*models.SSHKey {
@@ -152,12 +160,17 @@ func (o *ListSSHKeysUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list Ssh keys unauthorized response
+func (o *ListSSHKeysUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListSSHKeysUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysUnauthorized", 401)
 }
 
 func (o *ListSSHKeysUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysUnauthorized", 401)
 }
 
 func (o *ListSSHKeysUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListSSHKeysForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list Ssh keys forbidden response
+func (o *ListSSHKeysForbidden) Code() int {
+	return 403
+}
+
 func (o *ListSSHKeysForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysForbidden", 403)
 }
 
 func (o *ListSSHKeysForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSshKeysForbidden", 403)
 }
 
 func (o *ListSSHKeysForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListSSHKeysDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list SSH keys default response
-func (o *ListSSHKeysDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list SSH keys default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListSSHKeysDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list SSH keys default response
+func (o *ListSSHKeysDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListSSHKeysDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSSHKeys default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSSHKeys default %s", o._statusCode, payload)
 }
 
 func (o *ListSSHKeysDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSSHKeys default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/sshkeys][%d] listSSHKeys default %s", o._statusCode, payload)
 }
 
 func (o *ListSSHKeysDefault) GetPayload() *models.ErrorResponse {

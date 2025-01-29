@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListGKEClusterZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e cluster zones o k response
+func (o *ListGKEClusterZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEClusterZonesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterZonesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterZonesOK) GetPayload() models.GKEZoneList {
@@ -152,12 +160,17 @@ func (o *ListGKEClusterZonesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list g k e cluster zones unauthorized response
+func (o *ListGKEClusterZonesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListGKEClusterZonesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterZonesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterZonesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListGKEClusterZonesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list g k e cluster zones forbidden response
+func (o *ListGKEClusterZonesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListGKEClusterZonesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesForbidden", 403)
 }
 
 func (o *ListGKEClusterZonesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZonesForbidden", 403)
 }
 
 func (o *ListGKEClusterZonesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListGKEClusterZonesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list g k e cluster zones default response
-func (o *ListGKEClusterZonesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list g k e cluster zones default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListGKEClusterZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e cluster zones default response
+func (o *ListGKEClusterZonesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEClusterZonesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZones default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterZonesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/zones][%d] listGKEClusterZones default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterZonesDefault) GetPayload() *models.ErrorResponse {

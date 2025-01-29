@@ -6,6 +6,7 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectVSphereTagsForTagCategoriesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project v sphere tags for tag categories o k response
+func (o *ListProjectVSphereTagsForTagCategoriesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectVSphereTagsForTagCategoriesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategoriesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategoriesOK %s", 200, payload)
 }
 
 func (o *ListProjectVSphereTagsForTagCategoriesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategoriesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategoriesOK %s", 200, payload)
 }
 
 func (o *ListProjectVSphereTagsForTagCategoriesOK) GetPayload() []*models.VSphereTag {
@@ -120,11 +128,6 @@ type ListProjectVSphereTagsForTagCategoriesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project v sphere tags for tag categories default response
-func (o *ListProjectVSphereTagsForTagCategoriesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project v sphere tags for tag categories default response has a 2xx status code
 func (o *ListProjectVSphereTagsForTagCategoriesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectVSphereTagsForTagCategoriesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project v sphere tags for tag categories default response
+func (o *ListProjectVSphereTagsForTagCategoriesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectVSphereTagsForTagCategoriesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategories default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategories default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectVSphereTagsForTagCategoriesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategories default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vsphere/tagcategories/{tag_category}/tags][%d] listProjectVSphereTagsForTagCategories default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectVSphereTagsForTagCategoriesDefault) GetPayload() *models.ErrorResponse {

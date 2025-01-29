@@ -181,6 +181,11 @@ func (m *AWSVPC) contextValidateCidrBlockAssociationSet(ctx context.Context, for
 	for i := 0; i < len(m.CidrBlockAssociationSet); i++ {
 
 		if m.CidrBlockAssociationSet[i] != nil {
+
+			if swag.IsZero(m.CidrBlockAssociationSet[i]) { // not required
+				return nil
+			}
+
 			if err := m.CidrBlockAssociationSet[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("cidrBlockAssociationSet" + "." + strconv.Itoa(i))
@@ -201,6 +206,11 @@ func (m *AWSVPC) contextValidateIPV6CidrBlockAssociationSet(ctx context.Context,
 	for i := 0; i < len(m.IPV6CidrBlockAssociationSet); i++ {
 
 		if m.IPV6CidrBlockAssociationSet[i] != nil {
+
+			if swag.IsZero(m.IPV6CidrBlockAssociationSet[i]) { // not required
+				return nil
+			}
+
 			if err := m.IPV6CidrBlockAssociationSet[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ipv6CidrBlockAssociationSet" + "." + strconv.Itoa(i))
@@ -221,6 +231,11 @@ func (m *AWSVPC) contextValidateTags(ctx context.Context, formats strfmt.Registr
 	for i := 0; i < len(m.Tags); i++ {
 
 		if m.Tags[i] != nil {
+
+			if swag.IsZero(m.Tags[i]) { // not required
+				return nil
+			}
+
 			if err := m.Tags[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("tags" + "." + strconv.Itoa(i))

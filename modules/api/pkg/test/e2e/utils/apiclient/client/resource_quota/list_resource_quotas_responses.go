@@ -6,6 +6,7 @@ package resource_quota
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListResourceQuotasOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list resource quotas o k response
+func (o *ListResourceQuotasOK) Code() int {
+	return 200
+}
+
 func (o *ListResourceQuotasOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasOK %s", 200, payload)
 }
 
 func (o *ListResourceQuotasOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasOK %s", 200, payload)
 }
 
 func (o *ListResourceQuotasOK) GetPayload() []*models.ResourceQuota {
@@ -152,12 +160,17 @@ func (o *ListResourceQuotasUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list resource quotas unauthorized response
+func (o *ListResourceQuotasUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListResourceQuotasUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasUnauthorized", 401)
 }
 
 func (o *ListResourceQuotasUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasUnauthorized", 401)
 }
 
 func (o *ListResourceQuotasUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListResourceQuotasForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list resource quotas forbidden response
+func (o *ListResourceQuotasForbidden) Code() int {
+	return 403
+}
+
 func (o *ListResourceQuotasForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasForbidden", 403)
 }
 
 func (o *ListResourceQuotasForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotasForbidden", 403)
 }
 
 func (o *ListResourceQuotasForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListResourceQuotasDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list resource quotas default response
-func (o *ListResourceQuotasDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list resource quotas default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListResourceQuotasDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list resource quotas default response
+func (o *ListResourceQuotasDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListResourceQuotasDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotas default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotas default %s", o._statusCode, payload)
 }
 
 func (o *ListResourceQuotasDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotas default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/quotas][%d] listResourceQuotas default %s", o._statusCode, payload)
 }
 
 func (o *ListResourceQuotasDefault) GetPayload() *models.ErrorResponse {

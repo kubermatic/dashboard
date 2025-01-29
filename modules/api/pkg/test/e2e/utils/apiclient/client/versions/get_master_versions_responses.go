@@ -6,6 +6,7 @@ package versions
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *GetMasterVersionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get master versions o k response
+func (o *GetMasterVersionsOK) Code() int {
+	return 200
+}
+
 func (o *GetMasterVersionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersionsOK %s", 200, payload)
 }
 
 func (o *GetMasterVersionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersionsOK %s", 200, payload)
 }
 
 func (o *GetMasterVersionsOK) GetPayload() []*models.MasterVersion {
@@ -120,11 +128,6 @@ type GetMasterVersionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the get master versions default response
-func (o *GetMasterVersionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this get master versions default response has a 2xx status code
 func (o *GetMasterVersionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *GetMasterVersionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get master versions default response
+func (o *GetMasterVersionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetMasterVersionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersions default %s", o._statusCode, payload)
 }
 
 func (o *GetMasterVersionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/upgrades/cluster][%d] getMasterVersions default %s", o._statusCode, payload)
 }
 
 func (o *GetMasterVersionsDefault) GetPayload() *models.ErrorResponse {

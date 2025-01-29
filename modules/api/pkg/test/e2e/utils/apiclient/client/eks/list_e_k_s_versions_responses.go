@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListEKSVersionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s versions o k response
+func (o *ListEKSVersionsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSVersionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersionsOK %s", 200, payload)
 }
 
 func (o *ListEKSVersionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersionsOK %s", 200, payload)
 }
 
 func (o *ListEKSVersionsOK) GetPayload() []*models.MasterVersion {
@@ -120,11 +128,6 @@ type ListEKSVersionsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s versions default response
-func (o *ListEKSVersionsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s versions default response has a 2xx status code
 func (o *ListEKSVersionsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListEKSVersionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s versions default response
+func (o *ListEKSVersionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSVersionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersions default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSVersionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/versions][%d] listEKSVersions default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSVersionsDefault) GetPayload() *models.ErrorResponse {

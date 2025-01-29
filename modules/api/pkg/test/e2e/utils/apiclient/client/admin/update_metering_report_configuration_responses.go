@@ -7,6 +7,7 @@ package admin
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,12 +94,17 @@ func (o *UpdateMeteringReportConfigurationOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update metering report configuration o k response
+func (o *UpdateMeteringReportConfigurationOK) Code() int {
+	return 200
+}
+
 func (o *UpdateMeteringReportConfigurationOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationOK", 200)
 }
 
 func (o *UpdateMeteringReportConfigurationOK) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationOK", 200)
 }
 
 func (o *UpdateMeteringReportConfigurationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -144,12 +150,17 @@ func (o *UpdateMeteringReportConfigurationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update metering report configuration unauthorized response
+func (o *UpdateMeteringReportConfigurationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateMeteringReportConfigurationUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationUnauthorized", 401)
 }
 
 func (o *UpdateMeteringReportConfigurationUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationUnauthorized", 401)
 }
 
 func (o *UpdateMeteringReportConfigurationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -195,12 +206,17 @@ func (o *UpdateMeteringReportConfigurationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update metering report configuration forbidden response
+func (o *UpdateMeteringReportConfigurationForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateMeteringReportConfigurationForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationForbidden", 403)
 }
 
 func (o *UpdateMeteringReportConfigurationForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfigurationForbidden", 403)
 }
 
 func (o *UpdateMeteringReportConfigurationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -224,11 +240,6 @@ type UpdateMeteringReportConfigurationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update metering report configuration default response
-func (o *UpdateMeteringReportConfigurationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update metering report configuration default response has a 2xx status code
@@ -256,12 +267,19 @@ func (o *UpdateMeteringReportConfigurationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update metering report configuration default response
+func (o *UpdateMeteringReportConfigurationDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateMeteringReportConfigurationDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfiguration default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfiguration default %s", o._statusCode, payload)
 }
 
 func (o *UpdateMeteringReportConfigurationDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfiguration default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/configurations/reports/{name}][%d] updateMeteringReportConfiguration default %s", o._statusCode, payload)
 }
 
 func (o *UpdateMeteringReportConfigurationDefault) GetPayload() *models.ErrorResponse {

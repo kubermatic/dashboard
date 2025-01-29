@@ -6,6 +6,7 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetUsersForProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get users for project o k response
+func (o *GetUsersForProjectOK) Code() int {
+	return 200
+}
+
 func (o *GetUsersForProjectOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectOK %s", 200, payload)
 }
 
 func (o *GetUsersForProjectOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectOK %s", 200, payload)
 }
 
 func (o *GetUsersForProjectOK) GetPayload() []*models.User {
@@ -152,12 +160,17 @@ func (o *GetUsersForProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get users for project unauthorized response
+func (o *GetUsersForProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetUsersForProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectUnauthorized", 401)
 }
 
 func (o *GetUsersForProjectUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectUnauthorized", 401)
 }
 
 func (o *GetUsersForProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *GetUsersForProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get users for project forbidden response
+func (o *GetUsersForProjectForbidden) Code() int {
+	return 403
+}
+
 func (o *GetUsersForProjectForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectForbidden", 403)
 }
 
 func (o *GetUsersForProjectForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProjectForbidden", 403)
 }
 
 func (o *GetUsersForProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type GetUsersForProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get users for project default response
-func (o *GetUsersForProjectDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get users for project default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *GetUsersForProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get users for project default response
+func (o *GetUsersForProjectDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetUsersForProjectDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProject default %s", o._statusCode, payload)
 }
 
 func (o *GetUsersForProjectDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/users][%d] getUsersForProject default %s", o._statusCode, payload)
 }
 
 func (o *GetUsersForProjectDefault) GetPayload() *models.ErrorResponse {

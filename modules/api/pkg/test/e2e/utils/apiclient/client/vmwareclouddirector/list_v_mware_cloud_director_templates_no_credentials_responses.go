@@ -6,6 +6,7 @@ package vmwareclouddirector
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListVMwareCloudDirectorTemplatesNoCredentialsOK) IsCode(code int) bool 
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director templates no credentials o k response
+func (o *ListVMwareCloudDirectorTemplatesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsOK) GetPayload() models.VMwareCloudDirectorTemplateList {
@@ -120,11 +128,6 @@ type ListVMwareCloudDirectorTemplatesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director templates no credentials default response
-func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director templates no credentials default response has a 2xx status code
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) IsCode(code int) 
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list v mware cloud director templates no credentials default response
+func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/templates/{catalog_name}][%d] listVMwareCloudDirectorTemplatesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListVMwareCloudDirectorTemplatesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

@@ -95,6 +95,11 @@ func (m *Target) contextValidateCode(ctx context.Context, formats strfmt.Registr
 	for i := 0; i < len(m.Code); i++ {
 
 		if m.Code[i] != nil {
+
+			if swag.IsZero(m.Code[i]) { // not required
+				return nil
+			}
+
 			if err := m.Code[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("code" + "." + strconv.Itoa(i))

@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch machine deployment o k response
+func (o *PatchMachineDeploymentOK) Code() int {
+	return 200
+}
+
 func (o *PatchMachineDeploymentOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentOK %s", 200, payload)
 }
 
 func (o *PatchMachineDeploymentOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentOK %s", 200, payload)
 }
 
 func (o *PatchMachineDeploymentOK) GetPayload() *models.NodeDeployment {
@@ -154,12 +162,17 @@ func (o *PatchMachineDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch machine deployment unauthorized response
+func (o *PatchMachineDeploymentUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchMachineDeploymentUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentUnauthorized", 401)
 }
 
 func (o *PatchMachineDeploymentUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentUnauthorized", 401)
 }
 
 func (o *PatchMachineDeploymentUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchMachineDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch machine deployment forbidden response
+func (o *PatchMachineDeploymentForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchMachineDeploymentForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentForbidden", 403)
 }
 
 func (o *PatchMachineDeploymentForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeploymentForbidden", 403)
 }
 
 func (o *PatchMachineDeploymentForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchMachineDeploymentDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch machine deployment default response
-func (o *PatchMachineDeploymentDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch machine deployment default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch machine deployment default response
+func (o *PatchMachineDeploymentDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchMachineDeploymentDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeployment default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeployment default %s", o._statusCode, payload)
 }
 
 func (o *PatchMachineDeploymentDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeployment default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchMachineDeployment default %s", o._statusCode, payload)
 }
 
 func (o *PatchMachineDeploymentDefault) GetPayload() *models.ErrorResponse {

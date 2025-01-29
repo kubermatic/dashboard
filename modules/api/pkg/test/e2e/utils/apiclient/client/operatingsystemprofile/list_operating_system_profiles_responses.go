@@ -6,6 +6,7 @@ package operatingsystemprofile
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListOperatingSystemProfilesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list operating system profiles o k response
+func (o *ListOperatingSystemProfilesOK) Code() int {
+	return 200
+}
+
 func (o *ListOperatingSystemProfilesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesOK %s", 200, payload)
 }
 
 func (o *ListOperatingSystemProfilesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesOK %s", 200, payload)
 }
 
 func (o *ListOperatingSystemProfilesOK) GetPayload() []*models.OperatingSystemProfile {
@@ -152,12 +160,17 @@ func (o *ListOperatingSystemProfilesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list operating system profiles unauthorized response
+func (o *ListOperatingSystemProfilesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListOperatingSystemProfilesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesUnauthorized", 401)
 }
 
 func (o *ListOperatingSystemProfilesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesUnauthorized", 401)
 }
 
 func (o *ListOperatingSystemProfilesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListOperatingSystemProfilesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list operating system profiles forbidden response
+func (o *ListOperatingSystemProfilesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListOperatingSystemProfilesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesForbidden", 403)
 }
 
 func (o *ListOperatingSystemProfilesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfilesForbidden", 403)
 }
 
 func (o *ListOperatingSystemProfilesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListOperatingSystemProfilesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list operating system profiles default response
-func (o *ListOperatingSystemProfilesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list operating system profiles default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListOperatingSystemProfilesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list operating system profiles default response
+func (o *ListOperatingSystemProfilesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListOperatingSystemProfilesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfiles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfiles default %s", o._statusCode, payload)
 }
 
 func (o *ListOperatingSystemProfilesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfiles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/operatingsystemprofiles][%d] listOperatingSystemProfiles default %s", o._statusCode, payload)
 }
 
 func (o *ListOperatingSystemProfilesDefault) GetPayload() *models.ErrorResponse {

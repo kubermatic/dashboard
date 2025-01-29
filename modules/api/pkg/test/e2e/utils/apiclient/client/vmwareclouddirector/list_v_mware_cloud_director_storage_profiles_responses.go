@@ -6,6 +6,7 @@ package vmwareclouddirector
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListVMwareCloudDirectorStorageProfilesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v mware cloud director storage profiles o k response
+func (o *ListVMwareCloudDirectorStorageProfilesOK) Code() int {
+	return 200
+}
+
 func (o *ListVMwareCloudDirectorStorageProfilesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesOK %s", 200, payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesOK %s", 200, payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesOK) GetPayload() models.VMwareCloudDirectorStorageProfileList {
@@ -120,11 +128,6 @@ type ListVMwareCloudDirectorStorageProfilesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v mware cloud director storage profiles default response
-func (o *ListVMwareCloudDirectorStorageProfilesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v mware cloud director storage profiles default response has a 2xx status code
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListVMwareCloudDirectorStorageProfilesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list v mware cloud director storage profiles default response
+func (o *ListVMwareCloudDirectorStorageProfilesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfiles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfiles default %s", o._statusCode, payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfiles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vmwareclouddirector/{dc}/storageprofiles][%d] listVMwareCloudDirectorStorageProfiles default %s", o._statusCode, payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesDefault) GetPayload() *models.ErrorResponse {
