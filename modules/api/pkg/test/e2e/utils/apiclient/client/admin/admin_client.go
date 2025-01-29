@@ -54,6 +54,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateKyvernoPolicyTemplate(params *CreateKyvernoPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateKyvernoPolicyTemplateOK, error)
+
 	CreateMeteringReportConfiguration(params *CreateMeteringReportConfigurationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateMeteringReportConfigurationCreated, error)
 
 	CreateOrUpdateMeteringConfigurations(params *CreateOrUpdateMeteringConfigurationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOrUpdateMeteringConfigurationsOK, error)
@@ -99,6 +101,44 @@ type ClientService interface {
 	UpdateSeed(params *UpdateSeedParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateSeedOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateKyvernoPolicyTemplate Create Policy Template. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) CreateKyvernoPolicyTemplate(params *CreateKyvernoPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateKyvernoPolicyTemplateOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateKyvernoPolicyTemplateParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "createKyvernoPolicyTemplate",
+		Method:             "PUT",
+		PathPattern:        "/api/v2/policytemplate",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateKyvernoPolicyTemplateReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateKyvernoPolicyTemplateOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateKyvernoPolicyTemplateDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

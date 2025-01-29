@@ -223,6 +223,7 @@ type RoutingParams struct {
 	EtcdBackupConfigProjectProviderGetter          provider.EtcdBackupConfigProjectProviderGetter
 	EtcdRestoreProjectProviderGetter               provider.EtcdRestoreProjectProviderGetter
 	BackupStorageProvider                          provider.BackupStorageProvider
+	PolicyTemplateProvider                         provider.PolicyTemplateProvider
 	BackupCredentialsProviderGetter                provider.BackupCredentialsProviderGetter
 	PrivilegedMLAAdminSettingProviderGetter        provider.PrivilegedMLAAdminSettingProviderGetter
 	SeedProvider                                   provider.SeedProvider

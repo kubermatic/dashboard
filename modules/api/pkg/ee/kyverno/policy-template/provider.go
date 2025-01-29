@@ -52,7 +52,6 @@ func NewPolicyTemplateProvider(createMasterImpersonatedClient kubernetes.Imperso
 }
 
 func (p *PolicyTemplateProvider) Create(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
-
 	fmt.Println("==============================================")
 	fmt.Println("==============================================")
 	fmt.Println("policyTemplate")

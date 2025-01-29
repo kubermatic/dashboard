@@ -158,6 +158,7 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		etcdBackupConfigProjectProviderGetter:          routingParams.EtcdBackupConfigProjectProviderGetter,
 		etcdRestoreProjectProviderGetter:               routingParams.EtcdRestoreProjectProviderGetter,
 		backupStorageProvider:                          routingParams.BackupStorageProvider,
+		policyTemplateProvider:                         routingParams.PolicyTemplateProvider,
 		backupCredentialsProviderGetter:                routingParams.BackupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        routingParams.PrivilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   routingParams.SeedProvider,
