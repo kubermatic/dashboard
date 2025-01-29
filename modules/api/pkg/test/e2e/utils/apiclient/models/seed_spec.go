@@ -287,6 +287,11 @@ func (m *SeedSpec) contextValidateSeedDatacenters(ctx context.Context, formats s
 func (m *SeedSpec) contextValidateEtcdBackupRestore(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EtcdBackupRestore != nil {
+
+		if swag.IsZero(m.EtcdBackupRestore) { // not required
+			return nil
+		}
+
 		if err := m.EtcdBackupRestore.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("etcdBackupRestore")
@@ -301,6 +306,10 @@ func (m *SeedSpec) contextValidateEtcdBackupRestore(ctx context.Context, formats
 }
 
 func (m *SeedSpec) contextValidateExposeStrategy(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ExposeStrategy) { // not required
+		return nil
+	}
 
 	if err := m.ExposeStrategy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -317,6 +326,11 @@ func (m *SeedSpec) contextValidateExposeStrategy(ctx context.Context, formats st
 func (m *SeedSpec) contextValidateKubeconfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubeconfig != nil {
+
+		if swag.IsZero(m.Kubeconfig) { // not required
+			return nil
+		}
+
 		if err := m.Kubeconfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubeconfig")
@@ -333,6 +347,11 @@ func (m *SeedSpec) contextValidateKubeconfig(ctx context.Context, formats strfmt
 func (m *SeedSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubelb != nil {
+
+		if swag.IsZero(m.Kubelb) { // not required
+			return nil
+		}
+
 		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubelb")
@@ -349,6 +368,11 @@ func (m *SeedSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Reg
 func (m *SeedSpec) contextValidateMla(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Mla != nil {
+
+		if swag.IsZero(m.Mla) { // not required
+			return nil
+		}
+
 		if err := m.Mla.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mla")
@@ -365,6 +389,11 @@ func (m *SeedSpec) contextValidateMla(ctx context.Context, formats strfmt.Regist
 func (m *SeedSpec) contextValidateProxySettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ProxySettings != nil {
+
+		if swag.IsZero(m.ProxySettings) { // not required
+			return nil
+		}
+
 		if err := m.ProxySettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("proxy_settings")

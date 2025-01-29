@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteClusterTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete cluster template o k response
+func (o *DeleteClusterTemplateOK) Code() int {
+	return 200
+}
+
 func (o *DeleteClusterTemplateOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateOK", 200)
 }
 
 func (o *DeleteClusterTemplateOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateOK", 200)
 }
 
 func (o *DeleteClusterTemplateOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete cluster template unauthorized response
+func (o *DeleteClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteClusterTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateUnauthorized", 401)
 }
 
 func (o *DeleteClusterTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateUnauthorized", 401)
 }
 
 func (o *DeleteClusterTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete cluster template forbidden response
+func (o *DeleteClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteClusterTemplateForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateForbidden", 403)
 }
 
 func (o *DeleteClusterTemplateForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplateForbidden", 403)
 }
 
 func (o *DeleteClusterTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteClusterTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete cluster template default response
-func (o *DeleteClusterTemplateDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete cluster template default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete cluster template default response
+func (o *DeleteClusterTemplateDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteClusterTemplateDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplate default %s", o._statusCode, payload)
 }
 
 func (o *DeleteClusterTemplateDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clustertemplates/{template_id}][%d] deleteClusterTemplate default %s", o._statusCode, payload)
 }
 
 func (o *DeleteClusterTemplateDefault) GetPayload() *models.ErrorResponse {

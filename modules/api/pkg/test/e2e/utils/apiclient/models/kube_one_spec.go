@@ -115,6 +115,11 @@ func (m *KubeOneSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 func (m *KubeOneSpec) contextValidateCloudSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CloudSpec != nil {
+
+		if swag.IsZero(m.CloudSpec) { // not required
+			return nil
+		}
+
 		if err := m.CloudSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloudSpec")
@@ -131,6 +136,11 @@ func (m *KubeOneSpec) contextValidateCloudSpec(ctx context.Context, formats strf
 func (m *KubeOneSpec) contextValidateSSHKey(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SSHKey != nil {
+
+		if swag.IsZero(m.SSHKey) { // not required
+			return nil
+		}
+
 		if err := m.SSHKey.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("sshKey")

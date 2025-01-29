@@ -141,6 +141,11 @@ func (m *GKEMachineDeploymentCloudSpec) ContextValidate(ctx context.Context, for
 func (m *GKEMachineDeploymentCloudSpec) contextValidateAutoscaling(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Autoscaling != nil {
+
+		if swag.IsZero(m.Autoscaling) { // not required
+			return nil
+		}
+
 		if err := m.Autoscaling.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("autoscaling")
@@ -157,6 +162,11 @@ func (m *GKEMachineDeploymentCloudSpec) contextValidateAutoscaling(ctx context.C
 func (m *GKEMachineDeploymentCloudSpec) contextValidateConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Config != nil {
+
+		if swag.IsZero(m.Config) { // not required
+			return nil
+		}
+
 		if err := m.Config.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("config")
@@ -173,6 +183,11 @@ func (m *GKEMachineDeploymentCloudSpec) contextValidateConfig(ctx context.Contex
 func (m *GKEMachineDeploymentCloudSpec) contextValidateManagement(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Management != nil {
+
+		if swag.IsZero(m.Management) { // not required
+			return nil
+		}
+
 		if err := m.Management.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("management")

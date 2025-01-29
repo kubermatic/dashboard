@@ -6,6 +6,7 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListOpenstackServerGroupsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list openstack server groups no credentials o k response
+func (o *ListOpenstackServerGroupsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListOpenstackServerGroupsNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListOpenstackServerGroupsNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListOpenstackServerGroupsNoCredentialsOK) GetPayload() []*models.OpenstackServerGroup {
@@ -120,11 +128,6 @@ type ListOpenstackServerGroupsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list openstack server groups no credentials default response
-func (o *ListOpenstackServerGroupsNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list openstack server groups no credentials default response has a 2xx status code
 func (o *ListOpenstackServerGroupsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListOpenstackServerGroupsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list openstack server groups no credentials default response
+func (o *ListOpenstackServerGroupsNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListOpenstackServerGroupsNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListOpenstackServerGroupsNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups][%d] listOpenstackServerGroupsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListOpenstackServerGroupsNoCredentialsDefault) GetPayload() *models.ErrorResponse {

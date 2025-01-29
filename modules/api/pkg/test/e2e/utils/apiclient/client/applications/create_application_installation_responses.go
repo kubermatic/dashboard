@@ -6,6 +6,7 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateApplicationInstallationCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create application installation created response
+func (o *CreateApplicationInstallationCreated) Code() int {
+	return 201
+}
+
 func (o *CreateApplicationInstallationCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationCreated %s", 201, payload)
 }
 
 func (o *CreateApplicationInstallationCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationCreated %s", 201, payload)
 }
 
 func (o *CreateApplicationInstallationCreated) GetPayload() *models.ApplicationInstallation {
@@ -154,12 +162,17 @@ func (o *CreateApplicationInstallationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create application installation unauthorized response
+func (o *CreateApplicationInstallationUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateApplicationInstallationUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationUnauthorized", 401)
 }
 
 func (o *CreateApplicationInstallationUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationUnauthorized", 401)
 }
 
 func (o *CreateApplicationInstallationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateApplicationInstallationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create application installation forbidden response
+func (o *CreateApplicationInstallationForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateApplicationInstallationForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationForbidden", 403)
 }
 
 func (o *CreateApplicationInstallationForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallationForbidden", 403)
 }
 
 func (o *CreateApplicationInstallationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateApplicationInstallationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create application installation default response
-func (o *CreateApplicationInstallationDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create application installation default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateApplicationInstallationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create application installation default response
+func (o *CreateApplicationInstallationDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateApplicationInstallationDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallation default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallation default %s", o._statusCode, payload)
 }
 
 func (o *CreateApplicationInstallationDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallation default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations][%d] createApplicationInstallation default %s", o._statusCode, payload)
 }
 
 func (o *CreateApplicationInstallationDefault) GetPayload() *models.ErrorResponse {

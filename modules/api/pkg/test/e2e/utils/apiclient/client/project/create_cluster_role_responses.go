@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateClusterRoleCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create cluster role created response
+func (o *CreateClusterRoleCreated) Code() int {
+	return 201
+}
+
 func (o *CreateClusterRoleCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleCreated %s", 201, payload)
 }
 
 func (o *CreateClusterRoleCreated) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleCreated %s", 201, payload)
 }
 
 func (o *CreateClusterRoleCreated) GetPayload() *models.ClusterRole {
@@ -154,12 +162,17 @@ func (o *CreateClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create cluster role unauthorized response
+func (o *CreateClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateClusterRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleUnauthorized", 401)
 }
 
 func (o *CreateClusterRoleUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleUnauthorized", 401)
 }
 
 func (o *CreateClusterRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create cluster role forbidden response
+func (o *CreateClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateClusterRoleForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleForbidden", 403)
 }
 
 func (o *CreateClusterRoleForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRoleForbidden", 403)
 }
 
 func (o *CreateClusterRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateClusterRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create cluster role default response
-func (o *CreateClusterRoleDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create cluster role default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create cluster role default response
+func (o *CreateClusterRoleDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateClusterRoleDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRole default %s", o._statusCode, payload)
 }
 
 func (o *CreateClusterRoleDefault) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles][%d] createClusterRole default %s", o._statusCode, payload)
 }
 
 func (o *CreateClusterRoleDefault) GetPayload() *models.ErrorResponse {

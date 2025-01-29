@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListNamespaceOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list namespace o k response
+func (o *ListNamespaceOK) Code() int {
+	return 200
+}
+
 func (o *ListNamespaceOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceOK %s", 200, payload)
 }
 
 func (o *ListNamespaceOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceOK %s", 200, payload)
 }
 
 func (o *ListNamespaceOK) GetPayload() []*models.Namespace {
@@ -152,12 +160,17 @@ func (o *ListNamespaceUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list namespace unauthorized response
+func (o *ListNamespaceUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListNamespaceUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceUnauthorized", 401)
 }
 
 func (o *ListNamespaceUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceUnauthorized", 401)
 }
 
 func (o *ListNamespaceUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListNamespaceForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list namespace forbidden response
+func (o *ListNamespaceForbidden) Code() int {
+	return 403
+}
+
 func (o *ListNamespaceForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceForbidden", 403)
 }
 
 func (o *ListNamespaceForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespaceForbidden", 403)
 }
 
 func (o *ListNamespaceForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListNamespaceDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list namespace default response
-func (o *ListNamespaceDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list namespace default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListNamespaceDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list namespace default response
+func (o *ListNamespaceDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListNamespaceDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespace default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespace default %s", o._statusCode, payload)
 }
 
 func (o *ListNamespaceDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespace default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/namespaces][%d] listNamespace default %s", o._statusCode, payload)
 }
 
 func (o *ListNamespaceDefault) GetPayload() *models.ErrorResponse {

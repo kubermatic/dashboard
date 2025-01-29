@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *AssignSSHKeyToClusterCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the assign Ssh key to cluster created response
+func (o *AssignSSHKeyToClusterCreated) Code() int {
+	return 201
+}
+
 func (o *AssignSSHKeyToClusterCreated) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterCreated %s", 201, payload)
 }
 
 func (o *AssignSSHKeyToClusterCreated) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterCreated %s", 201, payload)
 }
 
 func (o *AssignSSHKeyToClusterCreated) GetPayload() *models.SSHKey {
@@ -154,12 +162,17 @@ func (o *AssignSSHKeyToClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the assign Ssh key to cluster unauthorized response
+func (o *AssignSSHKeyToClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *AssignSSHKeyToClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterUnauthorized", 401)
 }
 
 func (o *AssignSSHKeyToClusterUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterUnauthorized", 401)
 }
 
 func (o *AssignSSHKeyToClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *AssignSSHKeyToClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the assign Ssh key to cluster forbidden response
+func (o *AssignSSHKeyToClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *AssignSSHKeyToClusterForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterForbidden", 403)
 }
 
 func (o *AssignSSHKeyToClusterForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSshKeyToClusterForbidden", 403)
 }
 
 func (o *AssignSSHKeyToClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type AssignSSHKeyToClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the assign SSH key to cluster default response
-func (o *AssignSSHKeyToClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this assign SSH key to cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *AssignSSHKeyToClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the assign SSH key to cluster default response
+func (o *AssignSSHKeyToClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *AssignSSHKeyToClusterDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSSHKeyToCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSSHKeyToCluster default %s", o._statusCode, payload)
 }
 
 func (o *AssignSSHKeyToClusterDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSSHKeyToCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/sshkeys/{key_id}][%d] assignSSHKeyToCluster default %s", o._statusCode, payload)
 }
 
 func (o *AssignSSHKeyToClusterDefault) GetPayload() *models.ErrorResponse {

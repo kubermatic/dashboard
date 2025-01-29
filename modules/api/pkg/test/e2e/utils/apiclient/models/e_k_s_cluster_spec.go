@@ -141,6 +141,11 @@ func (m *EKSClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *EKSClusterSpec) contextValidateKubernetesNetworkConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.KubernetesNetworkConfig != nil {
+
+		if swag.IsZero(m.KubernetesNetworkConfig) { // not required
+			return nil
+		}
+
 		if err := m.KubernetesNetworkConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubernetesNetworkConfig")
@@ -157,6 +162,11 @@ func (m *EKSClusterSpec) contextValidateKubernetesNetworkConfig(ctx context.Cont
 func (m *EKSClusterSpec) contextValidateVpcConfigRequest(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.VpcConfigRequest != nil {
+
+		if swag.IsZero(m.VpcConfigRequest) { // not required
+			return nil
+		}
+
 		if err := m.VpcConfigRequest.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vpcConfigRequest")

@@ -6,6 +6,7 @@ package kubevirt
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListKubevirtStorageClassesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list kubevirt storage classes no credentials o k response
+func (o *ListKubevirtStorageClassesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListKubevirtStorageClassesNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListKubevirtStorageClassesNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListKubevirtStorageClassesNoCredentialsOK) GetPayload() models.StorageClassList {
@@ -120,11 +128,6 @@ type ListKubevirtStorageClassesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list kubevirt storage classes no credentials default response
-func (o *ListKubevirtStorageClassesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list kubevirt storage classes no credentials default response has a 2xx status code
 func (o *ListKubevirtStorageClassesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListKubevirtStorageClassesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list kubevirt storage classes no credentials default response
+func (o *ListKubevirtStorageClassesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListKubevirtStorageClassesNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListKubevirtStorageClassesNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/storageclasses][%d] listKubevirtStorageClassesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListKubevirtStorageClassesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

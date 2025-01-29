@@ -6,6 +6,7 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update admission plugin o k response
+func (o *UpdateAdmissionPluginOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAdmissionPluginOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginOK %s", 200, payload)
 }
 
 func (o *UpdateAdmissionPluginOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginOK %s", 200, payload)
 }
 
 func (o *UpdateAdmissionPluginOK) GetPayload() *models.AdmissionPlugin {
@@ -154,12 +162,17 @@ func (o *UpdateAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update admission plugin unauthorized response
+func (o *UpdateAdmissionPluginUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateAdmissionPluginUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginUnauthorized", 401)
 }
 
 func (o *UpdateAdmissionPluginUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginUnauthorized", 401)
 }
 
 func (o *UpdateAdmissionPluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update admission plugin forbidden response
+func (o *UpdateAdmissionPluginForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAdmissionPluginForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginForbidden", 403)
 }
 
 func (o *UpdateAdmissionPluginForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPluginForbidden", 403)
 }
 
 func (o *UpdateAdmissionPluginForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateAdmissionPluginDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update admission plugin default response
-func (o *UpdateAdmissionPluginDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update admission plugin default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update admission plugin default response
+func (o *UpdateAdmissionPluginDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateAdmissionPluginDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPlugin default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPlugin default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAdmissionPluginDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPlugin default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/admission/plugins/{name}][%d] updateAdmissionPlugin default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAdmissionPluginDefault) GetPayload() *models.ErrorResponse {

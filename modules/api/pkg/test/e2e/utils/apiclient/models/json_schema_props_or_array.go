@@ -113,6 +113,11 @@ func (m *JSONSchemaPropsOrArray) contextValidateJSONSchemas(ctx context.Context,
 	for i := 0; i < len(m.JSONSchemas); i++ {
 
 		if m.JSONSchemas[i] != nil {
+
+			if swag.IsZero(m.JSONSchemas[i]) { // not required
+				return nil
+			}
+
 			if err := m.JSONSchemas[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("JSONSchemas" + "." + strconv.Itoa(i))
@@ -131,6 +136,11 @@ func (m *JSONSchemaPropsOrArray) contextValidateJSONSchemas(ctx context.Context,
 func (m *JSONSchemaPropsOrArray) contextValidateSchema(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Schema != nil {
+
+		if swag.IsZero(m.Schema) { // not required
+			return nil
+		}
+
 		if err := m.Schema.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Schema")

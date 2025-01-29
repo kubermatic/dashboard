@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetClusterHealthOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster health o k response
+func (o *GetClusterHealthOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterHealthOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthOK %s", 200, payload)
 }
 
 func (o *GetClusterHealthOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthOK %s", 200, payload)
 }
 
 func (o *GetClusterHealthOK) GetPayload() *models.ClusterHealth {
@@ -154,12 +162,17 @@ func (o *GetClusterHealthUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster health unauthorized response
+func (o *GetClusterHealthUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterHealthUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthUnauthorized", 401)
 }
 
 func (o *GetClusterHealthUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthUnauthorized", 401)
 }
 
 func (o *GetClusterHealthUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetClusterHealthForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster health forbidden response
+func (o *GetClusterHealthForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterHealthForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthForbidden", 403)
 }
 
 func (o *GetClusterHealthForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealthForbidden", 403)
 }
 
 func (o *GetClusterHealthForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetClusterHealthDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get cluster health default response
-func (o *GetClusterHealthDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster health default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetClusterHealthDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get cluster health default response
+func (o *GetClusterHealthDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetClusterHealthDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealth default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealth default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterHealthDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealth default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/health][%d] getClusterHealth default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterHealthDefault) GetPayload() *models.ErrorResponse {

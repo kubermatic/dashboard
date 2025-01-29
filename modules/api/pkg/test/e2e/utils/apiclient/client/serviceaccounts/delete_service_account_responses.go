@@ -6,6 +6,7 @@ package serviceaccounts
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete service account o k response
+func (o *DeleteServiceAccountOK) Code() int {
+	return 200
+}
+
 func (o *DeleteServiceAccountOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountOK", 200)
 }
 
 func (o *DeleteServiceAccountOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountOK", 200)
 }
 
 func (o *DeleteServiceAccountOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete service account unauthorized response
+func (o *DeleteServiceAccountUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteServiceAccountUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountUnauthorized", 401)
 }
 
 func (o *DeleteServiceAccountUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountUnauthorized", 401)
 }
 
 func (o *DeleteServiceAccountUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete service account forbidden response
+func (o *DeleteServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteServiceAccountForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountForbidden", 403)
 }
 
 func (o *DeleteServiceAccountForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccountForbidden", 403)
 }
 
 func (o *DeleteServiceAccountForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteServiceAccountDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete service account default response
-func (o *DeleteServiceAccountDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete service account default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete service account default response
+func (o *DeleteServiceAccountDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteServiceAccountDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccount default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccount default %s", o._statusCode, payload)
 }
 
 func (o *DeleteServiceAccountDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccount default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] deleteServiceAccount default %s", o._statusCode, payload)
 }
 
 func (o *DeleteServiceAccountDefault) GetPayload() *models.ErrorResponse {

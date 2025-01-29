@@ -76,6 +76,10 @@ func (m *VMwareCloudDirectorSettings) contextValidateIPAllocationModes(ctx conte
 
 	for i := 0; i < len(m.IPAllocationModes); i++ {
 
+		if swag.IsZero(m.IPAllocationModes[i]) { // not required
+			return nil
+		}
+
 		if err := m.IPAllocationModes[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ipAllocationModes" + "." + strconv.Itoa(i))

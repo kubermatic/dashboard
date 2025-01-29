@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ExportClusterTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the export cluster template o k response
+func (o *ExportClusterTemplateOK) Code() int {
+	return 200
+}
+
 func (o *ExportClusterTemplateOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateOK %s", 200, payload)
 }
 
 func (o *ExportClusterTemplateOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateOK %s", 200, payload)
 }
 
 func (o *ExportClusterTemplateOK) GetPayload() *models.ClusterTemplate {
@@ -154,12 +162,17 @@ func (o *ExportClusterTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the export cluster template unauthorized response
+func (o *ExportClusterTemplateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ExportClusterTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateUnauthorized", 401)
 }
 
 func (o *ExportClusterTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateUnauthorized", 401)
 }
 
 func (o *ExportClusterTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *ExportClusterTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the export cluster template forbidden response
+func (o *ExportClusterTemplateForbidden) Code() int {
+	return 403
+}
+
 func (o *ExportClusterTemplateForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateForbidden", 403)
 }
 
 func (o *ExportClusterTemplateForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplateForbidden", 403)
 }
 
 func (o *ExportClusterTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type ExportClusterTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the export cluster template default response
-func (o *ExportClusterTemplateDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this export cluster template default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *ExportClusterTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the export cluster template default response
+func (o *ExportClusterTemplateDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ExportClusterTemplateDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplate default %s", o._statusCode, payload)
 }
 
 func (o *ExportClusterTemplateDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates/{template_id}/export][%d] exportClusterTemplate default %s", o._statusCode, payload)
 }
 
 func (o *ExportClusterTemplateDefault) GetPayload() *models.ErrorResponse {

@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateAlertmanagerOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update alertmanager o k response
+func (o *UpdateAlertmanagerOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAlertmanagerOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerOK %s", 200, payload)
 }
 
 func (o *UpdateAlertmanagerOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerOK %s", 200, payload)
 }
 
 func (o *UpdateAlertmanagerOK) GetPayload() *models.Alertmanager {
@@ -154,12 +162,17 @@ func (o *UpdateAlertmanagerUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update alertmanager unauthorized response
+func (o *UpdateAlertmanagerUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateAlertmanagerUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerUnauthorized", 401)
 }
 
 func (o *UpdateAlertmanagerUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerUnauthorized", 401)
 }
 
 func (o *UpdateAlertmanagerUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateAlertmanagerForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update alertmanager forbidden response
+func (o *UpdateAlertmanagerForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAlertmanagerForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerForbidden", 403)
 }
 
 func (o *UpdateAlertmanagerForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanagerForbidden", 403)
 }
 
 func (o *UpdateAlertmanagerForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateAlertmanagerDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update alertmanager default response
-func (o *UpdateAlertmanagerDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update alertmanager default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateAlertmanagerDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update alertmanager default response
+func (o *UpdateAlertmanagerDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateAlertmanagerDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanager default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanager default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAlertmanagerDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanager default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] updateAlertmanager default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAlertmanagerDefault) GetPayload() *models.ErrorResponse {

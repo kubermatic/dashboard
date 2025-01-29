@@ -6,6 +6,7 @@ package constraint
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListDefaultConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list default constraint o k response
+func (o *ListDefaultConstraintOK) Code() int {
+	return 200
+}
+
 func (o *ListDefaultConstraintOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintOK %s", 200, payload)
 }
 
 func (o *ListDefaultConstraintOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintOK %s", 200, payload)
 }
 
 func (o *ListDefaultConstraintOK) GetPayload() []*models.Constraint {
@@ -152,12 +160,17 @@ func (o *ListDefaultConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list default constraint unauthorized response
+func (o *ListDefaultConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListDefaultConstraintUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintUnauthorized", 401)
 }
 
 func (o *ListDefaultConstraintUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintUnauthorized", 401)
 }
 
 func (o *ListDefaultConstraintUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListDefaultConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list default constraint forbidden response
+func (o *ListDefaultConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *ListDefaultConstraintForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintForbidden", 403)
 }
 
 func (o *ListDefaultConstraintForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraintForbidden", 403)
 }
 
 func (o *ListDefaultConstraintForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListDefaultConstraintDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list default constraint default response
-func (o *ListDefaultConstraintDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list default constraint default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListDefaultConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list default constraint default response
+func (o *ListDefaultConstraintDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListDefaultConstraintDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraint default %s", o._statusCode, payload)
 }
 
 func (o *ListDefaultConstraintDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/constraints][%d] listDefaultConstraint default %s", o._statusCode, payload)
 }
 
 func (o *ListDefaultConstraintDefault) GetPayload() *models.ErrorResponse {

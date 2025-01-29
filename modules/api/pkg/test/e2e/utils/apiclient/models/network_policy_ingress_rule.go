@@ -132,6 +132,11 @@ func (m *NetworkPolicyIngressRule) contextValidateFrom(ctx context.Context, form
 	for i := 0; i < len(m.From); i++ {
 
 		if m.From[i] != nil {
+
+			if swag.IsZero(m.From[i]) { // not required
+				return nil
+			}
+
 			if err := m.From[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("from" + "." + strconv.Itoa(i))
@@ -152,6 +157,11 @@ func (m *NetworkPolicyIngressRule) contextValidatePorts(ctx context.Context, for
 	for i := 0; i < len(m.Ports); i++ {
 
 		if m.Ports[i] != nil {
+
+			if swag.IsZero(m.Ports[i]) { // not required
+				return nil
+			}
+
 			if err := m.Ports[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ports" + "." + strconv.Itoa(i))

@@ -6,6 +6,7 @@ package addon
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateAddonV2Created) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create addon v2 created response
+func (o *CreateAddonV2Created) Code() int {
+	return 201
+}
+
 func (o *CreateAddonV2Created) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Created  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Created %s", 201, payload)
 }
 
 func (o *CreateAddonV2Created) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Created  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Created %s", 201, payload)
 }
 
 func (o *CreateAddonV2Created) GetPayload() *models.Addon {
@@ -154,12 +162,17 @@ func (o *CreateAddonV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create addon v2 unauthorized response
+func (o *CreateAddonV2Unauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateAddonV2Unauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Unauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Unauthorized", 401)
 }
 
 func (o *CreateAddonV2Unauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Unauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Unauthorized", 401)
 }
 
 func (o *CreateAddonV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateAddonV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create addon v2 forbidden response
+func (o *CreateAddonV2Forbidden) Code() int {
+	return 403
+}
+
 func (o *CreateAddonV2Forbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Forbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Forbidden", 403)
 }
 
 func (o *CreateAddonV2Forbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Forbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2Forbidden", 403)
 }
 
 func (o *CreateAddonV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateAddonV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create addon v2 default response
-func (o *CreateAddonV2Default) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create addon v2 default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateAddonV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create addon v2 default response
+func (o *CreateAddonV2Default) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateAddonV2Default) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2 default %s", o._statusCode, payload)
 }
 
 func (o *CreateAddonV2Default) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2 default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/addons][%d] createAddonV2 default %s", o._statusCode, payload)
 }
 
 func (o *CreateAddonV2Default) GetPayload() *models.ErrorResponse {

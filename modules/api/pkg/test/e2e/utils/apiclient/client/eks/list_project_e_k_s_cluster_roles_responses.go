@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListProjectEKSClusterRolesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s cluster roles o k response
+func (o *ListProjectEKSClusterRolesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSClusterRolesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSClusterRolesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSClusterRolesOK) GetPayload() models.EKSClusterRoleList {
@@ -152,12 +160,17 @@ func (o *ListProjectEKSClusterRolesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s cluster roles unauthorized response
+func (o *ListProjectEKSClusterRolesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSClusterRolesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesUnauthorized", 401)
 }
 
 func (o *ListProjectEKSClusterRolesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesUnauthorized", 401)
 }
 
 func (o *ListProjectEKSClusterRolesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListProjectEKSClusterRolesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s cluster roles forbidden response
+func (o *ListProjectEKSClusterRolesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSClusterRolesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesForbidden", 403)
 }
 
 func (o *ListProjectEKSClusterRolesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRolesForbidden", 403)
 }
 
 func (o *ListProjectEKSClusterRolesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListProjectEKSClusterRolesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list project e k s cluster roles default response
-func (o *ListProjectEKSClusterRolesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list project e k s cluster roles default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListProjectEKSClusterRolesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project e k s cluster roles default response
+func (o *ListProjectEKSClusterRolesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectEKSClusterRolesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRoles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRoles default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSClusterRolesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRoles default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusterroles][%d] listProjectEKSClusterRoles default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSClusterRolesDefault) GetPayload() *models.ErrorResponse {

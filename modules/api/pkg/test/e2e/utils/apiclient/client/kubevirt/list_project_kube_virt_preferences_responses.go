@@ -6,6 +6,7 @@ package kubevirt
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectKubeVirtPreferencesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project kube virt preferences o k response
+func (o *ListProjectKubeVirtPreferencesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectKubeVirtPreferencesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferencesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferencesOK %s", 200, payload)
 }
 
 func (o *ListProjectKubeVirtPreferencesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferencesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferencesOK %s", 200, payload)
 }
 
 func (o *ListProjectKubeVirtPreferencesOK) GetPayload() *models.VirtualMachinePreferenceList {
@@ -122,11 +130,6 @@ type ListProjectKubeVirtPreferencesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project kube virt preferences default response
-func (o *ListProjectKubeVirtPreferencesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project kube virt preferences default response has a 2xx status code
 func (o *ListProjectKubeVirtPreferencesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListProjectKubeVirtPreferencesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project kube virt preferences default response
+func (o *ListProjectKubeVirtPreferencesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectKubeVirtPreferencesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferences default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferences default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectKubeVirtPreferencesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferences default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/preferences][%d] listProjectKubeVirtPreferences default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectKubeVirtPreferencesDefault) GetPayload() *models.ErrorResponse {

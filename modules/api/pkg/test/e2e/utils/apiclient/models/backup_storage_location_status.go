@@ -141,6 +141,10 @@ func (m *BackupStorageLocationStatus) ContextValidate(ctx context.Context, forma
 
 func (m *BackupStorageLocationStatus) contextValidateAccessMode(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.AccessMode) { // not required
+		return nil
+	}
+
 	if err := m.AccessMode.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("accessMode")
@@ -155,6 +159,10 @@ func (m *BackupStorageLocationStatus) contextValidateAccessMode(ctx context.Cont
 
 func (m *BackupStorageLocationStatus) contextValidateLastSyncedRevision(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.LastSyncedRevision) { // not required
+		return nil
+	}
+
 	if err := m.LastSyncedRevision.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("lastSyncedRevision")
@@ -168,6 +176,10 @@ func (m *BackupStorageLocationStatus) contextValidateLastSyncedRevision(ctx cont
 }
 
 func (m *BackupStorageLocationStatus) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Phase) { // not required
+		return nil
+	}
 
 	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

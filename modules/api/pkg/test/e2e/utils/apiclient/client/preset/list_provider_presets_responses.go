@@ -6,6 +6,7 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListProviderPresetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list provider presets o k response
+func (o *ListProviderPresetsOK) Code() int {
+	return 200
+}
+
 func (o *ListProviderPresetsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsOK %s", 200, payload)
 }
 
 func (o *ListProviderPresetsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsOK %s", 200, payload)
 }
 
 func (o *ListProviderPresetsOK) GetPayload() *models.PresetList {
@@ -154,12 +162,17 @@ func (o *ListProviderPresetsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list provider presets unauthorized response
+func (o *ListProviderPresetsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProviderPresetsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsUnauthorized", 401)
 }
 
 func (o *ListProviderPresetsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsUnauthorized", 401)
 }
 
 func (o *ListProviderPresetsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *ListProviderPresetsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list provider presets forbidden response
+func (o *ListProviderPresetsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProviderPresetsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsForbidden", 403)
 }
 
 func (o *ListProviderPresetsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresetsForbidden", 403)
 }
 
 func (o *ListProviderPresetsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type ListProviderPresetsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list provider presets default response
-func (o *ListProviderPresetsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list provider presets default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *ListProviderPresetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list provider presets default response
+func (o *ListProviderPresetsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProviderPresetsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresets default %s", o._statusCode, payload)
 }
 
 func (o *ListProviderPresetsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/presets][%d] listProviderPresets default %s", o._statusCode, payload)
 }
 
 func (o *ListProviderPresetsDefault) GetPayload() *models.ErrorResponse {

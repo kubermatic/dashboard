@@ -6,6 +6,7 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectOpenstackAvailabilityZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project openstack availability zones o k response
+func (o *ListProjectOpenstackAvailabilityZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectOpenstackAvailabilityZonesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectOpenstackAvailabilityZonesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectOpenstackAvailabilityZonesOK) GetPayload() []*models.OpenstackAvailabilityZone {
@@ -120,11 +128,6 @@ type ListProjectOpenstackAvailabilityZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project openstack availability zones default response
-func (o *ListProjectOpenstackAvailabilityZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project openstack availability zones default response has a 2xx status code
 func (o *ListProjectOpenstackAvailabilityZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectOpenstackAvailabilityZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project openstack availability zones default response
+func (o *ListProjectOpenstackAvailabilityZonesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectOpenstackAvailabilityZonesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectOpenstackAvailabilityZonesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/availabilityzones][%d] listProjectOpenstackAvailabilityZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectOpenstackAvailabilityZonesDefault) GetPayload() *models.ErrorResponse {

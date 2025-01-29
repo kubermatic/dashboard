@@ -6,6 +6,7 @@ package equinixmetal
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectEquinixMetalSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project equinix metal sizes o k response
+func (o *ListProjectEquinixMetalSizesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEquinixMetalSizesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizesOK %s", 200, payload)
 }
 
 func (o *ListProjectEquinixMetalSizesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizesOK %s", 200, payload)
 }
 
 func (o *ListProjectEquinixMetalSizesOK) GetPayload() []models.PacketSizeList {
@@ -120,11 +128,6 @@ type ListProjectEquinixMetalSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project equinix metal sizes default response
-func (o *ListProjectEquinixMetalSizesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project equinix metal sizes default response has a 2xx status code
 func (o *ListProjectEquinixMetalSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectEquinixMetalSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project equinix metal sizes default response
+func (o *ListProjectEquinixMetalSizesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectEquinixMetalSizesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizes default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEquinixMetalSizesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes][%d] listProjectEquinixMetalSizes default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEquinixMetalSizesDefault) GetPayload() *models.ErrorResponse {

@@ -148,6 +148,10 @@ func (m *CreateSeedSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 
 func (m *CreateSeedSpec) contextValidateExposeStrategy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.ExposeStrategy) { // not required
+		return nil
+	}
+
 	if err := m.ExposeStrategy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("expose_strategy")
@@ -163,6 +167,11 @@ func (m *CreateSeedSpec) contextValidateExposeStrategy(ctx context.Context, form
 func (m *CreateSeedSpec) contextValidateMla(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Mla != nil {
+
+		if swag.IsZero(m.Mla) { // not required
+			return nil
+		}
+
 		if err := m.Mla.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mla")
@@ -179,6 +188,11 @@ func (m *CreateSeedSpec) contextValidateMla(ctx context.Context, formats strfmt.
 func (m *CreateSeedSpec) contextValidateProxySettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ProxySettings != nil {
+
+		if swag.IsZero(m.ProxySettings) { // not required
+			return nil
+		}
+
 		if err := m.ProxySettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("proxy_settings")

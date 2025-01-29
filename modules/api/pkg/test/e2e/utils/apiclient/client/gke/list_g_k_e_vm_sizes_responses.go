@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListGKEVMSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e Vm sizes o k response
+func (o *ListGKEVMSizesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEVMSizesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVmSizesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVmSizesOK %s", 200, payload)
 }
 
 func (o *ListGKEVMSizesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVmSizesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVmSizesOK %s", 200, payload)
 }
 
 func (o *ListGKEVMSizesOK) GetPayload() models.GCPMachineSizeList {
@@ -120,11 +128,6 @@ type ListGKEVMSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g k e VM sizes default response
-func (o *ListGKEVMSizesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g k e VM sizes default response has a 2xx status code
 func (o *ListGKEVMSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListGKEVMSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e VM sizes default response
+func (o *ListGKEVMSizesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEVMSizesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVMSizes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVMSizes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEVMSizesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVMSizes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/vmsizes][%d] listGKEVMSizes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEVMSizesDefault) GetPayload() *models.ErrorResponse {

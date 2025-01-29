@@ -95,6 +95,11 @@ func (m *AddonConfigSpec) contextValidateControls(ctx context.Context, formats s
 	for i := 0; i < len(m.Controls); i++ {
 
 		if m.Controls[i] != nil {
+
+			if swag.IsZero(m.Controls[i]) { // not required
+				return nil
+			}
+
 			if err := m.Controls[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("formSpec" + "." + strconv.Itoa(i))

@@ -438,6 +438,11 @@ func (m *ReplacedResources) ContextValidate(ctx context.Context, formats strfmt.
 func (m *ReplacedResources) contextValidateAlibabaInstanceType(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AlibabaInstanceType != nil {
+
+		if swag.IsZero(m.AlibabaInstanceType) { // not required
+			return nil
+		}
+
 		if err := m.AlibabaInstanceType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("alibabaInstanceType")
@@ -454,6 +459,11 @@ func (m *ReplacedResources) contextValidateAlibabaInstanceType(ctx context.Conte
 func (m *ReplacedResources) contextValidateAnexiaNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AnexiaNodeSpec != nil {
+
+		if swag.IsZero(m.AnexiaNodeSpec) { // not required
+			return nil
+		}
+
 		if err := m.AnexiaNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("anexiaNodeSpec")
@@ -470,6 +480,11 @@ func (m *ReplacedResources) contextValidateAnexiaNodeSpec(ctx context.Context, f
 func (m *ReplacedResources) contextValidateAwsSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AwsSize != nil {
+
+		if swag.IsZero(m.AwsSize) { // not required
+			return nil
+		}
+
 		if err := m.AwsSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("awsSize")
@@ -486,6 +501,11 @@ func (m *ReplacedResources) contextValidateAwsSize(ctx context.Context, formats 
 func (m *ReplacedResources) contextValidateAzureSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AzureSize != nil {
+
+		if swag.IsZero(m.AzureSize) { // not required
+			return nil
+		}
+
 		if err := m.AzureSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("azureSize")
@@ -502,6 +522,11 @@ func (m *ReplacedResources) contextValidateAzureSize(ctx context.Context, format
 func (m *ReplacedResources) contextValidateDoSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DoSize != nil {
+
+		if swag.IsZero(m.DoSize) { // not required
+			return nil
+		}
+
 		if err := m.DoSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("doSize")
@@ -518,6 +543,11 @@ func (m *ReplacedResources) contextValidateDoSize(ctx context.Context, formats s
 func (m *ReplacedResources) contextValidateEquinixSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EquinixSize != nil {
+
+		if swag.IsZero(m.EquinixSize) { // not required
+			return nil
+		}
+
 		if err := m.EquinixSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("equinixSize")
@@ -534,6 +564,11 @@ func (m *ReplacedResources) contextValidateEquinixSize(ctx context.Context, form
 func (m *ReplacedResources) contextValidateGcpSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.GcpSize != nil {
+
+		if swag.IsZero(m.GcpSize) { // not required
+			return nil
+		}
+
 		if err := m.GcpSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("gcpSize")
@@ -550,6 +585,11 @@ func (m *ReplacedResources) contextValidateGcpSize(ctx context.Context, formats 
 func (m *ReplacedResources) contextValidateHetznerSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HetznerSize != nil {
+
+		if swag.IsZero(m.HetznerSize) { // not required
+			return nil
+		}
+
 		if err := m.HetznerSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hetznerSize")
@@ -566,6 +606,11 @@ func (m *ReplacedResources) contextValidateHetznerSize(ctx context.Context, form
 func (m *ReplacedResources) contextValidateKubevirtNodeSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.KubevirtNodeSize != nil {
+
+		if swag.IsZero(m.KubevirtNodeSize) { // not required
+			return nil
+		}
+
 		if err := m.KubevirtNodeSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubevirtNodeSize")
@@ -582,6 +627,11 @@ func (m *ReplacedResources) contextValidateKubevirtNodeSize(ctx context.Context,
 func (m *ReplacedResources) contextValidateNutanixNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NutanixNodeSpec != nil {
+
+		if swag.IsZero(m.NutanixNodeSpec) { // not required
+			return nil
+		}
+
 		if err := m.NutanixNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nutanixNodeSpec")
@@ -598,6 +648,11 @@ func (m *ReplacedResources) contextValidateNutanixNodeSpec(ctx context.Context, 
 func (m *ReplacedResources) contextValidateOpenstackSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OpenstackSize != nil {
+
+		if swag.IsZero(m.OpenstackSize) { // not required
+			return nil
+		}
+
 		if err := m.OpenstackSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openstackSize")
@@ -614,6 +669,11 @@ func (m *ReplacedResources) contextValidateOpenstackSize(ctx context.Context, fo
 func (m *ReplacedResources) contextValidateVSphereNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.VSphereNodeSpec != nil {
+
+		if swag.IsZero(m.VSphereNodeSpec) { // not required
+			return nil
+		}
+
 		if err := m.VSphereNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vSphereNodeSpec")
@@ -630,6 +690,11 @@ func (m *ReplacedResources) contextValidateVSphereNodeSpec(ctx context.Context, 
 func (m *ReplacedResources) contextValidateVMDirectorNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.VMDirectorNodeSpec != nil {
+
+		if swag.IsZero(m.VMDirectorNodeSpec) { // not required
+			return nil
+		}
+
 		if err := m.VMDirectorNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmDirectorNodeSpec")

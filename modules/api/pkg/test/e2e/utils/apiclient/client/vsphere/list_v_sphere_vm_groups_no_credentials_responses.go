@@ -6,6 +6,7 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListVSphereVMGroupsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list v sphere Vm groups no credentials o k response
+func (o *ListVSphereVMGroupsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListVSphereVMGroupsNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVmGroupsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVmGroupsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListVSphereVMGroupsNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVmGroupsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVmGroupsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListVSphereVMGroupsNoCredentialsOK) GetPayload() []*models.VSphereVMGroup {
@@ -120,11 +128,6 @@ type ListVSphereVMGroupsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list v sphere VM groups no credentials default response
-func (o *ListVSphereVMGroupsNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list v sphere VM groups no credentials default response has a 2xx status code
 func (o *ListVSphereVMGroupsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListVSphereVMGroupsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list v sphere VM groups no credentials default response
+func (o *ListVSphereVMGroupsNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListVSphereVMGroupsNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVMGroupsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVMGroupsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListVSphereVMGroupsNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVMGroupsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/vmgroups][%d] listVSphereVMGroupsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListVSphereVMGroupsNoCredentialsDefault) GetPayload() *models.ErrorResponse {

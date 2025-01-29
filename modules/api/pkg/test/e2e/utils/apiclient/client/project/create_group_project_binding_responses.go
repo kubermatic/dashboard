@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateGroupProjectBindingCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create group project binding created response
+func (o *CreateGroupProjectBindingCreated) Code() int {
+	return 201
+}
+
 func (o *CreateGroupProjectBindingCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingCreated %s", 201, payload)
 }
 
 func (o *CreateGroupProjectBindingCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingCreated %s", 201, payload)
 }
 
 func (o *CreateGroupProjectBindingCreated) GetPayload() *models.GroupProjectBinding {
@@ -154,12 +162,17 @@ func (o *CreateGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create group project binding unauthorized response
+func (o *CreateGroupProjectBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateGroupProjectBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingUnauthorized", 401)
 }
 
 func (o *CreateGroupProjectBindingUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingUnauthorized", 401)
 }
 
 func (o *CreateGroupProjectBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create group project binding forbidden response
+func (o *CreateGroupProjectBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateGroupProjectBindingForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingForbidden", 403)
 }
 
 func (o *CreateGroupProjectBindingForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBindingForbidden", 403)
 }
 
 func (o *CreateGroupProjectBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateGroupProjectBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create group project binding default response
-func (o *CreateGroupProjectBindingDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create group project binding default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create group project binding default response
+func (o *CreateGroupProjectBindingDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateGroupProjectBindingDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBinding default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBinding default %s", o._statusCode, payload)
 }
 
 func (o *CreateGroupProjectBindingDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBinding default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/groupbindings][%d] createGroupProjectBinding default %s", o._statusCode, payload)
 }
 
 func (o *CreateGroupProjectBindingDefault) GetPayload() *models.ErrorResponse {

@@ -242,6 +242,10 @@ func (m *DatacenterSpecOpenstack) contextValidateLoadBalancerClasses(ctx context
 
 func (m *DatacenterSpecOpenstack) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.Images) { // not required
+		return nil
+	}
+
 	if err := m.Images.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("images")
@@ -273,6 +277,11 @@ func (m *DatacenterSpecOpenstack) contextValidateNodePortsAllowedIPRange(ctx con
 func (m *DatacenterSpecOpenstack) contextValidateNodeSizeRequirements(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NodeSizeRequirements != nil {
+
+		if swag.IsZero(m.NodeSizeRequirements) { // not required
+			return nil
+		}
+
 		if err := m.NodeSizeRequirements.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodeSizeRequirements")

@@ -6,6 +6,7 @@ package metering
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteMeteringReportOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete metering report o k response
+func (o *DeleteMeteringReportOK) Code() int {
+	return 200
+}
+
 func (o *DeleteMeteringReportOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportOK", 200)
 }
 
 func (o *DeleteMeteringReportOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportOK", 200)
 }
 
 func (o *DeleteMeteringReportOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteMeteringReportUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete metering report unauthorized response
+func (o *DeleteMeteringReportUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteMeteringReportUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportUnauthorized", 401)
 }
 
 func (o *DeleteMeteringReportUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportUnauthorized", 401)
 }
 
 func (o *DeleteMeteringReportUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteMeteringReportForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete metering report forbidden response
+func (o *DeleteMeteringReportForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteMeteringReportForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportForbidden", 403)
 }
 
 func (o *DeleteMeteringReportForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReportForbidden", 403)
 }
 
 func (o *DeleteMeteringReportForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteMeteringReportDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete metering report default response
-func (o *DeleteMeteringReportDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete metering report default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteMeteringReportDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete metering report default response
+func (o *DeleteMeteringReportDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteMeteringReportDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReport default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReport default %s", o._statusCode, payload)
 }
 
 func (o *DeleteMeteringReportDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReport default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/metering/reports/{report_name}][%d] deleteMeteringReport default %s", o._statusCode, payload)
 }
 
 func (o *DeleteMeteringReportDefault) GetPayload() *models.ErrorResponse {

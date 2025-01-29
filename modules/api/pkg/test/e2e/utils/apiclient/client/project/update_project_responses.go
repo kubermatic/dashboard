@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -104,12 +105,19 @@ func (o *UpdateProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update project o k response
+func (o *UpdateProjectOK) Code() int {
+	return 200
+}
+
 func (o *UpdateProjectOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectOK %s", 200, payload)
 }
 
 func (o *UpdateProjectOK) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectOK %s", 200, payload)
 }
 
 func (o *UpdateProjectOK) GetPayload() *models.Project {
@@ -166,12 +174,17 @@ func (o *UpdateProjectBadRequest) IsCode(code int) bool {
 	return code == 400
 }
 
+// Code gets the status code for the update project bad request response
+func (o *UpdateProjectBadRequest) Code() int {
+	return 400
+}
+
 func (o *UpdateProjectBadRequest) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectBadRequest ", 400)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectBadRequest", 400)
 }
 
 func (o *UpdateProjectBadRequest) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectBadRequest ", 400)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectBadRequest", 400)
 }
 
 func (o *UpdateProjectBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -217,12 +230,17 @@ func (o *UpdateProjectNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
+// Code gets the status code for the update project not found response
+func (o *UpdateProjectNotFound) Code() int {
+	return 404
+}
+
 func (o *UpdateProjectNotFound) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotFound ", 404)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotFound", 404)
 }
 
 func (o *UpdateProjectNotFound) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotFound ", 404)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotFound", 404)
 }
 
 func (o *UpdateProjectNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -268,12 +286,17 @@ func (o *UpdateProjectInternalServerError) IsCode(code int) bool {
 	return code == 500
 }
 
+// Code gets the status code for the update project internal server error response
+func (o *UpdateProjectInternalServerError) Code() int {
+	return 500
+}
+
 func (o *UpdateProjectInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectInternalServerError ", 500)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectInternalServerError", 500)
 }
 
 func (o *UpdateProjectInternalServerError) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectInternalServerError ", 500)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectInternalServerError", 500)
 }
 
 func (o *UpdateProjectInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -319,12 +342,17 @@ func (o *UpdateProjectNotImplemented) IsCode(code int) bool {
 	return code == 501
 }
 
+// Code gets the status code for the update project not implemented response
+func (o *UpdateProjectNotImplemented) Code() int {
+	return 501
+}
+
 func (o *UpdateProjectNotImplemented) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotImplemented ", 501)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotImplemented", 501)
 }
 
 func (o *UpdateProjectNotImplemented) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotImplemented ", 501)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProjectNotImplemented", 501)
 }
 
 func (o *UpdateProjectNotImplemented) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -348,11 +376,6 @@ type UpdateProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update project default response
-func (o *UpdateProjectDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update project default response has a 2xx status code
@@ -380,12 +403,19 @@ func (o *UpdateProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update project default response
+func (o *UpdateProjectDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateProjectDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProject default %s", o._statusCode, payload)
 }
 
 func (o *UpdateProjectDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}][%d] updateProject default %s", o._statusCode, payload)
 }
 
 func (o *UpdateProjectDefault) GetPayload() *models.ErrorResponse {

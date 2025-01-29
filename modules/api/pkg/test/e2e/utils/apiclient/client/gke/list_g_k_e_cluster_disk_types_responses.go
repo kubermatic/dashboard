@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListGKEClusterDiskTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e cluster disk types o k response
+func (o *ListGKEClusterDiskTypesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEClusterDiskTypesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterDiskTypesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesOK %s", 200, payload)
 }
 
 func (o *ListGKEClusterDiskTypesOK) GetPayload() models.GCPDiskTypeList {
@@ -152,12 +160,17 @@ func (o *ListGKEClusterDiskTypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list g k e cluster disk types unauthorized response
+func (o *ListGKEClusterDiskTypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListGKEClusterDiskTypesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterDiskTypesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesUnauthorized", 401)
 }
 
 func (o *ListGKEClusterDiskTypesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListGKEClusterDiskTypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list g k e cluster disk types forbidden response
+func (o *ListGKEClusterDiskTypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListGKEClusterDiskTypesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesForbidden", 403)
 }
 
 func (o *ListGKEClusterDiskTypesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypesForbidden", 403)
 }
 
 func (o *ListGKEClusterDiskTypesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListGKEClusterDiskTypesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list g k e cluster disk types default response
-func (o *ListGKEClusterDiskTypesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list g k e cluster disk types default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListGKEClusterDiskTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e cluster disk types default response
+func (o *ListGKEClusterDiskTypesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEClusterDiskTypesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterDiskTypesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/disktypes][%d] listGKEClusterDiskTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEClusterDiskTypesDefault) GetPayload() *models.ErrorResponse {

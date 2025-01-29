@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListProjectEKSAMITypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project e k s a m i types o k response
+func (o *ListProjectEKSAMITypesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectEKSAMITypesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSAMITypesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesOK %s", 200, payload)
 }
 
 func (o *ListProjectEKSAMITypesOK) GetPayload() models.EKSAMITypeList {
@@ -152,12 +160,17 @@ func (o *ListProjectEKSAMITypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list project e k s a m i types unauthorized response
+func (o *ListProjectEKSAMITypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListProjectEKSAMITypesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesUnauthorized", 401)
 }
 
 func (o *ListProjectEKSAMITypesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesUnauthorized", 401)
 }
 
 func (o *ListProjectEKSAMITypesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListProjectEKSAMITypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list project e k s a m i types forbidden response
+func (o *ListProjectEKSAMITypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListProjectEKSAMITypesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesForbidden", 403)
 }
 
 func (o *ListProjectEKSAMITypesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypesForbidden", 403)
 }
 
 func (o *ListProjectEKSAMITypesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListProjectEKSAMITypesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list project e k s a m i types default response
-func (o *ListProjectEKSAMITypesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list project e k s a m i types default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListProjectEKSAMITypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project e k s a m i types default response
+func (o *ListProjectEKSAMITypesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectEKSAMITypesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypes default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSAMITypesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/amitypes][%d] listProjectEKSAMITypes default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectEKSAMITypesDefault) GetPayload() *models.ErrorResponse {

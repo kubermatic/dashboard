@@ -6,6 +6,7 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListAzureSubnetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list azure subnets o k response
+func (o *ListAzureSubnetsOK) Code() int {
+	return 200
+}
+
 func (o *ListAzureSubnetsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnetsOK %s", 200, payload)
 }
 
 func (o *ListAzureSubnetsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnetsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnetsOK %s", 200, payload)
 }
 
 func (o *ListAzureSubnetsOK) GetPayload() *models.AzureSubnetsList {
@@ -122,11 +130,6 @@ type ListAzureSubnetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list azure subnets default response
-func (o *ListAzureSubnetsDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list azure subnets default response has a 2xx status code
 func (o *ListAzureSubnetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -152,12 +155,19 @@ func (o *ListAzureSubnetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list azure subnets default response
+func (o *ListAzureSubnetsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListAzureSubnetsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnets default %s", o._statusCode, payload)
 }
 
 func (o *ListAzureSubnetsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnets default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/subnets][%d] listAzureSubnets default %s", o._statusCode, payload)
 }
 
 func (o *ListAzureSubnetsDefault) GetPayload() *models.ErrorResponse {

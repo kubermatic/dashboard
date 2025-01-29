@@ -132,6 +132,11 @@ func (m *HelmCredentials) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *HelmCredentials) contextValidatePassword(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Password != nil {
+
+		if swag.IsZero(m.Password) { // not required
+			return nil
+		}
+
 		if err := m.Password.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("password")
@@ -148,6 +153,11 @@ func (m *HelmCredentials) contextValidatePassword(ctx context.Context, formats s
 func (m *HelmCredentials) contextValidateRegistryConfigFile(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.RegistryConfigFile != nil {
+
+		if swag.IsZero(m.RegistryConfigFile) { // not required
+			return nil
+		}
+
 		if err := m.RegistryConfigFile.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("registryConfigFile")
@@ -164,6 +174,11 @@ func (m *HelmCredentials) contextValidateRegistryConfigFile(ctx context.Context,
 func (m *HelmCredentials) contextValidateUsername(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Username != nil {
+
+		if swag.IsZero(m.Username) { // not required
+			return nil
+		}
+
 		if err := m.Username.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("username")

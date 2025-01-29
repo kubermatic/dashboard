@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *BindUserToClusterRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the bind user to cluster role o k response
+func (o *BindUserToClusterRoleOK) Code() int {
+	return 200
+}
+
 func (o *BindUserToClusterRoleOK) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleOK %s", 200, payload)
 }
 
 func (o *BindUserToClusterRoleOK) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleOK %s", 200, payload)
 }
 
 func (o *BindUserToClusterRoleOK) GetPayload() *models.ClusterRoleBinding {
@@ -154,12 +162,17 @@ func (o *BindUserToClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the bind user to cluster role unauthorized response
+func (o *BindUserToClusterRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *BindUserToClusterRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleUnauthorized", 401)
 }
 
 func (o *BindUserToClusterRoleUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleUnauthorized", 401)
 }
 
 func (o *BindUserToClusterRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *BindUserToClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the bind user to cluster role forbidden response
+func (o *BindUserToClusterRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *BindUserToClusterRoleForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleForbidden", 403)
 }
 
 func (o *BindUserToClusterRoleForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRoleForbidden", 403)
 }
 
 func (o *BindUserToClusterRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type BindUserToClusterRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the bind user to cluster role default response
-func (o *BindUserToClusterRoleDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this bind user to cluster role default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *BindUserToClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the bind user to cluster role default response
+func (o *BindUserToClusterRoleDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *BindUserToClusterRoleDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRole default %s", o._statusCode, payload)
 }
 
 func (o *BindUserToClusterRoleDefault) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}/clusterbindings][%d] bindUserToClusterRole default %s", o._statusCode, payload)
 }
 
 func (o *BindUserToClusterRoleDefault) GetPayload() *models.ErrorResponse {

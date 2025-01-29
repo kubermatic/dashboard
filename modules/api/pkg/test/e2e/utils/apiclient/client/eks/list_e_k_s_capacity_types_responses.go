@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListEKSCapacityTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s capacity types o k response
+func (o *ListEKSCapacityTypesOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSCapacityTypesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesOK %s", 200, payload)
 }
 
 func (o *ListEKSCapacityTypesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesOK %s", 200, payload)
 }
 
 func (o *ListEKSCapacityTypesOK) GetPayload() models.EKSCapacityTypeList {
@@ -152,12 +160,17 @@ func (o *ListEKSCapacityTypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s capacity types unauthorized response
+func (o *ListEKSCapacityTypesUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSCapacityTypesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesUnauthorized", 401)
 }
 
 func (o *ListEKSCapacityTypesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesUnauthorized", 401)
 }
 
 func (o *ListEKSCapacityTypesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListEKSCapacityTypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s capacity types forbidden response
+func (o *ListEKSCapacityTypesForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSCapacityTypesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesForbidden", 403)
 }
 
 func (o *ListEKSCapacityTypesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypesForbidden", 403)
 }
 
 func (o *ListEKSCapacityTypesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListEKSCapacityTypesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list e k s capacity types default response
-func (o *ListEKSCapacityTypesDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s capacity types default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListEKSCapacityTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s capacity types default response
+func (o *ListEKSCapacityTypesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSCapacityTypesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSCapacityTypesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/eks/capacitytypes][%d] listEKSCapacityTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSCapacityTypesDefault) GetPayload() *models.ErrorResponse {

@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListProjectGKEZonesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list project g k e zones o k response
+func (o *ListProjectGKEZonesOK) Code() int {
+	return 200
+}
+
 func (o *ListProjectGKEZonesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectGKEZonesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZonesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZonesOK %s", 200, payload)
 }
 
 func (o *ListProjectGKEZonesOK) GetPayload() models.GKEZoneList {
@@ -120,11 +128,6 @@ type ListProjectGKEZonesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list project g k e zones default response
-func (o *ListProjectGKEZonesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list project g k e zones default response has a 2xx status code
 func (o *ListProjectGKEZonesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListProjectGKEZonesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list project g k e zones default response
+func (o *ListProjectGKEZonesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListProjectGKEZonesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectGKEZonesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZones default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/zones][%d] listProjectGKEZones default %s", o._statusCode, payload)
 }
 
 func (o *ListProjectGKEZonesDefault) GetPayload() *models.ErrorResponse {

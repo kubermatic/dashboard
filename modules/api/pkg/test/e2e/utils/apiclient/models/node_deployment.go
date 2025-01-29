@@ -152,6 +152,11 @@ func (m *NodeDeployment) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *NodeDeployment) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
+
+		if swag.IsZero(m.Spec) { // not required
+			return nil
+		}
+
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")
@@ -168,6 +173,11 @@ func (m *NodeDeployment) contextValidateSpec(ctx context.Context, formats strfmt
 func (m *NodeDeployment) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
+
+		if swag.IsZero(m.Status) { // not required
+			return nil
+		}
+
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")

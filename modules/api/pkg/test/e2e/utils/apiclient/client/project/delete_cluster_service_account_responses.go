@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteClusterServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete cluster service account o k response
+func (o *DeleteClusterServiceAccountOK) Code() int {
+	return 200
+}
+
 func (o *DeleteClusterServiceAccountOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountOK", 200)
 }
 
 func (o *DeleteClusterServiceAccountOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountOK", 200)
 }
 
 func (o *DeleteClusterServiceAccountOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteClusterServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete cluster service account unauthorized response
+func (o *DeleteClusterServiceAccountUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteClusterServiceAccountUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountUnauthorized", 401)
 }
 
 func (o *DeleteClusterServiceAccountUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountUnauthorized", 401)
 }
 
 func (o *DeleteClusterServiceAccountUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteClusterServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete cluster service account forbidden response
+func (o *DeleteClusterServiceAccountForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteClusterServiceAccountForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountForbidden", 403)
 }
 
 func (o *DeleteClusterServiceAccountForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccountForbidden", 403)
 }
 
 func (o *DeleteClusterServiceAccountForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteClusterServiceAccountDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete cluster service account default response
-func (o *DeleteClusterServiceAccountDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete cluster service account default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteClusterServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete cluster service account default response
+func (o *DeleteClusterServiceAccountDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteClusterServiceAccountDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccount default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccount default %s", o._statusCode, payload)
 }
 
 func (o *DeleteClusterServiceAccountDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccount default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}][%d] deleteClusterServiceAccount default %s", o._statusCode, payload)
 }
 
 func (o *DeleteClusterServiceAccountDefault) GetPayload() *models.ErrorResponse {

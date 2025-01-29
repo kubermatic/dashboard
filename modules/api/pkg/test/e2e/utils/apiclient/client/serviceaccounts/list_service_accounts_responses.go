@@ -6,6 +6,7 @@ package serviceaccounts
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListServiceAccountsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list service accounts o k response
+func (o *ListServiceAccountsOK) Code() int {
+	return 200
+}
+
 func (o *ListServiceAccountsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsOK %s", 200, payload)
 }
 
 func (o *ListServiceAccountsOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsOK %s", 200, payload)
 }
 
 func (o *ListServiceAccountsOK) GetPayload() []*models.ServiceAccount {
@@ -152,12 +160,17 @@ func (o *ListServiceAccountsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list service accounts unauthorized response
+func (o *ListServiceAccountsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListServiceAccountsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsUnauthorized", 401)
 }
 
 func (o *ListServiceAccountsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsUnauthorized", 401)
 }
 
 func (o *ListServiceAccountsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListServiceAccountsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list service accounts forbidden response
+func (o *ListServiceAccountsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListServiceAccountsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsForbidden", 403)
 }
 
 func (o *ListServiceAccountsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccountsForbidden", 403)
 }
 
 func (o *ListServiceAccountsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListServiceAccountsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list service accounts default response
-func (o *ListServiceAccountsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list service accounts default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListServiceAccountsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list service accounts default response
+func (o *ListServiceAccountsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListServiceAccountsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccounts default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccounts default %s", o._statusCode, payload)
 }
 
 func (o *ListServiceAccountsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccounts default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts][%d] listServiceAccounts default %s", o._statusCode, payload)
 }
 
 func (o *ListServiceAccountsDefault) GetPayload() *models.ErrorResponse {

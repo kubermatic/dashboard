@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetOidcClusterKubeconfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get oidc cluster kubeconfig o k response
+func (o *GetOidcClusterKubeconfigOK) Code() int {
+	return 200
+}
+
 func (o *GetOidcClusterKubeconfigOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigOK %s", 200, payload)
 }
 
 func (o *GetOidcClusterKubeconfigOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigOK %s", 200, payload)
 }
 
 func (o *GetOidcClusterKubeconfigOK) GetPayload() []uint8 {
@@ -152,12 +160,17 @@ func (o *GetOidcClusterKubeconfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get oidc cluster kubeconfig unauthorized response
+func (o *GetOidcClusterKubeconfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetOidcClusterKubeconfigUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigUnauthorized", 401)
 }
 
 func (o *GetOidcClusterKubeconfigUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigUnauthorized", 401)
 }
 
 func (o *GetOidcClusterKubeconfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *GetOidcClusterKubeconfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get oidc cluster kubeconfig forbidden response
+func (o *GetOidcClusterKubeconfigForbidden) Code() int {
+	return 403
+}
+
 func (o *GetOidcClusterKubeconfigForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigForbidden", 403)
 }
 
 func (o *GetOidcClusterKubeconfigForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfigForbidden", 403)
 }
 
 func (o *GetOidcClusterKubeconfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type GetOidcClusterKubeconfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get oidc cluster kubeconfig default response
-func (o *GetOidcClusterKubeconfigDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get oidc cluster kubeconfig default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *GetOidcClusterKubeconfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get oidc cluster kubeconfig default response
+func (o *GetOidcClusterKubeconfigDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetOidcClusterKubeconfigDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfig default %s", o._statusCode, payload)
 }
 
 func (o *GetOidcClusterKubeconfigDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/oidckubeconfig][%d] getOidcClusterKubeconfig default %s", o._statusCode, payload)
 }
 
 func (o *GetOidcClusterKubeconfigDefault) GetPayload() *models.ErrorResponse {

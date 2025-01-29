@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *UpgradeClusterNodeDeploymentsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the upgrade cluster node deployments o k response
+func (o *UpgradeClusterNodeDeploymentsOK) Code() int {
+	return 200
+}
+
 func (o *UpgradeClusterNodeDeploymentsOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsOK", 200)
 }
 
 func (o *UpgradeClusterNodeDeploymentsOK) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsOK", 200)
 }
 
 func (o *UpgradeClusterNodeDeploymentsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *UpgradeClusterNodeDeploymentsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the upgrade cluster node deployments unauthorized response
+func (o *UpgradeClusterNodeDeploymentsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpgradeClusterNodeDeploymentsUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsUnauthorized", 401)
 }
 
 func (o *UpgradeClusterNodeDeploymentsUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsUnauthorized", 401)
 }
 
 func (o *UpgradeClusterNodeDeploymentsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *UpgradeClusterNodeDeploymentsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the upgrade cluster node deployments forbidden response
+func (o *UpgradeClusterNodeDeploymentsForbidden) Code() int {
+	return 403
+}
+
 func (o *UpgradeClusterNodeDeploymentsForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsForbidden", 403)
 }
 
 func (o *UpgradeClusterNodeDeploymentsForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeploymentsForbidden", 403)
 }
 
 func (o *UpgradeClusterNodeDeploymentsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type UpgradeClusterNodeDeploymentsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the upgrade cluster node deployments default response
-func (o *UpgradeClusterNodeDeploymentsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this upgrade cluster node deployments default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *UpgradeClusterNodeDeploymentsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the upgrade cluster node deployments default response
+func (o *UpgradeClusterNodeDeploymentsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpgradeClusterNodeDeploymentsDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeployments default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeployments default %s", o._statusCode, payload)
 }
 
 func (o *UpgradeClusterNodeDeploymentsDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeployments default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodes/upgrades][%d] upgradeClusterNodeDeployments default %s", o._statusCode, payload)
 }
 
 func (o *UpgradeClusterNodeDeploymentsDefault) GetPayload() *models.ErrorResponse {

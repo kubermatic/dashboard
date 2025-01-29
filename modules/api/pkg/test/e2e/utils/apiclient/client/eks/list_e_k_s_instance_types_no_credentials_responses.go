@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListEKSInstanceTypesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s instance types no credentials o k response
+func (o *ListEKSInstanceTypesNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSInstanceTypesNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsOK) GetPayload() models.EKSInstanceTypeList {
@@ -152,12 +160,17 @@ func (o *ListEKSInstanceTypesNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s instance types no credentials unauthorized response
+func (o *ListEKSInstanceTypesNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSInstanceTypesNoCredentialsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsUnauthorized", 401)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsUnauthorized", 401)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListEKSInstanceTypesNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s instance types no credentials forbidden response
+func (o *ListEKSInstanceTypesNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSInstanceTypesNoCredentialsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsForbidden", 403)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentialsForbidden", 403)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListEKSInstanceTypesNoCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list e k s instance types no credentials default response
-func (o *ListEKSInstanceTypesNoCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s instance types no credentials default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListEKSInstanceTypesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s instance types no credentials default response
+func (o *ListEKSInstanceTypesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSInstanceTypesNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/instancetypes][%d] listEKSInstanceTypesNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSInstanceTypesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

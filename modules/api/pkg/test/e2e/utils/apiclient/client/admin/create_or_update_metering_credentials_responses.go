@@ -6,6 +6,7 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *CreateOrUpdateMeteringCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the create or update metering credentials o k response
+func (o *CreateOrUpdateMeteringCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *CreateOrUpdateMeteringCredentialsOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsOK", 200)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsOK) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsOK ", 200)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsOK", 200)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *CreateOrUpdateMeteringCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create or update metering credentials unauthorized response
+func (o *CreateOrUpdateMeteringCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateOrUpdateMeteringCredentialsUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsUnauthorized", 401)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsUnauthorized", 401)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *CreateOrUpdateMeteringCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create or update metering credentials forbidden response
+func (o *CreateOrUpdateMeteringCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateOrUpdateMeteringCredentialsForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsForbidden", 403)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentialsForbidden", 403)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type CreateOrUpdateMeteringCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create or update metering credentials default response
-func (o *CreateOrUpdateMeteringCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create or update metering credentials default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *CreateOrUpdateMeteringCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create or update metering credentials default response
+func (o *CreateOrUpdateMeteringCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateOrUpdateMeteringCredentialsDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentials default %s", o._statusCode, payload)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v1/admin/metering/credentials][%d] createOrUpdateMeteringCredentials default %s", o._statusCode, payload)
 }
 
 func (o *CreateOrUpdateMeteringCredentialsDefault) GetPayload() *models.ErrorResponse {

@@ -108,6 +108,10 @@ func (m *VMwareCloudDirectorNodeSpec) ContextValidate(ctx context.Context, forma
 
 func (m *VMwareCloudDirectorNodeSpec) contextValidateIPAllocationMode(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.IPAllocationMode) { // not required
+		return nil
+	}
+
 	if err := m.IPAllocationMode.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("ipAllocationMode")

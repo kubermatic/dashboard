@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListEKSClustersOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s clusters o k response
+func (o *ListEKSClustersOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSClustersOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClustersOK %s", 200, payload)
 }
 
 func (o *ListEKSClustersOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClustersOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClustersOK %s", 200, payload)
 }
 
 func (o *ListEKSClustersOK) GetPayload() models.EKSClusterList {
@@ -120,11 +128,6 @@ type ListEKSClustersDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list e k s clusters default response
-func (o *ListEKSClustersDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list e k s clusters default response has a 2xx status code
 func (o *ListEKSClustersDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListEKSClustersDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s clusters default response
+func (o *ListEKSClustersDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSClustersDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClusters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClusters default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSClustersDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClusters default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/clusters][%d] listEKSClusters default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSClustersDefault) GetPayload() *models.ErrorResponse {

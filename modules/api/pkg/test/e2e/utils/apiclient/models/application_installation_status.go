@@ -140,6 +140,11 @@ func (m *ApplicationInstallationStatus) contextValidateConditions(ctx context.Co
 	for i := 0; i < len(m.Conditions); i++ {
 
 		if m.Conditions[i] != nil {
+
+			if swag.IsZero(m.Conditions[i]) { // not required
+				return nil
+			}
+
 			if err := m.Conditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("conditions" + "." + strconv.Itoa(i))
@@ -158,6 +163,11 @@ func (m *ApplicationInstallationStatus) contextValidateConditions(ctx context.Co
 func (m *ApplicationInstallationStatus) contextValidateApplicationVersion(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ApplicationVersion != nil {
+
+		if swag.IsZero(m.ApplicationVersion) { // not required
+			return nil
+		}
+
 		if err := m.ApplicationVersion.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("applicationVersion")
@@ -172,6 +182,10 @@ func (m *ApplicationInstallationStatus) contextValidateApplicationVersion(ctx co
 }
 
 func (m *ApplicationInstallationStatus) contextValidateMethod(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Method) { // not required
+		return nil
+	}
 
 	if err := m.Method.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

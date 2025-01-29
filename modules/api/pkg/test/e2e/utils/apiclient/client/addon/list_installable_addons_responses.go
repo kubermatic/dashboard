@@ -6,6 +6,7 @@ package addon
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListInstallableAddonsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list installable addons o k response
+func (o *ListInstallableAddonsOK) Code() int {
+	return 200
+}
+
 func (o *ListInstallableAddonsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsOK %s", 200, payload)
 }
 
 func (o *ListInstallableAddonsOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsOK %s", 200, payload)
 }
 
 func (o *ListInstallableAddonsOK) GetPayload() models.AccessibleAddons {
@@ -152,12 +160,17 @@ func (o *ListInstallableAddonsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list installable addons unauthorized response
+func (o *ListInstallableAddonsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListInstallableAddonsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsUnauthorized", 401)
 }
 
 func (o *ListInstallableAddonsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsUnauthorized", 401)
 }
 
 func (o *ListInstallableAddonsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListInstallableAddonsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list installable addons forbidden response
+func (o *ListInstallableAddonsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListInstallableAddonsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsForbidden", 403)
 }
 
 func (o *ListInstallableAddonsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddonsForbidden", 403)
 }
 
 func (o *ListInstallableAddonsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListInstallableAddonsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list installable addons default response
-func (o *ListInstallableAddonsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list installable addons default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListInstallableAddonsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list installable addons default response
+func (o *ListInstallableAddonsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListInstallableAddonsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddons default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddons default %s", o._statusCode, payload)
 }
 
 func (o *ListInstallableAddonsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddons default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/installableaddons][%d] listInstallableAddons default %s", o._statusCode, payload)
 }
 
 func (o *ListInstallableAddonsDefault) GetPayload() *models.ErrorResponse {

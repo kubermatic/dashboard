@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -79,12 +80,17 @@ func (o *ValidateProjectEKSCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the validate project e k s credentials o k response
+func (o *ValidateProjectEKSCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ValidateProjectEKSCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentialsOK ", 200)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentialsOK", 200)
 }
 
 func (o *ValidateProjectEKSCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentialsOK ", 200)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentialsOK", 200)
 }
 
 func (o *ValidateProjectEKSCredentialsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -108,11 +114,6 @@ type ValidateProjectEKSCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the validate project e k s credentials default response
-func (o *ValidateProjectEKSCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this validate project e k s credentials default response has a 2xx status code
@@ -140,12 +141,19 @@ func (o *ValidateProjectEKSCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the validate project e k s credentials default response
+func (o *ValidateProjectEKSCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ValidateProjectEKSCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ValidateProjectEKSCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/validatecredentials][%d] validateProjectEKSCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ValidateProjectEKSCredentialsDefault) GetPayload() *models.ErrorResponse {

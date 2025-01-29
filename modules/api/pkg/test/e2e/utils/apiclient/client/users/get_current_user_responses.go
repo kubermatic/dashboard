@@ -6,6 +6,7 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -86,12 +87,19 @@ func (o *GetCurrentUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get current user o k response
+func (o *GetCurrentUserOK) Code() int {
+	return 200
+}
+
 func (o *GetCurrentUserOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserOK %s", 200, payload)
 }
 
 func (o *GetCurrentUserOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserOK %s", 200, payload)
 }
 
 func (o *GetCurrentUserOK) GetPayload() *models.User {
@@ -148,12 +156,17 @@ func (o *GetCurrentUserUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get current user unauthorized response
+func (o *GetCurrentUserUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetCurrentUserUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserUnauthorized", 401)
 }
 
 func (o *GetCurrentUserUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUserUnauthorized", 401)
 }
 
 func (o *GetCurrentUserUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -177,11 +190,6 @@ type GetCurrentUserDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get current user default response
-func (o *GetCurrentUserDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get current user default response has a 2xx status code
@@ -209,12 +217,19 @@ func (o *GetCurrentUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get current user default response
+func (o *GetCurrentUserDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetCurrentUserDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUser default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUser default %s", o._statusCode, payload)
 }
 
 func (o *GetCurrentUserDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUser default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/me][%d] getCurrentUser default %s", o._statusCode, payload)
 }
 
 func (o *GetCurrentUserDefault) GetPayload() *models.ErrorResponse {

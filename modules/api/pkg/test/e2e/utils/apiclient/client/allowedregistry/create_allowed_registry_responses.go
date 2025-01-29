@@ -6,6 +6,7 @@ package allowedregistry
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateAllowedRegistryCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create allowed registry created response
+func (o *CreateAllowedRegistryCreated) Code() int {
+	return 201
+}
+
 func (o *CreateAllowedRegistryCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryCreated %s", 201, payload)
 }
 
 func (o *CreateAllowedRegistryCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryCreated %s", 201, payload)
 }
 
 func (o *CreateAllowedRegistryCreated) GetPayload() *models.AllowedRegistry {
@@ -154,12 +162,17 @@ func (o *CreateAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create allowed registry unauthorized response
+func (o *CreateAllowedRegistryUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateAllowedRegistryUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryUnauthorized", 401)
 }
 
 func (o *CreateAllowedRegistryUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryUnauthorized", 401)
 }
 
 func (o *CreateAllowedRegistryUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create allowed registry forbidden response
+func (o *CreateAllowedRegistryForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateAllowedRegistryForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryForbidden", 403)
 }
 
 func (o *CreateAllowedRegistryForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistryForbidden", 403)
 }
 
 func (o *CreateAllowedRegistryForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateAllowedRegistryDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create allowed registry default response
-func (o *CreateAllowedRegistryDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create allowed registry default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create allowed registry default response
+func (o *CreateAllowedRegistryDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateAllowedRegistryDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistry default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistry default %s", o._statusCode, payload)
 }
 
 func (o *CreateAllowedRegistryDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistry default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/allowedregistries][%d] createAllowedRegistry default %s", o._statusCode, payload)
 }
 
 func (o *CreateAllowedRegistryDefault) GetPayload() *models.ErrorResponse {

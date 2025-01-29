@@ -110,6 +110,11 @@ func (m *GitSource) ContextValidate(ctx context.Context, formats strfmt.Registry
 func (m *GitSource) contextValidateCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credentials != nil {
+
+		if swag.IsZero(m.Credentials) { // not required
+			return nil
+		}
+
 		if err := m.Credentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentials")
@@ -126,6 +131,11 @@ func (m *GitSource) contextValidateCredentials(ctx context.Context, formats strf
 func (m *GitSource) contextValidateRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ref != nil {
+
+		if swag.IsZero(m.Ref) { // not required
+			return nil
+		}
+
 		if err := m.Ref.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ref")

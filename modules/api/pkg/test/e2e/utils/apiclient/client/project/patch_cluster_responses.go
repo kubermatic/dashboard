@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch cluster o k response
+func (o *PatchClusterOK) Code() int {
+	return 200
+}
+
 func (o *PatchClusterOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterOK %s", 200, payload)
 }
 
 func (o *PatchClusterOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterOK %s", 200, payload)
 }
 
 func (o *PatchClusterOK) GetPayload() *models.Cluster {
@@ -154,12 +162,17 @@ func (o *PatchClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch cluster unauthorized response
+func (o *PatchClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterUnauthorized", 401)
 }
 
 func (o *PatchClusterUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterUnauthorized", 401)
 }
 
 func (o *PatchClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch cluster forbidden response
+func (o *PatchClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchClusterForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterForbidden", 403)
 }
 
 func (o *PatchClusterForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchClusterForbidden", 403)
 }
 
 func (o *PatchClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch cluster default response
-func (o *PatchClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch cluster default response
+func (o *PatchClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchClusterDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchCluster default %s", o._statusCode, payload)
 }
 
 func (o *PatchClusterDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}][%d] patchCluster default %s", o._statusCode, payload)
 }
 
 func (o *PatchClusterDefault) GetPayload() *models.ErrorResponse {

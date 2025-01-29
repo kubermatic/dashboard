@@ -6,6 +6,7 @@ package rulegroup
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListAdminRuleGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list admin rule groups o k response
+func (o *ListAdminRuleGroupsOK) Code() int {
+	return 200
+}
+
 func (o *ListAdminRuleGroupsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsOK %s", 200, payload)
 }
 
 func (o *ListAdminRuleGroupsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsOK %s", 200, payload)
 }
 
 func (o *ListAdminRuleGroupsOK) GetPayload() []*models.RuleGroup {
@@ -152,12 +160,17 @@ func (o *ListAdminRuleGroupsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list admin rule groups unauthorized response
+func (o *ListAdminRuleGroupsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListAdminRuleGroupsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsUnauthorized", 401)
 }
 
 func (o *ListAdminRuleGroupsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsUnauthorized", 401)
 }
 
 func (o *ListAdminRuleGroupsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListAdminRuleGroupsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list admin rule groups forbidden response
+func (o *ListAdminRuleGroupsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListAdminRuleGroupsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsForbidden", 403)
 }
 
 func (o *ListAdminRuleGroupsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroupsForbidden", 403)
 }
 
 func (o *ListAdminRuleGroupsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListAdminRuleGroupsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list admin rule groups default response
-func (o *ListAdminRuleGroupsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list admin rule groups default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListAdminRuleGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list admin rule groups default response
+func (o *ListAdminRuleGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListAdminRuleGroupsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListAdminRuleGroupsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroups default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/rulegroups][%d] listAdminRuleGroups default %s", o._statusCode, payload)
 }
 
 func (o *ListAdminRuleGroupsDefault) GetPayload() *models.ErrorResponse {

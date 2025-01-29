@@ -98,6 +98,10 @@ func (m *ProxySettings) ContextValidate(ctx context.Context, formats strfmt.Regi
 
 func (m *ProxySettings) contextValidateHTTPProxy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.HTTPProxy) { // not required
+		return nil
+	}
+
 	if err := m.HTTPProxy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("httpProxy")
@@ -111,6 +115,10 @@ func (m *ProxySettings) contextValidateHTTPProxy(ctx context.Context, formats st
 }
 
 func (m *ProxySettings) contextValidateNoProxy(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.NoProxy) { // not required
+		return nil
+	}
 
 	if err := m.NoProxy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

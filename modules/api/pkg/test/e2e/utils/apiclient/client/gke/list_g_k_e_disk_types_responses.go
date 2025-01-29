@@ -6,6 +6,7 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,12 +81,19 @@ func (o *ListGKEDiskTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list g k e disk types o k response
+func (o *ListGKEDiskTypesOK) Code() int {
+	return 200
+}
+
 func (o *ListGKEDiskTypesOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypesOK %s", 200, payload)
 }
 
 func (o *ListGKEDiskTypesOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypesOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypesOK %s", 200, payload)
 }
 
 func (o *ListGKEDiskTypesOK) GetPayload() models.GKEDiskTypeList {
@@ -120,11 +128,6 @@ type ListGKEDiskTypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
-// Code gets the status code for the list g k e disk types default response
-func (o *ListGKEDiskTypesDefault) Code() int {
-	return o._statusCode
-}
-
 // IsSuccess returns true when this list g k e disk types default response has a 2xx status code
 func (o *ListGKEDiskTypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -150,12 +153,19 @@ func (o *ListGKEDiskTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list g k e disk types default response
+func (o *ListGKEDiskTypesDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListGKEDiskTypesDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEDiskTypesDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypes default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/gke/disktypes][%d] listGKEDiskTypes default %s", o._statusCode, payload)
 }
 
 func (o *ListGKEDiskTypesDefault) GetPayload() *models.ErrorResponse {

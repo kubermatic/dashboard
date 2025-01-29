@@ -7,6 +7,7 @@ package project
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,12 +96,19 @@ func (o *CalculateProjectResourceQuotaUpdateOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the calculate project resource quota update o k response
+func (o *CalculateProjectResourceQuotaUpdateOK) Code() int {
+	return 200
+}
+
 func (o *CalculateProjectResourceQuotaUpdateOK) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateOK %s", 200, payload)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateOK) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateOK %s", 200, payload)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateOK) GetPayload() *models.ResourceQuotaUpdateCalculation {
@@ -157,12 +165,17 @@ func (o *CalculateProjectResourceQuotaUpdateUnauthorized) IsCode(code int) bool 
 	return code == 401
 }
 
+// Code gets the status code for the calculate project resource quota update unauthorized response
+func (o *CalculateProjectResourceQuotaUpdateUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CalculateProjectResourceQuotaUpdateUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateUnauthorized", 401)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateUnauthorized", 401)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -208,12 +221,17 @@ func (o *CalculateProjectResourceQuotaUpdateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the calculate project resource quota update forbidden response
+func (o *CalculateProjectResourceQuotaUpdateForbidden) Code() int {
+	return 403
+}
+
 func (o *CalculateProjectResourceQuotaUpdateForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateForbidden", 403)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdateForbidden", 403)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -237,11 +255,6 @@ type CalculateProjectResourceQuotaUpdateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the calculate project resource quota update default response
-func (o *CalculateProjectResourceQuotaUpdateDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this calculate project resource quota update default response has a 2xx status code
@@ -269,12 +282,19 @@ func (o *CalculateProjectResourceQuotaUpdateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the calculate project resource quota update default response
+func (o *CalculateProjectResourceQuotaUpdateDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CalculateProjectResourceQuotaUpdateDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdate default %s", o._statusCode, payload)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdate default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/quotacalculation][%d] calculateProjectResourceQuotaUpdate default %s", o._statusCode, payload)
 }
 
 func (o *CalculateProjectResourceQuotaUpdateDefault) GetPayload() *models.ErrorResponse {
@@ -749,6 +769,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) ContextValidate(ctx context.Co
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAlibabaInstanceType(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.AlibabaInstanceType != nil {
+
+		if swag.IsZero(o.AlibabaInstanceType) { // not required
+			return nil
+		}
+
 		if err := o.AlibabaInstanceType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "alibabaInstanceType")
@@ -765,6 +790,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAlibabaInstance
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAnexiaNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.AnexiaNodeSpec != nil {
+
+		if swag.IsZero(o.AnexiaNodeSpec) { // not required
+			return nil
+		}
+
 		if err := o.AnexiaNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "anexiaNodeSpec")
@@ -781,6 +811,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAnexiaNodeSpec(
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAwsSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.AwsSize != nil {
+
+		if swag.IsZero(o.AwsSize) { // not required
+			return nil
+		}
+
 		if err := o.AwsSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "awsSize")
@@ -797,6 +832,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAwsSize(ctx con
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAzureSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.AzureSize != nil {
+
+		if swag.IsZero(o.AzureSize) { // not required
+			return nil
+		}
+
 		if err := o.AzureSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "azureSize")
@@ -813,6 +853,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateAzureSize(ctx c
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateDoSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.DoSize != nil {
+
+		if swag.IsZero(o.DoSize) { // not required
+			return nil
+		}
+
 		if err := o.DoSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "doSize")
@@ -829,6 +874,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateDoSize(ctx cont
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateEquinixSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.EquinixSize != nil {
+
+		if swag.IsZero(o.EquinixSize) { // not required
+			return nil
+		}
+
 		if err := o.EquinixSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "equinixSize")
@@ -845,6 +895,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateEquinixSize(ctx
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateGcpSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.GcpSize != nil {
+
+		if swag.IsZero(o.GcpSize) { // not required
+			return nil
+		}
+
 		if err := o.GcpSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "gcpSize")
@@ -861,6 +916,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateGcpSize(ctx con
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateHetznerSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.HetznerSize != nil {
+
+		if swag.IsZero(o.HetznerSize) { // not required
+			return nil
+		}
+
 		if err := o.HetznerSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "hetznerSize")
@@ -877,6 +937,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateHetznerSize(ctx
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateKubevirtNodeSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.KubevirtNodeSize != nil {
+
+		if swag.IsZero(o.KubevirtNodeSize) { // not required
+			return nil
+		}
+
 		if err := o.KubevirtNodeSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "kubevirtNodeSize")
@@ -893,6 +958,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateKubevirtNodeSiz
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateNutanixNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.NutanixNodeSpec != nil {
+
+		if swag.IsZero(o.NutanixNodeSpec) { // not required
+			return nil
+		}
+
 		if err := o.NutanixNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "nutanixNodeSpec")
@@ -909,6 +979,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateNutanixNodeSpec
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateOpenstackSize(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.OpenstackSize != nil {
+
+		if swag.IsZero(o.OpenstackSize) { // not required
+			return nil
+		}
+
 		if err := o.OpenstackSize.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "openstackSize")
@@ -925,6 +1000,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateOpenstackSize(c
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateReplacedResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.ReplacedResources != nil {
+
+		if swag.IsZero(o.ReplacedResources) { // not required
+			return nil
+		}
+
 		if err := o.ReplacedResources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "replacedResources")
@@ -941,6 +1021,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateReplacedResourc
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateVSphereNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.VSphereNodeSpec != nil {
+
+		if swag.IsZero(o.VSphereNodeSpec) { // not required
+			return nil
+		}
+
 		if err := o.VSphereNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "vSphereNodeSpec")
@@ -957,6 +1042,11 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateVSphereNodeSpec
 func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateVMDirectorNodeSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.VMDirectorNodeSpec != nil {
+
+		if swag.IsZero(o.VMDirectorNodeSpec) { // not required
+			return nil
+		}
+
 		if err := o.VMDirectorNodeSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "vmDirectorNodeSpec")

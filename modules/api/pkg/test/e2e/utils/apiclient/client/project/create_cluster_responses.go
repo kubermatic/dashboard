@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateClusterCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create cluster created response
+func (o *CreateClusterCreated) Code() int {
+	return 201
+}
+
 func (o *CreateClusterCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterCreated %s", 201, payload)
 }
 
 func (o *CreateClusterCreated) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterCreated %s", 201, payload)
 }
 
 func (o *CreateClusterCreated) GetPayload() *models.Cluster {
@@ -154,12 +162,17 @@ func (o *CreateClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create cluster unauthorized response
+func (o *CreateClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterUnauthorized", 401)
 }
 
 func (o *CreateClusterUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterUnauthorized", 401)
 }
 
 func (o *CreateClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create cluster forbidden response
+func (o *CreateClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateClusterForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterForbidden", 403)
 }
 
 func (o *CreateClusterForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createClusterForbidden", 403)
 }
 
 func (o *CreateClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create cluster default response
-func (o *CreateClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create cluster default response
+func (o *CreateClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateClusterDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createCluster default %s", o._statusCode, payload)
 }
 
 func (o *CreateClusterDefault) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters][%d] createCluster default %s", o._statusCode, payload)
 }
 
 func (o *CreateClusterDefault) GetPayload() *models.ErrorResponse {

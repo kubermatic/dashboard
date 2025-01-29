@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list role o k response
+func (o *ListRoleOK) Code() int {
+	return 200
+}
+
 func (o *ListRoleOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleOK %s", 200, payload)
 }
 
 func (o *ListRoleOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleOK %s", 200, payload)
 }
 
 func (o *ListRoleOK) GetPayload() []*models.Role {
@@ -152,12 +160,17 @@ func (o *ListRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list role unauthorized response
+func (o *ListRoleUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleUnauthorized", 401)
 }
 
 func (o *ListRoleUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleUnauthorized", 401)
 }
 
 func (o *ListRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list role forbidden response
+func (o *ListRoleForbidden) Code() int {
+	return 403
+}
+
 func (o *ListRoleForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleForbidden", 403)
 }
 
 func (o *ListRoleForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRoleForbidden", 403)
 }
 
 func (o *ListRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list role default response
-func (o *ListRoleDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list role default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list role default response
+func (o *ListRoleDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListRoleDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRole default %s", o._statusCode, payload)
 }
 
 func (o *ListRoleDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRole default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] listRole default %s", o._statusCode, payload)
 }
 
 func (o *ListRoleDefault) GetPayload() *models.ErrorResponse {

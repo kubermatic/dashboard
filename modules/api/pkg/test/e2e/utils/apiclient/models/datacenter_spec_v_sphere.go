@@ -135,6 +135,11 @@ func (m *DatacenterSpecVSphere) ContextValidate(ctx context.Context, formats str
 func (m *DatacenterSpecVSphere) contextValidateInfraManagementUser(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.InfraManagementUser != nil {
+
+		if swag.IsZero(m.InfraManagementUser) { // not required
+			return nil
+		}
+
 		if err := m.InfraManagementUser.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("infraManagementUser")
@@ -149,6 +154,10 @@ func (m *DatacenterSpecVSphere) contextValidateInfraManagementUser(ctx context.C
 }
 
 func (m *DatacenterSpecVSphere) contextValidateTemplates(ctx context.Context, formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Templates) { // not required
+		return nil
+	}
 
 	if err := m.Templates.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

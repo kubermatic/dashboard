@@ -6,6 +6,7 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListApplicationDefinitionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list application definitions o k response
+func (o *ListApplicationDefinitionsOK) Code() int {
+	return 200
+}
+
 func (o *ListApplicationDefinitionsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsOK %s", 200, payload)
 }
 
 func (o *ListApplicationDefinitionsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsOK %s", 200, payload)
 }
 
 func (o *ListApplicationDefinitionsOK) GetPayload() []*models.ApplicationDefinitionListItem {
@@ -152,12 +160,17 @@ func (o *ListApplicationDefinitionsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list application definitions unauthorized response
+func (o *ListApplicationDefinitionsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListApplicationDefinitionsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsUnauthorized", 401)
 }
 
 func (o *ListApplicationDefinitionsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsUnauthorized", 401)
 }
 
 func (o *ListApplicationDefinitionsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListApplicationDefinitionsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list application definitions forbidden response
+func (o *ListApplicationDefinitionsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListApplicationDefinitionsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsForbidden", 403)
 }
 
 func (o *ListApplicationDefinitionsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitionsForbidden", 403)
 }
 
 func (o *ListApplicationDefinitionsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListApplicationDefinitionsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list application definitions default response
-func (o *ListApplicationDefinitionsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list application definitions default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListApplicationDefinitionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list application definitions default response
+func (o *ListApplicationDefinitionsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListApplicationDefinitionsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitions default %s", o._statusCode, payload)
 }
 
 func (o *ListApplicationDefinitionsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitions default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/applicationdefinitions][%d] listApplicationDefinitions default %s", o._statusCode, payload)
 }
 
 func (o *ListApplicationDefinitionsDefault) GetPayload() *models.ErrorResponse {

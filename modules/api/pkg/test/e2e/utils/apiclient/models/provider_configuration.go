@@ -102,6 +102,11 @@ func (m *ProviderConfiguration) ContextValidate(ctx context.Context, formats str
 func (m *ProviderConfiguration) contextValidateOpenStack(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OpenStack != nil {
+
+		if swag.IsZero(m.OpenStack) { // not required
+			return nil
+		}
+
 		if err := m.OpenStack.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openStack")
@@ -118,6 +123,11 @@ func (m *ProviderConfiguration) contextValidateOpenStack(ctx context.Context, fo
 func (m *ProviderConfiguration) contextValidateVmwareCloudDirector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.VmwareCloudDirector != nil {
+
+		if swag.IsZero(m.VmwareCloudDirector) { // not required
+			return nil
+		}
+
 		if err := m.VmwareCloudDirector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmwareCloudDirector")

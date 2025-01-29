@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -91,12 +92,17 @@ func (o *DeleteGroupProjectBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the delete group project binding o k response
+func (o *DeleteGroupProjectBindingOK) Code() int {
+	return 200
+}
+
 func (o *DeleteGroupProjectBindingOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingOK", 200)
 }
 
 func (o *DeleteGroupProjectBindingOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingOK", 200)
 }
 
 func (o *DeleteGroupProjectBindingOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,12 +148,17 @@ func (o *DeleteGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the delete group project binding unauthorized response
+func (o *DeleteGroupProjectBindingUnauthorized) Code() int {
+	return 401
+}
+
 func (o *DeleteGroupProjectBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingUnauthorized", 401)
 }
 
 func (o *DeleteGroupProjectBindingUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingUnauthorized", 401)
 }
 
 func (o *DeleteGroupProjectBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -193,12 +204,17 @@ func (o *DeleteGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the delete group project binding forbidden response
+func (o *DeleteGroupProjectBindingForbidden) Code() int {
+	return 403
+}
+
 func (o *DeleteGroupProjectBindingForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingForbidden", 403)
 }
 
 func (o *DeleteGroupProjectBindingForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBindingForbidden", 403)
 }
 
 func (o *DeleteGroupProjectBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -222,11 +238,6 @@ type DeleteGroupProjectBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the delete group project binding default response
-func (o *DeleteGroupProjectBindingDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this delete group project binding default response has a 2xx status code
@@ -254,12 +265,19 @@ func (o *DeleteGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the delete group project binding default response
+func (o *DeleteGroupProjectBindingDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *DeleteGroupProjectBindingDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBinding default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBinding default %s", o._statusCode, payload)
 }
 
 func (o *DeleteGroupProjectBindingDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBinding default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] deleteGroupProjectBinding default %s", o._statusCode, payload)
 }
 
 func (o *DeleteGroupProjectBindingDefault) GetPayload() *models.ErrorResponse {

@@ -75,6 +75,11 @@ func (m *TinkerbellNodeSpec) ContextValidate(ctx context.Context, formats strfmt
 func (m *TinkerbellNodeSpec) contextValidateHardwareRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HardwareRef != nil {
+
+		if swag.IsZero(m.HardwareRef) { // not required
+			return nil
+		}
+
 		if err := m.HardwareRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hardwareRef")

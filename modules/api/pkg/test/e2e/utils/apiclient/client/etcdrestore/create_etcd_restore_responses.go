@@ -6,6 +6,7 @@ package etcdrestore
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *CreateEtcdRestoreCreated) IsCode(code int) bool {
 	return code == 201
 }
 
+// Code gets the status code for the create etcd restore created response
+func (o *CreateEtcdRestoreCreated) Code() int {
+	return 201
+}
+
 func (o *CreateEtcdRestoreCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreCreated %s", 201, payload)
 }
 
 func (o *CreateEtcdRestoreCreated) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreCreated  %+v", 201, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreCreated %s", 201, payload)
 }
 
 func (o *CreateEtcdRestoreCreated) GetPayload() *models.EtcdBackupConfig {
@@ -154,12 +162,17 @@ func (o *CreateEtcdRestoreUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the create etcd restore unauthorized response
+func (o *CreateEtcdRestoreUnauthorized) Code() int {
+	return 401
+}
+
 func (o *CreateEtcdRestoreUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreUnauthorized", 401)
 }
 
 func (o *CreateEtcdRestoreUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreUnauthorized", 401)
 }
 
 func (o *CreateEtcdRestoreUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *CreateEtcdRestoreForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the create etcd restore forbidden response
+func (o *CreateEtcdRestoreForbidden) Code() int {
+	return 403
+}
+
 func (o *CreateEtcdRestoreForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreForbidden", 403)
 }
 
 func (o *CreateEtcdRestoreForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestoreForbidden", 403)
 }
 
 func (o *CreateEtcdRestoreForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type CreateEtcdRestoreDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the create etcd restore default response
-func (o *CreateEtcdRestoreDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this create etcd restore default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *CreateEtcdRestoreDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the create etcd restore default response
+func (o *CreateEtcdRestoreDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *CreateEtcdRestoreDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestore default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestore default %s", o._statusCode, payload)
 }
 
 func (o *CreateEtcdRestoreDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestore default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores][%d] createEtcdRestore default %s", o._statusCode, payload)
 }
 
 func (o *CreateEtcdRestoreDefault) GetPayload() *models.ErrorResponse {

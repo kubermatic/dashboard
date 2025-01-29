@@ -185,6 +185,11 @@ func (m *ExternalCluster) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *ExternalCluster) contextValidateCloud(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Cloud != nil {
+
+		if swag.IsZero(m.Cloud) { // not required
+			return nil
+		}
+
 		if err := m.Cloud.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloud")
@@ -201,6 +206,11 @@ func (m *ExternalCluster) contextValidateCloud(ctx context.Context, formats strf
 func (m *ExternalCluster) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
+
+		if swag.IsZero(m.Spec) { // not required
+			return nil
+		}
+
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")
@@ -217,6 +227,11 @@ func (m *ExternalCluster) contextValidateSpec(ctx context.Context, formats strfm
 func (m *ExternalCluster) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
+
+		if swag.IsZero(m.Status) { // not required
+			return nil
+		}
+
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")

@@ -85,6 +85,11 @@ func (m *ConstraintTemplateStatus) contextValidateByPod(ctx context.Context, for
 	for i := 0; i < len(m.ByPod); i++ {
 
 		if m.ByPod[i] != nil {
+
+			if swag.IsZero(m.ByPod[i]) { // not required
+				return nil
+			}
+
 			if err := m.ByPod[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("byPod" + "." + strconv.Itoa(i))

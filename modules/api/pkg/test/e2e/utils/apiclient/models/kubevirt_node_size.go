@@ -135,6 +135,11 @@ func (m *KubevirtNodeSize) contextValidateSecondaryDisks(ctx context.Context, fo
 	for i := 0; i < len(m.SecondaryDisks); i++ {
 
 		if m.SecondaryDisks[i] != nil {
+
+			if swag.IsZero(m.SecondaryDisks[i]) { // not required
+				return nil
+			}
+
 			if err := m.SecondaryDisks[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("secondaryDisks" + "." + strconv.Itoa(i))

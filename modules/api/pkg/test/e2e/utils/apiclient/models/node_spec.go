@@ -219,6 +219,11 @@ func (m *NodeSpec) contextValidateTaints(ctx context.Context, formats strfmt.Reg
 	for i := 0; i < len(m.Taints); i++ {
 
 		if m.Taints[i] != nil {
+
+			if swag.IsZero(m.Taints[i]) { // not required
+				return nil
+			}
+
 			if err := m.Taints[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("taints" + "." + strconv.Itoa(i))
@@ -237,6 +242,7 @@ func (m *NodeSpec) contextValidateTaints(ctx context.Context, formats strfmt.Reg
 func (m *NodeSpec) contextValidateCloud(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Cloud != nil {
+
 		if err := m.Cloud.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloud")
@@ -253,6 +259,11 @@ func (m *NodeSpec) contextValidateCloud(ctx context.Context, formats strfmt.Regi
 func (m *NodeSpec) contextValidateNetwork(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Network != nil {
+
+		if swag.IsZero(m.Network) { // not required
+			return nil
+		}
+
 		if err := m.Network.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("network")
@@ -269,6 +280,7 @@ func (m *NodeSpec) contextValidateNetwork(ctx context.Context, formats strfmt.Re
 func (m *NodeSpec) contextValidateOperatingSystem(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OperatingSystem != nil {
+
 		if err := m.OperatingSystem.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("operatingSystem")
@@ -285,6 +297,7 @@ func (m *NodeSpec) contextValidateOperatingSystem(ctx context.Context, formats s
 func (m *NodeSpec) contextValidateVersions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Versions != nil {
+
 		if err := m.Versions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("versions")

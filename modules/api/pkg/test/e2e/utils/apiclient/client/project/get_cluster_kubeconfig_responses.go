@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetClusterKubeconfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get cluster kubeconfig o k response
+func (o *GetClusterKubeconfigOK) Code() int {
+	return 200
+}
+
 func (o *GetClusterKubeconfigOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigOK %s", 200, payload)
 }
 
 func (o *GetClusterKubeconfigOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigOK %s", 200, payload)
 }
 
 func (o *GetClusterKubeconfigOK) GetPayload() []uint8 {
@@ -152,12 +160,17 @@ func (o *GetClusterKubeconfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get cluster kubeconfig unauthorized response
+func (o *GetClusterKubeconfigUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetClusterKubeconfigUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigUnauthorized", 401)
 }
 
 func (o *GetClusterKubeconfigUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigUnauthorized", 401)
 }
 
 func (o *GetClusterKubeconfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *GetClusterKubeconfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get cluster kubeconfig forbidden response
+func (o *GetClusterKubeconfigForbidden) Code() int {
+	return 403
+}
+
 func (o *GetClusterKubeconfigForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigForbidden", 403)
 }
 
 func (o *GetClusterKubeconfigForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfigForbidden", 403)
 }
 
 func (o *GetClusterKubeconfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type GetClusterKubeconfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get cluster kubeconfig default response
-func (o *GetClusterKubeconfigDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster kubeconfig default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *GetClusterKubeconfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get cluster kubeconfig default response
+func (o *GetClusterKubeconfigDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetClusterKubeconfigDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfig default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterKubeconfigDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfig default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/kubeconfig][%d] getClusterKubeconfig default %s", o._statusCode, payload)
 }
 
 func (o *GetClusterKubeconfigDefault) GetPayload() *models.ErrorResponse {

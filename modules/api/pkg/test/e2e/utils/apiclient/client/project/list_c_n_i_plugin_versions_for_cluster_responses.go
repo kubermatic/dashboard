@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListCNIPluginVersionsForClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list c n i plugin versions for cluster o k response
+func (o *ListCNIPluginVersionsForClusterOK) Code() int {
+	return 200
+}
+
 func (o *ListCNIPluginVersionsForClusterOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterOK %s", 200, payload)
 }
 
 func (o *ListCNIPluginVersionsForClusterOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterOK %s", 200, payload)
 }
 
 func (o *ListCNIPluginVersionsForClusterOK) GetPayload() *models.CNIVersions {
@@ -154,12 +162,17 @@ func (o *ListCNIPluginVersionsForClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list c n i plugin versions for cluster unauthorized response
+func (o *ListCNIPluginVersionsForClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListCNIPluginVersionsForClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterUnauthorized", 401)
 }
 
 func (o *ListCNIPluginVersionsForClusterUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterUnauthorized", 401)
 }
 
 func (o *ListCNIPluginVersionsForClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *ListCNIPluginVersionsForClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list c n i plugin versions for cluster forbidden response
+func (o *ListCNIPluginVersionsForClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *ListCNIPluginVersionsForClusterForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterForbidden", 403)
 }
 
 func (o *ListCNIPluginVersionsForClusterForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForClusterForbidden", 403)
 }
 
 func (o *ListCNIPluginVersionsForClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type ListCNIPluginVersionsForClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list c n i plugin versions for cluster default response
-func (o *ListCNIPluginVersionsForClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list c n i plugin versions for cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *ListCNIPluginVersionsForClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list c n i plugin versions for cluster default response
+func (o *ListCNIPluginVersionsForClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListCNIPluginVersionsForClusterDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForCluster default %s", o._statusCode, payload)
 }
 
 func (o *ListCNIPluginVersionsForClusterDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/cniversions][%d] listCNIPluginVersionsForCluster default %s", o._statusCode, payload)
 }
 
 func (o *ListCNIPluginVersionsForClusterDefault) GetPayload() *models.ErrorResponse {

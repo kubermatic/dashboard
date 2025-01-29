@@ -6,6 +6,7 @@ package rulegroup
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update rule group o k response
+func (o *UpdateRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *UpdateRuleGroupOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupOK %s", 200, payload)
 }
 
 func (o *UpdateRuleGroupOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupOK %s", 200, payload)
 }
 
 func (o *UpdateRuleGroupOK) GetPayload() *models.RuleGroup {
@@ -154,12 +162,17 @@ func (o *UpdateRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update rule group unauthorized response
+func (o *UpdateRuleGroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateRuleGroupUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupUnauthorized", 401)
 }
 
 func (o *UpdateRuleGroupUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupUnauthorized", 401)
 }
 
 func (o *UpdateRuleGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update rule group forbidden response
+func (o *UpdateRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateRuleGroupForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupForbidden", 403)
 }
 
 func (o *UpdateRuleGroupForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroupForbidden", 403)
 }
 
 func (o *UpdateRuleGroupForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateRuleGroupDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update rule group default response
-func (o *UpdateRuleGroupDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update rule group default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update rule group default response
+func (o *UpdateRuleGroupDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateRuleGroupDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroup default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroup default %s", o._statusCode, payload)
 }
 
 func (o *UpdateRuleGroupDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroup default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}][%d] updateRuleGroup default %s", o._statusCode, payload)
 }
 
 func (o *UpdateRuleGroupDefault) GetPayload() *models.ErrorResponse {

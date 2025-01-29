@@ -162,6 +162,11 @@ func (m *EnvVarSource) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *EnvVarSource) contextValidateConfigMapKeyRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ConfigMapKeyRef != nil {
+
+		if swag.IsZero(m.ConfigMapKeyRef) { // not required
+			return nil
+		}
+
 		if err := m.ConfigMapKeyRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("configMapKeyRef")
@@ -178,6 +183,11 @@ func (m *EnvVarSource) contextValidateConfigMapKeyRef(ctx context.Context, forma
 func (m *EnvVarSource) contextValidateFieldRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.FieldRef != nil {
+
+		if swag.IsZero(m.FieldRef) { // not required
+			return nil
+		}
+
 		if err := m.FieldRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("fieldRef")
@@ -194,6 +204,11 @@ func (m *EnvVarSource) contextValidateFieldRef(ctx context.Context, formats strf
 func (m *EnvVarSource) contextValidateResourceFieldRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ResourceFieldRef != nil {
+
+		if swag.IsZero(m.ResourceFieldRef) { // not required
+			return nil
+		}
+
 		if err := m.ResourceFieldRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("resourceFieldRef")
@@ -210,6 +225,11 @@ func (m *EnvVarSource) contextValidateResourceFieldRef(ctx context.Context, form
 func (m *EnvVarSource) contextValidateSecretKeyRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SecretKeyRef != nil {
+
+		if swag.IsZero(m.SecretKeyRef) { // not required
+			return nil
+		}
+
 		if err := m.SecretKeyRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("secretKeyRef")

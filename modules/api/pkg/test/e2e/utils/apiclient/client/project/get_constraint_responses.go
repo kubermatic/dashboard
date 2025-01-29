@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get constraint o k response
+func (o *GetConstraintOK) Code() int {
+	return 200
+}
+
 func (o *GetConstraintOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintOK %s", 200, payload)
 }
 
 func (o *GetConstraintOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintOK %s", 200, payload)
 }
 
 func (o *GetConstraintOK) GetPayload() *models.Constraint {
@@ -154,12 +162,17 @@ func (o *GetConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get constraint unauthorized response
+func (o *GetConstraintUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetConstraintUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintUnauthorized", 401)
 }
 
 func (o *GetConstraintUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintUnauthorized", 401)
 }
 
 func (o *GetConstraintUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the get constraint forbidden response
+func (o *GetConstraintForbidden) Code() int {
+	return 403
+}
+
 func (o *GetConstraintForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintForbidden", 403)
 }
 
 func (o *GetConstraintForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraintForbidden", 403)
 }
 
 func (o *GetConstraintForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetConstraintDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get constraint default response
-func (o *GetConstraintDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get constraint default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get constraint default response
+func (o *GetConstraintDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetConstraintDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraint default %s", o._statusCode, payload)
 }
 
 func (o *GetConstraintDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraint default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] getConstraint default %s", o._statusCode, payload)
 }
 
 func (o *GetConstraintDefault) GetPayload() *models.ErrorResponse {

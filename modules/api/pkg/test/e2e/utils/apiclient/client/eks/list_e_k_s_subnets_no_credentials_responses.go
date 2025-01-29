@@ -6,6 +6,7 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *ListEKSSubnetsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the list e k s subnets no credentials o k response
+func (o *ListEKSSubnetsNoCredentialsOK) Code() int {
+	return 200
+}
+
 func (o *ListEKSSubnetsNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListEKSSubnetsNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsOK %s", 200, payload)
 }
 
 func (o *ListEKSSubnetsNoCredentialsOK) GetPayload() models.EKSSubnetList {
@@ -152,12 +160,17 @@ func (o *ListEKSSubnetsNoCredentialsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the list e k s subnets no credentials unauthorized response
+func (o *ListEKSSubnetsNoCredentialsUnauthorized) Code() int {
+	return 401
+}
+
 func (o *ListEKSSubnetsNoCredentialsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsUnauthorized", 401)
 }
 
 func (o *ListEKSSubnetsNoCredentialsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsUnauthorized", 401)
 }
 
 func (o *ListEKSSubnetsNoCredentialsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -203,12 +216,17 @@ func (o *ListEKSSubnetsNoCredentialsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the list e k s subnets no credentials forbidden response
+func (o *ListEKSSubnetsNoCredentialsForbidden) Code() int {
+	return 403
+}
+
 func (o *ListEKSSubnetsNoCredentialsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsForbidden", 403)
 }
 
 func (o *ListEKSSubnetsNoCredentialsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentialsForbidden", 403)
 }
 
 func (o *ListEKSSubnetsNoCredentialsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -232,11 +250,6 @@ type ListEKSSubnetsNoCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the list e k s subnets no credentials default response
-func (o *ListEKSSubnetsNoCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s subnets no credentials default response has a 2xx status code
@@ -264,12 +277,19 @@ func (o *ListEKSSubnetsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the list e k s subnets no credentials default response
+func (o *ListEKSSubnetsNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *ListEKSSubnetsNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSSubnetsNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/eks/subnets][%d] listEKSSubnetsNoCredentials default %s", o._statusCode, payload)
 }
 
 func (o *ListEKSSubnetsNoCredentialsDefault) GetPayload() *models.ErrorResponse {

@@ -72,6 +72,11 @@ func (m *ProjectResourceQuota) ContextValidate(ctx context.Context, formats strf
 func (m *ProjectResourceQuota) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Quota != nil {
+
+		if swag.IsZero(m.Quota) { // not required
+			return nil
+		}
+
 		if err := m.Quota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("quota")

@@ -6,6 +6,7 @@ package rulegroup
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *UpdateAdminRuleGroupOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the update admin rule group o k response
+func (o *UpdateAdminRuleGroupOK) Code() int {
+	return 200
+}
+
 func (o *UpdateAdminRuleGroupOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupOK %s", 200, payload)
 }
 
 func (o *UpdateAdminRuleGroupOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupOK %s", 200, payload)
 }
 
 func (o *UpdateAdminRuleGroupOK) GetPayload() *models.RuleGroup {
@@ -154,12 +162,17 @@ func (o *UpdateAdminRuleGroupUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the update admin rule group unauthorized response
+func (o *UpdateAdminRuleGroupUnauthorized) Code() int {
+	return 401
+}
+
 func (o *UpdateAdminRuleGroupUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupUnauthorized", 401)
 }
 
 func (o *UpdateAdminRuleGroupUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupUnauthorized ", 401)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupUnauthorized", 401)
 }
 
 func (o *UpdateAdminRuleGroupUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *UpdateAdminRuleGroupForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the update admin rule group forbidden response
+func (o *UpdateAdminRuleGroupForbidden) Code() int {
+	return 403
+}
+
 func (o *UpdateAdminRuleGroupForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupForbidden", 403)
 }
 
 func (o *UpdateAdminRuleGroupForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupForbidden ", 403)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroupForbidden", 403)
 }
 
 func (o *UpdateAdminRuleGroupForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type UpdateAdminRuleGroupDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the update admin rule group default response
-func (o *UpdateAdminRuleGroupDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this update admin rule group default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *UpdateAdminRuleGroupDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the update admin rule group default response
+func (o *UpdateAdminRuleGroupDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *UpdateAdminRuleGroupDefault) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroup default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroup default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAdminRuleGroupDefault) String() string {
-	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroup default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PUT /api/v2/seeds/{seed_name}/rulegroups/{rulegroup_id}][%d] updateAdminRuleGroup default %s", o._statusCode, payload)
 }
 
 func (o *UpdateAdminRuleGroupDefault) GetPayload() *models.ErrorResponse {

@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *PatchExternalClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the patch external cluster o k response
+func (o *PatchExternalClusterOK) Code() int {
+	return 200
+}
+
 func (o *PatchExternalClusterOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterOK %s", 200, payload)
 }
 
 func (o *PatchExternalClusterOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterOK %s", 200, payload)
 }
 
 func (o *PatchExternalClusterOK) GetPayload() *models.ExternalCluster {
@@ -154,12 +162,17 @@ func (o *PatchExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the patch external cluster unauthorized response
+func (o *PatchExternalClusterUnauthorized) Code() int {
+	return 401
+}
+
 func (o *PatchExternalClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterUnauthorized", 401)
 }
 
 func (o *PatchExternalClusterUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterUnauthorized", 401)
 }
 
 func (o *PatchExternalClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *PatchExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
+// Code gets the status code for the patch external cluster forbidden response
+func (o *PatchExternalClusterForbidden) Code() int {
+	return 403
+}
+
 func (o *PatchExternalClusterForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterForbidden", 403)
 }
 
 func (o *PatchExternalClusterForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalClusterForbidden", 403)
 }
 
 func (o *PatchExternalClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type PatchExternalClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the patch external cluster default response
-func (o *PatchExternalClusterDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this patch external cluster default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *PatchExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the patch external cluster default response
+func (o *PatchExternalClusterDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *PatchExternalClusterDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalCluster default %s", o._statusCode, payload)
 }
 
 func (o *PatchExternalClusterDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalCluster default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] patchExternalCluster default %s", o._statusCode, payload)
 }
 
 func (o *PatchExternalClusterDefault) GetPayload() *models.ErrorResponse {

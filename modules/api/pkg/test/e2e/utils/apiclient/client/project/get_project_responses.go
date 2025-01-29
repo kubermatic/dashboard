@@ -6,6 +6,7 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,12 +93,19 @@ func (o *GetProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
+// Code gets the status code for the get project o k response
+func (o *GetProjectOK) Code() int {
+	return 200
+}
+
 func (o *GetProjectOK) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectOK %s", 200, payload)
 }
 
 func (o *GetProjectOK) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectOK  %+v", 200, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectOK %s", 200, payload)
 }
 
 func (o *GetProjectOK) GetPayload() *models.Project {
@@ -154,12 +162,17 @@ func (o *GetProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
+// Code gets the status code for the get project unauthorized response
+func (o *GetProjectUnauthorized) Code() int {
+	return 401
+}
+
 func (o *GetProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectUnauthorized", 401)
 }
 
 func (o *GetProjectUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectUnauthorized", 401)
 }
 
 func (o *GetProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -205,12 +218,17 @@ func (o *GetProjectConflict) IsCode(code int) bool {
 	return code == 409
 }
 
+// Code gets the status code for the get project conflict response
+func (o *GetProjectConflict) Code() int {
+	return 409
+}
+
 func (o *GetProjectConflict) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectConflict ", 409)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectConflict", 409)
 }
 
 func (o *GetProjectConflict) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectConflict ", 409)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProjectConflict", 409)
 }
 
 func (o *GetProjectConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -234,11 +252,6 @@ type GetProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
-}
-
-// Code gets the status code for the get project default response
-func (o *GetProjectDefault) Code() int {
-	return o._statusCode
 }
 
 // IsSuccess returns true when this get project default response has a 2xx status code
@@ -266,12 +279,19 @@ func (o *GetProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
+// Code gets the status code for the get project default response
+func (o *GetProjectDefault) Code() int {
+	return o._statusCode
+}
+
 func (o *GetProjectDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProject default %s", o._statusCode, payload)
 }
 
 func (o *GetProjectDefault) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProject default  %+v", o._statusCode, o.Payload)
+	payload, _ := json.Marshal(o.Payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}][%d] getProject default %s", o._statusCode, payload)
 }
 
 func (o *GetProjectDefault) GetPayload() *models.ErrorResponse {
