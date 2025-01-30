@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package policyinstance
+package policybinding
 
 import (
 	"context"
@@ -23,32 +23,32 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func ListEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func ListEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return listEndpoint(ctx, request, userInfoGetter)
+		return listEndpoint(ctx, request, userInfoGetter, provider)
 	}
 }
 
-func GetEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func GetEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return getEndpoint(ctx, request, userInfoGetter)
+		return getEndpoint(ctx, request, userInfoGetter, provider)
 	}
 }
 
-func CreateEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func CreateEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return createEndpoint(ctx, request, userInfoGetter)
+		return createEndpoint(ctx, request, userInfoGetter, provider)
 	}
 }
 
-func PatchEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func PatchEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return patchEndpoint(ctx, request, userInfoGetter)
+		return patchEndpoint(ctx, request, userInfoGetter, provider)
 	}
 }
 
-func DeleteEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return deleteEndpoint(ctx, request, userInfoGetter)
+		return nil, deleteEndpoint(ctx, request, userInfoGetter, provider)
 	}
 }
