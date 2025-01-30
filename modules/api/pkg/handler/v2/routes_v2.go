@@ -1352,15 +1352,15 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.createBackupStorageLocation())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}").
 		Handler(r.getBackupStorageLocation())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}").
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
 		Handler(r.listBackupStorageLocation())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation").
+		Path("/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}").
 		Handler(r.deleteBackupStorageLocation())
 
 	// Defines a set of HTTP endpoints for managing cluster backup configs
