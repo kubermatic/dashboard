@@ -46,6 +46,10 @@ const routes: Routes = [
         loadChildren: () => import('./defaults/module').then(m => m.AdminSettingsDefaultsModule),
       },
       {
+        path: 'announcements',
+        loadChildren: () => import('./announcements/module').then(m => m.AdminSettingsAnnouncementsModule),
+      },
+      {
         path: 'datacenters',
         loadChildren: () => import('./dynamic-datacenters/module').then(m => m.AdminSettingsDatacentersModule),
       },

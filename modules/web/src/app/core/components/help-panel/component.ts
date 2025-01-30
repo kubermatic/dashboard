@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {AnnouncementsDialogComponent} from '@app/shared/components/announcements/component';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
@@ -29,8 +31,8 @@ import {take, takeUntil} from 'rxjs/operators';
   animations: [slideOut],
 })
 export class HelpPanelComponent implements OnInit, OnDestroy {
-  settings: AdminSettings;
-  lastSeenChangelogVersion: string;
+  adminSettings: AdminSettings;
+  userSettings: UserSettings;
   KKPDocumentationURL = 'https://docs.kubermatic.com/kubermatic/{version}/release-notes/#{version-anchor-link}';
 
   private _isOpen = false;
@@ -41,15 +43,16 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService,
     private readonly _userService: UserService,
     private readonly _config: AppConfigService,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.settings = s));
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.adminSettings = s));
 
     this._userService.currentUserSettings
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((settings: UserSettings) => (this.lastSeenChangelogVersion = settings.lastSeenChangelogVersion || ''));
+      .subscribe((settings: UserSettings) => (this.userSettings = settings));
   }
 
   ngOnDestroy(): void {
@@ -93,7 +96,7 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
   }
 
   hasNewChangelog(): boolean {
-    return this.lastSeenChangelogVersion !== this._config.getGitVersion().humanReadable;
+    return this.userSettings.lastSeenChangelogVersion !== this._config.getGitVersion().humanReadable;
   }
 
   goToAPIDocs(): void {
@@ -103,9 +106,19 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
 
   shouldShowPanel(): boolean {
     return (
-      !this.settings.disableChangelogPopup ||
-      this.settings.displayAPIDocs ||
-      this.settings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
+      !this.adminSettings.disableChangelogPopup ||
+      this.adminSettings.displayAPIDocs ||
+      this.adminSettings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
     );
+  }
+
+  openAnnouncementsDialog(): void {
+    const sortedAnnouncements = this.adminSettings?.announcements
+      ? Object.entries(this.adminSettings?.announcements).sort(
+          ([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+      : [];
+    const announcementsObject = Object.fromEntries(sortedAnnouncements);
+    this._matDialog.open(AnnouncementsDialogComponent, {data: announcementsObject});
   }
 }

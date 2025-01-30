@@ -28,6 +28,7 @@ limitations under the License.
     <div class="km-main"
          fxFlex
          fxLayout="column">
+      <km-announcement-banner [announcements]="adminAnnouncements"></km-announcement-banner>
       <router-outlet></router-outlet>
       <km-footer *ngIf="!!settings"
                  [ngClass]="hasSecondarySidenav ? 'footer-sm' : ''"

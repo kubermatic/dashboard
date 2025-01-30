@@ -22,9 +22,11 @@ import (
 	"io"
 	"net/http"
 	"slices"
+	"time"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
+	"github.com/google/uuid"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -34,6 +36,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
 )
 
@@ -89,6 +92,13 @@ func UpdateKubermaticSettingsEndpoint(userInfoGetter provider.UserInfoGetter, se
 		err = json.Unmarshal(patchedGlobalSettingsSpecJSON, &patchedGlobalSettingsSpec)
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("cannot decode patched settings: %v", err)
+		}
+		newAnnouncement := "newAnnouncement"
+		if announcements, ok := patchedGlobalSettingsSpec.Announcements[newAnnouncement]; ok {
+			announcements.CreatedAt = metav1.NewTime(time.Now())
+			newUUID := uuid.New().String()
+			delete(patchedGlobalSettingsSpec.Announcements, newAnnouncement)
+			patchedGlobalSettingsSpec.Announcements[newUUID] = announcements
 		}
 
 		existingGlobalSettings.Spec, err = convertAPISettingsToSettingsSpec(patchedGlobalSettingsSpec)
@@ -154,6 +164,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		WebTerminalOptions:               settings.WebTerminalOptions,
 		StaticLabels:                     settings.StaticLabels,
 		Annotations:                      settings.Annotations,
+		Announcements:                    settings.Announcements,
 	}
 
 	addDefaultAnnotations(&s.Annotations)
@@ -205,6 +216,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		WebTerminalOptions:               settings.WebTerminalOptions,
 		StaticLabels:                     settings.StaticLabels,
 		Annotations:                      settings.Annotations,
+		Announcements:                    settings.Announcements,
 	}
 
 	addDefaultAnnotations(&s.Annotations)

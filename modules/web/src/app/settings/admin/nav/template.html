@@ -39,12 +39,19 @@ limitations under the License.
         </a>
       </div>
 
-
       <div class="sub-menu-item"
            routerLinkActive="active">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(adminPanelView.Customization)">
           <span>{{adminPanelViewDisplayName.Customization}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.Announcements)">
+          <span>{{adminPanelViewDisplayName.Announcements}}</span>
         </a>
       </div>
 
@@ -70,6 +77,13 @@ limitations under the License.
          [routerLink]="getRouterLink(adminPanelView.Customization)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.Customization}}</span>
+      </a>
+
+      <a fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Announcements)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Announcements}}</span>
       </a>
     </ng-container>
   </km-side-nav-field>

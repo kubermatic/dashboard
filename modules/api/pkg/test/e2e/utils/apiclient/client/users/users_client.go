@@ -40,6 +40,8 @@ type ClientService interface {
 
 	LogoutCurrentUser(params *LogoutCurrentUserParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*LogoutCurrentUserOK, error)
 
+	PatchCurrentUserReadAnnouncements(params *PatchCurrentUserReadAnnouncementsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchCurrentUserReadAnnouncementsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -270,6 +272,44 @@ func (a *Client) LogoutCurrentUser(params *LogoutCurrentUserParams, authInfo run
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*LogoutCurrentUserDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PatchCurrentUserReadAnnouncements updates read announcements of the current user
+*/
+func (a *Client) PatchCurrentUserReadAnnouncements(params *PatchCurrentUserReadAnnouncementsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchCurrentUserReadAnnouncementsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchCurrentUserReadAnnouncementsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "patchCurrentUserReadAnnouncements",
+		Method:             "PATCH",
+		PathPattern:        "/api/v1/me/readannouncements",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PatchCurrentUserReadAnnouncementsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PatchCurrentUserReadAnnouncementsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PatchCurrentUserReadAnnouncementsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

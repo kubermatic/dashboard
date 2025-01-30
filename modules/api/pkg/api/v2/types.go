@@ -2232,6 +2232,9 @@ type GlobalSettings struct {
 
 	// Annotations are the settings for the annotations in KKP UI.
 	Annotations kubermaticv1.AnnotationSettings `json:"annotations,omitempty"`
+
+	// The announcement feature allows administrators to broadcast important messages to all users.
+	Announcements map[string]kubermaticv1.Announcement `json:"announcements,omitempty"`
 }
 
 // VSphereTagCategory is the object representing a vsphere tag category.

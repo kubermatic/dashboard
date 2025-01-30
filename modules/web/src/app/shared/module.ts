@@ -24,7 +24,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
-import {MatOptionModule, MatRippleModule} from '@angular/material/core';
+import {MatNativeDateModule, MatOptionModule, MatRippleModule} from '@angular/material/core';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -47,6 +47,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
@@ -137,6 +138,8 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
 import {PipesModule} from './pipes/ngx-filter-pipe/module';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {AnnouncementBannerComponent} from './components/announcement-banner/component';
+import {AnnouncementsDialogComponent} from './components/announcements/component';
 
 const modules = [
   CommonModule,
@@ -154,6 +157,8 @@ const modules = [
   MatSnackBarModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
   MatSelectModule,
   MatAutocompleteModule,
   MatCheckboxModule,
@@ -265,6 +270,8 @@ const components = [
   TerminalStatusBarComponent,
   MachineFlavorFilterComponent,
   PaginationPageSizeComponent,
+  AnnouncementBannerComponent,
+  AnnouncementsDialogComponent,
 ];
 
 const directives = [

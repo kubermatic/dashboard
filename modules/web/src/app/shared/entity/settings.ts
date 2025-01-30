@@ -58,11 +58,20 @@ export interface AdminSettings {
   webTerminalOptions?: WebTerminalOptions;
   staticLabels?: StaticLabel[];
   annotations?: AdminSettingsAnnotations;
+  // the Object type is used when we send the announcements to the API
+  announcements?: Map<string, AdminAnnouncement> | Object;
 }
 
 export interface AdminSettingsAnnotations {
   hiddenAnnotations?: string[];
   protectedAnnotations?: string[];
+}
+
+export interface AdminAnnouncement {
+  isActive: boolean;
+  message: string;
+  createdAt?: string;
+  expires?: string;
 }
 
 export interface StaticLabel {
