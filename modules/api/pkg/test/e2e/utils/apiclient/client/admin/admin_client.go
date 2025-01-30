@@ -60,6 +60,8 @@ type ClientService interface {
 
 	CreateOrUpdateMeteringCredentials(params *CreateOrUpdateMeteringCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateOrUpdateMeteringCredentialsOK, error)
 
+	CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyBindingOK, error)
+
 	CreatePolicyTemplate(params *CreatePolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyTemplateOK, error)
 
 	CreateSeed(params *CreateSeedParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateSeedOK, error)
@@ -69,6 +71,8 @@ type ClientService interface {
 	DeleteBackupDestination(params *DeleteBackupDestinationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteBackupDestinationOK, error)
 
 	DeleteMeteringReportConfiguration(params *DeleteMeteringReportConfigurationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteMeteringReportConfigurationOK, error)
+
+	DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyBindingOK, error)
 
 	DeletePolicyTemplate(params *DeletePolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyTemplateOK, error)
 
@@ -84,6 +88,8 @@ type ClientService interface {
 
 	GetMeteringReportConfiguration(params *GetMeteringReportConfigurationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetMeteringReportConfigurationOK, error)
 
+	GetPolicyBinding(params *GetPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyBindingOK, error)
+
 	GetPolicyTemplate(params *GetPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyTemplateOK, error)
 
 	GetSeed(params *GetSeedParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetSeedOK, error)
@@ -92,11 +98,15 @@ type ClientService interface {
 
 	ListMeteringReportConfigurations(params *ListMeteringReportConfigurationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListMeteringReportConfigurationsOK, error)
 
+	ListPolicyBinding(params *ListPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyBindingOK, error)
+
 	ListPolicyTemplate(params *ListPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyTemplateOK, error)
 
 	ListSeeds(params *ListSeedsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListSeedsOK, error)
 
 	PatchKubermaticSettings(params *PatchKubermaticSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchKubermaticSettingsOK, error)
+
+	PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchPolicyBindingOK, error)
 
 	PatchpolicyTemplate(params *PatchpolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchpolicyTemplateOK, error)
 
@@ -226,7 +236,45 @@ func (a *Client) CreateOrUpdateMeteringCredentials(params *CreateOrUpdateMeterin
 }
 
 /*
-CreatePolicyTemplate Create Policy Template. Only available in Kubermatic Enterprise Edition
+CreatePolicyBinding Create policy binding. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreatePolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "createPolicyBinding",
+		Method:             "POST",
+		PathPattern:        "/api/v2/policybinding",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreatePolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreatePolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreatePolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+CreatePolicyTemplate Create policy template. Only available in Kubermatic Enterprise Edition
 */
 func (a *Client) CreatePolicyTemplate(params *CreatePolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyTemplateOK, error) {
 	// TODO: Validate the params before sending
@@ -416,7 +464,45 @@ func (a *Client) DeleteMeteringReportConfiguration(params *DeleteMeteringReportC
 }
 
 /*
-DeletePolicyTemplate Delete Policy Template. Only available in Kubermatic Enterprise Edition
+DeletePolicyBinding Delete policy binding. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeletePolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "deletePolicyBinding",
+		Method:             "DELETE",
+		PathPattern:        "/api/v2/policybinding/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeletePolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeletePolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeletePolicyTemplate Delete policy template. Only available in Kubermatic Enterprise Edition
 */
 func (a *Client) DeletePolicyTemplate(params *DeletePolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyTemplateOK, error) {
 	// TODO: Validate the params before sending
@@ -682,7 +768,45 @@ func (a *Client) GetMeteringReportConfiguration(params *GetMeteringReportConfigu
 }
 
 /*
-GetPolicyTemplate Get Policy Template. Only available in Kubermatic Enterprise Edition
+GetPolicyBinding Get policy binding. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) GetPolicyBinding(params *GetPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getPolicyBinding",
+		Method:             "GET",
+		PathPattern:        "/api/v2/policybinding/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetPolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetPolicyTemplate Get policy template. Only available in Kubermatic Enterprise Edition
 */
 func (a *Client) GetPolicyTemplate(params *GetPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyTemplateOK, error) {
 	// TODO: Validate the params before sending
@@ -834,7 +958,45 @@ func (a *Client) ListMeteringReportConfigurations(params *ListMeteringReportConf
 }
 
 /*
-ListPolicyTemplate List all Policy Templates. Only available in Kubermatic Enterprise Edition
+ListPolicyBinding List all policy bindings. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) ListPolicyBinding(params *ListPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listPolicyBinding",
+		Method:             "GET",
+		PathPattern:        "/api/v2/policybinding",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListPolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListPolicyTemplate List all policy templates. Only available in Kubermatic Enterprise Edition
 */
 func (a *Client) ListPolicyTemplate(params *ListPolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyTemplateOK, error) {
 	// TODO: Validate the params before sending
@@ -948,7 +1110,45 @@ func (a *Client) PatchKubermaticSettings(params *PatchKubermaticSettingsParams, 
 }
 
 /*
-PatchpolicyTemplate Patch Policy Template. Only available in Kubermatic Enterprise Edition
+PatchPolicyBinding Patch policy binding. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "patchPolicyBinding",
+		Method:             "PATCH",
+		PathPattern:        "/api/v2/policybinding/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PatchPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PatchPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PatchPolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PatchpolicyTemplate Patch policy template. Only available in Kubermatic Enterprise Edition
 */
 func (a *Client) PatchpolicyTemplate(params *PatchpolicyTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchpolicyTemplateOK, error) {
 	// TODO: Validate the params before sending
