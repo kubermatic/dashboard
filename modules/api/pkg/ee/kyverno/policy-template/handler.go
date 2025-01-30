@@ -87,7 +87,15 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 	policyTemplateList, err := provider.List(ctx)
 
-	return policyTemplateList, nil
+	res := []*apiv2.PolicyTemplate{}
+	for _, policyTemplate := range policyTemplateList.Items {
+		res = append(res, &apiv2.PolicyTemplate{
+			Name: policyTemplate.Name,
+			Spec: *policyTemplate.Spec.DeepCopy(),
+		})
+	}
+
+	return res, nil
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) (interface{}, error) {
@@ -110,12 +118,10 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 		return nil, err
 	}
 
-	res := apiv2.PolicyTemplate{
+	return &apiv2.PolicyTemplate{
 		Name: policytemplate.Name,
 		Spec: *policytemplate.Spec.DeepCopy(),
-	}
-
-	return res, nil
+	}, nil
 }
 
 func DecodeGetPolicyTemplateReq(ctx context.Context, r *http.Request) (interface{}, error) {
@@ -202,7 +208,10 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	}
 	patchedPolicyTemplate, err := provider.Patch(ctx, policyTemplate)
 
-	return patchedPolicyTemplate, nil
+	return &apiv2.PolicyTemplate{
+		Name: patchedPolicyTemplate.Name,
+		Spec: *patchedPolicyTemplate.Spec.DeepCopy(),
+	}, err
 }
 
 func DecodePatchPolicyTemplateReq(ctx context.Context, r *http.Request) (interface{}, error) {
