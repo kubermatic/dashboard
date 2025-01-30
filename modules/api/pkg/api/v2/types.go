@@ -2334,33 +2334,15 @@ type PolicyTemplate struct {
 	Spec kubermaticv1.PolicyTemplateSpec `json:"spec,omitempty"`
 }
 
-// PolicyInstanceSpec describes how and where to apply the referenced PolicyTemplate.
-type PolicyInstance struct {
-	Name string             `json:"name,omitempty"`
-	Spec PolicyInstanceSpec `json:"spec,omitempty"`
-}
-
-// PolicyInstanceSpec describes how and where to apply the referenced PolicyTemplate.
-type PolicyInstanceSpec struct {
-	// PolicyTemplateName is the name of the policy template.
-	PolicyTemplateName string `json:"policyTemplateName"`
-	// Scope specifies the Kyverno Policy to be created.
-	// The scope can be "cluster" or "namespaced", by default it is "cluster"
-	Scope string `json:"scope,omitempty"`
-	// Target specifies which clusters/projects to apply the policy to
-	Target PolicyTargetSpec `json:"target,omitempty"`
-}
-
-// PolicyTargetSpec indicates how to select projects/clusters in Kubermatic.
-type PolicyTargetSpec struct {
-	// AllProjects indicates that the policy applies to all projects
-	AllProjects bool `json:"allProjects,omitempty"`
-	// ProjectSelector restricts the policy to projects matching these labels
-	ProjectSelector *metav1.LabelSelector `json:"projectSelector,omitempty"`
-	// AllClusters indicates that the policy applies to all clusters
-	AllClusters bool `json:"allClusters,omitempty"`
-	// ClusterSelector restricts the policy to clusters matching these labels
-	ClusterSelector *metav1.LabelSelector `json:"clusterSelector,omitempty"`
+// PolicyBinding binds a PolicyTemplate to specific clusters/projects and
+// optionally enables or disables it (if the template is not enforced).
+// swagger:model PolicyBinding
+type PolicyBinding struct {
+	Name string `json:"name,omitempty"`
+	// swagger:ignore
+	Spec kubermaticv1.PolicyBindingSpec `json:"spec,omitempty"`
+	// swagger:ignore
+	Status kubermaticv1.PolicyBindingStatus `json:"status,omitempty"`
 }
 
 // BackupStorageLocationBucketObject represents a S3 object of Backup Storage Location Bucket.

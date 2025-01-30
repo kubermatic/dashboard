@@ -7247,9 +7247,207 @@
         }
       }
     },
+    "/api/v2/policybinding": {
+      "get": {
+        "description": "List all policy bindings. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "listPolicyBinding",
+        "responses": {
+          "200": {
+            "description": "PolicyBinding",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PolicyBinding"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create policy binding. Only available in Kubermatic Enterprise Edition",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "createPolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyBinding",
+            "schema": {
+              "$ref": "#/definitions/PolicyBinding"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/policybinding/{binding_name}": {
+      "get": {
+        "description": "Get policy binding. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "getPolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PolicyBindingName",
+            "name": "binding_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyBinding",
+            "schema": {
+              "$ref": "#/definitions/PolicyBinding"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete policy binding. Only available in Kubermatic Enterprise Edition",
+        "tags": [
+          "admin"
+        ],
+        "operationId": "deletePolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PolicyBindingName",
+            "name": "binding_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/empty"
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Patch policy binding. Only available in Kubermatic Enterprise Edition",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "patchPolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Name",
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "PolicyBindingName",
+            "name": "binding_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyBinding",
+            "schema": {
+              "$ref": "#/definitions/PolicyBinding"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/policytemplate": {
       "get": {
-        "description": "List all Policy Templates. Only available in Kubermatic Enterprise Edition",
+        "description": "List all policy templates. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7282,7 +7480,7 @@
         }
       },
       "post": {
-        "description": "Create Policy Template. Only available in Kubermatic Enterprise Edition",
+        "description": "Create policy template. Only available in Kubermatic Enterprise Edition",
         "consumes": [
           "application/json"
         ],
@@ -7325,7 +7523,7 @@
     },
     "/api/v2/policytemplate/{template_name}": {
       "get": {
-        "description": "Get Policy Template. Only available in Kubermatic Enterprise Edition",
+        "description": "Get policy template. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7364,7 +7562,7 @@
         }
       },
       "delete": {
-        "description": "Delete Policy Template. Only available in Kubermatic Enterprise Edition",
+        "description": "Delete policy template. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7400,7 +7598,7 @@
         }
       },
       "patch": {
-        "description": "Patch Policy Template. Only available in Kubermatic Enterprise Edition",
+        "description": "Patch policy template. Only available in Kubermatic Enterprise Edition",
         "consumes": [
           "application/json"
         ],
@@ -38368,6 +38566,17 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "PolicyBinding": {
+      "description": "PolicyBinding binds a PolicyTemplate to specific clusters/projects and\noptionally enables or disables it (if the template is not enforced).",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "PolicyRule": {
       "description": "PolicyRule holds information that describes a policy rule, but does not contain information\nabout who the rule applies to or which namespace the rule applies to.",

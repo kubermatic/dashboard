@@ -1377,8 +1377,25 @@ type BackupStorageProvider interface {
 type PolicyTemplateProvider interface {
 	// Create creates a new PolicyTemplate.
 	Create(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error)
+	// Get gets the policyTemplate with the given name.
 	Get(ctx context.Context, name string) (*kubermaticv1.PolicyTemplate, error)
+	// List gets a list of policyTemplates.
 	List(ctx context.Context) (*kubermaticv1.PolicyTemplateList, error)
+	// Update updates the policyTemplate with the given name.
 	Patch(ctx context.Context, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error)
+	// Delete deletes the policyTemplate with the given name.
+	Delete(ctx context.Context, name string) error
+}
+
+type PolicyBindingProvider interface {
+	// Create creates a new PolicyBinding.
+	Create(ctx context.Context, policyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error)
+	// Get gets the policyBinding with the given name.
+	Get(ctx context.Context, name string) (*kubermaticv1.PolicyBinding, error)
+	// List gets a list of policyBindings.
+	List(ctx context.Context) (*kubermaticv1.PolicyBindingList, error)
+	// Update updates the policyBinding with the given name.
+	Patch(ctx context.Context, updatedpolicyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error)
+	// Delete deletes the policyBinding with the given name.
 	Delete(ctx context.Context, name string) error
 }

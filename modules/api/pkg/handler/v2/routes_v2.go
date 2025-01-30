@@ -53,7 +53,7 @@ import (
 	groupprojectbinding "k8c.io/dashboard/v2/pkg/handler/v2/group-project-binding"
 	ipampool "k8c.io/dashboard/v2/pkg/handler/v2/ipampool"
 	kubernetesdashboard "k8c.io/dashboard/v2/pkg/handler/v2/kubernetes-dashboard"
-	policyinstance "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-instance"
+	policybinding "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-binding"
 	policytemplate "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/machine"
 	mlaadminsetting "k8c.io/dashboard/v2/pkg/handler/v2/mla_admin_setting"
@@ -1738,24 +1738,24 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.deleteKyvernoPolicyTemplate())
 
 	mux.Methods(http.MethodGet).
-		Path("/policyinstance").
-		Handler(r.listKyvernoPolicyInstance())
+		Path("/policybinding").
+		Handler(r.listKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodGet).
-		Path("/policyinstance/{instance_name}").
-		Handler(r.getKyvernoPolicyInstance())
+		Path("/policybinding/{binding_name}").
+		Handler(r.getKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodPost).
-		Path("/policyinstance").
-		Handler(r.createKyvernoPolicyInstance())
+		Path("/policybinding").
+		Handler(r.createKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodPatch).
-		Path("/policyinstance/{instance_name}").
-		Handler(r.patchKyvernoPolicyInstance())
+		Path("/policybinding/{binding_name}").
+		Handler(r.patchKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodDelete).
-		Path("/policyinstance/{instance_name}").
-		Handler(r.deleteKyvernoPolicyInstance())
+		Path("/policybinding/{binding_name}").
+		Handler(r.deleteKyvernoPolicyBinding())
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
@@ -11230,7 +11230,7 @@ func (r Routing) listSeedStatus() http.Handler {
 // Define endpoints to manage kyverno policies
 // swagger:route GET /api/v2/policytemplate admin listPolicyTemplate
 //
-//	List all Policy Templates. Only available in Kubermatic Enterprise Edition
+//	List all policy templates. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11254,7 +11254,7 @@ func (r Routing) listKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route GET /api/v2/policytemplate/{template_name} admin getPolicyTemplate
 //
-//	Get Policy Template. Only available in Kubermatic Enterprise Edition
+//	Get policy template. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11277,9 +11277,9 @@ func (r Routing) getKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
-// swagger:route post /api/v2/policytemplate admin createPolicyTemplate
+// swagger:route POST /api/v2/policytemplate admin createPolicyTemplate
 //
-//	Create Policy Template. Only available in Kubermatic Enterprise Edition
+//	Create policy template. Only available in Kubermatic Enterprise Edition
 //
 //	Consumes:
 //	- application/json
@@ -11306,7 +11306,7 @@ func (r Routing) createKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route PATCH /api/v2/policytemplate/{template_name} admin patchpolicyTemplate
 //
-//	Patch Policy Template. Only available in Kubermatic Enterprise Edition
+//	Patch policy template. Only available in Kubermatic Enterprise Edition
 //
 //	Consumes:
 //	- application/json
@@ -11334,7 +11334,7 @@ func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route DELETE /api/v2/policytemplate/{template_name} admin deletePolicyTemplate
 //
-//	Delete Policy Template. Only available in Kubermatic Enterprise Edition
+//	Delete policy template. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11357,61 +11357,127 @@ func (r Routing) deleteKyvernoPolicyTemplate() http.Handler {
 	)
 }
 
-func (r Routing) listKyvernoPolicyInstance() http.Handler {
+// swagger:route GET /api/v2/policybinding admin listPolicyBinding
+//
+//	List all policy bindings. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []PolicyBinding
+//	  401: empty
+//	  403: empty
+
+func (r Routing) listKyvernoPolicyBinding() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policyinstance.ListEndpoint(r.userInfoGetter)),
+		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
 		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-func (r Routing) getKyvernoPolicyInstance() http.Handler {
+// swagger:route GET /api/v2/policybinding/{binding_name} admin getPolicyBinding
+//
+//	Get policy binding. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+
+func (r Routing) getKyvernoPolicyBinding() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policyinstance.GetEndpoint(r.userInfoGetter)),
-		policyinstance.DecodeGetPolicyInstanceReq,
+		)(policybinding.GetEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeGetPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-func (r Routing) createKyvernoPolicyInstance() http.Handler {
+// swagger:route POST /api/v2/policybinding admin createPolicyBinding
+//
+//	Create policy binding. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+func (r Routing) createKyvernoPolicyBinding() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policyinstance.CreateEndpoint(r.userInfoGetter)),
-		policyinstance.DecodeCreatePolicyInstanceReq,
+		)(policybinding.CreateEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeCreatePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-func (r Routing) patchKyvernoPolicyInstance() http.Handler {
+// swagger:route PATCH /api/v2/policybinding/{binding_name} admin patchPolicyBinding
+//
+//	Patch policy binding. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+func (r Routing) patchKyvernoPolicyBinding() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policyinstance.PatchEndpoint(r.userInfoGetter)),
-		policyinstance.DecodePatchPolicyInstanceReq,
+		)(policybinding.PatchEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodePatchPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-func (r Routing) deleteKyvernoPolicyInstance() http.Handler {
+// swagger:route DELETE /api/v2/policybinding/{binding_name} admin deletePolicyBinding
+//
+//	Delete policy binding. Only available in Kubermatic Enterprise Edition
+//
+// Responses:
+//
+//	default: errorResponse
+//	200: empty
+//	401: empty
+//	403: empty
+func (r Routing) deleteKyvernoPolicyBinding() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policyinstance.DeleteEndpoint(r.userInfoGetter)),
-		policyinstance.DecodeGetPolicyInstanceReq,
+		)(policybinding.DeleteEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeDeletePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
