@@ -27571,7 +27571,7 @@
         "name": {
           "description": "Name is the namespace to deploy the Application into.\nShould be a valid lowercase RFC1123 domain name",
           "type": "string",
-          "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
+          "pattern": "=`^(|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)`",
           "x-go-name": "Name"
         }
       },
@@ -30599,6 +30599,9 @@
         },
         "providerNetwork": {
           "$ref": "#/definitions/ProviderNetwork"
+        },
+        "vmEvictionStrategy": {
+          "$ref": "#/definitions/EvictionStrategy"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -30701,6 +30704,9 @@
           "description": "Optional: Gets mapped to the \"manage-security-groups\" setting in the cloud config.\nThis setting defaults to true.",
           "type": "boolean",
           "x-go-name": "ManageSecurityGroups"
+        },
+        "nodePortsAllowedIPRange": {
+          "$ref": "#/definitions/NetworkRanges"
         },
         "nodeSizeRequirements": {
           "$ref": "#/definitions/OpenstackNodeSizeRequirements"
@@ -31914,6 +31920,10 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "EvictionStrategy": {
+      "type": "string",
+      "x-go-package": "kubevirt.io/api/core/v1"
     },
     "ExposeStrategy": {
       "description": "Possible values are `NodePort`, `LoadBalancer` or `Tunneling` (requires a feature gate).",

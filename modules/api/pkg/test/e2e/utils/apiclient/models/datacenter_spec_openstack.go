@@ -74,6 +74,9 @@ type DatacenterSpecOpenstack struct {
 	// images
 	Images ImageList `json:"images,omitempty"`
 
+	// node ports allowed IP range
+	NodePortsAllowedIPRange *NetworkRanges `json:"nodePortsAllowedIPRange,omitempty"`
+
 	// node size requirements
 	NodeSizeRequirements *OpenstackNodeSizeRequirements `json:"nodeSizeRequirements,omitempty"`
 }
@@ -83,6 +86,10 @@ func (m *DatacenterSpecOpenstack) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateImages(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNodePortsAllowedIPRange(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -107,6 +114,25 @@ func (m *DatacenterSpecOpenstack) validateImages(formats strfmt.Registry) error 
 				return ve.ValidateName("images")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("images")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecOpenstack) validateNodePortsAllowedIPRange(formats strfmt.Registry) error {
+	if swag.IsZero(m.NodePortsAllowedIPRange) { // not required
+		return nil
+	}
+
+	if m.NodePortsAllowedIPRange != nil {
+		if err := m.NodePortsAllowedIPRange.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodePortsAllowedIPRange")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodePortsAllowedIPRange")
 			}
 			return err
 		}
@@ -142,6 +168,10 @@ func (m *DatacenterSpecOpenstack) ContextValidate(ctx context.Context, formats s
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateNodePortsAllowedIPRange(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateNodeSizeRequirements(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -161,6 +191,22 @@ func (m *DatacenterSpecOpenstack) contextValidateImages(ctx context.Context, for
 			return ce.ValidateName("images")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecOpenstack) contextValidateNodePortsAllowedIPRange(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NodePortsAllowedIPRange != nil {
+		if err := m.NodePortsAllowedIPRange.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodePortsAllowedIPRange")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodePortsAllowedIPRange")
+			}
+			return err
+		}
 	}
 
 	return nil
