@@ -93,11 +93,11 @@ func (o *GetClusterBackupStorageLocationOK) IsCode(code int) bool {
 }
 
 func (o *GetClusterBackupStorageLocationOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterBackupStorageLocationOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterBackupStorageLocationOK) GetPayload() *models.ClusterBackupStorageLocation {
@@ -155,11 +155,11 @@ func (o *GetClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 }
 
 func (o *GetClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *GetClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *GetClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *GetClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 }
 
 func (o *GetClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *GetClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *GetClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *GetClusterBackupStorageLocationDefault) IsCode(code int) bool {
 }
 
 func (o *GetClusterBackupStorageLocationDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterBackupStorageLocationDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] getClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] getClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

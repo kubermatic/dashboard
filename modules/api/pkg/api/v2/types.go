@@ -2323,3 +2323,14 @@ type BackupStorageLocationOverview struct {
 type BackupStorageLocationList struct {
 	Items []BackupStorageLocationOverview `json:"items"`
 }
+
+// BackupStorageLocationBucketObject represents a S3 object of Backup Storage Location Bucket.
+// swagger:model BackupStorageLocationBucketObject
+type BackupStorageLocationBucketObject struct {
+	Key  string `json:"key"`
+	Size int64  `json:"size,omitempty"`
+}
+
+// BackupStorageLocationBucketObjectList represents an array of Backup Storage Location Bucket Objects.
+// swagger:model BackupStorageLocationBucketObjectList
+type BackupStorageLocationBucketObjectList []BackupStorageLocationBucketObject

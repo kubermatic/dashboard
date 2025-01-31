@@ -52,7 +52,16 @@ type getCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"cbs_name"`
+	ClusterBackupStorageLocationName string `json:"cbsl_name"`
+}
+
+// listCbslBucketObjectsReq defines HTTP request for listCbslBucketObjects
+// swagger:parameters listClusterBackupStorageLocationBucketObjects
+type listCbslBucketObjectsReq struct {
+	common.ProjectReq
+	// in: path
+	// required: true
+	ClusterBackupStorageLocationName string `json:"cbsl_name"`
 }
 
 // createCbslReq defines HTTP request for createCbsl
@@ -77,7 +86,7 @@ type deleteCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"cbs_name"`
+	ClusterBackupStorageLocationName string `json:"cbsl_name"`
 }
 
 // patchCbslReq defines HTTP request for patchCbsl
@@ -86,7 +95,7 @@ type patchCbslReq struct {
 	common.ProjectReq
 	// in: path
 	// required: true
-	ClusterBackupStorageLocationName string `json:"cbs_name"`
+	ClusterBackupStorageLocationName string `json:"cbsl_name"`
 	// in: body
 	// required: true
 	Body CbslBody
@@ -160,6 +169,29 @@ func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.U
 		Spec:        *cbsl.Spec.DeepCopy(),
 		Status:      *cbsl.Status.DeepCopy(),
 	}, nil
+}
+
+func ListCSBLBucketObjects(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (apiv2.BackupStorageLocationBucketObjectList, error) {
+	req, ok := request.(listCbslBucketObjectsReq)
+	if !ok {
+		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	labelSet := map[string]string{
+		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
+	}
+
+	return provider.ListBucketObjects(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 }
 
 func CreateCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
@@ -267,9 +299,26 @@ func DecodeGetCBSLReq(ctx context.Context, r *http.Request) (interface{}, error)
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbsl_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
+	}
+
+	return req, nil
+}
+
+func DecodeListCBSLBucketObjectsReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	var req listCbslBucketObjectsReq
+
+	pr, err := common.DecodeProjectRequest(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+
+	req.ProjectReq = pr.(common.ProjectReq)
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbsl_name"]
+	if req.ClusterBackupStorageLocationName == "" {
+		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -300,9 +349,9 @@ func DecodeDeleteCBSLReq(ctx context.Context, r *http.Request) (interface{}, err
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbsl_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
 	}
 
 	return req, nil
@@ -317,9 +366,9 @@ func DecodePatchCBSLReq(ctx context.Context, r *http.Request) (interface{}, erro
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbs_name"]
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbsl_name"]
 	if req.ClusterBackupStorageLocationName == "" {
-		return "", fmt.Errorf("'cbs_name' parameter is required but was not provided")
+		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
 	}
 	if err = json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err

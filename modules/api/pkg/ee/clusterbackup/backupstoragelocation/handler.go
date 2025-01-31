@@ -116,23 +116,9 @@ func (r *createBSLReq) validateCreateBSLReq() error {
 	return nil
 }
 
-// checks whether a user is a global admin, project admin or has valid roles for a project.
-func validateUser(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID string) error {
-	userInfo, err := userInfoGetter(ctx, projectID)
-	if err != nil {
-		return err
-	}
-
-	// Only KKP admins and project owners/editors are allowed to perform this operation.
-	if !(userInfo.IsAdmin || userInfo.Roles.HasAny("editors", "owners")) {
-		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have privileges to perform this action. Please contact your administrator.", userInfo.Email))
-	}
-	return nil
-}
-
 func CreateBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, backupProvider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	req := request.(createBSLReq)
-	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
 
@@ -294,7 +280,7 @@ func DecodeGetBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 
 func GetBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	req := request.(getBSLReq)
-	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
 
@@ -341,7 +327,7 @@ func DecodeListBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 
 func ListBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocationList, error) {
 	req := request.(listBSLReq)
-	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
 
@@ -400,7 +386,7 @@ func DecodeDeleteBSLReq(c context.Context, r *http.Request) (interface{}, error)
 
 func DeleteBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	req := request.(deleteBSLReq)
-	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
 

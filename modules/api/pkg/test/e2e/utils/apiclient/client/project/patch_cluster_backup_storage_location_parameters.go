@@ -66,7 +66,7 @@ type PatchClusterBackupStorageLocationParams struct {
 	// Body.
 	Body *models.CbslBody
 
-	// CbsName.
+	// CbslName.
 	ClusterBackupStorageLocationName string
 
 	// ProjectID.
@@ -136,15 +136,15 @@ func (o *PatchClusterBackupStorageLocationParams) SetBody(body *models.CbslBody)
 	o.Body = body
 }
 
-// WithClusterBackupStorageLocationName adds the cbsName to the patch cluster backup storage location params
-func (o *PatchClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbsName string) *PatchClusterBackupStorageLocationParams {
-	o.SetClusterBackupStorageLocationName(cbsName)
+// WithClusterBackupStorageLocationName adds the cbslName to the patch cluster backup storage location params
+func (o *PatchClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbslName string) *PatchClusterBackupStorageLocationParams {
+	o.SetClusterBackupStorageLocationName(cbslName)
 	return o
 }
 
-// SetClusterBackupStorageLocationName adds the cbsName to the patch cluster backup storage location params
-func (o *PatchClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbsName string) {
-	o.ClusterBackupStorageLocationName = cbsName
+// SetClusterBackupStorageLocationName adds the cbslName to the patch cluster backup storage location params
+func (o *PatchClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbslName string) {
+	o.ClusterBackupStorageLocationName = cbslName
 }
 
 // WithProjectID adds the projectID to the patch cluster backup storage location params
@@ -171,8 +171,8 @@ func (o *PatchClusterBackupStorageLocationParams) WriteToRequest(r runtime.Clien
 		}
 	}
 
-	// path param cbs_name
-	if err := r.SetPathParam("cbs_name", o.ClusterBackupStorageLocationName); err != nil {
+	// path param cbsl_name
+	if err := r.SetPathParam("cbsl_name", o.ClusterBackupStorageLocationName); err != nil {
 		return err
 	}
 

@@ -48,6 +48,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatTreeModule} from '@angular/material/tree';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
@@ -187,6 +188,7 @@ const modules = [
   PipesModule,
   MonacoEditorModule,
   NgxChartsModule,
+  MatTreeModule,
 ];
 
 const components = [

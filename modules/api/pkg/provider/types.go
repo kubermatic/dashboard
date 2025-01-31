@@ -1360,6 +1360,9 @@ type BackupStorageProvider interface {
 	// Get returns a BackupStorageLocation of a given name.
 	GetUnsecured(ctx context.Context, userInfo *UserInfo, name string, labelSet map[string]string) (*kubermaticv1.ClusterBackupStorageLocation, error)
 
+	// ListBucketObjects returns objects from bucket of a given BackupStorageLocation name.
+	ListBucketObjects(ctx context.Context, userInfo *UserInfo, name string, labelSet map[string]string) (apiv2.BackupStorageLocationBucketObjectList, error)
+
 	// Create creates a new BackupStorageLocation.
 	Create(ctx context.Context, userInfo *UserInfo, cbslName, projectID string, cbsl *kubermaticv1.ClusterBackupStorageLocation, credentials apiv2.S3BackupCredentials) (*kubermaticv1.ClusterBackupStorageLocation, error)
 

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Application} from '@shared/entity/application';
+import {BackupStorageLocationSpec} from '@shared/entity/backup';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {isObjectEmpty} from '@shared/utils/common';
 import _ from 'lodash';
@@ -699,4 +700,9 @@ class ClusterModel {
 export class ProjectClusterList {
   clusters: Cluster[];
   errorMessage: string;
+}
+
+export class CreateClusterBackupStorageLocation {
+  cbslName: string;
+  bslSpec: BackupStorageLocationSpec;
 }

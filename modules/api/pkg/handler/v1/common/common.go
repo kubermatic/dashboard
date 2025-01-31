@@ -294,3 +294,17 @@ func GetClusterClient(ctx context.Context, userInfoGetter provider.UserInfoGette
 	}
 	return clusterProvider.GetClientForUserCluster(ctx, userInfo, cluster)
 }
+
+// checks whether a user is global admin, project admin or has valid roles to modify a project.
+func ValidateUserCanModifyProject(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID string) error {
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return err
+	}
+
+	// Only KKP admins and project owners/editors are allowed to perform this operation.
+	if !(userInfo.IsAdmin || userInfo.Roles.HasAny("editors", "owners")) {
+		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have privileges to perform this action. Please contact your administrator.", userInfo.Email))
+	}
+	return nil
+}

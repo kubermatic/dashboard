@@ -46,6 +46,16 @@ func getCBSL(
 	return nil, nil
 }
 
+func listCBSLBucketObjects(
+	_ context.Context,
+	_ interface{},
+	_ provider.UserInfoGetter,
+	_ provider.BackupStorageProvider,
+	_ provider.ProjectProvider,
+) (*apiv2.S3BackupCredentials, error) {
+	return nil, nil
+}
+
 func createCBSL(
 	_ context.Context,
 	_ interface{},
@@ -84,6 +94,13 @@ func DecodeListProjectCBSLReq(
 }
 
 func DecodeGetCBSLReq(
+	_ context.Context,
+	_ *http.Request,
+) (interface{}, error) {
+	return nil, nil
+}
+
+func DecodeListCBSLBucketObjectsReq(
 	_ context.Context,
 	_ *http.Request,
 ) (interface{}, error) {

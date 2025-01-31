@@ -15,6 +15,7 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
+import {AnnotationFormComponent} from '@app/shared/components/annotation-form/component';
 
 import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
@@ -25,6 +26,7 @@ import {
   ClusterPatch,
   CNIPlugin,
   CNIPluginVersions,
+  CreateClusterBackupStorageLocation,
   CreateClusterModel,
   Finalizer,
   MasterVersion,
@@ -33,17 +35,15 @@ import {
   Token,
 } from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {Health} from '@shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {merge, Observable, of, Subject, timer, map} from 'rxjs';
-import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import _ from 'lodash';
-import {AnnotationFormComponent} from '@app/shared/components/annotation-form/component';
+import {map, merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 
 @Injectable()
 export class ClusterService {
@@ -344,6 +344,11 @@ export class ClusterService {
   startExternalCCMMigration(projectID: string, cluster: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/externalccmmigration`;
     return this._http.post<void>(url, {});
+  }
+
+  createBSL(projectID: string, cluster: string, bsl: CreateClusterBackupStorageLocation): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/backupstoragelocation`;
+    return this._http.post<void>(url, bsl);
   }
 
   restores(projectID: string): Observable<EtcdRestore[]> {

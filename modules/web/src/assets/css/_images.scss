@@ -298,6 +298,20 @@
   transform: rotate(90deg);
 }
 
+.km-icon-arrow-right {
+  @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
+
+  transform: rotate(-90deg);
+
+  &.i-14 {
+    @include mixins.size(14px, 14px, true);
+  }
+
+  &.i-16 {
+    @include mixins.size(16px, 16px, true);
+  }
+}
+
 .km-icon-close {
   @include mixins.mask-image('/assets/images/icons/close.svg', 20px);
 }
@@ -492,6 +506,26 @@
   &.i-24 {
     @include mixins.size(24px, 24px, true);
   }
+}
+
+.km-icon-folder {
+  @include mixins.mask-image('/assets/images/icons/folder.svg', 18px);
+}
+
+.km-icon-folder-open {
+  @include mixins.mask-image('/assets/images/icons/folder-open.svg', 18px);
+}
+
+.km-icon-file {
+  @include mixins.mask-image('/assets/images/icons/file.svg', 14px);
+
+  .i-12 {
+    @include mixins.size(12px, 12px, true);
+  }
+}
+
+.km-icon-import {
+  @include mixins.mask-image('/assets/images/icons/import.svg', 24px);
 }
 
 .km-provider-logo-alibaba {

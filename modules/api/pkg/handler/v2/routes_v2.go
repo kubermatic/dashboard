@@ -1424,19 +1424,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectCBSL())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}").
 		Handler(r.getCBSL())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/bucketobjects").
+		Handler(r.listCBSLBucketObjects())
 
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clusterbackupstoragelocation").
 		Handler(r.createCBSL())
 
 	mux.Methods(http.MethodDelete).
-		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}").
 		Handler(r.deleteCBSL())
 
 	mux.Methods(http.MethodPatch).
-		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}").
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}").
 		Handler(r.patchCBSL())
 
 	// Defines a set of HTTP endpoints for managing etcd backup configs
@@ -8275,7 +8279,7 @@ func (r Routing) listProjectCBSL() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project getClusterBackupStorageLocation
+// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name} project getClusterBackupStorageLocation
 //
 //	Gets a cluster backup storage location for a given project based on its name
 //
@@ -8293,6 +8297,27 @@ func (r Routing) getCBSL() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(storagelocation.GetCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeGetCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/bucketobjects project listClusterBackupStorageLocationBucketObjects
+//
+//	List objects from bucket of a cluster backup storage location for a given project based on its name
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: BackupStorageLocationBucketObjectList
+//	  401: empty
+//	  403: empty
+func (r Routing) listCBSLBucketObjects() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.ListCBSLBucketObjectsEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeListCBSLBucketObjectsReq, handler.EncodeJSON, r.defaultServerOptions()...,
 	)
 }
 
@@ -8320,7 +8345,7 @@ func (r Routing) createCBSL() http.Handler {
 	)
 }
 
-// swagger:route DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project deleteClusterBackupStorageLocation
+// swagger:route DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name} project deleteClusterBackupStorageLocation
 //
 //	Deletes a cluster backup storage location for a given project based on its name
 //
@@ -8338,7 +8363,7 @@ func (r Routing) deleteCBSL() http.Handler {
 	)
 }
 
-// swagger:route PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name} project patchClusterBackupStorageLocation
+// swagger:route PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name} project patchClusterBackupStorageLocation
 //
 //	Patches a cluster backup storage location for a given project based on its name
 //

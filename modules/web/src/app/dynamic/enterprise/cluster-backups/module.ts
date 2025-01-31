@@ -19,6 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {NgModule} from '@angular/core';
+import {ImportBackupDialogComponent} from '@dynamic/enterprise/cluster-backups/list/backups/import-dialog/component';
 import {ClusterBackupsRoutingModule} from './routing';
 import {ClusterBackupsComponent} from './list/component';
 import {ClustersBackupsListComponent} from './list/backups/component';
@@ -45,6 +46,7 @@ import {AddBackupStorageLocationDialogComponent} from './list/backup-storage-loc
     AddRestoreDialogComponent,
     DeleteRestoreDialogComponent,
     AddBackupStorageLocationDialogComponent,
+    ImportBackupDialogComponent,
   ],
 })
 export class ClusterBackupsModule {}
