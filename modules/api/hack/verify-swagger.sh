@@ -41,7 +41,7 @@ cd $API/cmd/kubermatic-api/
 # To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/*
 #
 # this workaround will be removed once api will be totally removed from kubermatic repository
-run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/kubermatic/*
+run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/kubermatic/* -x github.com/sigstore/rekor/pkg/generated/models
 # The parameters order in the generated swagger spec json file is not
 # deterministic, sort in order to avoid flake results.
 # The sorting here is applied only to first level arrays, nested arrays are not
