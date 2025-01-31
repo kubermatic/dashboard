@@ -2230,7 +2230,7 @@ func GenApplicationInstallation(namespace string, name string, targetnamespace s
 			APIVersion: appskubermaticv1.SchemeGroupVersion.String(),
 		},
 		Spec: appskubermaticv1.ApplicationInstallationSpec{
-			Namespace: appskubermaticv1.AppNamespaceSpec{
+			Namespace: &appskubermaticv1.AppNamespaceSpec{
 				Name:   targetnamespace,
 				Create: true,
 			},
