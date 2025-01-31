@@ -34,7 +34,7 @@ type AppNamespaceSpec struct {
 
 	// Name is the namespace to deploy the Application into.
 	// Should be a valid lowercase RFC1123 domain name
-	// Pattern: =`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
+	// Pattern: =`^(|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)`
 	Name string `json:"name,omitempty"`
 }
 
@@ -57,7 +57,7 @@ func (m *AppNamespaceSpec) validateName(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.Pattern("name", "body", m.Name, `=`+"`"+`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`+"`"+``); err != nil {
+	if err := validate.Pattern("name", "body", m.Name, `=`+"`"+`^(|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)`+"`"+``); err != nil {
 		return err
 	}
 

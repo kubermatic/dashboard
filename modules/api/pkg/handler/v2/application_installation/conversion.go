@@ -110,7 +110,7 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 			Annotations: app.Annotations,
 		},
 		Spec: appskubermaticv1.ApplicationInstallationSpec{
-			Namespace: appskubermaticv1.AppNamespaceSpec{
+			Namespace: &appskubermaticv1.AppNamespaceSpec{
 				Name:        app.Spec.Namespace.Name,
 				Create:      app.Spec.Namespace.Create,
 				Labels:      app.Spec.Namespace.Labels,
