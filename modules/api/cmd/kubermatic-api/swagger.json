@@ -8757,6 +8757,166 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation": {
+      "get": {
+        "description": "List all the backup storage location objects present in the cluster. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "backupstoragelocation"
+        ],
+        "operationId": "listBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BackupStorageLocation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BackupStorageLocation"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a backup storage location which would be used for restoring backup of different clusters. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "backupstoragelocation"
+        ],
+        "operationId": "createBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BslBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BackupStorageLocation",
+            "schema": {
+              "$ref": "#/definitions/BackupStorageLocation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}": {
+      "get": {
+        "description": "Get a backup storage location object present in the cluster specified by bsl_name. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "backupstoragelocation"
+        ],
+        "operationId": "getBackupStorageLocation",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "BSLName",
+            "name": "bsl_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BackupStorageLocation",
+            "schema": {
+              "$ref": "#/definitions/BackupStorageLocation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/bindings": {
       "get": {
         "description": "List role binding",
@@ -28847,6 +29007,27 @@
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "BackupStorageLocation": {
+      "type": "object",
+      "title": "BackupStorageLocation is the object representing a Backup Storage Location.",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "x-go-name": "DisplayName"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/BackupStorageLocationSpec"
+        },
+        "status": {
+          "$ref": "#/definitions/BackupStorageLocationStatus"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "BackupStorageLocationAccessMode": {
       "description": "+kubebuilder:validation:Enum=ReadOnly;ReadWrite",
       "type": "string",
@@ -28991,14 +29172,6 @@
       "properties": {
         "bslSpec": {
           "$ref": "#/definitions/BackupStorageLocationSpec"
-        },
-        "credentials": {
-          "$ref": "#/definitions/BackupCredentials"
-        },
-        "name": {
-          "description": "Name of the cluster backup",
-          "type": "string",
-          "x-go-name": "Name"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backupstoragelocation"

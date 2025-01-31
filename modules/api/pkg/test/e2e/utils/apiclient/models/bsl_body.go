@@ -18,14 +18,8 @@ import (
 // swagger:model BslBody
 type BslBody struct {
 
-	// Name of the cluster backup
-	Name string `json:"name,omitempty"`
-
 	// bsl spec
 	BslSpec *BackupStorageLocationSpec `json:"bslSpec,omitempty"`
-
-	// credentials
-	Credentials *BackupCredentials `json:"credentials,omitempty"`
 }
 
 // Validate validates this bsl body
@@ -33,10 +27,6 @@ func (m *BslBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBslSpec(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateCredentials(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,34 +55,11 @@ func (m *BslBody) validateBslSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *BslBody) validateCredentials(formats strfmt.Registry) error {
-	if swag.IsZero(m.Credentials) { // not required
-		return nil
-	}
-
-	if m.Credentials != nil {
-		if err := m.Credentials.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("credentials")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("credentials")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // ContextValidate validate this bsl body based on the context it is used
 func (m *BslBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateBslSpec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateCredentials(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -110,22 +77,6 @@ func (m *BslBody) contextValidateBslSpec(ctx context.Context, formats strfmt.Reg
 				return ve.ValidateName("bslSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("bslSpec")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *BslBody) contextValidateCredentials(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Credentials != nil {
-		if err := m.Credentials.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("credentials")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("credentials")
 			}
 			return err
 		}

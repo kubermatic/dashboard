@@ -107,7 +107,7 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		return nil, errors.New("a user is missing but required")
 	}
 	cbslFullName := fmt.Sprintf("%s-%s", cbslName, projectID)
-	secretName := fmt.Sprintf("credential-%s", cbslFullName)
+	secretName := fmt.Sprintf("credential-%s-", cbslFullName)
 
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{

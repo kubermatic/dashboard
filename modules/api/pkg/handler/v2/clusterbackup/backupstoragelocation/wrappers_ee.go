@@ -22,12 +22,13 @@ import (
 	"context"
 	"net/http"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/ee/clusterbackup/backupstoragelocation"
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
 func createEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, backupProvider provider.BackupStorageProvider, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	return backupstoragelocation.CreateBSLEndpoint(ctx, req, userInfoGetter, backupProvider, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
@@ -36,7 +37,7 @@ func decodeCreateBSLReq(c context.Context, r *http.Request) (interface{}, error)
 }
 
 func listEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) ([]*apiv2.BackupStorageLocation, error) {
 	return backupstoragelocation.ListBSLEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 
@@ -45,7 +46,7 @@ func decodeListBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 }
 
 func getEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	return backupstoragelocation.GetBSLEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 

@@ -31,7 +31,7 @@ func createEndpoint(
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
-	_ provider.SettingsProvider) (interface{}, error) {
+	_ provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	return nil, nil
 }
 
@@ -46,7 +46,7 @@ func listEndpoint(
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
 	_ provider.SettingsProvider,
-) (interface{}, error) {
+) ([]*apiv2.BackupStorageLocation, error) {
 	return nil, nil
 }
 
@@ -61,7 +61,7 @@ func getEndpoint(
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
 	_ provider.SettingsProvider,
-) (interface{}, error) {
+) (*apiv2.BackupStorageLocation, error) {
 	return nil, nil
 }
 

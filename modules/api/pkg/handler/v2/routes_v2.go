@@ -8051,7 +8051,18 @@ func (r Routing) clusterBackupDownloadURL() http.Handler {
 	)
 }
 
-// Backup storage location.
+// swagger:route POST /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation backupstoragelocation createBackupStorageLocation
+//
+//	Creates a backup storage location which would be used for restoring backup of different clusters. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: BackupStorageLocation
+//	  401: empty
+//	  403: empty
 func (r Routing) createBackupStorageLocation() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
@@ -8065,6 +8076,18 @@ func (r Routing) createBackupStorageLocation() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation  backupstoragelocation listBackupStorageLocation
+//
+//	List all the backup storage location objects present in the cluster. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []BackupStorageLocation
+//	  401: empty
+//	  403: empty
 func (r Routing) listBackupStorageLocation() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
@@ -8077,6 +8100,18 @@ func (r Routing) listBackupStorageLocation() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name} backupstoragelocation getBackupStorageLocation
+//
+//	Get a backup storage location object present in the cluster specified by bsl_name. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: BackupStorageLocation
+//	  401: empty
+//	  403: empty
 func (r Routing) getBackupStorageLocation() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
