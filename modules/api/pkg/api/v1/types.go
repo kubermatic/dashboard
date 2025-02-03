@@ -1886,7 +1886,7 @@ func (spec *VSphereNodeSpec) MarshalJSON() ([]byte, error) {
 		Template       string       `json:"template"`
 		Tags           []VSphereTag `json:"tags,omitempty"`
 		VMAntiAffinity *bool        `json:"vmAntiAffinity"`
-		VMGroup        string       `json:"vmGroup"`
+		VMGroup        string       `json:"vmGroup,omitempty"`
 	}{
 		CPUs:           spec.CPUs,
 		Memory:         spec.Memory,
