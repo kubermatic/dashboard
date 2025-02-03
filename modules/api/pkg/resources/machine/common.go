@@ -608,8 +608,9 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 					OsImage: providerconfig.ConfigVarString{Value: extractKubeVirtOsImageURLOrDataVolumeNsName(kubernetesprovider.NamespaceName(cluster.Name), nodeSpec.Cloud.Kubevirt.PrimaryDiskOSImage)},
 				},
 			},
-			DNSPolicy: providerconfig.ConfigVarString{Value: dc.Spec.Kubevirt.DNSPolicy},
-			DNSConfig: dc.Spec.Kubevirt.DNSConfig.DeepCopy(),
+			DNSPolicy:        providerconfig.ConfigVarString{Value: dc.Spec.Kubevirt.DNSPolicy},
+			DNSConfig:        dc.Spec.Kubevirt.DNSConfig.DeepCopy(),
+			EvictionStrategy: string(dc.Spec.Kubevirt.VMEvictionStrategy),
 		},
 		Affinity: kubevirt.Affinity{
 			NodeAffinityPreset: kubevirt.NodeAffinityPreset{
