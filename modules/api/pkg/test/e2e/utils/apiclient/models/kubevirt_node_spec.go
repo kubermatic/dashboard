@@ -24,6 +24,10 @@ type KubevirtNodeSpec struct {
 	// Required: true
 	CPUs *string `json:"cpus"`
 
+	// EvictionStrategy describes the strategy to follow when a node drain occurs. If not set the default
+	// value is External and the VM will be protected by a PDB.
+	EvictionStrategy string `json:"evictionStrategy,omitempty"`
+
 	// FlavorName states name of the virtual-machine flavor.
 	//
 	// Deprecated. In favor of Instancetype and Preference.
