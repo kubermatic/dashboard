@@ -33,6 +33,7 @@ import {
   KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
+import {ApplicationService} from '@core/services/application';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
@@ -44,6 +45,7 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
+import {CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@shared/entity/application';
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
@@ -69,6 +71,7 @@ enum Controls {
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
   OperatingSystemProfile = 'operatingSystemProfile',
+  EnableClusterAutoscalingApp = 'enableClusterAutoscalingApp',
   MaxReplicas = 'maxReplicas',
   MinReplicas = 'minReplicas',
   StaticNetworkDNSServers = 'DNSServers',
@@ -148,6 +151,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _osmService: OperatingSystemManagerService,
     private readonly _projectService: ProjectService,
     private readonly _quotaCalculationService: QuotaCalculationService,
+    private readonly _applicationService: ApplicationService,
     private readonly _params: ParamsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
@@ -207,6 +211,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
+      [Controls.EnableClusterAutoscalingApp]: this._builder.control(
+        this._applicationService.applications.find(
+          app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+        )
+      ),
       [Controls.MaxReplicas]: this._builder.control(
         this._nodeDataService.nodeData.maxReplicas,
         Validators.max(this.MaxReplicasCount)
@@ -265,6 +274,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
+      this.form.get(Controls.EnableClusterAutoscalingApp).valueChanges,
       this.form.get(Controls.MaxReplicas).valueChanges,
       this.form.get(Controls.MinReplicas).valueChanges,
       this.form.get(Controls.OperatingSystemProfile).valueChanges
@@ -608,6 +618,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
         minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       };
+      if (!this.isDialogView()) {
+        data = {
+          ...data,
+          enableClusterAutoscalingApp: this.form.get(Controls.EnableClusterAutoscalingApp).value,
+        };
+      }
     }
 
     return data;
