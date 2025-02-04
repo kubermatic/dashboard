@@ -2234,7 +2234,7 @@ type KubevirtNodeSpec struct {
 	// TopologySpreadConstraints describes topology spread constraints for VMs.
 	TopologySpreadConstraints []TopologySpreadConstraint `json:"topologySpreadConstraints"`
 	// EvictionStrategy describes the strategy to follow when a node drain occurs. If not set the default
-	//	// value is External and the VM will be protected by a PDB.
+	// value is External and the VM will be protected by a PDB.
 	EvictionStrategy string `json:"evictionStrategy,omitempty"`
 }
 
