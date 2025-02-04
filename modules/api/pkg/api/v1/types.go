@@ -2233,6 +2233,9 @@ type KubevirtNodeSpec struct {
 	NodeAffinityPreset NodeAffinityPreset `json:"nodeAffinityPreset"`
 	// TopologySpreadConstraints describes topology spread constraints for VMs.
 	TopologySpreadConstraints []TopologySpreadConstraint `json:"topologySpreadConstraints"`
+	// EvictionStrategy describes the strategy to follow when a node drain occurs. If not set the default
+	// value is External and the VM will be protected by a PDB.
+	EvictionStrategy string `json:"evictionStrategy,omitempty"`
 }
 
 type KubevirtNodeSize struct {
@@ -2330,6 +2333,7 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		NodeAffinityPreset          NodeAffinityPreset              `json:"nodeAffinityPreset"`
 		TopologySpreadConstraints   []TopologySpreadConstraint      `json:"topologySpreadConstraints"`
 		Subnet                      string                          `json:"subnet,omitempty"`
+		EvictionStrategy            string                          `json:"evictionStrategy,omitempty"`
 	}{
 		FlavorName:                  spec.FlavorName,
 		FlavorProfile:               spec.FlavorProfile,
@@ -2346,6 +2350,7 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 		NodeAffinityPreset:          spec.NodeAffinityPreset,
 		TopologySpreadConstraints:   spec.TopologySpreadConstraints,
 		Subnet:                      spec.Subnet,
+		EvictionStrategy:            spec.EvictionStrategy,
 	}
 
 	return json.Marshal(&res)

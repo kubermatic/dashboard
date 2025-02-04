@@ -372,6 +372,9 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		if config.VirtualMachine.ProviderNetwork != nil && config.VirtualMachine.ProviderNetwork.VPC.Subnet != nil {
 			cloudSpec.Kubevirt.Subnet = config.VirtualMachine.ProviderNetwork.VPC.Subnet.Name
 		}
+		if config.VirtualMachine.EvictionStrategy != "" {
+			cloudSpec.Kubevirt.EvictionStrategy = config.VirtualMachine.EvictionStrategy
+		}
 
 		cloudSpec.Kubevirt.TopologySpreadConstraints = make([]apiv1.TopologySpreadConstraint, 0, len(config.TopologySpreadConstraints))
 		for _, tsc := range config.TopologySpreadConstraints {

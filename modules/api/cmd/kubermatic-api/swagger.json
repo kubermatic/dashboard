@@ -34764,6 +34764,11 @@
           "type": "string",
           "x-go-name": "CPUs"
         },
+        "evictionStrategy": {
+          "description": "EvictionStrategy describes the strategy to follow when a node drain occurs. If not set the default\nvalue is External and the VM will be protected by a PDB.",
+          "type": "string",
+          "x-go-name": "EvictionStrategy"
+        },
         "flavorName": {
           "description": "FlavorName states name of the virtual-machine flavor.\n\nDeprecated. In favor of Instancetype and Preference.",
           "type": "string",
