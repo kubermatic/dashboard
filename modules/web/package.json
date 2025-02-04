@@ -36,7 +36,7 @@
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
     "fix:html": "html-beautify --replace -f \"src/**/*.html\"",
-    "fix:license": "license-check-and-add add -r 2024",
+    "fix:license": "license-check-and-add add -r 2025",
     "clean": "gts clean",
     "vi": "node version.js",
     "postinstall": "npm run vi",
