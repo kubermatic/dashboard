@@ -2301,8 +2301,25 @@ type BackupDownloadUrl struct {
 // BackupStorageLocation is the object representing a Backup Storage Location.
 // swagger:model BackupStorageLocation
 type BackupStorageLocation struct {
-	Name        string                               `json:"name,omitempty"`
-	DisplayName string                               `json:"displayName,omitempty"`
-	Spec        velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
-	Status      velerov1.BackupStorageLocationStatus `json:"status"`
+	Name     string                               `json:"name"`
+	CBSLName string                               `json:"cbslName,omitempty"`
+	Spec     velerov1.BackupStorageLocationSpec   `json:"spec,omitempty"`
+	Status   velerov1.BackupStorageLocationStatus `json:"status,omitempty"`
+}
+
+// BackupStorageLocationOverview is the object representing a Backup Storage Location overview for a list
+// swagger:model BackupStorageLocationOverview
+type BackupStorageLocationOverview struct {
+	Name         string                               `json:"name"`
+	CBSLName     string                               `json:"cbslName,omitempty"`
+	Prefix       string                               `json:"prefix,omitempty"`
+	Region       string                               `json:"region,omitempty"`
+	CreationDate time.Time                            `json:"creationTime,omitempty"`
+	Status       velerov1.BackupStorageLocationStatus `json:"status,omitempty"`
+}
+
+// BackupStorageLocationList is the list of object representing a Backup Storage Location overview.
+// swagger:model BackupStorageLocationList
+type BackupStorageLocationList struct {
+	Items []BackupStorageLocationOverview `json:"items"`
 }

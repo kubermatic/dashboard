@@ -11,31 +11,39 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
-// BackupStorageLocation BackupStorageLocation is the object representing a Backup Storage Location.
+// BackupStorageLocationOverview BackupStorageLocationOverview is the object representing a Backup Storage Location overview for a list
 //
-// swagger:model BackupStorageLocation
-type BackupStorageLocation struct {
+// swagger:model BackupStorageLocationOverview
+type BackupStorageLocationOverview struct {
 
 	// c b s l name
 	CBSLName string `json:"cbslName,omitempty"`
 
+	// creation date
+	// Format: date-time
+	CreationDate strfmt.DateTime `json:"creationTime,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 
-	// spec
-	Spec *BackupStorageLocationSpec `json:"spec,omitempty"`
+	// prefix
+	Prefix string `json:"prefix,omitempty"`
+
+	// region
+	Region string `json:"region,omitempty"`
 
 	// status
 	Status *BackupStorageLocationStatus `json:"status,omitempty"`
 }
 
-// Validate validates this backup storage location
-func (m *BackupStorageLocation) Validate(formats strfmt.Registry) error {
+// Validate validates this backup storage location overview
+func (m *BackupStorageLocationOverview) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateSpec(formats); err != nil {
+	if err := m.validateCreationDate(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -49,26 +57,19 @@ func (m *BackupStorageLocation) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *BackupStorageLocation) validateSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.Spec) { // not required
+func (m *BackupStorageLocationOverview) validateCreationDate(formats strfmt.Registry) error {
+	if swag.IsZero(m.CreationDate) { // not required
 		return nil
 	}
 
-	if m.Spec != nil {
-		if err := m.Spec.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("spec")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("spec")
-			}
-			return err
-		}
+	if err := validate.FormatOf("creationTime", "body", "date-time", m.CreationDate.String(), formats); err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (m *BackupStorageLocation) validateStatus(formats strfmt.Registry) error {
+func (m *BackupStorageLocationOverview) validateStatus(formats strfmt.Registry) error {
 	if swag.IsZero(m.Status) { // not required
 		return nil
 	}
@@ -87,13 +88,9 @@ func (m *BackupStorageLocation) validateStatus(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this backup storage location based on the context it is used
-func (m *BackupStorageLocation) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this backup storage location overview based on the context it is used
+func (m *BackupStorageLocationOverview) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
-
-	if err := m.contextValidateSpec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
 	if err := m.contextValidateStatus(ctx, formats); err != nil {
 		res = append(res, err)
@@ -105,23 +102,7 @@ func (m *BackupStorageLocation) ContextValidate(ctx context.Context, formats str
 	return nil
 }
 
-func (m *BackupStorageLocation) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Spec != nil {
-		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("spec")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("spec")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *BackupStorageLocation) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+func (m *BackupStorageLocationOverview) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
@@ -138,7 +119,7 @@ func (m *BackupStorageLocation) contextValidateStatus(ctx context.Context, forma
 }
 
 // MarshalBinary interface implementation
-func (m *BackupStorageLocation) MarshalBinary() ([]byte, error) {
+func (m *BackupStorageLocationOverview) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -146,8 +127,8 @@ func (m *BackupStorageLocation) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *BackupStorageLocation) UnmarshalBinary(b []byte) error {
-	var res BackupStorageLocation
+func (m *BackupStorageLocationOverview) UnmarshalBinary(b []byte) error {
+	var res BackupStorageLocationOverview
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

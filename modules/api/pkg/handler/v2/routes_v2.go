@@ -8085,7 +8085,7 @@ func (r Routing) createBackupStorageLocation() http.Handler {
 //
 //	Responses:
 //	  default: errorResponse
-//	  200: []BackupStorageLocation
+//	  200: BackupStorageLocationList
 //	  401: empty
 //	  403: empty
 func (r Routing) listBackupStorageLocation() http.Handler {
@@ -8125,6 +8125,18 @@ func (r Routing) getBackupStorageLocation() http.Handler {
 	)
 }
 
+// swagger:route DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name} backupstoragelocation deleteBackupStorageLocation
+//
+//	Delete a backup storage location object present in the cluster specified by bsl_name. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+//	  401: empty
+//	  403: empty
 func (r Routing) deleteBackupStorageLocation() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(

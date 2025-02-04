@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	CreateBackupStorageLocation(params *CreateBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateBackupStorageLocationOK, error)
 
+	DeleteBackupStorageLocation(params *DeleteBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteBackupStorageLocationOK, error)
+
 	GetBackupStorageLocation(params *GetBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetBackupStorageLocationOK, error)
 
 	ListBackupStorageLocation(params *ListBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListBackupStorageLocationOK, error)
@@ -72,6 +74,44 @@ func (a *Client) CreateBackupStorageLocation(params *CreateBackupStorageLocation
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*CreateBackupStorageLocationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeleteBackupStorageLocation Delete a backup storage location object present in the cluster specified by bsl_name. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) DeleteBackupStorageLocation(params *DeleteBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteBackupStorageLocationOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeleteBackupStorageLocationParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "deleteBackupStorageLocation",
+		Method:             "DELETE",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation/{bsl_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeleteBackupStorageLocationReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeleteBackupStorageLocationOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeleteBackupStorageLocationDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

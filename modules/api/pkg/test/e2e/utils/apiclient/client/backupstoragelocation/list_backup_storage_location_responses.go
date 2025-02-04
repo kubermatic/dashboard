@@ -61,10 +61,10 @@ func NewListBackupStorageLocationOK() *ListBackupStorageLocationOK {
 /*
 ListBackupStorageLocationOK describes a response with status code 200, with default header values.
 
-BackupStorageLocation
+BackupStorageLocationList
 */
 type ListBackupStorageLocationOK struct {
-	Payload []*models.BackupStorageLocation
+	Payload *models.BackupStorageLocationList
 }
 
 // IsSuccess returns true when this list backup storage location o k response has a 2xx status code
@@ -100,14 +100,16 @@ func (o *ListBackupStorageLocationOK) String() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupstoragelocation][%d] listBackupStorageLocationOK  %+v", 200, o.Payload)
 }
 
-func (o *ListBackupStorageLocationOK) GetPayload() []*models.BackupStorageLocation {
+func (o *ListBackupStorageLocationOK) GetPayload() *models.BackupStorageLocationList {
 	return o.Payload
 }
 
 func (o *ListBackupStorageLocationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.BackupStorageLocationList)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

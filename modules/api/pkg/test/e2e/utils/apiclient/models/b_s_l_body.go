@@ -13,17 +13,20 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// BslBody bsl body
+// BSLBody b s l body
 //
-// swagger:model BslBody
-type BslBody struct {
+// swagger:model BSLBody
+type BSLBody struct {
+
+	// c b s l name
+	CBSLName string `json:"cbslName,omitempty"`
 
 	// bsl spec
 	BslSpec *BackupStorageLocationSpec `json:"bslSpec,omitempty"`
 }
 
-// Validate validates this bsl body
-func (m *BslBody) Validate(formats strfmt.Registry) error {
+// Validate validates this b s l body
+func (m *BSLBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateBslSpec(formats); err != nil {
@@ -36,7 +39,7 @@ func (m *BslBody) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *BslBody) validateBslSpec(formats strfmt.Registry) error {
+func (m *BSLBody) validateBslSpec(formats strfmt.Registry) error {
 	if swag.IsZero(m.BslSpec) { // not required
 		return nil
 	}
@@ -55,8 +58,8 @@ func (m *BslBody) validateBslSpec(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this bsl body based on the context it is used
-func (m *BslBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this b s l body based on the context it is used
+func (m *BSLBody) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateBslSpec(ctx, formats); err != nil {
@@ -69,7 +72,7 @@ func (m *BslBody) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *BslBody) contextValidateBslSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *BSLBody) contextValidateBslSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BslSpec != nil {
 		if err := m.BslSpec.ContextValidate(ctx, formats); err != nil {
@@ -86,7 +89,7 @@ func (m *BslBody) contextValidateBslSpec(ctx context.Context, formats strfmt.Reg
 }
 
 // MarshalBinary interface implementation
-func (m *BslBody) MarshalBinary() ([]byte, error) {
+func (m *BSLBody) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -94,8 +97,8 @@ func (m *BslBody) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *BslBody) UnmarshalBinary(b []byte) error {
-	var res BslBody
+func (m *BSLBody) UnmarshalBinary(b []byte) error {
+	var res BSLBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

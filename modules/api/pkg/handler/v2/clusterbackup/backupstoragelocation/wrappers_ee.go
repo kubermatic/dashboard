@@ -37,7 +37,7 @@ func decodeCreateBSLReq(c context.Context, r *http.Request) (interface{}, error)
 }
 
 func listEndpoint(ctx context.Context, req interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider,
-	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) ([]*apiv2.BackupStorageLocation, error) {
+	privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocationList, error) {
 	return backupstoragelocation.ListBSLEndpoint(ctx, req, userInfoGetter, projectProvider, privilegedProjectProvider, settingsProvider)
 }
 

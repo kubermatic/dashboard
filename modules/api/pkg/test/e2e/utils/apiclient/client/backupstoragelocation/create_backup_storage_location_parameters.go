@@ -64,7 +64,7 @@ CreateBackupStorageLocationParams contains all the parameters to send to the API
 type CreateBackupStorageLocationParams struct {
 
 	// Body.
-	Body *models.BslBody
+	Body *models.BSLBody
 
 	// ClusterID.
 	ClusterID string
@@ -126,13 +126,13 @@ func (o *CreateBackupStorageLocationParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create backup storage location params
-func (o *CreateBackupStorageLocationParams) WithBody(body *models.BslBody) *CreateBackupStorageLocationParams {
+func (o *CreateBackupStorageLocationParams) WithBody(body *models.BSLBody) *CreateBackupStorageLocationParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create backup storage location params
-func (o *CreateBackupStorageLocationParams) SetBody(body *models.BslBody) {
+func (o *CreateBackupStorageLocationParams) SetBody(body *models.BSLBody) {
 	o.Body = body
 }
 

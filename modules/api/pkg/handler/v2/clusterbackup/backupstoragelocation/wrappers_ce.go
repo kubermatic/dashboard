@@ -21,6 +21,7 @@ package backupstoragelocation
 import (
 	"context"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
@@ -46,7 +47,7 @@ func listEndpoint(
 	_ provider.ProjectProvider,
 	_ provider.PrivilegedProjectProvider,
 	_ provider.SettingsProvider,
-) ([]*apiv2.BackupStorageLocation, error) {
+) (*apiv2.BackupStorageLocationList, error) {
 	return nil, nil
 }
 
