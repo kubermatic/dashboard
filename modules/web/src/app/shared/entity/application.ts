@@ -15,6 +15,8 @@
 import {SafeUrl} from '@angular/platform-browser';
 import semver from 'semver';
 
+export const CLUSTER_AUTOSCALING_APP_DEF_NAME = 'cluster-autoscaler';
+
 export class Application {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;

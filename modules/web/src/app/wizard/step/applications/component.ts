@@ -18,12 +18,20 @@ import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {StepRegistry} from '@app/wizard/config';
 import {StepBase} from '@app/wizard/step/base';
 import {ApplicationService} from '@core/services/application';
+import {NodeDataService} from '@core/services/node-data/service';
 import {WizardService} from '@core/services/wizard/wizard';
 import {ApplicationsListView} from '@shared/components/application-list/component';
-import {Application, ApplicationAnnotations, getApplicationVersion} from '@shared/entity/application';
+import {
+  Application,
+  ApplicationAnnotations,
+  ApplicationDefinition,
+  getApplicationVersion,
+  CLUSTER_AUTOSCALING_APP_DEF_NAME,
+} from '@shared/entity/application';
 import * as y from 'js-yaml';
 import _, {merge} from 'lodash';
-import {forkJoin, takeUntil} from 'rxjs';
+import {forkJoin, of, takeUntil} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 
 enum Controls {
   Applications = 'applications',
@@ -54,7 +62,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     wizard: WizardService,
     private readonly _builder: FormBuilder,
     private readonly _applicationService: ApplicationService,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _nodeDataService: NodeDataService
   ) {
     super(wizard, StepRegistry.Applications);
   }
@@ -79,6 +88,30 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this.loadDefaultAndEnforcedApplications();
+      });
+
+    this._nodeDataService.nodeDataChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(
+        switchMap(nodeData => {
+          const clusterAutoscalingApp = this.applications.find(
+            application => application.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+          );
+          if (clusterAutoscalingApp) {
+            if (!nodeData.enableClusterAutoscalingApp) {
+              this.onApplicationDeleted(clusterAutoscalingApp);
+            }
+          } else if (nodeData.enableClusterAutoscalingApp) {
+            return this._applicationService.getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME);
+          }
+          return of(null);
+        })
+      )
+      .subscribe(appDef => {
+        if (appDef) {
+          const application = this.createApplicationInstallation(appDef);
+          this.onApplicationAdded(application);
+        }
       });
 
     this._onApplicationsChanged();
@@ -110,7 +143,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     });
   }
 
-  private createApplicationInstallation(appDef: any): Application {
+  private createApplicationInstallation(appDef: ApplicationDefinition): Application {
     const applicationInstallation: Application = {
       name: appDef.name,
       namespace: appDef.name,

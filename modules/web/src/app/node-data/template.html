@@ -241,12 +241,19 @@ limitations under the License.
         <mat-card-title fxFlex
                         fxLayout="row"
                         fxLayoutAlign="start center"
-                        fxlayoutgap="5px">
-          <div>Node Autoscaling</div>
-          <i class="km-icon-info km-pointer"
-             matTooltip='Enable "cluster-autoscaler" addon to apply these changes.'></i>
+                        fxLayoutGap="5px">
+          <div>Cluster Autoscaling</div>
+          <i *ngIf="isDialogView()" class="km-icon-info km-pointer"
+             matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. NOTE: The addon for cluster-autoscaler has been deprecated in favor of the Application, please make sure to remove the addon from the cluster before enabling this option."></i>
         </mat-card-title>
       </mat-card-header>
+
+      <mat-checkbox *ngIf="!isDialogView()"
+                    [name]="Controls.EnableClusterAutoscalingApp"
+                    [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+        <i class="km-icon-info km-pointer"
+           matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
+      </mat-checkbox>
 
       <km-number-stepper label="Max Replicas"
                          mode="all"
