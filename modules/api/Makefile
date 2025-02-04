@@ -119,3 +119,18 @@ verify:
 update-kkp:
 	go get -v k8c.io/kubermatic/v2@main
 	go mod tidy
+
+.PHONY: fmt
+fmt: ## Run go fmt against code.
+	go fmt ./...
+
+.PHONY: vet
+vet: ## Run go vet against code.
+	go vet ./...
+
+go-mod-tidy:
+	go mod tidy
+
+update-codegen: fmt vet go-mod-tidy
+	./hack/update-codegen.sh
+	./hack/gen-api-client.sh
