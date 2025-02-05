@@ -70,7 +70,7 @@ set -x
   -internal-address=127.0.0.1:18085 \
   -prometheus-url=http://localhost:9090 \
   -address=127.0.0.1:8080 \
-  -oidc-url=https://dev.kubermatic.io/dex \
+  -oidc-url=https://kkp.qa.lab.kubermatic.io/dex \
   -oidc-authenticator-client-id=kubermatic \
   -service-account-signing-key="$SERVICE_ACCOUNT_SIGNING_KEY" \
   -log-debug=$KUBERMATIC_DEBUG \

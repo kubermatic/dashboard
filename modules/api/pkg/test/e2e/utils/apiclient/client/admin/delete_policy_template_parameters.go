@@ -61,6 +61,9 @@ DeletePolicyTemplateParams contains all the parameters to send to the API endpoi
 */
 type DeletePolicyTemplateParams struct {
 
+	// ProjectID.
+	ProjectID *string
+
 	// TemplateName.
 	PolicyTemplateName string
 
@@ -117,6 +120,17 @@ func (o *DeletePolicyTemplateParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithProjectID adds the projectID to the delete policy template params
+func (o *DeletePolicyTemplateParams) WithProjectID(projectID *string) *DeletePolicyTemplateParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the delete policy template params
+func (o *DeletePolicyTemplateParams) SetProjectID(projectID *string) {
+	o.ProjectID = projectID
+}
+
 // WithPolicyTemplateName adds the templateName to the delete policy template params
 func (o *DeletePolicyTemplateParams) WithPolicyTemplateName(templateName string) *DeletePolicyTemplateParams {
 	o.SetPolicyTemplateName(templateName)
@@ -135,6 +149,23 @@ func (o *DeletePolicyTemplateParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
+
+	if o.ProjectID != nil {
+
+		// query param project_id
+		var qrProjectID string
+
+		if o.ProjectID != nil {
+			qrProjectID = *o.ProjectID
+		}
+		qProjectID := qrProjectID
+		if qProjectID != "" {
+
+			if err := r.SetQueryParam("project_id", qProjectID); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param template_name
 	if err := r.SetPathParam("template_name", o.PolicyTemplateName); err != nil {

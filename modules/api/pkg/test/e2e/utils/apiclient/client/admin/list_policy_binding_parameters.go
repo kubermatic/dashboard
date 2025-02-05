@@ -60,6 +60,10 @@ ListPolicyBindingParams contains all the parameters to send to the API endpoint
 	Typically these are written to a http.Request.
 */
 type ListPolicyBindingParams struct {
+
+	// ProjectID.
+	ProjectID *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +117,17 @@ func (o *ListPolicyBindingParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithProjectID adds the projectID to the list policy binding params
+func (o *ListPolicyBindingParams) WithProjectID(projectID *string) *ListPolicyBindingParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the list policy binding params
+func (o *ListPolicyBindingParams) SetProjectID(projectID *string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +135,23 @@ func (o *ListPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
+
+	if o.ProjectID != nil {
+
+		// query param project_id
+		var qrProjectID string
+
+		if o.ProjectID != nil {
+			qrProjectID = *o.ProjectID
+		}
+		qProjectID := qrProjectID
+		if qProjectID != "" {
+
+			if err := r.SetQueryParam("project_id", qProjectID); err != nil {
+				return err
+			}
+		}
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
