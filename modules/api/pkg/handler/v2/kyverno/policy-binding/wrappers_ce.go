@@ -29,6 +29,10 @@ func listEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _
 	return nil, nil
 }
 
+func DecodeListPolicyBindingReq(_ context.Context, _ *http.Request) (interface{}, error) {
+	return nil, nil
+}
+
 func getEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) (interface{}, error) {
 	return "ce_GettEndpoint", nil
 }

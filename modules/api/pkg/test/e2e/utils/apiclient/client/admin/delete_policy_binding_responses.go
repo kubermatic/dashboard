@@ -98,11 +98,11 @@ func (o *DeletePolicyBindingOK) Code() int {
 }
 
 func (o *DeletePolicyBindingOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK", 200)
 }
 
 func (o *DeletePolicyBindingOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK", 200)
 }
 
 func (o *DeletePolicyBindingOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -154,11 +154,11 @@ func (o *DeletePolicyBindingUnauthorized) Code() int {
 }
 
 func (o *DeletePolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
 }
 
 func (o *DeletePolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
 }
 
 func (o *DeletePolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -210,11 +210,11 @@ func (o *DeletePolicyBindingForbidden) Code() int {
 }
 
 func (o *DeletePolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden", 403)
 }
 
 func (o *DeletePolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBindingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden", 403)
 }
 
 func (o *DeletePolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -272,12 +272,12 @@ func (o *DeletePolicyBindingDefault) Code() int {
 
 func (o *DeletePolicyBindingDefault) Error() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
 }
 
 func (o *DeletePolicyBindingDefault) String() string {
 	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
 }
 
 func (o *DeletePolicyBindingDefault) GetPayload() *models.ErrorResponse {

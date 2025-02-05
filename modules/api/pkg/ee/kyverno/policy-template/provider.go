@@ -26,9 +26,10 @@ package policytemplate
 
 import (
 	"context"
+	"fmt"
 
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -78,8 +79,7 @@ func (p *PolicyTemplateProvider) Get(ctx context.Context, policyTemplateName str
 	return policyTemplate, nil
 }
 
-func (p *PolicyTemplateProvider) Patch(ctx context.Context, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
-
+func (p *PolicyTemplateProvider) Patch(ctx context.Context, user *provider.UserInfo, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyTemplate{}
@@ -90,25 +90,30 @@ func (p *PolicyTemplateProvider) Patch(ctx context.Context, updatedpolicyTemplat
 
 	updated := existing.DeepCopy()
 	updated.Spec = updatedpolicyTemplate.Spec
-
-	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
-		return nil, err
+	if updated.Spec.ProjectID == existing.Spec.ProjectID || user.IsAdmin {
+		if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+			return nil, err
+		}
+	} else {
+		return nil, fmt.Errorf("user %s is not allowed to update the policy template %s", user.Email, updatedpolicyTemplate.Name)
 	}
 
-	return updatedpolicyTemplate, nil
+	return updated, nil
 }
 
-func (p *PolicyTemplateProvider) Delete(ctx context.Context, policyTemplateName string) error {
+func (p *PolicyTemplateProvider) Delete(ctx context.Context, policyTemplateName string, projectID string, user *provider.UserInfo) error {
 	client := p.privilegedClient
 
-	policyTemplate := &kubermaticv1.PolicyTemplate{}
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyTemplateName}, policyTemplate); err != nil {
+	existing := &kubermaticv1.PolicyTemplate{}
+	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyTemplateName}, existing); err != nil {
 		return err
 	}
-
-	if err := client.Delete(ctx, policyTemplate); err != nil {
-		return err
+	if existing.Spec.ProjectID == projectID || (user.IsAdmin && projectID == "") {
+		if err := client.Delete(ctx, existing); err != nil {
+			return err
+		}
+	} else {
+		return fmt.Errorf("user %s is not allowed to delete the policy template %s", user.Email, policyTemplateName)
 	}
-
 	return nil
 }

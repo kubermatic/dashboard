@@ -64,6 +64,12 @@ type GetPolicyBindingParams struct {
 	// BindingName.
 	PolicyBindingName string
 
+	// Namespace.
+	Namespace string
+
+	// ProjectID.
+	ProjectID *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -128,6 +134,28 @@ func (o *GetPolicyBindingParams) SetPolicyBindingName(bindingName string) {
 	o.PolicyBindingName = bindingName
 }
 
+// WithNamespace adds the namespace to the get policy binding params
+func (o *GetPolicyBindingParams) WithNamespace(namespace string) *GetPolicyBindingParams {
+	o.SetNamespace(namespace)
+	return o
+}
+
+// SetNamespace adds the namespace to the get policy binding params
+func (o *GetPolicyBindingParams) SetNamespace(namespace string) {
+	o.Namespace = namespace
+}
+
+// WithProjectID adds the projectID to the get policy binding params
+func (o *GetPolicyBindingParams) WithProjectID(projectID *string) *GetPolicyBindingParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the get policy binding params
+func (o *GetPolicyBindingParams) SetProjectID(projectID *string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -139,6 +167,28 @@ func (o *GetPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg str
 	// path param binding_name
 	if err := r.SetPathParam("binding_name", o.PolicyBindingName); err != nil {
 		return err
+	}
+
+	// path param namespace
+	if err := r.SetPathParam("namespace", o.Namespace); err != nil {
+		return err
+	}
+
+	if o.ProjectID != nil {
+
+		// query param project_id
+		var qrProjectID string
+
+		if o.ProjectID != nil {
+			qrProjectID = *o.ProjectID
+		}
+		qProjectID := qrProjectID
+		if qProjectID != "" {
+
+			if err := r.SetQueryParam("project_id", qProjectID); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {

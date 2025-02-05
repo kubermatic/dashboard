@@ -29,6 +29,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/gorilla/mux"
 
@@ -40,12 +41,24 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// listPolicyBindingReq defines HTTP request for getting a list of policy bindings
+// swagger:parameters listPolicyBinding
+type listPolicyBindingReq struct {
+	// in: query
+	ProjectID string `json:"project_id,omitempty"`
+}
+
 // getPolicyBindingReq defines HTTP request for getting a policy binding
 // swagger:parameters getPolicyBinding
 type getPolicyBindingReq struct {
 	// in: path
 	// required: true
+	Namespace string `json:"namespace"`
+	// in: path
+	// required: true
 	PolicyBindingName string `json:"binding_name"`
+	// in: query
+	ProjectID string `json:"project_id,omitempty"`
 }
 
 // createPolicyBindingReq defines HTTP request for creating a policy binding
@@ -53,18 +66,19 @@ type getPolicyBindingReq struct {
 type createPolicyBindingReq struct {
 	// in: body
 	// required: true
-	apiv2.PolicyBinding
+	createPolicyBindingBody
 }
 
 // patchPolicyBindingReq defines HTTP request for patching a policy binding
 // swagger:parameters patchPolicyBinding
 type patchPolicyBindingReq struct {
+	// PolicyBindingName is the name of the policy binding
 	// in: path
 	// required: true
 	PolicyBindingName string `json:"binding_name"`
 	// in: body
 	// required: true
-	apiv2.PolicyBinding
+	Body patchPolicyBindingBody `json:"body"`
 }
 
 // deletePolicyBindingReq defines HTTP request for deleting a policy binding
@@ -72,35 +86,67 @@ type patchPolicyBindingReq struct {
 type deletePolicyBindingReq struct {
 	// in: path
 	// required: true
+	Namespace string `json:"namespace"`
+	// in: path
+	// required: true
 	PolicyBindingName string `json:"binding_name"`
+	// in: query
+	ProjectID string `json:"project_id,omitempty"`
 }
 
+type createPolicyBindingBody struct {
+	apiv2.PolicyBinding
+	Namespace string `json:"namespace"`
+	ProjectID string `json:"projectID"`
+}
+
+type patchPolicyBindingBody struct {
+	Namespace string `json:"namespace"`
+	Spec      kubermaticv1.PolicyBindingSpec
+	ProjectID string `json:"projectID"`
+}
+
+const globalScope = "global"
+
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
-	userInfo, err := userInfoGetter(ctx, "")
+	req, ok := request.(listPolicyBindingReq)
+	if !ok {
+		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if !userInfo.IsAdmin {
-		return nil, utilerrors.NewNotAuthorized()
+	if req.ProjectID == "" && !user.IsAdmin {
+		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("userInfo:", userInfo)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	policyBindingList, err := provider.List(ctx)
 
+	policyBindingList, err := provider.List(ctx)
+	if err != nil {
+		return nil, err
+	}
 	res := []*apiv2.PolicyBinding{}
 	for _, policyBinding := range policyBindingList.Items {
-		res = append(res, &apiv2.PolicyBinding{
-			Name: policyBinding.Name,
-			Spec: policyBinding.Spec,
-		})
+		if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+			res = append(res, &apiv2.PolicyBinding{
+				Name:   policyBinding.Name,
+				Spec:   policyBinding.Spec,
+				Status: policyBinding.Status,
+			})
+		}
 	}
 
-	return policyBindingList, nil
+	return res, nil
+}
+
+func DecodeListPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	var req listPolicyBindingReq
+	req.ProjectID = r.URL.Query().Get("project_id")
+
+	return req, nil
 }
 
 func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
@@ -108,39 +154,47 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
-	userInfo, err := userInfoGetter(ctx, "")
+	user, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if !userInfo.IsAdmin {
-		return nil, utilerrors.NewNotAuthorized()
+	if req.ProjectID == "" && !user.IsAdmin {
+		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyBindingName:", req.PolicyBindingName)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	policyBinding, err := provider.Get(ctx, req.PolicyBindingName)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyBinding:", policyBinding)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	return &apiv2.PolicyBinding{
-		Name: policyBinding.Name,
-		Spec: policyBinding.Spec,
-	}, nil
+
+	policyBinding, err := provider.Get(ctx, req.PolicyBindingName, req.Namespace)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+		return &apiv2.PolicyBinding{
+			Name:   policyBinding.Name,
+			Spec:   policyBinding.Spec,
+			Status: policyBinding.Status,
+		}, nil
+	}
+
+	return nil, utilerrors.NewNotFound("policy binding not found", req.PolicyBindingName)
 }
 
 func DecodeGetPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req getPolicyBindingReq
 
+	req.Namespace = mux.Vars(r)["namespace"]
+	if req.Namespace == "" {
+		return "", fmt.Errorf("'namespace' parameter is required but was not provided")
+	}
+
 	req.PolicyBindingName = mux.Vars(r)["binding_name"]
 	if req.PolicyBindingName == "" {
 		return "", fmt.Errorf("'binding_name' parameter is required but was not provided")
 	}
+
+	req.ProjectID = r.URL.Query().Get("project_id")
 
 	return req, nil
 }
@@ -151,25 +205,30 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return nil, err
 	}
 
+	if !userInfo.Roles.Has("owners") && !userInfo.IsAdmin {
+		return nil, fmt.Errorf("Only admins and project owners can create policy bindings")
+	}
 	if !userInfo.IsAdmin {
-		return nil, utilerrors.NewNotAuthorized()
+		if req.Spec.Scope == globalScope {
+			return nil, fmt.Errorf("Only admins can create policy binding with global scope")
+		}
+	}
+	if !slices.Contains(req.Spec.Target.Projects.Name, req.ProjectID) && !userInfo.IsAdmin {
+		return nil, fmt.Errorf("project owners can only create policybinding on there projects")
 	}
 
 	policyBindingSpec := req.Spec.DeepCopy()
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyBindingSpec:", policyBindingSpec)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
+
 	policyBinding := &kubermaticv1.PolicyBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: req.Name,
+			Name:      req.Name,
+			Namespace: req.Namespace,
 		},
 		Spec: *policyBindingSpec,
 	}
@@ -179,8 +238,9 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, err
 	}
 	return &apiv2.PolicyBinding{
-		Name: created.Name,
-		Spec: created.Spec,
+		Name:   created.Name,
+		Spec:   created.Spec,
+		Status: created.Status,
 	}, nil
 }
 
@@ -199,28 +259,41 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, req.Body.ProjectID)
 
 	if err != nil {
 		return nil, err
 	}
 
+	if !userInfo.Roles.Has("owners") && !userInfo.IsAdmin {
+		return nil, fmt.Errorf("Only admins and project owners can update policy bindings")
+	}
 	if !userInfo.IsAdmin {
-		return nil, utilerrors.NewNotAuthorized()
+		if req.Body.Spec.Scope == globalScope {
+			return nil, fmt.Errorf("Only admins can update policy binding with global scope")
+		}
+	}
+	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
+		return nil, fmt.Errorf("project owners can only update policybinding on there projects")
 	}
 
+	policyBindingSpec := req.Body.Spec.DeepCopy()
 	policyBinding := &kubermaticv1.PolicyBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: req.PolicyBindingName,
+			Name:      req.PolicyBindingName,
+			Namespace: req.Body.Namespace,
 		},
-		Spec: req.Spec,
+		Spec: *policyBindingSpec,
 	}
 
-	patchedPolicyBinding, err := provider.Patch(ctx, policyBinding)
-
+	patchedPolicyBinding, err := provider.Patch(ctx, userInfo, policyBinding, req.Body.ProjectID)
+	if err != nil {
+		return nil, err
+	}
 	return &apiv2.PolicyBinding{
-		Name: patchedPolicyBinding.Name,
-		Spec: *patchedPolicyBinding.Spec.DeepCopy(),
+		Name:   patchedPolicyBinding.Name,
+		Spec:   *patchedPolicyBinding.Spec.DeepCopy(),
+		Status: patchedPolicyBinding.Status,
 	}, nil
 }
 
@@ -232,7 +305,7 @@ func DecodePatchPolicyBindingReq(ctx context.Context, r *http.Request) (interfac
 		return "", fmt.Errorf("'binding_name' parameter is required but was not provided")
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
 
@@ -244,18 +317,17 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !ok {
 		return utilerrors.NewBadRequest("invalid request")
 	}
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, req.ProjectID)
 
 	if err != nil {
 		return err
 	}
 
-	if !userInfo.IsAdmin {
-		return utilerrors.NewNotAuthorized()
+	if !userInfo.Roles.Has("owners") && !userInfo.IsAdmin {
+		return fmt.Errorf("Only admins and project owners can delete policy template")
 	}
 
-	err = provider.Delete(ctx, req.PolicyBindingName)
-	if err != nil {
+	if err := provider.Delete(ctx, userInfo, req.PolicyBindingName, req.Namespace, req.ProjectID); err != nil {
 		return err
 	}
 
@@ -265,10 +337,17 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 func DecodeDeletePolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req deletePolicyBindingReq
 
+	req.Namespace = mux.Vars(r)["namespace"]
+	if req.Namespace == "" {
+		return "", fmt.Errorf("'namespace' parameter is required but was not provided")
+	}
+
 	req.PolicyBindingName = mux.Vars(r)["binding_name"]
 	if req.PolicyBindingName == "" {
 		return "", fmt.Errorf("'binding_name' parameter is required but was not provided")
 	}
+
+	req.ProjectID = r.URL.Query().Get("project_id")
 
 	return req, nil
 }
