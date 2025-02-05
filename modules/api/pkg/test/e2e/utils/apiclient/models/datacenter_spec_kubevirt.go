@@ -469,6 +469,10 @@ func (m *DatacenterSpecKubevirt) contextValidateProviderNetwork(ctx context.Cont
 
 func (m *DatacenterSpecKubevirt) contextValidateVMEvictionStrategy(ctx context.Context, formats strfmt.Registry) error {
 
+	if swag.IsZero(m.VMEvictionStrategy) { // not required
+		return nil
+	}
+
 	if err := m.VMEvictionStrategy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("vmEvictionStrategy")

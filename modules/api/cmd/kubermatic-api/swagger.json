@@ -7249,7 +7249,7 @@
     },
     "/api/v2/policybinding": {
       "get": {
-        "description": "List all policy bindings. Only available in Kubermatic Enterprise Edition",
+        "description": "List all policy bindings, If query parameter `project_id` is set then the endpoint will return only the policy bindings that are associated with the project. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7257,6 +7257,14 @@
           "admin"
         ],
         "operationId": "listPolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "PolicyBinding",
@@ -7282,7 +7290,7 @@
         }
       },
       "post": {
-        "description": "Create policy binding. Only available in Kubermatic Enterprise Edition",
+        "description": "Create policy binding, Only available in Kubermatic Enterprise Edition",
         "consumes": [
           "application/json"
         ],
@@ -7298,6 +7306,18 @@
             "type": "string",
             "x-go-name": "Name",
             "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Namespace",
+            "name": "namespace",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "projectID",
             "in": "query"
           }
         ],
@@ -7324,78 +7344,6 @@
       }
     },
     "/api/v2/policybinding/{binding_name}": {
-      "get": {
-        "description": "Get policy binding. Only available in Kubermatic Enterprise Edition",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "admin"
-        ],
-        "operationId": "getPolicyBinding",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "PolicyBindingName",
-            "name": "binding_name",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PolicyBinding",
-            "schema": {
-              "$ref": "#/definitions/PolicyBinding"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete policy binding. Only available in Kubermatic Enterprise Edition",
-        "tags": [
-          "admin"
-        ],
-        "operationId": "deletePolicyBinding",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "PolicyBindingName",
-            "name": "binding_name",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/responses/empty"
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      },
       "patch": {
         "description": "Patch policy binding. Only available in Kubermatic Enterprise Edition",
         "consumes": [
@@ -7411,16 +7359,20 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Name",
-            "name": "name",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "PolicyBindingName",
+            "description": "PolicyBindingName is the name of the policy binding",
             "name": "binding_name",
             "in": "path",
             "required": true
+          },
+          {
+            "x-go-name": "Body",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/patchPolicyBindingBody"
+            }
           }
         ],
         "responses": {
@@ -7445,9 +7397,109 @@
         }
       }
     },
+    "/api/v2/policybinding/{namespace}/{binding_name}": {
+      "get": {
+        "description": "Get policy binding, If query parameter `project_id` is set then the endpoint will return only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "admin"
+        ],
+        "operationId": "getPolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Namespace",
+            "name": "namespace",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "PolicyBindingName",
+            "name": "binding_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PolicyBinding",
+            "schema": {
+              "$ref": "#/definitions/PolicyBinding"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete policy binding, If query parameter `project_id` is set then the endpoint will delete only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition",
+        "tags": [
+          "admin"
+        ],
+        "operationId": "deletePolicyBinding",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "Namespace",
+            "name": "namespace",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "PolicyBindingName",
+            "name": "binding_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/empty"
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/policytemplate": {
       "get": {
-        "description": "List all policy templates. Only available in Kubermatic Enterprise Edition",
+        "description": "List all policy templates, If query parameter `project_id` is set then the endpoint will return only the policy templates that are associated with the project. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7455,6 +7507,14 @@
           "admin"
         ],
         "operationId": "listPolicyTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "PolicyTemplate",
@@ -7523,7 +7583,7 @@
     },
     "/api/v2/policytemplate/{template_name}": {
       "get": {
-        "description": "Get policy template. Only available in Kubermatic Enterprise Edition",
+        "description": "Get policy template, If the query parameter project_id is set, the endpoint will return the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7538,6 +7598,12 @@
             "name": "template_name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7562,7 +7628,7 @@
         }
       },
       "delete": {
-        "description": "Delete policy template. Only available in Kubermatic Enterprise Edition",
+        "description": "Delete policy template, If the query parameter project_id is set, the endpoint will delete the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
@@ -7577,6 +7643,12 @@
             "name": "template_name",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "query"
           }
         ],
         "responses": {
@@ -7612,16 +7684,18 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Name",
-            "name": "name",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "PolicyTemplateName",
             "name": "template_name",
             "in": "path",
             "required": true
+          },
+          {
+            "name": "Spec",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyTemplateSpec"
+            }
           }
         ],
         "responses": {
@@ -27679,6 +27753,11 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "AdmissionOperation": {
+      "description": "+kubebuilder:validation:Enum=CREATE;CONNECT;UPDATE;DELETE",
+      "title": "AdmissionOperation can have one of the values CREATE, UPDATE, CONNECT, DELETE, which are used to match a specific action.",
+      "$ref": "#/definitions/Operation"
+    },
     "AdmissionPlugin": {
       "description": "AdmissionPlugin represents an admission plugin",
       "type": "object",
@@ -28276,6 +28355,36 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "Any": {
+      "description": "+k8s:deepcopy-gen=false",
+      "type": "object",
+      "title": "Any can be any type.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno"
+    },
+    "AnyAllConditions": {
+      "description": "AnyConditions get fulfilled when at least one of its sub-conditions passes.\nAllConditions get fulfilled only when all of its sub-conditions pass.",
+      "type": "object",
+      "title": "AnyAllConditions consists of conditions wrapped denoting a logical criteria to be fulfilled.",
+      "properties": {
+        "all": {
+          "description": "AllConditions enable variable-based conditional rule execution. This is useful for\nfiner control of when an rule is applied. A condition can reference object data\nusing JMESPath notation.\nHere, all of the conditions need to pass\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "x-go-name": "AllConditions"
+        },
+        "any": {
+          "description": "AnyConditions enable variable-based conditional rule execution. This is useful for\nfiner control of when an rule is applied. A condition can reference object data\nusing JMESPath notation.\nHere, at least one of the conditions need to pass\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "x-go-name": "AnyConditions"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "Anything": {
       "description": "Anything is a struct wrapper around a field of type `interface{}`\nthat plays nicely with controller-gen\n+kubebuilder:object:generate=false\n+kubebuilder:validation:Type=\"\"",
@@ -28965,6 +29074,108 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
+    },
+    "ApplyRulesType": {
+      "description": "+kubebuilder:validation:Enum=All;One",
+      "type": "string",
+      "title": "ApplyRulesType controls whether processing stops after one rule is applied or all rules are applied.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "Attestation": {
+      "description": "See https://github.com/in-toto/attestation. Kyverno fetches signed attestations from the\nOCI registry and decodes them into a list of Statements.",
+      "type": "object",
+      "title": "Attestation are checks for signed in-toto Statements that are used to verify the image.",
+      "properties": {
+        "attestors": {
+          "description": "Attestors specify the required attestors (i.e. authorities).\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttestorSet"
+          },
+          "x-go-name": "Attestors"
+        },
+        "conditions": {
+          "description": "Conditions are used to verify attributes within a Predicate. If no Conditions are specified\nthe attestation check is satisfied as long there are predicates that match the predicate type.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnyAllConditions"
+          },
+          "x-go-name": "Conditions"
+        },
+        "name": {
+          "description": "Name is the variable name.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "predicateType": {
+          "description": "Deprecated in favour of 'Type', to be removed soon\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "PredicateType"
+        },
+        "type": {
+          "description": "Type defines the type of attestation contained within the Statement.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Type"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "Attestor": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations are used for image verification.\nEvery specified key-value pair must exist and match in the verified payload.\nThe payload may contain other key-value pairs.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "attestor": {
+          "$ref": "#/definitions/JSON"
+        },
+        "certificates": {
+          "$ref": "#/definitions/CertificateAttestor"
+        },
+        "keyless": {
+          "$ref": "#/definitions/KeylessAttestor"
+        },
+        "keys": {
+          "$ref": "#/definitions/StaticKeyAttestor"
+        },
+        "repository": {
+          "description": "Repository is an optional alternate OCI repository to use for signatures and attestations that match this rule.\nIf specified Repository will override other OCI image repository locations for this Attestor.",
+          "type": "string",
+          "x-go-name": "Repository"
+        },
+        "signatureAlgorithm": {
+          "description": "Specify signature algorithm for public keys. Supported values are sha224, sha256, sha384 and sha512.\n+kubebuilder:default=sha256",
+          "type": "string",
+          "x-go-name": "SignatureAlgorithm"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "AttestorSet": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "description": "Count specifies the required number of entries that must match. If the count is null, all entries must match\n(a logical AND). If the count is 1, at least one entry must match (a logical OR). If the count contains a\nvalue N, then N must be less than or equal to the size of entries, and at least N entries must match.\n+kubebuilder:validation:Optional",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "x-go-name": "Count"
+        },
+        "entries": {
+          "description": "Entries contains the available attestors. An attestor can be a static key,\nattributes for keyless verification, or a nested attestor declaration.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attestor"
+          },
+          "x-go-name": "Entries"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "AuditLoggingSettings": {
       "type": "object",
@@ -29887,6 +30098,27 @@
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
     },
+    "CTLog": {
+      "type": "object",
+      "properties": {
+        "ignoreSCT": {
+          "description": "IgnoreSCT defines whether to use the Signed Certificate Timestamp (SCT) log to check for a certificate\ntimestamp. Default is false. Set to true if this was opted out during signing.\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "IgnoreSCT"
+        },
+        "pubkey": {
+          "description": "PubKey, if set, is used to validate SCTs against a custom source.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "CTLogPubKey"
+        },
+        "tsaCertChain": {
+          "description": "TSACertChain, if set, is the PEM-encoded certificate chain file for the RFC3161 timestamp authority. Must\ncontain the root CA certificate. Optionally may contain intermediate CA certificates, and\nmay contain the leaf TSA certificate if not present in the timestamurce.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "TSACertChain"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "CbslBody": {
       "type": "object",
       "properties": {
@@ -29904,6 +30136,28 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/clusterbackup/storage-location"
     },
+    "CertificateAttestor": {
+      "type": "object",
+      "properties": {
+        "cert": {
+          "description": "Cert is an optional PEM-encoded public certificate.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Certificate"
+        },
+        "certChain": {
+          "description": "CertChain is an optional PEM encoded set of certificates used to verify.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "CertificateChain"
+        },
+        "ctlog": {
+          "$ref": "#/definitions/CTLog"
+        },
+        "rekor": {
+          "$ref": "#/definitions/Rekor"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "CleanupOptions": {
       "type": "object",
       "properties": {
@@ -29919,6 +30173,46 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "CloneFrom": {
+      "description": "The resource kind is derived from the match criteria.",
+      "type": "object",
+      "title": "CloneFrom provides the location of the source resource used to generate target resources.",
+      "properties": {
+        "name": {
+          "description": "Name specifies name of the resource.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "description": "Namespace specifies source resource namespace.\n+optional",
+          "type": "string",
+          "x-go-name": "Namespace"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "CloneList": {
+      "type": "object",
+      "properties": {
+        "kinds": {
+          "description": "Kinds is a list of resource kinds.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Kinds"
+        },
+        "namespace": {
+          "description": "Namespace specifies source resource namespace.",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "selector": {
+          "$ref": "#/definitions/LabelSelector"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "CloudSpec": {
       "type": "object",
@@ -30701,9 +30995,42 @@
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
     },
+    "Condition": {
+      "type": "object",
+      "title": "Condition defines variable-based conditional criteria for rule execution.",
+      "properties": {
+        "key": {
+          "$ref": "#/definitions/JSON"
+        },
+        "message": {
+          "description": "Message is an optional display message",
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "operator": {
+          "$ref": "#/definitions/ConditionOperator"
+        },
+        "value": {
+          "$ref": "#/definitions/JSON"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ConditionOperator": {
+      "description": "+kubebuilder:validation:Enum=Equals;NotEquals;In;AnyIn;AllIn;NotIn;AnyNotIn;AllNotIn;GreaterThanOrEquals;GreaterThan;LessThanOrEquals;LessThan;DurationGreaterThanOrEquals;DurationGreaterThan;DurationLessThanOrEquals;DurationLessThan",
+      "type": "string",
+      "title": "ConditionOperator is the operation performed on condition key and value.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "ConditionStatus": {
       "type": "string",
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ConditionsWrapper": {
+      "description": "+k8s:deepcopy-gen=false",
+      "type": "object",
+      "title": "ConditionsWrapper contains either the deprecated list of Conditions or the new AnyAll Conditions.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "ConfigMapKeySelector": {
       "description": "+structType=atomic",
@@ -30727,6 +31054,23 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ConfigMapReference": {
+      "description": "ConfigMapReference refers to a ConfigMap",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name is the ConfigMap name.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "description": "Namespace is the ConfigMap namespace.",
+          "type": "string",
+          "x-go-name": "Namespace"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "Constraint": {
       "description": "Constraint represents a gatekeeper Constraint",
@@ -30929,6 +31273,66 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "ContextAPICall": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "The data object specifies the POST data sent to the server.\nOnly applicable when the method field is set to POST.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RequestData"
+          },
+          "x-go-name": "Data"
+        },
+        "default": {
+          "$ref": "#/definitions/JSON"
+        },
+        "jmesPath": {
+          "description": "JMESPath is an optional JSON Match Expression that can be used to\ntransform the JSON response returned from the server. For example\na JMESPath of \"items | length(@)\" applied to the API server response\nfor the URLPath \"/apis/apps/v1/deployments\" will return the total count\nof deployments across all namespaces.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "JMESPath"
+        },
+        "method": {
+          "$ref": "#/definitions/Method"
+        },
+        "service": {
+          "$ref": "#/definitions/ServiceCall"
+        },
+        "urlPath": {
+          "description": "URLPath is the URL path to be used in the HTTP GET or POST request to the\nKubernetes API server (e.g. \"/api/v1/namespaces\" or  \"/apis/apps/v1/deployments\").\nThe format required is the same format used by the `kubectl get --raw` command.\nSee https://kyverno.io/docs/writing-policies/external-data-sources/#variables-from-kubernetes-api-server-calls\nfor details.\nIt's mutually exclusive with the Service field.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "URLPath"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ContextEntry": {
+      "description": "ContextEntry adds variables and data sources to a rule Context. Either a\nConfigMap reference or a APILookup must be provided.\n+kubebuilder:oneOf:={required:{configMap}}\n+kubebuilder:oneOf:={required:{apiCall}}\n+kubebuilder:oneOf:={required:{imageRegistry}}\n+kubebuilder:oneOf:={required:{variable}}\n+kubebuilder:oneOf:={required:{globalReference}}",
+      "type": "object",
+      "properties": {
+        "apiCall": {
+          "$ref": "#/definitions/ContextAPICall"
+        },
+        "configMap": {
+          "$ref": "#/definitions/ConfigMapReference"
+        },
+        "globalReference": {
+          "$ref": "#/definitions/GlobalContextEntryReference"
+        },
+        "imageRegistry": {
+          "$ref": "#/definitions/ImageRegistry"
+        },
+        "name": {
+          "description": "Name is the variable name.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "variable": {
+          "$ref": "#/definitions/Variable"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "ControlPlaneMetrics": {
       "description": "ControlPlaneMetrics defines a metric for the user cluster control plane resources",
@@ -31753,6 +32157,16 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
+    },
+    "Deny": {
+      "type": "object",
+      "title": "Deny specifies a list of conditions used to pass or fail a validation rule.",
+      "properties": {
+        "conditions": {
+          "$ref": "#/definitions/ConditionsWrapper"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "DependencyCredentials": {
       "type": "object",
@@ -33100,6 +33514,12 @@
       },
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
     },
+    "FailurePolicyType": {
+      "description": "+kubebuilder:validation:Enum=Ignore;Fail",
+      "type": "string",
+      "title": "FailurePolicyType specifies a failure policy that defines how unrecognized errors from the admission endpoint are handled.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "Fake": {
       "type": "object",
       "properties": {
@@ -33172,6 +33592,109 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "ForEachGeneration": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion specifies resource apiVersion.\n+optional",
+          "type": "string",
+          "x-go-name": "APIVersion"
+        },
+        "clone": {
+          "$ref": "#/definitions/CloneFrom"
+        },
+        "cloneList": {
+          "$ref": "#/definitions/CloneList"
+        },
+        "context": {
+          "description": "Context defines variables and data sources that can be used during rule execution.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContextEntry"
+          },
+          "x-go-name": "Context"
+        },
+        "data": {
+          "$ref": "#/definitions/JSON"
+        },
+        "kind": {
+          "description": "Kind specifies resource kind.",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
+        "list": {
+          "description": "List specifies a JMESPath expression that results in one or more elements\nto which the validation logic is applied.",
+          "type": "string",
+          "x-go-name": "List"
+        },
+        "name": {
+          "description": "Name specifies the resource name.\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "description": "Namespace specifies resource namespace.\n+optional",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "preconditions": {
+          "$ref": "#/definitions/AnyAllConditions"
+        },
+        "uid": {
+          "$ref": "#/definitions/UID"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ForEachMutation": {
+      "type": "object",
+      "title": "ForEachMutation applies mutation rules to a list of sub-elements by creating a context for each entry in the list and looping over it to apply the specified logic.",
+      "properties": {
+        "context": {
+          "description": "Context defines variables and data sources that can be used during rule execution.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContextEntry"
+          },
+          "x-go-name": "Context"
+        },
+        "foreach": {
+          "$ref": "#/definitions/ForEachMutationWrapper"
+        },
+        "list": {
+          "description": "List specifies a JMESPath expression that results in one or more elements\nto which the validation logic is applied.",
+          "type": "string",
+          "x-go-name": "List"
+        },
+        "order": {
+          "$ref": "#/definitions/ForeachOrder"
+        },
+        "patchStrategicMerge": {
+          "$ref": "#/definitions/Any"
+        },
+        "patchesJson6902": {
+          "description": "PatchesJSON6902 is a list of RFC 6902 JSON Patch declarations used to modify resources.\nSee https://tools.ietf.org/html/rfc6902 and https://kubectl.docs.kubernetes.io/references/kustomize/patchesjson6902/.\n+optional",
+          "type": "string",
+          "x-go-name": "PatchesJSON6902"
+        },
+        "preconditions": {
+          "$ref": "#/definitions/AnyAllConditions"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ForEachMutationWrapper": {
+      "description": "+k8s:deepcopy-gen=false",
+      "type": "object",
+      "title": "ForEachMutationWrapper contains a list of ForEach descriptors.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ForeachOrder": {
+      "description": "+kubebuilder:validation:Enum=Ascending;Descending",
+      "type": "string",
+      "title": "ForeachOrder specifies the iteration order in foreach statements.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "GCP": {
       "type": "object",
@@ -34011,6 +34534,68 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "Generation": {
+      "type": "object",
+      "title": "Generation defines how new resources should be created and managed.",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion specifies resource apiVersion.\n+optional",
+          "type": "string",
+          "x-go-name": "APIVersion"
+        },
+        "clone": {
+          "$ref": "#/definitions/CloneFrom"
+        },
+        "cloneList": {
+          "$ref": "#/definitions/CloneList"
+        },
+        "data": {
+          "$ref": "#/definitions/JSON"
+        },
+        "foreach": {
+          "description": "ForEach applies generate rules to a list of sub-elements by creating a context for each entry in the list and looping over it to apply the specified logic.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ForEachGeneration"
+          },
+          "x-go-name": "ForEachGeneration"
+        },
+        "generateExisting": {
+          "description": "GenerateExisting controls whether to trigger the rule in existing resources\nIf is set to \"true\" the rule will be triggered and applied to existing matched resources.\n+optional",
+          "type": "boolean",
+          "x-go-name": "GenerateExisting"
+        },
+        "kind": {
+          "description": "Kind specifies resource kind.",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
+        "name": {
+          "description": "Name specifies the resource name.\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "description": "Namespace specifies resource namespace.\n+optional",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "orphanDownstreamOnPolicyDelete": {
+          "description": "OrphanDownstreamOnPolicyDelete controls whether generated resources should be deleted when the rule that generated\nthem is deleted with synchronization enabled. This option is only applicable to generate rules of the data type.\nSee https://kyverno.io/docs/writing-policies/generate/#data-examples.\nDefaults to \"false\" if not specified.\n+optional",
+          "type": "boolean",
+          "x-go-name": "OrphanDownstreamOnPolicyDelete"
+        },
+        "synchronize": {
+          "description": "Synchronize controls if generated resources should be kept in-sync with their source resource.\nIf Synchronize is set to \"true\" changes to generated resources will be overwritten with resource\ndata from Data or the resource specified in the Clone declaration.\nOptional. Defaults to \"false\" if not specified.\n+optional",
+          "type": "boolean",
+          "x-go-name": "Synchronize"
+        },
+        "uid": {
+          "$ref": "#/definitions/UID"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "GitAuthMethod": {
       "description": "+kubebuilder:validation:Enum=password;token;ssh-key",
       "type": "string",
@@ -34080,6 +34665,22 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1"
+    },
+    "GlobalContextEntryReference": {
+      "type": "object",
+      "properties": {
+        "jmesPath": {
+          "description": "JMESPath is an optional JSON Match Expression that can be used to\ntransform the JSON response returned from the server. For example\na JMESPath of \"items | length(@)\" applied to the API server response\nfor the URLPath \"/apis/apps/v1/deployments\" will return the total count\nof deployments across all namespaces.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "JMESPath"
+        },
+        "name": {
+          "description": "Name of the global context entry\n+kubebuilder:validation:Required",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "GlobalCustomLinks": {
       "description": "GlobalCustomLinks defines custom links for global settings",
@@ -34310,6 +34911,22 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "HTTPHeader": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "description": "Key is the header key",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "value": {
+          "description": "Value is the header value",
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "HealthStatus": {
       "type": "string",
@@ -34601,6 +35218,47 @@
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
+    "ImageExtractorConfig": {
+      "type": "object",
+      "properties": {
+        "jmesPath": {
+          "description": "JMESPath is an optional JMESPath expression to apply to the image value.\nThis is useful when the extracted image begins with a prefix like 'docker://'.\nThe 'trim_prefix' function may be used to trim the prefix: trim_prefix(@, 'docker://').\nNote - Image digest mutation may not be used when applying a JMESPAth to an image.\n+optional",
+          "type": "string",
+          "x-go-name": "JMESPath"
+        },
+        "key": {
+          "description": "Key is an optional name of the field within 'path' that will be used to uniquely identify an image.\nNote - this field MUST be unique.\n+optional",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "name": {
+          "description": "Name is the entry the image will be available under 'images.\u003cname\u003e' in the context.\nIf this field is not defined, image entries will appear under 'images.custom'.\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "path": {
+          "description": "Path is the path to the object containing the image field in a custom resource.\nIt should be slash-separated. Each slash-separated key must be a valid YAML key or a wildcard '*'.\nWildcard keys are expanded in case of arrays or objects.",
+          "type": "string",
+          "x-go-name": "Path"
+        },
+        "value": {
+          "description": "Value is an optional name of the field within 'path' that points to the image URI.\nThis is useful when a custom 'key' is also defined.\n+optional",
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ImageExtractorConfigs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/ImageExtractorConfig"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "ImageList": {
       "type": "object",
       "title": "ImageList defines a map of operating system and the image to use.",
@@ -34616,6 +35274,187 @@
         "$ref": "#/definitions/OSVersions"
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "ImageRegistry": {
+      "description": "ImageRegistry defines requests to an OCI/Docker V2 registry to fetch image\ndetails.",
+      "type": "object",
+      "properties": {
+        "imageRegistryCredentials": {
+          "$ref": "#/definitions/ImageRegistryCredentials"
+        },
+        "jmesPath": {
+          "description": "JMESPath is an optional JSON Match Expression that can be used to\ntransform the ImageData struct returned as a result of processing\nthe image reference.\n+optional",
+          "type": "string",
+          "x-go-name": "JMESPath"
+        },
+        "reference": {
+          "description": "Reference is image reference to a container image in the registry.",
+          "type": "string",
+          "x-go-name": "Reference",
+          "example": "ghcr.io/kyverno/kyverno:latest"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ImageRegistryCredentials": {
+      "type": "object",
+      "properties": {
+        "allowInsecureRegistry": {
+          "description": "AllowInsecureRegistry allows insecure access to a registry.\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "AllowInsecureRegistry"
+        },
+        "providers": {
+          "description": "Providers specifies a list of OCI Registry names, whose authentication providers are provided.\nIt can be of one of these values: default,google,azure,amazon,github.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageRegistryCredentialsProvidersType"
+          },
+          "x-go-name": "Providers"
+        },
+        "secrets": {
+          "description": "Secrets specifies a list of secrets that are provided for credentials.\nSecrets must live in the Kyverno namespace.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Secrets"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ImageRegistryCredentialsProvidersType": {
+      "description": "+kubebuilder:validation:Enum=default;amazon;azure;google;github",
+      "type": "string",
+      "title": "ImageRegistryCredentialsProvidersType provides the list of credential providers required.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ImageVerification": {
+      "description": "ImageVerification validates that images that match the specified pattern\nare signed with the supplied public key. Once the image is verified it is\nmutated to include the SHA digest retrieved during the registration.",
+      "type": "object",
+      "properties": {
+        "additionalExtensions": {
+          "description": "Deprecated.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "AdditionalExtensions"
+        },
+        "annotations": {
+          "description": "Deprecated. Use annotations per Attestor instead.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "attestations": {
+          "description": "Attestations are optional checks for signed in-toto Statements used to verify the image.\nSee https://github.com/in-toto/attestation. Kyverno fetches signed attestations from the\nOCI registry and decodes them into a list of Statement declarations.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attestation"
+          },
+          "x-go-name": "Attestations"
+        },
+        "attestors": {
+          "description": "Attestors specified the required attestors (i.e. authorities)\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttestorSet"
+          },
+          "x-go-name": "Attestors"
+        },
+        "cosignOCI11": {
+          "description": "CosignOCI11 enables the experimental OCI 1.1 behaviour in cosign image verification.\nDefaults to false.\n+optional",
+          "type": "boolean",
+          "x-go-name": "CosignOCI11"
+        },
+        "failureAction": {
+          "$ref": "#/definitions/ValidationFailureAction"
+        },
+        "image": {
+          "description": "Deprecated. Use ImageReferences instead.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Image"
+        },
+        "imageReferences": {
+          "description": "ImageReferences is a list of matching image reference patterns. At least one pattern in the\nlist must match the image for the rule to apply. Each image reference consists of a registry\naddress (defaults to docker.io), repository, image, and tag (defaults to latest).\nWildcards ('*' and '?') are allowed. See: https://kubernetes.io/docs/concepts/containers/images.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ImageReferences"
+        },
+        "imageRegistryCredentials": {
+          "$ref": "#/definitions/ImageRegistryCredentials"
+        },
+        "issuer": {
+          "description": "Deprecated. Use KeylessAttestor instead.",
+          "type": "string",
+          "x-go-name": "Issuer"
+        },
+        "key": {
+          "description": "Deprecated. Use StaticKeyAttestor instead.",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "mutateDigest": {
+          "description": "MutateDigest enables replacement of image tags with digests.\nDefaults to true.\n+kubebuilder:default=true\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "MutateDigest"
+        },
+        "repository": {
+          "description": "Repository is an optional alternate OCI repository to use for image signatures and attestations that match this rule.\nIf specified Repository will override the default OCI image repository configured for the installation.\nThe repository can also be overridden per Attestor or Attestation.",
+          "type": "string",
+          "x-go-name": "Repository"
+        },
+        "required": {
+          "description": "Required validates that images are verified i.e. have matched passed a signature or attestation check.\n+kubebuilder:default=true\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "Required"
+        },
+        "roots": {
+          "description": "Deprecated. Use KeylessAttestor instead.",
+          "type": "string",
+          "x-go-name": "Roots"
+        },
+        "skipImageReferences": {
+          "description": "SkipImageReferences is a list of matching image reference patterns that should be skipped.\nAt least one pattern in the list must match the image for the rule to be skipped. Each image reference\nconsists of a registry address (defaults to docker.io), repository, image, and tag (defaults to latest).\nWildcards ('*' and '?') are allowed. See: https://kubernetes.io/docs/concepts/containers/images.\n+kubebuilder:validation:Optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "SkipImageReferences"
+        },
+        "subject": {
+          "description": "Deprecated. Use KeylessAttestor instead.",
+          "type": "string",
+          "x-go-name": "Subject"
+        },
+        "type": {
+          "$ref": "#/definitions/ImageVerificationType"
+        },
+        "useCache": {
+          "description": "UseCache enables caching of image verify responses for this rule.\n+kubebuilder:default=true\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "UseCache"
+        },
+        "validate": {
+          "$ref": "#/definitions/ValidateImageVerification"
+        },
+        "verifyDigest": {
+          "description": "VerifyDigest validates that images have a digest.\n+kubebuilder:default=true\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "VerifyDigest"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ImageVerificationType": {
+      "description": "ImageVerificationType selects the type of verification algorithm\n+kubebuilder:validation:Enum=Cosign;SigstoreBundle;Notary\n+kubebuilder:default=Cosign",
+      "type": "string",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "InferFromVolumeFailurePolicy": {
       "type": "string",
@@ -34965,6 +35804,51 @@
       "description": "JoiningScript represent an encoded joining script for machines",
       "type": "string",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "KeylessAttestor": {
+      "type": "object",
+      "properties": {
+        "additionalExtensions": {
+          "description": "AdditionalExtensions are certificate-extensions used for keyless signing.\n+kubebuilder:validation:Optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "AdditionalExtensions"
+        },
+        "ctlog": {
+          "$ref": "#/definitions/CTLog"
+        },
+        "issuer": {
+          "description": "Issuer is the certificate issuer used for keyless signing.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Issuer"
+        },
+        "issuerRegExp": {
+          "description": "IssuerRegExp is the regular expression to match certificate issuer used for keyless signing.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "IssuerRegExp"
+        },
+        "rekor": {
+          "$ref": "#/definitions/Rekor"
+        },
+        "roots": {
+          "description": "Roots is an optional set of PEM encoded trusted root certificates.\nIf not provided, the system roots are used.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Roots"
+        },
+        "subject": {
+          "description": "Subject is the verified identity used for keyless signing, for example the email address.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "Subject"
+        },
+        "subjectRegExp": {
+          "description": "SubjectRegExp is the regular expression to match identity used for keyless signing, for example the email address.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "SubjectRegExp"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "Kind": {
       "type": "object",
@@ -36162,6 +37046,23 @@
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
+    "MatchCondition": {
+      "type": "object",
+      "title": "MatchCondition represents a condition which must by fulfilled for a request to be sent to a webhook.",
+      "properties": {
+        "expression": {
+          "description": "Expression represents the expression which will be evaluated by CEL. Must evaluate to bool.\nCEL expressions have access to the contents of the AdmissionRequest and Authorizer, organized into CEL variables:\n\n'object' - The object from the incoming request. The value is null for DELETE requests.\n'oldObject' - The existing object. The value is null for CREATE requests.\n'request' - Attributes of the admission request(/pkg/apis/admission/types.go#AdmissionRequest).\n'authorizer' - A CEL Authorizer. May be used to perform authorization checks for the principal (user or service account) of the request.\nSee https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz\n'authorizer.requestResource' - A CEL ResourceCheck constructed from the 'authorizer' and configured with the\nrequest resource.\nDocumentation on CEL: https://kubernetes.io/docs/reference/using-api/cel/\n\nRequired.",
+          "type": "string",
+          "x-go-name": "Expression"
+        },
+        "name": {
+          "description": "Name is an identifier for this match condition, used for strategic merging of MatchConditions,\nas well as providing an identifier for logging purposes. A good name should be descriptive of\nthe associated expression.\nName must be a qualified name consisting of alphanumeric characters, '-', '_' or '.', and\nmust start and end with an alphanumeric character (e.g. 'MyName',  or 'my.name',  or\n'123-abc', regex used for validation is '([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]') with an\noptional DNS subdomain prefix and '/' (e.g. 'example.com/MyName')\n\nRequired.",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8s.io/api/admissionregistration/v1"
+    },
     "MatchEntry": {
       "type": "object",
       "properties": {
@@ -36183,6 +37084,94 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "MatchResources": {
+      "description": "MatchResources is used to specify resource and admission review request data for\nwhich a policy rule is applicable.\n+kubebuilder:not:={required:{any,all}}",
+      "type": "object",
+      "properties": {
+        "all": {
+          "$ref": "#/definitions/ResourceFilters"
+        },
+        "annotations": {
+          "description": "Annotations is a  map of annotations (key-value pairs of type string). Annotation keys\nand values support the wildcard characters \"*\" (matches zero or many characters) and\n\"?\" (matches at least one character).\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "any": {
+          "$ref": "#/definitions/ResourceFilters"
+        },
+        "clusterRoles": {
+          "description": "ClusterRoles is the list of cluster-wide role names for the user.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ClusterRoles"
+        },
+        "kinds": {
+          "description": "Kinds is a list of resource kinds.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Kinds"
+        },
+        "name": {
+          "description": "Name is the name of the resource. The name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\nNOTE: \"Name\" is being deprecated in favor of \"Names\".\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "names": {
+          "description": "Names are the names of the resources. Each name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Names"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "namespaces": {
+          "description": "Namespaces is a list of namespaces names. Each name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Namespaces"
+        },
+        "operations": {
+          "description": "Operations can contain values [\"CREATE, \"UPDATE\", \"CONNECT\", \"DELETE\"], which are used to match a specific action.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AdmissionOperation"
+          },
+          "x-go-name": "Operations"
+        },
+        "roles": {
+          "description": "Roles is the list of namespaced role names for the user.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Roles"
+        },
+        "selector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "subjects": {
+          "description": "Subjects is the list of subject names like users, user groups, and service accounts.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Subject"
+          },
+          "x-go-name": "Subjects"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "MeteringConfiguration": {
       "type": "object",
@@ -36292,6 +37281,12 @@
       "x-go-name": "ReportURL",
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "Method": {
+      "description": "+kubebuilder:validation:Enum=GET;POST",
+      "type": "string",
+      "title": "Method is a HTTP request type.",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "MlaOptions": {
       "type": "object",
       "properties": {
@@ -36368,6 +37363,42 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "Mutation": {
+      "type": "object",
+      "title": "Mutation defines how resource are modified.",
+      "properties": {
+        "foreach": {
+          "description": "ForEach applies mutation rules to a list of sub-elements by creating a context for each entry in the list and looping over it to apply the specified logic.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ForEachMutation"
+          },
+          "x-go-name": "ForEachMutation"
+        },
+        "mutateExistingOnPolicyUpdate": {
+          "description": "MutateExistingOnPolicyUpdate controls if the mutateExisting rule will be applied on policy events.\n+optional",
+          "type": "boolean",
+          "x-go-name": "MutateExistingOnPolicyUpdate"
+        },
+        "patchStrategicMerge": {
+          "$ref": "#/definitions/JSON"
+        },
+        "patchesJson6902": {
+          "description": "PatchesJSON6902 is a list of RFC 6902 JSON Patch declarations used to modify resources.\nSee https://tools.ietf.org/html/rfc6902 and https://kubectl.docs.kubernetes.io/references/kustomize/patchesjson6902/.\n+optional",
+          "type": "string",
+          "x-go-name": "PatchesJSON6902"
+        },
+        "targets": {
+          "description": "Targets defines the target resources to be mutated.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TargetResourceSpec"
+          },
+          "x-go-name": "Targets"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "Names": {
       "type": "object",
@@ -38339,6 +39370,11 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "Operation": {
+      "description": "Operation is the type of resource operation being checked for admission control",
+      "type": "string",
+      "x-go-package": "k8s.io/api/admission/v1"
+    },
     "Packet": {
       "type": "object",
       "properties": {
@@ -38578,6 +39614,29 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "PolicyBindingSpec": {
+      "type": "object",
+      "title": "PolicyBindingSpec describes how and where to apply the referenced PolicyTemplate.",
+      "properties": {
+        "namespacedPolicy": {
+          "description": "NamespacedPolicy is a boolean to indicate if the policy binding is namespaced",
+          "type": "boolean",
+          "x-go-name": "NamespacedPolicy"
+        },
+        "policyTemplateRef": {
+          "$ref": "#/definitions/ObjectReference"
+        },
+        "scope": {
+          "description": "Scope specifies the scope of the policy.\nCan be one of: global, project, or cluster\n\n+kubebuilder:validation:Enum=global;project;cluster",
+          "type": "string",
+          "x-go-name": "Scope"
+        },
+        "target": {
+          "$ref": "#/definitions/PolicyTargetSpec"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "PolicyRule": {
       "description": "PolicyRule holds information that describes a policy rule, but does not contain information\nabout who the rule applies to or which namespace the rule applies to.",
       "type": "object",
@@ -38625,6 +39684,19 @@
       },
       "x-go-package": "k8s.io/api/rbac/v1"
     },
+    "PolicyTargetSpec": {
+      "type": "object",
+      "title": "PolicyTargetSpec indicates how to select projects/clusters in Kubermatic.",
+      "properties": {
+        "clusters": {
+          "$ref": "#/definitions/ResourceSelector"
+        },
+        "projects": {
+          "$ref": "#/definitions/ResourceSelector"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "PolicyTemplate": {
       "type": "object",
       "title": "PolicyTemplate defines a reusable blueprint of a Kyverno policy.",
@@ -38635,6 +39707,126 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "PolicyTemplateSpec": {
+      "type": "object",
+      "properties": {
+        "admission": {
+          "description": "Admission controls if rules are applied during admission.\nOptional. Default value is \"true\".\n+optional\n+kubebuilder:default=true",
+          "type": "boolean",
+          "x-go-name": "Admission"
+        },
+        "applyRules": {
+          "$ref": "#/definitions/ApplyRulesType"
+        },
+        "background": {
+          "description": "Background controls if rules are applied to existing resources during a background scan.\nOptional. Default value is \"true\". The value must be set to \"false\" if the policy rule\nuses variables that are only available in the admission review request (e.g. user name).\n+optional\n+kubebuilder:default=true",
+          "type": "boolean",
+          "x-go-name": "Background"
+        },
+        "category": {
+          "description": "Category is the category of the policy, specified as an annotation in the Kyverno policy\n\n+optional",
+          "type": "string",
+          "x-go-name": "Category"
+        },
+        "default": {
+          "description": "Default determines whether we apply the policy (create policy binding)\n\n+optional",
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
+        "description": {
+          "description": "Description is the description of the policy, specified as an annotation in the Kyverno policy",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "emitWarning": {
+          "description": "EmitWarning enables API response warnings for mutate policy rules or validate policy rules with validationFailureAction set to Audit.\nEnabling this option will extend admission request processing times. The default value is \"false\".\n+optional\n+kubebuilder:default=false",
+          "type": "boolean",
+          "x-go-name": "EmitWarning"
+        },
+        "enforced": {
+          "description": "Enforced indicates whether this policy is mandatory\n\nIf true, this policy is mandatory\nA PolicyBinding referencing it cannot disable it",
+          "type": "boolean",
+          "x-go-name": "Enforced"
+        },
+        "failurePolicy": {
+          "$ref": "#/definitions/FailurePolicyType"
+        },
+        "generateExisting": {
+          "description": "Deprecated, use generateExisting under the generate rule instead\n+optional",
+          "type": "boolean",
+          "x-go-name": "GenerateExisting"
+        },
+        "generateExistingOnPolicyUpdate": {
+          "description": "Deprecated, use generateExisting instead\n+optional",
+          "type": "boolean",
+          "x-go-name": "GenerateExistingOnPolicyUpdate"
+        },
+        "mutateExistingOnPolicyUpdate": {
+          "description": "Deprecated, use mutateExistingOnPolicyUpdate under the mutate rule instead\n+optional",
+          "type": "boolean",
+          "x-go-name": "MutateExistingOnPolicyUpdate"
+        },
+        "projectID": {
+          "description": "ProjectID is the ID of the project for which the policy template is created\n\nRelevant only for project visibility policies\n+optional",
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "rules": {
+          "description": "Rules is a list of Rule instances. A Policy contains multiple rules and\neach rule can validate, mutate, or generate resources.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rule"
+          },
+          "x-go-name": "Rules"
+        },
+        "schemaValidation": {
+          "description": "Deprecated.",
+          "type": "boolean",
+          "x-go-name": "SchemaValidation"
+        },
+        "severity": {
+          "description": "Severity indicates the severity level of the policy\n\n+optional",
+          "type": "string",
+          "x-go-name": "Severity"
+        },
+        "title": {
+          "description": "Title is the title of the policy, specified as an annotation in the Kyverno policy",
+          "type": "string",
+          "x-go-name": "Title"
+        },
+        "useServerSideApply": {
+          "description": "UseServerSideApply controls whether to use server-side apply for generate rules\nIf is set to \"true\" create \u0026 update for generate rules will use apply instead of create/update.\nDefaults to \"false\" if not specified.\n+optional",
+          "type": "boolean",
+          "x-go-name": "UseServerSideApply"
+        },
+        "validationFailureAction": {
+          "$ref": "#/definitions/ValidationFailureAction"
+        },
+        "validationFailureActionOverrides": {
+          "description": "Deprecated, use validationFailureActionOverrides under the validate rule instead.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidationFailureActionOverride"
+          },
+          "x-go-name": "ValidationFailureActionOverrides"
+        },
+        "visibility": {
+          "description": "Visibility specifies where the policy is visible.\n\nCan be one of: global, project, or cluster\n+kubebuilder:validation:Enum=global;project;cluster",
+          "type": "string",
+          "x-go-name": "Visibility"
+        },
+        "webhookConfiguration": {
+          "$ref": "#/definitions/WebhookConfiguration"
+        },
+        "webhookTimeoutSeconds": {
+          "description": "Deprecated, use webhookTimeoutSeconds under webhookConfiguration instead.",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "WebhookTimeoutSeconds"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "PolicyType": {
       "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",
@@ -39432,6 +40624,28 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "Rekor": {
+      "type": "object",
+      "properties": {
+        "ignoreTlog": {
+          "description": "IgnoreTlog skips transparency log verification.\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "IgnoreTlog"
+        },
+        "pubkey": {
+          "description": "RekorPubKey is an optional PEM-encoded public key to use for a custom Rekor.\nIf set, this will be used to validate transparency log signatures from a custom Rekor.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "RekorPubKey"
+        },
+        "url": {
+          "description": "URL is the address of the transparency log. Defaults to the public Rekor log instance https://rekor.sigstore.dev.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "default": "=https://rekor.sigstore.dev",
+          "x-go-name": "URL"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "ReplacedResources": {
       "type": "object",
       "title": "ReplacedResources is used to subtract replaced resources in the calculation. For instance, when user is changing instance type of an existing Machine Deployment, resources of an old instance type need to be subtracted.",
@@ -39489,6 +40703,21 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/ee/resource-quota"
     },
+    "RequestData": {
+      "description": "RequestData contains the HTTP POST data",
+      "type": "object",
+      "properties": {
+        "key": {
+          "description": "Key is a unique identifier for the data value",
+          "type": "string",
+          "x-go-name": "Key"
+        },
+        "value": {
+          "$ref": "#/definitions/JSON"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "ResourceClaim": {
       "type": "object",
       "title": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
@@ -39525,6 +40754,96 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ResourceFilter": {
+      "description": "ResourceFilter allow users to \"AND\" or \"OR\" between resources",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations is a  map of annotations (key-value pairs of type string). Annotation keys\nand values support the wildcard characters \"*\" (matches zero or many characters) and\n\"?\" (matches at least one character).\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "clusterRoles": {
+          "description": "ClusterRoles is the list of cluster-wide role names for the user.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "ClusterRoles"
+        },
+        "kinds": {
+          "description": "Kinds is a list of resource kinds.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Kinds"
+        },
+        "name": {
+          "description": "Name is the name of the resource. The name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\nNOTE: \"Name\" is being deprecated in favor of \"Names\".\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "names": {
+          "description": "Names are the names of the resources. Each name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Names"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "namespaces": {
+          "description": "Namespaces is a list of namespaces names. Each name supports wildcard characters\n\"*\" (matches zero or many characters) and \"?\" (at least one character).\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Namespaces"
+        },
+        "operations": {
+          "description": "Operations can contain values [\"CREATE, \"UPDATE\", \"CONNECT\", \"DELETE\"], which are used to match a specific action.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AdmissionOperation"
+          },
+          "x-go-name": "Operations"
+        },
+        "roles": {
+          "description": "Roles is the list of namespaced role names for the user.\n+optional",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Roles"
+        },
+        "selector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "subjects": {
+          "description": "Subjects is the list of subject names like users, user groups, and service accounts.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Subject"
+          },
+          "x-go-name": "Subjects"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ResourceFilters": {
+      "description": "ResourceFilters is a slice of ResourceFilter",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ResourceFilter"
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "ResourceLabelMap": {
       "type": "object",
@@ -39624,6 +40943,29 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "ResourceSelector": {
+      "type": "object",
+      "title": "ResourceSelector is a struct that contains the label selector, name, and selectAll fields.",
+      "properties": {
+        "labelSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "name": {
+          "description": "Name is a list of names to select the resources (projects/clusters)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Name"
+        },
+        "selectAll": {
+          "description": "SelectAll is a boolean to select all the resources (projects/clusters) from cluster admins.",
+          "type": "boolean",
+          "x-go-name": "SelectAll"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "ResourceType": {
       "type": "string",
@@ -39757,6 +41099,77 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "Rule": {
+      "description": "Each rules contains a match declaration to select resources, and an optional exclude\ndeclaration to specify which resources to exclude.",
+      "type": "object",
+      "title": "Rule defines a validation, mutation, or generation control for matching resources.",
+      "properties": {
+        "celPreconditions": {
+          "description": "CELPreconditions are used to determine if a policy rule should be applied by evaluating a\nset of CEL conditions. It can only be used with the validate.cel subrule\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MatchCondition"
+          },
+          "x-go-name": "CELPreconditions"
+        },
+        "context": {
+          "description": "Context defines variables and data sources that can be used during rule execution.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContextEntry"
+          },
+          "x-go-name": "Context"
+        },
+        "exclude": {
+          "$ref": "#/definitions/MatchResources"
+        },
+        "generate": {
+          "$ref": "#/definitions/Generation"
+        },
+        "imageExtractors": {
+          "$ref": "#/definitions/ImageExtractorConfigs"
+        },
+        "match": {
+          "$ref": "#/definitions/MatchResources"
+        },
+        "mutate": {
+          "$ref": "#/definitions/Mutation"
+        },
+        "name": {
+          "description": "Name is a label to identify the rule, It must be unique within the policy.\n+kubebuilder:validation:MaxLength=63",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "preconditions": {
+          "$ref": "#/definitions/ConditionsWrapper"
+        },
+        "reportProperties": {
+          "description": "ReportProperties are the additional properties from the rule that will be added to the policy report result\n+optional",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "ReportProperties"
+        },
+        "skipBackgroundRequests": {
+          "description": "SkipBackgroundRequests bypasses admission requests that are sent by the background controller.\nThe default value is set to \"true\", it must be set to \"false\" to apply\ngenerate and mutateExisting rules to those requests.\n+kubebuilder:default=true\n+kubebuilder:validation:Optional",
+          "type": "boolean",
+          "x-go-name": "SkipBackgroundRequests"
+        },
+        "validate": {
+          "$ref": "#/definitions/Validation"
+        },
+        "verifyImages": {
+          "description": "VerifyImages is used to verify image signatures and mutate them to add a digest\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageVerification"
+          },
+          "x-go-name": "VerifyImages"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "RuleGroup": {
       "type": "object",
@@ -40220,6 +41633,60 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ServiceCall": {
+      "type": "object",
+      "properties": {
+        "caBundle": {
+          "description": "CABundle is a PEM encoded CA bundle which will be used to validate\nthe server certificate.\n+kubebuilder:validation:Optional",
+          "type": "string",
+          "x-go-name": "CABundle"
+        },
+        "headers": {
+          "description": "Headers is a list of optional HTTP headers to be included in the request.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HTTPHeader"
+          },
+          "x-go-name": "Headers"
+        },
+        "url": {
+          "description": "URL is the JSON web service URL. A typical form is\n`https://{service}.{namespace}:{port}/{path}`.",
+          "type": "string",
+          "x-go-name": "URL"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "StaticKeyAttestor": {
+      "type": "object",
+      "properties": {
+        "ctlog": {
+          "$ref": "#/definitions/CTLog"
+        },
+        "kms": {
+          "description": "KMS provides the URI to the public key stored in a Key Management System. See:\nhttps://github.com/sigstore/cosign/blob/main/KMS.md",
+          "type": "string",
+          "x-go-name": "KMS"
+        },
+        "publicKeys": {
+          "description": "Keys is a set of X.509 public keys used to verify image signatures. The keys can be directly\nspecified or can be a variable reference to a key specified in a ConfigMap (see\nhttps://kyverno.io/docs/writing-policies/variables/), or reference a standard Kubernetes Secret\nelsewhere in the cluster by specifying it in the format \"k8s://\u003cnamespace\u003e/\u003csecret_name\u003e\".\nThe named Secret must specify a key `cosign.pub` containing the public key used for\nverification, (see https://github.com/sigstore/cosign/blob/main/KMS.md#kubernetes-secret).\nWhen multiple keys are specified each key is processed as a separate staticKey entry\n(.attestors[*].entries.keys) within the set of attestors and the count is applied across the keys.",
+          "type": "string",
+          "x-go-name": "PublicKeys"
+        },
+        "rekor": {
+          "$ref": "#/definitions/Rekor"
+        },
+        "secret": {
+          "$ref": "#/definitions/SecretReference"
+        },
+        "signatureAlgorithm": {
+          "description": "Deprecated. Use attestor.signatureAlgorithm instead.\n+kubebuilder:default=sha256",
+          "type": "string",
+          "x-go-name": "SignatureAlgorithm"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "StaticLabel": {
       "type": "object",
       "title": "StaticLabel is a label that can be used for the clusters.",
@@ -40398,6 +41865,50 @@
         }
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+    },
+    "TargetResourceSpec": {
+      "type": "object",
+      "title": "TargetResourceSpec defines targets for mutating existing resources.",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion specifies resource apiVersion.\n+optional",
+          "type": "string",
+          "x-go-name": "APIVersion"
+        },
+        "context": {
+          "description": "Context defines variables and data sources that can be used during rule execution.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContextEntry"
+          },
+          "x-go-name": "Context"
+        },
+        "kind": {
+          "description": "Kind specifies resource kind.",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
+        "name": {
+          "description": "Name specifies the resource name.\n+optional",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "namespace": {
+          "description": "Namespace specifies resource namespace.\n+optional",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "preconditions": {
+          "$ref": "#/definitions/ConditionsWrapper"
+        },
+        "selector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "uid": {
+          "$ref": "#/definitions/UID"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "TemplateMethod": {
       "description": "+kubebuilder:validation:Enum=helm",
@@ -41363,6 +42874,21 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ValidateImageVerification": {
+      "description": "ValidateImageVerification checks conditions across multiple image\nverification attestations or context entries",
+      "type": "object",
+      "properties": {
+        "deny": {
+          "$ref": "#/definitions/Deny"
+        },
+        "message": {
+          "description": "Message specifies a custom message to be displayed on failure.\n+optional",
+          "type": "string",
+          "x-go-name": "Message"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "Validation": {
       "type": "object",
       "properties": {
@@ -41376,6 +42902,30 @@
         }
       },
       "x-go-package": "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
+    },
+    "ValidationFailureAction": {
+      "description": "ValidationFailureAction defines the policy validation failure action",
+      "type": "string",
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
+    "ValidationFailureActionOverride": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/ValidationFailureAction"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "namespaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Namespaces"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "ValidationRule": {
       "type": "object",
@@ -41419,6 +42969,24 @@
         "$ref": "#/definitions/ValidationRule"
       },
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+    },
+    "Variable": {
+      "type": "object",
+      "title": "Variable defines an arbitrary JMESPath context variable that can be defined inline.",
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/Any"
+        },
+        "jmesPath": {
+          "description": "JMESPath is an optional JMESPath Expression that can be used to\ntransform the variable.\n+optional",
+          "type": "string",
+          "x-go-name": "JMESPath"
+        },
+        "value": {
+          "$ref": "#/definitions/Any"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
     },
     "VersionList": {
       "description": "VersionList represents a list of versions",
@@ -41568,6 +43136,30 @@
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
+    "WebhookConfiguration": {
+      "type": "object",
+      "title": "WebhookConfiguration specifies the configuration for Kubernetes admission webhookconfiguration.",
+      "properties": {
+        "failurePolicy": {
+          "$ref": "#/definitions/FailurePolicyType"
+        },
+        "matchConditions": {
+          "description": "MatchCondition configures admission webhook matchConditions.\nRequires Kubernetes 1.27 or later.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MatchCondition"
+          },
+          "x-go-name": "MatchConditions"
+        },
+        "timeoutSeconds": {
+          "description": "TimeoutSeconds specifies the maximum time in seconds allowed to apply this policy.\nAfter the configured time expires, the admission request may fail, or may simply ignore the policy results,\nbased on the failure policy. The default timeout is 10s, the value must be between 1 and 30 seconds.",
+          "type": "integer",
+          "format": "int32",
+          "x-go-name": "TimeoutSeconds"
+        }
+      },
+      "x-go-package": "github.com/kyverno/kyverno/api/kyverno/v1"
+    },
     "bcBody": {
       "type": "object",
       "properties": {
@@ -41684,6 +43276,23 @@
       "description": "+kubebuilder:validation:Enum=DHCP;POOL",
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "patchPolicyBindingBody": {
+      "type": "object",
+      "properties": {
+        "Spec": {
+          "$ref": "#/definitions/PolicyBindingSpec"
+        },
+        "namespace": {
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "projectID": {
+          "type": "string",
+          "x-go-name": "ProjectID"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/ee/kyverno/policy-binding"
     },
     "wrBody": {
       "type": "object",

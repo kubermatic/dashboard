@@ -56,6 +56,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	kubeovnv1 "github.com/kubeovn/kube-ovn/pkg/apis/kubeovn/v1"
+	kyvernov1 "github.com/kyverno/kyverno/api/kyverno/v1"
 	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/v3/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
@@ -94,6 +95,7 @@ import (
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
 	ctrlruntime "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlruntimelog "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
@@ -140,6 +142,10 @@ func main() {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", velerov1.SchemeGroupVersion), zap.Error(err))
 	}
 
+	if err := kyvernov1.AddToScheme(scheme.Scheme); err != nil {
+		log.Fatalw("failed to register scheme", zap.Stringer("api", kyvernov1.SchemeGroupVersion), zap.Error(err))
+	}
+
 	if err := kubeovnv1.AddToScheme(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", kubeovnv1.SchemeGroupVersion), zap.Error(err))
 	}
@@ -155,6 +161,14 @@ func main() {
 		Cache: cache.Options{
 			DefaultNamespaces: map[string]cache.Config{
 				options.namespace: {},
+			},
+			ByObject: map[ctrlruntimeclient.Object]cache.ByObject{
+				&kubermaticv1.PolicyBinding{}: {
+					// Cache PolicyBinding across all namespaces.
+					Namespaces: map[string]cache.Config{
+						cache.AllNamespaces: {},
+					},
+				},
 			},
 		},
 		BaseContext: func() context.Context {

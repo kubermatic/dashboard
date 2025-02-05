@@ -3,11 +3,12 @@ package policybinding
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	restclient "k8s.io/client-go/rest"
+
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -40,68 +41,56 @@ func (p *PolicyBindingProvider) List(ctx context.Context) (*kubermaticv1.PolicyB
 	if err := client.List(ctx, policyBindingList); err != nil {
 		return nil, err
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyBindingList:", policyBindingList)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 
 	return policyBindingList, nil
 }
 
-func (p *PolicyBindingProvider) Get(ctx context.Context, policyBindingName string, userInfo *provider.UserInfo) (*kubermaticv1.PolicyBinding, error) {
-	client := p.privilegedClient
+func (p *PolicyBindingProvider) Get(ctx context.Context, policyBindingName string, namespace string) (*kubermaticv1.PolicyBinding, error) {
+	client := p.privilegedClient.(ctrlruntimeclient.Reader)
 
 	policyBinding := &kubermaticv1.PolicyBinding{}
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyBindingName}, policyBinding); err != nil {
+	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: policyBindingName}, policyBinding); err != nil {
 		return nil, err
 	}
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
-	fmt.Println("policyBinding:", policyBinding)
-	fmt.Println("==============================================")
-	fmt.Println("==============================================")
 	return policyBinding, nil
 }
 
-func (p *PolicyBindingProvider) Patch(ctx context.Context, updatedPolicyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error) {
+func (p *PolicyBindingProvider) Patch(ctx context.Context, user *provider.UserInfo, updatedPolicyBinding *kubermaticv1.PolicyBinding, projectID string) (*kubermaticv1.PolicyBinding, error) {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyBinding{}
 
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: updatedPolicyBinding.Name}, existing); err != nil {
+	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: updatedPolicyBinding.Namespace, Name: updatedPolicyBinding.Name}, existing); err != nil {
 		return nil, err
 	}
 
 	updated := existing.DeepCopy()
 	updated.Spec = updatedPolicyBinding.Spec
-
-	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
-		return nil, err
+	if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || user.IsAdmin {
+		if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+			return nil, err
+		}
+	} else {
+		return nil, fmt.Errorf("user %s is not allowed to update the policy binding %s", user.Email, updated.Name)
 	}
 
 	return updated, nil
 }
 
-func (p *PolicyBindingProvider) Delete(ctx context.Context, policyTemplateName string) error {
+func (p *PolicyBindingProvider) Delete(ctx context.Context, user *provider.UserInfo, policyTemplateName string, namespace string, projectID string) error {
 	client := p.privilegedClient
 
-	policyBinding := &kubermaticv1.PolicyBinding{}
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyTemplateName}, policyBinding); err != nil {
+	existing := &kubermaticv1.PolicyBinding{}
+	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: policyTemplateName}, existing); err != nil {
 		return err
 	}
-
-	if err := client.Delete(ctx, policyBinding); err != nil {
-		return err
+	if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || (user.IsAdmin && projectID == "") {
+		if err := client.Delete(ctx, existing); err != nil {
+			return err
+		}
+	} else {
+		return fmt.Errorf("user %s is not allowed to delete the policy binding %s", user.Email, policyTemplateName)
 	}
 
 	return nil
-}
-
-func (p *PolicyBindingProvider) getImpersonatedClient(userInfo *provider.UserInfo) (ctrlruntimeclient.Client, error) {
-	impersonationCfg := restclient.ImpersonationConfig{
-		UserName: userInfo.Email,
-		Groups:   userInfo.Groups,
-	}
-	return p.createMasterImpersonatedClient(impersonationCfg)
 }

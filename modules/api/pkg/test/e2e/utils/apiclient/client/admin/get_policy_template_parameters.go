@@ -61,6 +61,9 @@ GetPolicyTemplateParams contains all the parameters to send to the API endpoint
 */
 type GetPolicyTemplateParams struct {
 
+	// ProjectID.
+	ProjectID *string
+
 	// TemplateName.
 	PolicyTemplateName string
 
@@ -117,6 +120,17 @@ func (o *GetPolicyTemplateParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithProjectID adds the projectID to the get policy template params
+func (o *GetPolicyTemplateParams) WithProjectID(projectID *string) *GetPolicyTemplateParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the get policy template params
+func (o *GetPolicyTemplateParams) SetProjectID(projectID *string) {
+	o.ProjectID = projectID
+}
+
 // WithPolicyTemplateName adds the templateName to the get policy template params
 func (o *GetPolicyTemplateParams) WithPolicyTemplateName(templateName string) *GetPolicyTemplateParams {
 	o.SetPolicyTemplateName(templateName)
@@ -135,6 +149,23 @@ func (o *GetPolicyTemplateParams) WriteToRequest(r runtime.ClientRequest, reg st
 		return err
 	}
 	var res []error
+
+	if o.ProjectID != nil {
+
+		// query param project_id
+		var qrProjectID string
+
+		if o.ProjectID != nil {
+			qrProjectID = *o.ProjectID
+		}
+		qProjectID := qrProjectID
+		if qProjectID != "" {
+
+			if err := r.SetQueryParam("project_id", qProjectID); err != nil {
+				return err
+			}
+		}
+	}
 
 	// path param template_name
 	if err := r.SetPathParam("template_name", o.PolicyTemplateName); err != nil {

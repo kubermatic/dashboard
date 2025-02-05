@@ -20,6 +20,7 @@ import (
 	"context"
 
 	"github.com/go-kit/kit/endpoint"
+
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 

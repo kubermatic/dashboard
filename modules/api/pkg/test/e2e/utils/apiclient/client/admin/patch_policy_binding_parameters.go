@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // NewPatchPolicyBindingParams creates a new PatchPolicyBindingParams object,
@@ -61,11 +63,14 @@ PatchPolicyBindingParams contains all the parameters to send to the API endpoint
 */
 type PatchPolicyBindingParams struct {
 
-	// BindingName.
+	/* BindingName.
+
+	   PolicyBindingName is the name of the policy binding
+	*/
 	PolicyBindingName string
 
-	// Name.
-	Name *string
+	// Body.
+	Body *models.PatchPolicyBindingBody
 
 	timeout    time.Duration
 	Context    context.Context
@@ -131,15 +136,15 @@ func (o *PatchPolicyBindingParams) SetPolicyBindingName(bindingName string) {
 	o.PolicyBindingName = bindingName
 }
 
-// WithName adds the name to the patch policy binding params
-func (o *PatchPolicyBindingParams) WithName(name *string) *PatchPolicyBindingParams {
-	o.SetName(name)
+// WithBody adds the body to the patch policy binding params
+func (o *PatchPolicyBindingParams) WithBody(body *models.PatchPolicyBindingBody) *PatchPolicyBindingParams {
+	o.SetBody(body)
 	return o
 }
 
-// SetName adds the name to the patch policy binding params
-func (o *PatchPolicyBindingParams) SetName(name *string) {
-	o.Name = name
+// SetBody adds the body to the patch policy binding params
+func (o *PatchPolicyBindingParams) SetBody(body *models.PatchPolicyBindingBody) {
+	o.Body = body
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -154,21 +159,9 @@ func (o *PatchPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg s
 	if err := r.SetPathParam("binding_name", o.PolicyBindingName); err != nil {
 		return err
 	}
-
-	if o.Name != nil {
-
-		// query param name
-		var qrName string
-
-		if o.Name != nil {
-			qrName = *o.Name
-		}
-		qName := qrName
-		if qName != "" {
-
-			if err := r.SetQueryParam("name", qName); err != nil {
-				return err
-			}
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
 		}
 	}
 

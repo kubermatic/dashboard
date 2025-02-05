@@ -64,6 +64,12 @@ type CreatePolicyBindingParams struct {
 	// Name.
 	Name *string
 
+	// Namespace.
+	Namespace *string
+
+	// ProjectID.
+	ProjectID *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -128,6 +134,28 @@ func (o *CreatePolicyBindingParams) SetName(name *string) {
 	o.Name = name
 }
 
+// WithNamespace adds the namespace to the create policy binding params
+func (o *CreatePolicyBindingParams) WithNamespace(namespace *string) *CreatePolicyBindingParams {
+	o.SetNamespace(namespace)
+	return o
+}
+
+// SetNamespace adds the namespace to the create policy binding params
+func (o *CreatePolicyBindingParams) SetNamespace(namespace *string) {
+	o.Namespace = namespace
+}
+
+// WithProjectID adds the projectID to the create policy binding params
+func (o *CreatePolicyBindingParams) WithProjectID(projectID *string) *CreatePolicyBindingParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the create policy binding params
+func (o *CreatePolicyBindingParams) SetProjectID(projectID *string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *CreatePolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -148,6 +176,40 @@ func (o *CreatePolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg 
 		if qName != "" {
 
 			if err := r.SetQueryParam("name", qName); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Namespace != nil {
+
+		// query param namespace
+		var qrNamespace string
+
+		if o.Namespace != nil {
+			qrNamespace = *o.Namespace
+		}
+		qNamespace := qrNamespace
+		if qNamespace != "" {
+
+			if err := r.SetQueryParam("namespace", qNamespace); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.ProjectID != nil {
+
+		// query param projectID
+		var qrProjectID string
+
+		if o.ProjectID != nil {
+			qrProjectID = *o.ProjectID
+		}
+		qProjectID := qrProjectID
+		if qProjectID != "" {
+
+			if err := r.SetQueryParam("projectID", qProjectID); err != nil {
 				return err
 			}
 		}
