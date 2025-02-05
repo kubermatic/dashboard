@@ -37,7 +37,6 @@ import (
 	uuid2 "github.com/google/uuid"
 	"github.com/gorilla/mux"
 	velerov1 "github.com/vmware-tanzu/velero/pkg/apis/velero/v1"
-	"k8c.io/kubermatic/v2/pkg/resources"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	clusterbackup "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backup"
@@ -47,6 +46,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
+	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
@@ -111,17 +111,36 @@ func (r *createBSLReq) validateCreateBSLReq() error {
 		return fmt.Errorf("velero plugin not supported other than aws")
 	}
 	if r.Body.CBSLName == "" {
-		return fmt.Errorf("a valid CBSL must be provided for the BSL to be creatd in the cluster for importing backups")
+		return fmt.Errorf("a valid CBSL must be provided for the BSL to be created in the cluster for importing backups")
+	}
+	return nil
+}
+
+// checks whether a user is a global admin or a project admin.
+func validateUser(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectId string) error {
+	userInfo, err := userInfoGetter(ctx, projectId)
+	if err != nil {
+		return common.KubernetesErrorToHTTPError(err)
+	}
+	if !userInfo.IsAdmin {
+		return utilerrors.NewNotAuthorized()
 	}
 	return nil
 }
 
 func CreateBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, backupProvider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
+	if err := validateUser(ctx, userInfoGetter, ""); err != nil {
+		return nil, err
+	}
+
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
 	req := request.(createBSLReq)
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
 	if err := req.validateCreateBSLReq(); err != nil {
 		return nil, utilerrors.NewBadRequest("%v", err)
 	}
@@ -273,11 +292,17 @@ func DecodeGetBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 }
 
 func GetBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
+	if err := validateUser(ctx, userInfoGetter, ""); err != nil {
+		return nil, err
+	}
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
 	req := request.(getBSLReq)
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -316,11 +341,17 @@ func DecodeListBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 }
 
 func ListBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocationList, error) {
+	if err := validateUser(ctx, userInfoGetter, ""); err != nil {
+		return nil, err
+	}
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
 	req := request.(listBSLReq)
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -371,11 +402,17 @@ func DecodeDeleteBSLReq(c context.Context, r *http.Request) (interface{}, error)
 }
 
 func DeleteBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
+	if err := validateUser(ctx, userInfoGetter, ""); err != nil {
+		return nil, err
+	}
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
 
 	req := request.(deleteBSLReq)
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
