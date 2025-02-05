@@ -1738,7 +1738,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodGet).
-		Path("/policybinding/{binding_name}").
+		Path("/policybinding/{namespace}/{binding_name}").
 		Handler(r.getKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodPost).
@@ -1750,7 +1750,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.patchKyvernoPolicyBinding())
 
 	mux.Methods(http.MethodDelete).
-		Path("/policybinding/{binding_name}").
+		Path("/policybinding/{namespace}/{binding_name}").
 		Handler(r.deleteKyvernoPolicyBinding())
 }
 
@@ -11203,9 +11203,10 @@ func (r Routing) listSeedStatus() http.Handler {
 }
 
 // Define endpoints to manage kyverno policies
+//
 // swagger:route GET /api/v2/policytemplate admin listPolicyTemplate
 //
-//	List all policy templates. Only available in Kubermatic Enterprise Edition
+//	List all policy templates, If query parameter `project_id` is set then the endpoint will return only the policy templates that are associated with the project. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11221,7 +11222,7 @@ func (r Routing) listKyvernoPolicyTemplate() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(policytemplate.ListEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
-		common.DecodeEmptyReq,
+		policytemplate.DecodeListPolicyTemplateReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -11229,7 +11230,7 @@ func (r Routing) listKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route GET /api/v2/policytemplate/{template_name} admin getPolicyTemplate
 //
-//	Get policy template. Only available in Kubermatic Enterprise Edition
+//	Get policy template, If the query parameter project_id is set, the endpoint will return the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11309,7 +11310,7 @@ func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route DELETE /api/v2/policytemplate/{template_name} admin deletePolicyTemplate
 //
-//	Delete policy template. Only available in Kubermatic Enterprise Edition
+//	Delete policy template, If the query parameter project_id is set, the endpoint will delete the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11334,7 +11335,7 @@ func (r Routing) deleteKyvernoPolicyTemplate() http.Handler {
 
 // swagger:route GET /api/v2/policybinding admin listPolicyBinding
 //
-//	List all policy bindings. Only available in Kubermatic Enterprise Edition
+//	List all policy bindings, If query parameter `project_id` is set then the endpoint will return only the policy bindings that are associated with the project. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11351,15 +11352,15 @@ func (r Routing) listKyvernoPolicyBinding() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
-		common.DecodeEmptyReq,
+		policybinding.DecodeListPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }
 
-// swagger:route GET /api/v2/policybinding/{binding_name} admin getPolicyBinding
+// swagger:route GET /api/v2/policybinding/{namespace}/{binding_name} admin getPolicyBinding
 //
-//	Get policy binding. Only available in Kubermatic Enterprise Edition
+//	Get policy binding, If query parameter `project_id` is set then the endpoint will return only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition
 //
 //	Produces:
 //	- application/json
@@ -11384,7 +11385,7 @@ func (r Routing) getKyvernoPolicyBinding() http.Handler {
 
 // swagger:route POST /api/v2/policybinding admin createPolicyBinding
 //
-//	Create policy binding. Only available in Kubermatic Enterprise Edition
+//	Create policy binding, Only available in Kubermatic Enterprise Edition
 //
 //	Consumes:
 //	- application/json
@@ -11436,9 +11437,9 @@ func (r Routing) patchKyvernoPolicyBinding() http.Handler {
 	)
 }
 
-// swagger:route DELETE /api/v2/policybinding/{binding_name} admin deletePolicyBinding
+// swagger:route DELETE /api/v2/policybinding/{namespace}/{binding_name} admin deletePolicyBinding
 //
-//	Delete policy binding. Only available in Kubermatic Enterprise Edition
+//	Delete policy binding, If query parameter `project_id` is set then the endpoint will delete only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition
 //
 // Responses:
 //

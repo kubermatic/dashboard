@@ -30,6 +30,10 @@ func listEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	return policybinding.ListEndpoint(ctx, request, userInfoGetter, provider)
 }
 
+func DecodeListPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	return policybinding.DecodeListPolicyBindingReq(ctx, r)
+}
+
 func getEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
 	return policybinding.GetEndpoint(ctx, request, userInfoGetter, provider)
 }
