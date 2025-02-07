@@ -42,6 +42,9 @@ type KubeVirtInfraStorageClass struct {
 
 	// volume binding mode
 	VolumeBindingMode VolumeBindingMode `json:"volumeBindingMode,omitempty"`
+
+	// volume provisioner
+	VolumeProvisioner KubeVirtVolumeProvisioner `json:"volumeProvisioner,omitempty"`
 }
 
 // Validate validates this kube virt infra storage class
@@ -49,6 +52,10 @@ func (m *KubeVirtInfraStorageClass) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateVolumeBindingMode(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateVolumeProvisioner(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -75,11 +82,32 @@ func (m *KubeVirtInfraStorageClass) validateVolumeBindingMode(formats strfmt.Reg
 	return nil
 }
 
+func (m *KubeVirtInfraStorageClass) validateVolumeProvisioner(formats strfmt.Registry) error {
+	if swag.IsZero(m.VolumeProvisioner) { // not required
+		return nil
+	}
+
+	if err := m.VolumeProvisioner.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("volumeProvisioner")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("volumeProvisioner")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // ContextValidate validate this kube virt infra storage class based on the context it is used
 func (m *KubeVirtInfraStorageClass) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateVolumeBindingMode(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateVolumeProvisioner(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -96,6 +124,20 @@ func (m *KubeVirtInfraStorageClass) contextValidateVolumeBindingMode(ctx context
 			return ve.ValidateName("volumeBindingMode")
 		} else if ce, ok := err.(*errors.CompositeError); ok {
 			return ce.ValidateName("volumeBindingMode")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *KubeVirtInfraStorageClass) contextValidateVolumeProvisioner(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.VolumeProvisioner.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("volumeProvisioner")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("volumeProvisioner")
 		}
 		return err
 	}
