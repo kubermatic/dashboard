@@ -44,6 +44,8 @@ export class ApplicationRef {
 export class ApplicationNamespace {
   create?: boolean;
   name: string;
+  labels?: Record<string, string>;
+  annotations?: Record<string, string>;
 }
 
 export class ApplicationStatus {
@@ -60,6 +62,10 @@ export class ApplicationCondition {
   message: string;
 }
 
+export class ApplicationSettings {
+  defaultNamespace?: string;
+}
+
 export class ApplicationDefinition {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -71,6 +77,7 @@ export class ApplicationDefinition {
 }
 
 export class ApplicationDefinitionSpec {
+  defaultNamespace?: ApplicationNamespace;
   defaultValues?: string | object;
   defaultVersion?: string;
   enforced: boolean;

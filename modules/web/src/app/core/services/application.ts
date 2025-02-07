@@ -17,7 +17,12 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {Application, ApplicationDefinition, getApplicationLogoData} from '@shared/entity/application';
+import {
+  Application,
+  ApplicationDefinition,
+  ApplicationSettings,
+  getApplicationLogoData,
+} from '@shared/entity/application';
 import _ from 'lodash';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap, tap} from 'rxjs/operators';
@@ -49,6 +54,11 @@ export class ApplicationService {
   set applications(applications: Application[]) {
     this._applications = applications;
     this.applicationChanges.emit(this._applications);
+  }
+
+  getApplicationSettings(): Observable<ApplicationSettings> {
+    const url = `${this._restRoot}/applicationsettings`;
+    return this._httpClient.get<ApplicationSettings>(url).pipe(catchError(() => of({} as ApplicationSettings)));
   }
 
   listApplicationDefinitions(): Observable<ApplicationDefinition[]> {
