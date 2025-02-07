@@ -114,6 +114,9 @@ func KubeVirtStorageClasses(ctx context.Context, kubeconfig, datacenterName stri
 
 	storageClasses := apiv2.StorageClassList{}
 	for _, sc := range datacenter.Spec.Kubevirt.InfraStorageClasses {
+		if sc.VolumeProvisioner == kubermaticv1.KubeVirtCSIDriver {
+			continue
+		}
 		storageClasses = append(storageClasses, apiv2.StorageClass{Name: sc.Name})
 	}
 	if len(storageClasses) > 0 {
