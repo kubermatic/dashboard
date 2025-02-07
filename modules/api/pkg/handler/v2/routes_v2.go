@@ -31,6 +31,7 @@ import (
 	allowedregistry "k8c.io/dashboard/v2/pkg/handler/v2/allowed_registry"
 	applicationdefinition "k8c.io/dashboard/v2/pkg/handler/v2/application_definition"
 	applicationinstallation "k8c.io/dashboard/v2/pkg/handler/v2/application_installation"
+	applicationsettings "k8c.io/dashboard/v2/pkg/handler/v2/application_settings"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupcredentials"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupdestinations"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -505,6 +506,11 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodDelete).
 		Path("/applicationdefinitions/{appdef_name}").
 		Handler(r.deleteApplicationDefinition())
+
+	// Defines a set of endpoints for application settings
+	mux.Methods(http.MethodGet).
+		Path("/applicationsettings").
+		Handler(r.getApplicationSettings())
 
 	// Define a set of endpoints for gatekeeper constraint templates
 	mux.Methods(http.MethodGet).
@@ -10656,6 +10662,30 @@ func (r Routing) deleteApplicationDefinition() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(applicationdefinition.DeleteApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
 		applicationdefinition.DecodeDeleteApplicationDefinition,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/applicationsettings applications getApplicationSettings
+//
+//	Get application settings
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: ApplicationSettings
+//	  401: empty
+//	  403: empty
+func (r Routing) getApplicationSettings() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(applicationsettings.GetApplicationSettingsEndpoint(r.kubermaticConfigGetter)),
+		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

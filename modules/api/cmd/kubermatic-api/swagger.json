@@ -6636,6 +6636,38 @@
         }
       }
     },
+    "/api/v2/applicationsettings": {
+      "get": {
+        "description": "Get application settings",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "applications"
+        ],
+        "operationId": "getApplicationSettings",
+        "responses": {
+          "200": {
+            "description": "ApplicationSettings",
+            "schema": {
+              "$ref": "#/definitions/ApplicationSettings"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/cni/{cni_plugin_type}/versions": {
       "get": {
         "description": "Lists all CNI Plugin versions that are supported for a given CNI plugin type",
@@ -11821,6 +11853,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -11832,13 +11871,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -28154,6 +28186,17 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "ApplicationSettings": {
+      "description": "ApplicationSettings defines common settings for applications",
+      "type": "object",
+      "properties": {
+        "defaultNamespace": {
+          "type": "string",
+          "x-go-name": "DefaultNamespace"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "ApplicationSource": {
       "type": "object",
