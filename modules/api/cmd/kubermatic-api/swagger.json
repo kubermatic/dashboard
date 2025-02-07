@@ -34547,6 +34547,9 @@
         "volumeBindingMode": {
           "$ref": "#/definitions/VolumeBindingMode"
         },
+        "volumeProvisioner": {
+          "$ref": "#/definitions/KubeVirtVolumeProvisioner"
+        },
         "zones": {
           "description": "Zones represent a logical failure domain. It is common for Kubernetes clusters to span multiple zones\nfor increased availability",
           "type": "array",
@@ -34595,6 +34598,11 @@
         "$ref": "#/definitions/KubeVirtVPC"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "KubeVirtVolumeProvisioner": {
+      "description": "KubeVirtVolumeProvisioner represents what is the provisioner of the storage class volume, whether it will be the csi driver\nand/or CDI for disk images.",
+      "type": "string",
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "KubermaticVersions": {
       "type": "object",
