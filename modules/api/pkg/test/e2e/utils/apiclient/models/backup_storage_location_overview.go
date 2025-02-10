@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// BackupStorageLocationOverview BackupStorageLocationOverview is the object representing a Backup Storage Location overview for a list
+// BackupStorageLocationOverview BackupStorageLocationOverview is the object representing a backup storage location with essential fields only for list views.
 //
 // swagger:model BackupStorageLocationOverview
 type BackupStorageLocationOverview struct {

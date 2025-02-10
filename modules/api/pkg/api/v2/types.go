@@ -2307,7 +2307,7 @@ type BackupStorageLocation struct {
 	Status   velerov1.BackupStorageLocationStatus `json:"status,omitempty"`
 }
 
-// BackupStorageLocationOverview is the object representing a Backup Storage Location overview for a list
+// BackupStorageLocationOverview is the object representing a backup storage location with essential fields only for list views.
 // swagger:model BackupStorageLocationOverview
 type BackupStorageLocationOverview struct {
 	Name         string                               `json:"name"`

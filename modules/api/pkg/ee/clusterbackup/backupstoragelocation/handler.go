@@ -40,7 +40,6 @@ import (
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	clusterbackup "k8c.io/dashboard/v2/pkg/ee/clusterbackup/backup"
-	"k8c.io/dashboard/v2/pkg/ee/group-project-binding/handler"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -59,7 +58,6 @@ import (
 
 const (
 	supportedVeleroPlugin    = "aws"
-	credentialsSecretKeyName = "cloud-credentials"
 	accessKeyTemplate        = "awsAccessKeyId"
 	secretAccessKeyTemplate  = "awsSecretAccessKey"
 	clusterIdLabelKey        = "cluster-id"
@@ -67,7 +65,6 @@ const (
 	bslKind                  = "BackupStorageLocation"
 	CBSL                     = "cbsl"
 	backupSyncPeriod         = 30 * time.Second
-	defaultBSLName           = "default-cluster-backup-bsl"
 )
 
 var credentialsTemplate string = `[default]
@@ -119,34 +116,29 @@ func (r *createBSLReq) validateCreateBSLReq() error {
 }
 
 // checks whether a user is a global admin, project admin or has valid roles for a project.
-func validateUser(ctx context.Context, userInfoGetter provider.UserInfoGetter, httpMethod, projectId string) error {
-	userInfo, err := userInfoGetter(ctx, projectId)
+func validateUser(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectID string) error {
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
-		return common.KubernetesErrorToHTTPError(err)
+		return err
 	}
-	if userInfo.IsAdmin {
-		return nil
+
+	// Only KKP admins and project owners/editors are allowed to perform this operation.
+	if !(userInfo.IsAdmin || userInfo.Roles.HasAny("editors", "owners")) {
+		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesnt have privileges to perform this action. Please contact your administrator.", userInfo.Email))
 	}
-	if _, ok := userInfo.Roles[handler.OwnersRole]; ok {
-		return nil
-	}
-	if _, ok := userInfo.Roles[handler.EditorsRole]; ok {
-		return nil
-	}
-	if _, ok := userInfo.Roles[handler.ViewersRole]; ok && httpMethod == http.MethodGet {
-		return nil
-	}
-	return utilerrors.NewNotAuthorized()
+	return nil
 }
 
 func CreateBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, backupProvider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	req := request.(createBSLReq)
-	if err := validateUser(ctx, userInfoGetter, http.MethodPost, req.ProjectID); err != nil {
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
+
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
+
 	if err := req.validateCreateBSLReq(); err != nil {
 		return nil, utilerrors.NewBadRequest("%v", err)
 	}
@@ -159,10 +151,12 @@ func CreateBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter 
 	bsl := &velerov1.BackupStorageLocation{
 		Spec: req.Body.BSLSpec,
 	}
-	// This wouldn't be used as a storage location for backups; it should only be used for restoring backups from backup objects of a different cluster.
+
+	// We configure the BSL to be read-only to prevent any accidental/intentional write operations against the storage location.
 	bsl.Spec.AccessMode = velerov1.BackupStorageLocationAccessModeReadOnly
+	// We don't want the BSL to be the default BSL for the cluster.
 	bsl.Spec.Default = false
-	// backup sync period can't be zero, otherwise backup won't be synced from s3
+	// Backup sync period can't be zero, otherwise backup won't be synced from s3
 	if bsl.Spec.BackupSyncPeriod.Duration == 0 {
 		bsl.Spec.BackupSyncPeriod.Duration = backupSyncPeriod
 	}
@@ -206,7 +200,7 @@ func createBSL(ctx context.Context, client ctrlruntimeclient.Client, backupProvi
 				return nil, fmt.Errorf("failed to generate Velero cloud-credentials template: %w", err)
 			}
 			if bsl.Spec.Credential.Key == "" {
-				bsl.Spec.Credential.Key = credentialsSecretKeyName
+				bsl.Spec.Credential.Key = resources.ClusterCloudCredentialsSecretName
 			}
 			secret = &corev1.Secret{
 				ObjectMeta: metav1.ObjectMeta{
@@ -232,7 +226,7 @@ func createBSL(ctx context.Context, client ctrlruntimeclient.Client, backupProvi
 			LocalObjectReference: corev1.LocalObjectReference{
 				Name: secret.Name,
 			},
-			Key: credentialsSecretKeyName,
+			Key: resources.ClusterCloudCredentialsSecretName,
 		}
 	}
 
@@ -299,9 +293,10 @@ func DecodeGetBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 
 func GetBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocation, error) {
 	req := request.(getBSLReq)
-	if err := validateUser(ctx, userInfoGetter, http.MethodGet, req.ProjectID); err != nil {
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
+
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
@@ -345,9 +340,10 @@ func DecodeListBSLReq(c context.Context, r *http.Request) (interface{}, error) {
 
 func ListBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.BackupStorageLocationList, error) {
 	req := request.(listBSLReq)
-	if err := validateUser(ctx, userInfoGetter, http.MethodGet, req.ProjectID); err != nil {
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
+
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
@@ -403,12 +399,14 @@ func DecodeDeleteBSLReq(c context.Context, r *http.Request) (interface{}, error)
 
 func DeleteBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider) (interface{}, error) {
 	req := request.(deleteBSLReq)
-	if err := validateUser(ctx, userInfoGetter, http.MethodDelete, req.ProjectID); err != nil {
+	if err := validateUser(ctx, userInfoGetter, req.ProjectID); err != nil {
 		return nil, err
 	}
+
 	if err := clusterbackup.IsClusterBackupEnabled(ctx, settingsProvider); err != nil {
 		return nil, err
 	}
+
 	if req.BSLName == defaultBSLName {
 		return nil, fmt.Errorf("cannot delete a default BSL from the cluster")
 	}
@@ -440,7 +438,7 @@ func getBSLLabels(cbslName, projectID, clusterID string) map[string]string {
 }
 
 func getVeleroCloudCredentials(awsAccessKeyId, awsSecretAccessKey []byte) ([]byte, error) {
-	t, err := template.New(credentialsSecretKeyName).Parse(credentialsTemplate)
+	t, err := template.New(resources.ClusterCloudCredentialsSecretName).Parse(credentialsTemplate)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse credentials file template: %w", err)
 	}
