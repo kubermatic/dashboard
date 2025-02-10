@@ -61,7 +61,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.6-0.20210604193023-d5e0c0615ace
 	github.com/stretchr/testify v1.10.0
-	github.com/vmware-tanzu/velero v1.15.0
+	github.com/vmware-tanzu/velero v1.14.0
 	github.com/vmware/go-vcloud-director/v2 v2.26.0
 	github.com/vmware/govmomi v0.46.2
 	go.anx.io/go-anxcloud v0.7.6

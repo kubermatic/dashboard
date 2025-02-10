@@ -1079,8 +1079,8 @@ github.com/vbatts/tar-split v0.11.5 h1:3bHCTIheBm1qFTcgh9oPu+nNBtX+XJIupG/vacinC
 github.com/vbatts/tar-split v0.11.5/go.mod h1:yZbwRsSeGjusneWgA781EKej9HF8vme8okylkAeNKLk=
 github.com/vektah/gqlparser/v2 v2.5.15 h1:fYdnU8roQniJziV5TDiFPm/Ff7pE8xbVSOJqbsdl88A=
 github.com/vektah/gqlparser/v2 v2.5.15/go.mod h1:WQQjFc+I1YIzoPvZBhUQX7waZgg3pMLi0r8KymvAE2w=
-github.com/vmware-tanzu/velero v1.15.0 h1:+S/lNSDwQqlROGWfmNuZnnabopGmco978COIt3AP09c=
-github.com/vmware-tanzu/velero v1.15.0/go.mod h1:28VhzPJRBo91GBRkgs4Ird0fx2vCpepBWmhF+5Pn/WQ=
+github.com/vmware-tanzu/velero v1.14.0 h1:ZYy9TLtokdHInIdWTfwHYIZhRr+xLd0nGzHyQrXMCIM=
+github.com/vmware-tanzu/velero v1.14.0/go.mod h1:yeGs7/xq35yOGDPCV0ryxoybQBsTLXmrxwzXBXtiwp8=
 github.com/vmware/go-vcloud-director/v2 v2.26.0 h1:hcrZNbtj6x0a+nVUfkJG+Jj1l38Gw+NuUxUp0xStbSM=
 github.com/vmware/go-vcloud-director/v2 v2.26.0/go.mod h1:7Of1qJja+LLNKVegjZG7uuhhy6xgGg3q7Fkw2CEP+Tw=
 github.com/vmware/govmomi v0.46.2 h1:gZTIcKSr4sVcDB803FUv0r4lhOgE5Y5WQCNW75dPlls=
