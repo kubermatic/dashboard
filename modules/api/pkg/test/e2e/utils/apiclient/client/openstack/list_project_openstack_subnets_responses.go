@@ -6,7 +6,6 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectOpenstackSubnetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project openstack subnets o k response
-func (o *ListProjectOpenstackSubnetsOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectOpenstackSubnetsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnetsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectOpenstackSubnetsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnetsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectOpenstackSubnetsOK) GetPayload() []*models.OpenstackSubnet {
@@ -128,6 +120,11 @@ type ListProjectOpenstackSubnetsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project openstack subnets default response
+func (o *ListProjectOpenstackSubnetsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project openstack subnets default response has a 2xx status code
 func (o *ListProjectOpenstackSubnetsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectOpenstackSubnetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project openstack subnets default response
-func (o *ListProjectOpenstackSubnetsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectOpenstackSubnetsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnets default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectOpenstackSubnetsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnets default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/subnets][%d] listProjectOpenstackSubnets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectOpenstackSubnetsDefault) GetPayload() *models.ErrorResponse {

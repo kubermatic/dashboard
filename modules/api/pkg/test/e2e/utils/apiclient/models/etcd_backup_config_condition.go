@@ -148,10 +148,6 @@ func (m *EtcdBackupConfigCondition) ContextValidate(ctx context.Context, formats
 
 func (m *EtcdBackupConfigCondition) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Status) { // not required
-		return nil
-	}
-
 	if err := m.Status.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("status")
@@ -165,10 +161,6 @@ func (m *EtcdBackupConfigCondition) contextValidateStatus(ctx context.Context, f
 }
 
 func (m *EtcdBackupConfigCondition) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Type) { // not required
-		return nil
-	}
 
 	if err := m.Type.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

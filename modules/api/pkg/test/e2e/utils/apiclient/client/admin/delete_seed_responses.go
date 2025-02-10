@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete seed o k response
-func (o *DeleteSeedOK) Code() int {
-	return 200
-}
-
 func (o *DeleteSeedOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedOK ", 200)
 }
 
 func (o *DeleteSeedOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedOK ", 200)
 }
 
 func (o *DeleteSeedOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete seed unauthorized response
-func (o *DeleteSeedUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteSeedUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedUnauthorized ", 401)
 }
 
 func (o *DeleteSeedUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedUnauthorized ", 401)
 }
 
 func (o *DeleteSeedUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete seed forbidden response
-func (o *DeleteSeedForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteSeedForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedForbidden ", 403)
 }
 
 func (o *DeleteSeedForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeedForbidden ", 403)
 }
 
 func (o *DeleteSeedForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteSeedDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete seed default response
+func (o *DeleteSeedDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete seed default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete seed default response
-func (o *DeleteSeedDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteSeedDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteSeedDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/admin/seeds/{seed_name}][%d] deleteSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteSeedDefault) GetPayload() *models.ErrorResponse {

@@ -75,11 +75,6 @@ func (m *CustomNetworkPolicy) ContextValidate(ctx context.Context, formats strfm
 func (m *CustomNetworkPolicy) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
-
-		if swag.IsZero(m.Spec) { // not required
-			return nil
-		}
-
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")

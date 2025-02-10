@@ -6,7 +6,6 @@ package etcdbackupconfig
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListProjectEtcdBackupConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project etcd backup config o k response
-func (o *ListProjectEtcdBackupConfigOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectEtcdBackupConfigOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectEtcdBackupConfigOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectEtcdBackupConfigOK) GetPayload() []*models.EtcdBackupConfig {
@@ -160,17 +152,12 @@ func (o *ListProjectEtcdBackupConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list project etcd backup config unauthorized response
-func (o *ListProjectEtcdBackupConfigUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListProjectEtcdBackupConfigUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigUnauthorized ", 401)
 }
 
 func (o *ListProjectEtcdBackupConfigUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigUnauthorized ", 401)
 }
 
 func (o *ListProjectEtcdBackupConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListProjectEtcdBackupConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list project etcd backup config forbidden response
-func (o *ListProjectEtcdBackupConfigForbidden) Code() int {
-	return 403
-}
-
 func (o *ListProjectEtcdBackupConfigForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigForbidden ", 403)
 }
 
 func (o *ListProjectEtcdBackupConfigForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfigForbidden ", 403)
 }
 
 func (o *ListProjectEtcdBackupConfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListProjectEtcdBackupConfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list project etcd backup config default response
+func (o *ListProjectEtcdBackupConfigDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list project etcd backup config default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListProjectEtcdBackupConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project etcd backup config default response
-func (o *ListProjectEtcdBackupConfigDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectEtcdBackupConfigDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectEtcdBackupConfigDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/etcdbackupconfigs][%d] listProjectEtcdBackupConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectEtcdBackupConfigDefault) GetPayload() *models.ErrorResponse {

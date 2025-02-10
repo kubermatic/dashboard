@@ -6,7 +6,6 @@ package allowedregistries
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchAllowedRegistryOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch allowed registry o k response
-func (o *PatchAllowedRegistryOK) Code() int {
-	return 200
-}
-
 func (o *PatchAllowedRegistryOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchAllowedRegistryOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchAllowedRegistryOK) GetPayload() *models.ConstraintTemplate {
@@ -162,17 +154,12 @@ func (o *PatchAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch allowed registry unauthorized response
-func (o *PatchAllowedRegistryUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchAllowedRegistryUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryUnauthorized ", 401)
 }
 
 func (o *PatchAllowedRegistryUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryUnauthorized ", 401)
 }
 
 func (o *PatchAllowedRegistryUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch allowed registry forbidden response
-func (o *PatchAllowedRegistryForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchAllowedRegistryForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryForbidden ", 403)
 }
 
 func (o *PatchAllowedRegistryForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistryForbidden ", 403)
 }
 
 func (o *PatchAllowedRegistryForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchAllowedRegistryDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch allowed registry default response
+func (o *PatchAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch allowed registry default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch allowed registry default response
-func (o *PatchAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchAllowedRegistryDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistry default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistry default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchAllowedRegistryDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistry default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/allowedregistries/{allowed_registry}][%d] patchAllowedRegistry default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchAllowedRegistryDefault) GetPayload() *models.ErrorResponse {

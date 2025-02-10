@@ -6,7 +6,6 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListDCForProviderOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list d c for provider o k response
-func (o *ListDCForProviderOK) Code() int {
-	return 200
-}
-
 func (o *ListDCForProviderOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderOK  %+v", 200, o.Payload)
 }
 
 func (o *ListDCForProviderOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderOK  %+v", 200, o.Payload)
 }
 
 func (o *ListDCForProviderOK) GetPayload() []*models.Datacenter {
@@ -160,17 +152,12 @@ func (o *ListDCForProviderUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list d c for provider unauthorized response
-func (o *ListDCForProviderUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListDCForProviderUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderUnauthorized ", 401)
 }
 
 func (o *ListDCForProviderUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderUnauthorized ", 401)
 }
 
 func (o *ListDCForProviderUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListDCForProviderForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list d c for provider forbidden response
-func (o *ListDCForProviderForbidden) Code() int {
-	return 403
-}
-
 func (o *ListDCForProviderForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderForbidden ", 403)
 }
 
 func (o *ListDCForProviderForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProviderForbidden ", 403)
 }
 
 func (o *ListDCForProviderForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListDCForProviderDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list d c for provider default response
+func (o *ListDCForProviderDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list d c for provider default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListDCForProviderDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list d c for provider default response
-func (o *ListDCForProviderDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListDCForProviderDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProvider default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProvider default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListDCForProviderDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProvider default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/dc][%d] listDCForProvider default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListDCForProviderDefault) GetPayload() *models.ErrorResponse {

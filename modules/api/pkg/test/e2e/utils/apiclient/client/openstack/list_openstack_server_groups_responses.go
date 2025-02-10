@@ -6,7 +6,6 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListOpenstackServerGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list openstack server groups o k response
-func (o *ListOpenstackServerGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListOpenstackServerGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOpenstackServerGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOpenstackServerGroupsOK) GetPayload() []*models.OpenstackServerGroup {
@@ -128,6 +120,11 @@ type ListOpenstackServerGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list openstack server groups default response
+func (o *ListOpenstackServerGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list openstack server groups default response has a 2xx status code
 func (o *ListOpenstackServerGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListOpenstackServerGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list openstack server groups default response
-func (o *ListOpenstackServerGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListOpenstackServerGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOpenstackServerGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/openstack/servergroups][%d] listOpenstackServerGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOpenstackServerGroupsDefault) GetPayload() *models.ErrorResponse {

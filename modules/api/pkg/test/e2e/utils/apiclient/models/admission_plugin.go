@@ -75,10 +75,6 @@ func (m *AdmissionPlugin) ContextValidate(ctx context.Context, formats strfmt.Re
 
 func (m *AdmissionPlugin) contextValidateFromVersion(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.FromVersion) { // not required
-		return nil
-	}
-
 	if err := m.FromVersion.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("fromVersion")

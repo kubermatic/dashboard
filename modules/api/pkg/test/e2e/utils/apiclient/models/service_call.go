@@ -91,11 +91,6 @@ func (m *ServiceCall) contextValidateHeaders(ctx context.Context, formats strfmt
 	for i := 0; i < len(m.Headers); i++ {
 
 		if m.Headers[i] != nil {
-
-			if swag.IsZero(m.Headers[i]) { // not required
-				return nil
-			}
-
 			if err := m.Headers[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("headers" + "." + strconv.Itoa(i))

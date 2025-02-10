@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetKubermaticSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get kubermatic settings o k response
-func (o *GetKubermaticSettingsOK) Code() int {
-	return 200
-}
-
 func (o *GetKubermaticSettingsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetKubermaticSettingsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetKubermaticSettingsOK) GetPayload() *models.GlobalSettings {
@@ -162,17 +154,12 @@ func (o *GetKubermaticSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get kubermatic settings unauthorized response
-func (o *GetKubermaticSettingsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetKubermaticSettingsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsUnauthorized ", 401)
 }
 
 func (o *GetKubermaticSettingsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsUnauthorized ", 401)
 }
 
 func (o *GetKubermaticSettingsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetKubermaticSettingsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get kubermatic settings forbidden response
-func (o *GetKubermaticSettingsForbidden) Code() int {
-	return 403
-}
-
 func (o *GetKubermaticSettingsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsForbidden ", 403)
 }
 
 func (o *GetKubermaticSettingsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettingsForbidden ", 403)
 }
 
 func (o *GetKubermaticSettingsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetKubermaticSettingsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get kubermatic settings default response
+func (o *GetKubermaticSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get kubermatic settings default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetKubermaticSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get kubermatic settings default response
-func (o *GetKubermaticSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetKubermaticSettingsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetKubermaticSettingsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings][%d] getKubermaticSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetKubermaticSettingsDefault) GetPayload() *models.ErrorResponse {

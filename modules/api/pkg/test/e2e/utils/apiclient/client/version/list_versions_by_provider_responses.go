@@ -6,7 +6,6 @@ package version
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListVersionsByProviderOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list versions by provider o k response
-func (o *ListVersionsByProviderOK) Code() int {
-	return 200
-}
-
 func (o *ListVersionsByProviderOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVersionsByProviderOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVersionsByProviderOK) GetPayload() models.VersionList {
@@ -160,17 +152,12 @@ func (o *ListVersionsByProviderUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list versions by provider unauthorized response
-func (o *ListVersionsByProviderUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListVersionsByProviderUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderUnauthorized ", 401)
 }
 
 func (o *ListVersionsByProviderUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderUnauthorized ", 401)
 }
 
 func (o *ListVersionsByProviderUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListVersionsByProviderForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list versions by provider forbidden response
-func (o *ListVersionsByProviderForbidden) Code() int {
-	return 403
-}
-
 func (o *ListVersionsByProviderForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderForbidden ", 403)
 }
 
 func (o *ListVersionsByProviderForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProviderForbidden ", 403)
 }
 
 func (o *ListVersionsByProviderForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListVersionsByProviderDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list versions by provider default response
+func (o *ListVersionsByProviderDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list versions by provider default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListVersionsByProviderDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list versions by provider default response
-func (o *ListVersionsByProviderDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVersionsByProviderDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProvider default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProvider default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVersionsByProviderDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProvider default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/versions][%d] listVersionsByProvider default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVersionsByProviderDefault) GetPayload() *models.ErrorResponse {

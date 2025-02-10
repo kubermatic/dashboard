@@ -136,11 +136,6 @@ func (m *Attestation) contextValidateAttestors(ctx context.Context, formats strf
 	for i := 0; i < len(m.Attestors); i++ {
 
 		if m.Attestors[i] != nil {
-
-			if swag.IsZero(m.Attestors[i]) { // not required
-				return nil
-			}
-
 			if err := m.Attestors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("attestors" + "." + strconv.Itoa(i))
@@ -161,11 +156,6 @@ func (m *Attestation) contextValidateConditions(ctx context.Context, formats str
 	for i := 0; i < len(m.Conditions); i++ {
 
 		if m.Conditions[i] != nil {
-
-			if swag.IsZero(m.Conditions[i]) { // not required
-				return nil
-			}
-
 			if err := m.Conditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("conditions" + "." + strconv.Itoa(i))

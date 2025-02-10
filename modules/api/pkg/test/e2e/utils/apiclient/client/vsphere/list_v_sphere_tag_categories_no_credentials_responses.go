@@ -6,7 +6,6 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListVSphereTagCategoriesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list v sphere tag categories no credentials o k response
-func (o *ListVSphereTagCategoriesNoCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ListVSphereTagCategoriesNoCredentialsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereTagCategoriesNoCredentialsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereTagCategoriesNoCredentialsOK) GetPayload() []*models.VSphereTagCategory {
@@ -128,6 +120,11 @@ type ListVSphereTagCategoriesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list v sphere tag categories no credentials default response
+func (o *ListVSphereTagCategoriesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list v sphere tag categories no credentials default response has a 2xx status code
 func (o *ListVSphereTagCategoriesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListVSphereTagCategoriesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list v sphere tag categories no credentials default response
-func (o *ListVSphereTagCategoriesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVSphereTagCategoriesNoCredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereTagCategoriesNoCredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vsphere/tagcategories][%d] listVSphereTagCategoriesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereTagCategoriesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

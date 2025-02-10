@@ -133,11 +133,6 @@ func (m *NetworkPolicyPeer) ContextValidate(ctx context.Context, formats strfmt.
 func (m *NetworkPolicyPeer) contextValidateIPBlock(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.IPBlock != nil {
-
-		if swag.IsZero(m.IPBlock) { // not required
-			return nil
-		}
-
 		if err := m.IPBlock.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ipBlock")
@@ -154,11 +149,6 @@ func (m *NetworkPolicyPeer) contextValidateIPBlock(ctx context.Context, formats 
 func (m *NetworkPolicyPeer) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NamespaceSelector != nil {
-
-		if swag.IsZero(m.NamespaceSelector) { // not required
-			return nil
-		}
-
 		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespaceSelector")
@@ -175,11 +165,6 @@ func (m *NetworkPolicyPeer) contextValidateNamespaceSelector(ctx context.Context
 func (m *NetworkPolicyPeer) contextValidatePodSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PodSelector != nil {
-
-		if swag.IsZero(m.PodSelector) { // not required
-			return nil
-		}
-
 		if err := m.PodSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("podSelector")

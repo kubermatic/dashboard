@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListExternalClusterEventsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list external cluster events o k response
-func (o *ListExternalClusterEventsOK) Code() int {
-	return 200
-}
-
 func (o *ListExternalClusterEventsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListExternalClusterEventsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListExternalClusterEventsOK) GetPayload() []*models.Event {
@@ -160,17 +152,12 @@ func (o *ListExternalClusterEventsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list external cluster events unauthorized response
-func (o *ListExternalClusterEventsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListExternalClusterEventsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsUnauthorized ", 401)
 }
 
 func (o *ListExternalClusterEventsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsUnauthorized ", 401)
 }
 
 func (o *ListExternalClusterEventsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListExternalClusterEventsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list external cluster events forbidden response
-func (o *ListExternalClusterEventsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListExternalClusterEventsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsForbidden ", 403)
 }
 
 func (o *ListExternalClusterEventsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEventsForbidden ", 403)
 }
 
 func (o *ListExternalClusterEventsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListExternalClusterEventsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list external cluster events default response
+func (o *ListExternalClusterEventsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list external cluster events default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListExternalClusterEventsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list external cluster events default response
-func (o *ListExternalClusterEventsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListExternalClusterEventsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEvents default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEvents default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListExternalClusterEventsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEvents default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/events][%d] listExternalClusterEvents default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListExternalClusterEventsDefault) GetPayload() *models.ErrorResponse {

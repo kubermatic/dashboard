@@ -6,7 +6,6 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -99,19 +98,12 @@ func (o *GetPresetStatsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get preset stats o k response
-func (o *GetPresetStatsOK) Code() int {
-	return 200
-}
-
 func (o *GetPresetStatsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPresetStatsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPresetStatsOK) GetPayload() *models.PresetStats {
@@ -168,17 +160,12 @@ func (o *GetPresetStatsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get preset stats unauthorized response
-func (o *GetPresetStatsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetPresetStatsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsUnauthorized ", 401)
 }
 
 func (o *GetPresetStatsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsUnauthorized ", 401)
 }
 
 func (o *GetPresetStatsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -224,17 +211,12 @@ func (o *GetPresetStatsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get preset stats forbidden response
-func (o *GetPresetStatsForbidden) Code() int {
-	return 403
-}
-
 func (o *GetPresetStatsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsForbidden ", 403)
 }
 
 func (o *GetPresetStatsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsForbidden ", 403)
 }
 
 func (o *GetPresetStatsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -280,17 +262,12 @@ func (o *GetPresetStatsNotFound) IsCode(code int) bool {
 	return code == 404
 }
 
-// Code gets the status code for the get preset stats not found response
-func (o *GetPresetStatsNotFound) Code() int {
-	return 404
-}
-
 func (o *GetPresetStatsNotFound) Error() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsNotFound", 404)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsNotFound ", 404)
 }
 
 func (o *GetPresetStatsNotFound) String() string {
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsNotFound", 404)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStatsNotFound ", 404)
 }
 
 func (o *GetPresetStatsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -314,6 +291,11 @@ type GetPresetStatsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get preset stats default response
+func (o *GetPresetStatsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get preset stats default response has a 2xx status code
@@ -341,19 +323,12 @@ func (o *GetPresetStatsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get preset stats default response
-func (o *GetPresetStatsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetPresetStatsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStats default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStats default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPresetStatsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStats default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/presets/{preset_name}/stats][%d] getPresetStats default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPresetStatsDefault) GetPayload() *models.ErrorResponse {

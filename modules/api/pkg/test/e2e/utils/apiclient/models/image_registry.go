@@ -83,11 +83,6 @@ func (m *ImageRegistry) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *ImageRegistry) contextValidateImageRegistryCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ImageRegistryCredentials != nil {
-
-		if swag.IsZero(m.ImageRegistryCredentials) { // not required
-			return nil
-		}
-
 		if err := m.ImageRegistryCredentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("imageRegistryCredentials")

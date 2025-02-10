@@ -150,11 +150,6 @@ func (m *StaticKeyAttestor) ContextValidate(ctx context.Context, formats strfmt.
 func (m *StaticKeyAttestor) contextValidateCtlog(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ctlog != nil {
-
-		if swag.IsZero(m.Ctlog) { // not required
-			return nil
-		}
-
 		if err := m.Ctlog.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ctlog")
@@ -171,11 +166,6 @@ func (m *StaticKeyAttestor) contextValidateCtlog(ctx context.Context, formats st
 func (m *StaticKeyAttestor) contextValidateRekor(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Rekor != nil {
-
-		if swag.IsZero(m.Rekor) { // not required
-			return nil
-		}
-
 		if err := m.Rekor.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rekor")
@@ -192,11 +182,6 @@ func (m *StaticKeyAttestor) contextValidateRekor(ctx context.Context, formats st
 func (m *StaticKeyAttestor) contextValidateSecret(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Secret != nil {
-
-		if swag.IsZero(m.Secret) { // not required
-			return nil
-		}
-
 		if err := m.Secret.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("secret")

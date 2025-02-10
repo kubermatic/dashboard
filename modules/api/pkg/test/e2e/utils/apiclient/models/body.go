@@ -108,11 +108,6 @@ func (m *Body) ContextValidate(ctx context.Context, formats strfmt.Registry) err
 func (m *Body) contextValidateCloud(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Cloud != nil {
-
-		if swag.IsZero(m.Cloud) { // not required
-			return nil
-		}
-
 		if err := m.Cloud.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloud")
@@ -129,11 +124,6 @@ func (m *Body) contextValidateCloud(ctx context.Context, formats strfmt.Registry
 func (m *Body) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
-
-		if swag.IsZero(m.Spec) { // not required
-			return nil
-		}
-
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")

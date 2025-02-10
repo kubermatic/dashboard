@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListPolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list policy template o k response
-func (o *ListPolicyTemplateOK) Code() int {
-	return 200
-}
-
 func (o *ListPolicyTemplateOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyTemplateOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyTemplateOK) GetPayload() []*models.PolicyTemplate {
@@ -160,17 +152,12 @@ func (o *ListPolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list policy template unauthorized response
-func (o *ListPolicyTemplateUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListPolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *ListPolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *ListPolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListPolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list policy template forbidden response
-func (o *ListPolicyTemplateForbidden) Code() int {
-	return 403
-}
-
 func (o *ListPolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden ", 403)
 }
 
 func (o *ListPolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden ", 403)
 }
 
 func (o *ListPolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListPolicyTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list policy template default response
+func (o *ListPolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list policy template default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListPolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list policy template default response
-func (o *ListPolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListPolicyTemplateDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyTemplateDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyTemplateDefault) GetPayload() *models.ErrorResponse {

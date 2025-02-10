@@ -89,10 +89,6 @@ func (m *VirtualMachineInstancetypeList) contextValidateInstancetypes(ctx contex
 
 		for i := 0; i < len(m.Instancetypes[k]); i++ {
 
-			if swag.IsZero(m.Instancetypes[k][i]) { // not required
-				return nil
-			}
-
 			if err := m.Instancetypes[k][i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("instancetypes" + "." + k + "." + strconv.Itoa(i))

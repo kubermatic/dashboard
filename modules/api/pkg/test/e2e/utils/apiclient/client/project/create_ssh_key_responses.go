@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateSSHKeyCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create Ssh key created response
-func (o *CreateSSHKeyCreated) Code() int {
-	return 201
-}
-
 func (o *CreateSSHKeyCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateSSHKeyCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateSSHKeyCreated) GetPayload() *models.SSHKey {
@@ -162,17 +154,12 @@ func (o *CreateSSHKeyUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create Ssh key unauthorized response
-func (o *CreateSSHKeyUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateSSHKeyUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyUnauthorized ", 401)
 }
 
 func (o *CreateSSHKeyUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyUnauthorized ", 401)
 }
 
 func (o *CreateSSHKeyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateSSHKeyForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create Ssh key forbidden response
-func (o *CreateSSHKeyForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateSSHKeyForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyForbidden ", 403)
 }
 
 func (o *CreateSSHKeyForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSshKeyForbidden ", 403)
 }
 
 func (o *CreateSSHKeyForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateSSHKeyDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create SSH key default response
+func (o *CreateSSHKeyDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create SSH key default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateSSHKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create SSH key default response
-func (o *CreateSSHKeyDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateSSHKeyDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSSHKey default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSSHKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateSSHKeyDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSSHKey default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/sshkeys][%d] createSSHKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateSSHKeyDefault) GetPayload() *models.ErrorResponse {

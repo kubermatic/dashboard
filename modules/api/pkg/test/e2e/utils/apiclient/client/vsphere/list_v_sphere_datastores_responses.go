@@ -6,7 +6,6 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListVSphereDatastoresOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list v sphere datastores o k response
-func (o *ListVSphereDatastoresOK) Code() int {
-	return 200
-}
-
 func (o *ListVSphereDatastoresOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastoresOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastoresOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereDatastoresOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastoresOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastoresOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereDatastoresOK) GetPayload() []*models.VSphereDatastoreList {
@@ -128,6 +120,11 @@ type ListVSphereDatastoresDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list v sphere datastores default response
+func (o *ListVSphereDatastoresDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list v sphere datastores default response has a 2xx status code
 func (o *ListVSphereDatastoresDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListVSphereDatastoresDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list v sphere datastores default response
-func (o *ListVSphereDatastoresDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVSphereDatastoresDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastores default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastores default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereDatastoresDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastores default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/datastores][%d] listVSphereDatastores default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereDatastoresDefault) GetPayload() *models.ErrorResponse {

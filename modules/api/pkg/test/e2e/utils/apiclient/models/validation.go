@@ -75,11 +75,6 @@ func (m *Validation) ContextValidate(ctx context.Context, formats strfmt.Registr
 func (m *Validation) contextValidateOpenAPIV3Schema(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OpenAPIV3Schema != nil {
-
-		if swag.IsZero(m.OpenAPIV3Schema) { // not required
-			return nil
-		}
-
 		if err := m.OpenAPIV3Schema.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openAPIV3Schema")

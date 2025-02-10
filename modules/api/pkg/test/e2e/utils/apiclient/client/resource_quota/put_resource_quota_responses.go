@@ -6,7 +6,6 @@ package resource_quota
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *PutResourceQuotaOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the put resource quota o k response
-func (o *PutResourceQuotaOK) Code() int {
-	return 200
-}
-
 func (o *PutResourceQuotaOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaOK", 200)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaOK ", 200)
 }
 
 func (o *PutResourceQuotaOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaOK", 200)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaOK ", 200)
 }
 
 func (o *PutResourceQuotaOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *PutResourceQuotaUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the put resource quota unauthorized response
-func (o *PutResourceQuotaUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PutResourceQuotaUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaUnauthorized ", 401)
 }
 
 func (o *PutResourceQuotaUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaUnauthorized ", 401)
 }
 
 func (o *PutResourceQuotaUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *PutResourceQuotaForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the put resource quota forbidden response
-func (o *PutResourceQuotaForbidden) Code() int {
-	return 403
-}
-
 func (o *PutResourceQuotaForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaForbidden ", 403)
 }
 
 func (o *PutResourceQuotaForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuotaForbidden ", 403)
 }
 
 func (o *PutResourceQuotaForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type PutResourceQuotaDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the put resource quota default response
+func (o *PutResourceQuotaDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this put resource quota default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *PutResourceQuotaDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the put resource quota default response
-func (o *PutResourceQuotaDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PutResourceQuotaDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuota default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuota default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PutResourceQuotaDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuota default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/quotas/{quota_name}][%d] putResourceQuota default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PutResourceQuotaDefault) GetPayload() *models.ErrorResponse {

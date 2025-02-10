@@ -147,11 +147,6 @@ func (m *AnexiaNodeSpec) contextValidateDisks(ctx context.Context, formats strfm
 	for i := 0; i < len(m.Disks); i++ {
 
 		if m.Disks[i] != nil {
-
-			if swag.IsZero(m.Disks[i]) { // not required
-				return nil
-			}
-
 			if err := m.Disks[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("disks" + "." + strconv.Itoa(i))

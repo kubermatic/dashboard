@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetAlertmanagerOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get alertmanager o k response
-func (o *GetAlertmanagerOK) Code() int {
-	return 200
-}
-
 func (o *GetAlertmanagerOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAlertmanagerOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAlertmanagerOK) GetPayload() *models.Alertmanager {
@@ -162,17 +154,12 @@ func (o *GetAlertmanagerUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get alertmanager unauthorized response
-func (o *GetAlertmanagerUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetAlertmanagerUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerUnauthorized ", 401)
 }
 
 func (o *GetAlertmanagerUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerUnauthorized ", 401)
 }
 
 func (o *GetAlertmanagerUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetAlertmanagerForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get alertmanager forbidden response
-func (o *GetAlertmanagerForbidden) Code() int {
-	return 403
-}
-
 func (o *GetAlertmanagerForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerForbidden ", 403)
 }
 
 func (o *GetAlertmanagerForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanagerForbidden ", 403)
 }
 
 func (o *GetAlertmanagerForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetAlertmanagerDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get alertmanager default response
+func (o *GetAlertmanagerDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get alertmanager default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetAlertmanagerDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get alertmanager default response
-func (o *GetAlertmanagerDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetAlertmanagerDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanager default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanager default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAlertmanagerDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanager default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] getAlertmanager default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAlertmanagerDefault) GetPayload() *models.ErrorResponse {

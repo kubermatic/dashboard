@@ -6,7 +6,6 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListDCForSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list d c for seed o k response
-func (o *ListDCForSeedOK) Code() int {
-	return 200
-}
-
 func (o *ListDCForSeedOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedOK  %+v", 200, o.Payload)
 }
 
 func (o *ListDCForSeedOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedOK  %+v", 200, o.Payload)
 }
 
 func (o *ListDCForSeedOK) GetPayload() []*models.Datacenter {
@@ -160,17 +152,12 @@ func (o *ListDCForSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list d c for seed unauthorized response
-func (o *ListDCForSeedUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListDCForSeedUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedUnauthorized ", 401)
 }
 
 func (o *ListDCForSeedUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedUnauthorized ", 401)
 }
 
 func (o *ListDCForSeedUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListDCForSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list d c for seed forbidden response
-func (o *ListDCForSeedForbidden) Code() int {
-	return 403
-}
-
 func (o *ListDCForSeedForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedForbidden ", 403)
 }
 
 func (o *ListDCForSeedForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeedForbidden ", 403)
 }
 
 func (o *ListDCForSeedForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListDCForSeedDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list d c for seed default response
+func (o *ListDCForSeedDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list d c for seed default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListDCForSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list d c for seed default response
-func (o *ListDCForSeedDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListDCForSeedDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListDCForSeedDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc][%d] listDCForSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListDCForSeedDefault) GetPayload() *models.ErrorResponse {

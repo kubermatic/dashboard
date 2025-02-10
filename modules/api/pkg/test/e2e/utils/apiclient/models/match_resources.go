@@ -80,10 +80,6 @@ type MatchResources struct {
 func (m *MatchResources) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateOperations(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateSubjects(formats); err != nil {
 		res = append(res, err)
 	}
@@ -107,27 +103,6 @@ func (m *MatchResources) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-func (m *MatchResources) validateOperations(formats strfmt.Registry) error {
-	if swag.IsZero(m.Operations) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Operations); i++ {
-
-		if err := m.Operations[i].Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("operations" + "." + strconv.Itoa(i))
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("operations" + "." + strconv.Itoa(i))
-			}
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -233,10 +208,6 @@ func (m *MatchResources) validateSelector(formats strfmt.Registry) error {
 func (m *MatchResources) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateOperations(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateSubjects(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -263,38 +234,11 @@ func (m *MatchResources) ContextValidate(ctx context.Context, formats strfmt.Reg
 	return nil
 }
 
-func (m *MatchResources) contextValidateOperations(ctx context.Context, formats strfmt.Registry) error {
-
-	for i := 0; i < len(m.Operations); i++ {
-
-		if swag.IsZero(m.Operations[i]) { // not required
-			return nil
-		}
-
-		if err := m.Operations[i].ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("operations" + "." + strconv.Itoa(i))
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("operations" + "." + strconv.Itoa(i))
-			}
-			return err
-		}
-
-	}
-
-	return nil
-}
-
 func (m *MatchResources) contextValidateSubjects(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Subjects); i++ {
 
 		if m.Subjects[i] != nil {
-
-			if swag.IsZero(m.Subjects[i]) { // not required
-				return nil
-			}
-
 			if err := m.Subjects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("subjects" + "." + strconv.Itoa(i))
@@ -341,11 +285,6 @@ func (m *MatchResources) contextValidateAny(ctx context.Context, formats strfmt.
 func (m *MatchResources) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NamespaceSelector != nil {
-
-		if swag.IsZero(m.NamespaceSelector) { // not required
-			return nil
-		}
-
 		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespaceSelector")
@@ -362,11 +301,6 @@ func (m *MatchResources) contextValidateNamespaceSelector(ctx context.Context, f
 func (m *MatchResources) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")

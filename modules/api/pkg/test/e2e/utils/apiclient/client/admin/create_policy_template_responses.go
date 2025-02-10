@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreatePolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the create policy template o k response
-func (o *CreatePolicyTemplateOK) Code() int {
-	return 200
-}
-
 func (o *CreatePolicyTemplateOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyTemplateOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyTemplateOK) GetPayload() *models.PolicyTemplate {
@@ -162,17 +154,12 @@ func (o *CreatePolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create policy template unauthorized response
-func (o *CreatePolicyTemplateUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreatePolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *CreatePolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *CreatePolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreatePolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create policy template forbidden response
-func (o *CreatePolicyTemplateForbidden) Code() int {
-	return 403
-}
-
 func (o *CreatePolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden ", 403)
 }
 
 func (o *CreatePolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden ", 403)
 }
 
 func (o *CreatePolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreatePolicyTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create policy template default response
+func (o *CreatePolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create policy template default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreatePolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create policy template default response
-func (o *CreatePolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreatePolicyTemplateDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyTemplateDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyTemplateDefault) GetPayload() *models.ErrorResponse {

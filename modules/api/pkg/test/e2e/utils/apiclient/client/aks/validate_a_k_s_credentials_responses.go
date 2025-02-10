@@ -6,7 +6,6 @@ package aks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,17 +79,12 @@ func (o *ValidateAKSCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the validate a k s credentials o k response
-func (o *ValidateAKSCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ValidateAKSCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentialsOK", 200)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentialsOK ", 200)
 }
 
 func (o *ValidateAKSCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentialsOK", 200)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentialsOK ", 200)
 }
 
 func (o *ValidateAKSCredentialsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,6 +108,11 @@ type ValidateAKSCredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the validate a k s credentials default response
+func (o *ValidateAKSCredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this validate a k s credentials default response has a 2xx status code
@@ -141,19 +140,12 @@ func (o *ValidateAKSCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the validate a k s credentials default response
-func (o *ValidateAKSCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ValidateAKSCredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ValidateAKSCredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/validatecredentials][%d] validateAKSCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ValidateAKSCredentialsDefault) GetPayload() *models.ErrorResponse {

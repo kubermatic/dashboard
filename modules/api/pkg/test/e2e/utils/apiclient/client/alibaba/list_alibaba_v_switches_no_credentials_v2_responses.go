@@ -6,7 +6,6 @@ package alibaba
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListAlibabaVSwitchesNoCredentialsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list alibaba v switches no credentials v2 o k response
-func (o *ListAlibabaVSwitchesNoCredentialsV2OK) Code() int {
-	return 200
-}
-
 func (o *ListAlibabaVSwitchesNoCredentialsV2OK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *ListAlibabaVSwitchesNoCredentialsV2OK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *ListAlibabaVSwitchesNoCredentialsV2OK) GetPayload() models.AlibabaVSwitchList {
@@ -128,6 +120,11 @@ type ListAlibabaVSwitchesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list alibaba v switches no credentials v2 default response
+func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list alibaba v switches no credentials v2 default response has a 2xx status code
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListAlibabaVSwitchesNoCredentialsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list alibaba v switches no credentials v2 default response
-func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches][%d] listAlibabaVSwitchesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAlibabaVSwitchesNoCredentialsV2Default) GetPayload() *models.ErrorResponse {

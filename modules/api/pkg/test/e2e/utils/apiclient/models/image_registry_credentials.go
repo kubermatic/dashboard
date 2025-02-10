@@ -87,10 +87,6 @@ func (m *ImageRegistryCredentials) contextValidateProviders(ctx context.Context,
 
 	for i := 0; i < len(m.Providers); i++ {
 
-		if swag.IsZero(m.Providers[i]) { // not required
-			return nil
-		}
-
 		if err := m.Providers[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("providers" + "." + strconv.Itoa(i))
