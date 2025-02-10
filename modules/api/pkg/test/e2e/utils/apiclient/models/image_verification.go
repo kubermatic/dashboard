@@ -307,11 +307,6 @@ func (m *ImageVerification) contextValidateAttestations(ctx context.Context, for
 	for i := 0; i < len(m.Attestations); i++ {
 
 		if m.Attestations[i] != nil {
-
-			if swag.IsZero(m.Attestations[i]) { // not required
-				return nil
-			}
-
 			if err := m.Attestations[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("attestations" + "." + strconv.Itoa(i))
@@ -332,11 +327,6 @@ func (m *ImageVerification) contextValidateAttestors(ctx context.Context, format
 	for i := 0; i < len(m.Attestors); i++ {
 
 		if m.Attestors[i] != nil {
-
-			if swag.IsZero(m.Attestors[i]) { // not required
-				return nil
-			}
-
 			if err := m.Attestors[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("attestors" + "." + strconv.Itoa(i))
@@ -354,10 +344,6 @@ func (m *ImageVerification) contextValidateAttestors(ctx context.Context, format
 
 func (m *ImageVerification) contextValidateFailureAction(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.FailureAction) { // not required
-		return nil
-	}
-
 	if err := m.FailureAction.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("failureAction")
@@ -373,11 +359,6 @@ func (m *ImageVerification) contextValidateFailureAction(ctx context.Context, fo
 func (m *ImageVerification) contextValidateImageRegistryCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ImageRegistryCredentials != nil {
-
-		if swag.IsZero(m.ImageRegistryCredentials) { // not required
-			return nil
-		}
-
 		if err := m.ImageRegistryCredentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("imageRegistryCredentials")
@@ -392,10 +373,6 @@ func (m *ImageVerification) contextValidateImageRegistryCredentials(ctx context.
 }
 
 func (m *ImageVerification) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Type) { // not required
-		return nil
-	}
 
 	if err := m.Type.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -412,11 +389,6 @@ func (m *ImageVerification) contextValidateType(ctx context.Context, formats str
 func (m *ImageVerification) contextValidateValidate(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Validate != nil {
-
-		if swag.IsZero(m.Validate) { // not required
-			return nil
-		}
-
 		if err := m.Validate.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("validate")

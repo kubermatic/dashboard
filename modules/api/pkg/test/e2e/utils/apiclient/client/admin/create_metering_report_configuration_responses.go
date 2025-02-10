@@ -7,7 +7,6 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -94,17 +93,12 @@ func (o *CreateMeteringReportConfigurationCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create metering report configuration created response
-func (o *CreateMeteringReportConfigurationCreated) Code() int {
-	return 201
-}
-
 func (o *CreateMeteringReportConfigurationCreated) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationCreated", 201)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationCreated ", 201)
 }
 
 func (o *CreateMeteringReportConfigurationCreated) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationCreated", 201)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationCreated ", 201)
 }
 
 func (o *CreateMeteringReportConfigurationCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,17 +144,12 @@ func (o *CreateMeteringReportConfigurationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create metering report configuration unauthorized response
-func (o *CreateMeteringReportConfigurationUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateMeteringReportConfigurationUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationUnauthorized ", 401)
 }
 
 func (o *CreateMeteringReportConfigurationUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationUnauthorized ", 401)
 }
 
 func (o *CreateMeteringReportConfigurationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,17 +195,12 @@ func (o *CreateMeteringReportConfigurationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create metering report configuration forbidden response
-func (o *CreateMeteringReportConfigurationForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateMeteringReportConfigurationForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationForbidden ", 403)
 }
 
 func (o *CreateMeteringReportConfigurationForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfigurationForbidden ", 403)
 }
 
 func (o *CreateMeteringReportConfigurationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -240,6 +224,11 @@ type CreateMeteringReportConfigurationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create metering report configuration default response
+func (o *CreateMeteringReportConfigurationDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create metering report configuration default response has a 2xx status code
@@ -267,19 +256,12 @@ func (o *CreateMeteringReportConfigurationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create metering report configuration default response
-func (o *CreateMeteringReportConfigurationDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateMeteringReportConfigurationDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfiguration default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfiguration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateMeteringReportConfigurationDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfiguration default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/admin/metering/configurations/reports/{name}][%d] createMeteringReportConfiguration default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateMeteringReportConfigurationDefault) GetPayload() *models.ErrorResponse {

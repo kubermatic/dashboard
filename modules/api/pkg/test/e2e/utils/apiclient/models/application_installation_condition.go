@@ -39,7 +39,7 @@ type ApplicationInstallationCondition struct {
 	// Type of ApplicationInstallation condition.
 	// ManifestsRetrieved ManifestsRetrieved  ManifestsRetrieved indicates all necessary manifests have been fetched from the external source.
 	// Ready Ready  Ready describes all components have been successfully rolled out and are ready.
-	// Enum: ["ManifestsRetrieved","Ready"]
+	// Enum: [ManifestsRetrieved Ready]
 	Type string `json:"type,omitempty"`
 
 	// status
@@ -170,10 +170,6 @@ func (m *ApplicationInstallationCondition) ContextValidate(ctx context.Context, 
 }
 
 func (m *ApplicationInstallationCondition) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Status) { // not required
-		return nil
-	}
 
 	if err := m.Status.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

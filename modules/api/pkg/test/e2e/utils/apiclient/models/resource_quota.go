@@ -117,11 +117,6 @@ func (m *ResourceQuota) ContextValidate(ctx context.Context, formats strfmt.Regi
 func (m *ResourceQuota) contextValidateQuota(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Quota != nil {
-
-		if swag.IsZero(m.Quota) { // not required
-			return nil
-		}
-
 		if err := m.Quota.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("quota")
@@ -138,11 +133,6 @@ func (m *ResourceQuota) contextValidateQuota(ctx context.Context, formats strfmt
 func (m *ResourceQuota) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Status != nil {
-
-		if swag.IsZero(m.Status) { // not required
-			return nil
-		}
-
 		if err := m.Status.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("status")

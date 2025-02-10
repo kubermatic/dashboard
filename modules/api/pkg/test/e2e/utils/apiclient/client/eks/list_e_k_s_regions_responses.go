@@ -6,7 +6,6 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListEKSRegionsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list e k s regions o k response
-func (o *ListEKSRegionsOK) Code() int {
-	return 200
-}
-
 func (o *ListEKSRegionsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSRegionsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSRegionsOK) GetPayload() []models.EKSRegionList {
@@ -160,17 +152,12 @@ func (o *ListEKSRegionsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list e k s regions unauthorized response
-func (o *ListEKSRegionsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListEKSRegionsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsUnauthorized ", 401)
 }
 
 func (o *ListEKSRegionsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsUnauthorized ", 401)
 }
 
 func (o *ListEKSRegionsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListEKSRegionsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list e k s regions forbidden response
-func (o *ListEKSRegionsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListEKSRegionsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsForbidden ", 403)
 }
 
 func (o *ListEKSRegionsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegionsForbidden ", 403)
 }
 
 func (o *ListEKSRegionsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListEKSRegionsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list e k s regions default response
+func (o *ListEKSRegionsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s regions default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListEKSRegionsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list e k s regions default response
-func (o *ListEKSRegionsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListEKSRegionsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegions default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegions default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSRegionsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegions default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/regions][%d] listEKSRegions default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSRegionsDefault) GetPayload() *models.ErrorResponse {

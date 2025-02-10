@@ -75,10 +75,6 @@ func (m *DatacenterSpecAWS) ContextValidate(ctx context.Context, formats strfmt.
 
 func (m *DatacenterSpecAWS) contextValidateImages(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Images) { // not required
-		return nil
-	}
-
 	if err := m.Images.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("images")

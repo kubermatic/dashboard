@@ -142,11 +142,6 @@ func (m *ConstraintTemplateSpec) contextValidateTargets(ctx context.Context, for
 	for i := 0; i < len(m.Targets); i++ {
 
 		if m.Targets[i] != nil {
-
-			if swag.IsZero(m.Targets[i]) { // not required
-				return nil
-			}
-
 			if err := m.Targets[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("targets" + "." + strconv.Itoa(i))
@@ -165,11 +160,6 @@ func (m *ConstraintTemplateSpec) contextValidateTargets(ctx context.Context, for
 func (m *ConstraintTemplateSpec) contextValidateCrd(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Crd != nil {
-
-		if swag.IsZero(m.Crd) { // not required
-			return nil
-		}
-
 		if err := m.Crd.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("crd")
@@ -186,11 +176,6 @@ func (m *ConstraintTemplateSpec) contextValidateCrd(ctx context.Context, formats
 func (m *ConstraintTemplateSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")

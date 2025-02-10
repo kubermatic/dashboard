@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteGatekeeperConfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete gatekeeper config o k response
-func (o *DeleteGatekeeperConfigOK) Code() int {
-	return 200
-}
-
 func (o *DeleteGatekeeperConfigOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigOK ", 200)
 }
 
 func (o *DeleteGatekeeperConfigOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigOK ", 200)
 }
 
 func (o *DeleteGatekeeperConfigOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteGatekeeperConfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete gatekeeper config unauthorized response
-func (o *DeleteGatekeeperConfigUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteGatekeeperConfigUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigUnauthorized ", 401)
 }
 
 func (o *DeleteGatekeeperConfigUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigUnauthorized ", 401)
 }
 
 func (o *DeleteGatekeeperConfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteGatekeeperConfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete gatekeeper config forbidden response
-func (o *DeleteGatekeeperConfigForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteGatekeeperConfigForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigForbidden ", 403)
 }
 
 func (o *DeleteGatekeeperConfigForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfigForbidden ", 403)
 }
 
 func (o *DeleteGatekeeperConfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteGatekeeperConfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete gatekeeper config default response
+func (o *DeleteGatekeeperConfigDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete gatekeeper config default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteGatekeeperConfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete gatekeeper config default response
-func (o *DeleteGatekeeperConfigDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteGatekeeperConfigDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteGatekeeperConfigDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/gatekeeper/config][%d] deleteGatekeeperConfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteGatekeeperConfigDefault) GetPayload() *models.ErrorResponse {

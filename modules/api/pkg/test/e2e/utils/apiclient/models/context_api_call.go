@@ -162,11 +162,6 @@ func (m *ContextAPICall) contextValidateData(ctx context.Context, formats strfmt
 	for i := 0; i < len(m.Data); i++ {
 
 		if m.Data[i] != nil {
-
-			if swag.IsZero(m.Data[i]) { // not required
-				return nil
-			}
-
 			if err := m.Data[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("data" + "." + strconv.Itoa(i))
@@ -184,10 +179,6 @@ func (m *ContextAPICall) contextValidateData(ctx context.Context, formats strfmt
 
 func (m *ContextAPICall) contextValidateMethod(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Method) { // not required
-		return nil
-	}
-
 	if err := m.Method.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("method")
@@ -203,11 +194,6 @@ func (m *ContextAPICall) contextValidateMethod(ctx context.Context, formats strf
 func (m *ContextAPICall) contextValidateService(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Service != nil {
-
-		if swag.IsZero(m.Service) { // not required
-			return nil
-		}
-
 		if err := m.Service.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("service")

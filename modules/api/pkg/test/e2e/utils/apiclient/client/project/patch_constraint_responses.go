@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch constraint o k response
-func (o *PatchConstraintOK) Code() int {
-	return 200
-}
-
 func (o *PatchConstraintOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchConstraintOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchConstraintOK) GetPayload() *models.Constraint {
@@ -162,17 +154,12 @@ func (o *PatchConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch constraint unauthorized response
-func (o *PatchConstraintUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchConstraintUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintUnauthorized ", 401)
 }
 
 func (o *PatchConstraintUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintUnauthorized ", 401)
 }
 
 func (o *PatchConstraintUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch constraint forbidden response
-func (o *PatchConstraintForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchConstraintForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintForbidden ", 403)
 }
 
 func (o *PatchConstraintForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraintForbidden ", 403)
 }
 
 func (o *PatchConstraintForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchConstraintDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch constraint default response
+func (o *PatchConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch constraint default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch constraint default response
-func (o *PatchConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchConstraintDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraint default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraint default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchConstraintDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraint default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusters/{cluster_id}/constraints/{constraint_name}][%d] patchConstraint default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchConstraintDefault) GetPayload() *models.ErrorResponse {

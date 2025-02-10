@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchKubermaticSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch kubermatic settings o k response
-func (o *PatchKubermaticSettingsOK) Code() int {
-	return 200
-}
-
 func (o *PatchKubermaticSettingsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchKubermaticSettingsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchKubermaticSettingsOK) GetPayload() *models.GlobalSettings {
@@ -162,17 +154,12 @@ func (o *PatchKubermaticSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch kubermatic settings unauthorized response
-func (o *PatchKubermaticSettingsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchKubermaticSettingsUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsUnauthorized ", 401)
 }
 
 func (o *PatchKubermaticSettingsUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsUnauthorized ", 401)
 }
 
 func (o *PatchKubermaticSettingsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchKubermaticSettingsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch kubermatic settings forbidden response
-func (o *PatchKubermaticSettingsForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchKubermaticSettingsForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsForbidden ", 403)
 }
 
 func (o *PatchKubermaticSettingsForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettingsForbidden ", 403)
 }
 
 func (o *PatchKubermaticSettingsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchKubermaticSettingsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch kubermatic settings default response
+func (o *PatchKubermaticSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch kubermatic settings default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchKubermaticSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch kubermatic settings default response
-func (o *PatchKubermaticSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchKubermaticSettingsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchKubermaticSettingsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/admin/settings][%d] patchKubermaticSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchKubermaticSettingsDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetClusterEventsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get cluster events o k response
-func (o *GetClusterEventsOK) Code() int {
-	return 200
-}
-
 func (o *GetClusterEventsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterEventsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterEventsOK) GetPayload() []*models.Event {
@@ -160,17 +152,12 @@ func (o *GetClusterEventsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get cluster events unauthorized response
-func (o *GetClusterEventsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetClusterEventsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsUnauthorized ", 401)
 }
 
 func (o *GetClusterEventsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsUnauthorized ", 401)
 }
 
 func (o *GetClusterEventsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetClusterEventsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get cluster events forbidden response
-func (o *GetClusterEventsForbidden) Code() int {
-	return 403
-}
-
 func (o *GetClusterEventsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsForbidden ", 403)
 }
 
 func (o *GetClusterEventsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEventsForbidden ", 403)
 }
 
 func (o *GetClusterEventsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetClusterEventsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get cluster events default response
+func (o *GetClusterEventsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster events default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetClusterEventsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get cluster events default response
-func (o *GetClusterEventsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetClusterEventsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEvents default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEvents default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterEventsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEvents default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/events][%d] getClusterEvents default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterEventsDefault) GetPayload() *models.ErrorResponse {

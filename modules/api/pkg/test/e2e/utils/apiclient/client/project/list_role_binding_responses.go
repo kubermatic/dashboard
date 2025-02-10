@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListRoleBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list role binding o k response
-func (o *ListRoleBindingOK) Code() int {
-	return 200
-}
-
 func (o *ListRoleBindingOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *ListRoleBindingOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *ListRoleBindingOK) GetPayload() []*models.RoleBinding {
@@ -160,17 +152,12 @@ func (o *ListRoleBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list role binding unauthorized response
-func (o *ListRoleBindingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListRoleBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingUnauthorized ", 401)
 }
 
 func (o *ListRoleBindingUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingUnauthorized ", 401)
 }
 
 func (o *ListRoleBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListRoleBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list role binding forbidden response
-func (o *ListRoleBindingForbidden) Code() int {
-	return 403
-}
-
 func (o *ListRoleBindingForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingForbidden ", 403)
 }
 
 func (o *ListRoleBindingForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBindingForbidden ", 403)
 }
 
 func (o *ListRoleBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListRoleBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list role binding default response
+func (o *ListRoleBindingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list role binding default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListRoleBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list role binding default response
-func (o *ListRoleBindingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListRoleBindingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListRoleBindingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/bindings][%d] listRoleBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListRoleBindingDefault) GetPayload() *models.ErrorResponse {

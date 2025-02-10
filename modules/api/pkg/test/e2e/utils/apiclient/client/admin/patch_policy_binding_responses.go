@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchPolicyBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch policy binding o k response
-func (o *PatchPolicyBindingOK) Code() int {
-	return 200
-}
-
 func (o *PatchPolicyBindingOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchPolicyBindingOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchPolicyBindingOK) GetPayload() *models.PolicyBinding {
@@ -162,17 +154,12 @@ func (o *PatchPolicyBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch policy binding unauthorized response
-func (o *PatchPolicyBindingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchPolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingUnauthorized ", 401)
 }
 
 func (o *PatchPolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingUnauthorized ", 401)
 }
 
 func (o *PatchPolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchPolicyBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch policy binding forbidden response
-func (o *PatchPolicyBindingForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchPolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingForbidden ", 403)
 }
 
 func (o *PatchPolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBindingForbidden ", 403)
 }
 
 func (o *PatchPolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchPolicyBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch policy binding default response
+func (o *PatchPolicyBindingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch policy binding default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchPolicyBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch policy binding default response
-func (o *PatchPolicyBindingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchPolicyBindingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchPolicyBindingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policybinding/{binding_name}][%d] patchPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchPolicyBindingDefault) GetPayload() *models.ErrorResponse {

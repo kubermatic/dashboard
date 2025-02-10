@@ -6,7 +6,6 @@ package addon
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteAddonV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete addon v2 o k response
-func (o *DeleteAddonV2OK) Code() int {
-	return 200
-}
-
 func (o *DeleteAddonV2OK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2OK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2OK ", 200)
 }
 
 func (o *DeleteAddonV2OK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2OK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2OK ", 200)
 }
 
 func (o *DeleteAddonV2OK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteAddonV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete addon v2 unauthorized response
-func (o *DeleteAddonV2Unauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteAddonV2Unauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Unauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Unauthorized ", 401)
 }
 
 func (o *DeleteAddonV2Unauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Unauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Unauthorized ", 401)
 }
 
 func (o *DeleteAddonV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteAddonV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete addon v2 forbidden response
-func (o *DeleteAddonV2Forbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteAddonV2Forbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Forbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Forbidden ", 403)
 }
 
 func (o *DeleteAddonV2Forbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Forbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2Forbidden ", 403)
 }
 
 func (o *DeleteAddonV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteAddonV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete addon v2 default response
+func (o *DeleteAddonV2Default) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete addon v2 default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteAddonV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete addon v2 default response
-func (o *DeleteAddonV2Default) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteAddonV2Default) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAddonV2Default) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/addons/{addon_id}][%d] deleteAddonV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAddonV2Default) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectAWSSecurityGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project a w s security groups o k response
-func (o *ListProjectAWSSecurityGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectAWSSecurityGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAWSSecurityGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAWSSecurityGroupsOK) GetPayload() *models.AWSSecurityGroupList {
@@ -130,6 +122,11 @@ type ListProjectAWSSecurityGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project a w s security groups default response
+func (o *ListProjectAWSSecurityGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project a w s security groups default response has a 2xx status code
 func (o *ListProjectAWSSecurityGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListProjectAWSSecurityGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project a w s security groups default response
-func (o *ListProjectAWSSecurityGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectAWSSecurityGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSecurityGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups][%d] listProjectAWSSecurityGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSecurityGroupsDefault) GetPayload() *models.ErrorResponse {

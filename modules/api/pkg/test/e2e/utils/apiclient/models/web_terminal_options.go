@@ -88,11 +88,6 @@ func (m *WebTerminalOptions) contextValidateAdditionalEnvironmentVariables(ctx c
 	for i := 0; i < len(m.AdditionalEnvironmentVariables); i++ {
 
 		if m.AdditionalEnvironmentVariables[i] != nil {
-
-			if swag.IsZero(m.AdditionalEnvironmentVariables[i]) { // not required
-				return nil
-			}
-
 			if err := m.AdditionalEnvironmentVariables[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("additionalEnvironmentVariables" + "." + strconv.Itoa(i))

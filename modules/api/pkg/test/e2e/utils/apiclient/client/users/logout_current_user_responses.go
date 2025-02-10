@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -86,17 +85,12 @@ func (o *LogoutCurrentUserOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the logout current user o k response
-func (o *LogoutCurrentUserOK) Code() int {
-	return 200
-}
-
 func (o *LogoutCurrentUserOK) Error() string {
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserOK", 200)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserOK ", 200)
 }
 
 func (o *LogoutCurrentUserOK) String() string {
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserOK", 200)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserOK ", 200)
 }
 
 func (o *LogoutCurrentUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -142,17 +136,12 @@ func (o *LogoutCurrentUserUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the logout current user unauthorized response
-func (o *LogoutCurrentUserUnauthorized) Code() int {
-	return 401
-}
-
 func (o *LogoutCurrentUserUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserUnauthorized ", 401)
 }
 
 func (o *LogoutCurrentUserUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUserUnauthorized ", 401)
 }
 
 func (o *LogoutCurrentUserUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -176,6 +165,11 @@ type LogoutCurrentUserDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the logout current user default response
+func (o *LogoutCurrentUserDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this logout current user default response has a 2xx status code
@@ -203,19 +197,12 @@ func (o *LogoutCurrentUserDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the logout current user default response
-func (o *LogoutCurrentUserDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *LogoutCurrentUserDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUser default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUser default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *LogoutCurrentUserDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUser default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/me/logout][%d] logoutCurrentUser default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *LogoutCurrentUserDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package ipampool
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetIPAMPoolOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get Ip a m pool o k response
-func (o *GetIPAMPoolOK) Code() int {
-	return 200
-}
-
 func (o *GetIPAMPoolOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolOK  %+v", 200, o.Payload)
 }
 
 func (o *GetIPAMPoolOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolOK  %+v", 200, o.Payload)
 }
 
 func (o *GetIPAMPoolOK) GetPayload() *models.IPAMPool {
@@ -162,17 +154,12 @@ func (o *GetIPAMPoolUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get Ip a m pool unauthorized response
-func (o *GetIPAMPoolUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetIPAMPoolUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolUnauthorized ", 401)
 }
 
 func (o *GetIPAMPoolUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolUnauthorized ", 401)
 }
 
 func (o *GetIPAMPoolUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetIPAMPoolForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get Ip a m pool forbidden response
-func (o *GetIPAMPoolForbidden) Code() int {
-	return 403
-}
-
 func (o *GetIPAMPoolForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolForbidden ", 403)
 }
 
 func (o *GetIPAMPoolForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIpAMPoolForbidden ", 403)
 }
 
 func (o *GetIPAMPoolForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetIPAMPoolDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get IP a m pool default response
+func (o *GetIPAMPoolDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get IP a m pool default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetIPAMPoolDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get IP a m pool default response
-func (o *GetIPAMPoolDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetIPAMPoolDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIPAMPool default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIPAMPool default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetIPAMPoolDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIPAMPool default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] getIPAMPool default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetIPAMPoolDefault) GetPayload() *models.ErrorResponse {

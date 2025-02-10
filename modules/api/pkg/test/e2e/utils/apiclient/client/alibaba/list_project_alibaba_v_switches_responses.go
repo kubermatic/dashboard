@@ -6,7 +6,6 @@ package alibaba
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectAlibabaVSwitchesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project alibaba v switches o k response
-func (o *ListProjectAlibabaVSwitchesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectAlibabaVSwitchesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitchesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitchesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAlibabaVSwitchesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitchesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitchesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAlibabaVSwitchesOK) GetPayload() models.AlibabaVSwitchList {
@@ -128,6 +120,11 @@ type ListProjectAlibabaVSwitchesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project alibaba v switches default response
+func (o *ListProjectAlibabaVSwitchesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project alibaba v switches default response has a 2xx status code
 func (o *ListProjectAlibabaVSwitchesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectAlibabaVSwitchesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project alibaba v switches default response
-func (o *ListProjectAlibabaVSwitchesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectAlibabaVSwitchesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitches default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitches default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAlibabaVSwitchesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitches default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/vswitches][%d] listProjectAlibabaVSwitches default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAlibabaVSwitchesDefault) GetPayload() *models.ErrorResponse {

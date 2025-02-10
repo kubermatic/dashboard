@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetClusterServiceAccountKubeconfigOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get cluster service account kubeconfig o k response
-func (o *GetClusterServiceAccountKubeconfigOK) Code() int {
-	return 200
-}
-
 func (o *GetClusterServiceAccountKubeconfigOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterServiceAccountKubeconfigOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterServiceAccountKubeconfigOK) GetPayload() []uint8 {
@@ -160,17 +152,12 @@ func (o *GetClusterServiceAccountKubeconfigUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get cluster service account kubeconfig unauthorized response
-func (o *GetClusterServiceAccountKubeconfigUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetClusterServiceAccountKubeconfigUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigUnauthorized ", 401)
 }
 
 func (o *GetClusterServiceAccountKubeconfigUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigUnauthorized ", 401)
 }
 
 func (o *GetClusterServiceAccountKubeconfigUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetClusterServiceAccountKubeconfigForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get cluster service account kubeconfig forbidden response
-func (o *GetClusterServiceAccountKubeconfigForbidden) Code() int {
-	return 403
-}
-
 func (o *GetClusterServiceAccountKubeconfigForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigForbidden ", 403)
 }
 
 func (o *GetClusterServiceAccountKubeconfigForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfigForbidden ", 403)
 }
 
 func (o *GetClusterServiceAccountKubeconfigForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetClusterServiceAccountKubeconfigDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get cluster service account kubeconfig default response
+func (o *GetClusterServiceAccountKubeconfigDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster service account kubeconfig default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetClusterServiceAccountKubeconfigDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get cluster service account kubeconfig default response
-func (o *GetClusterServiceAccountKubeconfigDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetClusterServiceAccountKubeconfigDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterServiceAccountKubeconfigDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfig default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig][%d] getClusterServiceAccountKubeconfig default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterServiceAccountKubeconfigDefault) GetPayload() *models.ErrorResponse {

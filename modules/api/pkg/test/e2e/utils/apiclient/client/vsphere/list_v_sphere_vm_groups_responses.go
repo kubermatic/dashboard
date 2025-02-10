@@ -6,7 +6,6 @@ package vsphere
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListVSphereVMGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list v sphere Vm groups o k response
-func (o *ListVSphereVMGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListVSphereVMGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVmGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVmGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereVMGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVmGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVmGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVSphereVMGroupsOK) GetPayload() models.VSphereVMGroupList {
@@ -128,6 +120,11 @@ type ListVSphereVMGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list v sphere VM groups default response
+func (o *ListVSphereVMGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list v sphere VM groups default response has a 2xx status code
 func (o *ListVSphereVMGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListVSphereVMGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list v sphere VM groups default response
-func (o *ListVSphereVMGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVSphereVMGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVMGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVMGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereVMGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVMGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/vsphere/vmgroups][%d] listVSphereVMGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVSphereVMGroupsDefault) GetPayload() *models.ErrorResponse {

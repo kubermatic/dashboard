@@ -208,11 +208,6 @@ func (m *NetworkPolicySpec) contextValidateEgress(ctx context.Context, formats s
 	for i := 0; i < len(m.Egress); i++ {
 
 		if m.Egress[i] != nil {
-
-			if swag.IsZero(m.Egress[i]) { // not required
-				return nil
-			}
-
 			if err := m.Egress[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("egress" + "." + strconv.Itoa(i))
@@ -233,11 +228,6 @@ func (m *NetworkPolicySpec) contextValidateIngress(ctx context.Context, formats 
 	for i := 0; i < len(m.Ingress); i++ {
 
 		if m.Ingress[i] != nil {
-
-			if swag.IsZero(m.Ingress[i]) { // not required
-				return nil
-			}
-
 			if err := m.Ingress[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("ingress" + "." + strconv.Itoa(i))
@@ -257,10 +247,6 @@ func (m *NetworkPolicySpec) contextValidatePolicyTypes(ctx context.Context, form
 
 	for i := 0; i < len(m.PolicyTypes); i++ {
 
-		if swag.IsZero(m.PolicyTypes[i]) { // not required
-			return nil
-		}
-
 		if err := m.PolicyTypes[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("policyTypes" + "." + strconv.Itoa(i))
@@ -278,11 +264,6 @@ func (m *NetworkPolicySpec) contextValidatePolicyTypes(ctx context.Context, form
 func (m *NetworkPolicySpec) contextValidatePodSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PodSelector != nil {
-
-		if swag.IsZero(m.PodSelector) { // not required
-			return nil
-		}
-
 		if err := m.PodSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("podSelector")

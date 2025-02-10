@@ -72,11 +72,6 @@ func (m *DependencyCredentials) ContextValidate(ctx context.Context, formats str
 func (m *DependencyCredentials) contextValidateHelmCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.HelmCredentials != nil {
-
-		if swag.IsZero(m.HelmCredentials) { // not required
-			return nil
-		}
-
 		if err := m.HelmCredentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("helmCredentials")

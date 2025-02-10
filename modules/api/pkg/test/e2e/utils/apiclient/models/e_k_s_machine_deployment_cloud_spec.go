@@ -178,11 +178,6 @@ func (m *EKSMachineDeploymentCloudSpec) ContextValidate(ctx context.Context, for
 func (m *EKSMachineDeploymentCloudSpec) contextValidateScalingConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ScalingConfig != nil {
-
-		if swag.IsZero(m.ScalingConfig) { // not required
-			return nil
-		}
-
 		if err := m.ScalingConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("scalingConfig")

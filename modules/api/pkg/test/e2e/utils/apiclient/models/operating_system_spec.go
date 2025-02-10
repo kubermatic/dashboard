@@ -192,11 +192,6 @@ func (m *OperatingSystemSpec) ContextValidate(ctx context.Context, formats strfm
 func (m *OperatingSystemSpec) contextValidateAmzn2(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Amzn2 != nil {
-
-		if swag.IsZero(m.Amzn2) { // not required
-			return nil
-		}
-
 		if err := m.Amzn2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("amzn2")
@@ -213,11 +208,6 @@ func (m *OperatingSystemSpec) contextValidateAmzn2(ctx context.Context, formats 
 func (m *OperatingSystemSpec) contextValidateFlatcar(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Flatcar != nil {
-
-		if swag.IsZero(m.Flatcar) { // not required
-			return nil
-		}
-
 		if err := m.Flatcar.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("flatcar")
@@ -234,11 +224,6 @@ func (m *OperatingSystemSpec) contextValidateFlatcar(ctx context.Context, format
 func (m *OperatingSystemSpec) contextValidateRhel(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Rhel != nil {
-
-		if swag.IsZero(m.Rhel) { // not required
-			return nil
-		}
-
 		if err := m.Rhel.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rhel")
@@ -255,11 +240,6 @@ func (m *OperatingSystemSpec) contextValidateRhel(ctx context.Context, formats s
 func (m *OperatingSystemSpec) contextValidateRockylinux(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Rockylinux != nil {
-
-		if swag.IsZero(m.Rockylinux) { // not required
-			return nil
-		}
-
 		if err := m.Rockylinux.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rockylinux")
@@ -276,11 +256,6 @@ func (m *OperatingSystemSpec) contextValidateRockylinux(ctx context.Context, for
 func (m *OperatingSystemSpec) contextValidateUbuntu(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ubuntu != nil {
-
-		if swag.IsZero(m.Ubuntu) { // not required
-			return nil
-		}
-
 		if err := m.Ubuntu.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ubuntu")

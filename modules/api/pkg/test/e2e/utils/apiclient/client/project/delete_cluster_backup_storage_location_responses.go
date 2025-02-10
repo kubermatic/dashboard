@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,11 +91,6 @@ func (o *DeleteClusterBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete cluster backup storage location o k response
-func (o *DeleteClusterBackupStorageLocationOK) Code() int {
-	return 200
-}
-
 func (o *DeleteClusterBackupStorageLocationOK) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
 }
@@ -146,11 +140,6 @@ func (o *DeleteClusterBackupStorageLocationUnauthorized) IsServerError() bool {
 // IsCode returns true when this delete cluster backup storage location unauthorized response a status code equal to that given
 func (o *DeleteClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
-}
-
-// Code gets the status code for the delete cluster backup storage location unauthorized response
-func (o *DeleteClusterBackupStorageLocationUnauthorized) Code() int {
-	return 401
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) Error() string {
@@ -204,11 +193,6 @@ func (o *DeleteClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete cluster backup storage location forbidden response
-func (o *DeleteClusterBackupStorageLocationForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteClusterBackupStorageLocationForbidden) Error() string {
 	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
 }
@@ -240,6 +224,11 @@ type DeleteClusterBackupStorageLocationDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the delete cluster backup storage location default response
+func (o *DeleteClusterBackupStorageLocationDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this delete cluster backup storage location default response has a 2xx status code
 func (o *DeleteClusterBackupStorageLocationDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -263,11 +252,6 @@ func (o *DeleteClusterBackupStorageLocationDefault) IsServerError() bool {
 // IsCode returns true when this delete cluster backup storage location default response a status code equal to that given
 func (o *DeleteClusterBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the delete cluster backup storage location default response
-func (o *DeleteClusterBackupStorageLocationDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) Error() string {

@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetClusterMetricsV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get cluster metrics v2 o k response
-func (o *GetClusterMetricsV2OK) Code() int {
-	return 200
-}
-
 func (o *GetClusterMetricsV2OK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterMetricsV2OK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterMetricsV2OK) GetPayload() *models.ClusterMetrics {
@@ -162,17 +154,12 @@ func (o *GetClusterMetricsV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get cluster metrics v2 unauthorized response
-func (o *GetClusterMetricsV2Unauthorized) Code() int {
-	return 401
-}
-
 func (o *GetClusterMetricsV2Unauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Unauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Unauthorized ", 401)
 }
 
 func (o *GetClusterMetricsV2Unauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Unauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Unauthorized ", 401)
 }
 
 func (o *GetClusterMetricsV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetClusterMetricsV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get cluster metrics v2 forbidden response
-func (o *GetClusterMetricsV2Forbidden) Code() int {
-	return 403
-}
-
 func (o *GetClusterMetricsV2Forbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Forbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Forbidden ", 403)
 }
 
 func (o *GetClusterMetricsV2Forbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Forbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2Forbidden ", 403)
 }
 
 func (o *GetClusterMetricsV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetClusterMetricsV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get cluster metrics v2 default response
+func (o *GetClusterMetricsV2Default) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster metrics v2 default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetClusterMetricsV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get cluster metrics v2 default response
-func (o *GetClusterMetricsV2Default) Code() int {
-	return o._statusCode
-}
-
 func (o *GetClusterMetricsV2Default) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterMetricsV2Default) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/metrics][%d] getClusterMetricsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterMetricsV2Default) GetPayload() *models.ErrorResponse {

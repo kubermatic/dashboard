@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *EditUserInProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the edit user in project o k response
-func (o *EditUserInProjectOK) Code() int {
-	return 200
-}
-
 func (o *EditUserInProjectOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *EditUserInProjectOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *EditUserInProjectOK) GetPayload() *models.User {
@@ -162,17 +154,12 @@ func (o *EditUserInProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the edit user in project unauthorized response
-func (o *EditUserInProjectUnauthorized) Code() int {
-	return 401
-}
-
 func (o *EditUserInProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectUnauthorized ", 401)
 }
 
 func (o *EditUserInProjectUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectUnauthorized ", 401)
 }
 
 func (o *EditUserInProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *EditUserInProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the edit user in project forbidden response
-func (o *EditUserInProjectForbidden) Code() int {
-	return 403
-}
-
 func (o *EditUserInProjectForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectForbidden ", 403)
 }
 
 func (o *EditUserInProjectForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProjectForbidden ", 403)
 }
 
 func (o *EditUserInProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type EditUserInProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the edit user in project default response
+func (o *EditUserInProjectDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this edit user in project default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *EditUserInProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the edit user in project default response
-func (o *EditUserInProjectDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *EditUserInProjectDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *EditUserInProjectDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/users/{user_id}][%d] editUserInProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *EditUserInProjectDefault) GetPayload() *models.ErrorResponse {

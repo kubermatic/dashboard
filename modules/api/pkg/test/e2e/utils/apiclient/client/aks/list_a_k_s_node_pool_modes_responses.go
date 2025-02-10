@@ -6,7 +6,6 @@ package aks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListAKSNodePoolModesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list a k s node pool modes o k response
-func (o *ListAKSNodePoolModesOK) Code() int {
-	return 200
-}
-
 func (o *ListAKSNodePoolModesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAKSNodePoolModesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAKSNodePoolModesOK) GetPayload() models.AKSNodePoolModes {
@@ -160,17 +152,12 @@ func (o *ListAKSNodePoolModesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list a k s node pool modes unauthorized response
-func (o *ListAKSNodePoolModesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListAKSNodePoolModesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesUnauthorized ", 401)
 }
 
 func (o *ListAKSNodePoolModesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesUnauthorized ", 401)
 }
 
 func (o *ListAKSNodePoolModesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListAKSNodePoolModesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list a k s node pool modes forbidden response
-func (o *ListAKSNodePoolModesForbidden) Code() int {
-	return 403
-}
-
 func (o *ListAKSNodePoolModesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesForbidden ", 403)
 }
 
 func (o *ListAKSNodePoolModesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModesForbidden ", 403)
 }
 
 func (o *ListAKSNodePoolModesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListAKSNodePoolModesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list a k s node pool modes default response
+func (o *ListAKSNodePoolModesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list a k s node pool modes default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListAKSNodePoolModesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list a k s node pool modes default response
-func (o *ListAKSNodePoolModesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListAKSNodePoolModesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAKSNodePoolModesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/modes][%d] listAKSNodePoolModes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAKSNodePoolModesDefault) GetPayload() *models.ErrorResponse {

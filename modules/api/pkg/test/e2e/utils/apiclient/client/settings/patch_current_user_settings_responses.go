@@ -6,7 +6,6 @@ package settings
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -87,19 +86,12 @@ func (o *PatchCurrentUserSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch current user settings o k response
-func (o *PatchCurrentUserSettingsOK) Code() int {
-	return 200
-}
-
 func (o *PatchCurrentUserSettingsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchCurrentUserSettingsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchCurrentUserSettingsOK) GetPayload() *models.User {
@@ -156,17 +148,12 @@ func (o *PatchCurrentUserSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch current user settings unauthorized response
-func (o *PatchCurrentUserSettingsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchCurrentUserSettingsUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsUnauthorized ", 401)
 }
 
 func (o *PatchCurrentUserSettingsUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettingsUnauthorized ", 401)
 }
 
 func (o *PatchCurrentUserSettingsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -190,6 +177,11 @@ type PatchCurrentUserSettingsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch current user settings default response
+func (o *PatchCurrentUserSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch current user settings default response has a 2xx status code
@@ -217,19 +209,12 @@ func (o *PatchCurrentUserSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch current user settings default response
-func (o *PatchCurrentUserSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchCurrentUserSettingsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchCurrentUserSettingsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/settings][%d] patchCurrentUserSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchCurrentUserSettingsDefault) GetPayload() *models.ErrorResponse {

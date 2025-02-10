@@ -172,11 +172,6 @@ func (m *GatekeeperConfigSpec) contextValidateMatch(ctx context.Context, formats
 	for i := 0; i < len(m.Match); i++ {
 
 		if m.Match[i] != nil {
-
-			if swag.IsZero(m.Match[i]) { // not required
-				return nil
-			}
-
 			if err := m.Match[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("match" + "." + strconv.Itoa(i))
@@ -195,11 +190,6 @@ func (m *GatekeeperConfigSpec) contextValidateMatch(ctx context.Context, formats
 func (m *GatekeeperConfigSpec) contextValidateReadiness(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Readiness != nil {
-
-		if swag.IsZero(m.Readiness) { // not required
-			return nil
-		}
-
 		if err := m.Readiness.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("readiness")
@@ -216,11 +206,6 @@ func (m *GatekeeperConfigSpec) contextValidateReadiness(ctx context.Context, for
 func (m *GatekeeperConfigSpec) contextValidateSync(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Sync != nil {
-
-		if swag.IsZero(m.Sync) { // not required
-			return nil
-		}
-
 		if err := m.Sync.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("sync")
@@ -237,11 +222,6 @@ func (m *GatekeeperConfigSpec) contextValidateSync(ctx context.Context, formats 
 func (m *GatekeeperConfigSpec) contextValidateValidation(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Validation != nil {
-
-		if swag.IsZero(m.Validation) { // not required
-			return nil
-		}
-
 		if err := m.Validation.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("validation")

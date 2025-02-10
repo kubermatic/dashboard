@@ -242,11 +242,6 @@ func (m *ApplicationDefinitionSpec) contextValidateVersions(ctx context.Context,
 	for i := 0; i < len(m.Versions); i++ {
 
 		if m.Versions[i] != nil {
-
-			if swag.IsZero(m.Versions[i]) { // not required
-				return nil
-			}
-
 			if err := m.Versions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("versions" + "." + strconv.Itoa(i))
@@ -265,11 +260,6 @@ func (m *ApplicationDefinitionSpec) contextValidateVersions(ctx context.Context,
 func (m *ApplicationDefinitionSpec) contextValidateDefaultDeployOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultDeployOptions != nil {
-
-		if swag.IsZero(m.DefaultDeployOptions) { // not required
-			return nil
-		}
-
 		if err := m.DefaultDeployOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("defaultDeployOptions")
@@ -286,11 +276,6 @@ func (m *ApplicationDefinitionSpec) contextValidateDefaultDeployOptions(ctx cont
 func (m *ApplicationDefinitionSpec) contextValidateDefaultNamespace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DefaultNamespace != nil {
-
-		if swag.IsZero(m.DefaultNamespace) { // not required
-			return nil
-		}
-
 		if err := m.DefaultNamespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("defaultNamespace")
@@ -305,10 +290,6 @@ func (m *ApplicationDefinitionSpec) contextValidateDefaultNamespace(ctx context.
 }
 
 func (m *ApplicationDefinitionSpec) contextValidateMethod(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Method) { // not required
-		return nil
-	}
 
 	if err := m.Method.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -325,11 +306,6 @@ func (m *ApplicationDefinitionSpec) contextValidateMethod(ctx context.Context, f
 func (m *ApplicationDefinitionSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")

@@ -361,11 +361,6 @@ func (m *Rule) contextValidateCELPreconditions(ctx context.Context, formats strf
 	for i := 0; i < len(m.CELPreconditions); i++ {
 
 		if m.CELPreconditions[i] != nil {
-
-			if swag.IsZero(m.CELPreconditions[i]) { // not required
-				return nil
-			}
-
 			if err := m.CELPreconditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("celPreconditions" + "." + strconv.Itoa(i))
@@ -386,11 +381,6 @@ func (m *Rule) contextValidateContext(ctx context.Context, formats strfmt.Regist
 	for i := 0; i < len(m.Context); i++ {
 
 		if m.Context[i] != nil {
-
-			if swag.IsZero(m.Context[i]) { // not required
-				return nil
-			}
-
 			if err := m.Context[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("context" + "." + strconv.Itoa(i))
@@ -411,11 +401,6 @@ func (m *Rule) contextValidateVerifyImages(ctx context.Context, formats strfmt.R
 	for i := 0; i < len(m.VerifyImages); i++ {
 
 		if m.VerifyImages[i] != nil {
-
-			if swag.IsZero(m.VerifyImages[i]) { // not required
-				return nil
-			}
-
 			if err := m.VerifyImages[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("verifyImages" + "." + strconv.Itoa(i))
@@ -434,11 +419,6 @@ func (m *Rule) contextValidateVerifyImages(ctx context.Context, formats strfmt.R
 func (m *Rule) contextValidateExclude(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Exclude != nil {
-
-		if swag.IsZero(m.Exclude) { // not required
-			return nil
-		}
-
 		if err := m.Exclude.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("exclude")
@@ -455,11 +435,6 @@ func (m *Rule) contextValidateExclude(ctx context.Context, formats strfmt.Regist
 func (m *Rule) contextValidateGenerate(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Generate != nil {
-
-		if swag.IsZero(m.Generate) { // not required
-			return nil
-		}
-
 		if err := m.Generate.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("generate")
@@ -474,10 +449,6 @@ func (m *Rule) contextValidateGenerate(ctx context.Context, formats strfmt.Regis
 }
 
 func (m *Rule) contextValidateImageExtractors(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ImageExtractors) { // not required
-		return nil
-	}
 
 	if err := m.ImageExtractors.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -494,11 +465,6 @@ func (m *Rule) contextValidateImageExtractors(ctx context.Context, formats strfm
 func (m *Rule) contextValidateMatch(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Match != nil {
-
-		if swag.IsZero(m.Match) { // not required
-			return nil
-		}
-
 		if err := m.Match.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("match")
@@ -515,11 +481,6 @@ func (m *Rule) contextValidateMatch(ctx context.Context, formats strfmt.Registry
 func (m *Rule) contextValidateMutate(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Mutate != nil {
-
-		if swag.IsZero(m.Mutate) { // not required
-			return nil
-		}
-
 		if err := m.Mutate.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("mutate")
@@ -536,11 +497,6 @@ func (m *Rule) contextValidateMutate(ctx context.Context, formats strfmt.Registr
 func (m *Rule) contextValidateValidate(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Validate != nil {
-
-		if swag.IsZero(m.Validate) { // not required
-			return nil
-		}
-
 		if err := m.Validate.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("validate")

@@ -6,7 +6,6 @@ package tokens
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteServiceAccountTokenOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete service account token o k response
-func (o *DeleteServiceAccountTokenOK) Code() int {
-	return 200
-}
-
 func (o *DeleteServiceAccountTokenOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenOK ", 200)
 }
 
 func (o *DeleteServiceAccountTokenOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenOK ", 200)
 }
 
 func (o *DeleteServiceAccountTokenOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteServiceAccountTokenUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete service account token unauthorized response
-func (o *DeleteServiceAccountTokenUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteServiceAccountTokenUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenUnauthorized ", 401)
 }
 
 func (o *DeleteServiceAccountTokenUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenUnauthorized ", 401)
 }
 
 func (o *DeleteServiceAccountTokenUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteServiceAccountTokenForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete service account token forbidden response
-func (o *DeleteServiceAccountTokenForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteServiceAccountTokenForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenForbidden ", 403)
 }
 
 func (o *DeleteServiceAccountTokenForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountTokenForbidden ", 403)
 }
 
 func (o *DeleteServiceAccountTokenForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteServiceAccountTokenDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete service account token default response
+func (o *DeleteServiceAccountTokenDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete service account token default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteServiceAccountTokenDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete service account token default response
-func (o *DeleteServiceAccountTokenDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteServiceAccountTokenDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountToken default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountToken default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteServiceAccountTokenDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountToken default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens/{token_id}][%d] deleteServiceAccountToken default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteServiceAccountTokenDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListGKEClusterSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list g k e cluster sizes o k response
-func (o *ListGKEClusterSizesOK) Code() int {
-	return 200
-}
-
 func (o *ListGKEClusterSizesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListGKEClusterSizesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListGKEClusterSizesOK) GetPayload() models.GCPMachineSizeList {
@@ -160,17 +152,12 @@ func (o *ListGKEClusterSizesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list g k e cluster sizes unauthorized response
-func (o *ListGKEClusterSizesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListGKEClusterSizesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesUnauthorized ", 401)
 }
 
 func (o *ListGKEClusterSizesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesUnauthorized ", 401)
 }
 
 func (o *ListGKEClusterSizesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListGKEClusterSizesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list g k e cluster sizes forbidden response
-func (o *ListGKEClusterSizesForbidden) Code() int {
-	return 403
-}
-
 func (o *ListGKEClusterSizesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesForbidden ", 403)
 }
 
 func (o *ListGKEClusterSizesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizesForbidden ", 403)
 }
 
 func (o *ListGKEClusterSizesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListGKEClusterSizesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list g k e cluster sizes default response
+func (o *ListGKEClusterSizesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list g k e cluster sizes default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListGKEClusterSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list g k e cluster sizes default response
-func (o *ListGKEClusterSizesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListGKEClusterSizesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListGKEClusterSizesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/providers/gke/sizes][%d] listGKEClusterSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListGKEClusterSizesDefault) GetPayload() *models.ErrorResponse {

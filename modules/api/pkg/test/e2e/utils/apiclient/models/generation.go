@@ -208,11 +208,6 @@ func (m *Generation) contextValidateForEachGeneration(ctx context.Context, forma
 	for i := 0; i < len(m.ForEachGeneration); i++ {
 
 		if m.ForEachGeneration[i] != nil {
-
-			if swag.IsZero(m.ForEachGeneration[i]) { // not required
-				return nil
-			}
-
 			if err := m.ForEachGeneration[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("foreach" + "." + strconv.Itoa(i))
@@ -231,11 +226,6 @@ func (m *Generation) contextValidateForEachGeneration(ctx context.Context, forma
 func (m *Generation) contextValidateClone(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Clone != nil {
-
-		if swag.IsZero(m.Clone) { // not required
-			return nil
-		}
-
 		if err := m.Clone.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clone")
@@ -252,11 +242,6 @@ func (m *Generation) contextValidateClone(ctx context.Context, formats strfmt.Re
 func (m *Generation) contextValidateCloneList(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CloneList != nil {
-
-		if swag.IsZero(m.CloneList) { // not required
-			return nil
-		}
-
 		if err := m.CloneList.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloneList")
@@ -271,10 +256,6 @@ func (m *Generation) contextValidateCloneList(ctx context.Context, formats strfm
 }
 
 func (m *Generation) contextValidateUID(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UID) { // not required
-		return nil
-	}
 
 	if err := m.UID.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

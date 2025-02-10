@@ -196,11 +196,6 @@ func (m *User) contextValidateProjects(ctx context.Context, formats strfmt.Regis
 	for i := 0; i < len(m.Projects); i++ {
 
 		if m.Projects[i] != nil {
-
-			if swag.IsZero(m.Projects[i]) { // not required
-				return nil
-			}
-
 			if err := m.Projects[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("projects" + "." + strconv.Itoa(i))
@@ -219,11 +214,6 @@ func (m *User) contextValidateProjects(ctx context.Context, formats strfmt.Regis
 func (m *User) contextValidateUserSettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.UserSettings != nil {
-
-		if swag.IsZero(m.UserSettings) { // not required
-			return nil
-		}
-
 		if err := m.UserSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("userSettings")

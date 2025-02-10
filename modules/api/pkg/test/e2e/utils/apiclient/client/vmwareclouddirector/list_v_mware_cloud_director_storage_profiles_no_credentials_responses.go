@@ -6,7 +6,6 @@ package vmwareclouddirector
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsOK) IsCode(code int)
 	return code == 200
 }
 
-// Code gets the status code for the list v mware cloud director storage profiles no credentials o k response
-func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsOK) GetPayload() models.VMwareCloudDirectorStorageProfileList {
@@ -128,6 +120,11 @@ type ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list v mware cloud director storage profiles no credentials default response
+func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list v mware cloud director storage profiles no credentials default response has a 2xx status code
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) IsCode(code
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list v mware cloud director storage profiles no credentials default response
-func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/vmwareclouddirector/storageprofiles][%d] listVMwareCloudDirectorStorageProfilesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVMwareCloudDirectorStorageProfilesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

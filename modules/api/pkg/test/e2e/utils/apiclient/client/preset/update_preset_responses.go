@@ -6,7 +6,6 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *UpdatePresetOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the update preset o k response
-func (o *UpdatePresetOK) Code() int {
-	return 200
-}
-
 func (o *UpdatePresetOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdatePresetOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdatePresetOK) GetPayload() *models.Preset {
@@ -162,17 +154,12 @@ func (o *UpdatePresetUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the update preset unauthorized response
-func (o *UpdatePresetUnauthorized) Code() int {
-	return 401
-}
-
 func (o *UpdatePresetUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetUnauthorized ", 401)
 }
 
 func (o *UpdatePresetUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetUnauthorized ", 401)
 }
 
 func (o *UpdatePresetUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *UpdatePresetForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the update preset forbidden response
-func (o *UpdatePresetForbidden) Code() int {
-	return 403
-}
-
 func (o *UpdatePresetForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetForbidden ", 403)
 }
 
 func (o *UpdatePresetForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePresetForbidden ", 403)
 }
 
 func (o *UpdatePresetForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type UpdatePresetDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the update preset default response
+func (o *UpdatePresetDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this update preset default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *UpdatePresetDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the update preset default response
-func (o *UpdatePresetDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *UpdatePresetDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePreset default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePreset default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdatePresetDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePreset default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/providers/{provider_name}/presets][%d] updatePreset default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdatePresetDefault) GetPayload() *models.ErrorResponse {

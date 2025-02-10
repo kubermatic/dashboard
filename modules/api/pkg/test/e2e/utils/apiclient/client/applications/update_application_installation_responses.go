@@ -6,7 +6,6 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *UpdateApplicationInstallationOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the update application installation o k response
-func (o *UpdateApplicationInstallationOK) Code() int {
-	return 200
-}
-
 func (o *UpdateApplicationInstallationOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateApplicationInstallationOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateApplicationInstallationOK) GetPayload() *models.ApplicationInstallation {
@@ -162,17 +154,12 @@ func (o *UpdateApplicationInstallationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the update application installation unauthorized response
-func (o *UpdateApplicationInstallationUnauthorized) Code() int {
-	return 401
-}
-
 func (o *UpdateApplicationInstallationUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationUnauthorized ", 401)
 }
 
 func (o *UpdateApplicationInstallationUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationUnauthorized ", 401)
 }
 
 func (o *UpdateApplicationInstallationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *UpdateApplicationInstallationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the update application installation forbidden response
-func (o *UpdateApplicationInstallationForbidden) Code() int {
-	return 403
-}
-
 func (o *UpdateApplicationInstallationForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationForbidden ", 403)
 }
 
 func (o *UpdateApplicationInstallationForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallationForbidden ", 403)
 }
 
 func (o *UpdateApplicationInstallationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type UpdateApplicationInstallationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the update application installation default response
+func (o *UpdateApplicationInstallationDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this update application installation default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *UpdateApplicationInstallationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the update application installation default response
-func (o *UpdateApplicationInstallationDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *UpdateApplicationInstallationDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateApplicationInstallationDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] updateApplicationInstallation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateApplicationInstallationDefault) GetPayload() *models.ErrorResponse {

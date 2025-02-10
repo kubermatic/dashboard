@@ -171,11 +171,6 @@ func (m *Project) contextValidateOwners(ctx context.Context, formats strfmt.Regi
 	for i := 0; i < len(m.Owners); i++ {
 
 		if m.Owners[i] != nil {
-
-			if swag.IsZero(m.Owners[i]) { // not required
-				return nil
-			}
-
 			if err := m.Owners[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("owners" + "." + strconv.Itoa(i))
@@ -194,11 +189,6 @@ func (m *Project) contextValidateOwners(ctx context.Context, formats strfmt.Regi
 func (m *Project) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Spec != nil {
-
-		if swag.IsZero(m.Spec) { // not required
-			return nil
-		}
-
 		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("spec")

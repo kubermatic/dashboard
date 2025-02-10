@@ -99,10 +99,6 @@ func (m *TinkerbellImages) ContextValidate(ctx context.Context, formats strfmt.R
 
 func (m *TinkerbellImages) contextValidateOperatingSystems(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.OperatingSystems) { // not required
-		return nil
-	}
-
 	if err := m.OperatingSystems.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("operatingSystems")
@@ -116,10 +112,6 @@ func (m *TinkerbellImages) contextValidateOperatingSystems(ctx context.Context, 
 }
 
 func (m *TinkerbellImages) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Source) { // not required
-		return nil
-	}
 
 	if err := m.Source.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

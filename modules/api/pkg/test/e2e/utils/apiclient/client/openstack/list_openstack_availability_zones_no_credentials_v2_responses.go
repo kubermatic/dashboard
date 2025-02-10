@@ -6,7 +6,6 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListOpenstackAvailabilityZonesNoCredentialsV2OK) IsCode(code int) bool 
 	return code == 200
 }
 
-// Code gets the status code for the list openstack availability zones no credentials v2 o k response
-func (o *ListOpenstackAvailabilityZonesNoCredentialsV2OK) Code() int {
-	return 200
-}
-
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2OK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2OK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2OK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2OK  %+v", 200, o.Payload)
 }
 
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2OK) GetPayload() []*models.OpenstackAvailabilityZone {
@@ -128,6 +120,11 @@ type ListOpenstackAvailabilityZonesNoCredentialsV2Default struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list openstack availability zones no credentials v2 default response
+func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list openstack availability zones no credentials v2 default response has a 2xx status code
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) IsCode(code int) 
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list openstack availability zones no credentials v2 default response
-func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) Code() int {
-	return o._statusCode
-}
-
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/availabilityzones][%d] listOpenstackAvailabilityZonesNoCredentialsV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOpenstackAvailabilityZonesNoCredentialsV2Default) GetPayload() *models.ErrorResponse {

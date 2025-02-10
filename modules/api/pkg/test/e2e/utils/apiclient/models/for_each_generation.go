@@ -223,11 +223,6 @@ func (m *ForEachGeneration) contextValidateContext(ctx context.Context, formats 
 	for i := 0; i < len(m.Context); i++ {
 
 		if m.Context[i] != nil {
-
-			if swag.IsZero(m.Context[i]) { // not required
-				return nil
-			}
-
 			if err := m.Context[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("context" + "." + strconv.Itoa(i))
@@ -246,11 +241,6 @@ func (m *ForEachGeneration) contextValidateContext(ctx context.Context, formats 
 func (m *ForEachGeneration) contextValidateClone(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Clone != nil {
-
-		if swag.IsZero(m.Clone) { // not required
-			return nil
-		}
-
 		if err := m.Clone.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clone")
@@ -267,11 +257,6 @@ func (m *ForEachGeneration) contextValidateClone(ctx context.Context, formats st
 func (m *ForEachGeneration) contextValidateCloneList(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CloneList != nil {
-
-		if swag.IsZero(m.CloneList) { // not required
-			return nil
-		}
-
 		if err := m.CloneList.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("cloneList")
@@ -288,11 +273,6 @@ func (m *ForEachGeneration) contextValidateCloneList(ctx context.Context, format
 func (m *ForEachGeneration) contextValidatePreconditions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Preconditions != nil {
-
-		if swag.IsZero(m.Preconditions) { // not required
-			return nil
-		}
-
 		if err := m.Preconditions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("preconditions")
@@ -307,10 +287,6 @@ func (m *ForEachGeneration) contextValidatePreconditions(ctx context.Context, fo
 }
 
 func (m *ForEachGeneration) contextValidateUID(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UID) { // not required
-		return nil
-	}
 
 	if err := m.UID.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

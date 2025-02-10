@@ -201,11 +201,6 @@ func (m *KubevirtCloudSpec) contextValidatePreAllocatedDataVolumes(ctx context.C
 	for i := 0; i < len(m.PreAllocatedDataVolumes); i++ {
 
 		if m.PreAllocatedDataVolumes[i] != nil {
-
-			if swag.IsZero(m.PreAllocatedDataVolumes[i]) { // not required
-				return nil
-			}
-
 			if err := m.PreAllocatedDataVolumes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("preAllocatedDataVolumes" + "." + strconv.Itoa(i))
@@ -226,11 +221,6 @@ func (m *KubevirtCloudSpec) contextValidateStorageClasses(ctx context.Context, f
 	for i := 0; i < len(m.StorageClasses); i++ {
 
 		if m.StorageClasses[i] != nil {
-
-			if swag.IsZero(m.StorageClasses[i]) { // not required
-				return nil
-			}
-
 			if err := m.StorageClasses[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("storageClasses" + "." + strconv.Itoa(i))
@@ -249,11 +239,6 @@ func (m *KubevirtCloudSpec) contextValidateStorageClasses(ctx context.Context, f
 func (m *KubevirtCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
-
-		if swag.IsZero(m.CredentialsReference) { // not required
-			return nil
-		}
-
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")

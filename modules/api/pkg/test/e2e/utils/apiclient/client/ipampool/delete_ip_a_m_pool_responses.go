@@ -6,7 +6,6 @@ package ipampool
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteIPAMPoolOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete Ip a m pool o k response
-func (o *DeleteIPAMPoolOK) Code() int {
-	return 200
-}
-
 func (o *DeleteIPAMPoolOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolOK ", 200)
 }
 
 func (o *DeleteIPAMPoolOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolOK ", 200)
 }
 
 func (o *DeleteIPAMPoolOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteIPAMPoolUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete Ip a m pool unauthorized response
-func (o *DeleteIPAMPoolUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteIPAMPoolUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolUnauthorized ", 401)
 }
 
 func (o *DeleteIPAMPoolUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolUnauthorized ", 401)
 }
 
 func (o *DeleteIPAMPoolUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteIPAMPoolForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete Ip a m pool forbidden response
-func (o *DeleteIPAMPoolForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteIPAMPoolForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolForbidden ", 403)
 }
 
 func (o *DeleteIPAMPoolForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIpAMPoolForbidden ", 403)
 }
 
 func (o *DeleteIPAMPoolForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteIPAMPoolDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete IP a m pool default response
+func (o *DeleteIPAMPoolDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete IP a m pool default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteIPAMPoolDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete IP a m pool default response
-func (o *DeleteIPAMPoolDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteIPAMPoolDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIPAMPool default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIPAMPool default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteIPAMPoolDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIPAMPool default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/seeds/{seed_name}/ipampools/{ipampool_name}][%d] deleteIPAMPool default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteIPAMPoolDefault) GetPayload() *models.ErrorResponse {

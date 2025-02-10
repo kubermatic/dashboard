@@ -6,7 +6,6 @@ package kubevirt
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectKubeVirtInstancetypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project kube virt instancetypes o k response
-func (o *ListProjectKubeVirtInstancetypesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectKubeVirtInstancetypesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectKubeVirtInstancetypesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectKubeVirtInstancetypesOK) GetPayload() *models.VirtualMachineInstancetypeList {
@@ -130,6 +122,11 @@ type ListProjectKubeVirtInstancetypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project kube virt instancetypes default response
+func (o *ListProjectKubeVirtInstancetypesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project kube virt instancetypes default response has a 2xx status code
 func (o *ListProjectKubeVirtInstancetypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListProjectKubeVirtInstancetypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project kube virt instancetypes default response
-func (o *ListProjectKubeVirtInstancetypesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectKubeVirtInstancetypesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectKubeVirtInstancetypesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/kubevirt/instancetypes][%d] listProjectKubeVirtInstancetypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectKubeVirtInstancetypesDefault) GetPayload() *models.ErrorResponse {

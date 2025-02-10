@@ -147,11 +147,6 @@ func (m *AKSClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *AKSClusterSpec) contextValidateMachineDeploymentSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MachineDeploymentSpec != nil {
-
-		if swag.IsZero(m.MachineDeploymentSpec) { // not required
-			return nil
-		}
-
 		if err := m.MachineDeploymentSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("machineDeploymentSpec")
@@ -168,11 +163,6 @@ func (m *AKSClusterSpec) contextValidateMachineDeploymentSpec(ctx context.Contex
 func (m *AKSClusterSpec) contextValidateNetworkProfile(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NetworkProfile != nil {
-
-		if swag.IsZero(m.NetworkProfile) { // not required
-			return nil
-		}
-
 		if err := m.NetworkProfile.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("networkProfile")
