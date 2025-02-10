@@ -6,7 +6,6 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListAzureRouteTablesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list azure route tables o k response
-func (o *ListAzureRouteTablesOK) Code() int {
-	return 200
-}
-
 func (o *ListAzureRouteTablesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTablesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTablesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAzureRouteTablesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTablesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTablesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAzureRouteTablesOK) GetPayload() *models.AzureRouteTablesList {
@@ -130,6 +122,11 @@ type ListAzureRouteTablesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list azure route tables default response
+func (o *ListAzureRouteTablesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list azure route tables default response has a 2xx status code
 func (o *ListAzureRouteTablesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListAzureRouteTablesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list azure route tables default response
-func (o *ListAzureRouteTablesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListAzureRouteTablesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTables default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTables default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAzureRouteTablesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTables default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/routetables][%d] listAzureRouteTables default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAzureRouteTablesDefault) GetPayload() *models.ErrorResponse {

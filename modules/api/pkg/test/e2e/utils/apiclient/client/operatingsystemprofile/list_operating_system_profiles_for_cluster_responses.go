@@ -6,7 +6,6 @@ package operatingsystemprofile
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListOperatingSystemProfilesForClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list operating system profiles for cluster o k response
-func (o *ListOperatingSystemProfilesForClusterOK) Code() int {
-	return 200
-}
-
 func (o *ListOperatingSystemProfilesForClusterOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterOK) GetPayload() []*models.OperatingSystemProfile {
@@ -160,17 +152,12 @@ func (o *ListOperatingSystemProfilesForClusterUnauthorized) IsCode(code int) boo
 	return code == 401
 }
 
-// Code gets the status code for the list operating system profiles for cluster unauthorized response
-func (o *ListOperatingSystemProfilesForClusterUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
 }
 
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
 }
 
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListOperatingSystemProfilesForClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list operating system profiles for cluster forbidden response
-func (o *ListOperatingSystemProfilesForClusterForbidden) Code() int {
-	return 403
-}
-
 func (o *ListOperatingSystemProfilesForClusterForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
 }
 
 func (o *ListOperatingSystemProfilesForClusterForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
 }
 
 func (o *ListOperatingSystemProfilesForClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListOperatingSystemProfilesForClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list operating system profiles for cluster default response
+func (o *ListOperatingSystemProfilesForClusterDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list operating system profiles for cluster default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListOperatingSystemProfilesForClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list operating system profiles for cluster default response
-func (o *ListOperatingSystemProfilesForClusterDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListOperatingSystemProfilesForClusterDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) GetPayload() *models.ErrorResponse {

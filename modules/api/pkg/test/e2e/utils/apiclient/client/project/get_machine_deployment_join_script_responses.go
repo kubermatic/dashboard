@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetMachineDeploymentJoinScriptOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get machine deployment join script o k response
-func (o *GetMachineDeploymentJoinScriptOK) Code() int {
-	return 200
-}
-
 func (o *GetMachineDeploymentJoinScriptOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptOK  %+v", 200, o.Payload)
 }
 
 func (o *GetMachineDeploymentJoinScriptOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptOK  %+v", 200, o.Payload)
 }
 
 func (o *GetMachineDeploymentJoinScriptOK) GetPayload() models.JoiningScript {
@@ -160,17 +152,12 @@ func (o *GetMachineDeploymentJoinScriptUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get machine deployment join script unauthorized response
-func (o *GetMachineDeploymentJoinScriptUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetMachineDeploymentJoinScriptUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptUnauthorized ", 401)
 }
 
 func (o *GetMachineDeploymentJoinScriptUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptUnauthorized ", 401)
 }
 
 func (o *GetMachineDeploymentJoinScriptUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetMachineDeploymentJoinScriptForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get machine deployment join script forbidden response
-func (o *GetMachineDeploymentJoinScriptForbidden) Code() int {
-	return 403
-}
-
 func (o *GetMachineDeploymentJoinScriptForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptForbidden ", 403)
 }
 
 func (o *GetMachineDeploymentJoinScriptForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScriptForbidden ", 403)
 }
 
 func (o *GetMachineDeploymentJoinScriptForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetMachineDeploymentJoinScriptDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get machine deployment join script default response
+func (o *GetMachineDeploymentJoinScriptDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get machine deployment join script default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetMachineDeploymentJoinScriptDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get machine deployment join script default response
-func (o *GetMachineDeploymentJoinScriptDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetMachineDeploymentJoinScriptDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScript default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScript default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetMachineDeploymentJoinScriptDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScript default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/joiningscript][%d] getMachineDeploymentJoinScript default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetMachineDeploymentJoinScriptDefault) GetPayload() *models.ErrorResponse {

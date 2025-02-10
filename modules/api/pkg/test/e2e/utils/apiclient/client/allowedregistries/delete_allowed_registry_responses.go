@@ -6,7 +6,6 @@ package allowedregistries
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteAllowedRegistryOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete allowed registry o k response
-func (o *DeleteAllowedRegistryOK) Code() int {
-	return 200
-}
-
 func (o *DeleteAllowedRegistryOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryOK ", 200)
 }
 
 func (o *DeleteAllowedRegistryOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryOK ", 200)
 }
 
 func (o *DeleteAllowedRegistryOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteAllowedRegistryUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete allowed registry unauthorized response
-func (o *DeleteAllowedRegistryUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteAllowedRegistryUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryUnauthorized ", 401)
 }
 
 func (o *DeleteAllowedRegistryUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryUnauthorized ", 401)
 }
 
 func (o *DeleteAllowedRegistryUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteAllowedRegistryForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete allowed registry forbidden response
-func (o *DeleteAllowedRegistryForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteAllowedRegistryForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryForbidden ", 403)
 }
 
 func (o *DeleteAllowedRegistryForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistryForbidden ", 403)
 }
 
 func (o *DeleteAllowedRegistryForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteAllowedRegistryDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete allowed registry default response
+func (o *DeleteAllowedRegistryDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete allowed registry default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteAllowedRegistryDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete allowed registry default response
-func (o *DeleteAllowedRegistryDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteAllowedRegistryDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistry default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistry default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAllowedRegistryDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistry default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/allowedregistries/{allowed_registry}][%d] deleteAllowedRegistry default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteAllowedRegistryDefault) GetPayload() *models.ErrorResponse {

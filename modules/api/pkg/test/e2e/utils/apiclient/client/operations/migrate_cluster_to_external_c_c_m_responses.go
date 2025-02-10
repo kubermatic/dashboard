@@ -6,7 +6,6 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *MigrateClusterToExternalCCMOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the migrate cluster to external c c m o k response
-func (o *MigrateClusterToExternalCCMOK) Code() int {
-	return 200
-}
-
 func (o *MigrateClusterToExternalCCMOK) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMOK", 200)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMOK ", 200)
 }
 
 func (o *MigrateClusterToExternalCCMOK) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMOK", 200)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMOK ", 200)
 }
 
 func (o *MigrateClusterToExternalCCMOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *MigrateClusterToExternalCCMUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the migrate cluster to external c c m unauthorized response
-func (o *MigrateClusterToExternalCCMUnauthorized) Code() int {
-	return 401
-}
-
 func (o *MigrateClusterToExternalCCMUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMUnauthorized ", 401)
 }
 
 func (o *MigrateClusterToExternalCCMUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMUnauthorized ", 401)
 }
 
 func (o *MigrateClusterToExternalCCMUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *MigrateClusterToExternalCCMForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the migrate cluster to external c c m forbidden response
-func (o *MigrateClusterToExternalCCMForbidden) Code() int {
-	return 403
-}
-
 func (o *MigrateClusterToExternalCCMForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMForbidden ", 403)
 }
 
 func (o *MigrateClusterToExternalCCMForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCMForbidden ", 403)
 }
 
 func (o *MigrateClusterToExternalCCMForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type MigrateClusterToExternalCCMDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the migrate cluster to external c c m default response
+func (o *MigrateClusterToExternalCCMDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this migrate cluster to external c c m default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *MigrateClusterToExternalCCMDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the migrate cluster to external c c m default response
-func (o *MigrateClusterToExternalCCMDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *MigrateClusterToExternalCCMDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCM default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCM default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *MigrateClusterToExternalCCMDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCM default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusters/{cluster_id}/externalccmmigration][%d] migrateClusterToExternalCCM default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *MigrateClusterToExternalCCMDefault) GetPayload() *models.ErrorResponse {

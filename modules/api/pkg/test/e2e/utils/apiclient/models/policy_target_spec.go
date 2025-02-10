@@ -102,11 +102,6 @@ func (m *PolicyTargetSpec) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *PolicyTargetSpec) contextValidateClusters(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Clusters != nil {
-
-		if swag.IsZero(m.Clusters) { // not required
-			return nil
-		}
-
 		if err := m.Clusters.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("clusters")
@@ -123,11 +118,6 @@ func (m *PolicyTargetSpec) contextValidateClusters(ctx context.Context, formats 
 func (m *PolicyTargetSpec) contextValidateProjects(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Projects != nil {
-
-		if swag.IsZero(m.Projects) { // not required
-			return nil
-		}
-
 		if err := m.Projects.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("projects")

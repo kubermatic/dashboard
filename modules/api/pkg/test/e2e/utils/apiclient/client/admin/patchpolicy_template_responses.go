@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchpolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patchpolicy template o k response
-func (o *PatchpolicyTemplateOK) Code() int {
-	return 200
-}
-
 func (o *PatchpolicyTemplateOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchpolicyTemplateOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchpolicyTemplateOK) GetPayload() *models.PolicyTemplate {
@@ -162,17 +154,12 @@ func (o *PatchpolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patchpolicy template unauthorized response
-func (o *PatchpolicyTemplateUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchpolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
 }
 
 func (o *PatchpolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
 }
 
 func (o *PatchpolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchpolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patchpolicy template forbidden response
-func (o *PatchpolicyTemplateForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchpolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
 }
 
 func (o *PatchpolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
 }
 
 func (o *PatchpolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchpolicyTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patchpolicy template default response
+func (o *PatchpolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patchpolicy template default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchpolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patchpolicy template default response
-func (o *PatchpolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchpolicyTemplateDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchpolicyTemplateDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchpolicyTemplateDefault) GetPayload() *models.ErrorResponse {

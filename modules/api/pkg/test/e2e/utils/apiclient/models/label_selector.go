@@ -93,11 +93,6 @@ func (m *LabelSelector) contextValidateMatchExpressions(ctx context.Context, for
 	for i := 0; i < len(m.MatchExpressions); i++ {
 
 		if m.MatchExpressions[i] != nil {
-
-			if swag.IsZero(m.MatchExpressions[i]) { // not required
-				return nil
-			}
-
 			if err := m.MatchExpressions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("matchExpressions" + "." + strconv.Itoa(i))

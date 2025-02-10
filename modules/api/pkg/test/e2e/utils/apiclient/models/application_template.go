@@ -102,11 +102,6 @@ func (m *ApplicationTemplate) ContextValidate(ctx context.Context, formats strfm
 func (m *ApplicationTemplate) contextValidateSource(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Source != nil {
-
-		if swag.IsZero(m.Source) { // not required
-			return nil
-		}
-
 		if err := m.Source.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("source")
@@ -123,11 +118,6 @@ func (m *ApplicationTemplate) contextValidateSource(ctx context.Context, formats
 func (m *ApplicationTemplate) contextValidateTemplateCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.TemplateCredentials != nil {
-
-		if swag.IsZero(m.TemplateCredentials) { // not required
-			return nil
-		}
-
 		if err := m.TemplateCredentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("templateCredentials")

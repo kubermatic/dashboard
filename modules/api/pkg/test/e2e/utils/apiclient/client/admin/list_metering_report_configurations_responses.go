@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListMeteringReportConfigurationsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list metering report configurations o k response
-func (o *ListMeteringReportConfigurationsOK) Code() int {
-	return 200
-}
-
 func (o *ListMeteringReportConfigurationsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListMeteringReportConfigurationsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListMeteringReportConfigurationsOK) GetPayload() []*models.MeteringReportConfiguration {
@@ -160,17 +152,12 @@ func (o *ListMeteringReportConfigurationsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list metering report configurations unauthorized response
-func (o *ListMeteringReportConfigurationsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListMeteringReportConfigurationsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsUnauthorized ", 401)
 }
 
 func (o *ListMeteringReportConfigurationsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsUnauthorized ", 401)
 }
 
 func (o *ListMeteringReportConfigurationsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListMeteringReportConfigurationsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list metering report configurations forbidden response
-func (o *ListMeteringReportConfigurationsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListMeteringReportConfigurationsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsForbidden ", 403)
 }
 
 func (o *ListMeteringReportConfigurationsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurationsForbidden ", 403)
 }
 
 func (o *ListMeteringReportConfigurationsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListMeteringReportConfigurationsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list metering report configurations default response
+func (o *ListMeteringReportConfigurationsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list metering report configurations default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListMeteringReportConfigurationsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list metering report configurations default response
-func (o *ListMeteringReportConfigurationsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListMeteringReportConfigurationsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurations default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurations default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListMeteringReportConfigurationsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurations default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/metering/configurations/reports][%d] listMeteringReportConfigurations default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListMeteringReportConfigurationsDefault) GetPayload() *models.ErrorResponse {

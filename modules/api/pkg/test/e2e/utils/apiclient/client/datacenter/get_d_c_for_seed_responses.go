@@ -6,7 +6,6 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetDCForSeedOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get d c for seed o k response
-func (o *GetDCForSeedOK) Code() int {
-	return 200
-}
-
 func (o *GetDCForSeedOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedOK  %+v", 200, o.Payload)
 }
 
 func (o *GetDCForSeedOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedOK  %+v", 200, o.Payload)
 }
 
 func (o *GetDCForSeedOK) GetPayload() *models.Datacenter {
@@ -162,17 +154,12 @@ func (o *GetDCForSeedUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get d c for seed unauthorized response
-func (o *GetDCForSeedUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetDCForSeedUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedUnauthorized ", 401)
 }
 
 func (o *GetDCForSeedUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedUnauthorized ", 401)
 }
 
 func (o *GetDCForSeedUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetDCForSeedForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get d c for seed forbidden response
-func (o *GetDCForSeedForbidden) Code() int {
-	return 403
-}
-
 func (o *GetDCForSeedForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedForbidden ", 403)
 }
 
 func (o *GetDCForSeedForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeedForbidden ", 403)
 }
 
 func (o *GetDCForSeedForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetDCForSeedDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get d c for seed default response
+func (o *GetDCForSeedDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get d c for seed default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetDCForSeedDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get d c for seed default response
-func (o *GetDCForSeedDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetDCForSeedDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetDCForSeedDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeed default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/seed/{seed_name}/dc/{dc}][%d] getDCForSeed default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetDCForSeedDefault) GetPayload() *models.ErrorResponse {

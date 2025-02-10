@@ -678,11 +678,6 @@ func (m *DatacenterSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *DatacenterSpec) contextValidateAlibaba(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Alibaba != nil {
-
-		if swag.IsZero(m.Alibaba) { // not required
-			return nil
-		}
-
 		if err := m.Alibaba.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("alibaba")
@@ -699,11 +694,6 @@ func (m *DatacenterSpec) contextValidateAlibaba(ctx context.Context, formats str
 func (m *DatacenterSpec) contextValidateAnexia(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Anexia != nil {
-
-		if swag.IsZero(m.Anexia) { // not required
-			return nil
-		}
-
 		if err := m.Anexia.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("anexia")
@@ -720,11 +710,6 @@ func (m *DatacenterSpec) contextValidateAnexia(ctx context.Context, formats strf
 func (m *DatacenterSpec) contextValidateAws(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Aws != nil {
-
-		if swag.IsZero(m.Aws) { // not required
-			return nil
-		}
-
 		if err := m.Aws.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("aws")
@@ -741,11 +726,6 @@ func (m *DatacenterSpec) contextValidateAws(ctx context.Context, formats strfmt.
 func (m *DatacenterSpec) contextValidateAzure(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Azure != nil {
-
-		if swag.IsZero(m.Azure) { // not required
-			return nil
-		}
-
 		if err := m.Azure.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("azure")
@@ -762,11 +742,6 @@ func (m *DatacenterSpec) contextValidateAzure(ctx context.Context, formats strfm
 func (m *DatacenterSpec) contextValidateBaremetal(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Baremetal != nil {
-
-		if swag.IsZero(m.Baremetal) { // not required
-			return nil
-		}
-
 		if err := m.Baremetal.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("baremetal")
@@ -783,11 +758,6 @@ func (m *DatacenterSpec) contextValidateBaremetal(ctx context.Context, formats s
 func (m *DatacenterSpec) contextValidateDigitalocean(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Digitalocean != nil {
-
-		if swag.IsZero(m.Digitalocean) { // not required
-			return nil
-		}
-
 		if err := m.Digitalocean.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("digitalocean")
@@ -804,11 +774,6 @@ func (m *DatacenterSpec) contextValidateDigitalocean(ctx context.Context, format
 func (m *DatacenterSpec) contextValidateEnforcedAuditWebhookSettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EnforcedAuditWebhookSettings != nil {
-
-		if swag.IsZero(m.EnforcedAuditWebhookSettings) { // not required
-			return nil
-		}
-
 		if err := m.EnforcedAuditWebhookSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("enforcedAuditWebhookSettings")
@@ -825,11 +790,6 @@ func (m *DatacenterSpec) contextValidateEnforcedAuditWebhookSettings(ctx context
 func (m *DatacenterSpec) contextValidateFake(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Fake != nil {
-
-		if swag.IsZero(m.Fake) { // not required
-			return nil
-		}
-
 		if err := m.Fake.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("fake")
@@ -846,11 +806,6 @@ func (m *DatacenterSpec) contextValidateFake(ctx context.Context, formats strfmt
 func (m *DatacenterSpec) contextValidateGcp(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Gcp != nil {
-
-		if swag.IsZero(m.Gcp) { // not required
-			return nil
-		}
-
 		if err := m.Gcp.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("gcp")
@@ -867,11 +822,6 @@ func (m *DatacenterSpec) contextValidateGcp(ctx context.Context, formats strfmt.
 func (m *DatacenterSpec) contextValidateHetzner(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Hetzner != nil {
-
-		if swag.IsZero(m.Hetzner) { // not required
-			return nil
-		}
-
 		if err := m.Hetzner.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hetzner")
@@ -888,11 +838,6 @@ func (m *DatacenterSpec) contextValidateHetzner(ctx context.Context, formats str
 func (m *DatacenterSpec) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubelb != nil {
-
-		if swag.IsZero(m.Kubelb) { // not required
-			return nil
-		}
-
 		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubelb")
@@ -909,11 +854,6 @@ func (m *DatacenterSpec) contextValidateKubelb(ctx context.Context, formats strf
 func (m *DatacenterSpec) contextValidateKubevirt(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Kubevirt != nil {
-
-		if swag.IsZero(m.Kubevirt) { // not required
-			return nil
-		}
-
 		if err := m.Kubevirt.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("kubevirt")
@@ -930,11 +870,6 @@ func (m *DatacenterSpec) contextValidateKubevirt(ctx context.Context, formats st
 func (m *DatacenterSpec) contextValidateMachineFlavorFilter(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.MachineFlavorFilter != nil {
-
-		if swag.IsZero(m.MachineFlavorFilter) { // not required
-			return nil
-		}
-
 		if err := m.MachineFlavorFilter.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("machineFlavorFilter")
@@ -951,11 +886,6 @@ func (m *DatacenterSpec) contextValidateMachineFlavorFilter(ctx context.Context,
 func (m *DatacenterSpec) contextValidateNode(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Node != nil {
-
-		if swag.IsZero(m.Node) { // not required
-			return nil
-		}
-
 		if err := m.Node.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("node")
@@ -972,11 +902,6 @@ func (m *DatacenterSpec) contextValidateNode(ctx context.Context, formats strfmt
 func (m *DatacenterSpec) contextValidateNutanix(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Nutanix != nil {
-
-		if swag.IsZero(m.Nutanix) { // not required
-			return nil
-		}
-
 		if err := m.Nutanix.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nutanix")
@@ -993,11 +918,6 @@ func (m *DatacenterSpec) contextValidateNutanix(ctx context.Context, formats str
 func (m *DatacenterSpec) contextValidateOpenstack(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Openstack != nil {
-
-		if swag.IsZero(m.Openstack) { // not required
-			return nil
-		}
-
 		if err := m.Openstack.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openstack")
@@ -1012,10 +932,6 @@ func (m *DatacenterSpec) contextValidateOpenstack(ctx context.Context, formats s
 }
 
 func (m *DatacenterSpec) contextValidateOperatingSystemProfiles(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.OperatingSystemProfiles) { // not required
-		return nil
-	}
 
 	if err := m.OperatingSystemProfiles.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -1032,11 +948,6 @@ func (m *DatacenterSpec) contextValidateOperatingSystemProfiles(ctx context.Cont
 func (m *DatacenterSpec) contextValidatePacket(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Packet != nil {
-
-		if swag.IsZero(m.Packet) { // not required
-			return nil
-		}
-
 		if err := m.Packet.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("packet")
@@ -1053,11 +964,6 @@ func (m *DatacenterSpec) contextValidatePacket(ctx context.Context, formats strf
 func (m *DatacenterSpec) contextValidateVmwareclouddirector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Vmwareclouddirector != nil {
-
-		if swag.IsZero(m.Vmwareclouddirector) { // not required
-			return nil
-		}
-
 		if err := m.Vmwareclouddirector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmwareclouddirector")
@@ -1074,11 +980,6 @@ func (m *DatacenterSpec) contextValidateVmwareclouddirector(ctx context.Context,
 func (m *DatacenterSpec) contextValidateVsphere(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Vsphere != nil {
-
-		if swag.IsZero(m.Vsphere) { // not required
-			return nil
-		}
-
 		if err := m.Vsphere.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vsphere")

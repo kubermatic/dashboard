@@ -6,7 +6,6 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectEKSVPCsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project e k s v p cs o k response
-func (o *ListProjectEKSVPCsOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectEKSVPCsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectEKSVPCsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectEKSVPCsOK) GetPayload() models.EKSVPCList {
@@ -128,6 +120,11 @@ type ListProjectEKSVPCsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project e k s v p cs default response
+func (o *ListProjectEKSVPCsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project e k s v p cs default response has a 2xx status code
 func (o *ListProjectEKSVPCsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectEKSVPCsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project e k s v p cs default response
-func (o *ListProjectEKSVPCsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectEKSVPCsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCs default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCs default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectEKSVPCsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCs default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/eks/vpcs][%d] listProjectEKSVPCs default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectEKSVPCsDefault) GetPayload() *models.ErrorResponse {

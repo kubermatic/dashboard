@@ -97,10 +97,6 @@ func (m *AKSMDPhase) ContextValidate(ctx context.Context, formats strfmt.Registr
 
 func (m *AKSMDPhase) contextValidatePowerState(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.PowerState) { // not required
-		return nil
-	}
-
 	if err := m.PowerState.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("powerState")
@@ -114,10 +110,6 @@ func (m *AKSMDPhase) contextValidatePowerState(ctx context.Context, formats strf
 }
 
 func (m *AKSMDPhase) contextValidateProvisioningState(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ProvisioningState) { // not required
-		return nil
-	}
 
 	if err := m.ProvisioningState.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

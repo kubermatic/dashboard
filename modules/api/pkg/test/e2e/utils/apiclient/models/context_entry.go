@@ -201,11 +201,6 @@ func (m *ContextEntry) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (m *ContextEntry) contextValidateAPICall(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.APICall != nil {
-
-		if swag.IsZero(m.APICall) { // not required
-			return nil
-		}
-
 		if err := m.APICall.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("apiCall")
@@ -222,11 +217,6 @@ func (m *ContextEntry) contextValidateAPICall(ctx context.Context, formats strfm
 func (m *ContextEntry) contextValidateConfigMap(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ConfigMap != nil {
-
-		if swag.IsZero(m.ConfigMap) { // not required
-			return nil
-		}
-
 		if err := m.ConfigMap.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("configMap")
@@ -243,11 +233,6 @@ func (m *ContextEntry) contextValidateConfigMap(ctx context.Context, formats str
 func (m *ContextEntry) contextValidateGlobalReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.GlobalReference != nil {
-
-		if swag.IsZero(m.GlobalReference) { // not required
-			return nil
-		}
-
 		if err := m.GlobalReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("globalReference")
@@ -264,11 +249,6 @@ func (m *ContextEntry) contextValidateGlobalReference(ctx context.Context, forma
 func (m *ContextEntry) contextValidateImageRegistry(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ImageRegistry != nil {
-
-		if swag.IsZero(m.ImageRegistry) { // not required
-			return nil
-		}
-
 		if err := m.ImageRegistry.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("imageRegistry")
@@ -285,11 +265,6 @@ func (m *ContextEntry) contextValidateImageRegistry(ctx context.Context, formats
 func (m *ContextEntry) contextValidateVariable(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Variable != nil {
-
-		if swag.IsZero(m.Variable) { // not required
-			return nil
-		}
-
 		if err := m.Variable.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("variable")

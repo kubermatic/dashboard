@@ -102,10 +102,6 @@ func (m *ValidationFailureActionOverride) ContextValidate(ctx context.Context, f
 
 func (m *ValidationFailureActionOverride) contextValidateAction(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Action) { // not required
-		return nil
-	}
-
 	if err := m.Action.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("action")
@@ -121,11 +117,6 @@ func (m *ValidationFailureActionOverride) contextValidateAction(ctx context.Cont
 func (m *ValidationFailureActionOverride) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NamespaceSelector != nil {
-
-		if swag.IsZero(m.NamespaceSelector) { // not required
-			return nil
-		}
-
 		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespaceSelector")

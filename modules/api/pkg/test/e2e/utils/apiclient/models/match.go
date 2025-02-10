@@ -152,11 +152,6 @@ func (m *Match) contextValidateKinds(ctx context.Context, formats strfmt.Registr
 	for i := 0; i < len(m.Kinds); i++ {
 
 		if m.Kinds[i] != nil {
-
-			if swag.IsZero(m.Kinds[i]) { // not required
-				return nil
-			}
-
 			if err := m.Kinds[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("kinds" + "." + strconv.Itoa(i))
@@ -175,11 +170,6 @@ func (m *Match) contextValidateKinds(ctx context.Context, formats strfmt.Registr
 func (m *Match) contextValidateLabelSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.LabelSelector != nil {
-
-		if swag.IsZero(m.LabelSelector) { // not required
-			return nil
-		}
-
 		if err := m.LabelSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("labelSelector")
@@ -196,11 +186,6 @@ func (m *Match) contextValidateLabelSelector(ctx context.Context, formats strfmt
 func (m *Match) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NamespaceSelector != nil {
-
-		if swag.IsZero(m.NamespaceSelector) { // not required
-			return nil
-		}
-
 		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespaceSelector")

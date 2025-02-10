@@ -6,7 +6,6 @@ package vmwareclouddirector
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectVMwareCloudDirectorTemplatesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project v mware cloud director templates o k response
-func (o *ListProjectVMwareCloudDirectorTemplatesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectVMwareCloudDirectorTemplatesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplatesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplatesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectVMwareCloudDirectorTemplatesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplatesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplatesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectVMwareCloudDirectorTemplatesOK) GetPayload() models.VMwareCloudDirectorTemplateList {
@@ -128,6 +120,11 @@ type ListProjectVMwareCloudDirectorTemplatesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project v mware cloud director templates default response
+func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project v mware cloud director templates default response has a 2xx status code
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectVMwareCloudDirectorTemplatesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project v mware cloud director templates default response
-func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplates default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplates default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplates default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}][%d] listProjectVMwareCloudDirectorTemplates default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectVMwareCloudDirectorTemplatesDefault) GetPayload() *models.ErrorResponse {

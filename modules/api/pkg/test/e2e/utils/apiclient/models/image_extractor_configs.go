@@ -11,7 +11,6 @@ import (
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
 )
 
@@ -58,10 +57,6 @@ func (m ImageExtractorConfigs) ContextValidate(ctx context.Context, formats strf
 	for k := range m {
 
 		for i := 0; i < len(m[k]); i++ {
-
-			if swag.IsZero(m[k][i]) { // not required
-				return nil
-			}
 
 			if err := m[k][i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {

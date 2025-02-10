@@ -108,10 +108,6 @@ func (m *GlobalObjectKeySelector) ContextValidate(ctx context.Context, formats s
 
 func (m *GlobalObjectKeySelector) contextValidateUID(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.UID) { // not required
-		return nil
-	}
-
 	if err := m.UID.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("uid")

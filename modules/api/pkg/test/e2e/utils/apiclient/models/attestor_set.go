@@ -108,11 +108,6 @@ func (m *AttestorSet) contextValidateEntries(ctx context.Context, formats strfmt
 	for i := 0; i < len(m.Entries); i++ {
 
 		if m.Entries[i] != nil {
-
-			if swag.IsZero(m.Entries[i]) { // not required
-				return nil
-			}
-
 			if err := m.Entries[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("entries" + "." + strconv.Itoa(i))

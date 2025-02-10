@@ -7,7 +7,6 @@ package project
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,19 +94,12 @@ func (o *UpdateExternalClusterOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the update external cluster o k response
-func (o *UpdateExternalClusterOK) Code() int {
-	return 200
-}
-
 func (o *UpdateExternalClusterOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateExternalClusterOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateExternalClusterOK) GetPayload() *models.ExternalCluster {
@@ -164,17 +156,12 @@ func (o *UpdateExternalClusterUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the update external cluster unauthorized response
-func (o *UpdateExternalClusterUnauthorized) Code() int {
-	return 401
-}
-
 func (o *UpdateExternalClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterUnauthorized ", 401)
 }
 
 func (o *UpdateExternalClusterUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterUnauthorized ", 401)
 }
 
 func (o *UpdateExternalClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -220,17 +207,12 @@ func (o *UpdateExternalClusterForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the update external cluster forbidden response
-func (o *UpdateExternalClusterForbidden) Code() int {
-	return 403
-}
-
 func (o *UpdateExternalClusterForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterForbidden ", 403)
 }
 
 func (o *UpdateExternalClusterForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalClusterForbidden ", 403)
 }
 
 func (o *UpdateExternalClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -254,6 +236,11 @@ type UpdateExternalClusterDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the update external cluster default response
+func (o *UpdateExternalClusterDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this update external cluster default response has a 2xx status code
@@ -281,19 +268,12 @@ func (o *UpdateExternalClusterDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the update external cluster default response
-func (o *UpdateExternalClusterDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *UpdateExternalClusterDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalCluster default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateExternalClusterDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalCluster default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}][%d] updateExternalCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateExternalClusterDefault) GetPayload() *models.ErrorResponse {

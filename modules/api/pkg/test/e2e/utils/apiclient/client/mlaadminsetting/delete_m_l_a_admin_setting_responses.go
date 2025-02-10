@@ -6,7 +6,6 @@ package mlaadminsetting
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteMLAAdminSettingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete m l a admin setting o k response
-func (o *DeleteMLAAdminSettingOK) Code() int {
-	return 200
-}
-
 func (o *DeleteMLAAdminSettingOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingOK ", 200)
 }
 
 func (o *DeleteMLAAdminSettingOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingOK ", 200)
 }
 
 func (o *DeleteMLAAdminSettingOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete m l a admin setting unauthorized response
-func (o *DeleteMLAAdminSettingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteMLAAdminSettingUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingUnauthorized ", 401)
 }
 
 func (o *DeleteMLAAdminSettingUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingUnauthorized ", 401)
 }
 
 func (o *DeleteMLAAdminSettingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete m l a admin setting forbidden response
-func (o *DeleteMLAAdminSettingForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteMLAAdminSettingForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingForbidden ", 403)
 }
 
 func (o *DeleteMLAAdminSettingForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSettingForbidden ", 403)
 }
 
 func (o *DeleteMLAAdminSettingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteMLAAdminSettingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete m l a admin setting default response
+func (o *DeleteMLAAdminSettingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete m l a admin setting default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete m l a admin setting default response
-func (o *DeleteMLAAdminSettingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteMLAAdminSettingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSetting default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSetting default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteMLAAdminSettingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSetting default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] deleteMLAAdminSetting default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteMLAAdminSettingDefault) GetPayload() *models.ErrorResponse {

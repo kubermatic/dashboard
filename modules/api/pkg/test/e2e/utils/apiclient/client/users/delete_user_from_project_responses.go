@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *DeleteUserFromProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete user from project o k response
-func (o *DeleteUserFromProjectOK) Code() int {
-	return 200
-}
-
 func (o *DeleteUserFromProjectOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectOK %s", 200, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteUserFromProjectOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectOK %s", 200, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *DeleteUserFromProjectOK) GetPayload() *models.User {
@@ -162,17 +154,12 @@ func (o *DeleteUserFromProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete user from project unauthorized response
-func (o *DeleteUserFromProjectUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteUserFromProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectUnauthorized ", 401)
 }
 
 func (o *DeleteUserFromProjectUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectUnauthorized ", 401)
 }
 
 func (o *DeleteUserFromProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *DeleteUserFromProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete user from project forbidden response
-func (o *DeleteUserFromProjectForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteUserFromProjectForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectForbidden ", 403)
 }
 
 func (o *DeleteUserFromProjectForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProjectForbidden ", 403)
 }
 
 func (o *DeleteUserFromProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type DeleteUserFromProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete user from project default response
+func (o *DeleteUserFromProjectDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete user from project default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *DeleteUserFromProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete user from project default response
-func (o *DeleteUserFromProjectDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteUserFromProjectDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteUserFromProjectDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/users/{user_id}][%d] deleteUserFromProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteUserFromProjectDefault) GetPayload() *models.ErrorResponse {

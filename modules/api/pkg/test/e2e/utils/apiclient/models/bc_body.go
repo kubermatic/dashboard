@@ -72,11 +72,6 @@ func (m *BcBody) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 func (m *BcBody) contextValidateBackupCredentials(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BackupCredentials != nil {
-
-		if swag.IsZero(m.BackupCredentials) { // not required
-			return nil
-		}
-
 		if err := m.BackupCredentials.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("backup_credentials")

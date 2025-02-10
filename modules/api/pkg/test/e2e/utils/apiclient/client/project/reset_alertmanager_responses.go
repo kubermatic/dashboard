@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *ResetAlertmanagerOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the reset alertmanager o k response
-func (o *ResetAlertmanagerOK) Code() int {
-	return 200
-}
-
 func (o *ResetAlertmanagerOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerOK ", 200)
 }
 
 func (o *ResetAlertmanagerOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerOK ", 200)
 }
 
 func (o *ResetAlertmanagerOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *ResetAlertmanagerUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the reset alertmanager unauthorized response
-func (o *ResetAlertmanagerUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ResetAlertmanagerUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerUnauthorized ", 401)
 }
 
 func (o *ResetAlertmanagerUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerUnauthorized ", 401)
 }
 
 func (o *ResetAlertmanagerUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *ResetAlertmanagerForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the reset alertmanager forbidden response
-func (o *ResetAlertmanagerForbidden) Code() int {
-	return 403
-}
-
 func (o *ResetAlertmanagerForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerForbidden ", 403)
 }
 
 func (o *ResetAlertmanagerForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanagerForbidden ", 403)
 }
 
 func (o *ResetAlertmanagerForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type ResetAlertmanagerDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the reset alertmanager default response
+func (o *ResetAlertmanagerDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this reset alertmanager default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *ResetAlertmanagerDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the reset alertmanager default response
-func (o *ResetAlertmanagerDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ResetAlertmanagerDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanager default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanager default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ResetAlertmanagerDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanager default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/alertmanager/config][%d] resetAlertmanager default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ResetAlertmanagerDefault) GetPayload() *models.ErrorResponse {

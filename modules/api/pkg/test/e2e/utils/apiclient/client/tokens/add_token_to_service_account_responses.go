@@ -6,7 +6,6 @@ package tokens
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *AddTokenToServiceAccountCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the add token to service account created response
-func (o *AddTokenToServiceAccountCreated) Code() int {
-	return 201
-}
-
 func (o *AddTokenToServiceAccountCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountCreated  %+v", 201, o.Payload)
 }
 
 func (o *AddTokenToServiceAccountCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountCreated  %+v", 201, o.Payload)
 }
 
 func (o *AddTokenToServiceAccountCreated) GetPayload() *models.ServiceAccountToken {
@@ -162,17 +154,12 @@ func (o *AddTokenToServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the add token to service account unauthorized response
-func (o *AddTokenToServiceAccountUnauthorized) Code() int {
-	return 401
-}
-
 func (o *AddTokenToServiceAccountUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountUnauthorized ", 401)
 }
 
 func (o *AddTokenToServiceAccountUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountUnauthorized ", 401)
 }
 
 func (o *AddTokenToServiceAccountUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *AddTokenToServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the add token to service account forbidden response
-func (o *AddTokenToServiceAccountForbidden) Code() int {
-	return 403
-}
-
 func (o *AddTokenToServiceAccountForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountForbidden ", 403)
 }
 
 func (o *AddTokenToServiceAccountForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccountForbidden ", 403)
 }
 
 func (o *AddTokenToServiceAccountForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type AddTokenToServiceAccountDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the add token to service account default response
+func (o *AddTokenToServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this add token to service account default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *AddTokenToServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the add token to service account default response
-func (o *AddTokenToServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *AddTokenToServiceAccountDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *AddTokenToServiceAccountDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] addTokenToServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *AddTokenToServiceAccountDefault) GetPayload() *models.ErrorResponse {

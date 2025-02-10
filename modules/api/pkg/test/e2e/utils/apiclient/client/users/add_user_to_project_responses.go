@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *AddUserToProjectCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the add user to project created response
-func (o *AddUserToProjectCreated) Code() int {
-	return 201
-}
-
 func (o *AddUserToProjectCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectCreated  %+v", 201, o.Payload)
 }
 
 func (o *AddUserToProjectCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectCreated  %+v", 201, o.Payload)
 }
 
 func (o *AddUserToProjectCreated) GetPayload() *models.User {
@@ -162,17 +154,12 @@ func (o *AddUserToProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the add user to project unauthorized response
-func (o *AddUserToProjectUnauthorized) Code() int {
-	return 401
-}
-
 func (o *AddUserToProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectUnauthorized ", 401)
 }
 
 func (o *AddUserToProjectUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectUnauthorized ", 401)
 }
 
 func (o *AddUserToProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *AddUserToProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the add user to project forbidden response
-func (o *AddUserToProjectForbidden) Code() int {
-	return 403
-}
-
 func (o *AddUserToProjectForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectForbidden ", 403)
 }
 
 func (o *AddUserToProjectForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProjectForbidden ", 403)
 }
 
 func (o *AddUserToProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type AddUserToProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the add user to project default response
+func (o *AddUserToProjectDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this add user to project default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *AddUserToProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the add user to project default response
-func (o *AddUserToProjectDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *AddUserToProjectDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *AddUserToProjectDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/users][%d] addUserToProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *AddUserToProjectDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package ipampool
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListIPAMPoolsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list Ip a m pools o k response
-func (o *ListIPAMPoolsOK) Code() int {
-	return 200
-}
-
 func (o *ListIPAMPoolsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListIPAMPoolsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListIPAMPoolsOK) GetPayload() []*models.IPAMPool {
@@ -160,17 +152,12 @@ func (o *ListIPAMPoolsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list Ip a m pools unauthorized response
-func (o *ListIPAMPoolsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListIPAMPoolsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsUnauthorized ", 401)
 }
 
 func (o *ListIPAMPoolsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsUnauthorized ", 401)
 }
 
 func (o *ListIPAMPoolsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListIPAMPoolsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list Ip a m pools forbidden response
-func (o *ListIPAMPoolsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListIPAMPoolsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsForbidden ", 403)
 }
 
 func (o *ListIPAMPoolsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIpAMPoolsForbidden ", 403)
 }
 
 func (o *ListIPAMPoolsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListIPAMPoolsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list IP a m pools default response
+func (o *ListIPAMPoolsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list IP a m pools default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListIPAMPoolsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list IP a m pools default response
-func (o *ListIPAMPoolsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListIPAMPoolsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIPAMPools default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIPAMPools default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListIPAMPoolsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIPAMPools default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/ipampools][%d] listIPAMPools default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListIPAMPoolsDefault) GetPayload() *models.ErrorResponse {

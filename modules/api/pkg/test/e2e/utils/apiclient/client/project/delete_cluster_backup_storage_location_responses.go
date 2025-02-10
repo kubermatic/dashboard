@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteClusterBackupStorageLocationOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete cluster backup storage location o k response
-func (o *DeleteClusterBackupStorageLocationOK) Code() int {
-	return 200
-}
-
 func (o *DeleteClusterBackupStorageLocationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
 }
 
 func (o *DeleteClusterBackupStorageLocationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
 }
 
 func (o *DeleteClusterBackupStorageLocationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete cluster backup storage location unauthorized response
-func (o *DeleteClusterBackupStorageLocationUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete cluster backup storage location forbidden response
-func (o *DeleteClusterBackupStorageLocationForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *DeleteClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *DeleteClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteClusterBackupStorageLocationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete cluster backup storage location default response
+func (o *DeleteClusterBackupStorageLocationDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete cluster backup storage location default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteClusterBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete cluster backup storage location default response
-func (o *DeleteClusterBackupStorageLocationDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteClusterBackupStorageLocationDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

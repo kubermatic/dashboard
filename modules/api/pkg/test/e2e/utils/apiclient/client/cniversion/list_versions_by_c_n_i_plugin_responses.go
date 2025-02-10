@@ -6,7 +6,6 @@ package cniversion
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListVersionsByCNIPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list versions by c n i plugin o k response
-func (o *ListVersionsByCNIPluginOK) Code() int {
-	return 200
-}
-
 func (o *ListVersionsByCNIPluginOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVersionsByCNIPluginOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginOK  %+v", 200, o.Payload)
 }
 
 func (o *ListVersionsByCNIPluginOK) GetPayload() *models.CNIVersions {
@@ -162,17 +154,12 @@ func (o *ListVersionsByCNIPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list versions by c n i plugin unauthorized response
-func (o *ListVersionsByCNIPluginUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListVersionsByCNIPluginUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginUnauthorized ", 401)
 }
 
 func (o *ListVersionsByCNIPluginUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginUnauthorized ", 401)
 }
 
 func (o *ListVersionsByCNIPluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *ListVersionsByCNIPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list versions by c n i plugin forbidden response
-func (o *ListVersionsByCNIPluginForbidden) Code() int {
-	return 403
-}
-
 func (o *ListVersionsByCNIPluginForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginForbidden ", 403)
 }
 
 func (o *ListVersionsByCNIPluginForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPluginForbidden ", 403)
 }
 
 func (o *ListVersionsByCNIPluginForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type ListVersionsByCNIPluginDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list versions by c n i plugin default response
+func (o *ListVersionsByCNIPluginDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list versions by c n i plugin default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *ListVersionsByCNIPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list versions by c n i plugin default response
-func (o *ListVersionsByCNIPluginDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListVersionsByCNIPluginDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPlugin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPlugin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVersionsByCNIPluginDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPlugin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/cni/{cni_plugin_type}/versions][%d] listVersionsByCNIPlugin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListVersionsByCNIPluginDefault) GetPayload() *models.ErrorResponse {

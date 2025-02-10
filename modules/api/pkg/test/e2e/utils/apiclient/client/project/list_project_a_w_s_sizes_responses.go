@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectAWSSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project a w s sizes o k response
-func (o *ListProjectAWSSizesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectAWSSizesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAWSSizesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAWSSizesOK) GetPayload() models.AWSSizeList {
@@ -128,6 +120,11 @@ type ListProjectAWSSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project a w s sizes default response
+func (o *ListProjectAWSSizesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project a w s sizes default response has a 2xx status code
 func (o *ListProjectAWSSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectAWSSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project a w s sizes default response
-func (o *ListProjectAWSSizesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectAWSSizesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSizesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/aws/sizes][%d] listProjectAWSSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAWSSizesDefault) GetPayload() *models.ErrorResponse {

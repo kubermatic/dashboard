@@ -6,7 +6,6 @@ package anexia
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectAnexiaVlansOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project anexia vlans o k response
-func (o *ListProjectAnexiaVlansOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectAnexiaVlansOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlansOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlansOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAnexiaVlansOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlansOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlansOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAnexiaVlansOK) GetPayload() models.AnexiaVlanList {
@@ -128,6 +120,11 @@ type ListProjectAnexiaVlansDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project anexia vlans default response
+func (o *ListProjectAnexiaVlansDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project anexia vlans default response has a 2xx status code
 func (o *ListProjectAnexiaVlansDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectAnexiaVlansDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project anexia vlans default response
-func (o *ListProjectAnexiaVlansDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectAnexiaVlansDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlans default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlans default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAnexiaVlansDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlans default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/anexia/vlans][%d] listProjectAnexiaVlans default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAnexiaVlansDefault) GetPayload() *models.ErrorResponse {

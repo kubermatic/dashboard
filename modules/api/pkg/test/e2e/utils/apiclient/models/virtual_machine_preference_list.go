@@ -89,10 +89,6 @@ func (m *VirtualMachinePreferenceList) contextValidatePreferences(ctx context.Co
 
 		for i := 0; i < len(m.Preferences[k]); i++ {
 
-			if swag.IsZero(m.Preferences[k][i]) { // not required
-				return nil
-			}
-
 			if err := m.Preferences[k][i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("preferences" + "." + k + "." + strconv.Itoa(i))

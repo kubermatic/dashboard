@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch role o k response
-func (o *PatchRoleOK) Code() int {
-	return 200
-}
-
 func (o *PatchRoleOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchRoleOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchRoleOK) GetPayload() *models.Role {
@@ -162,17 +154,12 @@ func (o *PatchRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch role unauthorized response
-func (o *PatchRoleUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleUnauthorized ", 401)
 }
 
 func (o *PatchRoleUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleUnauthorized ", 401)
 }
 
 func (o *PatchRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch role forbidden response
-func (o *PatchRoleForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchRoleForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleForbidden ", 403)
 }
 
 func (o *PatchRoleForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRoleForbidden ", 403)
 }
 
 func (o *PatchRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch role default response
+func (o *PatchRoleDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch role default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch role default response
-func (o *PatchRoleDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchRoleDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchRoleDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles/{namespace}/{role_id}][%d] patchRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchRoleDefault) GetPayload() *models.ErrorResponse {

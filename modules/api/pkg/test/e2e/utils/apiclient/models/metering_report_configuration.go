@@ -88,10 +88,6 @@ func (m *MeteringReportConfiguration) ContextValidate(ctx context.Context, forma
 
 func (m *MeteringReportConfiguration) contextValidateFormat(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Format) { // not required
-		return nil
-	}
-
 	if err := m.Format.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("format")

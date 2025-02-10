@@ -6,7 +6,6 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreatePresetOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the create preset o k response
-func (o *CreatePresetOK) Code() int {
-	return 200
-}
-
 func (o *CreatePresetOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePresetOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePresetOK) GetPayload() *models.Preset {
@@ -162,17 +154,12 @@ func (o *CreatePresetUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create preset unauthorized response
-func (o *CreatePresetUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreatePresetUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetUnauthorized ", 401)
 }
 
 func (o *CreatePresetUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetUnauthorized ", 401)
 }
 
 func (o *CreatePresetUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreatePresetForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create preset forbidden response
-func (o *CreatePresetForbidden) Code() int {
-	return 403
-}
-
 func (o *CreatePresetForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetForbidden ", 403)
 }
 
 func (o *CreatePresetForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPresetForbidden ", 403)
 }
 
 func (o *CreatePresetForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreatePresetDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create preset default response
+func (o *CreatePresetDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create preset default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreatePresetDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create preset default response
-func (o *CreatePresetDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreatePresetDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPreset default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPreset default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePresetDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPreset default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/providers/{provider_name}/presets][%d] createPreset default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePresetDefault) GetPayload() *models.ErrorResponse {

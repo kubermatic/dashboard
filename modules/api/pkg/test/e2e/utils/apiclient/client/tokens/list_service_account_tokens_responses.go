@@ -6,7 +6,6 @@ package tokens
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListServiceAccountTokensOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list service account tokens o k response
-func (o *ListServiceAccountTokensOK) Code() int {
-	return 200
-}
-
 func (o *ListServiceAccountTokensOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensOK  %+v", 200, o.Payload)
 }
 
 func (o *ListServiceAccountTokensOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensOK  %+v", 200, o.Payload)
 }
 
 func (o *ListServiceAccountTokensOK) GetPayload() []*models.PublicServiceAccountToken {
@@ -160,17 +152,12 @@ func (o *ListServiceAccountTokensUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list service account tokens unauthorized response
-func (o *ListServiceAccountTokensUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListServiceAccountTokensUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensUnauthorized ", 401)
 }
 
 func (o *ListServiceAccountTokensUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensUnauthorized ", 401)
 }
 
 func (o *ListServiceAccountTokensUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListServiceAccountTokensForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list service account tokens forbidden response
-func (o *ListServiceAccountTokensForbidden) Code() int {
-	return 403
-}
-
 func (o *ListServiceAccountTokensForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensForbidden ", 403)
 }
 
 func (o *ListServiceAccountTokensForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokensForbidden ", 403)
 }
 
 func (o *ListServiceAccountTokensForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListServiceAccountTokensDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list service account tokens default response
+func (o *ListServiceAccountTokensDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list service account tokens default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListServiceAccountTokensDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list service account tokens default response
-func (o *ListServiceAccountTokensDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListServiceAccountTokensDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokens default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokens default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListServiceAccountTokensDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokens default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}/tokens][%d] listServiceAccountTokens default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListServiceAccountTokensDefault) GetPayload() *models.ErrorResponse {

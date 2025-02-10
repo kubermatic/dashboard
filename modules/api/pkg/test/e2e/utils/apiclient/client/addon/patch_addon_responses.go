@@ -6,7 +6,6 @@ package addon
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchAddonOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch addon o k response
-func (o *PatchAddonOK) Code() int {
-	return 200
-}
-
 func (o *PatchAddonOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchAddonOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchAddonOK) GetPayload() *models.Addon {
@@ -162,17 +154,12 @@ func (o *PatchAddonUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch addon unauthorized response
-func (o *PatchAddonUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchAddonUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonUnauthorized ", 401)
 }
 
 func (o *PatchAddonUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonUnauthorized ", 401)
 }
 
 func (o *PatchAddonUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchAddonForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch addon forbidden response
-func (o *PatchAddonForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchAddonForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonForbidden ", 403)
 }
 
 func (o *PatchAddonForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddonForbidden ", 403)
 }
 
 func (o *PatchAddonForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchAddonDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch addon default response
+func (o *PatchAddonDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch addon default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchAddonDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch addon default response
-func (o *PatchAddonDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchAddonDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddon default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddon default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchAddonDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddon default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/addons/{addon_id}][%d] patchAddon default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchAddonDefault) GetPayload() *models.ErrorResponse {

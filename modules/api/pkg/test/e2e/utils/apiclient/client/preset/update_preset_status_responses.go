@@ -7,7 +7,6 @@ package preset
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -94,17 +93,12 @@ func (o *UpdatePresetStatusOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the update preset status o k response
-func (o *UpdatePresetStatusOK) Code() int {
-	return 200
-}
-
 func (o *UpdatePresetStatusOK) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusOK", 200)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusOK ", 200)
 }
 
 func (o *UpdatePresetStatusOK) String() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusOK", 200)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusOK ", 200)
 }
 
 func (o *UpdatePresetStatusOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -150,17 +144,12 @@ func (o *UpdatePresetStatusUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the update preset status unauthorized response
-func (o *UpdatePresetStatusUnauthorized) Code() int {
-	return 401
-}
-
 func (o *UpdatePresetStatusUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusUnauthorized ", 401)
 }
 
 func (o *UpdatePresetStatusUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusUnauthorized ", 401)
 }
 
 func (o *UpdatePresetStatusUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,17 +195,12 @@ func (o *UpdatePresetStatusForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the update preset status forbidden response
-func (o *UpdatePresetStatusForbidden) Code() int {
-	return 403
-}
-
 func (o *UpdatePresetStatusForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusForbidden ", 403)
 }
 
 func (o *UpdatePresetStatusForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatusForbidden ", 403)
 }
 
 func (o *UpdatePresetStatusForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -240,6 +224,11 @@ type UpdatePresetStatusDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the update preset status default response
+func (o *UpdatePresetStatusDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this update preset status default response has a 2xx status code
@@ -267,19 +256,12 @@ func (o *UpdatePresetStatusDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the update preset status default response
-func (o *UpdatePresetStatusDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *UpdatePresetStatusDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatus default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatus default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdatePresetStatusDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatus default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v2/presets/{preset_name}/status][%d] updatePresetStatus default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdatePresetStatusDefault) GetPayload() *models.ErrorResponse {
