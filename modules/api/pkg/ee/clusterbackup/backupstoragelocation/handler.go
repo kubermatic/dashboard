@@ -45,6 +45,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	clusterbackupresources "k8c.io/kubermatic/v2/pkg/ee/cluster-backup/user-cluster/velero-controller/resources"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -57,14 +58,14 @@ import (
 )
 
 const (
-	supportedVeleroPlugin    = "aws"
-	accessKeyTemplate        = "awsAccessKeyId"
-	secretAccessKeyTemplate  = "awsSecretAccessKey"
-	clusterIdLabelKey        = "cluster-id"
-	bslRegion                = "region"
-	bslKind                  = "BackupStorageLocation"
-	CBSL                     = "cbsl"
-	backupSyncPeriod         = 30 * time.Second
+	supportedVeleroPlugin   = "aws"
+	accessKeyTemplate       = "awsAccessKeyId"
+	secretAccessKeyTemplate = "awsSecretAccessKey"
+	clusterIdLabelKey       = "cluster-id"
+	bslRegion               = "region"
+	bslKind                 = "BackupStorageLocation"
+	CBSL                    = "cbsl"
+	backupSyncPeriod        = 30 * time.Second
 )
 
 var credentialsTemplate string = `[default]
@@ -124,7 +125,7 @@ func validateUser(ctx context.Context, userInfoGetter provider.UserInfoGetter, p
 
 	// Only KKP admins and project owners/editors are allowed to perform this operation.
 	if !(userInfo.IsAdmin || userInfo.Roles.HasAny("editors", "owners")) {
-		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesnt have privileges to perform this action. Please contact your administrator.", userInfo.Email))
+		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have privileges to perform this action. Please contact your administrator.", userInfo.Email))
 	}
 	return nil
 }
@@ -407,7 +408,7 @@ func DeleteBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter 
 		return nil, err
 	}
 
-	if req.BSLName == defaultBSLName {
+	if req.BSLName == clusterbackupresources.DefaultBSLName {
 		return nil, fmt.Errorf("cannot delete a default BSL from the cluster")
 	}
 

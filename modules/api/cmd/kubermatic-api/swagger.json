@@ -29109,8 +29109,8 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "BackupStorageLocationOverview": {
-      "description": "BackupStorageLocationOverview is the object representing a Backup Storage Location overview for a list",
       "type": "object",
+      "title": "BackupStorageLocationOverview is the object representing a backup storage location with essential fields only for list views.",
       "properties": {
         "cbslName": {
           "type": "string",
