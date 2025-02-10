@@ -6,7 +6,6 @@ package nutanix
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectNutanixCategoriesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project nutanix categories o k response
-func (o *ListProjectNutanixCategoriesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectNutanixCategoriesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategoriesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategoriesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectNutanixCategoriesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategoriesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategoriesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectNutanixCategoriesOK) GetPayload() models.NutanixCategoryList {
@@ -128,6 +120,11 @@ type ListProjectNutanixCategoriesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project nutanix categories default response
+func (o *ListProjectNutanixCategoriesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project nutanix categories default response has a 2xx status code
 func (o *ListProjectNutanixCategoriesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectNutanixCategoriesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project nutanix categories default response
-func (o *ListProjectNutanixCategoriesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectNutanixCategoriesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategories default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategories default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectNutanixCategoriesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategories default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories][%d] listProjectNutanixCategories default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectNutanixCategoriesDefault) GetPayload() *models.ErrorResponse {

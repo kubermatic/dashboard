@@ -6,7 +6,6 @@ package metric
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListNodeDeploymentMetricsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list node deployment metrics o k response
-func (o *ListNodeDeploymentMetricsOK) Code() int {
-	return 200
-}
-
 func (o *ListNodeDeploymentMetricsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNodeDeploymentMetricsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNodeDeploymentMetricsOK) GetPayload() []*models.NodeMetric {
@@ -160,17 +152,12 @@ func (o *ListNodeDeploymentMetricsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list node deployment metrics unauthorized response
-func (o *ListNodeDeploymentMetricsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListNodeDeploymentMetricsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsUnauthorized ", 401)
 }
 
 func (o *ListNodeDeploymentMetricsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsUnauthorized ", 401)
 }
 
 func (o *ListNodeDeploymentMetricsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListNodeDeploymentMetricsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list node deployment metrics forbidden response
-func (o *ListNodeDeploymentMetricsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListNodeDeploymentMetricsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsForbidden ", 403)
 }
 
 func (o *ListNodeDeploymentMetricsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetricsForbidden ", 403)
 }
 
 func (o *ListNodeDeploymentMetricsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListNodeDeploymentMetricsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list node deployment metrics default response
+func (o *ListNodeDeploymentMetricsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list node deployment metrics default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListNodeDeploymentMetricsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list node deployment metrics default response
-func (o *ListNodeDeploymentMetricsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListNodeDeploymentMetricsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetrics default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetrics default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNodeDeploymentMetricsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetrics default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}/nodes/metrics][%d] listNodeDeploymentMetrics default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNodeDeploymentMetricsDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListProjectsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list projects o k response
-func (o *ListProjectsOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectsOK) GetPayload() []*models.Project {
@@ -160,17 +152,12 @@ func (o *ListProjectsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list projects unauthorized response
-func (o *ListProjectsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListProjectsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsUnauthorized ", 401)
 }
 
 func (o *ListProjectsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsUnauthorized ", 401)
 }
 
 func (o *ListProjectsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListProjectsConflict) IsCode(code int) bool {
 	return code == 409
 }
 
-// Code gets the status code for the list projects conflict response
-func (o *ListProjectsConflict) Code() int {
-	return 409
-}
-
 func (o *ListProjectsConflict) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsConflict", 409)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsConflict ", 409)
 }
 
 func (o *ListProjectsConflict) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsConflict", 409)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjectsConflict ", 409)
 }
 
 func (o *ListProjectsConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListProjectsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list projects default response
+func (o *ListProjectsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list projects default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListProjectsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list projects default response
-func (o *ListProjectsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjects default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjects default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjects default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects][%d] listProjects default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectsDefault) GetPayload() *models.ErrorResponse {

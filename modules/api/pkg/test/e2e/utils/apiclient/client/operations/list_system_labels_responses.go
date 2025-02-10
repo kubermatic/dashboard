@@ -6,7 +6,6 @@ package operations
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListSystemLabelsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list system labels o k response
-func (o *ListSystemLabelsOK) Code() int {
-	return 200
-}
-
 func (o *ListSystemLabelsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListSystemLabelsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListSystemLabelsOK) GetPayload() models.ResourceLabelMap {
@@ -160,17 +152,12 @@ func (o *ListSystemLabelsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list system labels unauthorized response
-func (o *ListSystemLabelsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListSystemLabelsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsUnauthorized ", 401)
 }
 
 func (o *ListSystemLabelsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsUnauthorized ", 401)
 }
 
 func (o *ListSystemLabelsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListSystemLabelsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list system labels forbidden response
-func (o *ListSystemLabelsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListSystemLabelsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsForbidden ", 403)
 }
 
 func (o *ListSystemLabelsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabelsForbidden ", 403)
 }
 
 func (o *ListSystemLabelsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListSystemLabelsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list system labels default response
+func (o *ListSystemLabelsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list system labels default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListSystemLabelsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list system labels default response
-func (o *ListSystemLabelsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListSystemLabelsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabels default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabels default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListSystemLabelsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabels default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/labels/system][%d] listSystemLabels default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListSystemLabelsDefault) GetPayload() *models.ErrorResponse {

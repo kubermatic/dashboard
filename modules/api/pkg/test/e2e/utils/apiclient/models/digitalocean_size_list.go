@@ -119,11 +119,6 @@ func (m *DigitaloceanSizeList) contextValidateOptimized(ctx context.Context, for
 	for i := 0; i < len(m.Optimized); i++ {
 
 		if m.Optimized[i] != nil {
-
-			if swag.IsZero(m.Optimized[i]) { // not required
-				return nil
-			}
-
 			if err := m.Optimized[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("optimized" + "." + strconv.Itoa(i))
@@ -144,11 +139,6 @@ func (m *DigitaloceanSizeList) contextValidateStandard(ctx context.Context, form
 	for i := 0; i < len(m.Standard); i++ {
 
 		if m.Standard[i] != nil {
-
-			if swag.IsZero(m.Standard[i]) { // not required
-				return nil
-			}
-
 			if err := m.Standard[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("standard" + "." + strconv.Itoa(i))

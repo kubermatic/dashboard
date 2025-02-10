@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetExternalClusterMachineDeploymentUpgradesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get external cluster machine deployment upgrades o k response
-func (o *GetExternalClusterMachineDeploymentUpgradesOK) Code() int {
-	return 200
-}
-
 func (o *GetExternalClusterMachineDeploymentUpgradesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesOK) GetPayload() []*models.MasterVersion {
@@ -160,17 +152,12 @@ func (o *GetExternalClusterMachineDeploymentUpgradesUnauthorized) IsCode(code in
 	return code == 401
 }
 
-// Code gets the status code for the get external cluster machine deployment upgrades unauthorized response
-func (o *GetExternalClusterMachineDeploymentUpgradesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetExternalClusterMachineDeploymentUpgradesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesUnauthorized ", 401)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesUnauthorized ", 401)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetExternalClusterMachineDeploymentUpgradesForbidden) IsCode(code int) 
 	return code == 403
 }
 
-// Code gets the status code for the get external cluster machine deployment upgrades forbidden response
-func (o *GetExternalClusterMachineDeploymentUpgradesForbidden) Code() int {
-	return 403
-}
-
 func (o *GetExternalClusterMachineDeploymentUpgradesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesForbidden ", 403)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgradesForbidden ", 403)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetExternalClusterMachineDeploymentUpgradesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get external cluster machine deployment upgrades default response
+func (o *GetExternalClusterMachineDeploymentUpgradesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get external cluster machine deployment upgrades default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetExternalClusterMachineDeploymentUpgradesDefault) IsCode(code int) bo
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get external cluster machine deployment upgrades default response
-func (o *GetExternalClusterMachineDeploymentUpgradesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetExternalClusterMachineDeploymentUpgradesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgrades default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgrades default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgrades default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}/upgrades][%d] getExternalClusterMachineDeploymentUpgrades default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetExternalClusterMachineDeploymentUpgradesDefault) GetPayload() *models.ErrorResponse {

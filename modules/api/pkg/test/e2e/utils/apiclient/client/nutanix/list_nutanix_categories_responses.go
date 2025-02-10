@@ -6,7 +6,6 @@ package nutanix
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListNutanixCategoriesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list nutanix categories o k response
-func (o *ListNutanixCategoriesOK) Code() int {
-	return 200
-}
-
 func (o *ListNutanixCategoriesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategoriesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategoriesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixCategoriesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategoriesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategoriesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixCategoriesOK) GetPayload() models.NutanixCategoryList {
@@ -128,6 +120,11 @@ type ListNutanixCategoriesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list nutanix categories default response
+func (o *ListNutanixCategoriesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list nutanix categories default response has a 2xx status code
 func (o *ListNutanixCategoriesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListNutanixCategoriesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list nutanix categories default response
-func (o *ListNutanixCategoriesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListNutanixCategoriesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategories default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategories default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixCategoriesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategories default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/categories][%d] listNutanixCategories default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixCategoriesDefault) GetPayload() *models.ErrorResponse {

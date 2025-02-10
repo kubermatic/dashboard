@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListClusterTemplatesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list cluster templates o k response
-func (o *ListClusterTemplatesOK) Code() int {
-	return 200
-}
-
 func (o *ListClusterTemplatesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClusterTemplatesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClusterTemplatesOK) GetPayload() models.ClusterTemplateList {
@@ -160,17 +152,12 @@ func (o *ListClusterTemplatesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list cluster templates unauthorized response
-func (o *ListClusterTemplatesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListClusterTemplatesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesUnauthorized ", 401)
 }
 
 func (o *ListClusterTemplatesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesUnauthorized ", 401)
 }
 
 func (o *ListClusterTemplatesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListClusterTemplatesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list cluster templates forbidden response
-func (o *ListClusterTemplatesForbidden) Code() int {
-	return 403
-}
-
 func (o *ListClusterTemplatesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesForbidden ", 403)
 }
 
 func (o *ListClusterTemplatesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplatesForbidden ", 403)
 }
 
 func (o *ListClusterTemplatesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListClusterTemplatesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list cluster templates default response
+func (o *ListClusterTemplatesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list cluster templates default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListClusterTemplatesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list cluster templates default response
-func (o *ListClusterTemplatesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListClusterTemplatesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplates default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplates default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClusterTemplatesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplates default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clustertemplates][%d] listClusterTemplates default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClusterTemplatesDefault) GetPayload() *models.ErrorResponse {

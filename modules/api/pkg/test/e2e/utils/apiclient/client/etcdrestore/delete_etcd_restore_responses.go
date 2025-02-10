@@ -6,7 +6,6 @@ package etcdrestore
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -98,17 +97,12 @@ func (o *DeleteEtcdRestoreOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete etcd restore o k response
-func (o *DeleteEtcdRestoreOK) Code() int {
-	return 200
-}
-
 func (o *DeleteEtcdRestoreOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreOK ", 200)
 }
 
 func (o *DeleteEtcdRestoreOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreOK ", 200)
 }
 
 func (o *DeleteEtcdRestoreOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -154,17 +148,12 @@ func (o *DeleteEtcdRestoreUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete etcd restore unauthorized response
-func (o *DeleteEtcdRestoreUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteEtcdRestoreUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreUnauthorized ", 401)
 }
 
 func (o *DeleteEtcdRestoreUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreUnauthorized ", 401)
 }
 
 func (o *DeleteEtcdRestoreUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -210,17 +199,12 @@ func (o *DeleteEtcdRestoreForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete etcd restore forbidden response
-func (o *DeleteEtcdRestoreForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteEtcdRestoreForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreForbidden ", 403)
 }
 
 func (o *DeleteEtcdRestoreForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreForbidden ", 403)
 }
 
 func (o *DeleteEtcdRestoreForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,19 +251,12 @@ func (o *DeleteEtcdRestoreConflict) IsCode(code int) bool {
 	return code == 409
 }
 
-// Code gets the status code for the delete etcd restore conflict response
-func (o *DeleteEtcdRestoreConflict) Code() int {
-	return 409
-}
-
 func (o *DeleteEtcdRestoreConflict) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreConflict %s", 409, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreConflict  %+v", 409, o.Payload)
 }
 
 func (o *DeleteEtcdRestoreConflict) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreConflict %s", 409, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestoreConflict  %+v", 409, o.Payload)
 }
 
 func (o *DeleteEtcdRestoreConflict) GetPayload() *models.ErrorResponse {
@@ -316,6 +293,11 @@ type DeleteEtcdRestoreDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the delete etcd restore default response
+func (o *DeleteEtcdRestoreDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this delete etcd restore default response has a 2xx status code
 func (o *DeleteEtcdRestoreDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -341,19 +323,12 @@ func (o *DeleteEtcdRestoreDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete etcd restore default response
-func (o *DeleteEtcdRestoreDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteEtcdRestoreDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestore default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestore default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteEtcdRestoreDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestore default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/etcdrestores/{er_name}][%d] deleteEtcdRestore default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteEtcdRestoreDefault) GetPayload() *models.ErrorResponse {

@@ -102,11 +102,6 @@ func (m *ApplicationSource) ContextValidate(ctx context.Context, formats strfmt.
 func (m *ApplicationSource) contextValidateGit(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Git != nil {
-
-		if swag.IsZero(m.Git) { // not required
-			return nil
-		}
-
 		if err := m.Git.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("git")
@@ -123,11 +118,6 @@ func (m *ApplicationSource) contextValidateGit(ctx context.Context, formats strf
 func (m *ApplicationSource) contextValidateHelm(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Helm != nil {
-
-		if swag.IsZero(m.Helm) { // not required
-			return nil
-		}
-
 		if err := m.Helm.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("helm")

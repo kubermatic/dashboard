@@ -107,11 +107,6 @@ func (m *NetworkPolicyPort) ContextValidate(ctx context.Context, formats strfmt.
 func (m *NetworkPolicyPort) contextValidatePort(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Port != nil {
-
-		if swag.IsZero(m.Port) { // not required
-			return nil
-		}
-
 		if err := m.Port.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("port")
@@ -126,10 +121,6 @@ func (m *NetworkPolicyPort) contextValidatePort(ctx context.Context, formats str
 }
 
 func (m *NetworkPolicyPort) contextValidateProtocol(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Protocol) { // not required
-		return nil
-	}
 
 	if err := m.Protocol.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

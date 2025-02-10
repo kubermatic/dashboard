@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetClusterOidcOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get cluster oidc o k response
-func (o *GetClusterOidcOK) Code() int {
-	return 200
-}
-
 func (o *GetClusterOidcOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterOidcOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcOK  %+v", 200, o.Payload)
 }
 
 func (o *GetClusterOidcOK) GetPayload() *models.OIDCSpec {
@@ -162,17 +154,12 @@ func (o *GetClusterOidcUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get cluster oidc unauthorized response
-func (o *GetClusterOidcUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetClusterOidcUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcUnauthorized ", 401)
 }
 
 func (o *GetClusterOidcUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcUnauthorized ", 401)
 }
 
 func (o *GetClusterOidcUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetClusterOidcForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get cluster oidc forbidden response
-func (o *GetClusterOidcForbidden) Code() int {
-	return 403
-}
-
 func (o *GetClusterOidcForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcForbidden ", 403)
 }
 
 func (o *GetClusterOidcForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidcForbidden ", 403)
 }
 
 func (o *GetClusterOidcForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetClusterOidcDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get cluster oidc default response
+func (o *GetClusterOidcDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get cluster oidc default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetClusterOidcDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get cluster oidc default response
-func (o *GetClusterOidcDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetClusterOidcDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidc default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidc default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterOidcDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidc default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/oidc][%d] getClusterOidc default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetClusterOidcDefault) GetPayload() *models.ErrorResponse {

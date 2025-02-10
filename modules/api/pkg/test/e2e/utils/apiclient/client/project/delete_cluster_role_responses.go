@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteClusterRoleOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete cluster role o k response
-func (o *DeleteClusterRoleOK) Code() int {
-	return 200
-}
-
 func (o *DeleteClusterRoleOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleOK ", 200)
 }
 
 func (o *DeleteClusterRoleOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleOK ", 200)
 }
 
 func (o *DeleteClusterRoleOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteClusterRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete cluster role unauthorized response
-func (o *DeleteClusterRoleUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteClusterRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleUnauthorized ", 401)
 }
 
 func (o *DeleteClusterRoleUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleUnauthorized ", 401)
 }
 
 func (o *DeleteClusterRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteClusterRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete cluster role forbidden response
-func (o *DeleteClusterRoleForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteClusterRoleForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleForbidden ", 403)
 }
 
 func (o *DeleteClusterRoleForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRoleForbidden ", 403)
 }
 
 func (o *DeleteClusterRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteClusterRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete cluster role default response
+func (o *DeleteClusterRoleDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete cluster role default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteClusterRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete cluster role default response
-func (o *DeleteClusterRoleDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteClusterRoleDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterRoleDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/clusterroles/{role_id}][%d] deleteClusterRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterRoleDefault) GetPayload() *models.ErrorResponse {

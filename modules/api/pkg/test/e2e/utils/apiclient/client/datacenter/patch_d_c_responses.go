@@ -6,7 +6,6 @@ package datacenter
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchDCOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch d c o k response
-func (o *PatchDCOK) Code() int {
-	return 200
-}
-
 func (o *PatchDCOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchDCOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchDCOK) GetPayload() *models.Datacenter {
@@ -162,17 +154,12 @@ func (o *PatchDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch d c unauthorized response
-func (o *PatchDCUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchDCUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCUnauthorized ", 401)
 }
 
 func (o *PatchDCUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCUnauthorized ", 401)
 }
 
 func (o *PatchDCUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch d c forbidden response
-func (o *PatchDCForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchDCForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCForbidden ", 403)
 }
 
 func (o *PatchDCForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDCForbidden ", 403)
 }
 
 func (o *PatchDCForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchDCDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch d c default response
+func (o *PatchDCDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch d c default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch d c default response
-func (o *PatchDCDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchDCDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDC default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDC default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchDCDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDC default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/seed/{seed_name}/dc/{dc}][%d] patchDC default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchDCDefault) GetPayload() *models.ErrorResponse {

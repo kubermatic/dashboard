@@ -146,10 +146,6 @@ func (m *BackupStorageLocationSpec) ContextValidate(ctx context.Context, formats
 
 func (m *BackupStorageLocationSpec) contextValidateAccessMode(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.AccessMode) { // not required
-		return nil
-	}
-
 	if err := m.AccessMode.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("accessMode")
@@ -165,11 +161,6 @@ func (m *BackupStorageLocationSpec) contextValidateAccessMode(ctx context.Contex
 func (m *BackupStorageLocationSpec) contextValidateCredential(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Credential != nil {
-
-		if swag.IsZero(m.Credential) { // not required
-			return nil
-		}
-
 		if err := m.Credential.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credential")
@@ -186,11 +177,6 @@ func (m *BackupStorageLocationSpec) contextValidateCredential(ctx context.Contex
 func (m *BackupStorageLocationSpec) contextValidateObjectStorage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ObjectStorage != nil {
-
-		if swag.IsZero(m.ObjectStorage) { // not required
-			return nil
-		}
-
 		if err := m.ObjectStorage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("objectStorage")

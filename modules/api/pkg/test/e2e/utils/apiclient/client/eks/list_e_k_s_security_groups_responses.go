@@ -6,7 +6,6 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListEKSSecurityGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list e k s security groups o k response
-func (o *ListEKSSecurityGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListEKSSecurityGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSSecurityGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSSecurityGroupsOK) GetPayload() models.EKSSecurityGroupList {
@@ -160,17 +152,12 @@ func (o *ListEKSSecurityGroupsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list e k s security groups unauthorized response
-func (o *ListEKSSecurityGroupsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListEKSSecurityGroupsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsUnauthorized ", 401)
 }
 
 func (o *ListEKSSecurityGroupsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsUnauthorized ", 401)
 }
 
 func (o *ListEKSSecurityGroupsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListEKSSecurityGroupsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list e k s security groups forbidden response
-func (o *ListEKSSecurityGroupsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListEKSSecurityGroupsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsForbidden ", 403)
 }
 
 func (o *ListEKSSecurityGroupsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroupsForbidden ", 403)
 }
 
 func (o *ListEKSSecurityGroupsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListEKSSecurityGroupsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list e k s security groups default response
+func (o *ListEKSSecurityGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s security groups default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListEKSSecurityGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list e k s security groups default response
-func (o *ListEKSSecurityGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListEKSSecurityGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSSecurityGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/eks/securitygroups][%d] listEKSSecurityGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSSecurityGroupsDefault) GetPayload() *models.ErrorResponse {

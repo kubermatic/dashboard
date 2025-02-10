@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetBackupDestinationNamesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get backup destination names o k response
-func (o *GetBackupDestinationNamesOK) Code() int {
-	return 200
-}
-
 func (o *GetBackupDestinationNamesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetBackupDestinationNamesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesOK  %+v", 200, o.Payload)
 }
 
 func (o *GetBackupDestinationNamesOK) GetPayload() models.BackupDestinationNames {
@@ -160,17 +152,12 @@ func (o *GetBackupDestinationNamesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get backup destination names unauthorized response
-func (o *GetBackupDestinationNamesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetBackupDestinationNamesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesUnauthorized ", 401)
 }
 
 func (o *GetBackupDestinationNamesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesUnauthorized ", 401)
 }
 
 func (o *GetBackupDestinationNamesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetBackupDestinationNamesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get backup destination names forbidden response
-func (o *GetBackupDestinationNamesForbidden) Code() int {
-	return 403
-}
-
 func (o *GetBackupDestinationNamesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesForbidden ", 403)
 }
 
 func (o *GetBackupDestinationNamesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNamesForbidden ", 403)
 }
 
 func (o *GetBackupDestinationNamesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetBackupDestinationNamesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get backup destination names default response
+func (o *GetBackupDestinationNamesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get backup destination names default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetBackupDestinationNamesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get backup destination names default response
-func (o *GetBackupDestinationNamesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetBackupDestinationNamesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNames default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNames default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetBackupDestinationNamesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNames default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/backupdestinations][%d] getBackupDestinationNames default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetBackupDestinationNamesDefault) GetPayload() *models.ErrorResponse {

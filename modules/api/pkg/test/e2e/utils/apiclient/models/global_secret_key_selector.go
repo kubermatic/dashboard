@@ -46,16 +46,6 @@ func (m GlobalSecretKeySelector) MarshalJSON() ([]byte, error) {
 
 // Validate validates this global secret key selector
 func (m *GlobalSecretKeySelector) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	// validation for a type composition with GlobalObjectKeySelector
-	if err := m.GlobalObjectKeySelector.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }
 

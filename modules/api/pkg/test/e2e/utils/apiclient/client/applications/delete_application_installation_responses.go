@@ -6,7 +6,6 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteApplicationInstallationOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete application installation o k response
-func (o *DeleteApplicationInstallationOK) Code() int {
-	return 200
-}
-
 func (o *DeleteApplicationInstallationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationOK ", 200)
 }
 
 func (o *DeleteApplicationInstallationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationOK ", 200)
 }
 
 func (o *DeleteApplicationInstallationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteApplicationInstallationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete application installation unauthorized response
-func (o *DeleteApplicationInstallationUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteApplicationInstallationUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationUnauthorized ", 401)
 }
 
 func (o *DeleteApplicationInstallationUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationUnauthorized ", 401)
 }
 
 func (o *DeleteApplicationInstallationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteApplicationInstallationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete application installation forbidden response
-func (o *DeleteApplicationInstallationForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteApplicationInstallationForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationForbidden ", 403)
 }
 
 func (o *DeleteApplicationInstallationForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallationForbidden ", 403)
 }
 
 func (o *DeleteApplicationInstallationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteApplicationInstallationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete application installation default response
+func (o *DeleteApplicationInstallationDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete application installation default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteApplicationInstallationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete application installation default response
-func (o *DeleteApplicationInstallationDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteApplicationInstallationDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteApplicationInstallationDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusters/{cluster_id}/applicationinstallations/{namespace}/{appinstall_name}][%d] deleteApplicationInstallation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteApplicationInstallationDefault) GetPayload() *models.ErrorResponse {

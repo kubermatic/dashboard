@@ -6,7 +6,6 @@ package digitalocean
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectDigitaloceanSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project digitalocean sizes o k response
-func (o *ListProjectDigitaloceanSizesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectDigitaloceanSizesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectDigitaloceanSizesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectDigitaloceanSizesOK) GetPayload() *models.DigitaloceanSizeList {
@@ -130,6 +122,11 @@ type ListProjectDigitaloceanSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project digitalocean sizes default response
+func (o *ListProjectDigitaloceanSizesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project digitalocean sizes default response has a 2xx status code
 func (o *ListProjectDigitaloceanSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListProjectDigitaloceanSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project digitalocean sizes default response
-func (o *ListProjectDigitaloceanSizesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectDigitaloceanSizesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectDigitaloceanSizesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/digitalocean/sizes][%d] listProjectDigitaloceanSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectDigitaloceanSizesDefault) GetPayload() *models.ErrorResponse {

@@ -156,11 +156,6 @@ func (m *ForEachMutation) contextValidateContext(ctx context.Context, formats st
 	for i := 0; i < len(m.Context); i++ {
 
 		if m.Context[i] != nil {
-
-			if swag.IsZero(m.Context[i]) { // not required
-				return nil
-			}
-
 			if err := m.Context[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("context" + "." + strconv.Itoa(i))
@@ -178,10 +173,6 @@ func (m *ForEachMutation) contextValidateContext(ctx context.Context, formats st
 
 func (m *ForEachMutation) contextValidateOrder(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Order) { // not required
-		return nil
-	}
-
 	if err := m.Order.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("order")
@@ -197,11 +188,6 @@ func (m *ForEachMutation) contextValidateOrder(ctx context.Context, formats strf
 func (m *ForEachMutation) contextValidatePreconditions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Preconditions != nil {
-
-		if swag.IsZero(m.Preconditions) { // not required
-			return nil
-		}
-
 		if err := m.Preconditions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("preconditions")

@@ -82,11 +82,6 @@ func (m *Sync) contextValidateSyncOnly(ctx context.Context, formats strfmt.Regis
 	for i := 0; i < len(m.SyncOnly); i++ {
 
 		if m.SyncOnly[i] != nil {
-
-			if swag.IsZero(m.SyncOnly[i]) { // not required
-				return nil
-			}
-
 			if err := m.SyncOnly[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("syncOnly" + "." + strconv.Itoa(i))

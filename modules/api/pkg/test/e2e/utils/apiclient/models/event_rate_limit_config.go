@@ -164,11 +164,6 @@ func (m *EventRateLimitConfig) ContextValidate(ctx context.Context, formats strf
 func (m *EventRateLimitConfig) contextValidateNamespace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Namespace != nil {
-
-		if swag.IsZero(m.Namespace) { // not required
-			return nil
-		}
-
 		if err := m.Namespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespace")
@@ -185,11 +180,6 @@ func (m *EventRateLimitConfig) contextValidateNamespace(ctx context.Context, for
 func (m *EventRateLimitConfig) contextValidateServer(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Server != nil {
-
-		if swag.IsZero(m.Server) { // not required
-			return nil
-		}
-
 		if err := m.Server.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("server")
@@ -206,11 +196,6 @@ func (m *EventRateLimitConfig) contextValidateServer(ctx context.Context, format
 func (m *EventRateLimitConfig) contextValidateSourceAndObject(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.SourceAndObject != nil {
-
-		if swag.IsZero(m.SourceAndObject) { // not required
-			return nil
-		}
-
 		if err := m.SourceAndObject.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("sourceAndObject")
@@ -227,11 +212,6 @@ func (m *EventRateLimitConfig) contextValidateSourceAndObject(ctx context.Contex
 func (m *EventRateLimitConfig) contextValidateUser(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.User != nil {
-
-		if swag.IsZero(m.User) { // not required
-			return nil
-		}
-
 		if err := m.User.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("user")

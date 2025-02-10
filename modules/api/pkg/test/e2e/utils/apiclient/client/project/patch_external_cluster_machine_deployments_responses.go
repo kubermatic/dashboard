@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *PatchExternalClusterMachineDeploymentsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch external cluster machine deployments o k response
-func (o *PatchExternalClusterMachineDeploymentsOK) Code() int {
-	return 200
-}
-
 func (o *PatchExternalClusterMachineDeploymentsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsOK) GetPayload() *models.ExternalClusterMachineDeployment {
@@ -162,17 +154,12 @@ func (o *PatchExternalClusterMachineDeploymentsUnauthorized) IsCode(code int) bo
 	return code == 401
 }
 
-// Code gets the status code for the patch external cluster machine deployments unauthorized response
-func (o *PatchExternalClusterMachineDeploymentsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchExternalClusterMachineDeploymentsUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsUnauthorized ", 401)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsUnauthorized ", 401)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *PatchExternalClusterMachineDeploymentsForbidden) IsCode(code int) bool 
 	return code == 403
 }
 
-// Code gets the status code for the patch external cluster machine deployments forbidden response
-func (o *PatchExternalClusterMachineDeploymentsForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchExternalClusterMachineDeploymentsForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsForbidden ", 403)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeploymentsForbidden ", 403)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type PatchExternalClusterMachineDeploymentsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch external cluster machine deployments default response
+func (o *PatchExternalClusterMachineDeploymentsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch external cluster machine deployments default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *PatchExternalClusterMachineDeploymentsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch external cluster machine deployments default response
-func (o *PatchExternalClusterMachineDeploymentsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchExternalClusterMachineDeploymentsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeployments default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeployments default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeployments default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] patchExternalClusterMachineDeployments default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchExternalClusterMachineDeploymentsDefault) GetPayload() *models.ErrorResponse {

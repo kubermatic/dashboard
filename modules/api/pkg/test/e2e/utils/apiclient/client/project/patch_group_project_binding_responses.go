@@ -7,7 +7,6 @@ package project
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -95,19 +94,12 @@ func (o *PatchGroupProjectBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch group project binding o k response
-func (o *PatchGroupProjectBindingOK) Code() int {
-	return 200
-}
-
 func (o *PatchGroupProjectBindingOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchGroupProjectBindingOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchGroupProjectBindingOK) GetPayload() *models.GroupProjectBinding {
@@ -164,17 +156,12 @@ func (o *PatchGroupProjectBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch group project binding unauthorized response
-func (o *PatchGroupProjectBindingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchGroupProjectBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingUnauthorized ", 401)
 }
 
 func (o *PatchGroupProjectBindingUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingUnauthorized ", 401)
 }
 
 func (o *PatchGroupProjectBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -220,17 +207,12 @@ func (o *PatchGroupProjectBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the patch group project binding forbidden response
-func (o *PatchGroupProjectBindingForbidden) Code() int {
-	return 403
-}
-
 func (o *PatchGroupProjectBindingForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingForbidden ", 403)
 }
 
 func (o *PatchGroupProjectBindingForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingForbidden", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBindingForbidden ", 403)
 }
 
 func (o *PatchGroupProjectBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -254,6 +236,11 @@ type PatchGroupProjectBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch group project binding default response
+func (o *PatchGroupProjectBindingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch group project binding default response has a 2xx status code
@@ -281,19 +268,12 @@ func (o *PatchGroupProjectBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch group project binding default response
-func (o *PatchGroupProjectBindingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchGroupProjectBindingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchGroupProjectBindingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/groupbindings/{binding_name}][%d] patchGroupProjectBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchGroupProjectBindingDefault) GetPayload() *models.ErrorResponse {

@@ -127,11 +127,6 @@ func (m *KeylessAttestor) ContextValidate(ctx context.Context, formats strfmt.Re
 func (m *KeylessAttestor) contextValidateCtlog(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ctlog != nil {
-
-		if swag.IsZero(m.Ctlog) { // not required
-			return nil
-		}
-
 		if err := m.Ctlog.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ctlog")
@@ -148,11 +143,6 @@ func (m *KeylessAttestor) contextValidateCtlog(ctx context.Context, formats strf
 func (m *KeylessAttestor) contextValidateRekor(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Rekor != nil {
-
-		if swag.IsZero(m.Rekor) { // not required
-			return nil
-		}
-
 		if err := m.Rekor.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rekor")

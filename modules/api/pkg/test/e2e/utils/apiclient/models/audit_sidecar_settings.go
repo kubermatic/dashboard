@@ -102,11 +102,6 @@ func (m *AuditSidecarSettings) ContextValidate(ctx context.Context, formats strf
 func (m *AuditSidecarSettings) contextValidateConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Config != nil {
-
-		if swag.IsZero(m.Config) { // not required
-			return nil
-		}
-
 		if err := m.Config.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("config")
@@ -123,11 +118,6 @@ func (m *AuditSidecarSettings) contextValidateConfig(ctx context.Context, format
 func (m *AuditSidecarSettings) contextValidateResources(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Resources != nil {
-
-		if swag.IsZero(m.Resources) { // not required
-			return nil
-		}
-
 		if err := m.Resources.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("resources")

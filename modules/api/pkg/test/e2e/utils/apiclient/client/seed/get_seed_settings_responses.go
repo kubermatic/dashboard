@@ -6,7 +6,6 @@ package seed
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetSeedSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get seed settings o k response
-func (o *GetSeedSettingsOK) Code() int {
-	return 200
-}
-
 func (o *GetSeedSettingsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetSeedSettingsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetSeedSettingsOK) GetPayload() *models.SeedSettings {
@@ -162,17 +154,12 @@ func (o *GetSeedSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get seed settings unauthorized response
-func (o *GetSeedSettingsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetSeedSettingsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsUnauthorized ", 401)
 }
 
 func (o *GetSeedSettingsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsUnauthorized ", 401)
 }
 
 func (o *GetSeedSettingsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetSeedSettingsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get seed settings forbidden response
-func (o *GetSeedSettingsForbidden) Code() int {
-	return 403
-}
-
 func (o *GetSeedSettingsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsForbidden ", 403)
 }
 
 func (o *GetSeedSettingsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettingsForbidden ", 403)
 }
 
 func (o *GetSeedSettingsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetSeedSettingsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get seed settings default response
+func (o *GetSeedSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get seed settings default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetSeedSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get seed settings default response
-func (o *GetSeedSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetSeedSettingsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetSeedSettingsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/settings][%d] getSeedSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetSeedSettingsDefault) GetPayload() *models.ErrorResponse {

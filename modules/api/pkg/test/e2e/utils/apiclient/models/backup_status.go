@@ -213,10 +213,6 @@ func (m *BackupStatus) ContextValidate(ctx context.Context, formats strfmt.Regis
 
 func (m *BackupStatus) contextValidateBackupPhase(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.BackupPhase) { // not required
-		return nil
-	}
-
 	if err := m.BackupPhase.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("backupPhase")
@@ -230,10 +226,6 @@ func (m *BackupStatus) contextValidateBackupPhase(ctx context.Context, formats s
 }
 
 func (m *BackupStatus) contextValidateDeletePhase(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.DeletePhase) { // not required
-		return nil
-	}
 
 	if err := m.DeletePhase.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

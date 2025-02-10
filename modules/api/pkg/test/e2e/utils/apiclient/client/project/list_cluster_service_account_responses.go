@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListClusterServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list cluster service account o k response
-func (o *ListClusterServiceAccountOK) Code() int {
-	return 200
-}
-
 func (o *ListClusterServiceAccountOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClusterServiceAccountOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClusterServiceAccountOK) GetPayload() []*models.ClusterServiceAccount {
@@ -160,17 +152,12 @@ func (o *ListClusterServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list cluster service account unauthorized response
-func (o *ListClusterServiceAccountUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListClusterServiceAccountUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountUnauthorized ", 401)
 }
 
 func (o *ListClusterServiceAccountUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountUnauthorized ", 401)
 }
 
 func (o *ListClusterServiceAccountUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListClusterServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list cluster service account forbidden response
-func (o *ListClusterServiceAccountForbidden) Code() int {
-	return 403
-}
-
 func (o *ListClusterServiceAccountForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountForbidden ", 403)
 }
 
 func (o *ListClusterServiceAccountForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccountForbidden ", 403)
 }
 
 func (o *ListClusterServiceAccountForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListClusterServiceAccountDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list cluster service account default response
+func (o *ListClusterServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list cluster service account default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListClusterServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list cluster service account default response
-func (o *ListClusterServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListClusterServiceAccountDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClusterServiceAccountDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount][%d] listClusterServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClusterServiceAccountDefault) GetPayload() *models.ErrorResponse {

@@ -163,11 +163,6 @@ func (m *ExternalClusterSpec) ContextValidate(ctx context.Context, formats strfm
 func (m *ExternalClusterSpec) contextValidateAksclusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AksclusterSpec != nil {
-
-		if swag.IsZero(m.AksclusterSpec) { // not required
-			return nil
-		}
-
 		if err := m.AksclusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("aksclusterSpec")
@@ -184,11 +179,6 @@ func (m *ExternalClusterSpec) contextValidateAksclusterSpec(ctx context.Context,
 func (m *ExternalClusterSpec) contextValidateEksclusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.EksclusterSpec != nil {
-
-		if swag.IsZero(m.EksclusterSpec) { // not required
-			return nil
-		}
-
 		if err := m.EksclusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("eksclusterSpec")
@@ -205,11 +195,6 @@ func (m *ExternalClusterSpec) contextValidateEksclusterSpec(ctx context.Context,
 func (m *ExternalClusterSpec) contextValidateGkeclusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.GkeclusterSpec != nil {
-
-		if swag.IsZero(m.GkeclusterSpec) { // not required
-			return nil
-		}
-
 		if err := m.GkeclusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("gkeclusterSpec")
@@ -224,10 +209,6 @@ func (m *ExternalClusterSpec) contextValidateGkeclusterSpec(ctx context.Context,
 }
 
 func (m *ExternalClusterSpec) contextValidateVersion(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Version) { // not required
-		return nil
-	}
 
 	if err := m.Version.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

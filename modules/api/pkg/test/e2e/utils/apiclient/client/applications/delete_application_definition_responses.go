@@ -6,7 +6,6 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteApplicationDefinitionOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete application definition o k response
-func (o *DeleteApplicationDefinitionOK) Code() int {
-	return 200
-}
-
 func (o *DeleteApplicationDefinitionOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionOK ", 200)
 }
 
 func (o *DeleteApplicationDefinitionOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionOK ", 200)
 }
 
 func (o *DeleteApplicationDefinitionOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete application definition unauthorized response
-func (o *DeleteApplicationDefinitionUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteApplicationDefinitionUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionUnauthorized ", 401)
 }
 
 func (o *DeleteApplicationDefinitionUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionUnauthorized ", 401)
 }
 
 func (o *DeleteApplicationDefinitionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete application definition forbidden response
-func (o *DeleteApplicationDefinitionForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteApplicationDefinitionForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionForbidden ", 403)
 }
 
 func (o *DeleteApplicationDefinitionForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinitionForbidden ", 403)
 }
 
 func (o *DeleteApplicationDefinitionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteApplicationDefinitionDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete application definition default response
+func (o *DeleteApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete application definition default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete application definition default response
-func (o *DeleteApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteApplicationDefinitionDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinition default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinition default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteApplicationDefinitionDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinition default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/applicationdefinitions/{appdef_name}][%d] deleteApplicationDefinition default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteApplicationDefinitionDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package credentials
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list credentials o k response
-func (o *ListCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ListCredentialsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListCredentialsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListCredentialsOK) GetPayload() *models.CredentialList {
@@ -130,6 +122,11 @@ type ListCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list credentials default response
+func (o *ListCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list credentials default response has a 2xx status code
 func (o *ListCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list credentials default response
-func (o *ListCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListCredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListCredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/providers/{provider_name}/presets/credentials][%d] listCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListCredentialsDefault) GetPayload() *models.ErrorResponse {

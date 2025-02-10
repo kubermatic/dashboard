@@ -135,11 +135,6 @@ func (m *AKSMachineDeploymentCloudSpec) ContextValidate(ctx context.Context, for
 func (m *AKSMachineDeploymentCloudSpec) contextValidateBasicSettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.BasicSettings != nil {
-
-		if swag.IsZero(m.BasicSettings) { // not required
-			return nil
-		}
-
 		if err := m.BasicSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("basicSettings")
@@ -156,11 +151,6 @@ func (m *AKSMachineDeploymentCloudSpec) contextValidateBasicSettings(ctx context
 func (m *AKSMachineDeploymentCloudSpec) contextValidateConfiguration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Configuration != nil {
-
-		if swag.IsZero(m.Configuration) { // not required
-			return nil
-		}
-
 		if err := m.Configuration.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("configuration")
@@ -177,11 +167,6 @@ func (m *AKSMachineDeploymentCloudSpec) contextValidateConfiguration(ctx context
 func (m *AKSMachineDeploymentCloudSpec) contextValidateOptionalSettings(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.OptionalSettings != nil {
-
-		if swag.IsZero(m.OptionalSettings) { // not required
-			return nil
-		}
-
 		if err := m.OptionalSettings.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("optionalSettings")

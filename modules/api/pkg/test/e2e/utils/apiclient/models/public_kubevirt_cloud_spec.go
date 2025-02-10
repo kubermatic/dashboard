@@ -85,11 +85,6 @@ func (m *PublicKubevirtCloudSpec) contextValidatePreAllocatedDataVolumes(ctx con
 	for i := 0; i < len(m.PreAllocatedDataVolumes); i++ {
 
 		if m.PreAllocatedDataVolumes[i] != nil {
-
-			if swag.IsZero(m.PreAllocatedDataVolumes[i]) { // not required
-				return nil
-			}
-
 			if err := m.PreAllocatedDataVolumes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("preAllocatedDataVolumes" + "." + strconv.Itoa(i))

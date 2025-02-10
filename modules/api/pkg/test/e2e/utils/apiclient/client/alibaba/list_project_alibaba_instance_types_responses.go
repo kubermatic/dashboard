@@ -6,7 +6,6 @@ package alibaba
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectAlibabaInstanceTypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project alibaba instance types o k response
-func (o *ListProjectAlibabaInstanceTypesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectAlibabaInstanceTypesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAlibabaInstanceTypesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectAlibabaInstanceTypesOK) GetPayload() models.AlibabaInstanceTypeList {
@@ -128,6 +120,11 @@ type ListProjectAlibabaInstanceTypesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project alibaba instance types default response
+func (o *ListProjectAlibabaInstanceTypesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project alibaba instance types default response has a 2xx status code
 func (o *ListProjectAlibabaInstanceTypesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectAlibabaInstanceTypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project alibaba instance types default response
-func (o *ListProjectAlibabaInstanceTypesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectAlibabaInstanceTypesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAlibabaInstanceTypesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/alibaba/instancetypes][%d] listProjectAlibabaInstanceTypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectAlibabaInstanceTypesDefault) GetPayload() *models.ErrorResponse {

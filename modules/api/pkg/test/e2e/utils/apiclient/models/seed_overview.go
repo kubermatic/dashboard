@@ -78,10 +78,6 @@ func (m *SeedOverview) ContextValidate(ctx context.Context, formats strfmt.Regis
 
 func (m *SeedOverview) contextValidatePhase(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Phase) { // not required
-		return nil
-	}
-
 	if err := m.Phase.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("phase")

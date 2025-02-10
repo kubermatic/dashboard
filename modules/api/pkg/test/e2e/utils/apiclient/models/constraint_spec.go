@@ -142,11 +142,6 @@ func (m *ConstraintSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *ConstraintSpec) contextValidateMatch(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Match != nil {
-
-		if swag.IsZero(m.Match) { // not required
-			return nil
-		}
-
 		if err := m.Match.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("match")
@@ -161,10 +156,6 @@ func (m *ConstraintSpec) contextValidateMatch(ctx context.Context, formats strfm
 }
 
 func (m *ConstraintSpec) contextValidateParameters(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Parameters) { // not required
-		return nil
-	}
 
 	if err := m.Parameters.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -181,11 +172,6 @@ func (m *ConstraintSpec) contextValidateParameters(ctx context.Context, formats 
 func (m *ConstraintSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")

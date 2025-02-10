@@ -6,7 +6,6 @@ package kubevirt
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListKubeVirtStorageClassesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list kube virt storage classes o k response
-func (o *ListKubeVirtStorageClassesOK) Code() int {
-	return 200
-}
-
 func (o *ListKubeVirtStorageClassesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClassesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClassesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListKubeVirtStorageClassesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClassesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClassesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListKubeVirtStorageClassesOK) GetPayload() models.StorageClassList {
@@ -128,6 +120,11 @@ type ListKubeVirtStorageClassesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list kube virt storage classes default response
+func (o *ListKubeVirtStorageClassesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list kube virt storage classes default response has a 2xx status code
 func (o *ListKubeVirtStorageClassesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListKubeVirtStorageClassesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list kube virt storage classes default response
-func (o *ListKubeVirtStorageClassesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListKubeVirtStorageClassesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClasses default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClasses default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListKubeVirtStorageClassesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClasses default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/kubevirt/storageclasses][%d] listKubeVirtStorageClasses default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListKubeVirtStorageClassesDefault) GetPayload() *models.ErrorResponse {

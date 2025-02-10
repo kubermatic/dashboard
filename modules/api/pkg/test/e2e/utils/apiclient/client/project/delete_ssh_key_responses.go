@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteSSHKeyOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete Ssh key o k response
-func (o *DeleteSSHKeyOK) Code() int {
-	return 200
-}
-
 func (o *DeleteSSHKeyOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyOK ", 200)
 }
 
 func (o *DeleteSSHKeyOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyOK ", 200)
 }
 
 func (o *DeleteSSHKeyOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteSSHKeyUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete Ssh key unauthorized response
-func (o *DeleteSSHKeyUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteSSHKeyUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyUnauthorized ", 401)
 }
 
 func (o *DeleteSSHKeyUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyUnauthorized ", 401)
 }
 
 func (o *DeleteSSHKeyUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteSSHKeyForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete Ssh key forbidden response
-func (o *DeleteSSHKeyForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteSSHKeyForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyForbidden ", 403)
 }
 
 func (o *DeleteSSHKeyForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSshKeyForbidden ", 403)
 }
 
 func (o *DeleteSSHKeyForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteSSHKeyDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete SSH key default response
+func (o *DeleteSSHKeyDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete SSH key default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteSSHKeyDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete SSH key default response
-func (o *DeleteSSHKeyDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteSSHKeyDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSSHKey default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSSHKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteSSHKeyDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSSHKey default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/sshkeys/{key_id}][%d] deleteSSHKey default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteSSHKeyDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetAdmissionPluginOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get admission plugin o k response
-func (o *GetAdmissionPluginOK) Code() int {
-	return 200
-}
-
 func (o *GetAdmissionPluginOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAdmissionPluginOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAdmissionPluginOK) GetPayload() *models.AdmissionPlugin {
@@ -162,17 +154,12 @@ func (o *GetAdmissionPluginUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get admission plugin unauthorized response
-func (o *GetAdmissionPluginUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetAdmissionPluginUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginUnauthorized ", 401)
 }
 
 func (o *GetAdmissionPluginUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginUnauthorized ", 401)
 }
 
 func (o *GetAdmissionPluginUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetAdmissionPluginForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get admission plugin forbidden response
-func (o *GetAdmissionPluginForbidden) Code() int {
-	return 403
-}
-
 func (o *GetAdmissionPluginForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginForbidden ", 403)
 }
 
 func (o *GetAdmissionPluginForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPluginForbidden ", 403)
 }
 
 func (o *GetAdmissionPluginForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetAdmissionPluginDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get admission plugin default response
+func (o *GetAdmissionPluginDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get admission plugin default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetAdmissionPluginDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get admission plugin default response
-func (o *GetAdmissionPluginDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetAdmissionPluginDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPlugin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPlugin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAdmissionPluginDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPlugin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/admission/plugins/{name}][%d] getAdmissionPlugin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAdmissionPluginDefault) GetPayload() *models.ErrorResponse {

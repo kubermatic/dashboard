@@ -125,11 +125,6 @@ func (m *PacketSize) contextValidateCPUs(ctx context.Context, formats strfmt.Reg
 	for i := 0; i < len(m.CPUs); i++ {
 
 		if m.CPUs[i] != nil {
-
-			if swag.IsZero(m.CPUs[i]) { // not required
-				return nil
-			}
-
 			if err := m.CPUs[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("cpus" + "." + strconv.Itoa(i))
@@ -150,11 +145,6 @@ func (m *PacketSize) contextValidateDrives(ctx context.Context, formats strfmt.R
 	for i := 0; i < len(m.Drives); i++ {
 
 		if m.Drives[i] != nil {
-
-			if swag.IsZero(m.Drives[i]) { // not required
-				return nil
-			}
-
 			if err := m.Drives[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("drives" + "." + strconv.Itoa(i))

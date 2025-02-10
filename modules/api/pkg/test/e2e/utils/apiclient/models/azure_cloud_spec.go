@@ -189,11 +189,6 @@ func (m *AzureCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Reg
 func (m *AzureCloudSpec) contextValidateCredentialsReference(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.CredentialsReference != nil {
-
-		if swag.IsZero(m.CredentialsReference) { // not required
-			return nil
-		}
-
 		if err := m.CredentialsReference.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("credentialsReference")
@@ -208,10 +203,6 @@ func (m *AzureCloudSpec) contextValidateCredentialsReference(ctx context.Context
 }
 
 func (m *AzureCloudSpec) contextValidateLoadBalancerSKU(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.LoadBalancerSKU) { // not required
-		return nil
-	}
 
 	if err := m.LoadBalancerSKU.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -228,11 +219,6 @@ func (m *AzureCloudSpec) contextValidateLoadBalancerSKU(ctx context.Context, for
 func (m *AzureCloudSpec) contextValidateNodePortsAllowedIPRanges(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.NodePortsAllowedIPRanges != nil {
-
-		if swag.IsZero(m.NodePortsAllowedIPRanges) { // not required
-			return nil
-		}
-
 		if err := m.NodePortsAllowedIPRanges.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nodePortsAllowedIPRanges")

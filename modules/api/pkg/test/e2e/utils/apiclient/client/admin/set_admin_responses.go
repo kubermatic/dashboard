@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *SetAdminOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the set admin o k response
-func (o *SetAdminOK) Code() int {
-	return 200
-}
-
 func (o *SetAdminOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminOK  %+v", 200, o.Payload)
 }
 
 func (o *SetAdminOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminOK  %+v", 200, o.Payload)
 }
 
 func (o *SetAdminOK) GetPayload() *models.Admin {
@@ -162,17 +154,12 @@ func (o *SetAdminUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the set admin unauthorized response
-func (o *SetAdminUnauthorized) Code() int {
-	return 401
-}
-
 func (o *SetAdminUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminUnauthorized ", 401)
 }
 
 func (o *SetAdminUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminUnauthorized ", 401)
 }
 
 func (o *SetAdminUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *SetAdminForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the set admin forbidden response
-func (o *SetAdminForbidden) Code() int {
-	return 403
-}
-
 func (o *SetAdminForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminForbidden ", 403)
 }
 
 func (o *SetAdminForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdminForbidden ", 403)
 }
 
 func (o *SetAdminForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type SetAdminDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the set admin default response
+func (o *SetAdminDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this set admin default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *SetAdminDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the set admin default response
-func (o *SetAdminDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *SetAdminDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdmin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdmin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *SetAdminDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdmin default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/admin][%d] setAdmin default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *SetAdminDefault) GetPayload() *models.ErrorResponse {

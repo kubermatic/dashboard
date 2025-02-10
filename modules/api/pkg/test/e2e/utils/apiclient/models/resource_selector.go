@@ -78,11 +78,6 @@ func (m *ResourceSelector) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *ResourceSelector) contextValidateLabelSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.LabelSelector != nil {
-
-		if swag.IsZero(m.LabelSelector) { // not required
-			return nil
-		}
-
 		if err := m.LabelSelector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("labelSelector")

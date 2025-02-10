@@ -6,7 +6,6 @@ package serviceaccounts
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *UpdateServiceAccountOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the update service account o k response
-func (o *UpdateServiceAccountOK) Code() int {
-	return 200
-}
-
 func (o *UpdateServiceAccountOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateServiceAccountOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountOK %s", 200, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountOK  %+v", 200, o.Payload)
 }
 
 func (o *UpdateServiceAccountOK) GetPayload() *models.ServiceAccount {
@@ -162,17 +154,12 @@ func (o *UpdateServiceAccountUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the update service account unauthorized response
-func (o *UpdateServiceAccountUnauthorized) Code() int {
-	return 401
-}
-
 func (o *UpdateServiceAccountUnauthorized) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountUnauthorized ", 401)
 }
 
 func (o *UpdateServiceAccountUnauthorized) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountUnauthorized", 401)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountUnauthorized ", 401)
 }
 
 func (o *UpdateServiceAccountUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *UpdateServiceAccountForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the update service account forbidden response
-func (o *UpdateServiceAccountForbidden) Code() int {
-	return 403
-}
-
 func (o *UpdateServiceAccountForbidden) Error() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountForbidden ", 403)
 }
 
 func (o *UpdateServiceAccountForbidden) String() string {
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountForbidden", 403)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccountForbidden ", 403)
 }
 
 func (o *UpdateServiceAccountForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type UpdateServiceAccountDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the update service account default response
+func (o *UpdateServiceAccountDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this update service account default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *UpdateServiceAccountDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the update service account default response
-func (o *UpdateServiceAccountDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *UpdateServiceAccountDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateServiceAccountDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccount default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PUT /api/v1/projects/{project_id}/serviceaccounts/{serviceaccount_id}][%d] updateServiceAccount default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *UpdateServiceAccountDefault) GetPayload() *models.ErrorResponse {

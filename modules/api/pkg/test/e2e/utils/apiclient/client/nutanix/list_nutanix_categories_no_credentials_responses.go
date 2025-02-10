@@ -6,7 +6,6 @@ package nutanix
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListNutanixCategoriesNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list nutanix categories no credentials o k response
-func (o *ListNutanixCategoriesNoCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ListNutanixCategoriesNoCredentialsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixCategoriesNoCredentialsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentialsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixCategoriesNoCredentialsOK) GetPayload() models.NutanixCategoryList {
@@ -128,6 +120,11 @@ type ListNutanixCategoriesNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list nutanix categories no credentials default response
+func (o *ListNutanixCategoriesNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list nutanix categories no credentials default response has a 2xx status code
 func (o *ListNutanixCategoriesNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListNutanixCategoriesNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list nutanix categories no credentials default response
-func (o *ListNutanixCategoriesNoCredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListNutanixCategoriesNoCredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixCategoriesNoCredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories][%d] listNutanixCategoriesNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixCategoriesNoCredentialsDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListClustersForProjectOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list clusters for project o k response
-func (o *ListClustersForProjectOK) Code() int {
-	return 200
-}
-
 func (o *ListClustersForProjectOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClustersForProjectOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectOK  %+v", 200, o.Payload)
 }
 
 func (o *ListClustersForProjectOK) GetPayload() models.ClusterList {
@@ -160,17 +152,12 @@ func (o *ListClustersForProjectUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list clusters for project unauthorized response
-func (o *ListClustersForProjectUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListClustersForProjectUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectUnauthorized ", 401)
 }
 
 func (o *ListClustersForProjectUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectUnauthorized ", 401)
 }
 
 func (o *ListClustersForProjectUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListClustersForProjectForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list clusters for project forbidden response
-func (o *ListClustersForProjectForbidden) Code() int {
-	return 403
-}
-
 func (o *ListClustersForProjectForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectForbidden ", 403)
 }
 
 func (o *ListClustersForProjectForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProjectForbidden ", 403)
 }
 
 func (o *ListClustersForProjectForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListClustersForProjectDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list clusters for project default response
+func (o *ListClustersForProjectDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list clusters for project default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListClustersForProjectDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list clusters for project default response
-func (o *ListClustersForProjectDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListClustersForProjectDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClustersForProjectDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProject default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/projects/{project_id}/clusters][%d] listClustersForProject default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListClustersForProjectDefault) GetPayload() *models.ErrorResponse {

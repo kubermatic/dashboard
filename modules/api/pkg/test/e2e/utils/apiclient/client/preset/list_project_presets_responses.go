@@ -6,7 +6,6 @@ package preset
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListProjectPresetsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project presets o k response
-func (o *ListProjectPresetsOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectPresetsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectPresetsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectPresetsOK) GetPayload() *models.PresetList {
@@ -162,17 +154,12 @@ func (o *ListProjectPresetsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list project presets unauthorized response
-func (o *ListProjectPresetsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListProjectPresetsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsUnauthorized ", 401)
 }
 
 func (o *ListProjectPresetsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsUnauthorized ", 401)
 }
 
 func (o *ListProjectPresetsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *ListProjectPresetsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list project presets forbidden response
-func (o *ListProjectPresetsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListProjectPresetsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsForbidden ", 403)
 }
 
 func (o *ListProjectPresetsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresetsForbidden ", 403)
 }
 
 func (o *ListProjectPresetsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type ListProjectPresetsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list project presets default response
+func (o *ListProjectPresetsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list project presets default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *ListProjectPresetsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project presets default response
-func (o *ListProjectPresetsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectPresetsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresets default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectPresetsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresets default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/presets][%d] listProjectPresets default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectPresetsDefault) GetPayload() *models.ErrorResponse {

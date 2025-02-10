@@ -133,11 +133,6 @@ func (m *Mutation) contextValidateForEachMutation(ctx context.Context, formats s
 	for i := 0; i < len(m.ForEachMutation); i++ {
 
 		if m.ForEachMutation[i] != nil {
-
-			if swag.IsZero(m.ForEachMutation[i]) { // not required
-				return nil
-			}
-
 			if err := m.ForEachMutation[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("foreach" + "." + strconv.Itoa(i))
@@ -158,11 +153,6 @@ func (m *Mutation) contextValidateTargets(ctx context.Context, formats strfmt.Re
 	for i := 0; i < len(m.Targets); i++ {
 
 		if m.Targets[i] != nil {
-
-			if swag.IsZero(m.Targets[i]) { // not required
-				return nil
-			}
-
 			if err := m.Targets[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("targets" + "." + strconv.Itoa(i))

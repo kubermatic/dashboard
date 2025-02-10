@@ -6,7 +6,6 @@ package mlaadminsetting
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetMLAAdminSettingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get m l a admin setting o k response
-func (o *GetMLAAdminSettingOK) Code() int {
-	return 200
-}
-
 func (o *GetMLAAdminSettingOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingOK  %+v", 200, o.Payload)
 }
 
 func (o *GetMLAAdminSettingOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingOK  %+v", 200, o.Payload)
 }
 
 func (o *GetMLAAdminSettingOK) GetPayload() *models.MLAAdminSetting {
@@ -162,17 +154,12 @@ func (o *GetMLAAdminSettingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get m l a admin setting unauthorized response
-func (o *GetMLAAdminSettingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetMLAAdminSettingUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingUnauthorized ", 401)
 }
 
 func (o *GetMLAAdminSettingUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingUnauthorized ", 401)
 }
 
 func (o *GetMLAAdminSettingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetMLAAdminSettingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get m l a admin setting forbidden response
-func (o *GetMLAAdminSettingForbidden) Code() int {
-	return 403
-}
-
 func (o *GetMLAAdminSettingForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingForbidden ", 403)
 }
 
 func (o *GetMLAAdminSettingForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSettingForbidden ", 403)
 }
 
 func (o *GetMLAAdminSettingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetMLAAdminSettingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get m l a admin setting default response
+func (o *GetMLAAdminSettingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get m l a admin setting default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetMLAAdminSettingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get m l a admin setting default response
-func (o *GetMLAAdminSettingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetMLAAdminSettingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSetting default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSetting default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetMLAAdminSettingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSetting default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/mlaadminsetting][%d] getMLAAdminSetting default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetMLAAdminSettingDefault) GetPayload() *models.ErrorResponse {

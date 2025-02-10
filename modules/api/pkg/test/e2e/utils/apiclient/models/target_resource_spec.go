@@ -159,11 +159,6 @@ func (m *TargetResourceSpec) contextValidateContext(ctx context.Context, formats
 	for i := 0; i < len(m.Context); i++ {
 
 		if m.Context[i] != nil {
-
-			if swag.IsZero(m.Context[i]) { // not required
-				return nil
-			}
-
 			if err := m.Context[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("context" + "." + strconv.Itoa(i))
@@ -182,11 +177,6 @@ func (m *TargetResourceSpec) contextValidateContext(ctx context.Context, formats
 func (m *TargetResourceSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")
@@ -201,10 +191,6 @@ func (m *TargetResourceSpec) contextValidateSelector(ctx context.Context, format
 }
 
 func (m *TargetResourceSpec) contextValidateUID(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.UID) { // not required
-		return nil
-	}
 
 	if err := m.UID.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

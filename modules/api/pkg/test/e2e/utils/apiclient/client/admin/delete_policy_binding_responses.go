@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeletePolicyBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete policy binding o k response
-func (o *DeletePolicyBindingOK) Code() int {
-	return 200
-}
-
 func (o *DeletePolicyBindingOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK ", 200)
 }
 
 func (o *DeletePolicyBindingOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingOK ", 200)
 }
 
 func (o *DeletePolicyBindingOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeletePolicyBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete policy binding unauthorized response
-func (o *DeletePolicyBindingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeletePolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized ", 401)
 }
 
 func (o *DeletePolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingUnauthorized ", 401)
 }
 
 func (o *DeletePolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeletePolicyBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete policy binding forbidden response
-func (o *DeletePolicyBindingForbidden) Code() int {
-	return 403
-}
-
 func (o *DeletePolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden ", 403)
 }
 
 func (o *DeletePolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBindingForbidden ", 403)
 }
 
 func (o *DeletePolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeletePolicyBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete policy binding default response
+func (o *DeletePolicyBindingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete policy binding default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeletePolicyBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete policy binding default response
-func (o *DeletePolicyBindingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeletePolicyBindingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyBindingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policybinding/{namespace}/{binding_name}][%d] deletePolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyBindingDefault) GetPayload() *models.ErrorResponse {

@@ -7,7 +7,6 @@ package datacenter
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -96,19 +95,12 @@ func (o *CreateDCCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create d c created response
-func (o *CreateDCCreated) Code() int {
-	return 201
-}
-
 func (o *CreateDCCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateDCCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateDCCreated) GetPayload() *models.Datacenter {
@@ -165,17 +157,12 @@ func (o *CreateDCUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create d c unauthorized response
-func (o *CreateDCUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateDCUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCUnauthorized ", 401)
 }
 
 func (o *CreateDCUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCUnauthorized ", 401)
 }
 
 func (o *CreateDCUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -221,17 +208,12 @@ func (o *CreateDCForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create d c forbidden response
-func (o *CreateDCForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateDCForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCForbidden ", 403)
 }
 
 func (o *CreateDCForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDCForbidden ", 403)
 }
 
 func (o *CreateDCForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -255,6 +237,11 @@ type CreateDCDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create d c default response
+func (o *CreateDCDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create d c default response has a 2xx status code
@@ -282,19 +269,12 @@ func (o *CreateDCDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create d c default response
-func (o *CreateDCDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateDCDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDC default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDC default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateDCDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDC default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/seed/{seed_name}/dc][%d] createDC default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateDCDefault) GetPayload() *models.ErrorResponse {
@@ -376,11 +356,6 @@ func (o *CreateDCBody) ContextValidate(ctx context.Context, formats strfmt.Regis
 func (o *CreateDCBody) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
 
 	if o.Spec != nil {
-
-		if swag.IsZero(o.Spec) { // not required
-			return nil
-		}
-
 		if err := o.Spec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("Body" + "." + "spec")

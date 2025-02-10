@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteExternalClusterMachineDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete external cluster machine deployment o k response
-func (o *DeleteExternalClusterMachineDeploymentOK) Code() int {
-	return 200
-}
-
 func (o *DeleteExternalClusterMachineDeploymentOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentOK ", 200)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentOK ", 200)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteExternalClusterMachineDeploymentUnauthorized) IsCode(code int) bo
 	return code == 401
 }
 
-// Code gets the status code for the delete external cluster machine deployment unauthorized response
-func (o *DeleteExternalClusterMachineDeploymentUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteExternalClusterMachineDeploymentUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentUnauthorized ", 401)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentUnauthorized ", 401)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteExternalClusterMachineDeploymentForbidden) IsCode(code int) bool 
 	return code == 403
 }
 
-// Code gets the status code for the delete external cluster machine deployment forbidden response
-func (o *DeleteExternalClusterMachineDeploymentForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteExternalClusterMachineDeploymentForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentForbidden ", 403)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeploymentForbidden ", 403)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteExternalClusterMachineDeploymentDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete external cluster machine deployment default response
+func (o *DeleteExternalClusterMachineDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete external cluster machine deployment default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteExternalClusterMachineDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete external cluster machine deployment default response
-func (o *DeleteExternalClusterMachineDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteExternalClusterMachineDeploymentDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id}/machinedeployments/{machinedeployment_id}][%d] deleteExternalClusterMachineDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteExternalClusterMachineDeploymentDefault) GetPayload() *models.ErrorResponse {

@@ -132,10 +132,6 @@ func (m *AuditLoggingSettings) ContextValidate(ctx context.Context, formats strf
 
 func (m *AuditLoggingSettings) contextValidatePolicyPreset(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.PolicyPreset) { // not required
-		return nil
-	}
-
 	if err := m.PolicyPreset.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("policyPreset")
@@ -151,11 +147,6 @@ func (m *AuditLoggingSettings) contextValidatePolicyPreset(ctx context.Context, 
 func (m *AuditLoggingSettings) contextValidateSidecar(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Sidecar != nil {
-
-		if swag.IsZero(m.Sidecar) { // not required
-			return nil
-		}
-
 		if err := m.Sidecar.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("sidecar")
@@ -172,11 +163,6 @@ func (m *AuditLoggingSettings) contextValidateSidecar(ctx context.Context, forma
 func (m *AuditLoggingSettings) contextValidateWebhookBackend(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.WebhookBackend != nil {
-
-		if swag.IsZero(m.WebhookBackend) { // not required
-			return nil
-		}
-
 		if err := m.WebhookBackend.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("webhookBackend")

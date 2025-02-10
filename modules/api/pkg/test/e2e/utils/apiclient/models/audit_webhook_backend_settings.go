@@ -75,11 +75,6 @@ func (m *AuditWebhookBackendSettings) ContextValidate(ctx context.Context, forma
 func (m *AuditWebhookBackendSettings) contextValidateAuditWebhookConfig(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.AuditWebhookConfig != nil {
-
-		if swag.IsZero(m.AuditWebhookConfig) { // not required
-			return nil
-		}
-
 		if err := m.AuditWebhookConfig.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("auditWebhookConfig")

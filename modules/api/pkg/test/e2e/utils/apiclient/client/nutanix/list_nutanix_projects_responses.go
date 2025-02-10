@@ -6,7 +6,6 @@ package nutanix
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListNutanixProjectsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list nutanix projects o k response
-func (o *ListNutanixProjectsOK) Code() int {
-	return 200
-}
-
 func (o *ListNutanixProjectsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjectsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjectsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixProjectsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjectsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjectsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListNutanixProjectsOK) GetPayload() models.NutanixProjectList {
@@ -128,6 +120,11 @@ type ListNutanixProjectsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list nutanix projects default response
+func (o *ListNutanixProjectsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list nutanix projects default response has a 2xx status code
 func (o *ListNutanixProjectsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListNutanixProjectsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list nutanix projects default response
-func (o *ListNutanixProjectsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListNutanixProjectsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjects default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjects default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixProjectsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjects default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/nutanix/{dc}/projects][%d] listNutanixProjects default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListNutanixProjectsDefault) GetPayload() *models.ErrorResponse {

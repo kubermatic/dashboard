@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateNodeDeploymentCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create node deployment created response
-func (o *CreateNodeDeploymentCreated) Code() int {
-	return 201
-}
-
 func (o *CreateNodeDeploymentCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateNodeDeploymentCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateNodeDeploymentCreated) GetPayload() *models.NodeDeployment {
@@ -162,17 +154,12 @@ func (o *CreateNodeDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create node deployment unauthorized response
-func (o *CreateNodeDeploymentUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateNodeDeploymentUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentUnauthorized ", 401)
 }
 
 func (o *CreateNodeDeploymentUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentUnauthorized ", 401)
 }
 
 func (o *CreateNodeDeploymentUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateNodeDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create node deployment forbidden response
-func (o *CreateNodeDeploymentForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateNodeDeploymentForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentForbidden ", 403)
 }
 
 func (o *CreateNodeDeploymentForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeploymentForbidden ", 403)
 }
 
 func (o *CreateNodeDeploymentForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateNodeDeploymentDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create node deployment default response
+func (o *CreateNodeDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create node deployment default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateNodeDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create node deployment default response
-func (o *CreateNodeDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateNodeDeploymentDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateNodeDeploymentDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments][%d] createNodeDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateNodeDeploymentDefault) GetPayload() *models.ErrorResponse {

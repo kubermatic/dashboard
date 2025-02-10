@@ -110,11 +110,6 @@ func (m *CertificateAttestor) ContextValidate(ctx context.Context, formats strfm
 func (m *CertificateAttestor) contextValidateCtlog(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Ctlog != nil {
-
-		if swag.IsZero(m.Ctlog) { // not required
-			return nil
-		}
-
 		if err := m.Ctlog.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ctlog")
@@ -131,11 +126,6 @@ func (m *CertificateAttestor) contextValidateCtlog(ctx context.Context, formats 
 func (m *CertificateAttestor) contextValidateRekor(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Rekor != nil {
-
-		if swag.IsZero(m.Rekor) { // not required
-			return nil
-		}
-
 		if err := m.Rekor.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("rekor")

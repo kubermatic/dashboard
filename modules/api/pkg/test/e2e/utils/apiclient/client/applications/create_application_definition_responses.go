@@ -6,7 +6,6 @@ package applications
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateApplicationDefinitionCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create application definition created response
-func (o *CreateApplicationDefinitionCreated) Code() int {
-	return 201
-}
-
 func (o *CreateApplicationDefinitionCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateApplicationDefinitionCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateApplicationDefinitionCreated) GetPayload() *models.ApplicationDefinition {
@@ -162,17 +154,12 @@ func (o *CreateApplicationDefinitionUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create application definition unauthorized response
-func (o *CreateApplicationDefinitionUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateApplicationDefinitionUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionUnauthorized ", 401)
 }
 
 func (o *CreateApplicationDefinitionUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionUnauthorized ", 401)
 }
 
 func (o *CreateApplicationDefinitionUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateApplicationDefinitionForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create application definition forbidden response
-func (o *CreateApplicationDefinitionForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateApplicationDefinitionForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionForbidden ", 403)
 }
 
 func (o *CreateApplicationDefinitionForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinitionForbidden ", 403)
 }
 
 func (o *CreateApplicationDefinitionForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateApplicationDefinitionDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create application definition default response
+func (o *CreateApplicationDefinitionDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create application definition default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateApplicationDefinitionDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create application definition default response
-func (o *CreateApplicationDefinitionDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateApplicationDefinitionDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinition default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinition default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateApplicationDefinitionDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinition default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/applicationdefinitions][%d] createApplicationDefinition default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateApplicationDefinitionDefault) GetPayload() *models.ErrorResponse {

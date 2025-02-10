@@ -6,7 +6,6 @@ package constraint
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateDefaultConstraintOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the create default constraint o k response
-func (o *CreateDefaultConstraintOK) Code() int {
-	return 200
-}
-
 func (o *CreateDefaultConstraintOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateDefaultConstraintOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintOK %s", 200, payload)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintOK  %+v", 200, o.Payload)
 }
 
 func (o *CreateDefaultConstraintOK) GetPayload() *models.Constraint {
@@ -162,17 +154,12 @@ func (o *CreateDefaultConstraintUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create default constraint unauthorized response
-func (o *CreateDefaultConstraintUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateDefaultConstraintUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintUnauthorized ", 401)
 }
 
 func (o *CreateDefaultConstraintUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintUnauthorized ", 401)
 }
 
 func (o *CreateDefaultConstraintUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateDefaultConstraintForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create default constraint forbidden response
-func (o *CreateDefaultConstraintForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateDefaultConstraintForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintForbidden ", 403)
 }
 
 func (o *CreateDefaultConstraintForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraintForbidden ", 403)
 }
 
 func (o *CreateDefaultConstraintForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateDefaultConstraintDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create default constraint default response
+func (o *CreateDefaultConstraintDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create default constraint default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateDefaultConstraintDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create default constraint default response
-func (o *CreateDefaultConstraintDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateDefaultConstraintDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraint default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraint default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateDefaultConstraintDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraint default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/constraints][%d] createDefaultConstraint default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateDefaultConstraintDefault) GetPayload() *models.ErrorResponse {

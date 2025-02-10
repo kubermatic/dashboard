@@ -6,7 +6,6 @@ package rulegroup
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListRuleGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list rule groups o k response
-func (o *ListRuleGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListRuleGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListRuleGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListRuleGroupsOK) GetPayload() []*models.RuleGroup {
@@ -160,17 +152,12 @@ func (o *ListRuleGroupsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list rule groups unauthorized response
-func (o *ListRuleGroupsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListRuleGroupsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsUnauthorized ", 401)
 }
 
 func (o *ListRuleGroupsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsUnauthorized ", 401)
 }
 
 func (o *ListRuleGroupsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListRuleGroupsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list rule groups forbidden response
-func (o *ListRuleGroupsForbidden) Code() int {
-	return 403
-}
-
 func (o *ListRuleGroupsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsForbidden ", 403)
 }
 
 func (o *ListRuleGroupsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroupsForbidden ", 403)
 }
 
 func (o *ListRuleGroupsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListRuleGroupsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list rule groups default response
+func (o *ListRuleGroupsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list rule groups default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListRuleGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list rule groups default response
-func (o *ListRuleGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListRuleGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListRuleGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/rulegroups][%d] listRuleGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListRuleGroupsDefault) GetPayload() *models.ErrorResponse {

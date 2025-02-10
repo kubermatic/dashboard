@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetKubermaticCustomLinksOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get kubermatic custom links o k response
-func (o *GetKubermaticCustomLinksOK) Code() int {
-	return 200
-}
-
 func (o *GetKubermaticCustomLinksOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksOK  %+v", 200, o.Payload)
 }
 
 func (o *GetKubermaticCustomLinksOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksOK  %+v", 200, o.Payload)
 }
 
 func (o *GetKubermaticCustomLinksOK) GetPayload() models.GlobalCustomLinks {
@@ -160,17 +152,12 @@ func (o *GetKubermaticCustomLinksUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get kubermatic custom links unauthorized response
-func (o *GetKubermaticCustomLinksUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetKubermaticCustomLinksUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksUnauthorized ", 401)
 }
 
 func (o *GetKubermaticCustomLinksUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksUnauthorized ", 401)
 }
 
 func (o *GetKubermaticCustomLinksUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetKubermaticCustomLinksForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get kubermatic custom links forbidden response
-func (o *GetKubermaticCustomLinksForbidden) Code() int {
-	return 403
-}
-
 func (o *GetKubermaticCustomLinksForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksForbidden ", 403)
 }
 
 func (o *GetKubermaticCustomLinksForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinksForbidden ", 403)
 }
 
 func (o *GetKubermaticCustomLinksForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetKubermaticCustomLinksDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get kubermatic custom links default response
+func (o *GetKubermaticCustomLinksDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get kubermatic custom links default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetKubermaticCustomLinksDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get kubermatic custom links default response
-func (o *GetKubermaticCustomLinksDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetKubermaticCustomLinksDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinks default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinks default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetKubermaticCustomLinksDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinks default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin/settings/customlinks][%d] getKubermaticCustomLinks default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetKubermaticCustomLinksDefault) GetPayload() *models.ErrorResponse {

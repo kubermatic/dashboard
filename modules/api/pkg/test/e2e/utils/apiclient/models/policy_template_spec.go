@@ -316,11 +316,6 @@ func (m *PolicyTemplateSpec) contextValidateRules(ctx context.Context, formats s
 	for i := 0; i < len(m.Rules); i++ {
 
 		if m.Rules[i] != nil {
-
-			if swag.IsZero(m.Rules[i]) { // not required
-				return nil
-			}
-
 			if err := m.Rules[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("rules" + "." + strconv.Itoa(i))
@@ -341,11 +336,6 @@ func (m *PolicyTemplateSpec) contextValidateValidationFailureActionOverrides(ctx
 	for i := 0; i < len(m.ValidationFailureActionOverrides); i++ {
 
 		if m.ValidationFailureActionOverrides[i] != nil {
-
-			if swag.IsZero(m.ValidationFailureActionOverrides[i]) { // not required
-				return nil
-			}
-
 			if err := m.ValidationFailureActionOverrides[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("validationFailureActionOverrides" + "." + strconv.Itoa(i))
@@ -363,10 +353,6 @@ func (m *PolicyTemplateSpec) contextValidateValidationFailureActionOverrides(ctx
 
 func (m *PolicyTemplateSpec) contextValidateApplyRules(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.ApplyRules) { // not required
-		return nil
-	}
-
 	if err := m.ApplyRules.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("applyRules")
@@ -381,10 +367,6 @@ func (m *PolicyTemplateSpec) contextValidateApplyRules(ctx context.Context, form
 
 func (m *PolicyTemplateSpec) contextValidateFailurePolicy(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.FailurePolicy) { // not required
-		return nil
-	}
-
 	if err := m.FailurePolicy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("failurePolicy")
@@ -398,10 +380,6 @@ func (m *PolicyTemplateSpec) contextValidateFailurePolicy(ctx context.Context, f
 }
 
 func (m *PolicyTemplateSpec) contextValidateValidationFailureAction(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.ValidationFailureAction) { // not required
-		return nil
-	}
 
 	if err := m.ValidationFailureAction.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
@@ -418,11 +396,6 @@ func (m *PolicyTemplateSpec) contextValidateValidationFailureAction(ctx context.
 func (m *PolicyTemplateSpec) contextValidateWebhookConfiguration(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.WebhookConfiguration != nil {
-
-		if swag.IsZero(m.WebhookConfiguration) { // not required
-			return nil
-		}
-
 		if err := m.WebhookConfiguration.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("webhookConfiguration")

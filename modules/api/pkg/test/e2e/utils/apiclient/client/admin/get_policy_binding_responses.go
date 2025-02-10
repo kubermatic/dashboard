@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetPolicyBindingOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get policy binding o k response
-func (o *GetPolicyBindingOK) Code() int {
-	return 200
-}
-
 func (o *GetPolicyBindingOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyBindingOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyBindingOK) GetPayload() *models.PolicyBinding {
@@ -162,17 +154,12 @@ func (o *GetPolicyBindingUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get policy binding unauthorized response
-func (o *GetPolicyBindingUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetPolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingUnauthorized ", 401)
 }
 
 func (o *GetPolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingUnauthorized ", 401)
 }
 
 func (o *GetPolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetPolicyBindingForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get policy binding forbidden response
-func (o *GetPolicyBindingForbidden) Code() int {
-	return 403
-}
-
 func (o *GetPolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingForbidden ", 403)
 }
 
 func (o *GetPolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBindingForbidden ", 403)
 }
 
 func (o *GetPolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetPolicyBindingDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get policy binding default response
+func (o *GetPolicyBindingDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get policy binding default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetPolicyBindingDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get policy binding default response
-func (o *GetPolicyBindingDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetPolicyBindingDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPolicyBindingDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBinding default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/policybinding/{namespace}/{binding_name}][%d] getPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPolicyBindingDefault) GetPayload() *models.ErrorResponse {

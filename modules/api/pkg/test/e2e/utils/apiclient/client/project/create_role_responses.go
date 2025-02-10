@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateRoleCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create role created response
-func (o *CreateRoleCreated) Code() int {
-	return 201
-}
-
 func (o *CreateRoleCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateRoleCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateRoleCreated) GetPayload() *models.Role {
@@ -162,17 +154,12 @@ func (o *CreateRoleUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create role unauthorized response
-func (o *CreateRoleUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateRoleUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleUnauthorized ", 401)
 }
 
 func (o *CreateRoleUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleUnauthorized ", 401)
 }
 
 func (o *CreateRoleUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateRoleForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create role forbidden response
-func (o *CreateRoleForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateRoleForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleForbidden ", 403)
 }
 
 func (o *CreateRoleForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleForbidden", 403)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRoleForbidden ", 403)
 }
 
 func (o *CreateRoleForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateRoleDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create role default response
+func (o *CreateRoleDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create role default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateRoleDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create role default response
-func (o *CreateRoleDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateRoleDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateRoleDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRole default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/roles][%d] createRole default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateRoleDefault) GetPayload() *models.ErrorResponse {

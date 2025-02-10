@@ -6,7 +6,6 @@ package seed
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetSeedOverviewOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get seed overview o k response
-func (o *GetSeedOverviewOK) Code() int {
-	return 200
-}
-
 func (o *GetSeedOverviewOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewOK  %+v", 200, o.Payload)
 }
 
 func (o *GetSeedOverviewOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewOK  %+v", 200, o.Payload)
 }
 
 func (o *GetSeedOverviewOK) GetPayload() *models.SeedOverview {
@@ -162,17 +154,12 @@ func (o *GetSeedOverviewUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get seed overview unauthorized response
-func (o *GetSeedOverviewUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetSeedOverviewUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewUnauthorized ", 401)
 }
 
 func (o *GetSeedOverviewUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewUnauthorized ", 401)
 }
 
 func (o *GetSeedOverviewUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *GetSeedOverviewForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get seed overview forbidden response
-func (o *GetSeedOverviewForbidden) Code() int {
-	return 403
-}
-
 func (o *GetSeedOverviewForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewForbidden ", 403)
 }
 
 func (o *GetSeedOverviewForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverviewForbidden ", 403)
 }
 
 func (o *GetSeedOverviewForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type GetSeedOverviewDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get seed overview default response
+func (o *GetSeedOverviewDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get seed overview default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *GetSeedOverviewDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get seed overview default response
-func (o *GetSeedOverviewDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetSeedOverviewDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverview default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverview default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetSeedOverviewDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverview default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/seeds/{seed_name}/overview][%d] getSeedOverview default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetSeedOverviewDefault) GetPayload() *models.ErrorResponse {

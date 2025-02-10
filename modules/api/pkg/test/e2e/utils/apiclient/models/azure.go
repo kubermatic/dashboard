@@ -121,10 +121,6 @@ func (m *Azure) ContextValidate(ctx context.Context, formats strfmt.Registry) er
 
 func (m *Azure) contextValidateLoadBalancerSKU(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.LoadBalancerSKU) { // not required
-		return nil
-	}
-
 	if err := m.LoadBalancerSKU.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("loadBalancerSKU")

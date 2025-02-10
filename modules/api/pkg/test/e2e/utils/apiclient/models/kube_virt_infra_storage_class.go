@@ -119,10 +119,6 @@ func (m *KubeVirtInfraStorageClass) ContextValidate(ctx context.Context, formats
 
 func (m *KubeVirtInfraStorageClass) contextValidateVolumeBindingMode(ctx context.Context, formats strfmt.Registry) error {
 
-	if swag.IsZero(m.VolumeBindingMode) { // not required
-		return nil
-	}
-
 	if err := m.VolumeBindingMode.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {
 			return ve.ValidateName("volumeBindingMode")

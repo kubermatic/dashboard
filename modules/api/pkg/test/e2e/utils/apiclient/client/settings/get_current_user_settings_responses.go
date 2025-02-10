@@ -6,7 +6,6 @@ package settings
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -87,19 +86,12 @@ func (o *GetCurrentUserSettingsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get current user settings o k response
-func (o *GetCurrentUserSettingsOK) Code() int {
-	return 200
-}
-
 func (o *GetCurrentUserSettingsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetCurrentUserSettingsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetCurrentUserSettingsOK) GetPayload() *models.UserSettings {
@@ -156,17 +148,12 @@ func (o *GetCurrentUserSettingsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get current user settings unauthorized response
-func (o *GetCurrentUserSettingsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetCurrentUserSettingsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsUnauthorized ", 401)
 }
 
 func (o *GetCurrentUserSettingsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettingsUnauthorized ", 401)
 }
 
 func (o *GetCurrentUserSettingsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -190,6 +177,11 @@ type GetCurrentUserSettingsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get current user settings default response
+func (o *GetCurrentUserSettingsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get current user settings default response has a 2xx status code
@@ -217,19 +209,12 @@ func (o *GetCurrentUserSettingsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get current user settings default response
-func (o *GetCurrentUserSettingsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetCurrentUserSettingsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetCurrentUserSettingsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettings default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/me/settings][%d] getCurrentUserSettings default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetCurrentUserSettingsDefault) GetPayload() *models.ErrorResponse {

@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeletePolicyTemplateOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete policy template o k response
-func (o *DeletePolicyTemplateOK) Code() int {
-	return 200
-}
-
 func (o *DeletePolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK ", 200)
 }
 
 func (o *DeletePolicyTemplateOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK ", 200)
 }
 
 func (o *DeletePolicyTemplateOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeletePolicyTemplateUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete policy template unauthorized response
-func (o *DeletePolicyTemplateUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeletePolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
 }
 
 func (o *DeletePolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
 }
 
 func (o *DeletePolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeletePolicyTemplateForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete policy template forbidden response
-func (o *DeletePolicyTemplateForbidden) Code() int {
-	return 403
-}
-
 func (o *DeletePolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
 }
 
 func (o *DeletePolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
 }
 
 func (o *DeletePolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeletePolicyTemplateDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete policy template default response
+func (o *DeletePolicyTemplateDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete policy template default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeletePolicyTemplateDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete policy template default response
-func (o *DeletePolicyTemplateDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeletePolicyTemplateDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyTemplateDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyTemplateDefault) GetPayload() *models.ErrorResponse {

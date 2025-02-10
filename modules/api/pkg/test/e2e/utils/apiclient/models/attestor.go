@@ -148,11 +148,6 @@ func (m *Attestor) ContextValidate(ctx context.Context, formats strfmt.Registry)
 func (m *Attestor) contextValidateCertificates(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Certificates != nil {
-
-		if swag.IsZero(m.Certificates) { // not required
-			return nil
-		}
-
 		if err := m.Certificates.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("certificates")
@@ -169,11 +164,6 @@ func (m *Attestor) contextValidateCertificates(ctx context.Context, formats strf
 func (m *Attestor) contextValidateKeyless(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Keyless != nil {
-
-		if swag.IsZero(m.Keyless) { // not required
-			return nil
-		}
-
 		if err := m.Keyless.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("keyless")
@@ -190,11 +180,6 @@ func (m *Attestor) contextValidateKeyless(ctx context.Context, formats strfmt.Re
 func (m *Attestor) contextValidateKeys(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Keys != nil {
-
-		if swag.IsZero(m.Keys) { // not required
-			return nil
-		}
-
 		if err := m.Keys.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("keys")

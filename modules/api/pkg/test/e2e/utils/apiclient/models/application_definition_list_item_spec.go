@@ -105,11 +105,6 @@ func (m *ApplicationDefinitionListItemSpec) ContextValidate(ctx context.Context,
 func (m *ApplicationDefinitionListItemSpec) contextValidateSelector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Selector != nil {
-
-		if swag.IsZero(m.Selector) { // not required
-			return nil
-		}
-
 		if err := m.Selector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("selector")

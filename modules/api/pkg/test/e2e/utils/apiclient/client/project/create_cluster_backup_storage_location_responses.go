@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *CreateClusterBackupStorageLocationCreated) IsCode(code int) bool {
 	return code == 201
 }
 
-// Code gets the status code for the create cluster backup storage location created response
-func (o *CreateClusterBackupStorageLocationCreated) Code() int {
-	return 201
-}
-
 func (o *CreateClusterBackupStorageLocationCreated) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateClusterBackupStorageLocationCreated) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationCreated %s", 201, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateClusterBackupStorageLocationCreated) GetPayload() *models.ClusterBackupStorageLocation {
@@ -162,17 +154,12 @@ func (o *CreateClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the create cluster backup storage location unauthorized response
-func (o *CreateClusterBackupStorageLocationUnauthorized) Code() int {
-	return 401
-}
-
 func (o *CreateClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *CreateClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationUnauthorized", 401)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *CreateClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -218,17 +205,12 @@ func (o *CreateClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the create cluster backup storage location forbidden response
-func (o *CreateClusterBackupStorageLocationForbidden) Code() int {
-	return 403
-}
-
 func (o *CreateClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *CreateClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationForbidden", 403)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *CreateClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -252,6 +234,11 @@ type CreateClusterBackupStorageLocationDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the create cluster backup storage location default response
+func (o *CreateClusterBackupStorageLocationDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this create cluster backup storage location default response has a 2xx status code
@@ -279,19 +266,12 @@ func (o *CreateClusterBackupStorageLocationDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the create cluster backup storage location default response
-func (o *CreateClusterBackupStorageLocationDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *CreateClusterBackupStorageLocationDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateClusterBackupStorageLocationDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocation default %s", o._statusCode, payload)
+	return fmt.Sprintf("[POST /api/v2/projects/{project_id}/clusterbackupstoragelocation][%d] createClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreateClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

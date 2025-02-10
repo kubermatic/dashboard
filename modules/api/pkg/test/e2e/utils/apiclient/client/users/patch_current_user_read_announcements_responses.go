@@ -6,7 +6,6 @@ package users
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -87,19 +86,12 @@ func (o *PatchCurrentUserReadAnnouncementsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the patch current user read announcements o k response
-func (o *PatchCurrentUserReadAnnouncementsOK) Code() int {
-	return 200
-}
-
 func (o *PatchCurrentUserReadAnnouncementsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsOK %s", 200, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsOK) GetPayload() *models.User {
@@ -156,17 +148,12 @@ func (o *PatchCurrentUserReadAnnouncementsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the patch current user read announcements unauthorized response
-func (o *PatchCurrentUserReadAnnouncementsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *PatchCurrentUserReadAnnouncementsUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsUnauthorized ", 401)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsUnauthorized", 401)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncementsUnauthorized ", 401)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -190,6 +177,11 @@ type PatchCurrentUserReadAnnouncementsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the patch current user read announcements default response
+func (o *PatchCurrentUserReadAnnouncementsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this patch current user read announcements default response has a 2xx status code
@@ -217,19 +209,12 @@ func (o *PatchCurrentUserReadAnnouncementsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the patch current user read announcements default response
-func (o *PatchCurrentUserReadAnnouncementsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *PatchCurrentUserReadAnnouncementsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncements default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncements default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncements default %s", o._statusCode, payload)
+	return fmt.Sprintf("[PATCH /api/v1/me/readannouncements][%d] patchCurrentUserReadAnnouncements default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchCurrentUserReadAnnouncementsDefault) GetPayload() *models.ErrorResponse {

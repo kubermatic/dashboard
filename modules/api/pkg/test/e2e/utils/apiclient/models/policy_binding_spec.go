@@ -111,11 +111,6 @@ func (m *PolicyBindingSpec) ContextValidate(ctx context.Context, formats strfmt.
 func (m *PolicyBindingSpec) contextValidatePolicyTemplateRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.PolicyTemplateRef != nil {
-
-		if swag.IsZero(m.PolicyTemplateRef) { // not required
-			return nil
-		}
-
 		if err := m.PolicyTemplateRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("policyTemplateRef")
@@ -132,11 +127,6 @@ func (m *PolicyBindingSpec) contextValidatePolicyTemplateRef(ctx context.Context
 func (m *PolicyBindingSpec) contextValidateTarget(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Target != nil {
-
-		if swag.IsZero(m.Target) { // not required
-			return nil
-		}
-
 		if err := m.Target.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("target")

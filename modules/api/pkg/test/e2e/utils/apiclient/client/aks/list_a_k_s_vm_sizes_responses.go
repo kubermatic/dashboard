@@ -6,7 +6,6 @@ package aks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListAKSVMSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list a k s Vm sizes o k response
-func (o *ListAKSVMSizesOK) Code() int {
-	return 200
-}
-
 func (o *ListAKSVMSizesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVmSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVmSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAKSVMSizesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVmSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVmSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAKSVMSizesOK) GetPayload() models.AKSVMSizeList {
@@ -128,6 +120,11 @@ type ListAKSVMSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list a k s VM sizes default response
+func (o *ListAKSVMSizesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list a k s VM sizes default response has a 2xx status code
 func (o *ListAKSVMSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListAKSVMSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list a k s VM sizes default response
-func (o *ListAKSVMSizesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListAKSVMSizesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVMSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVMSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAKSVMSizesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVMSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/aks/vmsizes][%d] listAKSVMSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAKSVMSizesDefault) GetPayload() *models.ErrorResponse {

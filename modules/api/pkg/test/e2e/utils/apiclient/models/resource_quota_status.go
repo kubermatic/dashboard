@@ -102,11 +102,6 @@ func (m *ResourceQuotaStatus) ContextValidate(ctx context.Context, formats strfm
 func (m *ResourceQuotaStatus) contextValidateGlobalUsage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.GlobalUsage != nil {
-
-		if swag.IsZero(m.GlobalUsage) { // not required
-			return nil
-		}
-
 		if err := m.GlobalUsage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("globalUsage")
@@ -123,11 +118,6 @@ func (m *ResourceQuotaStatus) contextValidateGlobalUsage(ctx context.Context, fo
 func (m *ResourceQuotaStatus) contextValidateLocalUsage(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.LocalUsage != nil {
-
-		if swag.IsZero(m.LocalUsage) { // not required
-			return nil
-		}
-
 		if err := m.LocalUsage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("localUsage")

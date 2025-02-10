@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DeleteNodeDeploymentOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the delete node deployment o k response
-func (o *DeleteNodeDeploymentOK) Code() int {
-	return 200
-}
-
 func (o *DeleteNodeDeploymentOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentOK ", 200)
 }
 
 func (o *DeleteNodeDeploymentOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentOK", 200)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentOK ", 200)
 }
 
 func (o *DeleteNodeDeploymentOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DeleteNodeDeploymentUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the delete node deployment unauthorized response
-func (o *DeleteNodeDeploymentUnauthorized) Code() int {
-	return 401
-}
-
 func (o *DeleteNodeDeploymentUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentUnauthorized ", 401)
 }
 
 func (o *DeleteNodeDeploymentUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentUnauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentUnauthorized ", 401)
 }
 
 func (o *DeleteNodeDeploymentUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DeleteNodeDeploymentForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the delete node deployment forbidden response
-func (o *DeleteNodeDeploymentForbidden) Code() int {
-	return 403
-}
-
 func (o *DeleteNodeDeploymentForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentForbidden ", 403)
 }
 
 func (o *DeleteNodeDeploymentForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentForbidden", 403)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeploymentForbidden ", 403)
 }
 
 func (o *DeleteNodeDeploymentForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DeleteNodeDeploymentDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the delete node deployment default response
+func (o *DeleteNodeDeploymentDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this delete node deployment default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DeleteNodeDeploymentDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the delete node deployment default response
-func (o *DeleteNodeDeploymentDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *DeleteNodeDeploymentDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteNodeDeploymentDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeployment default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/v1/projects/{project_id}/dc/{dc}/clusters/{cluster_id}/nodedeployments/{nodedeployment_id}][%d] deleteNodeDeployment default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteNodeDeploymentDefault) GetPayload() *models.ErrorResponse {

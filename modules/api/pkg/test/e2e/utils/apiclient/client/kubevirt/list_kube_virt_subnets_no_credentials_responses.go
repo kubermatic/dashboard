@@ -6,7 +6,6 @@ package kubevirt
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,11 +80,6 @@ func (o *ListKubeVirtSubnetsNoCredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list kube virt subnets no credentials o k response
-func (o *ListKubeVirtSubnetsNoCredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ListKubeVirtSubnetsNoCredentialsOK) Error() string {
 	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets][%d] listKubeVirtSubnetsNoCredentialsOK  %+v", 200, o.Payload)
 }
@@ -126,6 +120,11 @@ type ListKubeVirtSubnetsNoCredentialsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list kube virt subnets no credentials default response
+func (o *ListKubeVirtSubnetsNoCredentialsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list kube virt subnets no credentials default response has a 2xx status code
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -149,11 +148,6 @@ func (o *ListKubeVirtSubnetsNoCredentialsDefault) IsServerError() bool {
 // IsCode returns true when this list kube virt subnets no credentials default response a status code equal to that given
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
-}
-
-// Code gets the status code for the list kube virt subnets no credentials default response
-func (o *ListKubeVirtSubnetsNoCredentialsDefault) Code() int {
-	return o._statusCode
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) Error() string {

@@ -6,7 +6,6 @@ package azure
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListAzureResourceGroupsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list azure resource groups o k response
-func (o *ListAzureResourceGroupsOK) Code() int {
-	return 200
-}
-
 func (o *ListAzureResourceGroupsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAzureResourceGroupsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroupsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroupsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAzureResourceGroupsOK) GetPayload() *models.AzureResourceGroupsList {
@@ -130,6 +122,11 @@ type ListAzureResourceGroupsDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list azure resource groups default response
+func (o *ListAzureResourceGroupsDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list azure resource groups default response has a 2xx status code
 func (o *ListAzureResourceGroupsDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -155,19 +152,12 @@ func (o *ListAzureResourceGroupsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list azure resource groups default response
-func (o *ListAzureResourceGroupsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListAzureResourceGroupsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAzureResourceGroupsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroups default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/providers/azure/resourcegroups][%d] listAzureResourceGroups default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListAzureResourceGroupsDefault) GetPayload() *models.ErrorResponse {

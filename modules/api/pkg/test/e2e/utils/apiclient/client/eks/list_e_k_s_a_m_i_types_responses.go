@@ -6,7 +6,6 @@ package eks
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *ListEKSAMITypesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list e k s a m i types o k response
-func (o *ListEKSAMITypesOK) Code() int {
-	return 200
-}
-
 func (o *ListEKSAMITypesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSAMITypesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListEKSAMITypesOK) GetPayload() models.EKSAMITypeList {
@@ -160,17 +152,12 @@ func (o *ListEKSAMITypesUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the list e k s a m i types unauthorized response
-func (o *ListEKSAMITypesUnauthorized) Code() int {
-	return 401
-}
-
 func (o *ListEKSAMITypesUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesUnauthorized ", 401)
 }
 
 func (o *ListEKSAMITypesUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesUnauthorized ", 401)
 }
 
 func (o *ListEKSAMITypesUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *ListEKSAMITypesForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the list e k s a m i types forbidden response
-func (o *ListEKSAMITypesForbidden) Code() int {
-	return 403
-}
-
 func (o *ListEKSAMITypesForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesForbidden ", 403)
 }
 
 func (o *ListEKSAMITypesForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesForbidden", 403)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypesForbidden ", 403)
 }
 
 func (o *ListEKSAMITypesForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type ListEKSAMITypesDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the list e k s a m i types default response
+func (o *ListEKSAMITypesDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this list e k s a m i types default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *ListEKSAMITypesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list e k s a m i types default response
-func (o *ListEKSAMITypesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListEKSAMITypesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSAMITypesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/eks/amitypes][%d] listEKSAMITypes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListEKSAMITypesDefault) GetPayload() *models.ErrorResponse {

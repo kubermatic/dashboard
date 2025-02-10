@@ -6,7 +6,6 @@ package project
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -92,17 +91,12 @@ func (o *DetachSSHKeyFromClusterV2OK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the detach Ssh key from cluster v2 o k response
-func (o *DetachSSHKeyFromClusterV2OK) Code() int {
-	return 200
-}
-
 func (o *DetachSSHKeyFromClusterV2OK) Error() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2OK", 200)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2OK ", 200)
 }
 
 func (o *DetachSSHKeyFromClusterV2OK) String() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2OK", 200)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2OK ", 200)
 }
 
 func (o *DetachSSHKeyFromClusterV2OK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -148,17 +142,12 @@ func (o *DetachSSHKeyFromClusterV2Unauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the detach Ssh key from cluster v2 unauthorized response
-func (o *DetachSSHKeyFromClusterV2Unauthorized) Code() int {
-	return 401
-}
-
 func (o *DetachSSHKeyFromClusterV2Unauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Unauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Unauthorized ", 401)
 }
 
 func (o *DetachSSHKeyFromClusterV2Unauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Unauthorized", 401)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Unauthorized ", 401)
 }
 
 func (o *DetachSSHKeyFromClusterV2Unauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,17 +193,12 @@ func (o *DetachSSHKeyFromClusterV2Forbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the detach Ssh key from cluster v2 forbidden response
-func (o *DetachSSHKeyFromClusterV2Forbidden) Code() int {
-	return 403
-}
-
 func (o *DetachSSHKeyFromClusterV2Forbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Forbidden", 403)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Forbidden ", 403)
 }
 
 func (o *DetachSSHKeyFromClusterV2Forbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Forbidden", 403)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSshKeyFromClusterV2Forbidden ", 403)
 }
 
 func (o *DetachSSHKeyFromClusterV2Forbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -238,6 +222,11 @@ type DetachSSHKeyFromClusterV2Default struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the detach SSH key from cluster v2 default response
+func (o *DetachSSHKeyFromClusterV2Default) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this detach SSH key from cluster v2 default response has a 2xx status code
@@ -265,19 +254,12 @@ func (o *DetachSSHKeyFromClusterV2Default) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the detach SSH key from cluster v2 default response
-func (o *DetachSSHKeyFromClusterV2Default) Code() int {
-	return o._statusCode
-}
-
 func (o *DetachSSHKeyFromClusterV2Default) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSSHKeyFromClusterV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSSHKeyFromClusterV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DetachSSHKeyFromClusterV2Default) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSSHKeyFromClusterV2 default %s", o._statusCode, payload)
+	return fmt.Sprintf("[DELETE /api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}][%d] detachSSHKeyFromClusterV2 default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DetachSSHKeyFromClusterV2Default) GetPayload() *models.ErrorResponse {

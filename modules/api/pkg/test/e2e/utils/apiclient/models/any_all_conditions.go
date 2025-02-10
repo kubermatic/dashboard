@@ -130,11 +130,6 @@ func (m *AnyAllConditions) contextValidateAllConditions(ctx context.Context, for
 	for i := 0; i < len(m.AllConditions); i++ {
 
 		if m.AllConditions[i] != nil {
-
-			if swag.IsZero(m.AllConditions[i]) { // not required
-				return nil
-			}
-
 			if err := m.AllConditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("all" + "." + strconv.Itoa(i))
@@ -155,11 +150,6 @@ func (m *AnyAllConditions) contextValidateAnyConditions(ctx context.Context, for
 	for i := 0; i < len(m.AnyConditions); i++ {
 
 		if m.AnyConditions[i] != nil {
-
-			if swag.IsZero(m.AnyConditions[i]) { // not required
-				return nil
-			}
-
 			if err := m.AnyConditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("any" + "." + strconv.Itoa(i))

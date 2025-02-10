@@ -6,7 +6,6 @@ package openstack
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -81,19 +80,12 @@ func (o *ListProjectOpenstackSizesOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the list project openstack sizes o k response
-func (o *ListProjectOpenstackSizesOK) Code() int {
-	return 200
-}
-
 func (o *ListProjectOpenstackSizesOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectOpenstackSizesOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizesOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizesOK  %+v", 200, o.Payload)
 }
 
 func (o *ListProjectOpenstackSizesOK) GetPayload() []*models.OpenstackSize {
@@ -128,6 +120,11 @@ type ListProjectOpenstackSizesDefault struct {
 	Payload *models.ErrorResponse
 }
 
+// Code gets the status code for the list project openstack sizes default response
+func (o *ListProjectOpenstackSizesDefault) Code() int {
+	return o._statusCode
+}
+
 // IsSuccess returns true when this list project openstack sizes default response has a 2xx status code
 func (o *ListProjectOpenstackSizesDefault) IsSuccess() bool {
 	return o._statusCode/100 == 2
@@ -153,19 +150,12 @@ func (o *ListProjectOpenstackSizesDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the list project openstack sizes default response
-func (o *ListProjectOpenstackSizesDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ListProjectOpenstackSizesDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectOpenstackSizesDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizes default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/openstack/sizes][%d] listProjectOpenstackSizes default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListProjectOpenstackSizesDefault) GetPayload() *models.ErrorResponse {

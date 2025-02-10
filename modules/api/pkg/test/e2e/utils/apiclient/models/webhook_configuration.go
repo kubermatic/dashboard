@@ -117,11 +117,6 @@ func (m *WebhookConfiguration) contextValidateMatchConditions(ctx context.Contex
 	for i := 0; i < len(m.MatchConditions); i++ {
 
 		if m.MatchConditions[i] != nil {
-
-			if swag.IsZero(m.MatchConditions[i]) { // not required
-				return nil
-			}
-
 			if err := m.MatchConditions[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
 					return ve.ValidateName("matchConditions" + "." + strconv.Itoa(i))
@@ -138,10 +133,6 @@ func (m *WebhookConfiguration) contextValidateMatchConditions(ctx context.Contex
 }
 
 func (m *WebhookConfiguration) contextValidateFailurePolicy(ctx context.Context, formats strfmt.Registry) error {
-
-	if swag.IsZero(m.FailurePolicy) { // not required
-		return nil
-	}
 
 	if err := m.FailurePolicy.ContextValidate(ctx, formats); err != nil {
 		if ve, ok := err.(*errors.Validation); ok {

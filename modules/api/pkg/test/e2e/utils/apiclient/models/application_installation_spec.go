@@ -141,11 +141,6 @@ func (m *ApplicationInstallationSpec) ContextValidate(ctx context.Context, forma
 func (m *ApplicationInstallationSpec) contextValidateApplicationRef(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ApplicationRef != nil {
-
-		if swag.IsZero(m.ApplicationRef) { // not required
-			return nil
-		}
-
 		if err := m.ApplicationRef.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("applicationRef")
@@ -162,11 +157,6 @@ func (m *ApplicationInstallationSpec) contextValidateApplicationRef(ctx context.
 func (m *ApplicationInstallationSpec) contextValidateDeployOptions(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeployOptions != nil {
-
-		if swag.IsZero(m.DeployOptions) { // not required
-			return nil
-		}
-
 		if err := m.DeployOptions.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deployOptions")
@@ -183,11 +173,6 @@ func (m *ApplicationInstallationSpec) contextValidateDeployOptions(ctx context.C
 func (m *ApplicationInstallationSpec) contextValidateNamespace(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Namespace != nil {
-
-		if swag.IsZero(m.Namespace) { // not required
-			return nil
-		}
-
 		if err := m.Namespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("namespace")

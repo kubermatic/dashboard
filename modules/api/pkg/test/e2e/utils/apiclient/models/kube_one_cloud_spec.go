@@ -342,11 +342,6 @@ func (m *KubeOneCloudSpec) ContextValidate(ctx context.Context, formats strfmt.R
 func (m *KubeOneCloudSpec) contextValidateAws(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Aws != nil {
-
-		if swag.IsZero(m.Aws) { // not required
-			return nil
-		}
-
 		if err := m.Aws.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("aws")
@@ -363,11 +358,6 @@ func (m *KubeOneCloudSpec) contextValidateAws(ctx context.Context, formats strfm
 func (m *KubeOneCloudSpec) contextValidateAzure(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Azure != nil {
-
-		if swag.IsZero(m.Azure) { // not required
-			return nil
-		}
-
 		if err := m.Azure.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("azure")
@@ -384,11 +374,6 @@ func (m *KubeOneCloudSpec) contextValidateAzure(ctx context.Context, formats str
 func (m *KubeOneCloudSpec) contextValidateDigitalocean(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Digitalocean != nil {
-
-		if swag.IsZero(m.Digitalocean) { // not required
-			return nil
-		}
-
 		if err := m.Digitalocean.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("digitalocean")
@@ -405,11 +390,6 @@ func (m *KubeOneCloudSpec) contextValidateDigitalocean(ctx context.Context, form
 func (m *KubeOneCloudSpec) contextValidateEquinix(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Equinix != nil {
-
-		if swag.IsZero(m.Equinix) { // not required
-			return nil
-		}
-
 		if err := m.Equinix.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("equinix")
@@ -426,11 +406,6 @@ func (m *KubeOneCloudSpec) contextValidateEquinix(ctx context.Context, formats s
 func (m *KubeOneCloudSpec) contextValidateGcp(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Gcp != nil {
-
-		if swag.IsZero(m.Gcp) { // not required
-			return nil
-		}
-
 		if err := m.Gcp.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("gcp")
@@ -447,11 +422,6 @@ func (m *KubeOneCloudSpec) contextValidateGcp(ctx context.Context, formats strfm
 func (m *KubeOneCloudSpec) contextValidateHetzner(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Hetzner != nil {
-
-		if swag.IsZero(m.Hetzner) { // not required
-			return nil
-		}
-
 		if err := m.Hetzner.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("hetzner")
@@ -468,11 +438,6 @@ func (m *KubeOneCloudSpec) contextValidateHetzner(ctx context.Context, formats s
 func (m *KubeOneCloudSpec) contextValidateNutanix(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Nutanix != nil {
-
-		if swag.IsZero(m.Nutanix) { // not required
-			return nil
-		}
-
 		if err := m.Nutanix.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("nutanix")
@@ -489,11 +454,6 @@ func (m *KubeOneCloudSpec) contextValidateNutanix(ctx context.Context, formats s
 func (m *KubeOneCloudSpec) contextValidateOpenstack(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Openstack != nil {
-
-		if swag.IsZero(m.Openstack) { // not required
-			return nil
-		}
-
 		if err := m.Openstack.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("openstack")
@@ -510,11 +470,6 @@ func (m *KubeOneCloudSpec) contextValidateOpenstack(ctx context.Context, formats
 func (m *KubeOneCloudSpec) contextValidateVmwareclouddirector(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Vmwareclouddirector != nil {
-
-		if swag.IsZero(m.Vmwareclouddirector) { // not required
-			return nil
-		}
-
 		if err := m.Vmwareclouddirector.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vmwareclouddirector")
@@ -531,11 +486,6 @@ func (m *KubeOneCloudSpec) contextValidateVmwareclouddirector(ctx context.Contex
 func (m *KubeOneCloudSpec) contextValidateVsphere(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Vsphere != nil {
-
-		if swag.IsZero(m.Vsphere) { // not required
-			return nil
-		}
-
 		if err := m.Vsphere.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("vsphere")

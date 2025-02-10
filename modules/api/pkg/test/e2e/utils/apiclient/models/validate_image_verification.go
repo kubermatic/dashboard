@@ -77,11 +77,6 @@ func (m *ValidateImageVerification) ContextValidate(ctx context.Context, formats
 func (m *ValidateImageVerification) contextValidateDeny(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Deny != nil {
-
-		if swag.IsZero(m.Deny) { // not required
-			return nil
-		}
-
 		if err := m.Deny.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("deny")

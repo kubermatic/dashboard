@@ -6,7 +6,6 @@ package gke
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -80,17 +79,12 @@ func (o *ValidateProjectGKECredentialsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the validate project g k e credentials o k response
-func (o *ValidateProjectGKECredentialsOK) Code() int {
-	return 200
-}
-
 func (o *ValidateProjectGKECredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentialsOK", 200)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentialsOK ", 200)
 }
 
 func (o *ValidateProjectGKECredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentialsOK", 200)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentialsOK ", 200)
 }
 
 func (o *ValidateProjectGKECredentialsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -114,6 +108,11 @@ type ValidateProjectGKECredentialsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the validate project g k e credentials default response
+func (o *ValidateProjectGKECredentialsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this validate project g k e credentials default response has a 2xx status code
@@ -141,19 +140,12 @@ func (o *ValidateProjectGKECredentialsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the validate project g k e credentials default response
-func (o *ValidateProjectGKECredentialsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *ValidateProjectGKECredentialsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ValidateProjectGKECredentialsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentials default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/providers/gke/validatecredentials][%d] validateProjectGKECredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ValidateProjectGKECredentialsDefault) GetPayload() *models.ErrorResponse {

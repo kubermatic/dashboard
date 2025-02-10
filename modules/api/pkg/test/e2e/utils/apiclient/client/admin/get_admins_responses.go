@@ -6,7 +6,6 @@ package admin
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 
@@ -93,19 +92,12 @@ func (o *GetAdminsOK) IsCode(code int) bool {
 	return code == 200
 }
 
-// Code gets the status code for the get admins o k response
-func (o *GetAdminsOK) Code() int {
-	return 200
-}
-
 func (o *GetAdminsOK) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAdminsOK) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsOK %s", 200, payload)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetAdminsOK) GetPayload() []*models.Admin {
@@ -160,17 +152,12 @@ func (o *GetAdminsUnauthorized) IsCode(code int) bool {
 	return code == 401
 }
 
-// Code gets the status code for the get admins unauthorized response
-func (o *GetAdminsUnauthorized) Code() int {
-	return 401
-}
-
 func (o *GetAdminsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsUnauthorized ", 401)
 }
 
 func (o *GetAdminsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsUnauthorized", 401)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsUnauthorized ", 401)
 }
 
 func (o *GetAdminsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -216,17 +203,12 @@ func (o *GetAdminsForbidden) IsCode(code int) bool {
 	return code == 403
 }
 
-// Code gets the status code for the get admins forbidden response
-func (o *GetAdminsForbidden) Code() int {
-	return 403
-}
-
 func (o *GetAdminsForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsForbidden ", 403)
 }
 
 func (o *GetAdminsForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsForbidden", 403)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdminsForbidden ", 403)
 }
 
 func (o *GetAdminsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -250,6 +232,11 @@ type GetAdminsDefault struct {
 	_statusCode int
 
 	Payload *models.ErrorResponse
+}
+
+// Code gets the status code for the get admins default response
+func (o *GetAdminsDefault) Code() int {
+	return o._statusCode
 }
 
 // IsSuccess returns true when this get admins default response has a 2xx status code
@@ -277,19 +264,12 @@ func (o *GetAdminsDefault) IsCode(code int) bool {
 	return o._statusCode == code
 }
 
-// Code gets the status code for the get admins default response
-func (o *GetAdminsDefault) Code() int {
-	return o._statusCode
-}
-
 func (o *GetAdminsDefault) Error() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdmins default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdmins default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAdminsDefault) String() string {
-	payload, _ := json.Marshal(o.Payload)
-	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdmins default %s", o._statusCode, payload)
+	return fmt.Sprintf("[GET /api/v1/admin][%d] getAdmins default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetAdminsDefault) GetPayload() *models.ErrorResponse {
