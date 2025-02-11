@@ -14,8 +14,6 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
-
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // NewPatchpolicyTemplateParams creates a new PatchpolicyTemplateParams object,
@@ -62,9 +60,6 @@ PatchpolicyTemplateParams contains all the parameters to send to the API endpoin
 	Typically these are written to a http.Request.
 */
 type PatchpolicyTemplateParams struct {
-
-	// Spec.
-	Spec *models.PolicyTemplateSpec
 
 	// TemplateName.
 	PolicyTemplateName string
@@ -122,17 +117,6 @@ func (o *PatchpolicyTemplateParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithSpec adds the spec to the patchpolicy template params
-func (o *PatchpolicyTemplateParams) WithSpec(spec *models.PolicyTemplateSpec) *PatchpolicyTemplateParams {
-	o.SetSpec(spec)
-	return o
-}
-
-// SetSpec adds the spec to the patchpolicy template params
-func (o *PatchpolicyTemplateParams) SetSpec(spec *models.PolicyTemplateSpec) {
-	o.Spec = spec
-}
-
 // WithPolicyTemplateName adds the templateName to the patchpolicy template params
 func (o *PatchpolicyTemplateParams) WithPolicyTemplateName(templateName string) *PatchpolicyTemplateParams {
 	o.SetPolicyTemplateName(templateName)
@@ -151,11 +135,6 @@ func (o *PatchpolicyTemplateParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-	if o.Spec != nil {
-		if err := r.SetBodyParam(o.Spec); err != nil {
-			return err
-		}
-	}
 
 	// path param template_name
 	if err := r.SetPathParam("template_name", o.PolicyTemplateName); err != nil {
