@@ -80,17 +80,17 @@ limitations under the License.
           </div>
         </km-property>
 
-        <km-property *ngIf="machineDeployment.spec.maxReplicas">
-          <div key>Max Replicas</div>
-          <div value>
-            <span>{{machineDeployment.spec.maxReplicas}}</span>
-          </div>
-        </km-property>
-
         <km-property *ngIf="machineDeployment.spec.minReplicas">
           <div key>Min Replicas</div>
           <div value>
             <span>{{machineDeployment.spec.minReplicas}}</span>
+          </div>
+        </km-property>
+
+        <km-property *ngIf="machineDeployment.spec.maxReplicas">
+          <div key>Max Replicas</div>
+          <div value>
+            <span>{{machineDeployment.spec.maxReplicas}}</span>
           </div>
         </km-property>
 

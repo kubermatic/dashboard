@@ -243,7 +243,8 @@ limitations under the License.
                         fxLayoutAlign="start center"
                         fxLayoutGap="5px">
           <div>Cluster Autoscaling</div>
-          <i *ngIf="isDialogView()" class="km-icon-info km-pointer"
+          <i *ngIf="isDialogView()"
+             class="km-icon-info km-pointer"
              matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. NOTE: The addon for cluster-autoscaler has been deprecated in favor of the Application, please make sure to remove the addon from the cluster before enabling this option."></i>
         </mat-card-title>
       </mat-card-header>
@@ -255,20 +256,20 @@ limitations under the License.
            matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
       </mat-checkbox>
 
-      <km-number-stepper label="Max Replicas"
-                         mode="all"
-                         hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
-                         [min]="form.get(Controls.MinReplicas).value || MinReplicasCount"
-                         [max]="MaxReplicasCount"
-                         [formControlName]="Controls.MaxReplicas">
-      </km-number-stepper>
-
       <km-number-stepper label="Min Replicas"
                          mode="all"
                          hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
                          [min]="MinReplicasCount"
                          [max]="form.get(Controls.MaxReplicas).value  || MaxReplicasCount"
                          [formControlName]="Controls.MinReplicas">
+      </km-number-stepper>
+
+      <km-number-stepper label="Max Replicas"
+                         mode="all"
+                         hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
+                         [min]="form.get(Controls.MinReplicas).value || MinReplicasCount"
+                         [max]="MaxReplicasCount"
+                         [formControlName]="Controls.MaxReplicas">
       </km-number-stepper>
     </ng-container>
 
