@@ -131,6 +131,7 @@ vet: ## Run go vet against code.
 go-mod-tidy:
 	go mod tidy
 
-update-codegen: fmt vet go-mod-tidy
+update-codegen: go-mod-tidy fmt
 	./hack/update-codegen.sh
 	./hack/gen-api-client.sh
+	./hack/update-swagger.sh
