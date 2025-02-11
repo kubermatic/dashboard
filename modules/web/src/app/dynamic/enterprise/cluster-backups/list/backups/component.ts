@@ -184,7 +184,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       status.icon === StatusIcon.Warning ||
       status.icon === StatusIcon.Unknown
     ) {
-      status.message = `${status.message}, Run "velero ${BackupType.Backup} logs ${backupName}" for more information`;
+      status.message = `${status.message}. Run "velero ${BackupType.Backup.toLowerCase()} logs ${backupName}" for more information`;
     }
     return status;
   }
