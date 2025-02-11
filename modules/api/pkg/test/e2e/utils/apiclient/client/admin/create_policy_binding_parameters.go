@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // NewCreatePolicyBindingParams creates a new CreatePolicyBindingParams object,
@@ -61,14 +63,8 @@ CreatePolicyBindingParams contains all the parameters to send to the API endpoin
 */
 type CreatePolicyBindingParams struct {
 
-	// Name.
-	Name *string
-
-	// Namespace.
-	Namespace *string
-
-	// ProjectID.
-	ProjectID *string
+	// Body.
+	Body *models.CreatePolicyBindingBody
 
 	timeout    time.Duration
 	Context    context.Context
@@ -123,37 +119,15 @@ func (o *CreatePolicyBindingParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithName adds the name to the create policy binding params
-func (o *CreatePolicyBindingParams) WithName(name *string) *CreatePolicyBindingParams {
-	o.SetName(name)
+// WithBody adds the body to the create policy binding params
+func (o *CreatePolicyBindingParams) WithBody(body *models.CreatePolicyBindingBody) *CreatePolicyBindingParams {
+	o.SetBody(body)
 	return o
 }
 
-// SetName adds the name to the create policy binding params
-func (o *CreatePolicyBindingParams) SetName(name *string) {
-	o.Name = name
-}
-
-// WithNamespace adds the namespace to the create policy binding params
-func (o *CreatePolicyBindingParams) WithNamespace(namespace *string) *CreatePolicyBindingParams {
-	o.SetNamespace(namespace)
-	return o
-}
-
-// SetNamespace adds the namespace to the create policy binding params
-func (o *CreatePolicyBindingParams) SetNamespace(namespace *string) {
-	o.Namespace = namespace
-}
-
-// WithProjectID adds the projectID to the create policy binding params
-func (o *CreatePolicyBindingParams) WithProjectID(projectID *string) *CreatePolicyBindingParams {
-	o.SetProjectID(projectID)
-	return o
-}
-
-// SetProjectID adds the projectId to the create policy binding params
-func (o *CreatePolicyBindingParams) SetProjectID(projectID *string) {
-	o.ProjectID = projectID
+// SetBody adds the body to the create policy binding params
+func (o *CreatePolicyBindingParams) SetBody(body *models.CreatePolicyBindingBody) {
+	o.Body = body
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -163,55 +137,9 @@ func (o *CreatePolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg 
 		return err
 	}
 	var res []error
-
-	if o.Name != nil {
-
-		// query param name
-		var qrName string
-
-		if o.Name != nil {
-			qrName = *o.Name
-		}
-		qName := qrName
-		if qName != "" {
-
-			if err := r.SetQueryParam("name", qName); err != nil {
-				return err
-			}
-		}
-	}
-
-	if o.Namespace != nil {
-
-		// query param namespace
-		var qrNamespace string
-
-		if o.Namespace != nil {
-			qrNamespace = *o.Namespace
-		}
-		qNamespace := qrNamespace
-		if qNamespace != "" {
-
-			if err := r.SetQueryParam("namespace", qNamespace); err != nil {
-				return err
-			}
-		}
-	}
-
-	if o.ProjectID != nil {
-
-		// query param projectID
-		var qrProjectID string
-
-		if o.ProjectID != nil {
-			qrProjectID = *o.ProjectID
-		}
-		qProjectID := qrProjectID
-		if qProjectID != "" {
-
-			if err := r.SetQueryParam("projectID", qProjectID); err != nil {
-				return err
-			}
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
 		}
 	}
 
