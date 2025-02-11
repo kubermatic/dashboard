@@ -27,6 +27,7 @@ import {
   ApplicationDefinition,
   getApplicationVersion,
   CLUSTER_AUTOSCALING_APP_DEF_NAME,
+  ApplicationSettings,
 } from '@shared/entity/application';
 import * as y from 'js-yaml';
 import _, {merge} from 'lodash';
@@ -58,6 +59,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
 
   applications: Application[] = [];
 
+  private _applicationSettings: ApplicationSettings;
+
   constructor(
     wizard: WizardService,
     private readonly _builder: FormBuilder,
@@ -72,6 +75,11 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     this.form = this._builder.group({
       [Controls.Applications]: this._builder.control(''),
     });
+
+    this._applicationService
+      .getApplicationSettings()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this._applicationSettings = settings));
 
     this.applications =
       this._applicationService.applications?.map(application => {
@@ -145,15 +153,16 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
 
   private createApplicationInstallation(appDef: ApplicationDefinition): Application {
     const applicationInstallation: Application = {
-      name: appDef.name,
+      name: this._applicationSettings?.defaultNamespace || appDef.name,
       namespace: appDef.name,
       spec: {
         applicationRef: {
           name: appDef.name,
           version: getApplicationVersion(appDef),
         },
-        namespace: {
+        namespace: appDef.spec.defaultNamespace || {
           name: appDef.name,
+          create: true,
         },
       },
     };

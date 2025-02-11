@@ -40,6 +40,8 @@ type ClientService interface {
 
 	GetApplicationInstallation(params *GetApplicationInstallationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApplicationInstallationOK, error)
 
+	GetApplicationSettings(params *GetApplicationSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApplicationSettingsOK, error)
+
 	ListApplicationDefinitions(params *ListApplicationDefinitionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListApplicationDefinitionsOK, error)
 
 	ListApplicationInstallations(params *ListApplicationInstallationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListApplicationInstallationsOK, error)
@@ -278,6 +280,44 @@ func (a *Client) GetApplicationInstallation(params *GetApplicationInstallationPa
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetApplicationInstallationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetApplicationSettings Get application settings
+*/
+func (a *Client) GetApplicationSettings(params *GetApplicationSettingsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetApplicationSettingsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetApplicationSettingsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getApplicationSettings",
+		Method:             "GET",
+		PathPattern:        "/api/v2/applicationsettings",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetApplicationSettingsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetApplicationSettingsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetApplicationSettingsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

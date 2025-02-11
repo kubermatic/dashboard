@@ -2237,6 +2237,12 @@ type GlobalSettings struct {
 	Announcements map[string]kubermaticv1.Announcement `json:"announcements,omitempty"`
 }
 
+// ApplicationSettings defines common settings for applications
+// swagger:model ApplicationSettings
+type ApplicationSettings struct {
+	DefaultNamespace string `json:"defaultNamespace,omitempty"`
+}
+
 // VSphereTagCategory is the object representing a vsphere tag category.
 // swagger:model VSphereTagCategory
 type VSphereTagCategory struct {

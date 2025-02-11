@@ -59,17 +59,17 @@ limitations under the License.
           <ng-container *ngTemplateOutlet="versions"></ng-container>
 
           <mat-form-field>
-            <mat-label>Namespace</mat-label>
+            <mat-label>Application Installation Namespace</mat-label>
             <input matInput
                    required
-                   [formControlName]="Controls.Namespace"
+                   [formControlName]="Controls.AppInstallationNamespace"
                    type="text"
                    autocomplete="off" />
-            <mat-hint>Namespace where application resources will be deployed.</mat-hint>
-            <mat-error *ngIf="form.get(Controls.Namespace).hasError('required')">
+            <mat-hint>Namespace where application installation will be created.</mat-hint>
+            <mat-error *ngIf="form.get(Controls.AppInstallationNamespace).hasError('required')">
               <strong>Required</strong>
             </mat-error>
-            <mat-error *ngIf="form.get(Controls.Namespace).hasError('pattern')">
+            <mat-error *ngIf="form.get(Controls.AppInstallationNamespace).hasError('pattern')">
               Namespace can only contain alphanumeric characters and dashes (only between characters).
             </mat-error>
           </mat-form-field>
@@ -87,12 +87,27 @@ limitations under the License.
               Name can only contain alphanumeric characters and dashes (only between characters).
             </mat-error>
             <mat-error *ngIf="form.get(Controls.Name).hasError('duplicate')">
-              An application with this name already exists in selected namespace.
+              An application with this name already exists in the selected application resources namespace.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Application Resources Namespace</mat-label>
+            <input matInput
+                   required
+                   [formControlName]="Controls.AppResourcesNamespace"
+                   type="text"
+                   autocomplete="off" />
+            <mat-hint>Namespace where application resources will be deployed.</mat-hint>
+            <mat-error *ngIf="form.get(Controls.AppResourcesNamespace).hasError('required')">
+              <strong>Required</strong>
+            </mat-error>
+            <mat-error *ngIf="form.get(Controls.AppResourcesNamespace).hasError('pattern')">
+              Namespace can only contain alphanumeric characters and dashes (only between characters).
             </mat-error>
           </mat-form-field>
         </ng-template>
         <div class="application-values">
-          <km-editor [readonly]="isEnforcedApplication() ? 'true' : 'false'"
+          <km-editor [readonly]="isEnforcedApplication()"
                      [(model)]="valuesConfig"
                      (modelChange)="onValuesConfigChanged($event)"
                      height="370px"

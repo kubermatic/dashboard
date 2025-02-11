@@ -36,7 +36,8 @@ import {finalize, takeUntil} from 'rxjs/operators';
 enum Controls {
   Version = 'version',
   Name = 'name',
-  Namespace = 'namespace',
+  AppInstallationNamespace = 'appInstallationNamespace',
+  AppResourcesNamespace = 'appResourcesNamespace',
   Values = 'values',
 }
 
@@ -152,10 +153,10 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
 
     if (!this.application.creationTimestamp) {
       this.form.addControl(
-        Controls.Namespace,
+        Controls.AppInstallationNamespace,
         this._builder.control(
           {
-            value: this.application.spec.namespace?.name,
+            value: this.application.namespace,
             disabled: this.isEnforcedApplication(),
           },
           [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
@@ -171,8 +172,18 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
           [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, this._duplicateNameValidator()]
         )
       );
+      this.form.addControl(
+        Controls.AppResourcesNamespace,
+        this._builder.control(
+          {
+            value: this.application.spec.namespace?.name,
+            disabled: this.isEnforcedApplication(),
+          },
+          [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
+        )
+      );
       this.form
-        .get(Controls.Namespace)
+        .get(Controls.AppResourcesNamespace)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(() => this.form.get(Controls.Name).updateValueAndValidity());
     }
@@ -183,7 +194,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
 
   private _duplicateNameValidator(): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} | null => {
-      const namespace = this.form?.get(Controls.Namespace).value;
+      const namespace = this.form?.get(Controls.AppResourcesNamespace).value;
       const name = control.value;
       if (!namespace || !name) {
         return null;
@@ -213,12 +224,12 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       patch = {
         ...patch,
         name: this.form.get(Controls.Name).value,
-        namespace: this.form.get(Controls.Namespace).value,
+        namespace: this.form.get(Controls.AppInstallationNamespace).value,
         spec: {
           ...patch.spec,
           namespace: {
             ...patch.spec.namespace,
-            name: this.form.get(Controls.Namespace).value,
+            name: this.form.get(Controls.AppResourcesNamespace).value,
           } as ApplicationNamespace,
         } as ApplicationSpec,
       } as Application;

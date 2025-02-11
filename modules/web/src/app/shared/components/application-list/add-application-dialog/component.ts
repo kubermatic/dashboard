@@ -25,6 +25,7 @@ import {
   ApplicationLabelValue,
   ApplicationNamespace,
   ApplicationRef,
+  ApplicationSettings,
   ApplicationSpec,
   ApplicationVersion,
   getApplicationVersion,
@@ -39,7 +40,8 @@ import {finalize, takeUntil} from 'rxjs/operators';
 enum Controls {
   Version = 'version',
   Name = 'name',
-  Namespace = 'namespace',
+  AppInstallationNamespace = 'appInstallationNamespace',
+  AppResourcesNamespace = 'appResourcesNamespace',
   Values = 'values',
 }
 
@@ -75,6 +77,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   editionVersion: string = getEditionVersion();
 
   private readonly _unsubscribe = new Subject<void>();
+  private _applicationSettings: ApplicationSettings;
   private _namespaceValueChangesSubscription$: Subscription;
 
   constructor(
@@ -87,6 +90,11 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     this.applicationDefsDataSource.data = this._allowedApplicationDefinitions;
     this.applicationDefsDataSource.filterPredicate = this._filter.bind(this);
     this.applicationDefsDataSource.filter = '';
+
+    this._applicationService
+      .getApplicationSettings()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this._applicationSettings = settings));
   }
 
   ngOnChanges(): void {
@@ -175,15 +183,19 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     const version = getApplicationVersion(this.selectedApplication);
     this.form = this._builder.group({
       [Controls.Version]: this._builder.control(version, Validators.required),
-      [Controls.Namespace]: this._builder.control(this.selectedApplication.name, [
-        Validators.required,
-        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-      ]),
+      [Controls.AppInstallationNamespace]: this._builder.control(
+        this._applicationSettings.defaultNamespace || this.selectedApplication.name,
+        [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
+      ),
       [Controls.Name]: this._builder.control(this.selectedApplication.name, [
         Validators.required,
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
         this._duplicateNameValidator(),
       ]),
+      [Controls.AppResourcesNamespace]: this._builder.control(
+        this.selectedApplication.spec.defaultNamespace?.name || this.selectedApplication.name,
+        [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
+      ),
       [Controls.Values]: this._builder.control(this.valuesConfig),
     });
 
@@ -195,7 +207,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       this._namespaceValueChangesSubscription$.unsubscribe();
     }
     this._namespaceValueChangesSubscription$ = this.form
-      .get(Controls.Namespace)
+      .get(Controls.AppResourcesNamespace)
       .valueChanges.subscribe(() => this.form.get(Controls.Name).updateValueAndValidity());
 
     this.form.get(Controls.Name).markAsTouched();
@@ -203,7 +215,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
 
   private _duplicateNameValidator(): ValidatorFn {
     return (control: AbstractControl): {[key: string]: any} | null => {
-      const namespace = this.form?.get(Controls.Namespace).value;
+      const namespace = this.form?.get(Controls.AppResourcesNamespace).value;
       const name = control.value;
       if (!namespace || !name) {
         return null;
@@ -219,16 +231,19 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   private _getApplicationEntity(): Application {
     return {
       name: this.form.get(Controls.Name).value,
-      namespace: this.form.get(Controls.Namespace).value,
+      namespace: this.form.get(Controls.AppInstallationNamespace).value,
       spec: {
         applicationRef: {
           name: this.selectedApplication.name,
           version: this.form.get(Controls.Version).value,
         } as ApplicationRef,
-        namespace: {
-          name: this.form.get(Controls.Namespace).value,
-          create: true,
-        } as ApplicationNamespace,
+        namespace:
+          this.form.get(Controls.AppResourcesNamespace).value === this.selectedApplication.spec.defaultNamespace?.name
+            ? this.selectedApplication.spec.defaultNamespace
+            : ({
+                name: this.form.get(Controls.AppResourcesNamespace).value,
+                create: true,
+              } as ApplicationNamespace),
         valuesBlock: this.form.get(Controls.Values).value,
       } as ApplicationSpec,
     } as Application;
