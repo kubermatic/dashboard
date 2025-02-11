@@ -14,6 +14,8 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // NewCreatePolicyTemplateParams creates a new CreatePolicyTemplateParams object,
@@ -61,8 +63,8 @@ CreatePolicyTemplateParams contains all the parameters to send to the API endpoi
 */
 type CreatePolicyTemplateParams struct {
 
-	// Name.
-	Name *string
+	// Body.
+	Body *models.PolicyTemplate
 
 	timeout    time.Duration
 	Context    context.Context
@@ -117,15 +119,15 @@ func (o *CreatePolicyTemplateParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithName adds the name to the create policy template params
-func (o *CreatePolicyTemplateParams) WithName(name *string) *CreatePolicyTemplateParams {
-	o.SetName(name)
+// WithBody adds the body to the create policy template params
+func (o *CreatePolicyTemplateParams) WithBody(body *models.PolicyTemplate) *CreatePolicyTemplateParams {
+	o.SetBody(body)
 	return o
 }
 
-// SetName adds the name to the create policy template params
-func (o *CreatePolicyTemplateParams) SetName(name *string) {
-	o.Name = name
+// SetBody adds the body to the create policy template params
+func (o *CreatePolicyTemplateParams) SetBody(body *models.PolicyTemplate) {
+	o.Body = body
 }
 
 // WriteToRequest writes these params to a swagger request
@@ -135,21 +137,9 @@ func (o *CreatePolicyTemplateParams) WriteToRequest(r runtime.ClientRequest, reg
 		return err
 	}
 	var res []error
-
-	if o.Name != nil {
-
-		// query param name
-		var qrName string
-
-		if o.Name != nil {
-			qrName = *o.Name
-		}
-		qName := qrName
-		if qName != "" {
-
-			if err := r.SetQueryParam("name", qName); err != nil {
-				return err
-			}
+	if o.Body != nil {
+		if err := r.SetBodyParam(o.Body); err != nil {
+			return err
 		}
 	}
 

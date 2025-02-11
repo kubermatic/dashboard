@@ -66,7 +66,7 @@ type getPolicyBindingReq struct {
 type createPolicyBindingReq struct {
 	// in: body
 	// required: true
-	createPolicyBindingBody
+	Body createPolicyBindingBody
 }
 
 // patchPolicyBindingReq defines HTTP request for patching a policy binding
@@ -95,9 +95,10 @@ type deletePolicyBindingReq struct {
 }
 
 type createPolicyBindingBody struct {
-	apiv2.PolicyBinding
-	Namespace string `json:"namespace"`
-	ProjectID string `json:"projectID"`
+	Name      string                         `json:"name"`
+	Namespace string                         `json:"namespace"`
+	ProjectID string                         `json:"projectID"`
+	Spec      kubermaticv1.PolicyBindingSpec `json:"spec"`
 }
 
 type patchPolicyBindingBody struct {
@@ -205,7 +206,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	userInfo, err := userInfoGetter(ctx, req.ProjectID)
+	userInfo, err := userInfoGetter(ctx, req.Body.ProjectID)
 
 	if err != nil {
 		return nil, err
@@ -215,20 +216,20 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, fmt.Errorf("Only admins and project owners can create policy bindings")
 	}
 	if !userInfo.IsAdmin {
-		if req.Spec.Scope == globalScope {
+		if req.Body.Spec.Scope == globalScope {
 			return nil, fmt.Errorf("Only admins can create policy binding with global scope")
 		}
 	}
-	if !slices.Contains(req.Spec.Target.Projects.Name, req.ProjectID) && !userInfo.IsAdmin {
+	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
 		return nil, fmt.Errorf("project owners can only create policybinding on there projects")
 	}
 
-	policyBindingSpec := req.Spec.DeepCopy()
+	policyBindingSpec := req.Body.Spec.DeepCopy()
 
 	policyBinding := &kubermaticv1.PolicyBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      req.Name,
-			Namespace: req.Namespace,
+			Name:      req.Body.Name,
+			Namespace: req.Body.Namespace,
 		},
 		Spec: *policyBindingSpec,
 	}
@@ -246,7 +247,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 
 func DecodeCreatePolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req createPolicyBindingReq
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
 
