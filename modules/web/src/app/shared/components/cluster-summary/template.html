@@ -673,14 +673,14 @@ limitations under the License.
                                  [value]="machineDeployment.spec.dynamicConfig">
             </km-property-boolean>
 
-            <km-property *ngIf="machineDeployment.spec.maxReplicas as maxReplicas">
-              <div key>Max Replicas</div>
-              <div value>{{maxReplicas}}</div>
-            </km-property>
-
             <km-property *ngIf="machineDeployment.spec.minReplicas as minReplicas">
               <div key>Min Replicas</div>
               <div value>{{minReplicas}}</div>
+            </km-property>
+
+            <km-property *ngIf="machineDeployment.spec.maxReplicas as maxReplicas">
+              <div key>Max Replicas</div>
+              <div value>{{maxReplicas}}</div>
             </km-property>
 
             <km-property *ngIf="displayTags(machineDeployment.spec.template.labels)">
