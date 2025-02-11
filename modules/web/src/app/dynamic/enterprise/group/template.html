@@ -58,7 +58,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Role
         </th>
         <td mat-cell
-            *matCellDef="let element">{{element.role}}</td>
+            *matCellDef="let element">{{element.role | titlecase}}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="column.Actions">
