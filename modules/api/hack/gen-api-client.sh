@@ -35,13 +35,17 @@ function cleanup() {
 }
 trap cleanup EXIT SIGINT SIGTERM
 
-# We had to exclude github.com/sigstore/rekor/pkg/generated/models package because swagger spec generation was failing with the error:
+# We had to exclude "github.com/sigstore/rekor/pkg/generated/models" package because swagger spec generation was failing with the error:
 # classifier: unknown swagger annotation "discriminator"
+
+# Kyverno causes conflicts with Kubernetes Admission APIs and thus resulting in inconsistent swagger spec generation on each run. Ignoring Kyverno APIs is not possible
+# as it would break the generation of the Kyverno API client. So instead we are excluding the conflicting APIs/models "k8s.io/api/admissionregistration".
 run_swagger generate spec \
   --tags=ee \
   --scan-models \
   -o ${TMP_SWAGGER} \
   -x github.com/sigstore/rekor/pkg/generated/models \
+  -x k8s.io/api/admissionregistration/* \
   -x k8c.io/kubermatic/*
 
 rm -r ../../pkg/test/e2e/utils/apiclient/
