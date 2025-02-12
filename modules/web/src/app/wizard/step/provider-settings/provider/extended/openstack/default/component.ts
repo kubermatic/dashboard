@@ -38,7 +38,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {OpenstackCredentialsTypeService} from '../service';
+import {CredentialsType, OpenstackCredentialsTypeService} from '../service';
 import {IPVersion} from '../shared/types/ip-version';
 import {
   IPv4SubnetIDState,
@@ -358,7 +358,14 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (this._hasUserCredentials() && this._hasProject()) || this._hasApplicationCredentials();
+    switch (this._credentialsTypeService.credentialsType) {
+      case CredentialsType.Default:
+        return this._hasUserCredentials() && this._hasProject();
+      case CredentialsType.Application:
+        return this._hasApplicationCredentials();
+      default:
+        return false;
+    }
   }
 
   private _areCredentialsChanged(): boolean {
