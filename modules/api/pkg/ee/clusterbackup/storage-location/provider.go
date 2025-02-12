@@ -261,3 +261,11 @@ func (p *BackupStorageProvider) getImpersonatedClient(userInfo *provider.UserInf
 	}
 	return p.createMasterImpersonatedClient(impersonationCfg)
 }
+
+func (p *BackupStorageProvider) GetStorageLocationCreds(ctx context.Context, secretName string) (map[string][]byte, error) {
+	secret := &corev1.Secret{}
+	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: secretName, Namespace: resources.KubermaticNamespace}, secret); err != nil {
+		return nil, err
+	}
+	return secret.Data, nil
+}
