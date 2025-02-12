@@ -1531,8 +1531,8 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 k8c.io/kubeone v1.9.0 h1:+CPaUwOWHyw+dJmy3tR/KtRbVP0CuYPQpfaaEXeEIYU=
 k8c.io/kubeone v1.9.0/go.mod h1:l5ehlxg5fE900c2JBL6by6oN9a/TV+T0zunwlO7FNtY=
-k8c.io/kubermatic/v2 v2.27.0-alpha.1.0.20250207091313-bbee6896af57 h1:O4m74rs/nwPa71BgsGClPNgdFILqmqzAboxpDnFiTQ0=
-k8c.io/kubermatic/v2 v2.27.0-alpha.1.0.20250207091313-bbee6896af57/go.mod h1:59D9IDmf68i+EAA3zmACkQgl3OrClASy+ehIwwDxkCs=
+k8c.io/kubermatic/v2 v2.27.0-alpha.2.0.20250211114519-380a83d349f3 h1:W8K3CcpvGXtgN1db+O7sqeqqpoODmZMBqrdvEmMVvsc=
+k8c.io/kubermatic/v2 v2.27.0-alpha.2.0.20250211114519-380a83d349f3/go.mod h1:5GpV6udWFLhp9PG8oimBeaXlu/K+t1czhP5t2II37/s=
 k8c.io/machine-controller v1.61.0 h1:d7KVD2CDG2K76ujSt5RPLUP3BCNDcioObdM1N0BUNlc=
 k8c.io/machine-controller v1.61.0/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
 k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108 h1:xiKGpydY/jsBVD5XT3zvAxW2pPKEtgcv526zdVFzbuw=
