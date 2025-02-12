@@ -107,8 +107,7 @@ func (r *retryRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 		// make it impossible for the caller to read the response body.
 		// As this context times out anyway, and timing out means it closes
 		// itself, it's okay to not call cancel() here.
-		ctx, cancel := context.WithTimeout(context.Background(), r.requestTimeout)
-		defer cancel() // Ensure we clean up resources even if the request fails
+		ctx, _ := context.WithTimeout(context.Background(), r.requestTimeout) //nolint:govet
 
 		// replace any preexisting context with our new one
 		requestClone := request.WithContext(ctx)
