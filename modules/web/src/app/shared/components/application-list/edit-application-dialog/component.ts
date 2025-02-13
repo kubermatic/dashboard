@@ -163,16 +163,6 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
         )
       );
       this.form.addControl(
-        Controls.Name,
-        this._builder.control(
-          {
-            value: this.application.name,
-            disabled: this.isEnforcedApplication(),
-          },
-          [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, this._duplicateNameValidator()]
-        )
-      );
-      this.form.addControl(
         Controls.AppResourcesNamespace,
         this._builder.control(
           {
@@ -180,6 +170,16 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
             disabled: this.isEnforcedApplication(),
           },
           [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
+        )
+      );
+      this.form.addControl(
+        Controls.Name,
+        this._builder.control(
+          {
+            value: this.application.name,
+            disabled: this.isEnforcedApplication(),
+          },
+          [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, this._duplicateNameValidator()]
         )
       );
       this.form

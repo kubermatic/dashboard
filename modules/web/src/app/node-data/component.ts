@@ -212,7 +212,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         main: this.selectedOperatingSystemProfile || '',
       }),
       [Controls.EnableClusterAutoscalingApp]: this._builder.control(
-        this._applicationService.applications.find(
+        this._applicationService.applications?.find(
           app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
         )
       ),

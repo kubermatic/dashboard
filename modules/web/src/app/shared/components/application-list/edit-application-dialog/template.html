@@ -43,12 +43,16 @@ limitations under the License.
                 <div value>{{application.spec.applicationRef?.version}}</div>
               </km-property>
               <km-property>
-                <div key>Namespace</div>
-                <div value>{{application.spec.namespace?.name}}</div>
+                <div key>Installation Namespace</div>
+                <div value>{{application.namespace}}</div>
               </km-property>
               <km-property>
                 <div key>Name</div>
                 <div value>{{application.name}}</div>
+              </km-property>
+              <km-property>
+                <div key>Resources Namespace</div>
+                <div value>{{application.spec.namespace?.name}}</div>
               </km-property>
             </div>
           </div>
