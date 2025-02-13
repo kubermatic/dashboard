@@ -50,7 +50,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/hetznercloud/hcloud-go v1.59.2
 	github.com/kubeovn/kube-ovn v1.13.0
-	github.com/kyverno/kyverno v1.13.4 // indirect
+	github.com/kyverno/kyverno v1.13.4
 	github.com/minio/minio-go/v7 v7.0.81
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20241101234656-e78c8abd754a // v0.9.0+
