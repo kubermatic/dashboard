@@ -16,11 +16,17 @@ limitations under the License.
 
 <div *ngIf="showAnnouncementBanner && !!currentAnnouncementID"
      class="announcement">
+  <i class="km-icon-announcement i-24"></i>
   <p>{{ announcements.get(currentAnnouncementID)?.message }}</p>
   <div>
-    <a (click)="openAnnouncementsDialog()">see all</a>
+    <button mat-flat-button
+            matTooltip="See All Announcements"
+            (click)="openAnnouncementsDialog()">
+      See&nbsp;All
+    </button>
     <button mat-flat-button
             matTooltip="Close"
+            class="close-button"
             (click)="closeBanner()">
       <i class="km-icon-mask km-icon-close"></i>
     </button>

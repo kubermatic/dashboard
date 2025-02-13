@@ -16,7 +16,7 @@ import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/c
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {AnnouncementsDialogComponent} from '@app/shared/components/announcements/component';
+import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';

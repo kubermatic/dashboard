@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.events-long-text {
-  word-break: break-word;
-}
+@use 'sass:map';
 
-.mat-mdc-cell {
-  .mdc-icon-button {
-    position: relative;
-    top: 10px;
+@mixin theme-announcements-dialog-component($colors) {
+  .announcements-dialog-content {
+    --mat-table-background-color:  #{map.get($colors, dialog)};
 
-    .km-icon-check {
-      margin: 0;
+    .mat-mdc-row.unread-announcement {
+      background-color: map.get($colors, option-background-hover) !important;
     }
   }
+
 }

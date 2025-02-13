@@ -139,7 +139,7 @@ import {ValueChangedIndicatorDirective} from './directives/value-changed-indicat
 import {PipesModule} from './pipes/ngx-filter-pipe/module';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {AnnouncementBannerComponent} from './components/announcement-banner/component';
-import {AnnouncementsDialogComponent} from './components/announcements/component';
+import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 
 const modules = [
   CommonModule,

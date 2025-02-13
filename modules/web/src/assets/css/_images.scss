@@ -486,6 +486,14 @@
   @include mixins.mask-image('/assets/images/icons/docs.svg', 18px);
 }
 
+.km-icon-announcement {
+  @include mixins.mask-image('/assets/images/icons/announcement.svg', 18px);
+
+  &.i-24 {
+    @include mixins.size(24px, 24px, true);
+  }
+}
+
 .km-provider-logo-alibaba {
   @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 115px, 30px);
 }

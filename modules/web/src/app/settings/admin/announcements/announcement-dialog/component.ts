@@ -63,11 +63,11 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   }
 
   get label(): string {
-    return this._dialogModeService.isEditDialog ? 'Save' : 'Add';
+    return this._dialogModeService.isEditDialog ? 'Save Changes' : 'Add Announcement';
   }
 
   get icon(): string {
-    return this.isEditDialog ? 'km-icon-edit' : 'km-icon-add';
+    return this.isEditDialog ? 'km-icon-save' : 'km-icon-add';
   }
 
   ngOnInit(): void {
@@ -148,7 +148,9 @@ export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
 
   onNext(announcement: AdminAnnouncement): void {
     this._dialogRef.close(announcement);
-    this._notificationService.success('created new announcement');
+    this._notificationService.success(
+      this.isEditDialog ? 'Announcement updated successfully.' : 'New announcement created successfully.'
+    );
   }
 
   onTimeChange(time: string): void {
