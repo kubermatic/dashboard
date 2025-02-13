@@ -15,9 +15,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {AdminAnnouncementDialogComponent, AdminAnnouncementDialogConfig} from './announcement-dialog/component';
 import {DialogModeService} from '@app/core/services/dialog-mode';
-import {take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AdminAnnouncement, AdminSettings} from '@app/shared/entity/settings';
 import {StatusIcon} from '@app/shared/utils/health-status';
 import {Subject} from 'rxjs';
@@ -68,9 +69,25 @@ export class AdminAnnouncementsComponent implements OnInit, OnDestroy {
   }
 
   removeAnnouncement(announcementID: string): void {
-    this.announcements.set(announcementID, null);
-    this._settingsService
-      .patchAdminSettings({announcements: this.announcements} as AdminSettings)
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Announcement',
+        message: 'Are you sure you want to delete this announcement permanently?',
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(
+        switchMap(_ => {
+          this.announcements.set(announcementID, null);
+          return this._settingsService.patchAdminSettings({announcements: this.announcements} as AdminSettings);
+        })
+      )
+      .pipe(take(1))
       .subscribe(settings => {
         this._initAnnouncements(settings.announcements);
       });

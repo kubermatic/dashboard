@@ -21,7 +21,8 @@ import {take} from 'rxjs';
 
 enum Column {
   Message = 'message',
-  Read = 'read',
+  Created = 'created',
+  Actions = 'actions',
 }
 
 @Component({
@@ -35,7 +36,7 @@ export class AnnouncementsDialogComponent implements OnInit {
   displayedColumns: string[] = Object.values(Column);
   announcements = new Map<string, AdminAnnouncement>();
   readAnnouncements: string[] = [];
-  awaitedAnnouncementID: string = '';
+  markingAnnouncementsAsRead: Record<string, boolean> = {};
 
   constructor(
     public _matDialogRef: MatDialogRef<AnnouncementsDialogComponent>,
@@ -44,6 +45,7 @@ export class AnnouncementsDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this._matDialogRef.addPanelClass('km-announcements-dialog');
     this._getAnnouncements();
   }
 
@@ -52,8 +54,14 @@ export class AnnouncementsDialogComponent implements OnInit {
   }
 
   markAsRead(announcement: string): void {
-    this.awaitedAnnouncementID = announcement;
-    this._updateUserReadAnnouncements([...this.readAnnouncements, announcement]);
+    this.markingAnnouncementsAsRead[announcement] = true;
+    this._userService
+      .patchReadAnnouncements([...this.readAnnouncements, announcement])
+      .pipe(take(1))
+      .subscribe(announcements => {
+        this.readAnnouncements = announcements;
+        this.markingAnnouncementsAsRead[announcement] = false;
+      });
   }
 
   isMessageRead(announcementId: string): boolean {
@@ -64,8 +72,8 @@ export class AnnouncementsDialogComponent implements OnInit {
     return this.announcements.get(announcementID).message;
   }
 
-  closeDialog(): void {
-    this._matDialogRef.close();
+  getCreatedAt(announcementID: string): string {
+    return this.announcements.get(announcementID).createdAt;
   }
 
   private _getAnnouncements(): void {
@@ -91,15 +99,5 @@ export class AnnouncementsDialogComponent implements OnInit {
         );
       }
     });
-  }
-
-  private _updateUserReadAnnouncements(announcements: string[]): void {
-    this._userService
-      .patchReadAnnouncements(announcements)
-      .pipe(take(1))
-      .subscribe(announcements => {
-        this.readAnnouncements = announcements;
-        this.awaitedAnnouncementID = '';
-      });
   }
 }

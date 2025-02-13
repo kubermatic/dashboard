@@ -17,7 +17,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {NavigationEnd, Router} from '@angular/router';
 import {AdminAnnouncement} from '@app/shared/entity/settings';
 import {filter, Subject, takeUntil} from 'rxjs';
-import {AnnouncementsDialogComponent} from '../announcements/component';
+import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 import {UserService} from '@app/core/services/user';
 
 const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api', '/terms-of-service$', '/404$'];

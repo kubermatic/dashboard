@@ -556,6 +556,11 @@ km-dashboard {
       }
     }
   }
+
+  &.km-announcements-dialog {
+    max-width: 1000px !important;
+    min-width: 1000px !important;
+  }
 }
 
 .km-quota-inputs {

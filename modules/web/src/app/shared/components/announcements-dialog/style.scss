@@ -1,4 +1,4 @@
-// Copyright 2024 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'sass:map';
+@use 'variables';
 
-@mixin theme-announcement-banner-component($colors) {
-  .announcement {
-    background-color: rgb(map.get($colors, primary), 0.8);
+.announcement-message {
+  word-break: break-word;
+}
 
-    .km-icon-announcement {
-      background-color: map.get($colors, announcement-banner-text);
-    }
+.mat-mdc-cell {
+  .mdc-icon-button {
+    position: relative;
+    top: 10px;
 
-    p {
-      color: map.get($colors, announcement-banner-text);
-    }
-
-    div {
-      .mdc-button{
-        &:hover {
-          background-color: map.get($colors, primary-hover);
-        }
-      }
+    .km-icon-check {
+      margin: 0;
     }
   }
 }

@@ -16,31 +16,39 @@
   align-items: center;
   border-radius: 10px;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  margin: 5px 1%;
-  padding: 10px 20px;
+  margin: 10px 1%;
+  padding: 10px 15px;
   width: 98%;
 
   p {
-    flex: 1;
-    margin: 0;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    margin: 0 50px 0 15px;
+    max-height: 55px;
+    overflow: hidden;
     text-align: left;
+    text-overflow: ellipsis;
+    white-space: normal;
+    width: 100%;
     word-break: break-word;
   }
 
   div {
     align-items: center;
     display: flex;
-    padding-left: 10px;
 
     .mdc-button {
       height: 30px;
-      width: 30px;
 
-      .km-icon-close {
-        position: relative ;
-        top: 4px;
+      &.close-button {
+        width: 30px;
+
+        .km-icon-close {
+          position: relative ;
+          top: 4px;
+        }
       }
     }
   }

@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <km-dialog-title>Announcements</km-dialog-title>
-<mat-dialog-content>
+<mat-dialog-content class="announcements-dialog-content">
   <table mat-table
          matSort
          *ngIf="hasAnnouncements()"
@@ -24,25 +24,34 @@ limitations under the License.
     <ng-container [matColumnDef]="Column.Message">
       <th mat-header-cell
           *matHeaderCellDef
-          class="km-header-cell p-85">Message</th>
+          class="km-header-cell p-70">Message</th>
       <td mat-cell
-          class="events-long-text"
+          class="announcement-message"
           *matCellDef="let element">{{getMessage(element)}}</td>
     </ng-container>
-    <ng-container [matColumnDef]="Column.Read">
+    <ng-container [matColumnDef]="Column.Created">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell p-20">Created</th>
+      <td mat-cell
+          *matCellDef="let element">
+        <km-relative-time [date]="getCreatedAt(element)"></km-relative-time>
+      </td>
+    </ng-container>
+    <ng-container [matColumnDef]="Column.Actions">
       <th mat-header-cell
           *matHeaderCellDef
           class="km-header-cell"></th>
       <td mat-cell
           *matCellDef="let element">
-        <button *ngIf="!isMessageRead(element) && !isWaiting"
+        <button *ngIf="!isMessageRead(element) && !markingAnnouncementsAsRead[element]"
                 mat-icon-button
                 (click)="markAsRead(element)"
-                matTooltip="mark as read"
+                matTooltip="Mark as read"
                 fxLayoutAlign="center center">
-          <i Class="km-icon-mask km-icon-check"></i>
+          <i class="km-icon-mask km-icon-check"></i>
         </button>
-        <km-spinner-with-confirmation [isSaved]="!(element === awaitedAnnouncementID) "></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="!markingAnnouncementsAsRead[element]"></km-spinner-with-confirmation>
       </td>
     </ng-container>
     <tr mat-header-row
@@ -50,18 +59,11 @@ limitations under the License.
         *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row
         *matRowDef="let row; columns: displayedColumns"
-        class="km-mat-row
-        "></tr>
+        class="km-mat-row"
+        [ngClass]="{'unread-announcement': !isMessageRead(row)}"></tr>
   </table>
   <div class="km-row km-empty-list-msg"
        *ngIf="!hasAnnouncements()">No announcements available.</div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          type="button"
-          (click)="closeDialog()">
-    <i class="km-icon-mask km-icon-close"
-       matButtonIcon></i>
-    <span>Close</span>
-  </button>
 </mat-dialog-actions>
