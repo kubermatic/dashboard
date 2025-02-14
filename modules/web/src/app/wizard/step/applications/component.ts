@@ -153,8 +153,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
 
   private createApplicationInstallation(appDef: ApplicationDefinition): Application {
     const applicationInstallation: Application = {
-      name: this._applicationSettings?.defaultNamespace || appDef.name,
-      namespace: appDef.name,
+      name: appDef.name,
+      namespace: this._applicationSettings?.defaultNamespace || appDef.name,
       spec: {
         applicationRef: {
           name: appDef.name,
