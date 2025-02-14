@@ -22,7 +22,6 @@ import {takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-admin-settings-opa',
   templateUrl: './template.html',
-  styleUrls: ['style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminSettingsOPAComponent implements OnDestroy {

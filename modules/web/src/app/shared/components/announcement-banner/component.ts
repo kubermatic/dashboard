@@ -15,10 +15,10 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {NavigationEnd, Router} from '@angular/router';
-import {AdminAnnouncement} from '@app/shared/entity/settings';
-import {filter, Subject, takeUntil} from 'rxjs';
-import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 import {UserService} from '@app/core/services/user';
+import {AdminAnnouncement} from '@app/shared/entity/settings';
+import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
+import {filter, Subject, takeUntil} from 'rxjs';
 
 const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api', '/terms-of-service$', '/404$'];
 @Component({
@@ -28,7 +28,6 @@ const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api',
 })
 export class AnnouncementBannerComponent implements OnInit, OnChanges {
   @Input() announcements: Map<string, AdminAnnouncement>;
-  curentPath: string;
   readAnnouncements: string[] = [];
   showAnnouncementBanner: boolean = false;
   currentAnnouncementID: string = '';
