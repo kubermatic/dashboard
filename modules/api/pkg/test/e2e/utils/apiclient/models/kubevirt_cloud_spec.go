@@ -49,6 +49,9 @@ type KubevirtCloudSpec struct {
 
 	// credentials reference
 	CredentialsReference *GlobalSecretKeySelector `json:"credentialsReference,omitempty"`
+
+	// csi driver operator
+	CsiDriverOperator *KubeVirtCSIDriverOperator `json:"csiDriverOperator,omitempty"`
 }
 
 // Validate validates this kubevirt cloud spec
@@ -64,6 +67,10 @@ func (m *KubevirtCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCredentialsReference(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCsiDriverOperator(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -144,6 +151,25 @@ func (m *KubevirtCloudSpec) validateCredentialsReference(formats strfmt.Registry
 	return nil
 }
 
+func (m *KubevirtCloudSpec) validateCsiDriverOperator(formats strfmt.Registry) error {
+	if swag.IsZero(m.CsiDriverOperator) { // not required
+		return nil
+	}
+
+	if m.CsiDriverOperator != nil {
+		if err := m.CsiDriverOperator.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("csiDriverOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("csiDriverOperator")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this kubevirt cloud spec based on the context it is used
 func (m *KubevirtCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -157,6 +183,10 @@ func (m *KubevirtCloudSpec) ContextValidate(ctx context.Context, formats strfmt.
 	}
 
 	if err := m.contextValidateCredentialsReference(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCsiDriverOperator(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -214,6 +244,22 @@ func (m *KubevirtCloudSpec) contextValidateCredentialsReference(ctx context.Cont
 				return ve.ValidateName("credentialsReference")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("credentialsReference")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *KubevirtCloudSpec) contextValidateCsiDriverOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CsiDriverOperator != nil {
+		if err := m.CsiDriverOperator.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("csiDriverOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("csiDriverOperator")
 			}
 			return err
 		}
