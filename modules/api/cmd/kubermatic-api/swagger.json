@@ -34864,6 +34864,18 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "KubeVirtCSIDriverOperator": {
+      "type": "object",
+      "title": "KubeVirtCSIDriverOperator contains the different configurations for the kubevirt csi driver operator in the user cluster.",
+      "properties": {
+        "overwriteRegistry": {
+          "description": "OverwriteRegistry overwrite the images registry that the operator pulls.",
+          "type": "string",
+          "x-go-name": "OverwriteRegistry"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "KubeVirtHTTPSource": {
       "type": "object",
       "title": "KubeVirtHTTPSource represents list of images and their versions that can be downloaded over HTTP.",
@@ -35071,6 +35083,9 @@
       "properties": {
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"
+        },
+        "csiDriverOperator": {
+          "$ref": "#/definitions/KubeVirtCSIDriverOperator"
         },
         "csiKubeconfig": {
           "type": "string",
