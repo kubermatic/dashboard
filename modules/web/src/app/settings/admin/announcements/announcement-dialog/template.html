@@ -22,7 +22,7 @@ limitations under the License.
                 [formControlName]="Controls?.Message"
                 rows="4"
                 required></textarea>
-      <mat-hint>Add the announcement message</mat-hint>
+      <mat-hint>Text to be displayed on the announcement banner</mat-hint>
       <mat-error *ngIf="form?.get(Controls.Message).hasError('required')">The announcement message is required</mat-error>
     </mat-form-field>
     <div>

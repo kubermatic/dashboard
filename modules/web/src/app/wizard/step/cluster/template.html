@@ -396,9 +396,7 @@ limitations under the License.
 
             <ng-container *ngIf="!!controlValue(Controls.AuditLogging)">
               <div fxLayoutAlign=" center">
-                <mat-checkbox [formControlName]="Controls.AuditWebhookBackend">
-                  Audit Webhook Backend
-                </mat-checkbox>
+                <mat-checkbox [formControlName]="Controls.AuditWebhookBackend"> Audit Webhook Backend </mat-checkbox>
                 <i class="km-icon-info km-pointer"
                    [matTooltip]="enforcedAuditWebhookSettings ? 'Audit Webhook Backend settings are enforced by your admin in the chosen datacenter.' : 'Configure webhook backend for audit logging functionality.'"></i>
               </div>
@@ -494,22 +492,14 @@ limitations under the License.
                           *ngIf="isKubernetesDashboardEnabled">
               Kubernetes Dashboard
             </mat-checkbox>
-            <div fxLayout="row"
-                 fxLayoutAlign=" center">
-              <mat-checkbox [formControlName]="Controls.OPAIntegration"
-                            id="km-wizard-opa-integration-checkbox"
-                            [matTooltipDisabled]="!form.get(Controls.OPAIntegration).disabled">
-              </mat-checkbox>
-              <div fxLayout="row"
-                   fxLayoutAlign=" center">
-                OPA Integration
-                <i *ngIf="isEnforced(Controls.OPAIntegration)"
-                   class="km-icon-info km-pointer"
-                   matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
-                <i class="km-icon-warning km-pointer"
-                   matTooltip="OPA (Open Policy Agent) has been deprecated in KKP 2.27 and will be removed in KKP 2.29+. Kyverno will replace it as an EE-only feature for policy management."></i>
-              </div>
-            </div>
+
+            <mat-checkbox [formControlName]="Controls.OPAIntegration"
+                          id="km-wizard-opa-integration-checkbox">
+              OPA Integration
+              <i *ngIf="isEnforced(Controls.OPAIntegration)"
+                 class="km-icon-info km-pointer"
+                 matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
+            </mat-checkbox>
 
             <ng-container *ngIf="isMLAEnabled">
               <mat-checkbox [formControlName]="Controls.MLALogging">

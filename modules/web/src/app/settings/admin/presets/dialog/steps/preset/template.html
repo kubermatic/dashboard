@@ -27,7 +27,7 @@ limitations under the License.
            type="text"
            title="name"
            autocomplete="off"
-           required>
+           required />
     <mat-error *ngIf="form.get(controls.Name).hasError('required')">
       <strong>Required</strong>
     </mat-error>
@@ -56,9 +56,7 @@ limitations under the License.
                [formControlName]="controls.Projects"
                [label]="projectLabel"
                [valueFormatter]="projectDisplayFn.bind(this)">
-    <div *option="let project">
-      {{project.name}}
-    </div>
+    <div *option="let project">{{project.name}}</div>
   </km-combobox>
 
   <mat-checkbox [formControlName]="controls.Disable"

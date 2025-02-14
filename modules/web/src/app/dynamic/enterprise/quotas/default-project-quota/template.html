@@ -20,7 +20,7 @@ limitations under the License.
        class="entry-label">
     <span>Default Project Quota</span>
     <i class="km-icon-info km-pointer"
-       matTooltip="Applies to every project. Specific Project Quotas override the Default Project Quota."></i>
+       matTooltip="Default Project Quota is applied to every project. To override the default quota for a project, create a Resource Quota for the project."></i>
   </div>
 
   <form [formGroup]="form"
@@ -28,8 +28,7 @@ limitations under the License.
         fxLayoutGap="16px">
     <km-number-stepper [formControlName]="Controls.CPU"
                        label="CPU"
-                       min="0">
-    </km-number-stepper>
+                       min="0"> </km-number-stepper>
 
     <km-number-stepper [formControlName]="Controls.Memory"
                        label="Memory (GB)"
