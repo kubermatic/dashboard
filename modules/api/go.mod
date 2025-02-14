@@ -102,7 +102,7 @@ replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beec
 
 replace k8s.io/client-go => k8s.io/client-go v0.31.1
 
-// Needs to be same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
+// Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
 
 require (
