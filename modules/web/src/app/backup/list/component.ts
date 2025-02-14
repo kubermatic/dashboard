@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {SettingsService} from '@app/core/services/settings';
 import {View} from '@app/shared/entity/common';
 import {AdminSettings} from '@app/shared/entity/settings';
-import {take} from 'rxjs';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'km-backups',
   templateUrl: './template.html',
 })
-export class BackupsComponent implements OnInit {
+export class BackupsComponent implements OnInit, OnDestroy {
+  private readonly _unsubscribe = new Subject<void>();
   readonly view = View;
   enableEtcdBackup: boolean;
   etcdBackupType = '';
@@ -35,9 +36,14 @@ export class BackupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEtcdBackupType();
-    this._settingsService.adminSettings.pipe(take(1)).subscribe((settings: AdminSettings) => {
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe((settings: AdminSettings) => {
       this.enableEtcdBackup = settings.enableEtcdBackup;
     });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getEtcdBackupType(): void {
