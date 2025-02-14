@@ -70,7 +70,7 @@ require (
 	golang.org/x/oauth2 v0.24.0
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8c.io/kubeone v1.9.0
+	k8c.io/kubeone v1.7.3
 	k8c.io/kubermatic/v2 v2.27.0-alpha.2.0.20250211114519-380a83d349f3
 	k8c.io/machine-controller v1.61.0
 	k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108
@@ -101,6 +101,9 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
 replace k8s.io/client-go => k8s.io/client-go v0.31.1
+
+// Needs to be same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
+replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
 
 require (
 	cel.dev/expr v0.19.0 // indirect
@@ -391,8 +394,6 @@ require (
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.31.3 // indirect
 	k8s.io/kube-openapi v0.31.2 // indirect
-	k8s.io/kube-proxy v0.31.3 // indirect
-	k8s.io/kubelet v0.31.3 // indirect
 	k8s.io/pod-security-admission v0.31.2 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.2.1 // indirect
