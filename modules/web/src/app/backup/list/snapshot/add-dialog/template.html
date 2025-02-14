@@ -31,6 +31,9 @@ limitations under the License.
                       [value]="cluster.id">{{cluster.name}}</mat-option>
         </mat-select>
         <mat-hint>The list of existing clusters for the selected project.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.Cluster).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -39,6 +42,9 @@ limitations under the License.
                matInput
                required>
         <mat-hint>The name of the created automatic backup.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
       </mat-form-field>
 
       <div *ngIf="!!this.form.get(Controls.Cluster).value && !this.isLoadingDestinations"
@@ -69,6 +75,9 @@ limitations under the License.
           </mat-hint>
           <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
           </mat-hint>
+          <mat-error *ngIf="form.get(Controls.Destination).hasError('required')">
+            <strong>Required</strong>
+          </mat-error>
         </mat-form-field>
       </div>
 
