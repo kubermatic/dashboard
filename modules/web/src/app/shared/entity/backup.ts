@@ -217,14 +217,21 @@ export class BackupStorageLocationSpec {
     bucket?: string;
   };
   config: BackupStorageLocationConfig;
-  credential?: {
-    accessKeyId: string;
-    secretAccessKey: string;
-  };
+  credential?: BackupStorageLocationCredentials;
   backupSyncPeriod?: string;
   provider?: string;
   lastValidationTime?: string;
   status?: string;
+}
+
+export class BackupStorageLocationCredentials {
+  accessKeyId: string;
+  secretAccessKey: string;
+}
+
+export class BackupStorageLocationBucketObject {
+  key: string;
+  size: number;
 }
 
 export class BackupStorageLocationStatus {

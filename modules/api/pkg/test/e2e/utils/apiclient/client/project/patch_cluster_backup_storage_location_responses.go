@@ -93,11 +93,11 @@ func (o *PatchClusterBackupStorageLocationOK) IsCode(code int) bool {
 }
 
 func (o *PatchClusterBackupStorageLocationOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchClusterBackupStorageLocationOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchClusterBackupStorageLocationOK) GetPayload() *models.ClusterBackupStorageLocation {
@@ -155,11 +155,11 @@ func (o *PatchClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 }
 
 func (o *PatchClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *PatchClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *PatchClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *PatchClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 }
 
 func (o *PatchClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *PatchClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *PatchClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *PatchClusterBackupStorageLocationDefault) IsCode(code int) bool {
 }
 
 func (o *PatchClusterBackupStorageLocationDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchClusterBackupStorageLocationDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] patchClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

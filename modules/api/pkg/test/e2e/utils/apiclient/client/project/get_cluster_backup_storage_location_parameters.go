@@ -61,7 +61,7 @@ GetClusterBackupStorageLocationParams contains all the parameters to send to the
 */
 type GetClusterBackupStorageLocationParams struct {
 
-	// CbsName.
+	// CbslName.
 	ClusterBackupStorageLocationName string
 
 	// ProjectID.
@@ -120,15 +120,15 @@ func (o *GetClusterBackupStorageLocationParams) SetHTTPClient(client *http.Clien
 	o.HTTPClient = client
 }
 
-// WithClusterBackupStorageLocationName adds the cbsName to the get cluster backup storage location params
-func (o *GetClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbsName string) *GetClusterBackupStorageLocationParams {
-	o.SetClusterBackupStorageLocationName(cbsName)
+// WithClusterBackupStorageLocationName adds the cbslName to the get cluster backup storage location params
+func (o *GetClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbslName string) *GetClusterBackupStorageLocationParams {
+	o.SetClusterBackupStorageLocationName(cbslName)
 	return o
 }
 
-// SetClusterBackupStorageLocationName adds the cbsName to the get cluster backup storage location params
-func (o *GetClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbsName string) {
-	o.ClusterBackupStorageLocationName = cbsName
+// SetClusterBackupStorageLocationName adds the cbslName to the get cluster backup storage location params
+func (o *GetClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbslName string) {
+	o.ClusterBackupStorageLocationName = cbslName
 }
 
 // WithProjectID adds the projectID to the get cluster backup storage location params
@@ -150,8 +150,8 @@ func (o *GetClusterBackupStorageLocationParams) WriteToRequest(r runtime.ClientR
 	}
 	var res []error
 
-	// path param cbs_name
-	if err := r.SetPathParam("cbs_name", o.ClusterBackupStorageLocationName); err != nil {
+	// path param cbsl_name
+	if err := r.SetPathParam("cbsl_name", o.ClusterBackupStorageLocationName); err != nil {
 		return err
 	}
 

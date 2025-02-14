@@ -200,6 +200,8 @@ type ClientService interface {
 
 	ListClusterBackupStorageLocation(params *ListClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterBackupStorageLocationOK, error)
 
+	ListClusterBackupStorageLocationBucketObjects(params *ListClusterBackupStorageLocationBucketObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterBackupStorageLocationBucketObjectsOK, error)
+
 	ListClusterRole(params *ListClusterRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleOK, error)
 
 	ListClusterRoleBindingV2(params *ListClusterRoleBindingV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterRoleBindingV2OK, error)
@@ -1314,7 +1316,7 @@ func (a *Client) DeleteClusterBackupStorageLocation(params *DeleteClusterBackupS
 	op := &runtime.ClientOperation{
 		ID:                 "deleteClusterBackupStorageLocation",
 		Method:             "DELETE",
-		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -2150,7 +2152,7 @@ func (a *Client) GetClusterBackupStorageLocation(params *GetClusterBackupStorage
 	op := &runtime.ClientOperation{
 		ID:                 "getClusterBackupStorageLocation",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -3618,6 +3620,44 @@ func (a *Client) ListClusterBackupStorageLocation(params *ListClusterBackupStora
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListClusterBackupStorageLocationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListClusterBackupStorageLocationBucketObjects List objects from bucket of a cluster backup storage location for a given project based on its name
+*/
+func (a *Client) ListClusterBackupStorageLocationBucketObjects(params *ListClusterBackupStorageLocationBucketObjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListClusterBackupStorageLocationBucketObjectsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListClusterBackupStorageLocationBucketObjectsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listClusterBackupStorageLocationBucketObjects",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/bucketobjects",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListClusterBackupStorageLocationBucketObjectsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListClusterBackupStorageLocationBucketObjectsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListClusterBackupStorageLocationBucketObjectsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -5428,7 +5468,7 @@ func (a *Client) PatchClusterBackupStorageLocation(params *PatchClusterBackupSto
 	op := &runtime.ClientOperation{
 		ID:                 "patchClusterBackupStorageLocation",
 		Method:             "PATCH",
-		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

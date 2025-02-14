@@ -92,11 +92,11 @@ func (o *DeleteClusterBackupStorageLocationOK) IsCode(code int) bool {
 }
 
 func (o *DeleteClusterBackupStorageLocationOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
 }
 
 func (o *DeleteClusterBackupStorageLocationOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationOK ", 200)
 }
 
 func (o *DeleteClusterBackupStorageLocationOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -143,11 +143,11 @@ func (o *DeleteClusterBackupStorageLocationUnauthorized) IsCode(code int) bool {
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationUnauthorized ", 401)
 }
 
 func (o *DeleteClusterBackupStorageLocationUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -194,11 +194,11 @@ func (o *DeleteClusterBackupStorageLocationForbidden) IsCode(code int) bool {
 }
 
 func (o *DeleteClusterBackupStorageLocationForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *DeleteClusterBackupStorageLocationForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocationForbidden ", 403)
 }
 
 func (o *DeleteClusterBackupStorageLocationForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -255,11 +255,11 @@ func (o *DeleteClusterBackupStorageLocationDefault) IsCode(code int) bool {
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbs_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}][%d] deleteClusterBackupStorageLocation default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeleteClusterBackupStorageLocationDefault) GetPayload() *models.ErrorResponse {

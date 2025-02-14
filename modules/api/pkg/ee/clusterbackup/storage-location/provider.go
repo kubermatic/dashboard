@@ -29,6 +29,11 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsCredentials "github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	s3Types "github.com/aws/aws-sdk-go-v2/service/s3/types"
+
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -58,6 +63,8 @@ const (
 	ownerReferenceApi        = "kubermatic.k8s.io/v1"
 	ownerReferenceKind       = "ClusterBackupStorageLocation"
 	credentialsSecretKeyName = "cloud-credentials"
+	bslRegion                = "region"
+	bslS3Url                 = "s3Url"
 )
 
 func NewBackupStorageProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
@@ -116,8 +123,8 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 			Labels:    getCSBLLabels(cbslName, projectID),
 		},
 		Data: map[string][]byte{
-			"accessKeyId":     []byte(credentials.AccessKeyID),
-			"secretAccessKey": []byte(credentials.SecretAccessKey),
+			resources.AWSAccessKeyID:     []byte(credentials.AccessKeyID),
+			resources.AWSSecretAccessKey: []byte(credentials.SecretAccessKey),
 		},
 	}
 	client := p.privilegedClient
@@ -230,6 +237,59 @@ func (p *BackupStorageProvider) Patch(ctx context.Context, userInfo *provider.Us
 	return updated, nil
 }
 
+func (p *BackupStorageProvider) ListBucketObjects(ctx context.Context, userInfo *provider.UserInfo, name string, labelSet map[string]string) (apiv2.BackupStorageLocationBucketObjectList, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
+
+	client := p.privilegedClient
+	if !userInfo.IsAdmin {
+		var err error
+		client, err = p.getImpersonatedClient(userInfo)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	cbsl := &kubermaticv1.ClusterBackupStorageLocation{}
+	if err := client.Get(ctx, types.NamespacedName{Name: name, Namespace: resources.KubermaticNamespace}, cbsl); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	cbslCredentials, err := p.GetStorageLocationCreds(ctx, cbsl.Spec.Credential.Name)
+
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	bucket := cbsl.Spec.ObjectStorage.Bucket
+
+	credsProvider := awsCredentials.StaticCredentialsProvider{
+		Value: aws.Credentials{
+			AccessKeyID:     string(cbslCredentials[resources.AWSAccessKeyID]),
+			SecretAccessKey: string(cbslCredentials[resources.AWSSecretAccessKey]),
+		},
+	}
+
+	cfg := aws.Config{
+		Region:       cbsl.Spec.Config[bslRegion],
+		Credentials:  credsProvider,
+		BaseEndpoint: aws.String(cbsl.Spec.Config[bslS3Url]),
+	}
+
+	s3Client := s3.NewFromConfig(cfg, func(o *s3.Options) {
+		o.UsePathStyle = true
+	})
+
+	objectsList, err := fetchObjects(ctx, s3Client, bucket)
+
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	return objectsList, nil
+}
+
 func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName string, credentials apiv2.S3BackupCredentials) error {
 	// if we get empty credentials than we don't need to update the secret
 	if credentials.AccessKeyID == "" || credentials.SecretAccessKey == "" {
@@ -241,15 +301,15 @@ func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName
 		return common.KubernetesErrorToHTTPError(err)
 	}
 	// same credentials
-	if credentials.AccessKeyID == string(existing.Data["accessKeyId"]) &&
-		credentials.SecretAccessKey == string(existing.Data["secretAccessKey"]) {
+	if credentials.AccessKeyID == string(existing.Data[resources.AWSAccessKeyID]) &&
+		credentials.SecretAccessKey == string(existing.Data[resources.AWSSecretAccessKey]) {
 		return nil
 	}
 
 	updated := existing.DeepCopy()
 	updated.Data = map[string][]byte{
-		"accessKeyId":     []byte(credentials.AccessKeyID),
-		"secretAccessKey": []byte(credentials.SecretAccessKey),
+		resources.AWSAccessKeyID:     []byte(credentials.AccessKeyID),
+		resources.AWSSecretAccessKey: []byte(credentials.SecretAccessKey),
 	}
 	return p.privilegedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing))
 }
@@ -268,4 +328,32 @@ func (p *BackupStorageProvider) GetStorageLocationCreds(ctx context.Context, sec
 		return nil, err
 	}
 	return secret.Data, nil
+}
+
+func fetchObjects(ctx context.Context, s3Client *s3.Client, bucketName string) (apiv2.BackupStorageLocationBucketObjectList, error) {
+	var err error
+	var output *s3.ListObjectsV2Output
+	input := &s3.ListObjectsV2Input{
+		Bucket: aws.String(bucketName),
+	}
+	objects := apiv2.BackupStorageLocationBucketObjectList{}
+	objectPaginator := s3.NewListObjectsV2Paginator(s3Client, input)
+
+	for objectPaginator.HasMorePages() {
+		output, err = objectPaginator.NextPage(ctx)
+		if err != nil {
+			var noBucket *s3Types.NoSuchBucket
+			if errors.As(err, &noBucket) {
+				err = noBucket
+			}
+			break
+		}
+		for _, content := range output.Contents {
+			objects = append(objects, apiv2.BackupStorageLocationBucketObject{
+				Key:  *content.Key,
+				Size: *content.Size,
+			})
+		}
+	}
+	return objects, err
 }

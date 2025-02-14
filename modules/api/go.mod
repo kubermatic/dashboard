@@ -23,6 +23,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.195.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.53.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.38.2
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.2
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.2
 	github.com/aws/smithy-go v1.22.1
 	github.com/coreos/go-oidc v2.2.1+incompatible
@@ -161,7 +162,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.3.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.6 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.15 // indirect
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.24.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.6 // indirect
 	github.com/awslabs/amazon-ecr-credential-helper/ecr-login v0.0.0-20240909191326-0ee4ec5d16bf // indirect

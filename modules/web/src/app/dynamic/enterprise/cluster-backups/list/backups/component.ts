@@ -20,6 +20,10 @@
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {
+  ImportBackupDialogComponent,
+  ImportBackupDialogConfig,
+} from '@dynamic/enterprise/cluster-backups/list/backups/import-dialog/component';
 import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
 import {Observable, Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
@@ -219,6 +223,21 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .subscribe(_ => this._getBackupsList(this._selectedProject.id));
+  }
+
+  importBackups(): void {
+    const config: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject?.id,
+        cluster: this.selectedCluster,
+      } as ImportBackupDialogConfig,
+    };
+    this._matDialog
+      .open(ImportBackupDialogComponent, config)
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => {});
   }
 
   restoreBackup(backup: ClusterBackup): void {

@@ -61,7 +61,7 @@ DeleteClusterBackupStorageLocationParams contains all the parameters to send to 
 */
 type DeleteClusterBackupStorageLocationParams struct {
 
-	// CbsName.
+	// CbslName.
 	ClusterBackupStorageLocationName string
 
 	// ProjectID.
@@ -120,15 +120,15 @@ func (o *DeleteClusterBackupStorageLocationParams) SetHTTPClient(client *http.Cl
 	o.HTTPClient = client
 }
 
-// WithClusterBackupStorageLocationName adds the cbsName to the delete cluster backup storage location params
-func (o *DeleteClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbsName string) *DeleteClusterBackupStorageLocationParams {
-	o.SetClusterBackupStorageLocationName(cbsName)
+// WithClusterBackupStorageLocationName adds the cbslName to the delete cluster backup storage location params
+func (o *DeleteClusterBackupStorageLocationParams) WithClusterBackupStorageLocationName(cbslName string) *DeleteClusterBackupStorageLocationParams {
+	o.SetClusterBackupStorageLocationName(cbslName)
 	return o
 }
 
-// SetClusterBackupStorageLocationName adds the cbsName to the delete cluster backup storage location params
-func (o *DeleteClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbsName string) {
-	o.ClusterBackupStorageLocationName = cbsName
+// SetClusterBackupStorageLocationName adds the cbslName to the delete cluster backup storage location params
+func (o *DeleteClusterBackupStorageLocationParams) SetClusterBackupStorageLocationName(cbslName string) {
+	o.ClusterBackupStorageLocationName = cbslName
 }
 
 // WithProjectID adds the projectID to the delete cluster backup storage location params
@@ -150,8 +150,8 @@ func (o *DeleteClusterBackupStorageLocationParams) WriteToRequest(r runtime.Clie
 	}
 	var res []error
 
-	// path param cbs_name
-	if err := r.SetPathParam("cbs_name", o.ClusterBackupStorageLocationName); err != nil {
+	// path param cbsl_name
+	if err := r.SetPathParam("cbsl_name", o.ClusterBackupStorageLocationName); err != nil {
 		return err
 	}
 

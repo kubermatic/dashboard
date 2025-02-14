@@ -1,0 +1,132 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2025 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+<div>
+  <km-dialog-title>Import Backups</km-dialog-title>
+  <mat-dialog-content class="import-backup-dialog-content">
+    <p class="km-dialog-context-description">Target cluster name: <b>{{ cluster.name }}</b></p>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>{{ backupStorageLocationLabel }}</mat-label>
+        <mat-select [formControlName]="Controls.BSL"
+                    disableOptionCentering>
+          <mat-option *ngFor="let bsl of backupStorageLocations"
+                      [value]="bsl.name">{{ bsl.displayName }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get(Controls.BSL).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <ng-container *ngIf="form.get(Controls.BSL).value">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Backup Sync Period</mat-label>
+          <input [formControlName]="Controls.BackupSyncPeriod"
+                 matInput>
+          <mat-hint>Defines how frequently to sync backup API objects from object storage. Enter time in the format MMmSSs (e.g., 2m10s) and a value of 0 disables sync.</mat-hint>
+          <mat-error *ngIf="form.get(Controls.BackupSyncPeriod).hasError('pattern')">
+            Time must be in the format MMmSSs (e.g., 2m10s).
+          </mat-error>
+        </mat-form-field>
+
+        <div class="info-container">
+          <h4>Usage Guidelines</h4>
+          <p>
+            The file explorer below shows the S3 bucket configured with the selected Backup Storage Location.
+            Choose the directory which contains backups that are to be imported into the target cluster.
+            By default, KKP uses the sub-directory convention of <code>&sol;&lt;project-id&gt;&sol;&lt;cluster-id&gt;</code> for each user cluster.
+            The backup folder created by Velero contains <strong>backups</strong> and <strong>kopia</strong> directories.
+            <br/>
+            <br/>
+            <strong>NOTE:</strong> If the path is incorrect, Velero won’t be able to sync the backups.
+          </p>
+        </div>
+
+        <ng-container *ngIf="!isLoadingBackups; else loadingBackups">
+          <p class="backup-selection-message">
+            <ng-container *ngIf="selectedNode; else noBackupSelected">
+              Selected Backup Path: <code>{{ selectedNode.path }}</code>
+            </ng-container>
+            <ng-template #noBackupSelected>
+              <ng-container *ngIf="s3DirectoriesDataSource.length; else noBackups">
+                Please select a backup path.
+              </ng-container>
+              <ng-template #noBackups>
+                No backups available. Please select a different backup storage location.
+              </ng-template>
+            </ng-template>
+          </p>
+
+          <ng-container *ngIf="s3DirectoriesDataSource.length">
+            <mat-tree #tree
+                      [dataSource]="s3DirectoriesDataSource"
+                      [childrenAccessor]="childrenAccessor"
+                      class="km-tree-in-dialog">
+              <mat-tree-node *matTreeNodeDef="let node"
+                             matTreeNodePadding>
+                <div fxLayoutAlign=" center"
+                     class="leaf-node"><i class="km-icon-mask km-icon-file i-12"></i>{{ node.name }}
+                </div>
+              </mat-tree-node>
+              <!-- This is the tree node template for expandable nodes -->
+              <mat-tree-node *matTreeNodeDef="let node;when: hasChild"
+                             matTreeNodePadding
+                             matTreeNodeToggle
+                             class="km-pointer"
+                             [ngClass]="{'selected-node': selectedNode?.path === node.path}"
+                             [cdkTreeNodeTypeaheadLabel]="node.name"
+                             (click)="onSelectNode(node)">
+                <div fxLayoutAlign=" center"
+                     fxLayoutGap="10px">
+                  <i class="km-icon-mask km-icon-folder{{tree.isExpanded(node) ? '-open' : ''}}"
+                     matTreeNodeToggle></i>
+                  <span>{{ node.name }}</span>
+                  <i *ngIf="selectedNode?.path === node.path"
+                     class="km-icon-mask km-icon-check"></i>
+                </div>
+              </mat-tree-node>
+            </mat-tree>
+
+            <p class="disclaimer-message">
+              Disclaimer: Only AWS and Ceph S3 are supported so this feature is only tested for these providers.
+            </p>
+          </ng-container>
+
+        </ng-container>
+        <ng-template #loadingBackups>
+          <mat-spinner color="accent"
+                       class="km-spinner km-with-spacing"
+                       [diameter]="25"></mat-spinner>
+        </ng-template>
+      </ng-container>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <km-button icon="km-icon-import"
+               label="Import Backup"
+               [disabled]="form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
+  </mat-dialog-actions>
+</div>

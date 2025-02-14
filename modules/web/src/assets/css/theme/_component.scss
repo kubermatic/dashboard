@@ -53,6 +53,7 @@
 @import 'app/shared/components/annotation-form/theme';
 @import 'app/node-data/basic/provider/kubevirt/topology-spread-constraint-form/theme';
 @import 'app/node-data/basic/provider/nutanix/theme';
+@import '../../../app/dynamic/enterprise/cluster-backups/list/backups/import-dialog/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -96,4 +97,5 @@
   @include theme-nutanix-basic-node-data-component($colors);
   @include theme-announcement-banner-component($colors);
   @include theme-announcements-dialog-component($colors);
+  @include theme-import-backup-component($colors);
 }

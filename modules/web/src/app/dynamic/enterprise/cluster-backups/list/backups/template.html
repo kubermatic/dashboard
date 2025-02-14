@@ -58,6 +58,14 @@ END OF TERMS AND CONDITIONS
         </button>
         <button mat-flat-button
                 type="button"
+                (click)="importBackups()"
+                [disabled]="!canAdd">
+          <i class="km-icon-mask km-icon-import"
+             matButtonIcon></i>
+          <span>Import External Backups</span>
+        </button>
+        <button mat-flat-button
+                type="button"
                 (click)="addBackup()"
                 [disabled]="!canAdd">
           <i class="km-icon-mask km-icon-add"

@@ -35,6 +35,10 @@ func getCBSL(ctx context.Context, request interface{}, userInfoGetter provider.U
 	return storagelocation.GetCSBL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
+func listCBSLBucketObjects(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (apiv2.BackupStorageLocationBucketObjectList, error) {
+	return storagelocation.ListCSBLBucketObjects(ctx, request, userInfoGetter, provider, projectProvider)
+}
+
 func createCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
 	return storagelocation.CreateCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
@@ -53,6 +57,10 @@ func DecodeListProjectCBSLReq(ctx context.Context, r *http.Request) (interface{}
 
 func DecodeGetCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return storagelocation.DecodeGetCBSLReq(ctx, r)
+}
+
+func DecodeListCBSLBucketObjectsReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	return storagelocation.DecodeListCBSLBucketObjectsReq(ctx, r)
 }
 
 func DecodeCreateCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {
