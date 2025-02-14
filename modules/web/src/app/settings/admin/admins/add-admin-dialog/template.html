@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Add Admin</km-dialog-title>
+<km-dialog-title>Add Administrator</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column"
@@ -26,9 +26,12 @@ limitations under the License.
              id="km-add-admin-dialog-email-input"
              type="text"
              autocomplete="off"
-             cdkFocusInitial>
+             cdkFocusInitial />
       <mat-error *ngIf="form.controls.email.hasError('required')">
         <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.controls.email.hasError('email')">
+        <strong>Invalid email</strong>
       </mat-error>
     </mat-form-field>
   </form>
