@@ -15,14 +15,15 @@
 import {NodeDataMode} from '@app/node-data/config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
+import {GCPService} from '@core/services/provider/gcp';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import _ from 'lodash';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
-import {GCPService} from '@core/services/provider/gcp';
 
 export class NodeDataGCPProvider {
   private readonly _debounce = 500;
@@ -37,7 +38,7 @@ export class NodeDataGCPProvider {
 
   set labels(labels: object) {
     delete this._nodeDataService.nodeData.spec.cloud.gcp.labels;
-    this._nodeDataService.nodeData.spec.cloud.gcp.labels = labels;
+    this._nodeDataService.nodeData.spec.cloud.gcp.labels = _.isEmpty(labels) ? null : labels;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
