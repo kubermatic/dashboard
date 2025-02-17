@@ -225,12 +225,12 @@ END OF TERMS AND CONDITIONS
           *matHeaderRowDef="columns"></tr>
       <tr mat-row
           *matRowDef="let element; columns: columns"
-          class="km-mat-row km-pointer"
-          [ngClass]="{'km-selected': checkSelected(element.id)}"
+          class="km-mat-row"
+          [ngClass]="{'km-selected': checkSelected(element.id), 'km-pointer': element.spec.includedNamespaces}"
           (click)="toggleScheduleDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isScheduleToggled(element.name) ? '' : 'km-hidden'"
+          [ngClass]="isScheduleToggled(element.name) && element.spec.includedNamespaces?.length ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

@@ -23,11 +23,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
+import {RBACService} from '@app/core/services/rbac';
 import {ClusterBackup, ClusterRestore} from '@app/shared/entity/backup';
-import {Cluster} from '@app/shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {CookieService} from 'ngx-cookie-service';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 export interface AddRestoreDialogConfig {
   backup: ClusterBackup;
@@ -37,6 +36,13 @@ export interface AddRestoreDialogConfig {
 enum Controls {
   Name = 'name',
   NameSpaces = 'namespaces',
+  AllNamespaces = 'allNamespaces',
+}
+
+enum NamespacesState {
+  Ready = 'Namespaces',
+  Loading = 'Loading...',
+  Empty = 'No Namespaces Available',
 }
 
 @Component({
@@ -47,14 +53,16 @@ export class AddRestoreDialogComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   projectID = this._config.projectID;
   backup = this._config.backup;
+  nameSpaces: string[] = [];
   form: FormGroup;
   controls = Controls;
-  clusters: Cluster[] = [];
+  namespacesLabel = NamespacesState.Ready;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddRestoreDialogConfig,
     private readonly _dialogRef: MatDialogRef<AddRestoreDialogComponent>,
     private readonly _builder: FormBuilder,
-    readonly _cookieService: CookieService,
+    private readonly _rbacService: RBACService,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _notificationService: NotificationService
   ) {}
@@ -62,8 +70,28 @@ export class AddRestoreDialogComponent implements OnInit {
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
-      [Controls.NameSpaces]: this._builder.control('', Validators.required),
+      [Controls.AllNamespaces]: this._builder.control(true),
+      [Controls.NameSpaces]: this._builder.control([]),
     });
+
+    if (this.backup.spec.includedNamespaces?.length) {
+      this.nameSpaces = this.backup.spec.includedNamespaces;
+    } else {
+      this.getClusterNamespaces(this.projectID, this.backup.spec.clusterid);
+    }
+
+    this.form
+      .get(Controls.AllNamespaces)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        const namespacesControl = this.form.get(Controls.NameSpaces);
+        if (value) {
+          namespacesControl.clearValidators();
+        } else {
+          namespacesControl.setValidators(Validators.required);
+        }
+        namespacesControl.updateValueAndValidity();
+      });
   }
 
   getObservable(): Observable<ClusterRestore> {
@@ -84,14 +112,31 @@ export class AddRestoreDialogComponent implements OnInit {
     this._unsubscribe.complete();
   }
 
+  getClusterNamespaces(projectID: string, clusterID: string): void {
+    this.namespacesLabel = NamespacesState.Loading;
+    this._rbacService
+      .getClusterNamespaces(projectID, clusterID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(namespaces => {
+        this.nameSpaces = namespaces;
+        this.namespacesLabel = namespaces.length ? NamespacesState.Ready : NamespacesState.Empty;
+      });
+  }
+
   private _getClusterRestoreConfig(): ClusterRestore {
     const restore: ClusterRestore = {
       name: this.form.controls[Controls.Name].value,
       spec: {
-        includedNamespaces: this.form.controls[Controls.NameSpaces].value,
         backupName: this.backup.name,
       },
     };
+
+    if (this.form.get(Controls.AllNamespaces).value) {
+      delete restore.spec.includedNamespaces;
+    } else {
+      restore.spec.includedNamespaces = this.form.get(Controls.NameSpaces).value;
+    }
+
     return restore;
   }
 }
