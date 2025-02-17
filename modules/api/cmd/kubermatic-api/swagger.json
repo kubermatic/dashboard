@@ -30733,6 +30733,9 @@
           "type": "boolean",
           "x-go-name": "DisableCSIDriver"
         },
+        "edge": {
+          "$ref": "#/definitions/DatacenterSpecEdge"
+        },
         "enforceAuditLogging": {
           "description": "EnforceAuditLogging enforces audit logging on every cluster within the DC,\nignoring cluster-specific settings.",
           "type": "boolean",
@@ -30894,6 +30897,11 @@
           "x-go-name": "Region"
         }
       },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DatacenterSpecEdge": {
+      "type": "object",
+      "title": "DatacenterSpecEdge describes a datacenter of edge nodes.",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "DatacenterSpecFake": {
