@@ -74,25 +74,24 @@ END OF TERMS AND CONDITIONS
                matInput
                required>
         <mat-hint>
-          Cron expression that describes how often a backup should be created. Must match the criteria specified
+          Cron expression that describes how often a backup should be created.
+        </mat-hint>
+        <mat-error *ngIf="form.get(Controls.CronJob).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.CronJob).hasError('cronExpression')">Schedule must be in cron expression. Must match the criteria specified
           <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
              target="_blank"
              fxLayout="row inline"
              fxLayoutAlign=" center"
              rel="noopener noreferrer">here <i class="km-icon-external-link"></i></a>. Please note that specifying seconds is not supported.
-        </mat-hint>
-        <mat-error *ngIf="form.get(Controls.CronJob).hasError('required')">
-          <strong>Required</strong>
-        </mat-error>
-        <mat-error *ngIf="form.get(Controls.CronJob).hasError('cronExpression')">
-          Schedule must be in corn expression.
         </mat-error>
       </mat-form-field>
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>Expires In</mat-label>
         <input [formControlName]="Controls.ExpiresIn"
                matInput>
-        <mat-hint>Enter time in the format HHhMMmSSs (e.g., 24h10m10s), The amount of time before this backup is eligible for garbage collection. If not specified,
+        <mat-hint>Enter the time in the format HHhMMmSSs (e.g., 24h10m10s). The amount of time before this backup is eligible for garbage collection. If not specified,
           a default value of 30 days will be used.</mat-hint>
         <mat-error *ngIf="form.get(Controls.ExpiresIn).hasError('pattern')">
           Time must be in the format HHhMMmSSs (e.g., 24h10m10s).

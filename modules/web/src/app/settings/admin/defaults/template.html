@@ -223,9 +223,6 @@ limitations under the License.
                         [(ngModel)]="settings.enableClusterBackups"
                         (change)="onSettingsChange()">
           </mat-checkbox>
-          <mat-chip>
-            <div>Experimental</div>
-          </mat-chip>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableClusterBackups, apiSettings.enableClusterBackups)"></km-spinner-with-confirmation>
         </div>
 
