@@ -74,6 +74,7 @@ type DatacenterSpec struct {
 	BringYourOwn        *kubermaticv1.DatacenterSpecBringYourOwn        `json:"bringyourown,omitempty"`
 	AWS                 *kubermaticv1.DatacenterSpecAWS                 `json:"aws,omitempty"`
 	Azure               *kubermaticv1.DatacenterSpecAzure               `json:"azure,omitempty"`
+	Edge                *kubermaticv1.DatacenterSpecEdge                `json:"edge,omitempty"`
 	Openstack           *kubermaticv1.DatacenterSpecOpenstack           `json:"openstack,omitempty"`
 	Packet              *kubermaticv1.DatacenterSpecPacket              `json:"packet,omitempty"`
 	GCP                 *kubermaticv1.DatacenterSpecGCP                 `json:"gcp,omitempty"`

@@ -69,6 +69,9 @@ type DatacenterSpec struct {
 	// digitalocean
 	Digitalocean *DatacenterSpecDigitalocean `json:"digitalocean,omitempty"`
 
+	// edge
+	Edge DatacenterSpecEdge `json:"edge,omitempty"`
+
 	// fake
 	Fake *DatacenterSpecFake `json:"fake,omitempty"`
 
