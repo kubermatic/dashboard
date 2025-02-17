@@ -36,18 +36,23 @@ END OF TERMS AND CONDITIONS
           Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-checkbox [formControlName]="controls.AllNamespaces">
+        Restore All Namespaces
+        <i class="km-icon-info km-pointer"
+           matTooltip="Select all namespaces to restore."></i>
+      </mat-checkbox>
+      <mat-form-field *ngIf="!form?.get(controls.AllNamespaces).value">
         <mat-label>Choose Namespaces</mat-label>
         <mat-select [formControlName]="controls.NameSpaces"
                     multiple
                     panelClass="km-multiple-values-dropdown"
                     disableOptionCentering>
-          <mat-option *ngFor="let nameSpace of backup.spec.includedNamespaces"
+          <mat-option *ngFor="let nameSpace of nameSpaces"
                       [value]="nameSpace">
             {{nameSpace}}
           </mat-option>
         </mat-select>
-        <mat-hint>Namespaces to include in the backup.</mat-hint>
+        <mat-hint>Namespaces to include in the restore.</mat-hint>
         <mat-error *ngIf="form.get(controls.NameSpaces).hasError('required')">
           <strong>Required</strong>
         </mat-error>
