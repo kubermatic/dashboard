@@ -72,6 +72,9 @@ type DatacenterSpec struct {
 	// digitalocean
 	Digitalocean *DatacenterSpecDigitalocean `json:"digitalocean,omitempty"`
 
+	// edge
+	Edge DatacenterSpecEdge `json:"edge,omitempty"`
+
 	// enforced audit webhook settings
 	EnforcedAuditWebhookSettings *AuditWebhookBackendSettings `json:"enforcedAuditWebhookSettings,omitempty"`
 
