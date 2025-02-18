@@ -41,6 +41,9 @@ type DatacenterSpecKubevirt struct {
 	// kubevirt-<infra-storageClass-name>
 	InfraStorageClasses []*KubeVirtInfraStorageClass `json:"infraStorageClasses"`
 
+	// csi driver operator
+	CsiDriverOperator *KubeVirtCSIDriverOperator `json:"csiDriverOperator,omitempty"`
+
 	// dns config
 	DNSConfig *PodDNSConfig `json:"dnsConfig,omitempty"`
 
@@ -66,6 +69,10 @@ func (m *DatacenterSpecKubevirt) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateInfraStorageClasses(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCsiDriverOperator(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -142,6 +149,25 @@ func (m *DatacenterSpecKubevirt) validateInfraStorageClasses(formats strfmt.Regi
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) validateCsiDriverOperator(formats strfmt.Registry) error {
+	if swag.IsZero(m.CsiDriverOperator) { // not required
+		return nil
+	}
+
+	if m.CsiDriverOperator != nil {
+		if err := m.CsiDriverOperator.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("csiDriverOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("csiDriverOperator")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -252,6 +278,10 @@ func (m *DatacenterSpecKubevirt) ContextValidate(ctx context.Context, formats st
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateCsiDriverOperator(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateDNSConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -313,6 +343,22 @@ func (m *DatacenterSpecKubevirt) contextValidateInfraStorageClasses(ctx context.
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *DatacenterSpecKubevirt) contextValidateCsiDriverOperator(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CsiDriverOperator != nil {
+		if err := m.CsiDriverOperator.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("csiDriverOperator")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("csiDriverOperator")
+			}
+			return err
+		}
 	}
 
 	return nil

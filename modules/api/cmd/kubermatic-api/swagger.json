@@ -30971,6 +30971,9 @@
           "type": "boolean",
           "x-go-name": "CCMZoneAndRegionEnabled"
         },
+        "csiDriverOperator": {
+          "$ref": "#/definitions/KubeVirtCSIDriverOperator"
+        },
         "customNetworkPolicies": {
           "description": "Optional: CustomNetworkPolicies allows to add some extra custom NetworkPolicies, that are deployed\nin the dedicated infra KubeVirt cluster. They are added to the defaults.",
           "type": "array",
