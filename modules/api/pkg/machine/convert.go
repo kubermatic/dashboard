@@ -297,6 +297,8 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		}
 	case providerconfig.CloudProviderEdge:
 		cloudSpec.Edge = &apiv1.EdgeNodeSpec{}
+	case providerconfig.CloudProviderExternal:
+		// do nothing here as the external cloud provider doesn't have any specific cloud spec.
 	case providerconfig.CloudProviderGoogle:
 		config := &gce.CloudProviderSpec{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
