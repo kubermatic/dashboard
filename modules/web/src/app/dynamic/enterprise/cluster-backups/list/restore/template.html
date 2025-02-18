@@ -42,7 +42,7 @@ END OF TERMS AND CONDITIONS
                      (queryChange)="onSearch($event)"></km-search-field>
     <div fxFlex></div>
     <div *ngIf="selectedRestores.length">
-      <button mat-icon-button
+      <button mat-flat-button
               type="button"
               matTooltip="Delete selected"
               (click)="deleteRestores(selectedRestores)">
@@ -167,12 +167,12 @@ END OF TERMS AND CONDITIONS
           *matHeaderRowDef="columns"></tr>
       <tr mat-row
           *matRowDef="let element; columns: columns"
-          class="km-mat-row km-pointer"
-          [ngClass]="{'km-selected': checkSelected(element.id)}"
+          class="km-mat-row"
+          [ngClass]="{'km-selected': checkSelected(element.id), 'km-pointer': element.spec.includedNamespaces}"
           (click)="toggleRestoreDetail(element.name)"></tr>
       <tr mat-header-row
           *matRowDef="let element; columns: toggleableColumn"
-          [ngClass]="isRestoreToggled(element.name) ? '' : 'km-hidden'"
+          [ngClass]="isRestoreToggled(element.name) && element.spec.includedNamespaces?.length ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 
