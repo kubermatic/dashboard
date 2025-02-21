@@ -19,22 +19,22 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {NoopTokenDialogComponent, TokenDialogTestModule} from '@test/components/noop-token-dialog.component';
-import {fakeServiceAccount, fakeServiceAccountTokens} from '@test/data/serviceaccount';
-import {RouterStub} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {ServiceAccountService} from '@core/services/service-account';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {NoopTokenDialogComponent, TokenDialogTestModule} from '@test/components/noop-token-dialog.component';
+import {fakeServiceAccount, fakeServiceAccountTokens} from '@test/data/serviceaccount';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {ServiceAccountMockService} from '@test/services/service-account-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
-import {ServiceAccountService} from '@core/services/service-account';
-import {ServiceAccountMockService} from '@test/services/service-account-mock';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -50,7 +50,6 @@ describe('ServiceAccountTokenComponent', () => {
         SharedModule,
         CoreModule,
         ServiceAccountModule,
-        DialogTestModule,
         TokenDialogTestModule,
       ],
       providers: [

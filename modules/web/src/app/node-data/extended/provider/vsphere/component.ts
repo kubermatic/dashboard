@@ -26,21 +26,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-vsphere-extended-node-data',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-vsphere-extended-node-data',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VSphereExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;

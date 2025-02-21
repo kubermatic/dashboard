@@ -30,21 +30,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-azure-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AzureProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AzureProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-azure-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AzureProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

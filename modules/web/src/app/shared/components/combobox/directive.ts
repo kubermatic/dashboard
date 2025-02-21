@@ -15,7 +15,7 @@
 import {Directive} from '@angular/core';
 
 @Directive({
-    selector: '[option]',
-    standalone: false
+  selector: '[option]',
+  standalone: false,
 })
 export class OptionDirective {}

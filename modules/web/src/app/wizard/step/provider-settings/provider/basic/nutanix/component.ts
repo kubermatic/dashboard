@@ -43,21 +43,21 @@ enum ClusterState {
 }
 
 @Component({
-    selector: 'km-wizard-nutanix-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => NutanixProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => NutanixProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-nutanix-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NutanixProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NutanixProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class NutanixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @ViewChild('clusterCombobox')

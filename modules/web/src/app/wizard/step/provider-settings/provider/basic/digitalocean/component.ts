@@ -27,21 +27,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-digitalocean-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => DigitalOceanProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => DigitalOceanProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-digitalocean-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DigitalOceanProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => DigitalOceanProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class DigitalOceanProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

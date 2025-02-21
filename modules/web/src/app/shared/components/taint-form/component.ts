@@ -28,22 +28,22 @@ import {TaintFormValidators} from '../../validators/taint-form.validators';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
-    selector: 'km-taint-form',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => TaintFormComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => TaintFormComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-taint-form',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TaintFormComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => TaintFormComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class TaintFormComponent implements OnInit {
   @Input() title = 'Taints';

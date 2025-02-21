@@ -34,22 +34,22 @@ export enum PresetsState {
 }
 
 @Component({
-    selector: 'km-wizard-presets',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => PresetsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => PresetsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-presets',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PresetsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PresetsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();

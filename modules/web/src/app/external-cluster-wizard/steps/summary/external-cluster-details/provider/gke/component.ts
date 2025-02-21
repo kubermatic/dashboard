@@ -17,9 +17,9 @@ import {GKEClusterSpec, GKECloudSpec} from '@shared/entity/provider/gke';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
-    selector: 'km-gke-cluster-summary',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-gke-cluster-summary',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class GKEClusterSummaryComponent implements OnChanges {
   @Input() cluster: ExternalClusterModel;

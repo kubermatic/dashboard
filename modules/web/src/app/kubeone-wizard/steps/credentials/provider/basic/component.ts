@@ -26,21 +26,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-kubeone-wizard-credentials-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeOneCredentialsBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeOneCredentialsBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-kubeone-wizard-credentials-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeOneCredentialsBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeOneCredentialsBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class KubeOneCredentialsBasicComponent extends BaseFormValidator implements OnInit {
   readonly NodeProvider = NodeProvider;

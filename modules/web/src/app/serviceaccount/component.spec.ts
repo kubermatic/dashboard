@@ -19,23 +19,23 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeServiceAccounts, fakeServiceAccountTokens} from '@test/data/serviceaccount';
-import {RouterStub} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {asyncData} from '@test/services/cluster-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {ServiceAccountService} from '@core/services/service-account';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeServiceAccounts, fakeServiceAccountTokens} from '@test/data/serviceaccount';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {asyncData} from '@test/services/cluster-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {of} from 'rxjs';
 import {AppConfigService} from '../config.service';
 import {ServiceAccountComponent} from './component';
-import {ServiceAccountService} from '@core/services/service-account';
 
 describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
@@ -54,7 +54,7 @@ describe('ServiceAccountComponent', () => {
     deleteServiceAccountSpy = saMock.delete.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ServiceAccountService, useValue: saMock},

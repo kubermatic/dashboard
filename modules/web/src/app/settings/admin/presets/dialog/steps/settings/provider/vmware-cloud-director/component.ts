@@ -36,21 +36,21 @@ export enum CredentialsType {
 }
 
 @Component({
-    selector: 'km-vmware-cloud-director-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => VMwareCloudDirectorSettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => VMwareCloudDirectorSettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-vmware-cloud-director-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VMwareCloudDirectorSettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VMwareCloudDirectorSettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

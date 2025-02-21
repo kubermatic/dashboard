@@ -23,10 +23,10 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-select-external-cluster-provider',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-select-external-cluster-provider',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class SelectExternalClusterProviderComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

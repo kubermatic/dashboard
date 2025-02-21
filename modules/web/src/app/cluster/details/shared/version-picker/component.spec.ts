@@ -18,18 +18,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {NodeMockService} from '@test/services/node-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -38,6 +28,15 @@ import {NodeService} from '@core/services/node';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {NodeMockService} from '@test/services/node-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
+import {UserMockService} from '@test/services/user-mock';
 import {MachineDeploymentListComponent} from '../../cluster/machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from '../../cluster/machine-networks-display/component';
 import {NodeListComponent} from '../../cluster/node-list/component';
@@ -51,7 +50,7 @@ describe('VersionPickerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         VersionPickerComponent,
         NodeListComponent,

@@ -34,22 +34,22 @@ export enum PresetsState {
 }
 
 @Component({
-    selector: 'km-kubeone-wizard-presets',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeOnePresetsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeOnePresetsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-kubeone-wizard-presets',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeOnePresetsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeOnePresetsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();

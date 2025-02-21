@@ -133,22 +133,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-cluster-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ClusterStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ClusterStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-cluster-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ClusterStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ClusterStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   containerRuntime = ContainerRuntime;
@@ -579,10 +579,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.required,
       ]),
       [Controls.AuditLogging]: this._builder.control(clusterSpec?.auditLogging?.enabled ?? false),
-      [Controls.AuditWebhookBackend]: this._builder.control(!!clusterSpec?.auditLogging?.webhookBackend ?? false),
+      [Controls.AuditWebhookBackend]: this._builder.control(clusterSpec?.auditLogging?.webhookBackend || false),
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
-      [Controls.ClusterBackup]: this._builder.control(!!clusterSpec?.backupConfig ?? false),
+      [Controls.ClusterBackup]: this._builder.control(clusterSpec?.backupConfig || false),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
@@ -682,7 +682,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
           [Controls.AuditWebhookBackend]: !!clusterSpec?.auditLogging?.webhookBackend,
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
-          [Controls.ClusterBackup]: !!clusterSpec.backupConfig ?? false,
+          [Controls.ClusterBackup]: clusterSpec.backupConfig || false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
           [Controls.Konnectivity]:
             clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),

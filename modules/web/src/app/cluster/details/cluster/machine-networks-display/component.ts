@@ -19,10 +19,10 @@ import {Cluster, MachineNetwork} from '@shared/entity/cluster';
 import {AddMachineNetworkComponent} from '../add-machine-network/component';
 
 @Component({
-    selector: 'km-machine-networks-display',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-machine-networks-display',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class MachineNetworksDisplayComponent {
   @Input() cluster: Cluster;

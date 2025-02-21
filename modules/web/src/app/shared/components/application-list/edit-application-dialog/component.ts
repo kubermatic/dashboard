@@ -42,11 +42,11 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-edit-application-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-edit-application-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;

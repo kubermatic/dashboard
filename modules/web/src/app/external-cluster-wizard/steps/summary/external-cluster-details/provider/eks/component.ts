@@ -17,11 +17,11 @@ import {EKSClusterSpec, EKSCloudSpec} from '@shared/entity/provider/eks';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
-    selector: 'km-eks-cluster-summary',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-eks-cluster-summary',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class EKSClusterSummaryComponent implements OnChanges {
   @Input() cluster: ExternalClusterModel;

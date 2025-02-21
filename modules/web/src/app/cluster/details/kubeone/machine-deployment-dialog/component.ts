@@ -45,10 +45,10 @@ export enum KubeletVersionState {
 }
 
 @Component({
-    selector: 'km-kubeone-machine-deployment-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-kubeone-machine-deployment-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class KubeOneMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {
   readonly Controls = Controls;

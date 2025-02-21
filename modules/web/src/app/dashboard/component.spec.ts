@@ -16,12 +16,11 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter';
-import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
 import {AuthMockService} from '@test/services/auth-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
 import {DashboardComponent} from './component';
 
 describe('DashboardComponent', () => {
@@ -30,7 +29,7 @@ describe('DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule],
+      imports: [BrowserModule, BrowserAnimationsModule],
       declarations: [DashboardComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

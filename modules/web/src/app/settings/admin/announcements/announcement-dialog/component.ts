@@ -35,11 +35,11 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-admin-announcement-dialog',
-    templateUrl: 'template.html',
-    styleUrls: ['./style.scss'],
-    providers: [provideNativeDateAdapter()],
-    standalone: false
+  selector: 'km-admin-announcement-dialog',
+  templateUrl: 'template.html',
+  styleUrls: ['./style.scss'],
+  providers: [provideNativeDateAdapter()],
+  standalone: false,
 })
 export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

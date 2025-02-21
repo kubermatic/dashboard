@@ -23,11 +23,11 @@ import {take} from 'rxjs/operators';
 import {LayoutType} from '@shared/model/Terminal';
 
 @Component({
-    selector: 'km-web-terminal',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-web-terminal',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class WebTerminalComponent {
   readonly layoutType = LayoutType;

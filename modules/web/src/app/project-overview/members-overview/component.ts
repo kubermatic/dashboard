@@ -20,10 +20,10 @@ import {Group} from '@dynamic/enterprise/group/entity';
 import {DynamicModule} from '@dynamic/module-registry';
 
 @Component({
-    selector: 'km-members-overview',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-members-overview',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MembersOverviewComponent {
   @Input() project: Project;

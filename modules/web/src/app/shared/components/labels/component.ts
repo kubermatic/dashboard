@@ -15,10 +15,10 @@
 import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 
 @Component({
-    selector: 'km-labels',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-labels',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class LabelsComponent implements OnInit, OnChanges {
   @Input() labels = {};

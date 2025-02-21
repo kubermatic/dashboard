@@ -17,11 +17,10 @@ import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
-import {RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
 import {SettingsService} from './settings';
 
 describe('SettingsService', () => {
@@ -29,7 +28,7 @@ describe('SettingsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       providers: [
         SettingsService,
         {provide: AppConfigService, useClass: AppConfigMockService},

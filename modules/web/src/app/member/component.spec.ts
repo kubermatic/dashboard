@@ -26,12 +26,12 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
 import {fakeMembers} from '@test/data/member';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {MemberServiceMock} from '@test/services/member-mock';
 import {ProjectMockService} from '@test/services/project-mock';
-import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {RouterStub} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {MemberComponent} from './component';
@@ -43,14 +43,7 @@ describe('MemberComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-        MatTabsModule,
-        DialogTestModule,
-      ],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, NoopConfirmDialogComponent, MatTabsModule],
       declarations: [MemberComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

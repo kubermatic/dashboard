@@ -52,9 +52,9 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-external-cluster-list',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-external-cluster-list',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Permission = Permission;

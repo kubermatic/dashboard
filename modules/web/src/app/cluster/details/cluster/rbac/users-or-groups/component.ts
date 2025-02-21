@@ -35,9 +35,9 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-rbac-users-or-groups',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-rbac-users-or-groups',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();

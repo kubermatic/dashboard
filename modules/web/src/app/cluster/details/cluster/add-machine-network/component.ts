@@ -22,9 +22,9 @@ import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 @Component({
-    selector: 'km-add-machine-network',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-add-machine-network',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class AddMachineNetworkComponent {
   @Input() cluster: Cluster;

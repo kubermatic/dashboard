@@ -59,9 +59,9 @@ enum DefaultScheduleKeep {
 }
 
 @Component({
-    selector: 'km-add-automatic-backup-dialog',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-add-automatic-backup-dialog',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

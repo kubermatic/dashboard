@@ -44,23 +44,23 @@ enum Error {
 }
 
 @Component({
-    selector: 'km-number-stepper',
-    styleUrls: ['style.scss'],
-    templateUrl: 'template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => NumberStepperComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => NumberStepperComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-number-stepper',
+  styleUrls: ['style.scss'],
+  templateUrl: 'template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NumberStepperComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NumberStepperComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NumberStepperComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
   private readonly _unsubscribe = new Subject<void>();

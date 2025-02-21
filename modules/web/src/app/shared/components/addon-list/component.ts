@@ -28,10 +28,10 @@ import {getEditionVersion} from '@shared/utils/common';
 import {DialogModeService} from '@app/core/services/dialog-mode';
 
 @Component({
-    selector: 'km-addon-list',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-addon-list',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() addons: Addon[] = [];

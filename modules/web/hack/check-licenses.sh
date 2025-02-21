@@ -15,13 +15,14 @@
 # limitations under the License.
 
 # A list of allowed licenses for our production dependencies
-ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-2.0;Zlib;0BSD"
+ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-2.0;Zlib;0BSD;OFL-1.1"
 
 # A list of dependencies excluded from license check. Should be validated manually before excluding
 # them from the check.
 # UNKNOWN license:
 #   - emitter-component (dependency of swagger-ui)
 #   - btoa (dependency of swagger-ui)
+#   - @fontsource/ubuntu@5.1.1 (License is valid(https://github.com/fontsource/font-files/blob/main/fonts/variable/ubuntu-sans/LICENSE) and is OFL-1.1)
 # CC0-1.0 license:
 #   - encode-3986 (dependency of swagger-ui)
 #   - highlightjs-vue (dependency of swagger-ui)
@@ -31,7 +32,7 @@ ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-
 #   - argparse (dependency of js-yaml)
 # CC-BY-4.0 license:
 #   - caniuse-lite (dependency of multiple dependencies)
-EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse;caniuse-lite;highlightjs-vue"
+EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse;caniuse-lite;highlightjs-vue;@fontsource/ubuntu;inconsolata"
 
 LICENSE_CHECK_OUTPUT=$(npx license-compliance --production --allow ${ALLOWED_LICENSES} -e ${EXCLUDED_PACKAGES} -r detailed)
 

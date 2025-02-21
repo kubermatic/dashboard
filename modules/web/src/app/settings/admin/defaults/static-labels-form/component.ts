@@ -29,10 +29,10 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-static-labels-form',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-static-labels-form',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class StaticLabelsFormComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe = new Subject<void>();

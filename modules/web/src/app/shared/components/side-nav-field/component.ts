@@ -17,11 +17,11 @@ import {Router} from '@angular/router';
 import {AdminPanelSections, AdminPanelView, ProjectSidenavSection, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
 @Component({
-    selector: 'km-side-nav-field',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    animations: [shrinkGrow],
-    standalone: false
+  selector: 'km-side-nav-field',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  animations: [shrinkGrow],
+  standalone: false,
 })
 export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   private _expanded = false;

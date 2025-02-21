@@ -34,10 +34,10 @@ import {EMPTY, Observer, Subject, merge, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
-    selector: 'km-edit-sshkeys',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-edit-sshkeys',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;

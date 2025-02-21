@@ -26,10 +26,10 @@ export interface EditPresetDialogData {
 }
 
 @Component({
-    selector: 'km-edit-preset-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-edit-preset-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class EditPresetDialogComponent {
   creating = false;

@@ -23,22 +23,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-gcp-extended-node-data',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-gcp-extended-node-data',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GCPExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class GCPExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;

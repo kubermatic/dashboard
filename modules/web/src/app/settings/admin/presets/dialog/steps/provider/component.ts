@@ -30,22 +30,22 @@ enum Controls {
 const UNSUPPORTED_PROVIDERS = [NodeProvider.BRINGYOUROWN];
 
 @Component({
-    selector: 'km-preset-provider-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => PresetProviderStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => PresetProviderStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-preset-provider-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PresetProviderStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PresetProviderStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class PresetProviderStepComponent extends BaseFormValidator implements OnInit {
   @Input() existingProviders: PresetProvider[] = [];

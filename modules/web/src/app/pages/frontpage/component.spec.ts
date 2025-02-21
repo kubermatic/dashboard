@@ -16,11 +16,10 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import {RouterStub} from '@test/services/router-stubs';
-import {AuthMockService} from '@test/services/auth-mock';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
+import {AuthMockService} from '@test/services/auth-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {CookieService} from 'ngx-cookie-service';
 import {FrontpageComponent} from './component';
 
@@ -32,7 +31,7 @@ describe('FrontpageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [FrontpageComponent],
       providers: [{provide: Router, useClass: RouterStub}, {provide: Auth, useClass: AuthMockService}, CookieService],
       teardown: {destroyAfterEach: false},

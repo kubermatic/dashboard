@@ -47,22 +47,22 @@ enum ProjectState {
 }
 
 @Component({
-    selector: 'km-wizard-nutanix-provider-extended',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => NutanixProviderExtendedComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => NutanixProviderExtendedComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-wizard-nutanix-provider-extended',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NutanixProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NutanixProviderExtendedComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   // Following fields will not be blocked when preset is selected and vice versa.

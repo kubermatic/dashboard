@@ -19,9 +19,9 @@ import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import _ from 'lodash';
 
 @Component({
-    selector: 'km-mla',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-mla',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class MLAComponent {
   @Input() cluster: Cluster;

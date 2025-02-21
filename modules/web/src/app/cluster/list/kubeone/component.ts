@@ -44,9 +44,9 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-kubeone-cluster-list',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-kubeone-cluster-list',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class KubeOneClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Permission = Permission;

@@ -18,15 +18,14 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MachineNetworksComponent} from '@app/machine-networks/component';
-import {fakeClusterWithMachineNetwork} from '@test/data/cluster-with-machine-networks';
-import {fakeProject} from '@test/data/project';
-import {RouterTestingModule} from '@test/services/router-stubs';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {WizardService} from '@core/services/wizard/wizard';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
+import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
+import {fakeClusterWithMachineNetwork} from '@test/data/cluster-with-machine-networks';
+import {fakeProject} from '@test/data/project';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {AddMachineNetworkComponent} from './component';
 
 describe('AddMachineNetworkComponent', () => {
@@ -35,7 +34,7 @@ describe('AddMachineNetworkComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
       providers: [
         WizardService,

@@ -46,10 +46,10 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-preset-list',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-preset-list',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   readonly providers = NODE_PROVIDERS;

@@ -45,10 +45,10 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-machine-deployment-list',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-machine-deployment-list',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Column = Column;

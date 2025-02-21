@@ -18,9 +18,8 @@
             },
             "index": "src/index.html",
             "tsConfig": "src/tsconfig.ee.json",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "outputHashing": "all",
+            "polyfills": ["src/polyfills.ts"],
             "assets": [
               "src/assets",
               "src/favicon.png",
@@ -39,7 +38,7 @@
               "swagger-ui"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/assets/css"]
+              "includePaths": ["src/assets/css", "node_modules/"]
             },
             "styles": [
               "src/assets/css/root.scss",
@@ -60,9 +59,7 @@
                 "inject": false
               }
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js"
-            ],
+            "scripts": ["node_modules/jquery/dist/jquery.js"],
             "extractLicenses": false,
             "optimization": false,
             "namedChunks": true,
@@ -71,6 +68,7 @@
           "configurations": {
             "default-ce": {
               "tsConfig": "src/tsconfig.ce.json",
+              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/app/dynamic/module-registry.ts",

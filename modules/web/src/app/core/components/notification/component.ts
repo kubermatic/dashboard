@@ -24,10 +24,10 @@ export enum NotificationType {
 }
 
 @Component({
-    selector: 'km-notification',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-notification',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class NotificationComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly NOTIFICATION_DURATION = 5; // seconds

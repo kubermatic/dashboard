@@ -28,21 +28,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-azure-extended-node-data',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-azure-extended-node-data',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AzureExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AzureExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

@@ -37,21 +37,21 @@ enum VPCState {
 }
 
 @Component({
-    selector: 'km-wizard-kubevirt-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeVirtProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeVirtProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-kubevirt-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeVirtProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeVirtProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class KubeVirtProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

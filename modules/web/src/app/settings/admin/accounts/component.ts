@@ -23,10 +23,10 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
-    selector: 'km-accounts',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-accounts',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class AccountsComponent implements OnInit, OnChanges {
   users: Member[] = [];

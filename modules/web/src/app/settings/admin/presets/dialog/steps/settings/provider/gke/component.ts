@@ -25,21 +25,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-gke-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => GKESettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => GKESettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-gke-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GKESettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => GKESettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class GKESettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

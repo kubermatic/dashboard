@@ -17,15 +17,14 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
-import {UserMockService} from '@test/services/user-mock';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {ActivatedRouteStub} from '@test/services/router-stubs';
+import {UserMockService} from '@test/services/user-mock';
 import {TerminalComponent} from './component';
 
 describe('TerminalComponent', () => {
@@ -35,7 +34,7 @@ describe('TerminalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, MatSnackBarModule],
+      imports: [BrowserModule, BrowserAnimationsModule, MatSnackBarModule],
       declarations: [TerminalComponent],
       providers: [
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},

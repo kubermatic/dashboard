@@ -39,21 +39,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-applications-step',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ApplicationsStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ApplicationsStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-applications-step',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ApplicationsStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ApplicationsStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ApplicationsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly ApplicationsListView = ApplicationsListView;

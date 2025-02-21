@@ -38,9 +38,9 @@ import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
 
 @Component({
-    selector: 'km-member',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-member',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   readonly view = View;

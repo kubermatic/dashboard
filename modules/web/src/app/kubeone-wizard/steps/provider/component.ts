@@ -26,22 +26,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-kubeone-wizard-provider-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeOneProviderStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeOneProviderStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-kubeone-wizard-provider-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeOneProviderStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeOneProviderStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class KubeOneProviderStepComponent extends StepBase implements OnInit {
   readonly providers: NodeProvider[] = [

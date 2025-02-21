@@ -35,22 +35,22 @@ enum ProjectState {
 }
 
 @Component({
-    selector: 'km-preset-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => PresetStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => PresetStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-preset-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PresetStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PresetStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;

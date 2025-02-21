@@ -33,22 +33,22 @@ import {Observable, of, Subject, takeUntil} from 'rxjs';
 import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
-    selector: 'km-annotation-form',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AnnotationFormComponent),
-            multi: true,
-        },
-        {
-            provide: NG_ASYNC_VALIDATORS,
-            useExisting: forwardRef(() => AnnotationFormComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-annotation-form',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AnnotationFormComponent),
+      multi: true,
+    },
+    {
+      provide: NG_ASYNC_VALIDATORS,
+      useExisting: forwardRef(() => AnnotationFormComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AnnotationFormComponent implements OnInit, ControlValueAccessor, AsyncValidator, DoCheck, OnDestroy {
   @Input() title = 'Annotations';

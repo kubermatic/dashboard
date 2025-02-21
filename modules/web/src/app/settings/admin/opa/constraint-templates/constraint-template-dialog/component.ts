@@ -38,10 +38,10 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-constraint-template-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-constraint-template-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   readonly controls = Controls;

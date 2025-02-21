@@ -33,21 +33,21 @@ export enum PresetsState {
 }
 
 @Component({
-    selector: 'km-credentials-presets',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => CredentialsPresetsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => CredentialsPresetsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-credentials-presets',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CredentialsPresetsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => CredentialsPresetsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class CredentialsPresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

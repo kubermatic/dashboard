@@ -16,7 +16,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
 import {CoreModule} from '@core/module';
 import {AuthGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
@@ -24,14 +23,14 @@ import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {KubermaticComponent} from './component';
-import {AppConfigService} from './config.service';
-import {GoogleAnalyticsService} from './google-analytics.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {UserMockService} from '@test/services/user-mock';
+import {KubermaticComponent} from './component';
+import {AppConfigService} from './config.service';
+import {GoogleAnalyticsService} from './google-analytics.service';
 
 describe('KubermaticComponent', () => {
   let fixture: ComponentFixture<KubermaticComponent>;
@@ -40,14 +39,7 @@ describe('KubermaticComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpClientModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-        CoreModule,
-      ],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [KubermaticComponent],
       providers: [
         {provide: Auth, useClass: AuthMockService},

@@ -19,10 +19,10 @@ import {CNIVersionDialog} from './cni-version-dialog/component';
 import {coerce, lt} from 'semver';
 
 @Component({
-    selector: 'km-cni-version',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-cni-version',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class CNIVersionComponent implements OnInit {
   @Input() cluster: Cluster;

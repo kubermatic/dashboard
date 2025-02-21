@@ -28,10 +28,10 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-add-ssh-key-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-add-ssh-key-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AddSshKeyDialogComponent implements OnInit {
   @Input() projectID: string;

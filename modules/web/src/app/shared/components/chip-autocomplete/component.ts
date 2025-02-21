@@ -52,22 +52,22 @@ enum Controls {
  * @title Chips Autocomplete
  */
 @Component({
-    selector: 'km-chip-autocomplete',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ChipAutocompleteComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ChipAutocompleteComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-chip-autocomplete',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ChipAutocompleteComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ChipAutocompleteComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator {
   readonly Controls = Controls;

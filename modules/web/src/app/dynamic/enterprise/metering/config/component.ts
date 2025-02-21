@@ -30,10 +30,10 @@ import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {take} from 'rxjs';
 
 @Component({
-    selector: 'km-metering-config',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-metering-config',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MeteringConfigComponent {
   @Input() config: MeteringConfiguration;

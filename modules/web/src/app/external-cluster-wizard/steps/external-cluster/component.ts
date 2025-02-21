@@ -27,21 +27,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-external-cluster-step',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ExternalClusterStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ExternalClusterStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-external-cluster-step',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ExternalClusterStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ExternalClusterStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ExternalClusterStepComponent
   extends StepBase

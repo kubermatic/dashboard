@@ -28,22 +28,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-cluster-event-rate-limit',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => EventRateLimitComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => EventRateLimitComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-cluster-event-rate-limit',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => EventRateLimitComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => EventRateLimitComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;

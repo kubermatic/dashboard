@@ -16,10 +16,10 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {LayoutType} from '@shared/model/Terminal';
 
 @Component({
-    selector: 'km-overlay-terminal',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-overlay-terminal',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class OverlayTerminalComponent {
   readonly layoutType = LayoutType;

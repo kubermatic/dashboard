@@ -22,10 +22,10 @@ import {filter, Subject, takeUntil} from 'rxjs';
 
 const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api', '/terms-of-service$', '/404$'];
 @Component({
-    selector: 'km-announcement-banner',
-    templateUrl: './template.html',
-    styleUrl: './style.scss',
-    standalone: false
+  selector: 'km-announcement-banner',
+  templateUrl: './template.html',
+  styleUrl: './style.scss',
+  standalone: false,
 })
 export class AnnouncementBannerComponent implements OnInit, OnChanges {
   @Input() announcements: Map<string, AdminAnnouncement>;

@@ -20,10 +20,10 @@ import {ExternalCluster} from '@shared/entity/external-cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Component({
-    selector: 'km-cluster-panel',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-cluster-panel',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterPanelComponent {
   @Input() cluster: Cluster | ExternalCluster;

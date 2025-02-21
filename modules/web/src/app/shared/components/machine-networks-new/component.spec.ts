@@ -16,34 +16,33 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
+import {NutanixService} from '@app/core/services/provider/nutanix';
+import {VSphereService} from '@app/core/services/provider/vsphere';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {BaremetalService} from '@core/services/provider/baremetal';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {ProjectMockService} from '@test/services/project-mock';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {NodeDataService} from '@core/services/node-data/service';
-import {WizardService} from '@core/services/wizard/wizard';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {ParamsService} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
-import {PresetsService} from '@core/services/wizard/presets';
-import {SharedModule} from '@shared/module';
-import {MachineNetworkComponent} from './component';
 import {AlibabaService} from '@core/services/provider/alibaba';
 import {AnexiaService} from '@core/services/provider/anexia';
 import {AWSService} from '@core/services/provider/aws';
 import {AzureService} from '@core/services/provider/azure';
+import {BaremetalService} from '@core/services/provider/baremetal';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
 import {EquinixService} from '@core/services/provider/equinix';
 import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
-import {OpenStackService} from '@core/services/provider/openstack';
-import {NutanixService} from '@app/core/services/provider/nutanix';
-import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
-import {VSphereService} from '@app/core/services/provider/vsphere';
+import {OpenStackService} from '@core/services/provider/openstack';
+import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
+import {PresetsService} from '@core/services/wizard/presets';
+import {WizardService} from '@core/services/wizard/wizard';
+import {SharedModule} from '@shared/module';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {MachineNetworkComponent} from './component';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
@@ -51,7 +50,7 @@ describe('MachineNetworksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       providers: [
         AppConfigService,
         ClusterSpecService,

@@ -32,10 +32,10 @@ import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AdminRuleGroupDialog} from './rule-group-dialog/component';
 
 @Component({
-    selector: 'km-admin-settings-rule-groups',
-    styleUrls: ['style.scss'],
-    templateUrl: 'template.html',
-    standalone: false
+  selector: 'km-admin-settings-rule-groups',
+  styleUrls: ['style.scss'],
+  templateUrl: 'template.html',
+  standalone: false,
 })
 export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<AdminRuleGroup>();
