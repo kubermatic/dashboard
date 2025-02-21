@@ -13,15 +13,15 @@
 // limitations under the License.
 
 // Third party styles.
-@import '~modern-normalize/modern-normalize.css';
-@import '~swagger-ui/dist/swagger-ui.css';
-@import '~flag-icons/css/flag-icons.min.css';
+@import 'modern-normalize/modern-normalize.css';
+@import 'swagger-ui/dist/swagger-ui.css';
+@import 'flag-icons/css/flag-icons.min.css';
 
 // Fonts.
-@import '~@fontsource/inconsolata/index.css';
-@import '~@fontsource/roboto/latin-ext.css';
-@import '~@fontsource/roboto-mono/index.css';
-@import '~@fontsource/ubuntu/index.css';
+@import '@fontsource/inconsolata/index.css';
+@import '@fontsource/roboto/latin-ext.css';
+@import '@fontsource/roboto-mono/index.css';
+@import '@fontsource/ubuntu/index.css';
 
 // Application styles.
 @import 'images';

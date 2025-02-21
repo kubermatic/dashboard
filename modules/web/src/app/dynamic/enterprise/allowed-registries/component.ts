@@ -40,6 +40,7 @@ import {AllowedRegistriesService} from './service';
   selector: 'km-allowed-registries-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AllowedRegistriesComponent extends DynamicTab implements OnInit, OnChanges, OnDestroy {
   allowedRegistries: AllowedRegistry[] = [];

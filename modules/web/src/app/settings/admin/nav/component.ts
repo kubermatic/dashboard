@@ -29,6 +29,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AdminSidenavComponent implements OnInit, OnDestroy {
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;

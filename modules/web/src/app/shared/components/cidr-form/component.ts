@@ -44,6 +44,7 @@ import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class CIDRFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator {
   @Input() title = '';

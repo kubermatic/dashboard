@@ -53,6 +53,7 @@ import {SettingsService} from '@app/core/services/settings';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  standalone: false,
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;

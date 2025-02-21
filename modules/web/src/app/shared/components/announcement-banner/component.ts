@@ -25,6 +25,7 @@ const PAGES_WITHOUT_ANNOUNCEMENT_BANNER = ['/settings', '/account', '/rest-api',
   selector: 'km-announcement-banner',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  standalone: false,
 })
 export class AnnouncementBannerComponent implements OnInit, OnChanges {
   @Input() announcements: Map<string, AdminAnnouncement>;

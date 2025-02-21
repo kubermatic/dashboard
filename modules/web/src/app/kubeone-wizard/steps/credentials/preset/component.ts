@@ -49,6 +49,7 @@ export enum PresetsState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeOnePresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();

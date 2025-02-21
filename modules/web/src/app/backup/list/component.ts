@@ -22,6 +22,7 @@ import {Subject, takeUntil} from 'rxjs';
 @Component({
   selector: 'km-backups',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class BackupsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

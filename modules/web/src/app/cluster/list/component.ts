@@ -22,6 +22,7 @@ import {View} from '@app/shared/entity/common';
 @Component({
   selector: 'km-clusters',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();

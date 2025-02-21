@@ -62,6 +62,7 @@ enum ProjectState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   // Following fields will not be blocked when preset is selected and vice versa.

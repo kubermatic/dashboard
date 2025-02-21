@@ -76,6 +76,7 @@ enum ProjectState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpenstackDefaultCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

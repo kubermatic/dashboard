@@ -49,6 +49,7 @@ enum StepRegistry {
   selector: 'km-preset-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class PresetDialogComponent implements OnInit, OnDestroy {
   readonly stepRegistry = StepRegistry;

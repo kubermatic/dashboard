@@ -45,6 +45,7 @@ import {getProgressBarAccent} from '../utils/common';
   selector: 'km-quota-widget',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

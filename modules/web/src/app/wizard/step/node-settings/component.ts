@@ -40,6 +40,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class NodeSettingsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly Provider = NodeProvider;

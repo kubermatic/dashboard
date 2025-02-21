@@ -33,6 +33,7 @@ import {Mode, RuleGroupDialog} from './rule-group-dialog/component';
   selector: 'km-rule-groups',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;

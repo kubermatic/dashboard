@@ -18,6 +18,7 @@ import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChil
   selector: 'km-labels',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class LabelsComponent implements OnInit, OnChanges {
   @Input() labels = {};

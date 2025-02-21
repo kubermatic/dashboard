@@ -23,6 +23,7 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
   selector: 'km-external-cluster-cluster-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterStepComponent implements OnInit, OnDestroy {
   @Input() projectID: string;

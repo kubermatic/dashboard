@@ -23,6 +23,7 @@ import {Observable} from 'rxjs';
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class AddAdminDialogComponent implements OnInit {
   form: FormGroup;

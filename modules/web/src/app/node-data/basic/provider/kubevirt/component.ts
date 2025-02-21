@@ -134,6 +134,7 @@ class OSImageDropdownOption {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator

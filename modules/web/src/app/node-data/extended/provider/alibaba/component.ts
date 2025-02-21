@@ -36,6 +36,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;

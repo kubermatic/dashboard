@@ -41,6 +41,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeOneProviderStepComponent extends StepBase implements OnInit {
   readonly providers: NodeProvider[] = [

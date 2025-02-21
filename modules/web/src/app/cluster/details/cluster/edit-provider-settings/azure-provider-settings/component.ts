@@ -29,6 +29,7 @@ enum Control {
 @Component({
   selector: 'km-azure-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

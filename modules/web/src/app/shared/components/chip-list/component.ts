@@ -53,6 +53,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validator {
   private _unsubscribe = new Subject<void>();

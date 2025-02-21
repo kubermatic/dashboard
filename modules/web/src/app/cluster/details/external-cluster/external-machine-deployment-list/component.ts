@@ -54,6 +54,7 @@ enum Column {
   selector: 'km-external-machine-deployment-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly column = Column;

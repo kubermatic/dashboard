@@ -43,6 +43,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeletVersionNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

@@ -30,6 +30,7 @@ import {throttleTime} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ButtonComponent<T> implements OnInit, OnDestroy {
   @Input() icon: string;

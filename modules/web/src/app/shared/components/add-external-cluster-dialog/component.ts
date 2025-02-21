@@ -33,6 +33,7 @@ export enum Step {
 @Component({
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   @Input() projectId: string;

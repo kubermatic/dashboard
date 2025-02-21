@@ -96,6 +96,7 @@ enum Controls {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounce = 500;

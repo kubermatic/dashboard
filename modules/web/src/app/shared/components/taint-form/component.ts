@@ -43,6 +43,7 @@ import {DialogModeService} from '@app/core/services/dialog-mode';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class TaintFormComponent implements OnInit {
   @Input() title = 'Taints';

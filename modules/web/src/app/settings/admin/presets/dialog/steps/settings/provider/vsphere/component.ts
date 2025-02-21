@@ -45,6 +45,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VSphereSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

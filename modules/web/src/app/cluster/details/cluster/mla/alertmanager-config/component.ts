@@ -46,6 +46,7 @@ export enum AddonType {
   selector: 'km-alertmanager-config',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   readonly Type = Type;

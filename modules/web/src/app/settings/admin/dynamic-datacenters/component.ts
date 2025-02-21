@@ -34,6 +34,7 @@ import {DatacenterDataDialogComponent} from './datacenter-data-dialog/component'
   selector: 'km-dynamic-datacenters',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges {
   datacenters: Datacenter[] = [];

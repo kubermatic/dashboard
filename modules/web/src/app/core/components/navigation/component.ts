@@ -39,6 +39,7 @@ const enum RoutePath {
   selector: 'km-navigation',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class NavigationComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

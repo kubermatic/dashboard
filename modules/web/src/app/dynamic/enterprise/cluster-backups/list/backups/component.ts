@@ -60,6 +60,7 @@ enum ClusterState {
   selector: 'km-cluster-backups-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

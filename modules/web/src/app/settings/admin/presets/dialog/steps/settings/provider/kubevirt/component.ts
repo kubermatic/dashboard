@@ -40,6 +40,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubevirtSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

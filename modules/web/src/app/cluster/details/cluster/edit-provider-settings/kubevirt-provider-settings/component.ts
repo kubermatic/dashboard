@@ -26,6 +26,7 @@ enum Control {
 @Component({
   selector: 'km-kubevirt-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

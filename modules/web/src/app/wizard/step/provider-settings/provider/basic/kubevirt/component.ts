@@ -51,6 +51,7 @@ enum VPCState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeVirtProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

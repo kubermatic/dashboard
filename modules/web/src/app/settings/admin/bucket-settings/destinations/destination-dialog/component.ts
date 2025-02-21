@@ -48,6 +48,7 @@ export enum Controls {
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DestinationDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;

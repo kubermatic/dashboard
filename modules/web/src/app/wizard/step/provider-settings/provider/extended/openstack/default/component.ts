@@ -72,6 +72,7 @@ enum Controls {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpenstackProviderExtendedCredentialsComponent
   extends BaseFormValidator

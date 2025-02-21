@@ -38,6 +38,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class GCPExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;

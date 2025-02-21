@@ -42,6 +42,7 @@ import {take, takeUntil} from 'rxjs/operators';
   selector: 'km-machine-deployment-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: MachineDeployment;

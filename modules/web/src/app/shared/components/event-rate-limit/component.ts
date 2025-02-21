@@ -43,6 +43,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() eventRateLimitConfig: EventRateLimitConfig;

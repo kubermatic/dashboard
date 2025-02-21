@@ -19,6 +19,7 @@ import {StatusIcon} from '@shared/utils/health-status';
 @Component({
   selector: 'km-property-health',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class PropertyHealthComponent {
   @Input() label: string;

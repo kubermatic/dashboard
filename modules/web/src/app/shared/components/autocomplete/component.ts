@@ -40,6 +40,7 @@ export enum AutocompleteControls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() label: string;

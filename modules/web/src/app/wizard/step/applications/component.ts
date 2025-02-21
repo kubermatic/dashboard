@@ -53,6 +53,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ApplicationsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly ApplicationsListView = ApplicationsListView;

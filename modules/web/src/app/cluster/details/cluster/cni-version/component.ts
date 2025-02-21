@@ -22,6 +22,7 @@ import {coerce, lt} from 'semver';
   selector: 'km-cni-version',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class CNIVersionComponent implements OnInit {
   @Input() cluster: Cluster;

@@ -59,6 +59,7 @@ import {EditProjectComponent} from './edit-project/component';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   readonly ProjectStatus = ProjectStatus;

@@ -56,6 +56,7 @@ enum StepRegistry {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestroy {
   readonly Controls = Controls;

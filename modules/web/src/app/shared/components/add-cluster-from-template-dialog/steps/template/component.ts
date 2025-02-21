@@ -34,6 +34,7 @@ enum Control {
 @Component({
   selector: 'km-select-cluster-template',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
   @Input() projectId: string;

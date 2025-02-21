@@ -21,6 +21,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-relative-time',
   templateUrl: './template.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class RelativeTimeComponent implements OnInit, OnDestroy {
   @Input() date: string;

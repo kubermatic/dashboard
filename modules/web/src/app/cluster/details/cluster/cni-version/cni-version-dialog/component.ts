@@ -31,6 +31,7 @@ export interface CNIVersionDialogConfig {
 @Component({
   selector: 'km-cni-version-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class CNIVersionDialog implements OnInit, OnDestroy {
   selectedCNIVersion: string;

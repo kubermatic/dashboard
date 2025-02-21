@@ -48,6 +48,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AnnotationFormComponent implements OnInit, ControlValueAccessor, AsyncValidator, DoCheck, OnDestroy {
   @Input() title = 'Annotations';

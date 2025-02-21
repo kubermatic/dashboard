@@ -29,6 +29,7 @@ import {take, takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  standalone: false,
 })
 export class HelpPanelComponent implements OnInit, OnDestroy {
   adminSettings: AdminSettings;

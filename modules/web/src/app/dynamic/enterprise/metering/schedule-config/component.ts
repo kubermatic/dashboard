@@ -45,6 +45,7 @@ enum Column {
   selector: 'km-metering-schedule-config',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MeteringScheduleConfigComponent implements OnInit {
   @Input() schedules: MeteringReportConfiguration[];

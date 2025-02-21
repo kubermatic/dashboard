@@ -19,6 +19,7 @@ import {Event} from '@shared/entity/event';
   selector: 'km-event-card',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class EventCardComponent {
   @Input() events: Event[] = [];

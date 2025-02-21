@@ -30,6 +30,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   selector: 'km-defaults',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class DefaultsComponent implements OnInit, OnDestroy {
   user: Member;

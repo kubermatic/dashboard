@@ -28,6 +28,7 @@ enum Column {
   selector: 'km-rbac-service-account-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class RBACServiceAccountDetailsComponent implements OnChanges, OnDestroy {
   private _unsubscribe = new Subject<void>();

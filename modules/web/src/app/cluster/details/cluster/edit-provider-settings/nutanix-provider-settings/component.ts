@@ -30,6 +30,7 @@ export enum Controls {
 @Component({
   selector: 'km-nutanix-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class NutanixProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

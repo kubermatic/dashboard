@@ -62,6 +62,7 @@ import {StaticLabel} from '@app/shared/entity/settings';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';

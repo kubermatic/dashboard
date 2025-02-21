@@ -42,6 +42,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class MachineFlavorFilterComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() machineFlavorFilter: MachineFlavorFilter;

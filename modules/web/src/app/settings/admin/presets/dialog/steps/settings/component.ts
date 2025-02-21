@@ -46,6 +46,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit {
   @Input() mode: Mode;

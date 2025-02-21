@@ -22,6 +22,7 @@ import {AddMachineNetworkComponent} from '../add-machine-network/component';
   selector: 'km-machine-networks-display',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class MachineNetworksDisplayComponent {
   @Input() cluster: Cluster;

@@ -30,6 +30,7 @@ enum Control {
 @Component({
   selector: 'km-vsphere-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

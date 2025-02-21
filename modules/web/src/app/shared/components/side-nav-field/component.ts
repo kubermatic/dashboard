@@ -21,6 +21,7 @@ import {shrinkGrow} from '@shared/animations/grow';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
+  standalone: false,
 })
 export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   private _expanded = false;

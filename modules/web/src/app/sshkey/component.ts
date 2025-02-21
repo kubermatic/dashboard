@@ -39,6 +39,7 @@ import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
   selector: 'km-sshkey',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;

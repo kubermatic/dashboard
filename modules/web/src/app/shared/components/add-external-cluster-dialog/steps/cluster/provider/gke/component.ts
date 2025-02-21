@@ -25,6 +25,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-gke-cluster-select',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class GKEClusterSelectComponent implements OnInit, OnDestroy {
   @Input() projectID: string;

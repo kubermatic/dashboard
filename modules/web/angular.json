@@ -10,14 +10,16 @@
       "prefix": "km",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
             "sourceMap": true,
-            "outputPath": "dist",
+            "outputPath": {
+              "base": "dist"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "tsConfig": "src/tsconfig.ee.json",
-            "polyfills": "src/polyfills.ts",
+            "outputHashing": "all",
+            "polyfills": ["src/polyfills.ts"],
             "assets": [
               "src/assets",
               "src/favicon.png",
@@ -36,7 +38,7 @@
               "swagger-ui"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/assets/css"]
+              "includePaths": ["src/assets/css", "node_modules/"]
             },
             "styles": [
               "src/assets/css/root.scss",
@@ -58,15 +60,15 @@
               }
             ],
             "scripts": ["node_modules/jquery/dist/jquery.js"],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "default-ce": {
               "tsConfig": "src/tsconfig.ce.json",
+              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/app/dynamic/module-registry.ts",
@@ -81,14 +83,11 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -103,14 +102,11 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "tsConfig": "src/tsconfig.ce.json",
               "fileReplacements": [
                 {
@@ -130,13 +126,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -151,13 +144,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "tsConfig": "src/tsconfig.ce.json",
               "fileReplacements": [
                 {
@@ -177,13 +167,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -198,13 +185,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "tsConfig": "src/tsconfig.ce.json",
               "fileReplacements": [
                 {
@@ -224,13 +208,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -245,13 +226,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "commonChunk": false,
               "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "tsConfig": "src/tsconfig.ce.json",
               "fileReplacements": [
                 {
@@ -267,7 +245,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "./proxy.conf.cjs",
             "port": 8000,
@@ -305,7 +283,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "kubermatic:build"
           }

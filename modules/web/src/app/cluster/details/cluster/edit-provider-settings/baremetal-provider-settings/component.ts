@@ -26,6 +26,7 @@ enum Control {
 @Component({
   selector: 'km-baremetal-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class BaremetalProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

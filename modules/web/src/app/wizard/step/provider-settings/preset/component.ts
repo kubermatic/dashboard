@@ -49,6 +49,7 @@ export enum PresetsState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class PresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();

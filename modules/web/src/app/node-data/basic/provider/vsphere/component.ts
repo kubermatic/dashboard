@@ -62,6 +62,7 @@ enum VMGroupsState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

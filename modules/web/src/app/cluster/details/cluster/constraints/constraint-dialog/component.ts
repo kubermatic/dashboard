@@ -46,6 +46,7 @@ export enum Controls {
   selector: 'km-constraint-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ConstraintDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;

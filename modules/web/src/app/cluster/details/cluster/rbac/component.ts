@@ -31,6 +31,7 @@ import {ClusterServiceAccountService} from '@core/services/cluster-service-accou
   selector: 'km-rbac',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class RBACComponent implements OnDestroy {
   @Input() cluster: Cluster;

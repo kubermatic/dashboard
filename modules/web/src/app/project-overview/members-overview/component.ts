@@ -23,6 +23,7 @@ import {DynamicModule} from '@dynamic/module-registry';
   selector: 'km-members-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MembersOverviewComponent {
   @Input() project: Project;

@@ -31,6 +31,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   selector: 'km-user-settings',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class UserSettingsComponent implements OnInit, OnDestroy {
   readonly itemsPerPageOptions = ITEMS_PER_PAGE_OPTIONS;

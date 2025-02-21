@@ -24,6 +24,7 @@ import {Observable} from 'rxjs';
 @Component({
   selector: 'km-add-member',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: Project;

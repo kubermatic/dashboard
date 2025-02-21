@@ -38,6 +38,7 @@ import {HealthStatus} from '@shared/utils/health-status';
   selector: 'km-external-machine-deployment-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   private readonly _refreshTime = 10;

@@ -28,6 +28,7 @@ enum Control {
 @Component({
   selector: 'km-equinix-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class EquinixProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _billingCycleMaxLen = 64;

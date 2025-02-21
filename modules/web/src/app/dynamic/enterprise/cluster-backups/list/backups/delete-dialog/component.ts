@@ -31,6 +31,7 @@ export interface DeleteBackupDialogConfig {
 @Component({
   selector: 'km-delete-backup-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class DeleteBackupDialogComponent {
   type = this._config.type;

@@ -84,6 +84,7 @@ enum StorageProfileState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _alwaysEnabledControls = [Controls.StorageProfile, Controls.Filesystem];

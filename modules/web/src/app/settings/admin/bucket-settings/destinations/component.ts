@@ -30,6 +30,7 @@ import {EditCredentialsDialog} from './edit-credentials-dialog/component';
   selector: 'km-destinations',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class DestinationsComponent implements OnInit {
   @Input() seed?: AdminSeed;

@@ -27,6 +27,7 @@ export enum Controls {
 @Component({
   selector: 'km-gke-credentials',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class GKECredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;

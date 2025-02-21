@@ -21,6 +21,7 @@ import {ExternalClusterModel} from '@shared/entity/external-cluster';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class EKSClusterSummaryComponent implements OnChanges {
   @Input() cluster: ExternalClusterModel;

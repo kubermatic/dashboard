@@ -20,6 +20,7 @@ import {finalize, take} from 'rxjs/operators';
 @Component({
   selector: 'km-copy-joining-script-button',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class CopyJoiningScriptButtonComponent {
   private readonly COPIED_TIMEOUT = 2000;

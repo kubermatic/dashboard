@@ -40,6 +40,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeOneCredentialsBasicComponent extends BaseFormValidator implements OnInit {
   readonly NodeProvider = NodeProvider;

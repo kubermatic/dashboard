@@ -46,6 +46,7 @@ export enum Controls {
 @Component({
   selector: 'km-allowed-registry-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class AllowedRegistryDialog implements OnInit, OnDestroy {
   readonly controls = Controls;

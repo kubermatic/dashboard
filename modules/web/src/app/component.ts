@@ -37,6 +37,7 @@ const PAGES_WITH_SECONDARY_MENU = ['/settings'];
   selector: 'km-root',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;

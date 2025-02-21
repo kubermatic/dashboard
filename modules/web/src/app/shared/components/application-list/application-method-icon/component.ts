@@ -18,6 +18,7 @@ import {ApplicationMethod} from '@shared/entity/application';
 @Component({
   selector: 'km-application-method-icon',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class ApplicationMethodIconComponent implements OnChanges {
   @Input() method: string;

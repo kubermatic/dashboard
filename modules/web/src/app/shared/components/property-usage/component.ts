@@ -20,6 +20,7 @@ import {getPercentage} from '../../utils/common';
   selector: 'km-property-usage',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class PropertyUsageComponent {
   @Input() name: string;

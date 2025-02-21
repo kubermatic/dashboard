@@ -124,6 +124,7 @@ export enum NodePoolVersionState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AKSClusterSettingsComponent
   extends StepBase

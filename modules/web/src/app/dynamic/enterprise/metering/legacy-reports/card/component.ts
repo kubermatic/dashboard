@@ -25,6 +25,7 @@ import {Report} from '@shared/entity/metering';
   selector: 'km-metering-legacy-reports-card',
   styleUrls: ['./style.scss'],
   templateUrl: './template.html',
+  standalone: false,
 })
 export class MeteringLegacyReportCardComponent {
   @Input() reports: Report[];

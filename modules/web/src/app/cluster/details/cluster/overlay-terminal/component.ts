@@ -19,6 +19,7 @@ import {LayoutType} from '@shared/model/Terminal';
   selector: 'km-overlay-terminal',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class OverlayTerminalComponent {
   readonly layoutType = LayoutType;

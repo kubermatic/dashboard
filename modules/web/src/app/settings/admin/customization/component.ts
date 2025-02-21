@@ -28,6 +28,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   selector: 'km-Customization',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class CustomizationComponent implements OnInit, OnDestroy {
   user: Member;

@@ -17,6 +17,7 @@ import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 @Component({
   selector: 'km-dynamic-tab',
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class DynamicTabComponent {
   @Input() label: string;

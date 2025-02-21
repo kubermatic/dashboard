@@ -27,6 +27,7 @@ enum Control {
 @Component({
   selector: 'km-alibaba-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

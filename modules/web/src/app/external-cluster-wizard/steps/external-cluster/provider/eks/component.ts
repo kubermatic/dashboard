@@ -133,6 +133,7 @@ enum InstanceTypeState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class EKSClusterSettingsComponent
   extends StepBase

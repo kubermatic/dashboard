@@ -16,6 +16,7 @@ import {Directive, ElementRef, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   selector: '[kmInputPassword]',
+  standalone: false,
 })
 export class InputPasswordDirective implements OnInit, OnDestroy {
   private _eventListener: EventListener;

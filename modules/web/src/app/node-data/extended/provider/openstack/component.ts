@@ -37,6 +37,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class OpenstackExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

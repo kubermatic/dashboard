@@ -47,6 +47,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class OpenstackSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private credentialsType = CredentialsType.Default;

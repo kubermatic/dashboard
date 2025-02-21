@@ -29,6 +29,7 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
   selector: 'km-external-cluster-delete-confirmation',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDestroy, AfterContentChecked {
   readonly Provider = ExternalClusterProvider;

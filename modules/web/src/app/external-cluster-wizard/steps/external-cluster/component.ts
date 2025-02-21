@@ -41,6 +41,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ExternalClusterStepComponent
   extends StepBase

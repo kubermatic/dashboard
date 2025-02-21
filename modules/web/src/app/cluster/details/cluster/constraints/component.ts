@@ -34,6 +34,7 @@ import {ConstraintDialog} from './constraint-dialog/component';
   selector: 'km-constraint-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;

@@ -43,6 +43,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];

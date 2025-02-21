@@ -47,6 +47,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VMwareCloudDirectorProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

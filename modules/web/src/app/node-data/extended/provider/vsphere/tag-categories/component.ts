@@ -66,6 +66,7 @@ enum TagState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VSphereTagsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

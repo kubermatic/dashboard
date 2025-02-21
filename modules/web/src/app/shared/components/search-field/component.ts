@@ -18,6 +18,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 @Component({
   selector: 'km-search-field',
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class SearchFieldComponent implements OnInit {
   @Output() queryChange = new EventEmitter<string>();

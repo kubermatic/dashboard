@@ -33,6 +33,7 @@ import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 @Component({
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class StylePickerComponent implements OnInit {
   readonly isEqual = _.isEqual;

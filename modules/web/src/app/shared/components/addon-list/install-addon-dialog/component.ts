@@ -42,6 +42,7 @@ enum StepRegistry {
   selector: 'km-select-addon-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class InstallAddonDialogComponent {
   static getControlValidators(control: AddonFormSpec): ValidatorFn[] {

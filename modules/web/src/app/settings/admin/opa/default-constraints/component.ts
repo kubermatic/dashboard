@@ -35,6 +35,7 @@ import {DefaultConstraintDialog} from './default-constraint-dialog/component';
   selector: 'km-default-constraint-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = this.getColumns();

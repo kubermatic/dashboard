@@ -39,6 +39,7 @@ interface ExternalAddMachineDeploymentDialogConfig {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ExternalAddMachineDeploymentDialogComponent extends BaseFormValidator {
   projectID = this._data.projectId;

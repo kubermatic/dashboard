@@ -37,6 +37,7 @@ export enum RegionState {
 @Component({
   selector: 'km-eks-credentials',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class EKSCredentialsComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;

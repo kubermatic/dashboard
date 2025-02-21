@@ -49,6 +49,7 @@ enum Controls {
     },
   ],
   animations: [pushDown],
+  standalone: false,
 })
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

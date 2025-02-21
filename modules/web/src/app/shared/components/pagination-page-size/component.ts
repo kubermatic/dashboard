@@ -28,6 +28,7 @@ export const ITEMS_PER_PAGE_OPTIONS = [5, 10, 15, 20, 25];
   selector: 'km-pagination-page-size',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class PaginationPageSizeComponent implements OnInit, OnDestroy {
   readonly options = ITEMS_PER_PAGE_OPTIONS;

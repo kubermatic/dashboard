@@ -47,6 +47,7 @@ export enum PresetsState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class CredentialsPresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

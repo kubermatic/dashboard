@@ -24,6 +24,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
   selector: 'km-kubeone-wizard-summary-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class KubeOneSummaryStepComponent {
   readonly StepRegistry = StepRegistry;

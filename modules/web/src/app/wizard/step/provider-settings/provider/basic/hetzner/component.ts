@@ -41,6 +41,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class HetznerProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _minTokenLength = 64;

@@ -83,6 +83,7 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/component';
   selector: 'km-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();

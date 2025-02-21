@@ -20,6 +20,7 @@ import {Auth} from '@core/services/auth/service';
   selector: 'km-page-not-found',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class PageNotFoundComponent {
   constructor(

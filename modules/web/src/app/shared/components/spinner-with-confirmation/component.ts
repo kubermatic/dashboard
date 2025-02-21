@@ -20,6 +20,7 @@ import {fadeInOut} from '../../animations/fade';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [fadeInOut],
+  standalone: false,
 })
 export class SpinnerWithConfirmationComponent implements OnChanges {
   private readonly _defaultTimeout = 3000;

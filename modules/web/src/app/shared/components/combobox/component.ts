@@ -52,6 +52,7 @@ export enum ComboboxControls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class FilteredComboboxComponent extends BaseFormValidator implements OnInit, OnDestroy, OnChanges {
   @Input() label: string;

@@ -50,6 +50,7 @@ enum Controls {
   selector: 'km-add-backup-storage-location-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

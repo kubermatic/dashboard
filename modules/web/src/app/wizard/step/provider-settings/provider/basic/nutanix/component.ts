@@ -57,6 +57,7 @@ enum ClusterState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class NutanixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @ViewChild('clusterCombobox')

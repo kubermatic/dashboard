@@ -41,6 +41,7 @@ import {StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health
 @Component({
   selector: 'km-backup-storage-locations-list',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

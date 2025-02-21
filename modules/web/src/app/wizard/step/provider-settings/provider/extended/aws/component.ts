@@ -46,6 +46,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

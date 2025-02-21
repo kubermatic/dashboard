@@ -42,6 +42,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class AzureExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

@@ -60,6 +60,7 @@ enum Error {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NumberStepperComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
   private readonly _unsubscribe = new Subject<void>();
