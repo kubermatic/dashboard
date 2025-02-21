@@ -66,23 +66,23 @@ class OSImageDropdownOption {
 }
 
 @Component({
-    selector: 'km-baremetal-basic-node-data',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => BaremetalBasicNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => BaremetalBasicNodeDataComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-baremetal-basic-node-data',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => BaremetalBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => BaremetalBasicNodeDataComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BaremetalBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

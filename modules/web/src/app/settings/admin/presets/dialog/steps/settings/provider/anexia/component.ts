@@ -25,21 +25,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-anexia-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AnexiaSettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AnexiaSettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-anexia-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AnexiaSettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AnexiaSettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AnexiaSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

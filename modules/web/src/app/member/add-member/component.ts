@@ -22,9 +22,9 @@ import {MemberService} from '@core/services/member';
 import {Observable} from 'rxjs';
 
 @Component({
-    selector: 'km-add-member',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-add-member',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: Project;

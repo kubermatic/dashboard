@@ -21,10 +21,10 @@ import {Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 
 @Component({
-    selector: 'km-violation-details-list',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-violation-details-list',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ViolationDetailsComponent implements OnInit {
   @Input() violations: Violation[] = [];

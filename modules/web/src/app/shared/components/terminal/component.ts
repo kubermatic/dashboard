@@ -72,11 +72,11 @@ enum MessageTypes {
   Pong = 'PONG',
 }
 @Component({
-    selector: 'km-terminal',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-terminal',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
   readonly DELAY_TIMEOUT = 100;

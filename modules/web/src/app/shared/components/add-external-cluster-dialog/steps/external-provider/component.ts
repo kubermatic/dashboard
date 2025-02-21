@@ -24,10 +24,10 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-external-cluster-provider-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-external-cluster-provider-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
   readonly controls = Controls;

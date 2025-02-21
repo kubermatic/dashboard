@@ -25,9 +25,9 @@ enum Control {
 }
 
 @Component({
-    selector: 'km-gcp-provider-settings',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-gcp-provider-settings',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

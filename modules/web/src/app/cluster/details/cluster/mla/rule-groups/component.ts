@@ -30,10 +30,10 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, RuleGroupDialog} from './rule-group-dialog/component';
 
 @Component({
-    selector: 'km-rule-groups',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-rule-groups',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;

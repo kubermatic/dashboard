@@ -27,10 +27,10 @@ import {DestinationDialog, Mode} from './destination-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
 
 @Component({
-    selector: 'km-destinations',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-destinations',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class DestinationsComponent implements OnInit {
   @Input() seed?: AdminSeed;

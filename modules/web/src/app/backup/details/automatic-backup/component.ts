@@ -30,10 +30,10 @@ import {Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-    selector: 'km-automatic-backup-details',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-automatic-backup-details',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

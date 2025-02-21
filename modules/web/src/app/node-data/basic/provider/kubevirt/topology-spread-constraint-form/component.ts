@@ -36,22 +36,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-topology-spread-constraint-form',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => TopologySpreadConstraintFormComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => TopologySpreadConstraintFormComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-topology-spread-constraint-form',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TopologySpreadConstraintFormComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => TopologySpreadConstraintFormComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class TopologySpreadConstraintFormComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

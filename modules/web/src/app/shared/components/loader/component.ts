@@ -15,10 +15,10 @@
 import {Component, Input} from '@angular/core';
 
 @Component({
-    selector: 'km-loader',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-loader',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class LoaderComponent {
   @Input() text = 'Loading...';

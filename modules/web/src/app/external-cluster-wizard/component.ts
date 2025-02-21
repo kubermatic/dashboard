@@ -28,10 +28,10 @@ import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
 import {View} from '@app/shared/entity/common';
 
 @Component({
-    selector: 'km-external-cluster-wizard',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-external-cluster-wizard',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   readonly stepRegistry = StepRegistry;

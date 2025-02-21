@@ -27,21 +27,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-aks-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AKSSettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AKSSettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-aks-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AKSSettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AKSSettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AKSSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

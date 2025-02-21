@@ -19,22 +19,22 @@ import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/st
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 @Component({
-    selector: 'km-serviceaccount-token-information-step',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ServiceAccountTokenInformationStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ServiceAccountTokenInformationStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-serviceaccount-token-information-step',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ServiceAccountTokenInformationStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ServiceAccountTokenInformationStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ServiceAccountTokenInformationStepComponent extends BaseFormValidator implements OnInit {
   get token(): string {

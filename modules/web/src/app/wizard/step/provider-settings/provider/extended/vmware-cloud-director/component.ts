@@ -69,22 +69,22 @@ enum StorageProfileState {
 }
 
 @Component({
-    selector: 'km-wizard-vmware-cloud-director-provider-extended',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => VMwareCloudDirectorProviderExtendedComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => VMwareCloudDirectorProviderExtendedComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-wizard-vmware-cloud-director-provider-extended',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VMwareCloudDirectorProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VMwareCloudDirectorProviderExtendedComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VMwareCloudDirectorProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _alwaysEnabledControls = [Controls.StorageProfile, Controls.Filesystem];

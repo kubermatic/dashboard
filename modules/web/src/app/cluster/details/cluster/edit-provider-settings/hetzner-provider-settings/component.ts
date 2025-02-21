@@ -24,9 +24,9 @@ enum Control {
 }
 
 @Component({
-    selector: 'km-hetzner-provider-settings',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-hetzner-provider-settings',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

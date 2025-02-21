@@ -27,21 +27,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-anexia-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AnexiaProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AnexiaProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-anexia-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AnexiaProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AnexiaProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AnexiaProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

@@ -36,10 +36,10 @@ import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/e
 import {View} from '@app/shared/entity/common';
 
 @Component({
-    selector: 'km-external-cluster-details',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-external-cluster-details',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   readonly Provider = ExternalClusterProvider;

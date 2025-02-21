@@ -21,10 +21,10 @@ import {KubeOneClusterSpec} from '@shared/entity/kubeone-cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Component({
-    selector: 'km-kubeone-wizard-summary-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-kubeone-wizard-summary-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class KubeOneSummaryStepComponent {
   readonly StepRegistry = StepRegistry;

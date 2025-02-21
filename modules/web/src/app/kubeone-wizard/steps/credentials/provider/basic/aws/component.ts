@@ -28,22 +28,22 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-kubeone-wizard-aws-credentials-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeOneAWSCredentialsBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeOneAWSCredentialsBasicComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-kubeone-wizard-aws-credentials-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeOneAWSCredentialsBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeOneAWSCredentialsBasicComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class KubeOneAWSCredentialsBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

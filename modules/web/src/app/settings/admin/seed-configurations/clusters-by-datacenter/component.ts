@@ -22,10 +22,10 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-provider-datacenter-details',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-provider-datacenter-details',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ProviderDatacenterDetailsComponent implements OnChanges {
   readonly Column = Column;

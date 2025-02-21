@@ -18,11 +18,11 @@ import {ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/exte
 import {StepRegistry} from '../../config';
 
 @Component({
-    selector: 'km-external-cluster-summary-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-external-cluster-summary-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class ExternalClusterSummaryStepComponent implements OnInit {
   readonly ExternalClusterProvider = ExternalClusterProvider;

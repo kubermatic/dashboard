@@ -25,21 +25,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-provider-basic',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ProviderBasicComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ProviderBasicComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-provider-basic',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ProviderBasicComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ProviderBasicComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ProviderBasicComponent extends BaseFormValidator implements OnInit {
   @Input() provider: NodeProvider;

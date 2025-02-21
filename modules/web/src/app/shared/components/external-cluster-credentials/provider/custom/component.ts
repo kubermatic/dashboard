@@ -24,9 +24,9 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-custom-credentials',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-custom-credentials',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class CustomCredentialsComponent implements OnInit, OnDestroy {
   kubeconfig = '';

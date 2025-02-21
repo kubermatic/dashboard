@@ -46,9 +46,9 @@ enum NamespacesState {
 }
 
 @Component({
-    selector: 'km-add-restore-dialog',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-add-restore-dialog',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class AddRestoreDialogComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();

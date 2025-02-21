@@ -32,22 +32,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-kubeone-wizard-cluster-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => KubeOneClusterStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => KubeOneClusterStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-kubeone-wizard-cluster-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => KubeOneClusterStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => KubeOneClusterStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class KubeOneClusterStepComponent extends StepBase implements OnInit {
   readonly Controls = Controls;

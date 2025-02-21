@@ -25,21 +25,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-hetzner-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => HetznerSettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => HetznerSettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-hetzner-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => HetznerSettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => HetznerSettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class HetznerSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

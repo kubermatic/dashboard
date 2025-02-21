@@ -34,10 +34,10 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-seed-configurations',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-seed-configurations',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class SeedConfigurationsComponent implements OnDestroy {
   readonly Column = Column;

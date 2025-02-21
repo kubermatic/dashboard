@@ -48,22 +48,22 @@ class MachineNetworkSpec {
 }
 
 @Component({
-    selector: 'km-machine-networks-new',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MachineNetworkComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => MachineNetworkComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-machine-networks-new',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MachineNetworkComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => MachineNetworkComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class MachineNetworkComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;

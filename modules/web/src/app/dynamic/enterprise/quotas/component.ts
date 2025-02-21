@@ -57,10 +57,10 @@ interface progressBarData {
 }
 
 @Component({
-    selector: 'km-quotas',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-quotas',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class QuotasComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();

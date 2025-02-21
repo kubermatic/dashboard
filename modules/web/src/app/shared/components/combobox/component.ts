@@ -37,22 +37,22 @@ export enum ComboboxControls {
 }
 
 @Component({
-    selector: 'km-combobox',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => FilteredComboboxComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => FilteredComboboxComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-combobox',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FilteredComboboxComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => FilteredComboboxComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class FilteredComboboxComponent extends BaseFormValidator implements OnInit, OnDestroy, OnChanges {
   @Input() label: string;

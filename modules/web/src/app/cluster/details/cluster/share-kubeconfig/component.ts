@@ -21,10 +21,10 @@ import {ClusterService} from '@core/services/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 
 @Component({
-    selector: 'km-share-kubeconfig',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-share-kubeconfig',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;

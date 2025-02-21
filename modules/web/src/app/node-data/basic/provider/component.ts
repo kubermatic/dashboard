@@ -25,21 +25,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-basic-node-data',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => BasicNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => BasicNodeDataComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-basic-node-data',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => BasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => BasicNodeDataComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class BasicNodeDataComponent extends BaseFormValidator implements OnInit {
   @Input() provider: string;

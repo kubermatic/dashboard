@@ -21,10 +21,10 @@ export enum Type {
 }
 
 @Component({
-    selector: 'km-cluster-type-eol',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-cluster-type-eol',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ClusterTypeEOLComponent {
   @Input() version: string;

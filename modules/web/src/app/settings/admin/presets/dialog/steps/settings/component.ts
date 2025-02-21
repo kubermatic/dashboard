@@ -31,22 +31,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-preset-settings-step',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => PresetSettingsStepComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => PresetSettingsStepComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-preset-settings-step',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => PresetSettingsStepComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PresetSettingsStepComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit {
   @Input() mode: Mode;

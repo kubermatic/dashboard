@@ -38,22 +38,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-chip-list',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ChipListComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ChipListComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-chip-list',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ChipListComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ChipListComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validator {
   private _unsubscribe = new Subject<void>();

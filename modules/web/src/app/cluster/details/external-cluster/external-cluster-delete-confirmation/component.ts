@@ -26,10 +26,10 @@ import {ClusterService} from '@core/services/cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
-    selector: 'km-external-cluster-delete-confirmation',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-external-cluster-delete-confirmation',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDestroy, AfterContentChecked {
   readonly Provider = ExternalClusterProvider;

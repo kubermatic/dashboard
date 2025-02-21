@@ -33,10 +33,10 @@ enum Control {
 }
 
 @Component({
-    selector: 'km-openstack-provider-settings',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-openstack-provider-settings',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

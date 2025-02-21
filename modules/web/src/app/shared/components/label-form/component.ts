@@ -47,22 +47,22 @@ import _ from 'lodash';
 import {StaticLabel} from '@app/shared/entity/settings';
 
 @Component({
-    selector: 'km-label-form',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => LabelFormComponent),
-            multi: true,
-        },
-        {
-            provide: NG_ASYNC_VALIDATORS,
-            useExisting: forwardRef(() => LabelFormComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-label-form',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => LabelFormComponent),
+      multi: true,
+    },
+    {
+      provide: NG_ASYNC_VALIDATORS,
+      useExisting: forwardRef(() => LabelFormComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';

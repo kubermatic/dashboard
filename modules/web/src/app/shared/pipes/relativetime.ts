@@ -16,8 +16,9 @@ import {Pipe, PipeTransform} from '@angular/core';
 import moment from 'moment';
 
 @Pipe({
-    name: 'kmRelativeTime', pure: false,
-    standalone: false
+  name: 'kmRelativeTime',
+  pure: false,
+  standalone: false,
 })
 export class RelativeTimePipe implements PipeTransform {
   transform(value: string): string {

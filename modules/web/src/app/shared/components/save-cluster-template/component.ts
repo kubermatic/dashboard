@@ -46,9 +46,9 @@ enum Control {
 }
 
 @Component({
-    selector: 'km-cluster-from-template-dialog',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-cluster-from-template-dialog',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class SaveClusterTemplateDialogComponent implements OnInit {
   scope = ClusterTemplateScope;

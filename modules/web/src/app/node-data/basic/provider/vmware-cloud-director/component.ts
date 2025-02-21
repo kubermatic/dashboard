@@ -100,22 +100,22 @@ enum NetworkState {
 }
 
 @Component({
-    selector: 'km-vmware-cloud-director-basic-node-data',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => VMwareCloudDirectorBasicNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => VMwareCloudDirectorBasicNodeDataComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-vmware-cloud-director-basic-node-data',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => VMwareCloudDirectorBasicNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => VMwareCloudDirectorBasicNodeDataComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VMwareCloudDirectorBasicNodeDataComponent
   extends BaseFormValidator

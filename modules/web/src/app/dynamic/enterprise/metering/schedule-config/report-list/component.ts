@@ -41,10 +41,10 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-metering-reports-list',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-metering-reports-list',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MeteringReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();

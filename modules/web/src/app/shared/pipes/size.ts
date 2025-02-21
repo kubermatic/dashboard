@@ -16,8 +16,8 @@ import {DecimalPipe} from '@angular/common';
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    name: 'kmSize',
-    standalone: false
+  name: 'kmSize',
+  standalone: false,
 })
 export class SizeFormatterPipe implements PipeTransform {
   readonly base = 1024;

@@ -27,11 +27,11 @@ export enum EditorHeaderClass {
 }
 
 @Component({
-    selector: 'km-editor',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'km-editor',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() header = '';

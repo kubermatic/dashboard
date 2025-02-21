@@ -17,10 +17,10 @@ import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 
 @Component({
-    selector: 'km-page-not-found',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-page-not-found',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class PageNotFoundComponent {
   constructor(

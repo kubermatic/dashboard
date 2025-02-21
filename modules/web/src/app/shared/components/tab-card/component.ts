@@ -34,12 +34,12 @@ export enum Context {
 }
 
 @Component({
-    selector: 'km-tab-card',
-    templateUrl: 'template.html',
-    styleUrls: ['style.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-tab-card',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class TabCardComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;

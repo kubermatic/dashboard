@@ -32,21 +32,21 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-wizard-aws-provider-extended',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => AWSProviderExtendedComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => AWSProviderExtendedComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-wizard-aws-provider-extended',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AWSProviderExtendedComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AWSProviderExtendedComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

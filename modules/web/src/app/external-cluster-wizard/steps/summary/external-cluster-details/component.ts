@@ -16,9 +16,9 @@ import {Component, Input} from '@angular/core';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
-    selector: 'km-external-cluster-details',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-external-cluster-details',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class ExternalClusterDetailsComponent {
   @Input() cluster: ExternalClusterModel;

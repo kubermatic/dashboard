@@ -28,22 +28,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-digitalocean-extended-node-data',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-digitalocean-extended-node-data',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => DigitalOceanExtendedNodeDataComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];

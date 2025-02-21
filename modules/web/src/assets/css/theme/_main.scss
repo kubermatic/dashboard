@@ -24,8 +24,8 @@ $my-typography: mat.m2-define-typography-config(
 );
 
 @include mat.typography-hierarchy($my-typography);
-@include mat.elevation-classes();
-@include mat.app-background();
+@include mat.elevation-classes;
+@include mat.app-background;
 
 @mixin theme($theme, $colors) {
   $palette-background: map.get($theme, background);

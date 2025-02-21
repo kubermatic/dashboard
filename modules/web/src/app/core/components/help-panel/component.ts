@@ -25,11 +25,11 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
-    selector: 'km-help-panel',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    animations: [slideOut],
-    standalone: false
+  selector: 'km-help-panel',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  animations: [slideOut],
+  standalone: false,
 })
 export class HelpPanelComponent implements OnInit, OnDestroy {
   adminSettings: AdminSettings;

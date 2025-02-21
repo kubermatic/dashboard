@@ -16,8 +16,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {CustomLink, CustomLinkLocation} from '@shared/entity/settings';
 
 @Pipe({
-    name: 'kmLinkLocation',
-    standalone: false
+  name: 'kmLinkLocation',
+  standalone: false,
 })
 export class LinkLocationPipe implements PipeTransform {
   transform(links: CustomLink[], location: keyof typeof CustomLinkLocation): CustomLink[] {

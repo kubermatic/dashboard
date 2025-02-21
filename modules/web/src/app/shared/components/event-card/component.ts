@@ -16,10 +16,10 @@ import {Component, Input} from '@angular/core';
 import {Event} from '@shared/entity/event';
 
 @Component({
-    selector: 'km-event-card',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-event-card',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class EventCardComponent {
   @Input() events: Event[] = [];

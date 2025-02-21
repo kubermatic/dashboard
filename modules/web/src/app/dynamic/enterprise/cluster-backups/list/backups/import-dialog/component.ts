@@ -54,10 +54,10 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-import-backup-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-import-backup-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ImportBackupDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

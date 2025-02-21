@@ -28,22 +28,22 @@ enum Controls {
 }
 
 @Component({
-    selector: 'km-openstack-application-credentials',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
-            multi: true,
-        },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-openstack-application-credentials',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpenstackApplicationCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 250;

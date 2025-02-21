@@ -32,11 +32,11 @@ enum Column {
 }
 
 @Component({
-    selector: 'km-admin-settings-bucket-settings',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'km-admin-settings-bucket-settings',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly _unsubscribe = new Subject<void>();

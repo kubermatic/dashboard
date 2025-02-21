@@ -33,21 +33,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-nutanix-settings',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => NutanixSettingsComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => NutanixSettingsComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-nutanix-settings',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NutanixSettingsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NutanixSettingsComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class NutanixSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

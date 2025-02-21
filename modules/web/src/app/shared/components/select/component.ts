@@ -22,21 +22,21 @@ export enum Controls {
 }
 
 @Component({
-    selector: 'km-select',
-    templateUrl: './template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SelectComponent),
-            multi: true,
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => SelectComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'km-select',
+  templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class SelectComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

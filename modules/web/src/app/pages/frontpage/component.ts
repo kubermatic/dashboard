@@ -18,10 +18,10 @@ import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 
 @Component({
-    selector: 'km-frontpage',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-frontpage',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class FrontpageComponent implements OnInit {
   @ViewChild('loginButton') private readonly _loginButton: MatAnchor;

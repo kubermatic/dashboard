@@ -23,9 +23,9 @@ import {MemberService} from '@core/services/member';
 import {Observable} from 'rxjs';
 
 @Component({
-    selector: 'km-edit-member',
-    templateUrl: './template.html',
-    standalone: false
+  selector: 'km-edit-member',
+  templateUrl: './template.html',
+  standalone: false,
 })
 export class EditMemberComponent implements OnInit {
   @Input() project: Project;

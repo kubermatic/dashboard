@@ -39,10 +39,10 @@ export class AddClusterFromTemplateDialogData {
 }
 
 @Component({
-    selector: 'km-add-cluster-from-template-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['style.scss'],
-    standalone: false
+  selector: 'km-add-cluster-from-template-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
   showDetails = false;

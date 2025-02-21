@@ -46,10 +46,10 @@ enum ClusterState {
 }
 
 @Component({
-    selector: 'km-cluster-restore-list',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-cluster-restore-list',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClustersRestoresListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

@@ -35,10 +35,10 @@ export interface AlertmanagerConfigDialogData {
 }
 
 @Component({
-    selector: 'km-alertmanager-config-dialog',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-alertmanager-config-dialog',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
   spec = '';

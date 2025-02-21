@@ -32,10 +32,10 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DefaultConstraintDialog} from './default-constraint-dialog/component';
 
 @Component({
-    selector: 'km-default-constraint-list',
-    templateUrl: './template.html',
-    styleUrls: ['./style.scss'],
-    standalone: false
+  selector: 'km-default-constraint-list',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = this.getColumns();
