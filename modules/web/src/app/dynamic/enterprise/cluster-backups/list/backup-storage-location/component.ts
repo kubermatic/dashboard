@@ -39,8 +39,9 @@ import {NotificationService} from '@app/core/services/notification';
 import {StatusIcon, getClusterBackupHealthStatus} from '@app/shared/utils/health-status';
 
 @Component({
-  selector: 'km-backup-storage-locations-list',
-  templateUrl: './template.html',
+    selector: 'km-backup-storage-locations-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class BackupStorageLocationsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

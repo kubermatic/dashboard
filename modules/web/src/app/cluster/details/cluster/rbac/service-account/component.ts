@@ -35,8 +35,9 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-rbac-service-account',
-  templateUrl: './template.html',
+    selector: 'km-rbac-service-account',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

@@ -33,22 +33,23 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-aws-extended-node-data',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AWSExtendedNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AWSExtendedNodeDataComponent),
-      multi: true,
-    },
-  ],
-  animations: [pushDown],
+    selector: 'km-aws-extended-node-data',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AWSExtendedNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AWSExtendedNodeDataComponent),
+            multi: true,
+        },
+    ],
+    animations: [pushDown],
+    standalone: false
 })
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

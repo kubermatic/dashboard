@@ -17,8 +17,9 @@ import {AKSClusterSpec, AKSCloudSpec} from '@shared/entity/provider/aks';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Component({
-  selector: 'km-aks-cluster-summary',
-  templateUrl: './template.html',
+    selector: 'km-aks-cluster-summary',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AKSClusterSummaryComponent implements OnChanges {
   @Input() cluster: ExternalClusterModel;

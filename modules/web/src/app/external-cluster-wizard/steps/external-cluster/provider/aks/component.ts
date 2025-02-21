@@ -110,20 +110,21 @@ export enum NodePoolVersionState {
 }
 
 @Component({
-  selector: 'km-aks-cluster-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AKSClusterSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AKSClusterSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-aks-cluster-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AKSClusterSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AKSClusterSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class AKSClusterSettingsComponent
   extends StepBase

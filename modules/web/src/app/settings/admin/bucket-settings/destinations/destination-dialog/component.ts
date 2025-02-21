@@ -44,10 +44,11 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-destination-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-destination-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DestinationDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;

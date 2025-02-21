@@ -32,10 +32,11 @@ import {takeUntil} from 'rxjs/operators';
 import {KubeOneWizardStep, StepRegistry, steps} from './config';
 
 @Component({
-  selector: 'km-kubeone-wizard',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-kubeone-wizard',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class KubeOneWizardComponent implements OnInit, OnDestroy {
   readonly StepRegistry = StepRegistry;

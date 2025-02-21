@@ -33,9 +33,10 @@ import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
-  selector: 'km-snapshot-details',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-snapshot-details',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class SnapshotDetailsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

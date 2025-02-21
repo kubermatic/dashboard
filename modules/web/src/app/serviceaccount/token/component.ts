@@ -33,9 +33,10 @@ import {GroupConfig} from '@shared/model/Config';
 import {filter, switchMap, take} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-serviceaccount-token',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-serviceaccount-token',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccount;

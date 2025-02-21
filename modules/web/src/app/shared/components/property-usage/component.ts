@@ -17,9 +17,10 @@ import {ThemePalette} from '@angular/material/core';
 import {getPercentage} from '../../utils/common';
 
 @Component({
-  selector: 'km-property-usage',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-property-usage',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class PropertyUsageComponent {
   @Input() name: string;

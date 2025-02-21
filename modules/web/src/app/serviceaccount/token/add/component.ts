@@ -54,9 +54,10 @@ export interface ServiceAccountTokenDialogData {
 }
 
 @Component({
-  selector: 'km-serviceaccount-token-dialog',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-serviceaccount-token-dialog',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class ServiceAccountTokenDialog implements OnInit {
   form: FormGroup;

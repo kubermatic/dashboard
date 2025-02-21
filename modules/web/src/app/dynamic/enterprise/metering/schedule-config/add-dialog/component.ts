@@ -67,8 +67,9 @@ enum DefaultReportRetentionOption {
 }
 
 @Component({
-  selector: 'km-add-schedule-config-dialog',
-  templateUrl: './template.html',
+    selector: 'km-add-schedule-config-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

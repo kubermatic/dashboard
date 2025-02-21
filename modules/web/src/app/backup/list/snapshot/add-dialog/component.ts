@@ -36,8 +36,9 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-add-snapshot-dialog',
-  templateUrl: './template.html',
+    selector: 'km-add-snapshot-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

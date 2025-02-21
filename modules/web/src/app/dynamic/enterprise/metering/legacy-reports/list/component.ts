@@ -39,8 +39,9 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-metering-legacy-reports-list',
-  templateUrl: './template.html',
+    selector: 'km-metering-legacy-reports-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class MeteringLegacyReportListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

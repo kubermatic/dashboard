@@ -37,9 +37,10 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-seed-configuration-details',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-seed-configuration-details',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class SeedConfigurationDetailsComponent implements OnInit {
   readonly Column = Column;

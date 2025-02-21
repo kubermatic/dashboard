@@ -15,8 +15,9 @@
 import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 
 @Component({
-  selector: 'km-tab',
-  templateUrl: 'template.html',
+    selector: 'km-tab',
+    templateUrl: 'template.html',
+    standalone: false
 })
 export class TabComponent {
   @Input() label: string;

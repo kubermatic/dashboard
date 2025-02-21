@@ -49,10 +49,11 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 import {SettingsService} from '@app/core/services/settings';
 
 @Component({
-  selector: 'km-create-resource-panel',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [slideOut],
+    selector: 'km-create-resource-panel',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    animations: [slideOut],
+    standalone: false
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;

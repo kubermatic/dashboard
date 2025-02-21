@@ -15,9 +15,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
-  selector: 'km-terminal-toolbar',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-terminal-toolbar',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class TerminalToolBarComponent {
   @Input() showCloseButton: boolean;

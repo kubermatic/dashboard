@@ -35,20 +35,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-equinix-provider-basic',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EquinixProviderBasicComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => EquinixProviderBasicComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-equinix-provider-basic',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => EquinixProviderBasicComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => EquinixProviderBasicComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class EquinixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _apiKeyLength = 256;

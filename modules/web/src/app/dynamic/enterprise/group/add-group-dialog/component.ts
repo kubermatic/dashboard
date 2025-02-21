@@ -33,8 +33,9 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-add-group-dialog',
-  templateUrl: './template.html',
+    selector: 'km-add-group-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AddGroupDialogComponent implements OnInit {
   readonly Controls = Controls;

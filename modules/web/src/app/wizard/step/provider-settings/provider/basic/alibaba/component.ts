@@ -28,20 +28,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-alibaba-provider-basic',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaProviderBasicComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaProviderBasicComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-alibaba-provider-basic',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AlibabaProviderBasicComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AlibabaProviderBasicComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class AlibabaProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

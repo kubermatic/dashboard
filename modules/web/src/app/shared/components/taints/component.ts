@@ -16,8 +16,9 @@ import {Component, Input} from '@angular/core';
 import {Taint} from '../../entity/node';
 
 @Component({
-  selector: 'km-taints',
-  templateUrl: './template.html',
+    selector: 'km-taints',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class TaintsComponent {
   @Input() taints: Taint[] = [];

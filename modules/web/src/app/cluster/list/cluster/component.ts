@@ -61,9 +61,10 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-cluster-list',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-cluster-list',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();

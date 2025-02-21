@@ -38,9 +38,10 @@ interface AdminAnnouncementStatus {
 }
 
 @Component({
-  selector: 'km-admin-announcements',
-  templateUrl: 'template.html',
-  styleUrl: 'style.scss',
+    selector: 'km-admin-announcements',
+    templateUrl: 'template.html',
+    styleUrl: 'style.scss',
+    standalone: false
 })
 export class AdminAnnouncementsComponent implements OnInit, OnDestroy {
   readonly Column = Column;

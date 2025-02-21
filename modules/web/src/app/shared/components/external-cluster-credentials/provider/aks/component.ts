@@ -27,8 +27,9 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-aks-credentials',
-  templateUrl: './template.html',
+    selector: 'km-aks-credentials',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;

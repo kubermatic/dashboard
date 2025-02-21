@@ -31,8 +31,9 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-restore-list',
-  templateUrl: './template.html',
+    selector: 'km-restore-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class RestoreListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;

@@ -47,9 +47,10 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-rule-group-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-rule-group-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class RuleGroupDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;

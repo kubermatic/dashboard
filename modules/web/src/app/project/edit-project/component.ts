@@ -41,8 +41,9 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-edit-project',
-  templateUrl: './template.html',
+    selector: 'km-edit-project',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class EditProjectComponent implements OnInit {
   @Input() project: Project;

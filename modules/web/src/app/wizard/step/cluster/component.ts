@@ -133,21 +133,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-cluster-step',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ClusterStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ClusterStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-cluster-step',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ClusterStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ClusterStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   containerRuntime = ContainerRuntime;

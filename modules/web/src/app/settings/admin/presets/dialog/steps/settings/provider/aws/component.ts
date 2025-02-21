@@ -31,20 +31,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-aws-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AWSSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AWSSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-aws-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AWSSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AWSSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class AWSSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

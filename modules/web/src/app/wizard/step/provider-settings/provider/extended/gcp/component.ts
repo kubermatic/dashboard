@@ -52,21 +52,22 @@ enum SubNetworkState {
 }
 
 @Component({
-  selector: 'km-wizard-gcp-provider-extended',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GCPProviderExtendedComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => GCPProviderExtendedComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-wizard-gcp-provider-extended',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => GCPProviderExtendedComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => GCPProviderExtendedComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

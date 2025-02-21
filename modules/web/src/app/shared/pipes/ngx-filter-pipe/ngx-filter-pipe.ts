@@ -15,8 +15,9 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-  name: 'filterBy',
-  pure: false,
+    name: 'filterBy',
+    pure: false,
+    standalone: false
 })
 export class FilterPipe implements PipeTransform {
   static isFoundOnWalking(value: any, key: any): boolean {

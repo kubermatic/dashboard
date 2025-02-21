@@ -34,9 +34,10 @@ const PAGES_WITHOUT_MENU = ['/projects$', '/account$', '/settings', '/rest-api$'
 const PAGES_WITH_SECONDARY_MENU = ['/settings'];
 
 @Component({
-  selector: 'km-root',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-root',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class KubermaticComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;

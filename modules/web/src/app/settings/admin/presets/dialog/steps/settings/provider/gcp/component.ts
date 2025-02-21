@@ -28,20 +28,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-gcp-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GCPSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => GCPSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-gcp-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => GCPSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => GCPSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class GCPSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

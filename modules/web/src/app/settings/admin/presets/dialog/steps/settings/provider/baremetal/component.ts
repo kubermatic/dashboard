@@ -25,20 +25,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-baremetal-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BaremetalSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => BaremetalSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-baremetal-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => BaremetalSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => BaremetalSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class BaremetalSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

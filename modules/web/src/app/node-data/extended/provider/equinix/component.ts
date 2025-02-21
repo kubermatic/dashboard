@@ -23,20 +23,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-equinix-extended-node-data',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-equinix-extended-node-data',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class EquinixExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];

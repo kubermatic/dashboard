@@ -29,20 +29,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-node-data-kubelet-version',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => KubeletVersionNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => KubeletVersionNodeDataComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-node-data-kubelet-version',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => KubeletVersionNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => KubeletVersionNodeDataComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class KubeletVersionNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

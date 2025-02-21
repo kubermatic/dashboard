@@ -26,9 +26,10 @@ import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-wizard-summary-step',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-wizard-summary-step',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
   datacenter: Datacenter;

@@ -28,21 +28,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-kubeone-wizard-credentials-step',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => KubeOneCredentialsStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => KubeOneCredentialsStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-kubeone-wizard-credentials-step',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => KubeOneCredentialsStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => KubeOneCredentialsStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class KubeOneCredentialsStepComponent extends StepBase implements OnInit {
   readonly NodeProvider = NodeProvider;

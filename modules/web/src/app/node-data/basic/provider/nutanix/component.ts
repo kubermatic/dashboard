@@ -78,22 +78,23 @@ interface Category {
 }
 
 @Component({
-  selector: 'km-nutanix-basic-node-data',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NutanixBasicNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => NutanixBasicNodeDataComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-nutanix-basic-node-data',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => NutanixBasicNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => NutanixBasicNodeDataComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   readonly Controls = Controls;

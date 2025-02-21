@@ -24,9 +24,10 @@ import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-admin-settings',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-admin-settings',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
   user: Member;

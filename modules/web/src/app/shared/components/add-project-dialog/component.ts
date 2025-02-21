@@ -33,8 +33,9 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-add-project-dialog',
-  templateUrl: './template.html',
+    selector: 'km-add-project-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AddProjectDialogComponent implements OnInit {
   @Input() adminAllowedOperatingSystems: AllowedOperatingSystems;

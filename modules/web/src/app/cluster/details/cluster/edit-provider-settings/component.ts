@@ -21,8 +21,9 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-edit-provider-settings',
-  templateUrl: './template.html',
+    selector: 'km-edit-provider-settings',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();

@@ -16,9 +16,10 @@ import {Component, Input} from '@angular/core';
 import {ApplicationDefinition} from '@shared/entity/application';
 
 @Component({
-  selector: 'km-application-definition-card',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-application-definition-card',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ApplicationDefinitionCardComponent {
   @Input() applicationDefinition: ApplicationDefinition;

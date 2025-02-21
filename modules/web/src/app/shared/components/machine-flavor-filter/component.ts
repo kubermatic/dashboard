@@ -28,20 +28,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-machine-flavor-filter',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MachineFlavorFilterComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => MachineFlavorFilterComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-machine-flavor-filter',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => MachineFlavorFilterComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => MachineFlavorFilterComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class MachineFlavorFilterComponent extends BaseFormValidator implements OnInit, OnDestroy {
   @Input() machineFlavorFilter: MachineFlavorFilter;

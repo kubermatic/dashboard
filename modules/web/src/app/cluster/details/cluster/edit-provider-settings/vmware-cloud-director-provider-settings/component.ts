@@ -30,9 +30,10 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-vmware-cloud-director-provider-settings',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-vmware-cloud-director-provider-settings',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class VMwareCloudDirectorProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

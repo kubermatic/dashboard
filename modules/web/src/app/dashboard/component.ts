@@ -15,7 +15,8 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'km-dashboard',
-  templateUrl: './template.html',
+    selector: 'km-dashboard',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class DashboardComponent {}

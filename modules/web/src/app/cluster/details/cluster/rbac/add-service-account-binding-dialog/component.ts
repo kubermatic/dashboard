@@ -62,9 +62,10 @@ enum NamespaceState {
 }
 
 @Component({
-  selector: 'km-add-service-account-binding-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-add-service-account-binding-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class AddServiceAccountBindingDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

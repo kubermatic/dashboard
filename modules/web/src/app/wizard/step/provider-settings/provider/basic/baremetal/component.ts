@@ -33,20 +33,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-baremetal-provider-basic',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => BaremetalProviderBasicComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => BaremetalProviderBasicComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-baremetal-provider-basic',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => BaremetalProviderBasicComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => BaremetalProviderBasicComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class BaremetalProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

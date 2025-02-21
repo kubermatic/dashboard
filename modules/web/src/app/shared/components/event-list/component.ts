@@ -23,9 +23,10 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-event-list',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-event-list',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe = new Subject<void>();

@@ -26,10 +26,11 @@ import {Observable, Subject} from 'rxjs';
 import {throttleTime} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-button',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-button',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ButtonComponent<T> implements OnInit, OnDestroy {
   @Input() icon: string;

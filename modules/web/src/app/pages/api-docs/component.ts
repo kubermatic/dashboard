@@ -20,8 +20,9 @@ import SwaggerUI from 'swagger-ui';
 import {AppConfigService} from '@app/config.service';
 
 @Component({
-  selector: 'km-api-docs',
-  templateUrl: './template.html',
+    selector: 'km-api-docs',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class ApiDocsComponent implements OnInit {
   constructor(

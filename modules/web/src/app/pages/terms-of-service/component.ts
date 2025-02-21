@@ -17,9 +17,10 @@ import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 
 @Component({
-  selector: 'km-terms-of-service',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-terms-of-service',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class TermsOfServiceComponent {
   constructor(

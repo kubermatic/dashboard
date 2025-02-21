@@ -18,9 +18,10 @@ import {AdminSettings, CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 
 @Component({
-  selector: 'km-footer',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-footer',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class FooterComponent {
   @Input() version: VersionInfo;

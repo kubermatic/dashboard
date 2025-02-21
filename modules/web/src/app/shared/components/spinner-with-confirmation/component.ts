@@ -16,10 +16,11 @@ import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@an
 import {fadeInOut} from '../../animations/fade';
 
 @Component({
-  selector: 'km-spinner-with-confirmation',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [fadeInOut],
+    selector: 'km-spinner-with-confirmation',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    animations: [fadeInOut],
+    standalone: false
 })
 export class SpinnerWithConfirmationComponent implements OnChanges {
   private readonly _defaultTimeout = 3000;

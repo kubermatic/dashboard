@@ -36,21 +36,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-provider-step',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-provider-step',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ProviderStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ProviderStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];

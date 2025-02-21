@@ -68,21 +68,22 @@ enum TagCategoryState {
 }
 
 @Component({
-  selector: 'km-wizard-vsphere-provider-extended',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VSphereProviderExtendedComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => VSphereProviderExtendedComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-wizard-vsphere-provider-extended',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => VSphereProviderExtendedComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => VSphereProviderExtendedComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private readonly _debounceTime = 500;

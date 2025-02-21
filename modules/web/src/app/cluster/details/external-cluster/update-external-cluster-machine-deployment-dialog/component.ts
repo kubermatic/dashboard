@@ -48,9 +48,10 @@ export enum KubeletVersionState {
 }
 
 @Component({
-  selector: 'km-update-external-cluster-machine-deployment-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-update-external-cluster-machine-deployment-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {
   readonly Controls = Controls;

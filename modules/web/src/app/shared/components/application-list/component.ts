@@ -69,9 +69,10 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-application-list',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-application-list',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @Input() applications: Application[] = [];

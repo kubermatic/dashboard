@@ -32,9 +32,10 @@ import {DynamicModule} from '@app/dynamic/module-registry';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 
 @Component({
-  selector: 'km-sidenav',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-sidenav',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   readonly view = View;

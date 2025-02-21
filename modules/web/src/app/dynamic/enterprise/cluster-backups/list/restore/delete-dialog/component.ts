@@ -27,8 +27,9 @@ export interface DeleteRestoreDialogConfig {
 }
 
 @Component({
-  selector: 'km-delete-restore-dialog',
-  templateUrl: './template.html',
+    selector: 'km-delete-restore-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class DeleteRestoreDialogComponent {
   verificationInput = '';

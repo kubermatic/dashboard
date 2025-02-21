@@ -25,10 +25,11 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-user-panel',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [slideOut],
+    selector: 'km-user-panel',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    animations: [slideOut],
+    standalone: false
 })
 export class UserPanelComponent implements OnInit, OnDestroy {
   user: Member;

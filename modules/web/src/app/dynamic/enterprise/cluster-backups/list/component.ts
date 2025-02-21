@@ -26,8 +26,9 @@ import {AdminSettings} from '@app/shared/entity/settings';
 import {Subject, takeUntil} from 'rxjs';
 
 @Component({
-  selector: 'km-cluster-backups',
-  templateUrl: './template.html',
+    selector: 'km-cluster-backups',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class ClusterBackupsComponent implements OnInit, OnDestroy {
   readonly view = View;

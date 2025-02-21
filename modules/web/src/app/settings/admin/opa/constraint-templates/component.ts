@@ -30,9 +30,10 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
 
 @Component({
-  selector: 'km-constraint-templates-list',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-constraint-templates-list',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];

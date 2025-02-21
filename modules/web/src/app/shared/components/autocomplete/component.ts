@@ -25,21 +25,22 @@ export enum AutocompleteControls {
 }
 
 @Component({
-  selector: 'km-autocomplete',
-  styleUrls: ['./style.scss'],
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AutocompleteComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AutocompleteComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-autocomplete',
+    styleUrls: ['./style.scss'],
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AutocompleteComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AutocompleteComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() label: string;

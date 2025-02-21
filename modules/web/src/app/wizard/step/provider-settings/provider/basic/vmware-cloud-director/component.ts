@@ -33,20 +33,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-vmware-cloud-director-provider-basic',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VMwareCloudDirectorProviderBasicComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => VMwareCloudDirectorProviderBasicComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-vmware-cloud-director-provider-basic',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => VMwareCloudDirectorProviderBasicComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => VMwareCloudDirectorProviderBasicComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class VMwareCloudDirectorProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;

@@ -16,8 +16,9 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {verifyYAML, verifyJSON} from '@shared/utils/common';
 
 @Component({
-  selector: 'km-validate-json-or-yaml',
-  templateUrl: './template.html',
+    selector: 'km-validate-json-or-yaml',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class ValidateJsonOrYamlComponent implements OnChanges {
   @Input() data: string;

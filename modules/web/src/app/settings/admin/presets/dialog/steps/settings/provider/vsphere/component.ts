@@ -31,20 +31,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-vsphere-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VSphereSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => VSphereSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-vsphere-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => VSphereSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => VSphereSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class VSphereSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

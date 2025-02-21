@@ -61,9 +61,10 @@ enum NamespacesState {
 }
 
 @Component({
-  selector: 'km-add-cluster-backups-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-add-cluster-backups-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class AddClustersBackupsDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

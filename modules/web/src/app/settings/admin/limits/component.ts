@@ -22,9 +22,10 @@ import {Subject} from 'rxjs';
 import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-limits',
-  styleUrls: ['style.scss'],
-  templateUrl: 'template.html',
+    selector: 'km-limits',
+    styleUrls: ['style.scss'],
+    templateUrl: 'template.html',
+    standalone: false
 })
 export class LimitsComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.

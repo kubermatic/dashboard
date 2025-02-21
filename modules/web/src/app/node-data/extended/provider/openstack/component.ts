@@ -22,21 +22,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-openstack-extended-node-data',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-openstack-extended-node-data',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => OpenstackExtendedNodeDataComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class OpenstackExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;

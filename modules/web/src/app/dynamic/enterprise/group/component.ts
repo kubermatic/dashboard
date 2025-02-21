@@ -50,8 +50,9 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-group',
-  templateUrl: './template.html',
+    selector: 'km-group',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class GroupComponent extends DynamicTab implements OnInit, OnDestroy {
   readonly column = Column;

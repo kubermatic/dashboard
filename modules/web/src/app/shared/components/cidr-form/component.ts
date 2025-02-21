@@ -29,21 +29,22 @@ import {Observable, of, Subject} from 'rxjs';
 import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 @Component({
-  selector: 'km-cidr-form',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CIDRFormComponent),
-      multi: true,
-    },
-    {
-      provide: NG_ASYNC_VALIDATORS,
-      useExisting: forwardRef(() => CIDRFormComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-cidr-form',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => CIDRFormComponent),
+            multi: true,
+        },
+        {
+            provide: NG_ASYNC_VALIDATORS,
+            useExisting: forwardRef(() => CIDRFormComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class CIDRFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator {
   @Input() title = '';

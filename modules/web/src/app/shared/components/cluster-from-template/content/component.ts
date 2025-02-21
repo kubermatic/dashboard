@@ -28,10 +28,11 @@ enum Control {
 }
 
 @Component({
-  selector: 'km-cluster-from-template-content',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [shrinkGrow],
+    selector: 'km-cluster-from-template-content',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    animations: [shrinkGrow],
+    standalone: false
 })
 export class ClusterFromTemplateComponent implements OnInit, OnDestroy {
   @Input() template: ClusterTemplate;

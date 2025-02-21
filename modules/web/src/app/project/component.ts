@@ -55,10 +55,11 @@ import {DeleteProjectConfirmationComponent} from './delete-project/component';
 import {EditProjectComponent} from './edit-project/component';
 
 @Component({
-  selector: 'km-project',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-project',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   readonly ProjectStatus = ProjectStatus;

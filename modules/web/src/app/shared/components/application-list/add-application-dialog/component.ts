@@ -52,10 +52,11 @@ enum StepRegistry {
 }
 
 @Component({
-  selector: 'km-add-application-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'km-add-application-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestroy {
   readonly Controls = Controls;

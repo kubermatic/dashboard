@@ -36,21 +36,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-cluster-ssh-keys',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ClusterSSHKeysComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ClusterSSHKeysComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-cluster-ssh-keys',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ClusterSSHKeysComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ClusterSSHKeysComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

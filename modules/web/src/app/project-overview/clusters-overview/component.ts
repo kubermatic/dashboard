@@ -25,9 +25,10 @@ import {HealthStatus, StatusIcon, getClusterHealthStatus} from '@shared/utils/he
 import _ from 'lodash';
 
 @Component({
-  selector: 'km-clusters-overview',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-clusters-overview',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() project: Project;

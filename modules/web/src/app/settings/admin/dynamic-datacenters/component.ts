@@ -31,9 +31,10 @@ import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterDataDialogComponent} from './datacenter-data-dialog/component';
 
 @Component({
-  selector: 'km-dynamic-datacenters',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-dynamic-datacenters',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges {
   datacenters: Datacenter[] = [];

@@ -25,9 +25,10 @@ enum Mode {
 }
 
 @Component({
-  selector: 'km-property',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-property',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class PropertyComponent {
   readonly Margin = Margin;

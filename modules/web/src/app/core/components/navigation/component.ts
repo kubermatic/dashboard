@@ -36,9 +36,10 @@ const enum RoutePath {
 }
 
 @Component({
-  selector: 'km-navigation',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-navigation',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class NavigationComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

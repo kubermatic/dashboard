@@ -27,9 +27,10 @@ import {filter, switchMap, take} from 'rxjs/operators';
 import {GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';
 
 @Component({
-  selector: 'km-gatekeeper-config',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-gatekeeper-config',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   @Input() cluster: Cluster;

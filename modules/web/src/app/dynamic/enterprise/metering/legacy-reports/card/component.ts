@@ -22,9 +22,10 @@ import {Component, Input} from '@angular/core';
 import {Report} from '@shared/entity/metering';
 
 @Component({
-  selector: 'km-metering-legacy-reports-card',
-  styleUrls: ['./style.scss'],
-  templateUrl: './template.html',
+    selector: 'km-metering-legacy-reports-card',
+    styleUrls: ['./style.scss'],
+    templateUrl: './template.html',
+    standalone: false
 })
 export class MeteringLegacyReportCardComponent {
   @Input() reports: Report[];

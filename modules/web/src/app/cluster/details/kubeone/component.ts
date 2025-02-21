@@ -33,9 +33,10 @@ import {forkJoin, of, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-kubeone-cluster-details',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-kubeone-cluster-details',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   readonly Provider = ExternalClusterProvider;

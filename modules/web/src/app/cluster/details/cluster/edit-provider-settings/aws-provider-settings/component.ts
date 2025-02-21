@@ -28,8 +28,9 @@ enum Control {
 }
 
 @Component({
-  selector: 'km-aws-provider-settings',
-  templateUrl: './template.html',
+    selector: 'km-aws-provider-settings',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

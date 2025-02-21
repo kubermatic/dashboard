@@ -57,21 +57,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-extended-credentials',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-wizard-openstack-provider-extended-credentials',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => OpenstackProviderExtendedCredentialsComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OpenstackProviderExtendedCredentialsComponent
   extends BaseFormValidator

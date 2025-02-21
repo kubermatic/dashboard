@@ -39,9 +39,10 @@ import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-machine-deployment-details',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-machine-deployment-details',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: MachineDeployment;

@@ -25,20 +25,21 @@ interface ExternalAddMachineDeploymentDialogConfig {
 }
 
 @Component({
-  selector: 'km-external-add-machine-deployment-dialog',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-external-add-machine-deployment-dialog',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class ExternalAddMachineDeploymentDialogComponent extends BaseFormValidator {
   projectID = this._data.projectId;

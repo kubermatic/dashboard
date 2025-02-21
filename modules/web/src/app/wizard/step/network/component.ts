@@ -24,21 +24,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-machine-network-step',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MachineNetworkStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => MachineNetworkStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-machine-network-step',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => MachineNetworkStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => MachineNetworkStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class MachineNetworkStepComponent
   extends StepBase

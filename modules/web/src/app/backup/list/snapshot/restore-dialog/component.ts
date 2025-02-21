@@ -28,9 +28,10 @@ export interface RestoreSnapshotDialogConfig {
 }
 
 @Component({
-  selector: 'km-restore-snapshot-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['style.scss'],
+    selector: 'km-restore-snapshot-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['style.scss'],
+    standalone: false
 })
 export class RestoreSnapshotDialogComponent {
   constructor(

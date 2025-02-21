@@ -16,8 +16,9 @@ import {Component, Input} from '@angular/core';
 import {SSHKey} from '../../entity/ssh-key';
 
 @Component({
-  selector: 'km-ssh-key-list',
-  templateUrl: './template.html',
+    selector: 'km-ssh-key-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class SSHKeyListComponent {
   private readonly _defaultMaxDisplayed = 3;

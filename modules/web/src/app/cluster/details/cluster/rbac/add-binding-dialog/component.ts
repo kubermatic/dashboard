@@ -50,9 +50,10 @@ enum NamespaceState {
 }
 
 @Component({
-  selector: 'km-add-binding-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-add-binding-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class AddBindingDialogComponent implements OnInit, OnDestroy {
   readonly Kind = Kind;

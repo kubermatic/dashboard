@@ -20,9 +20,10 @@ import {Subject} from 'rxjs';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
-  selector: 'km-external-cluster-cluster-step',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-external-cluster-cluster-step',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ClusterStepComponent implements OnInit, OnDestroy {
   @Input() projectID: string;

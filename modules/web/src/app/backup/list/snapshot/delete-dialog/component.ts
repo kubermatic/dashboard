@@ -26,9 +26,10 @@ export interface DeleteSnapshotDialogConfig {
 }
 
 @Component({
-  selector: 'km-delete-snapshot-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-delete-snapshot-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class DeleteSnapshotDialogComponent {
   constructor(

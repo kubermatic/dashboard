@@ -16,9 +16,10 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {ProjectOwner} from '../../entity/project';
 
 @Component({
-  selector: 'km-initials-circle',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-initials-circle',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class InitialsCircleComponent implements OnInit, OnChanges {
   @Input() owners: ProjectOwner[];

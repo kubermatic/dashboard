@@ -41,10 +41,11 @@ import {WizardMode} from './types/wizard-mode';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 
 @Component({
-  selector: 'km-wizard',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-wizard',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;

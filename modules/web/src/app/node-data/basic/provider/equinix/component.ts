@@ -47,21 +47,22 @@ enum SizeState {
 }
 
 @Component({
-  selector: 'km-equinix-basic-node-data',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
-      multi: true,
-    },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'km-equinix-basic-node-data',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
+            multi: true,
+        },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EquinixBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   readonly Controls = Controls;

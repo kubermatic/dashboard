@@ -23,8 +23,9 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {Observable} from 'rxjs';
 
 @Component({
-  selector: 'km-edit-dialog',
-  templateUrl: './template.html',
+    selector: 'km-edit-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class EditServiceAccountDialogComponent implements OnInit {
   @Input() project: Project;

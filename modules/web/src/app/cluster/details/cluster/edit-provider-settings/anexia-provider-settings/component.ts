@@ -24,8 +24,9 @@ enum Control {
 }
 
 @Component({
-  selector: 'km-anexia-provider-settings',
-  templateUrl: './template.html',
+    selector: 'km-anexia-provider-settings',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class AnexiaProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

@@ -83,9 +83,10 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-edit-cluster',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-edit-cluster',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;

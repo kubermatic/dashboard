@@ -24,21 +24,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-serviceaccount-token-name-step',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ServiceAccountTokenNameStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ServiceAccountTokenNameStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-serviceaccount-token-name-step',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ServiceAccountTokenNameStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => ServiceAccountTokenNameStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class ServiceAccountTokenNameStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;

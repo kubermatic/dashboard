@@ -118,21 +118,22 @@ enum InstanceTypeState {
 }
 
 @Component({
-  selector: 'km-eks-cluster-settings',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EKSClusterSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => EKSClusterSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-eks-cluster-settings',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => EKSClusterSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => EKSClusterSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class EKSClusterSettingsComponent
   extends StepBase

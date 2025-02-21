@@ -22,20 +22,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-alibaba-extended-node-data',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-alibaba-extended-node-data',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => AlibabaExtendedNodeDataComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class AlibabaExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;

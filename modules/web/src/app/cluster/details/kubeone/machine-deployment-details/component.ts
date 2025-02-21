@@ -37,9 +37,10 @@ import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {major, minor} from 'semver';
 
 @Component({
-  selector: 'km-kubeone-machine-deployment-details',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-kubeone-machine-deployment-details',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: ExternalMachineDeployment;

@@ -116,21 +116,22 @@ export enum Zones {
 }
 
 @Component({
-  selector: 'km-gke-cluster-settings',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GKEClusterSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => GKEClusterSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-gke-cluster-settings',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => GKEClusterSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => GKEClusterSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class GKEClusterSettingsComponent
   extends StepBase

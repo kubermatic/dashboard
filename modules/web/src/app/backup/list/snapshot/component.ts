@@ -36,8 +36,9 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-snapshot-list',
-  templateUrl: './template.html',
+    selector: 'km-snapshot-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class SnapshotListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;

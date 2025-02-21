@@ -26,9 +26,10 @@ import {Observable, Subject} from 'rxjs';
 import {map, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-version-change-dialog',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-version-change-dialog',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster | ExternalCluster;

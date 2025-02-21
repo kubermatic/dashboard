@@ -31,9 +31,10 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ConstraintDialog} from './constraint-dialog/component';
 
 @Component({
-  selector: 'km-constraint-list',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-constraint-list',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;

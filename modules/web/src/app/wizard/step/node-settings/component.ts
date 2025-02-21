@@ -26,20 +26,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-node-settings-step',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NodeSettingsStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => NodeSettingsStepComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-node-settings-step',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => NodeSettingsStepComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => NodeSettingsStepComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class NodeSettingsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly Provider = NodeProvider;

@@ -22,9 +22,10 @@ import {Subject, merge} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-project-selector',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-project-selector',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
   @Input() showSidenav: boolean;

@@ -34,8 +34,9 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {StatusMassage} from '@app/shared/utils/health-status';
 
 @Component({
-  selector: 'km-backup-list',
-  templateUrl: './template.html',
+    selector: 'km-backup-list',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;

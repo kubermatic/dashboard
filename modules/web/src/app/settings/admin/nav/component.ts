@@ -26,9 +26,10 @@ import {HistoryService} from '@core/services/history';
 import {AdminPanelSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
 import {DynamicModule} from '@app/dynamic/module-registry';
 @Component({
-  selector: 'km-admin-sidenav',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-admin-sidenav',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class AdminSidenavComponent implements OnInit, OnDestroy {
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;

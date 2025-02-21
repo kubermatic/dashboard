@@ -45,8 +45,9 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-schedule-config-edit-dialog',
-  templateUrl: './template.html',
+    selector: 'km-schedule-config-edit-dialog',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

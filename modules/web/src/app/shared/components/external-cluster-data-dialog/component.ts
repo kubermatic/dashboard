@@ -28,8 +28,9 @@ export enum Controls {
 }
 
 @Component({
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class EditClusterConnectionDialogComponent implements OnInit {
   @Input() name = '';

@@ -28,9 +28,10 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-custom-links-form',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+    selector: 'km-custom-links-form',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    standalone: false
 })
 export class CustomLinksFormComponent implements OnDestroy {
   readonly Location = CustomLinkLocation;

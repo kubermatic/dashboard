@@ -16,8 +16,9 @@ import {Component, Input} from '@angular/core';
 import {ClusterMetrics} from '@shared/entity/metrics';
 
 @Component({
-  selector: 'km-cluster-metrics',
-  templateUrl: './template.html',
+    selector: 'km-cluster-metrics',
+    templateUrl: './template.html',
+    standalone: false
 })
 export class ClusterMetricsComponent {
   @Input() clusterMetrics: ClusterMetrics;

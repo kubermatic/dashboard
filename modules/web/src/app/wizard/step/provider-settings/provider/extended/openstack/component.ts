@@ -31,20 +31,21 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-extended',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderExtendedComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderExtendedComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-openstack-provider-extended',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => OpenstackProviderExtendedComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => OpenstackProviderExtendedComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class OpenstackProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

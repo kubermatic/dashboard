@@ -33,20 +33,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-openstack-settings',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackSettingsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackSettingsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-openstack-settings',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => OpenstackSettingsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => OpenstackSettingsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class OpenstackSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private credentialsType = CredentialsType.Default;

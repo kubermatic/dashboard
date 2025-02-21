@@ -119,21 +119,22 @@ class OSImageDropdownOption {
 }
 
 @Component({
-  selector: 'km-kubevirt-basic-node-data',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => KubeVirtBasicNodeDataComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => KubeVirtBasicNodeDataComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-kubevirt-basic-node-data',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => KubeVirtBasicNodeDataComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => KubeVirtBasicNodeDataComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator

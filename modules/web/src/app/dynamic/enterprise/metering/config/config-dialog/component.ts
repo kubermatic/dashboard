@@ -40,10 +40,11 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-metering-configuration-dialog',
-  templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
-  animations: [pushToSide],
+    selector: 'km-metering-configuration-dialog',
+    templateUrl: 'template.html',
+    styleUrls: ['style.scss'],
+    animations: [pushToSide],
+    standalone: false
 })
 export class MeteringConfigurationDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

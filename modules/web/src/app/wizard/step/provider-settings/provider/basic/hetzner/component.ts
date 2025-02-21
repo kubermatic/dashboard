@@ -27,20 +27,21 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-hetzner-provider-basic',
-  templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => HetznerProviderBasicComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => HetznerProviderBasicComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-wizard-hetzner-provider-basic',
+    templateUrl: './template.html',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => HetznerProviderBasicComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => HetznerProviderBasicComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class HetznerProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _minTokenLength = 64;

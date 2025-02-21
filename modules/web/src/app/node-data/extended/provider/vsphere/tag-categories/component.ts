@@ -51,21 +51,22 @@ enum TagState {
 }
 
 @Component({
-  selector: 'km-vsphere-tags',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VSphereTagsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => VSphereTagsComponent),
-      multi: true,
-    },
-  ],
+    selector: 'km-vsphere-tags',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => VSphereTagsComponent),
+            multi: true,
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => VSphereTagsComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class VSphereTagsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

@@ -16,10 +16,11 @@ import {Component, Input} from '@angular/core';
 import {shrinkGrow} from '@shared/animations/grow';
 
 @Component({
-  selector: 'km-expansion-panel',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [shrinkGrow],
+    selector: 'km-expansion-panel',
+    templateUrl: './template.html',
+    styleUrls: ['./style.scss'],
+    animations: [shrinkGrow],
+    standalone: false
 })
 export class ExpansionPanelComponent {
   private _initialized = false;
