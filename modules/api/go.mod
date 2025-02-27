@@ -71,6 +71,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
 	k8c.io/kubermatic/v2 v2.27.0-rc.0.0.20250218085523-655dc5da7852
+	k8c.io/kubermatic/v2/sdk v0.0.0-00010101000000-000000000000
 	k8c.io/machine-controller v1.61.0
 	k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108
 	k8c.io/reconciler v0.5.0
@@ -103,6 +104,10 @@ replace k8s.io/client-go => k8s.io/client-go v0.31.1
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
+
+replace k8c.io/kubermatic/v2 => /home/xrstf/gospace/src/k8c.io/kubermatic
+
+replace k8c.io/kubermatic/v2/sdk => /home/xrstf/gospace/src/k8c.io/kubermatic/sdk
 
 require (
 	cel.dev/expr v0.19.0 // indirect
@@ -285,7 +290,6 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	helm.sh/helm/v3 v3.16.3 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.2.1 // indirect
 	k8s.io/component-base v0.31.3 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
