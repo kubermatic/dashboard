@@ -33,7 +33,7 @@ import (
 // This version string is constructed with `git describe` and embedded in the binary during build.
 func GetKubermaticVersion(versions kubermatic.Versions) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		versions := apiv1.KubermaticVersions{API: versions.Kubermatic}
+		versions := apiv1.KubermaticVersions{API: versions.GitVersion}
 		return versions, nil
 	}
 }

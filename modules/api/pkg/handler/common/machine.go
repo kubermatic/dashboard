@@ -37,9 +37,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
 	machineresource "k8c.io/dashboard/v2/pkg/resources/machine"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 	"k8c.io/machine-controller/pkg/bootstrap"
 

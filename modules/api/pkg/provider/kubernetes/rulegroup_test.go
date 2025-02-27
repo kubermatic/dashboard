@@ -25,9 +25,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 	"k8c.io/kubermatic/v2/pkg/test/fake"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	restclient "k8s.io/client-go/rest"

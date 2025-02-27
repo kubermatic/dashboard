@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"net/http"
 
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/util/email"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 // DatacenterFromSeedMap returns datacenter from the seed:datacenter map.

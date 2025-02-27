@@ -30,9 +30,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/eks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gke"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 func GetUpgradesEndpoint(configGetter provider.KubermaticConfigurationGetter,

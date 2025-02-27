@@ -21,9 +21,9 @@ import (
 	"fmt"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/util/restmapper"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"

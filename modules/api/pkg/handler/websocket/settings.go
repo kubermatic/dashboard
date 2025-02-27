@@ -25,8 +25,8 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/admin"
 	"k8c.io/dashboard/v2/pkg/watcher"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 func WriteSettings(ctx context.Context, providers watcher.Providers, ws *websocket.Conn) {
