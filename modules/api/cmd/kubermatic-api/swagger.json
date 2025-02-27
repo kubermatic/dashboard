@@ -28435,7 +28435,7 @@
           "x-go-name": "Name"
         },
         "version": {
-          "description": "Version of the Application. Must be a valid SemVer version\nNOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for\nDeepEqual used in our reconciliation packages. At the same time, we are not using pkg/semver because\nof the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.",
+          "description": "Version of the Application. Must be a valid SemVer version\nNOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for\nDeepEqual used in our reconciliation packages. At the same time, we are not using sdk/semver because\nof the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.",
           "type": "string",
           "x-go-name": "Version"
         }
