@@ -34,7 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/hetzner"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/alibaba"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/anexia"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/nutanix"

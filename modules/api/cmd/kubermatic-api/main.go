@@ -71,7 +71,7 @@ import (
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/cluster/client"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
 	"k8c.io/kubermatic/v2/pkg/features"
@@ -121,7 +121,7 @@ func main() {
 	ctrlruntimelog.SetLogger(zapr.NewLogger(rawLog.WithOptions(zap.AddCallerSkip(1))))
 
 	ctx := signals.SetupSignalHandler()
-	cli.Hello(log, "API", options.log.Debug, &options.versions)
+	cli.Hello(log, "API", &options.versions)
 
 	if err := clusterv1alpha1.AddToScheme(scheme.Scheme); err != nil {
 		log.Fatalw("failed to register scheme", zap.Stringer("api", clusterv1alpha1.SchemeGroupVersion), zap.Error(err))

@@ -35,7 +35,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/azure"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 

@@ -27,7 +27,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
 	alibaba "k8c.io/machine-controller/pkg/cloudprovider/provider/alibaba/types"
 	anexiaProvider "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia"
