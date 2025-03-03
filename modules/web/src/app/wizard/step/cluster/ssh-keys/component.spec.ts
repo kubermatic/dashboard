@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {RouterStub} from '@test/services/router-stubs';
@@ -42,7 +42,7 @@ describe('ClusterSSHKeys', () => {
     sshKeyServiceMock.list.mockReturnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
+      imports: [BrowserModule, NoopAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [ClusterSSHKeysComponent],
       providers: [
         ClusterSpecService,

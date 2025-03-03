@@ -16,14 +16,14 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {fakeGatekeeperConfig} from '@test/data/opa';
-import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeGatekeeperConfig} from '@test/data/opa';
+import {fakeProject} from '@test/data/project';
 import {of} from 'rxjs';
 import {GatekeeperConfigComponent} from './component';
 
@@ -41,7 +41,7 @@ describe('GatekeeperConfigComponent', () => {
     deleteGatekeeperConfigSpy = opaMock.deleteGatekeeperConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [GatekeeperConfigComponent],
       providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
       teardown: {destroyAfterEach: false},

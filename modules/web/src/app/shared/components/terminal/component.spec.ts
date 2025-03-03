@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -34,7 +34,7 @@ describe('TerminalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, MatSnackBarModule],
+      imports: [BrowserModule, NoopAnimationsModule, MatSnackBarModule],
       declarations: [TerminalComponent],
       providers: [
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},

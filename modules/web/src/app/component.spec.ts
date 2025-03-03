@@ -15,7 +15,7 @@
 import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {AuthGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
@@ -39,7 +39,7 @@ describe('KubermaticComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [KubermaticComponent],
       providers: [
         {provide: Auth, useClass: AuthMockService},

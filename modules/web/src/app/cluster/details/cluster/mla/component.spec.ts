@@ -14,7 +14,7 @@
 
 import {ComponentFixture, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {SharedModule} from '@shared/module';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
@@ -28,7 +28,7 @@ describe('MLAComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [MLAComponent],
       providers: [],
       teardown: {destroyAfterEach: false},
