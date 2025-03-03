@@ -23,6 +23,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-admin-settings-opa',
   templateUrl: './template.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AdminSettingsOPAComponent implements OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

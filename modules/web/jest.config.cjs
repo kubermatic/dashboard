@@ -13,9 +13,11 @@
 // limitations under the License.
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
   preset: 'jest-preset-angular',
-  roots: ['src'],
+  roots: ['<rootDir>/src'],
+  setupFiles: ['jest-canvas-mock'],
   setupFilesAfterEnv: ['<rootDir>/src/test.base.ts'],
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
@@ -25,5 +27,4 @@ module.exports = {
     '^@environments/(.*)$': '<rootDir>/src/environments/$1',
     '^@test/(.*)$': '<rootDir>/src/test/$1',
   },
-  transformIgnorePatterns: ['node_modules/?!(@swimlane)/'],
 };

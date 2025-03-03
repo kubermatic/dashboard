@@ -18,11 +18,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {fakeServiceAccountToken} from '@test/data/serviceaccount';
-import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {ProjectMockService} from '@test/services/project-mock';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
+import {fakeServiceAccountToken} from '@test/data/serviceaccount';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {ServiceAccountTokenNameStepComponent} from './component';
 
 describe('ServiceAccountTokenNameStepComponent', () => {
@@ -31,7 +31,7 @@ describe('ServiceAccountTokenNameStepComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {
           provide: MAT_DIALOG_DATA,

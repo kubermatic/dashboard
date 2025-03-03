@@ -29,6 +29,7 @@ import {forkJoin, Observable} from 'rxjs';
   selector: 'km-revoke-token',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class RevokeTokenComponent implements OnInit {
   @Input() cluster: Cluster;

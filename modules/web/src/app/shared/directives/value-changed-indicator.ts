@@ -19,6 +19,7 @@ import _ from 'lodash';
 
 @Directive({
   selector: '[kmValueChangedIndicator]',
+  standalone: false,
 })
 export class ValueChangedIndicatorDirective implements OnInit {
   private _initialValue: string | string[] | boolean | number;

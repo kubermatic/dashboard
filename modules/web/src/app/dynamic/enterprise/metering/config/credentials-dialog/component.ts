@@ -40,6 +40,7 @@ enum Controls {
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   animations: [pushToSide],
+  standalone: false,
 })
 export class MeteringCredentialsDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

@@ -34,6 +34,7 @@ enum Controls {
 @Component({
   selector: 'km-edit-credentials-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class EditCredentialsDialog implements OnInit {
   form: FormGroup;

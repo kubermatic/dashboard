@@ -18,16 +18,16 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeProject} from '@test/data/project';
-import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
-import {AddSshKeyDialogComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {SharedModule} from '@shared/module';
+import {fakeProject} from '@test/data/project';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 import {click} from '@test/utils/click-handler';
-import {SharedModule} from '@shared/module';
+import {AddSshKeyDialogComponent} from './component';
 
 describe('AddSshKeyDialogComponent', () => {
   let fixture: ComponentFixture<AddSshKeyDialogComponent>;
@@ -36,7 +36,7 @@ describe('AddSshKeyDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, RouterTestingModule, SharedModule, CoreModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: Router, useClass: RouterStub},

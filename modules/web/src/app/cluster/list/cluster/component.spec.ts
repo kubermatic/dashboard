@@ -18,28 +18,28 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {ClusterTemplateService} from '@core/services/cluster-templates';
-import {fakeAWSCluster} from '@test/data/cluster';
-import {fakeHealth} from '@test/data/health';
-import {ClusterTemplateMockService} from '@test/services/cluster-template-mock';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
-import {asyncData} from '@test/services/cluster-mock';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
 import {EndOfLifeService} from '@core/services/eol';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {fakeAWSCluster} from '@test/data/cluster';
+import {fakeHealth} from '@test/data/health';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {asyncData} from '@test/services/cluster-mock';
+import {ClusterTemplateMockService} from '@test/services/cluster-template-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {ClusterListComponent} from './component';
-import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
@@ -59,7 +59,7 @@ describe('ClusterListComponent', () => {
     clusterServiceMock.restores.mockReturnValue(asyncData([]));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [ClusterListComponent],
       providers: [
         {provide: ClusterService, useValue: clusterServiceMock},

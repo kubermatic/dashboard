@@ -16,16 +16,16 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {CoreModule} from '@core/module';
+import {NotificationService} from '@core/services/notification';
+import {OPAService} from '@core/services/opa';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeConstraints, fakeConstraintTemplates} from '@test/data/opa';
 import {fakeProject} from '@test/data/project';
 import {UserMockService} from '@test/services/user-mock';
-import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification';
-import {UserService} from '@core/services/user';
-import {OPAService} from '@core/services/opa';
-import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';
 import {ViolationDetailsComponent} from './violation-details/component';
@@ -49,7 +49,7 @@ describe('ConstraintsComponent', () => {
     opaMock.getViolationPageIndex.mockReturnValue(0);
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [ConstraintsComponent, ViolationDetailsComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},

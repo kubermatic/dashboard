@@ -25,6 +25,7 @@ import {Observable} from 'rxjs';
 @Component({
   selector: 'km-edit-dialog',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class EditServiceAccountDialogComponent implements OnInit {
   @Input() project: Project;

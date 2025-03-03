@@ -55,6 +55,7 @@ enum ToggleableColumn {
   selector: 'km-node-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;

@@ -22,6 +22,7 @@ import {AppConfigService} from '@app/config.service';
 @Component({
   selector: 'km-api-docs',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class ApiDocsComponent implements OnInit {
   constructor(

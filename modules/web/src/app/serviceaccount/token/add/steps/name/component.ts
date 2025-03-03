@@ -39,6 +39,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ServiceAccountTokenNameStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;

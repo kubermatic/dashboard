@@ -18,6 +18,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   selector: 'km-terminal-status-bar',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class TerminalStatusBarComponent {
   @Input() isConnectionLost: boolean;

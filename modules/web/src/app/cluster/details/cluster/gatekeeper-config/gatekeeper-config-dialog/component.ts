@@ -40,6 +40,7 @@ export interface GatekeeperConfigDialogData {
   selector: 'km-gatekeeper-config-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class GatekeeperConfigDialog implements OnInit, OnDestroy {
   readonly Mode = DialogActionMode;

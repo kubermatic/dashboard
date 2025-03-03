@@ -43,6 +43,7 @@ enum Controls {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpenstackApplicationCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 250;

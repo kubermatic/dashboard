@@ -37,6 +37,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class EquinixExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];

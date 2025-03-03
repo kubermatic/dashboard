@@ -41,6 +41,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class EquinixSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

@@ -47,6 +47,7 @@ import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators
   selector: 'km-cluster-template',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   templates: ClusterTemplate[] = [];

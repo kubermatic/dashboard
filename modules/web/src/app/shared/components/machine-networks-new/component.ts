@@ -63,6 +63,7 @@ class MachineNetworkSpec {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class MachineNetworkComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;

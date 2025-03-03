@@ -57,6 +57,7 @@ import {DialogModeService} from '@app/core/services/dialog-mode';
   selector: 'km-project-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
   readonly View = View;

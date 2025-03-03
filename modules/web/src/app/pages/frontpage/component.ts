@@ -21,6 +21,7 @@ import {Auth} from '@core/services/auth/service';
   selector: 'km-frontpage',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class FrontpageComponent implements OnInit {
   @ViewChild('loginButton') private readonly _loginButton: MatAnchor;

@@ -17,12 +17,11 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormArray} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeClusterWithMachineNetwork} from '@test/data/cluster-with-machine-networks';
-import {RouterTestingModule} from '@test/services/router-stubs';
+import {VSphereService} from '@app/core/services/provider/vsphere';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
+import {fakeClusterWithMachineNetwork} from '@test/data/cluster-with-machine-networks';
 import {MachineNetworksComponent} from './component';
-import {VSphereService} from '@app/core/services/provider/vsphere';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
@@ -30,7 +29,7 @@ describe('MachineNetworksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       declarations: [MachineNetworksComponent],
       providers: [WizardService, VSphereService],
       teardown: {destroyAfterEach: false},

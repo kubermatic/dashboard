@@ -67,6 +67,7 @@ enum FloatingIPPoolState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OpenstackProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _domains: string[] = ['Default'];

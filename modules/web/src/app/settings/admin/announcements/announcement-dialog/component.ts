@@ -39,6 +39,7 @@ export enum Controls {
   templateUrl: 'template.html',
   styleUrls: ['./style.scss'],
   providers: [provideNativeDateAdapter()],
+  standalone: false,
 })
 export class AdminAnnouncementDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

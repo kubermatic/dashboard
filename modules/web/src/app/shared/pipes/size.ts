@@ -15,7 +15,10 @@
 import {DecimalPipe} from '@angular/common';
 import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({name: 'kmSize'})
+@Pipe({
+  name: 'kmSize',
+  standalone: false,
+})
 export class SizeFormatterPipe implements PipeTransform {
   readonly base = 1024;
   readonly powerSuffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];

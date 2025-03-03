@@ -82,6 +82,7 @@ enum MachineTypeState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private readonly _defaultDiskSize = 25;

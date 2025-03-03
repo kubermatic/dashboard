@@ -20,6 +20,7 @@ import {shrinkGrow} from '@shared/animations/grow';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
+  standalone: false,
 })
 export class ExpansionPanelComponent {
   private _initialized = false;

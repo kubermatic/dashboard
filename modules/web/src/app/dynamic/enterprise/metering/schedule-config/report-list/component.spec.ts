@@ -22,7 +22,6 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@app/core/services/auth/service';
 import {UserService} from '@app/core/services/user';
@@ -41,7 +40,7 @@ describe('MeteringReportListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule, NoopAnimationsModule, HttpClientTestingModule],
+      imports: [SharedModule, NoopAnimationsModule, HttpClientTestingModule],
       declarations: [MeteringReportListComponent],
       providers: [
         {provide: MeteringService, useClass: MeteringMockService},

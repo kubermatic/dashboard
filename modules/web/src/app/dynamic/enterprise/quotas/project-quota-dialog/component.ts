@@ -43,6 +43,7 @@ enum Error {
   selector: 'km-quota-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();

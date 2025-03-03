@@ -29,6 +29,7 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   animations: [slideOut],
+  standalone: false,
 })
 export class UserPanelComponent implements OnInit, OnDestroy {
   user: Member;

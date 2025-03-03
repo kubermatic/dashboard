@@ -26,6 +26,7 @@ import {VersionChangeDialogComponent} from '../version-change-dialog/component';
   selector: 'km-version-picker',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() cluster: Cluster | ExternalCluster;

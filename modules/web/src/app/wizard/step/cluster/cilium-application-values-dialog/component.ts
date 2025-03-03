@@ -30,6 +30,7 @@ enum Controls {
   selector: 'km-cilium-application-values-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class CiliumApplicationValuesDialogComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;

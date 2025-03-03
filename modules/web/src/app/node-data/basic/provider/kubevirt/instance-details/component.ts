@@ -25,6 +25,7 @@ export interface DialogDataInput {
   selector: 'km-instance-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class InstanceDetailsDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) private _data: DialogDataInput) {}

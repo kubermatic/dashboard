@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
@@ -20,21 +19,21 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeProjects} from '@test/data/project';
-import {ActivatedRouteStub, RouterLinkStubDirective, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {click} from '@test/utils/click-handler';
 import {ProjectSelectorComponent} from '@core/components/navigation/project/component';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
-import {MockComponent} from 'ng2-mock-component';
-import {SidenavComponent} from './component';
 import {View} from '@shared/entity/common';
+import {SharedModule} from '@shared/module';
+import {fakeProjects} from '@test/data/project';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ActivatedRouteStub, RouterLinkStubDirective} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {click} from '@test/utils/click-handler';
+import {SidenavComponent} from './component';
+import {MockComponent} from 'ng2-mock-component';
 
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<SidenavComponent>;
@@ -44,15 +43,16 @@ describe('SidenavComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
-      declarations: [
-        ProjectSelectorComponent,
-        SidenavComponent,
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
         MockComponent({
           selector: 'a',
           inputs: ['routerLink', 'routerLinkActiveOptions'],
         }),
+        SharedModule,
       ],
+      declarations: [ProjectSelectorComponent, SidenavComponent],
       providers: [
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: UserService, useClass: UserMockService},

@@ -43,6 +43,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeOneCredentialsStepComponent extends StepBase implements OnInit {
   readonly NodeProvider = NodeProvider;

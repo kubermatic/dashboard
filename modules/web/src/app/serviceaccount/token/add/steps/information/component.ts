@@ -34,6 +34,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ServiceAccountTokenInformationStepComponent extends BaseFormValidator implements OnInit {
   get token(): string {

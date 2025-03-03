@@ -16,30 +16,30 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {ProjectService} from '@app/core/services/project';
+import {CoreModule} from '@core/module';
+import {AddonService} from '@core/services/addon';
+import {DatacenterService} from '@core/services/datacenter';
+import {MLAService} from '@core/services/mla';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeAlertmanagerConfig} from '@test/data/mla';
 import {fakeProject} from '@test/data/project';
+import {AddonServiceMock} from '@test/services/addon-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
-import {CoreModule} from '@core/module';
-import {DatacenterService} from '@core/services/datacenter';
-import {NotificationService} from '@core/services/notification';
-import {MLAService} from '@core/services/mla';
-import {SettingsService} from '@core/services/settings';
-import {SharedModule} from '@shared/module';
+import {UserMockService} from '@test/services/user-mock';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
-import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {Router} from '@angular/router';
-import {RouterStub} from '@test/services/router-stubs';
-import {UserService} from '@core/services/user';
-import {UserMockService} from '@test/services/user-mock';
-import {AddonService} from '@core/services/addon';
-import {AddonServiceMock} from '@test/services/addon-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {ProjectService} from '@app/core/services/project';
 
 describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
@@ -55,7 +55,7 @@ describe('AlertmanagerConfigComponent', () => {
     resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [AlertmanagerConfigComponent],
       providers: [
         {provide: MLAService, useValue: mlaMock},

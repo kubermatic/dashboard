@@ -35,6 +35,7 @@ import {AdminRuleGroupDialog} from './rule-group-dialog/component';
   selector: 'km-admin-settings-rule-groups',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<AdminRuleGroup>();

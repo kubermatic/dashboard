@@ -30,6 +30,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-external-node-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ExternalCluster;

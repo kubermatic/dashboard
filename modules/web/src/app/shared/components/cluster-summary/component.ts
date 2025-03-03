@@ -35,6 +35,7 @@ import {take} from 'rxjs/operators';
   selector: 'km-cluster-summary',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterSummaryComponent implements OnInit {
   readonly ApplicationsListView = ApplicationsListView;
