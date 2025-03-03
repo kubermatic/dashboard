@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SettingsService } from '@core/services/settings';
-import { UserService } from '@core/services/user';
-import { Event } from '@shared/entity/event';
-import { SharedModule } from '@shared/module';
-import { SettingsMockService } from '@test/services/settings-mock';
-import { UserMockService } from '@test/services/user-mock';
-import { EventListComponent } from './component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {Event} from '@shared/entity/event';
+import {SharedModule} from '@shared/module';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {EventListComponent} from './component';
 
 describe('EventListComponent', () => {
   let fixture: ComponentFixture<EventListComponent>;

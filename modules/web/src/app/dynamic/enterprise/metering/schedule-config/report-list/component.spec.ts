@@ -32,7 +32,7 @@ import {AuthMockService} from '@test/services/auth-mock';
 import {MeteringMockService} from '@test/services/metering-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {MeteringReportListComponent} from './component';
-import { RouterTestingModule } from '@angular/router/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MeteringReportListComponent', () => {
   let component: MeteringReportListComponent;

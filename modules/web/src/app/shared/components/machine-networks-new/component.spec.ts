@@ -12,37 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AppConfigService } from '@app/config.service';
-import { NutanixService } from '@app/core/services/provider/nutanix';
-import { VSphereService } from '@app/core/services/provider/vsphere';
-import { NODE_DATA_CONFIG, NodeDataMode } from '@app/node-data/config';
-import { ClusterSpecService } from '@core/services/cluster-spec';
-import { DatacenterService } from '@core/services/datacenter';
-import { NodeDataService } from '@core/services/node-data/service';
-import { ParamsService } from '@core/services/params';
-import { ProjectService } from '@core/services/project';
-import { AlibabaService } from '@core/services/provider/alibaba';
-import { AnexiaService } from '@core/services/provider/anexia';
-import { AWSService } from '@core/services/provider/aws';
-import { AzureService } from '@core/services/provider/azure';
-import { BaremetalService } from '@core/services/provider/baremetal';
-import { DigitalOceanService } from '@core/services/provider/digitalocean';
-import { EquinixService } from '@core/services/provider/equinix';
-import { GCPService } from '@core/services/provider/gcp';
-import { HetznerService } from '@core/services/provider/hetzner';
-import { KubeVirtService } from '@core/services/provider/kubevirt';
-import { OpenStackService } from '@core/services/provider/openstack';
-import { VMwareCloudDirectorService } from '@core/services/provider/vmware-cloud-director';
-import { PresetsService } from '@core/services/wizard/presets';
-import { WizardService } from '@core/services/wizard/wizard';
-import { SharedModule } from '@shared/module';
-import { DatacenterMockService } from '@test/services/datacenter-mock';
-import { ProjectMockService } from '@test/services/project-mock';
-import { MachineNetworkComponent } from './component';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {AppConfigService} from '@app/config.service';
+import {NutanixService} from '@app/core/services/provider/nutanix';
+import {VSphereService} from '@app/core/services/provider/vsphere';
+import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
+import {ParamsService} from '@core/services/params';
+import {ProjectService} from '@core/services/project';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {BaremetalService} from '@core/services/provider/baremetal';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {EquinixService} from '@core/services/provider/equinix';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {OpenStackService} from '@core/services/provider/openstack';
+import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
+import {PresetsService} from '@core/services/wizard/presets';
+import {WizardService} from '@core/services/wizard/wizard';
+import {SharedModule} from '@shared/module';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {MachineNetworkComponent} from './component';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;

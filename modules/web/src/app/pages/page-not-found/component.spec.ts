@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { Auth } from '@core/services/auth/service';
-import { SharedModule } from '@shared/module';
-import { AuthMockService } from '@test/services/auth-mock';
-import { RouterStub } from '@test/services/router-stubs';
-import { click } from '@test/utils/click-handler';
-import { PageNotFoundComponent } from './component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {Auth} from '@core/services/auth/service';
+import {SharedModule} from '@shared/module';
+import {AuthMockService} from '@test/services/auth-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {click} from '@test/utils/click-handler';
+import {PageNotFoundComponent} from './component';
 
 describe('PageNotFoundComponent', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;

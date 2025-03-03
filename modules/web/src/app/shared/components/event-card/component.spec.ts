@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { UserService } from '@core/services/user';
-import { SharedModule } from '@shared/module';
-import { UserMockService } from '@test/services/user-mock';
-import { EventCardComponent } from './component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
+import {UserMockService} from '@test/services/user-mock';
+import {EventCardComponent} from './component';
 
 describe('EventCardComponent', () => {
   let fixture: ComponentFixture<EventCardComponent>;

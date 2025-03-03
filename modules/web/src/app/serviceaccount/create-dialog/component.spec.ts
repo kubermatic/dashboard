@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule } from '@core/module';
-import { NotificationService } from '@core/services/notification';
-import { ProjectService } from '@core/services/project';
-import { ServiceAccountService } from '@core/services/service-account';
-import { SharedModule } from '@shared/module';
-import { fakeProject } from '@test/data/project';
-import { fakeServiceAccount } from '@test/data/serviceaccount';
-import { asyncData } from '@test/services/cluster-mock';
-import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
-import { ProjectMockService } from '@test/services/project-mock';
-import { CreateServiceAccountDialogComponent } from './component';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreModule} from '@core/module';
+import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
+import {ServiceAccountService} from '@core/services/service-account';
+import {SharedModule} from '@shared/module';
+import {fakeProject} from '@test/data/project';
+import {fakeServiceAccount} from '@test/data/serviceaccount';
+import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {CreateServiceAccountDialogComponent} from './component';
 
 describe('CreateServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<CreateServiceAccountDialogComponent>;

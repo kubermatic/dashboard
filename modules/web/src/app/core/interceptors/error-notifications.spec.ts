@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { inject, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorNotificationsInterceptor } from '@core/interceptors';
-import { CoreModule } from '@core/module';
-import { SettingsService } from '@core/services/settings';
-import { SharedModule } from '@shared/module';
-import { SettingsMockService } from '@test/services/settings-mock';
+import {HttpClientModule} from '@angular/common/http';
+import {inject, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ErrorNotificationsInterceptor} from '@core/interceptors';
+import {CoreModule} from '@core/module';
+import {SettingsService} from '@core/services/settings';
+import {SharedModule} from '@shared/module';
+import {SettingsMockService} from '@test/services/settings-mock';
 
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {

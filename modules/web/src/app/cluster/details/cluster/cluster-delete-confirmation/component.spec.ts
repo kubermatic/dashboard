@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { AppConfigService } from '@app/config.service';
-import { GoogleAnalyticsService } from '@app/google-analytics.service';
-import { ClusterService } from '@core/services/cluster';
-import { DatacenterService } from '@core/services/datacenter';
-import { NotificationService } from '@core/services/notification';
-import { SettingsService } from '@core/services/settings';
-import { SharedModule } from '@shared/module';
-import { fakeDigitaloceanCluster } from '@test/data/cluster';
-import { fakeProject } from '@test/data/project';
-import { AppConfigMockService } from '@test/services/app-config-mock';
-import { ClusterMockService } from '@test/services/cluster-mock';
-import { DatacenterMockService } from '@test/services/datacenter-mock';
-import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
-import { RouterStub } from '@test/services/router-stubs';
-import { SettingsMockService } from '@test/services/settings-mock';
-import { of } from 'rxjs';
-import { ClusterDeleteConfirmationComponent } from './component';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {NotificationService} from '@core/services/notification';
+import {SettingsService} from '@core/services/settings';
+import {SharedModule} from '@shared/module';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeProject} from '@test/data/project';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {of} from 'rxjs';
+import {ClusterDeleteConfirmationComponent} from './component';
 
 describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;

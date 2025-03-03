@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Auth } from '@core/services/auth/service';
-import { DatacenterService } from '@core/services/datacenter';
-import { AuthMockService } from '@test/services/auth-mock';
-import { DatacenterMockService } from '@test/services/datacenter-mock';
-import { ActivatedRouteStub, RouterStub } from '@test/services/router-stubs';
-import { DashboardComponent } from './component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Auth} from '@core/services/auth/service';
+import {DatacenterService} from '@core/services/datacenter';
+import {AuthMockService} from '@test/services/auth-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
+import {DashboardComponent} from './component';
 
 describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;

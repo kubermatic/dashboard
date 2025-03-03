@@ -12,28 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { AppConfigService } from '@app/config.service';
-import { GoogleAnalyticsService } from '@app/google-analytics.service';
-import { ClusterService } from '@core/services/cluster';
-import { NodeService } from '@core/services/node';
-import { ProjectService } from '@core/services/project';
-import { SettingsService } from '@core/services/settings';
-import { UserService } from '@core/services/user';
-import { SharedModule } from '@shared/module';
-import { AppConfigMockService } from '@test/services/app-config-mock';
-import { ClusterMockService } from '@test/services/cluster-mock';
-import { NodeMockService } from '@test/services/node-mock';
-import { ProjectMockService } from '@test/services/project-mock';
-import { RouterStub } from '@test/services/router-stubs';
-import { SettingsMockService } from '@test/services/settings-mock';
-import { UserMockService } from '@test/services/user-mock';
-import { of } from 'rxjs';
-import { MachineDeploymentListComponent } from './component';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatDialog} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ClusterService} from '@core/services/cluster';
+import {NodeService} from '@core/services/node';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {NodeMockService} from '@test/services/node-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {of} from 'rxjs';
+import {MachineDeploymentListComponent} from './component';
 
 class MatDialogMock {
   open(): any {

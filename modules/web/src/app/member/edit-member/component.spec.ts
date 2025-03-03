@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreModule } from '@core/module';
-import { MemberService } from '@core/services/member';
-import { NotificationService } from '@core/services/notification';
-import { SharedModule } from '@shared/module';
-import { fakeMember } from '@test/data/member';
-import { fakeProject } from '@test/data/project';
-import { asyncData } from '@test/services/cluster-mock';
-import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
-import { EditMemberComponent } from './component';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreModule} from '@core/module';
+import {MemberService} from '@core/services/member';
+import {NotificationService} from '@core/services/notification';
+import {SharedModule} from '@shared/module';
+import {fakeMember} from '@test/data/member';
+import {fakeProject} from '@test/data/project';
+import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {EditMemberComponent} from './component';
 
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;

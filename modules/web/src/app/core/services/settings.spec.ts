@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AppConfigService } from '@app/config.service';
-import { Auth } from '@core/services/auth/service';
-import { SharedModule } from '@shared/module';
-import { AppConfigMockService } from '@test/services/app-config-mock';
-import { AuthMockService } from '@test/services/auth-mock';
-import { SettingsService } from './settings';
+import {HttpClientModule} from '@angular/common/http';
+import {TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {AppConfigService} from '@app/config.service';
+import {Auth} from '@core/services/auth/service';
+import {SharedModule} from '@shared/module';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {SettingsService} from './settings';
 
 describe('SettingsService', () => {
   let settingsService: SettingsService;

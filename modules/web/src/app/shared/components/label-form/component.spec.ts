@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-import { SharedModule } from '@shared/module';
-import { LabelFormComponent } from './component';
+import {SharedModule} from '@shared/module';
+import {LabelFormComponent} from './component';
 
 describe('LabelFormComponent', () => {
   let fixture: ComponentFixture<LabelFormComponent>;

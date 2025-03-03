@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
+import {TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-import { COOKIE, COOKIE_DI_TOKEN } from '@app/config';
-import { AppConfigService } from '@app/config.service';
-import { SharedModule } from '@shared/module';
-import { fakeUserGroupConfig } from '@test/data/user-group-config';
-import { AppConfigMockService } from '@test/services/app-config-mock';
-import { AuthMockService } from '@test/services/auth-mock';
-import { Auth } from './auth/service';
-import { TokenService } from './token';
+import {COOKIE, COOKIE_DI_TOKEN} from '@app/config';
+import {AppConfigService} from '@app/config.service';
+import {SharedModule} from '@shared/module';
+import {fakeUserGroupConfig} from '@test/data/user-group-config';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {Auth} from './auth/service';
+import {TokenService} from './token';
 
-import { UserService } from './user';
+import {UserService} from './user';
 
 describe('Service: UserService', () => {
   let userService: UserService;

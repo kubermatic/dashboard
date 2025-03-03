@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { AppConfigService } from '@app/config.service';
-import { Auth } from '@core/services/auth/service';
-import { ProjectService } from '@core/services/project';
-import { SettingsService } from '@core/services/settings';
-import { UserService } from '@core/services/user';
-import { SharedModule } from '@shared/module';
-import { AppConfigMockService } from '@test/services/app-config-mock';
-import { AuthMockService } from '@test/services/auth-mock';
-import { ProjectMockService } from '@test/services/project-mock';
-import { SettingsMockService } from '@test/services/settings-mock';
-import { UserMockService } from '@test/services/user-mock';
-import { UserPanelComponent } from './component';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, inject, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatDialog} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
+import {Auth} from '@core/services/auth/service';
+import {ProjectService} from '@core/services/project';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {SharedModule} from '@shared/module';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {UserPanelComponent} from './component';
 
 describe('UserPanelComponent', () => {
   let fixture: ComponentFixture<UserPanelComponent>;

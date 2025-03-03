@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { ProjectService } from '@core/services/project';
-import { SharedModule } from '@shared/module';
-import { fakeServiceAccountToken } from '@test/data/serviceaccount';
-import { ProjectMockService } from '@test/services/project-mock';
-import { RouterStub } from '@test/services/router-stubs';
-import { ServiceAccountTokenInformationStepComponent } from './component';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {ProjectService} from '@core/services/project';
+import {SharedModule} from '@shared/module';
+import {fakeServiceAccountToken} from '@test/data/serviceaccount';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {ServiceAccountTokenInformationStepComponent} from './component';
 
 describe('ServiceAccountTokenInformationStepComponent', () => {
   let component: ServiceAccountTokenInformationStepComponent;

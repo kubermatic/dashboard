@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { DEFAULT_ADMIN_SETTINGS } from '@app/shared/entity/settings';
-import { CoreModule } from '@core/module';
-import { ProjectService } from '@core/services/project';
-import { SharedModule } from '@shared/module';
-import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
-import { ProjectMockService } from '@test/services/project-mock';
-import { RouterStub } from '@test/services/router-stubs';
-import { AddProjectDialogComponent } from './component';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
+import {BrowserModule} from '@angular/platform-browser';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {DEFAULT_ADMIN_SETTINGS} from '@app/shared/entity/settings';
+import {CoreModule} from '@core/module';
+import {ProjectService} from '@core/services/project';
+import {SharedModule} from '@shared/module';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {AddProjectDialogComponent} from './component';
 
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
