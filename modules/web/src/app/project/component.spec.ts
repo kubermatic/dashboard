@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialog} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {CoreModule} from '@core/module';
-import {DatacenterService} from '@core/services/datacenter';
-import {ProjectService} from '@core/services/project';
-import {SettingsService} from '@core/services/settings';
-import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
-import {NoopProjectDeleteDialogComponent} from '@test/components/noop-project-delete-dialog.component';
-import {fakeProject} from '@test/data/project';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {RouterStub} from '@test/services/router-stubs';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {CookieService} from 'ngx-cookie-service';
-import {ProjectComponent} from './component';
-import {ProjectModule} from './module';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { AppConfigService } from '@app/config.service';
+import { GoogleAnalyticsService } from '@app/google-analytics.service';
+import { CoreModule } from '@core/module';
+import { DatacenterService } from '@core/services/datacenter';
+import { ProjectService } from '@core/services/project';
+import { SettingsService } from '@core/services/settings';
+import { UserService } from '@core/services/user';
+import { SharedModule } from '@shared/module';
+import { NoopProjectDeleteDialogComponent } from '@test/components/noop-project-delete-dialog.component';
+import { fakeProject } from '@test/data/project';
+import { AppConfigMockService } from '@test/services/app-config-mock';
+import { DatacenterMockService } from '@test/services/datacenter-mock';
+import { ProjectMockService } from '@test/services/project-mock';
+import { RouterStub } from '@test/services/router-stubs';
+import { SettingsMockService } from '@test/services/settings-mock';
+import { UserMockService } from '@test/services/user-mock';
+import { CookieService } from 'ngx-cookie-service';
+import { ProjectComponent } from './component';
+import { ProjectModule } from './module';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -44,7 +44,7 @@ describe('ProjectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ProjectModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, ProjectModule, SharedModule, CoreModule],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ProjectService, useClass: ProjectMockService},

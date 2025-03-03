@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialog} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {ProjectService} from '@app/core/services/project';
-import {CoreModule} from '@core/module';
-import {AddonService} from '@core/services/addon';
-import {DatacenterService} from '@core/services/datacenter';
-import {MLAService} from '@core/services/mla';
-import {NotificationService} from '@core/services/notification';
-import {SettingsService} from '@core/services/settings';
-import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
-import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {fakeAlertmanagerConfig} from '@test/data/mla';
-import {fakeProject} from '@test/data/project';
-import {AddonServiceMock} from '@test/services/addon-mock';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {RouterStub} from '@test/services/router-stubs';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {of} from 'rxjs';
-import {AlertmanagerConfigComponent} from './component';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { AppConfigService } from '@app/config.service';
+import { ProjectService } from '@app/core/services/project';
+import { CoreModule } from '@core/module';
+import { AddonService } from '@core/services/addon';
+import { DatacenterService } from '@core/services/datacenter';
+import { MLAService } from '@core/services/mla';
+import { NotificationService } from '@core/services/notification';
+import { SettingsService } from '@core/services/settings';
+import { UserService } from '@core/services/user';
+import { SharedModule } from '@shared/module';
+import { NoopConfirmDialogComponent } from '@test/components/noop-confirmation-dialog.component';
+import { fakeDigitaloceanCluster } from '@test/data/cluster';
+import { fakeAlertmanagerConfig } from '@test/data/mla';
+import { fakeProject } from '@test/data/project';
+import { AddonServiceMock } from '@test/services/addon-mock';
+import { AppConfigMockService } from '@test/services/app-config-mock';
+import { DatacenterMockService } from '@test/services/datacenter-mock';
+import { ProjectMockService } from '@test/services/project-mock';
+import { RouterStub } from '@test/services/router-stubs';
+import { SettingsMockService } from '@test/services/settings-mock';
+import { UserMockService } from '@test/services/user-mock';
+import { of } from 'rxjs';
+import { AlertmanagerConfigComponent } from './component';
 
 describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
@@ -55,7 +55,7 @@ describe('AlertmanagerConfigComponent', () => {
     resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [AlertmanagerConfigComponent],
       providers: [
         {provide: MLAService, useValue: mlaMock},

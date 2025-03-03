@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@test/data/project';
-import {fakeServiceAccount} from '@test/data/serviceaccount';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification';
-import {SharedModule} from '@shared/module';
-import {EditServiceAccountDialogComponent} from './component';
-import {ServiceAccountService} from '@core/services/service-account';
-import {asyncData} from '@test/services/cluster-mock';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CoreModule } from '@core/module';
+import { NotificationService } from '@core/services/notification';
+import { ServiceAccountService } from '@core/services/service-account';
+import { SharedModule } from '@shared/module';
+import { fakeProject } from '@test/data/project';
+import { fakeServiceAccount } from '@test/data/serviceaccount';
+import { asyncData } from '@test/services/cluster-mock';
+import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
+import { EditServiceAccountDialogComponent } from './component';
 
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
@@ -36,7 +36,7 @@ describe('EditServiceAccountDialogComponent', () => {
     editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ServiceAccountService, useValue: saMock},

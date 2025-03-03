@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
-import {DebugElement} from '@angular/core';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatDialog} from '@angular/material/dialog';
-import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {ProjectSelectorComponent} from '@core/components/navigation/project/component';
-import {ProjectService} from '@core/services/project';
-import {SettingsService} from '@core/services/settings';
-import {UserService} from '@core/services/user';
-import {View} from '@shared/entity/common';
-import {SharedModule} from '@shared/module';
-import {fakeProjects} from '@test/data/project';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ProjectMockService} from '@test/services/project-mock';
+import { HttpClientModule } from '@angular/common/http';
+import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { BrowserModule, By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppConfigService } from '@app/config.service';
+import { ProjectSelectorComponent } from '@core/components/navigation/project/component';
+import { ProjectService } from '@core/services/project';
+import { SettingsService } from '@core/services/settings';
+import { UserService } from '@core/services/user';
+import { View } from '@shared/entity/common';
+import { SharedModule } from '@shared/module';
+import { fakeProjects } from '@test/data/project';
+import { AppConfigMockService } from '@test/services/app-config-mock';
+import { ProjectMockService } from '@test/services/project-mock';
 import {
   ActivatedRouteStub,
   RouterLinkActiveStubDirective,
   RouterLinkStubDirective,
   RouterOutletStubComponent,
 } from '@test/services/router-stubs';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {click} from '@test/utils/click-handler';
-import {MockComponent} from 'ng2-mock-component';
-import {SidenavComponent} from './component';
+import { SettingsMockService } from '@test/services/settings-mock';
+import { UserMockService } from '@test/services/user-mock';
+import { click } from '@test/utils/click-handler';
+import { MockComponent } from 'ng2-mock-component';
+import { SidenavComponent } from './component';
 
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<SidenavComponent>;
@@ -56,7 +56,7 @@ describe('SidenavComponent', () => {
       imports: [
         BrowserModule,
         HttpClientModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         RouterLinkStubDirective,
         RouterLinkActiveStubDirective,
         RouterOutletStubComponent,

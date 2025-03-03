@@ -12,28 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatDialog} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
-import {AppConfigService} from '@app/config.service';
-import {NotificationPanelComponent} from '@core/components/notification-panel/component';
-import {Auth} from '@core/services/auth/service';
-import {ProjectService} from '@core/services/project';
-import {UserService} from '@core/services/user';
-import {Project} from '@shared/entity/project';
-import {SharedModule} from '@shared/module';
-import {fakeProjects} from '@test/data/project';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {MockComponent} from 'ng2-mock-component';
-import {UserPanelComponent} from '../../user-panel/component';
-import {NavigationComponent} from '../component';
-import {ProjectSelectorComponent} from './component';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { AppConfigService } from '@app/config.service';
+import { NotificationPanelComponent } from '@core/components/notification-panel/component';
+import { Auth } from '@core/services/auth/service';
+import { ProjectService } from '@core/services/project';
+import { UserService } from '@core/services/user';
+import { Project } from '@shared/entity/project';
+import { SharedModule } from '@shared/module';
+import { fakeProjects } from '@test/data/project';
+import { AppConfigMockService } from '@test/services/app-config-mock';
+import { AuthMockService } from '@test/services/auth-mock';
+import { ProjectMockService } from '@test/services/project-mock';
+import { UserMockService } from '@test/services/user-mock';
+import { MockComponent } from 'ng2-mock-component';
+import { UserPanelComponent } from '../../user-panel/component';
+import { NavigationComponent } from '../component';
+import { ProjectSelectorComponent } from './component';
 
 describe('ProjectSelectorComponent', () => {
   let fixture: ComponentFixture<ProjectSelectorComponent>;
@@ -45,7 +45,7 @@ describe('ProjectSelectorComponent', () => {
       inputs: ['routerLink', 'routerLinkActiveOptions'],
     });
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, MockLink, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, MockLink, NoopAnimationsModule, SharedModule],
       declarations: [NavigationComponent, NotificationPanelComponent, ProjectSelectorComponent, UserPanelComponent],
       providers: [
         {provide: ProjectService, useClass: ProjectMockService},

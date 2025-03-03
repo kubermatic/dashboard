@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
-import {Auth} from '@core/services/auth/service';
-import {SharedModule} from '@shared/module';
-import {AuthMockService} from '@test/services/auth-mock';
-import {RouterStub} from '@test/services/router-stubs';
-import {CookieService} from 'ngx-cookie-service';
-import {FrontpageComponent} from './component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { Auth } from '@core/services/auth/service';
+import { SharedModule } from '@shared/module';
+import { AuthMockService } from '@test/services/auth-mock';
+import { RouterStub } from '@test/services/router-stubs';
+import { CookieService } from 'ngx-cookie-service';
+import { FrontpageComponent } from './component';
 
 describe('FrontpageComponent', () => {
   let fixture: ComponentFixture<FrontpageComponent>;
@@ -31,7 +31,7 @@ describe('FrontpageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [FrontpageComponent],
       providers: [{provide: Router, useClass: RouterStub}, {provide: Auth, useClass: AuthMockService}, CookieService],
       teardown: {destroyAfterEach: false},

@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {FormArray} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {VSphereService} from '@app/core/services/provider/vsphere';
-import {WizardService} from '@core/services/wizard/wizard';
-import {SharedModule} from '@shared/module';
-import {fakeClusterWithMachineNetwork} from '@test/data/cluster-with-machine-networks';
-import {MachineNetworksComponent} from './component';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormArray } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { VSphereService } from '@app/core/services/provider/vsphere';
+import { WizardService } from '@core/services/wizard/wizard';
+import { SharedModule } from '@shared/module';
+import { fakeClusterWithMachineNetwork } from '@test/data/cluster-with-machine-networks';
+import { MachineNetworksComponent } from './component';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
@@ -29,7 +29,7 @@ describe('MachineNetworksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [MachineNetworksComponent],
       providers: [WizardService, VSphereService],
       teardown: {destroyAfterEach: false},

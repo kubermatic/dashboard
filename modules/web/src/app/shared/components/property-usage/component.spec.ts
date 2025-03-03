@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {SharedModule} from '@shared/module';
-import {PropertyUsageComponent} from './component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '@shared/module';
+import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
+import { PropertyUsageComponent } from './component';
 
 describe('PropertyUsageComponent', () => {
   let fixture: ComponentFixture<PropertyUsageComponent>;
@@ -26,7 +26,7 @@ describe('PropertyUsageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},

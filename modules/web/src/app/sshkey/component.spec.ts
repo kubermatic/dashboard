@@ -16,7 +16,7 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -45,7 +45,7 @@ describe('SSHKeyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, MatTabsModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatTabsModule],
       declarations: [SSHKeyComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

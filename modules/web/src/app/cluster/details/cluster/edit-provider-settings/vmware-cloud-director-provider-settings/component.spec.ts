@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
-import {ClusterService} from '@core/services/cluster';
-import {SharedModule} from '@shared/module';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
-import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
-import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
-import {EditProviderSettingsComponent} from '../component';
-import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
-import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/component';
-import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
-import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/component';
-import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
-import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
-import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
-import {VMwareCloudDirectorProviderSettingsComponent} from './component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NutanixProviderSettingsComponent } from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
+import { ClusterService } from '@core/services/cluster';
+import { SharedModule } from '@shared/module';
+import { ClusterMockService } from '@test/services/cluster-mock';
+import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
+import { AlibabaProviderSettingsComponent } from '../alibaba-provider-settings/component';
+import { AWSProviderSettingsComponent } from '../aws-provider-settings/component';
+import { AzureProviderSettingsComponent } from '../azure-provider-settings/component';
+import { EditProviderSettingsComponent } from '../component';
+import { DigitaloceanProviderSettingsComponent } from '../digitalocean-provider-settings/component';
+import { EquinixProviderSettingsComponent } from '../equinix-provider-settings/component';
+import { GCPProviderSettingsComponent } from '../gcp-provider-settings/component';
+import { HetznerProviderSettingsComponent } from '../hetzner-provider-settings/component';
+import { KubevirtProviderSettingsComponent } from '../kubevirt-provider-settings/component';
+import { OpenstackProviderSettingsComponent } from '../openstack-provider-settings/component';
+import { VSphereProviderSettingsComponent } from '../vsphere-provider-settings/component';
+import { VMwareCloudDirectorProviderSettingsComponent } from './component';
 
 describe('VMwareCloudDirectorProviderSettingsComponent', () => {
   let fixture: ComponentFixture<VMwareCloudDirectorProviderSettingsComponent>;
@@ -40,7 +40,7 @@ describe('VMwareCloudDirectorProviderSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         GCPProviderSettingsComponent,

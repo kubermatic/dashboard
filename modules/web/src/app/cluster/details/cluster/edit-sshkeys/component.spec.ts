@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatDialog} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AppConfigService} from '@app/config.service';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {ClusterService} from '@core/services/cluster';
-import {NotificationService} from '@core/services/notification';
-import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
-import {EditSSHKeysComponent} from './component';
-import {SSHKeyService} from '@core/services/ssh-key';
-import {SSHKeyMockService} from '@test/services/ssh-key-mock';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AppConfigService } from '@app/config.service';
+import { GoogleAnalyticsService } from '@app/google-analytics.service';
+import { ClusterService } from '@core/services/cluster';
+import { NotificationService } from '@core/services/notification';
+import { SSHKeyService } from '@core/services/ssh-key';
+import { UserService } from '@core/services/user';
+import { SharedModule } from '@shared/module';
+import { AppConfigMockService } from '@test/services/app-config-mock';
+import { ClusterMockService } from '@test/services/cluster-mock';
+import { SSHKeyMockService } from '@test/services/ssh-key-mock';
+import { UserMockService } from '@test/services/user-mock';
+import { EditSSHKeysComponent } from './component';
 
 describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
@@ -35,7 +35,7 @@ describe('EditSSHKeysComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [EditSSHKeysComponent],
       providers: [
         {provide: ClusterService, useClass: ClusterMockService},

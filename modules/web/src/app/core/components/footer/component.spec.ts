@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
-import {Auth} from '@core/services/auth/service';
-import {ProjectService} from '@core/services/project';
-import {UserService} from '@core/services/user';
-import {SharedModule} from '@shared/module';
-import {AuthMockService} from '@test/services/auth-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {RouterStub} from '@test/services/router-stubs';
-import {UserMockService} from '@test/services/user-mock';
-import {FooterComponent} from './component';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { Auth } from '@core/services/auth/service';
+import { ProjectService } from '@core/services/project';
+import { UserService } from '@core/services/user';
+import { SharedModule } from '@shared/module';
+import { AuthMockService } from '@test/services/auth-mock';
+import { ProjectMockService } from '@test/services/project-mock';
+import { RouterStub } from '@test/services/router-stubs';
+import { UserMockService } from '@test/services/user-mock';
+import { FooterComponent } from './component';
 
 describe('FooterComponent', () => {
   let fixture: ComponentFixture<FooterComponent>;
@@ -33,7 +33,7 @@ describe('FooterComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [FooterComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},

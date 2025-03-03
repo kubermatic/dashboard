@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {MatDialogRef} from '@angular/material/dialog';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@test/data/project';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {NotificationService} from '@core/services/notification';
-import {ProjectService} from '@core/services/project';
-import {SharedModule} from '@shared/module';
-import {Group} from '@shared/utils/member';
-import {AddMemberComponent} from './component';
-import {MemberService} from '@core/services/member';
-import {MemberServiceMock} from '@test/services/member-mock';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MemberService } from '@core/services/member';
+import { NotificationService } from '@core/services/notification';
+import { ProjectService } from '@core/services/project';
+import { SharedModule } from '@shared/module';
+import { Group } from '@shared/utils/member';
+import { fakeProject } from '@test/data/project';
+import { MatDialogRefMock } from '@test/services/mat-dialog-ref-mock';
+import { MemberServiceMock } from '@test/services/member-mock';
+import { ProjectMockService } from '@test/services/project-mock';
+import { AddMemberComponent } from './component';
 
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
@@ -33,7 +33,7 @@ describe('AddProjectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [AddMemberComponent],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

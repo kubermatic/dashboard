@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClientModule} from '@angular/common/http';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {ReactiveFormsModule} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthMockService} from '@test/services/auth-mock';
-import {Auth} from '@core/services/auth/service';
-import {ClusterSpecService} from '@core/services/cluster-spec';
-import {WizardService} from '@core/services/wizard/wizard';
-import {SharedModule} from '@shared/module';
-import {EventRateLimitComponent} from './component';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Auth } from '@core/services/auth/service';
+import { ClusterSpecService } from '@core/services/cluster-spec';
+import { WizardService } from '@core/services/wizard/wizard';
+import { SharedModule } from '@shared/module';
+import { AuthMockService } from '@test/services/auth-mock';
+import { EventRateLimitComponent } from './component';
 
 describe('EventRateLimitComponent', () => {
   let fixture: ComponentFixture<EventRateLimitComponent>;
@@ -30,7 +30,7 @@ describe('EventRateLimitComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
+      imports: [BrowserModule, NoopAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [EventRateLimitComponent],
       providers: [WizardService, ClusterSpecService, {provide: Auth, useClass: AuthMockService}],
     }).compileComponents();
