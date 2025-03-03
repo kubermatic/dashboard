@@ -15,7 +15,7 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
@@ -54,7 +54,7 @@ describe('ServiceAccountComponent', () => {
     deleteServiceAccountSpy = saMock.delete.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, ServiceAccountModule],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ServiceAccountService, useValue: saMock},

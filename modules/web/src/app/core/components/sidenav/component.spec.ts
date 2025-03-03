@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {HttpClientModule} from '@angular/common/http';
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
@@ -28,12 +29,17 @@ import {SharedModule} from '@shared/module';
 import {fakeProjects} from '@test/data/project';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {ProjectMockService} from '@test/services/project-mock';
-import {ActivatedRouteStub, RouterLinkStubDirective} from '@test/services/router-stubs';
+import {
+  ActivatedRouteStub,
+  RouterLinkActiveStubDirective,
+  RouterLinkStubDirective,
+  RouterOutletStubComponent,
+} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {click} from '@test/utils/click-handler';
-import {SidenavComponent} from './component';
 import {MockComponent} from 'ng2-mock-component';
+import {SidenavComponent} from './component';
 
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<SidenavComponent>;
@@ -42,15 +48,20 @@ describe('SidenavComponent', () => {
   let links: RouterLinkStubDirective[];
 
   beforeEach(() => {
+    const MockLink = MockComponent({
+      selector: 'a',
+      inputs: ['routerLink', 'routerLinkActiveOptions'],
+    });
     TestBed.configureTestingModule({
       imports: [
         BrowserModule,
+        HttpClientModule,
         BrowserAnimationsModule,
-        MockComponent({
-          selector: 'a',
-          inputs: ['routerLink', 'routerLinkActiveOptions'],
-        }),
+        RouterLinkStubDirective,
+        RouterLinkActiveStubDirective,
+        RouterOutletStubComponent,
         SharedModule,
+        MockLink,
       ],
       declarations: [ProjectSelectorComponent, SidenavComponent],
       providers: [

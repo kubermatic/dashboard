@@ -32,6 +32,7 @@ import {AuthMockService} from '@test/services/auth-mock';
 import {MeteringMockService} from '@test/services/metering-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {MeteringReportListComponent} from './component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('MeteringReportListComponent', () => {
   let component: MeteringReportListComponent;
@@ -40,7 +41,7 @@ describe('MeteringReportListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, NoopAnimationsModule, HttpClientTestingModule],
+      imports: [SharedModule, NoopAnimationsModule, HttpClientTestingModule, RouterTestingModule],
       declarations: [MeteringReportListComponent],
       providers: [
         {provide: MeteringService, useClass: MeteringMockService},
