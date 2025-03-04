@@ -35,10 +35,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	eksprovider "k8c.io/dashboard/v2/pkg/provider/cloud/eks"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 
