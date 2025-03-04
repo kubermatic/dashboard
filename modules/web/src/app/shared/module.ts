@@ -97,6 +97,7 @@ import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-too
 import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {SizeFormatterPipe} from '@shared/pipes/size';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ClipboardModule} from 'ngx-clipboard';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
 import {AddProjectDialogComponent} from './components/add-project-dialog/component';
@@ -187,6 +188,7 @@ const modules = [
   PipesModule,
   MonacoEditorModule,
   MatTreeModule,
+  NgxChartsModule,
 ];
 
 const components = [
