@@ -14,7 +14,7 @@
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter';
@@ -29,7 +29,7 @@ describe('DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule],
+      imports: [BrowserModule, NoopAnimationsModule],
       declarations: [DashboardComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

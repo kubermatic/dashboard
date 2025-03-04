@@ -101,7 +101,7 @@
     "zone.js": "0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "^19.1.8",
+    "@angular/build": "^19.2.0",
     "@angular/cli": "19.1.8",
     "@angular/compiler-cli": "19.1.7",
     "@jest/globals": "29.7.0",
@@ -109,8 +109,8 @@
     "@types/js-yaml": "4.0.9",
     "@types/lodash": "4.17.13",
     "@types/node": "22.13.4",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.2.25",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "7.7.0",
     "@typescript-eslint/parser": "8.16.0",
     "browserlist": "1.0.1",
@@ -134,7 +134,7 @@
     "license-compliance": "3.0.1",
     "lint-staged": "15.2.9",
     "ng2-mock-component": "0.2.0",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.3",
     "start-server-and-test": "2.0.5",
     "stream": "0.0.3",
     "stylelint": "16.14.1",

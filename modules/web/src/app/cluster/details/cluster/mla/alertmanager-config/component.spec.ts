@@ -15,7 +15,7 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ProjectService} from '@app/core/services/project';
@@ -55,7 +55,7 @@ describe('AlertmanagerConfigComponent', () => {
     resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [AlertmanagerConfigComponent],
       providers: [
         {provide: MLAService, useValue: mlaMock},

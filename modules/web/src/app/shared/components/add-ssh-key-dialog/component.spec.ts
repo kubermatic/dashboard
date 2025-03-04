@@ -15,7 +15,7 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {CoreModule} from '@core/module';
@@ -36,7 +36,7 @@ describe('AddSshKeyDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: Router, useClass: RouterStub},

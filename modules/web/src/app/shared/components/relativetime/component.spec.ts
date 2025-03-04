@@ -15,12 +15,12 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {SharedModule} from '@shared/module';
-import {RelativeTimeComponent} from './component';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
+import {SharedModule} from '@shared/module';
 import {AppConfigMockService} from '@test/services/app-config-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {RelativeTimeComponent} from './component';
 
 describe('RelativeTimeComponent', () => {
   let fixture: ComponentFixture<RelativeTimeComponent>;
@@ -28,7 +28,7 @@ describe('RelativeTimeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       providers: [
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},

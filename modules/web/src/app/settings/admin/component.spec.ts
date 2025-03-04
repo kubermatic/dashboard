@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {DatacenterService} from '@core/services/datacenter';
 import {HistoryService} from '@core/services/history';
@@ -52,7 +52,7 @@ describe('AdminSettingsComponent', () => {
     opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         AdminSettingsComponent,
         DynamicDatacentersComponent,

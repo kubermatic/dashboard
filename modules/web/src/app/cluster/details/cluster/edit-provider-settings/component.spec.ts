@@ -15,26 +15,26 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {RouterStub} from '@test/services/router-stubs';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {NotificationMockService} from '@test/services/notification-mock';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {NotificationMockService} from '@test/services/notification-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {AlibabaProviderSettingsComponent} from './alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from './aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from './azure-provider-settings/component';
-import {DigitaloceanProviderSettingsComponent} from './digitalocean-provider-settings/component';
 import {EditProviderSettingsComponent} from './component';
+import {DigitaloceanProviderSettingsComponent} from './digitalocean-provider-settings/component';
+import {EquinixProviderSettingsComponent} from './equinix-provider-settings/component';
 import {GCPProviderSettingsComponent} from './gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from './hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from './kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from './openstack-provider-settings/component';
-import {EquinixProviderSettingsComponent} from './equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from './vsphere-provider-settings/component';
 
 describe('EditProviderSettingsComponent', () => {
@@ -43,7 +43,7 @@ describe('EditProviderSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,

@@ -15,7 +15,7 @@
 import {HttpClientModule} from '@angular/common/http';
 import {inject, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ErrorNotificationsInterceptor} from '@core/interceptors';
 import {CoreModule} from '@core/module';
 import {SettingsService} from '@core/services/settings';
@@ -25,7 +25,7 @@ import {SettingsMockService} from '@test/services/settings-mock';
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule, CoreModule],
       providers: [ErrorNotificationsInterceptor, {provide: SettingsService, useClass: SettingsMockService}],
       teardown: {destroyAfterEach: false},
     });

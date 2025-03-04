@@ -15,16 +15,16 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeMember} from '@test/data/member';
-import {fakeProject} from '@test/data/project';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
+import {MemberService} from '@core/services/member';
 import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
-import {EditMemberComponent} from './component';
-import {MemberService} from '@core/services/member';
+import {fakeMember} from '@test/data/member';
+import {fakeProject} from '@test/data/project';
 import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {EditMemberComponent} from './component';
 
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
@@ -36,7 +36,7 @@ describe('EditMemberComponent', () => {
     editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MemberService, useValue: memberServiceMock},

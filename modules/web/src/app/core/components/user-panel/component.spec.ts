@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
@@ -38,7 +38,7 @@ describe('UserPanelComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [UserPanelComponent],
       providers: [
         MatDialog,

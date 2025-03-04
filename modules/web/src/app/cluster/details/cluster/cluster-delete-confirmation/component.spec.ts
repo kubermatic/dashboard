@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -43,7 +43,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [ClusterDeleteConfirmationComponent],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

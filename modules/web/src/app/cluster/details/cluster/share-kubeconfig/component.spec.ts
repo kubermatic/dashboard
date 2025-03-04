@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
@@ -36,7 +36,7 @@ describe('ShareKubeconfigComponent', () => {
   beforeEach(waitForAsync(() => {
     const authMock = {authenticated: jest.fn()};
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [ShareKubeconfigComponent],
       providers: [
         {provide: Auth, useValue: authMock},

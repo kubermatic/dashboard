@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
@@ -31,7 +31,7 @@ describe('ServiceAccountTokenInformationStepComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       providers: [
         {
           provide: MAT_DIALOG_DATA,

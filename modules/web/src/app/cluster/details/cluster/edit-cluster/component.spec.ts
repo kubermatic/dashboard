@@ -16,45 +16,45 @@ import {EventEmitter} from '@angular/core';
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {ProjectService} from '@app/core/services/project';
+import {CoreModule} from '@core/module';
+import {ClusterService} from '@core/services/cluster';
+import {DatacenterService} from '@core/services/datacenter';
+import {FeatureGateService} from '@core/services/feature-gate';
+import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
+import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
+import {ClusterSpec, CNIPlugin, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {SharedModule} from '@shared/module';
 import {doPatchCloudSpecFake} from '@test/data/cloud-spec';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeDigitaloceanDatacenter} from '@test/data/datacenter';
 import {fakeProject} from '@test/data/project';
-import {RouterStub} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
+import {asyncData} from '@test/services/cluster-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
 import {UserMockService} from '@test/services/user-mock';
-import {CoreModule} from '@core/module';
-import {ClusterService} from '@core/services/cluster';
-import {DatacenterService} from '@core/services/datacenter';
-import {UserService} from '@core/services/user';
-import {SettingsService} from '@core/services/settings';
-import {ClusterSpec, CNIPlugin, ProviderSettingsPatch} from '@shared/entity/cluster';
-import {SharedModule} from '@shared/module';
 import {Subject} from 'rxjs';
 import {AlibabaProviderSettingsComponent} from '../edit-provider-settings/alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../edit-provider-settings/aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../edit-provider-settings/azure-provider-settings/component';
-import {DigitaloceanProviderSettingsComponent} from '../edit-provider-settings/digitalocean-provider-settings/component';
 import {EditProviderSettingsComponent} from '../edit-provider-settings/component';
+import {DigitaloceanProviderSettingsComponent} from '../edit-provider-settings/digitalocean-provider-settings/component';
+import {EquinixProviderSettingsComponent} from '../edit-provider-settings/equinix-provider-settings/component';
 import {GCPProviderSettingsComponent} from '../edit-provider-settings/gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from '../edit-provider-settings/hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../edit-provider-settings/kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/openstack-provider-settings/component';
-import {EquinixProviderSettingsComponent} from '../edit-provider-settings/equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/component';
-import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {EditClusterComponent} from './component';
-import {FeatureGateService} from '@core/services/feature-gate';
-import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
-import {asyncData} from '@test/services/cluster-mock';
-import {ProjectService} from '@app/core/services/project';
-import {ProjectMockService} from '@test/services/project-mock';
 
 describe('EditClusterComponent', () => {
   let fixture: ComponentFixture<EditClusterComponent>;
@@ -73,7 +73,7 @@ describe('EditClusterComponent', () => {
     clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [
         EditClusterComponent,
         EditProviderSettingsComponent,

@@ -15,7 +15,7 @@
 import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {NutanixService} from '@app/core/services/provider/nutanix';
 import {VSphereService} from '@app/core/services/provider/vsphere';
@@ -50,7 +50,7 @@ describe('MachineNetworksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       providers: [
         AppConfigService,
         ClusterSpecService,

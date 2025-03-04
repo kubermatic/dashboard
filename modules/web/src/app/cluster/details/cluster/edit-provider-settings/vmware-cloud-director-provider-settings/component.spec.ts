@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
 import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
@@ -40,7 +40,7 @@ describe('VMwareCloudDirectorProviderSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         GCPProviderSettingsComponent,

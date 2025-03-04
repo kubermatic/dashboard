@@ -15,7 +15,7 @@
 import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -56,7 +56,7 @@ describe('MachineDeploymentDetailsComponent', () => {
     dcMock = {getDatacenter: jest.fn()};
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
       providers: [
         {provide: ClusterService, useClass: ClusterMockService},

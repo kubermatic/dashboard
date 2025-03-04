@@ -16,7 +16,7 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -43,7 +43,7 @@ describe('MemberComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, NoopConfirmDialogComponent, MatTabsModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, NoopConfirmDialogComponent, MatTabsModule],
       declarations: [MemberComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

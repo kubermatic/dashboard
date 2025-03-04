@@ -15,22 +15,22 @@
 import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {AddBindingDialogComponent, BindingType} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
+import {CoreModule} from '@core/module';
+import {RBACService} from '@core/services/rbac';
+import {SharedModule} from '@shared/module';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
 import {
-  fakeNamespaceBinding,
   fakeClusterBinding,
   fakeClusterRoleNames,
+  fakeNamespaceBinding,
   fakeNamespaceRoleNames,
   fakeRoleNames,
 } from '@test/data/rbac';
 import {asyncData} from '@test/services/cluster-mock';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {CoreModule} from '@core/module';
-import {RBACService} from '@core/services/rbac';
-import {SharedModule} from '@shared/module';
-import {AddBindingDialogComponent, BindingType} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
 
 describe('AddBindingDialogComponent', () => {
   let fixture: ComponentFixture<AddBindingDialogComponent>;
@@ -50,7 +50,7 @@ describe('AddBindingDialogComponent', () => {
     rbacMock.createNamespaceBinding.mockReturnValue(asyncData(fakeNamespaceBinding()));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [AddBindingDialogComponent],
       providers: [
         {provide: RBACService, useValue: rbacMock},

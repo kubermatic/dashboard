@@ -15,7 +15,7 @@
 import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -44,7 +44,7 @@ describe('ProjectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ProjectModule, SharedModule, CoreModule],
+      imports: [BrowserModule, NoopAnimationsModule, ProjectModule, SharedModule, CoreModule],
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ProjectService, useClass: ProjectMockService},

@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PresetsService} from '@app/core/services/wizard/presets';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -86,7 +86,7 @@ describe('ClusterDetailsComponent', () => {
     mlaMock.ruleGroups.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [
         ClusterDetailsComponent,
         NodeListComponent,

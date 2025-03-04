@@ -14,7 +14,7 @@
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
@@ -31,7 +31,7 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [PageNotFoundComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

@@ -16,7 +16,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {NotificationPanelComponent} from '@core/components/notification-panel/component';
@@ -45,7 +45,7 @@ describe('ProjectSelectorComponent', () => {
       inputs: ['routerLink', 'routerLinkActiveOptions'],
     });
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, MockLink, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, MockLink, NoopAnimationsModule, SharedModule],
       declarations: [NavigationComponent, NotificationPanelComponent, ProjectSelectorComponent, UserPanelComponent],
       providers: [
         {provide: ProjectService, useClass: ProjectMockService},

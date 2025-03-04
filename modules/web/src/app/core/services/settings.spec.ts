@@ -15,7 +15,7 @@
 import {HttpClientModule} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
@@ -28,7 +28,7 @@ describe('SettingsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       providers: [
         SettingsService,
         {provide: AppConfigService, useClass: AppConfigMockService},
