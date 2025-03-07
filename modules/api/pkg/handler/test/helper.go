@@ -48,18 +48,18 @@ import (
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
 	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
-	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
 	"k8c.io/kubermatic/v2/pkg/cni"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
 	"k8c.io/kubermatic/v2/pkg/controller/operator/common"
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	"k8c.io/kubermatic/v2/pkg/semver"
 	"k8c.io/kubermatic/v2/pkg/test/fake"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+	appskubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/apps.kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
+	kubermaticv1helper "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1/helper"
+	"k8c.io/kubermatic/v2/sdk/semver"
 	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
 	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
@@ -353,7 +353,7 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 		return nil, nil, err
 	}
 
-	kubermaticVersions := kubermatic.NewFakeVersions()
+	kubermaticVersions := kubermatic.GetFakeVersions()
 	fUserClusterConnection := &fakeUserClusterConnection{fakeClient}
 	clusterProvider := kubernetes.NewClusterProvider(
 		&restclient.Config{},
@@ -540,9 +540,6 @@ func initTestEndpoint(user apiv1.User, seedsGetter provider.SeedsGetter, kubeObj
 	}
 
 	seedProvider := kubernetes.NewSeedProvider(fakeClient)
-	if err != nil {
-		return nil, nil, err
-	}
 
 	applicationDefinitionProvider := kubernetes.NewApplicationDefinitionProvider(fakeClient)
 
@@ -762,7 +759,7 @@ func GenTestSeed(modifiers ...func(seed *kubermaticv1.Seed)) *kubermaticv1.Seed 
 			},
 		},
 	}
-	seed.SetKubermaticVersion(kubermatic.NewFakeVersions())
+	seed.Status.Versions.Kubermatic = kubermatic.GetFakeVersions().GitVersion
 	for _, modifier := range modifiers {
 		modifier(seed)
 	}

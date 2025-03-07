@@ -22,10 +22,10 @@ import (
 	"fmt"
 	"testing"
 
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
 	"k8c.io/kubermatic/v2/pkg/test/fake"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -75,9 +75,9 @@ func TestRevokeAdminKubeconfig(t *testing.T) {
 				WithObjects(tc.userClusterObjects...).
 				Build()
 
-			versions := kubermatic.NewFakeVersions()
+			versions := kubermatic.GetFakeVersions()
 			seed := &kubermaticv1.Seed{}
-			seed.SetKubermaticVersion(versions)
+			seed.Status.Versions.Kubermatic = versions.GitVersion
 
 			p := &ClusterProvider{
 				client:                  seedClient,
