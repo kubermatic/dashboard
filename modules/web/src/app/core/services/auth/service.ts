@@ -48,15 +48,7 @@ export class Auth {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this._removeFragment();
-        let secure = true;
-        if (location.protocol === 'http:') {
-          secure = false;
-        }
-        this._cookieService.set(this._cookie.token, token, 1, '/', null, secure, 'Lax');
-        // localhost is only served via http, though secure cookie is not possible
-        // following line will only work when domain is localhost
-        this._cookieService.set(this._cookie.token, token, 1, '/', 'localhost', false, 'Lax');
-        this._cookieService.set(this._cookie.token, token, 1, '/', '127.0.0.1', false, 'Lax');
+        this._tokenService.token = token;
       }
       this._previousRouteService.loadRouting();
     }
@@ -81,7 +73,7 @@ export class Auth {
   }
 
   getBearerToken(): string {
-    return this._cookieService.get(this._cookie.token);
+    return this._tokenService.token;
   }
 
   getNonce(): string {
@@ -120,7 +112,8 @@ export class Auth {
       .logout()
       .pipe(
         tap(_ => {
-          this._cookieService.delete(this._cookie.token, '/');
+          this._tokenService.deleteToken();
+          this._cookieService.delete(this._cookie.autoredirect, '/');
           this._cookieService.delete(this._cookie.nonce, '/');
         })
       )
