@@ -20,15 +20,69 @@ import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
 @Injectable()
 export class TokenService {
   private readonly _baseTime = 1000;
+  private readonly _maxCookieSize = 4000;
+  private _token: string;
 
   constructor(
     private readonly _cookieService: CookieService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
   ) {}
 
+  set token(token: string) {
+    this._token = token;
+    this.setTokenCookies(token);
+  }
+
+  get token(): string {
+    return this._token || this.getToken();
+  }
+
   hasExpired(): boolean {
-    const token = this._cookieService.get(this._cookie.token);
+    const token = this.token;
     return token ? moment().isBefore(moment(this.decodeToken(token).exp * this._baseTime)) : false;
+  }
+
+  setTokenCookies(token: string): void {
+    const numOfCookies = Math.ceil(token.length / this._maxCookieSize);
+    if (numOfCookies > 1) {
+      for (let i = 0; i < numOfCookies; i++) {
+        const tokenPart = token.slice(i * this._maxCookieSize, (i + 1) * this._maxCookieSize);
+        const cookieName = `${this._cookie.tokenPrefix}${i + 1}`;
+        this._setTokenCookie(cookieName, tokenPart);
+      }
+    } else {
+      this._setTokenCookie(this._cookie.token, token);
+    }
+  }
+
+  getToken(): string {
+    if (this._cookieService.check(this._cookie.token)) {
+      return this._cookieService.get(this._cookie.token);
+    }
+    let token = '';
+    let count = 1;
+    let tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}-${count}`);
+    while (tokenPart) {
+      token += tokenPart;
+      count++;
+      tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}-${count}`);
+    }
+    return token;
+  }
+
+  deleteToken(): void {
+    if (this._cookieService.check(this._cookie.token)) {
+      this._cookieService.delete(this._cookie.token);
+      return;
+    }
+    let count = 1;
+    let tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    while (tokenPart) {
+      this._cookieService.delete(`${this._cookie.tokenPrefix}${count}`, '/');
+      count++;
+      tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    }
+    this._token = '';
   }
 
   decodeToken(token: string): any {
@@ -62,5 +116,26 @@ export class TokenService {
         throw new Error('Illegal base64url string!');
     }
     return decodeURIComponent(window.atob(output));
+  }
+
+  // private _setSubToken(token: string, count: number, secure: boolean): void {
+
+  //   this._cookieService.set(`${this._cookie.tokenPrefix}-${count}`, token, 1, '/', null, secure, 'Lax');
+  //   // localhost is only served via http, though secure cookie is not possible
+  //   // following line will only work when domain is localhost
+  //   this._cookieService.set(`${this._cookie.tokenPrefix}-${count}`, token, 1, '/', 'localhost', false, 'Lax');
+  //   this._cookieService.set(`${this._cookie.tokenPrefix}-${count}`, token, 1, '/', '127.0.0.1', false, 'Lax');
+  // }
+
+  private _setTokenCookie(cookieName: string, token: string) {
+    let secure = true;
+    if (location.protocol === 'http:') {
+      secure = false;
+    }
+    this._cookieService.set(cookieName, token, 1, '/', null, secure, 'Lax');
+    // localhost is only served via http, though secure cookie is not possible
+    // following line will only work when domain is localhost
+    this._cookieService.set(cookieName, token, 1, '/', 'localhost', false, 'Lax');
+    this._cookieService.set(cookieName, token, 1, '/', '127.0.0.1', false, 'Lax');
   }
 }
