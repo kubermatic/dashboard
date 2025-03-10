@@ -78,7 +78,7 @@
     "@xterm/xterm": "^5.5.0",
     "browserslist": "^4.24.4",
     "buffer": "6.0.3",
-    "core-js": "3.40.0",
+    "core-js": "3.41.0",
     "country-code-lookup": "0.1.3",
     "cron-validator": "1.3.1",
     "flag-icons": "7.3.2",
