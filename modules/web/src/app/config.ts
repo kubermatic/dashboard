@@ -34,10 +34,12 @@ export interface Cookie {
   autoredirect: string;
   nonce: string;
   token: string;
+  tokenPrefix: string;
 }
 
 export const COOKIE: Cookie = {
   autoredirect: 'autoredirect',
   nonce: 'nonce',
   token: 'token',
+  tokenPrefix: 'token-',
 };
