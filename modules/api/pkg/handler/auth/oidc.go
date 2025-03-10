@@ -255,6 +255,35 @@ func (e cookieHeaderBearerTokenExtractor) Extract(r *http.Request) (string, erro
 	return cookie.Value, nil
 }
 
+func NewCookieHeaderBearerMultiTokenExtractor(header string) authtypes.TokenExtractor {
+	return cookieHeaderBearerMultiTokenExtractor{name: header}
+}
+
+type cookieHeaderBearerMultiTokenExtractor struct {
+	name string
+}
+
+func (e cookieHeaderBearerMultiTokenExtractor) Extract(r *http.Request) (string, error) {
+	var finalToken strings.Builder
+
+	for i := 1; ; i++ {
+		tokenName := fmt.Sprintf("%s-%d", e.name, i)
+		cookie, err := r.Cookie(tokenName)
+
+		if err != nil {
+			break
+		}
+
+		finalToken.WriteString(cookie.Value)
+	}
+
+	if finalToken.Len() == 0 {
+		return "", fmt.Errorf("haven't found a Bearer token in the Cookie header %s", e.name)
+	}
+
+	return finalToken.String(), nil
+}
+
 // NewCombinedExtractor returns an token extractor which tries a list of token extractors until it finds a token.
 func NewCombinedExtractor(extractors ...authtypes.TokenExtractor) authtypes.TokenExtractor {
 	return combinedExtractor{extractors: extractors}
