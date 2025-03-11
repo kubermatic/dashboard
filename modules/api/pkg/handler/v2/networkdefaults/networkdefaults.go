@@ -30,10 +30,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	kubermaticprovider "k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 // getNetworkDefaultsReq represents a request for retrieving the cluster networking defaults for the given provider.

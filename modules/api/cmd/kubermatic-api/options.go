@@ -30,12 +30,12 @@ import (
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources/certificates"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 type serverRunOptions struct {
@@ -132,7 +132,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	}
 
 	s.caBundle = cabundle
-	s.versions = kubermatic.NewDefaultVersions()
+	s.versions = kubermatic.GetVersions()
 
 	s.oidcIssuerConfiguration = &authtypes.OIDCConfiguration{
 		URL:                  s.oidcURL,

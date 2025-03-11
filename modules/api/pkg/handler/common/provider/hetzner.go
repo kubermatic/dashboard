@@ -32,8 +32,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/hetzner"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 )
 
 var reStandardSize = regexp.MustCompile("(^cx|^cpx)")
