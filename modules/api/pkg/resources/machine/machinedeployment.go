@@ -69,7 +69,7 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
-	osp := getOperatingSystemProfile(nd, dc)
+	osp := getOperatingSystemProfile(nd)
 	if osp != "" {
 		if md.Annotations == nil {
 			md.Annotations = make(map[string]string)
@@ -316,26 +316,13 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 	return &config, nil
 }
 
-func getOperatingSystemProfile(nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter) string {
-	if dc.Spec.DefaultOperatingSystemProfiles == nil {
-		return ""
+// getOperatingSystemProfile returns the OSP selected while creating the cluster.
+func getOperatingSystemProfile(nd *apiv1.NodeDeployment) string {
+	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp != "" {
+		return osp
 	}
 
-	// OS specifics
-	switch {
-	case nd.Spec.Template.OperatingSystem.Ubuntu != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemUbuntu]
-	case nd.Spec.Template.OperatingSystem.RHEL != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRHEL]
-	case nd.Spec.Template.OperatingSystem.Flatcar != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemFlatcar]
-	case nd.Spec.Template.OperatingSystem.RockyLinux != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRockyLinux]
-	case nd.Spec.Template.OperatingSystem.AmazonLinux != nil:
-		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemAmazonLinux2]
-	default:
-		return ""
-	}
+	return ""
 }
 
 func getProviderOS(config *providerconfig.Config, nd *apiv1.NodeDeployment) error {
