@@ -125,7 +125,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
 
-	policyBindingList, err := provider.List(ctx)
+	policyBindingList, err := provider.ListUnsecured(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
 
-	policyBinding, err := provider.Get(ctx, req.PolicyBindingName, req.Namespace)
+	policyBinding, err := provider.GetUnsecured(ctx, req.PolicyBindingName, req.Namespace)
 
 	if err != nil {
 		return nil, err
@@ -234,7 +234,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		Spec: *policyBindingSpec,
 	}
 
-	created, err := provider.Create(ctx, policyBinding)
+	created, err := provider.CreateUnsecured(ctx, policyBinding)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +287,7 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		Spec: *policyBindingSpec,
 	}
 
-	patchedPolicyBinding, err := provider.Patch(ctx, userInfo, policyBinding, req.Body.ProjectID)
+	patchedPolicyBinding, err := provider.PatchUnsecured(ctx, userInfo, policyBinding, req.Body.ProjectID)
 	if err != nil {
 		return nil, err
 	}
@@ -328,7 +328,7 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return fmt.Errorf("Only admins and project owners can delete policy template")
 	}
 
-	if err := provider.Delete(ctx, userInfo, req.PolicyBindingName, req.Namespace, req.ProjectID); err != nil {
+	if err := provider.DeleteUnsecured(ctx, userInfo, req.PolicyBindingName, req.Namespace, req.ProjectID); err != nil {
 		return err
 	}
 

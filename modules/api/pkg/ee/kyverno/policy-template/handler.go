@@ -103,7 +103,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	if req.ProjectID == "" && !user.IsAdmin {
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
-	policyTemplateList, err := provider.List(ctx)
+	policyTemplateList, err := provider.ListUnsecured(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	if req.ProjectID == "" && !user.IsAdmin {
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
-	policyTemplate, err := provider.Get(ctx, req.PolicyTemplateName)
+	policyTemplate, err := provider.GetUnsecured(ctx, req.PolicyTemplateName)
 
 	if err != nil {
 		return nil, err
@@ -206,7 +206,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		Spec: *policyTemplateSpec,
 	}
 
-	created, err := provider.Create(ctx, policyTemplate)
+	created, err := provider.CreateUnsecured(ctx, policyTemplate)
 	if err != nil {
 		return nil, err
 	}
@@ -254,7 +254,7 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		Spec: req.Spec,
 	}
 
-	patchedPolicyTemplate, err := provider.Patch(ctx, userInfo, policyTemplate)
+	patchedPolicyTemplate, err := provider.PatchUnsecured(ctx, userInfo, policyTemplate)
 	if err != nil {
 		return nil, err
 	}
@@ -296,7 +296,7 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return fmt.Errorf("Only admins and project owners can delete policy template")
 	}
 
-	if err := provider.Delete(ctx, req.PolicyTemplateName, req.ProjectID, userInfo); err != nil {
+	if err := provider.DeleteUnsecured(ctx, req.PolicyTemplateName, req.ProjectID, userInfo); err != nil {
 		return err
 	}
 

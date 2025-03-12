@@ -52,10 +52,10 @@ func backupStorageProviderFactory(_ kubernetes.ImpersonationClient, _ ctrlruntim
 	return nil
 }
 
-func policyTemplateProviderFactory(_ kubernetes.ImpersonationClient, _ ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
+func policyTemplateProviderFactory(_ ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
 	return nil
 }
 
-func policyBindingProviderFactory(_ kubernetes.ImpersonationClient, _ ctrlruntimeclient.Client) provider.PolicyBindingProvider {
+func policyBindingProviderFactory(_ ctrlruntimeclient.Client) provider.PolicyBindingProvider {
 	return nil
 }

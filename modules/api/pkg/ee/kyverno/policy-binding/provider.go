@@ -6,46 +6,39 @@ import (
 	"slices"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type PolicyBindingProvider struct {
-	createMasterImpersonatedClient kubernetes.ImpersonationClient
-	privilegedClient               ctrlruntimeclient.Client
+	privilegedClient ctrlruntimeclient.Client
 }
 
-func NewPolicyBindingProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *PolicyBindingProvider {
+func NewPolicyBindingProvider(privilegedClient ctrlruntimeclient.Client) *PolicyBindingProvider {
 	return &PolicyBindingProvider{
-		createMasterImpersonatedClient: createMasterImpersonatedClient,
-		privilegedClient:               privilegedClient,
+		privilegedClient: privilegedClient,
 	}
 }
 
-func (p *PolicyBindingProvider) Create(ctx context.Context, policyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error) {
-	client := p.privilegedClient
-
-	if err := client.Create(ctx, policyBinding); err != nil {
+func (p *PolicyBindingProvider) CreateUnsecured(ctx context.Context, policyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error) {
+	if err := p.privilegedClient.Create(ctx, policyBinding); err != nil {
 		return nil, err
 	}
 
 	return policyBinding, nil
 }
 
-func (p *PolicyBindingProvider) List(ctx context.Context) (*kubermaticv1.PolicyBindingList, error) {
-	client := p.privilegedClient
-
+func (p *PolicyBindingProvider) ListUnsecured(ctx context.Context) (*kubermaticv1.PolicyBindingList, error) {
 	policyBindingList := &kubermaticv1.PolicyBindingList{}
-	if err := client.List(ctx, policyBindingList); err != nil {
+	if err := p.privilegedClient.List(ctx, policyBindingList); err != nil {
 		return nil, err
 	}
 
 	return policyBindingList, nil
 }
 
-func (p *PolicyBindingProvider) Get(ctx context.Context, policyBindingName string, namespace string) (*kubermaticv1.PolicyBinding, error) {
+func (p *PolicyBindingProvider) GetUnsecured(ctx context.Context, policyBindingName string, namespace string) (*kubermaticv1.PolicyBinding, error) {
 	client := p.privilegedClient.(ctrlruntimeclient.Reader)
 
 	policyBinding := &kubermaticv1.PolicyBinding{}
@@ -55,7 +48,7 @@ func (p *PolicyBindingProvider) Get(ctx context.Context, policyBindingName strin
 	return policyBinding, nil
 }
 
-func (p *PolicyBindingProvider) Patch(ctx context.Context, user *provider.UserInfo, updatedPolicyBinding *kubermaticv1.PolicyBinding, projectID string) (*kubermaticv1.PolicyBinding, error) {
+func (p *PolicyBindingProvider) PatchUnsecured(ctx context.Context, user *provider.UserInfo, updatedPolicyBinding *kubermaticv1.PolicyBinding, projectID string) (*kubermaticv1.PolicyBinding, error) {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyBinding{}
@@ -77,7 +70,7 @@ func (p *PolicyBindingProvider) Patch(ctx context.Context, user *provider.UserIn
 	return updated, nil
 }
 
-func (p *PolicyBindingProvider) Delete(ctx context.Context, user *provider.UserInfo, policyTemplateName string, namespace string, projectID string) error {
+func (p *PolicyBindingProvider) DeleteUnsecured(ctx context.Context, user *provider.UserInfo, policyTemplateName string, namespace string, projectID string) error {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyBinding{}
