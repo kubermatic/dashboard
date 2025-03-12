@@ -29,57 +29,48 @@ import (
 	"fmt"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type PolicyTemplateProvider struct {
-	createMasterImpersonatedClient kubernetes.ImpersonationClient
-	privilegedClient               ctrlruntimeclient.Client
+	privilegedClient ctrlruntimeclient.Client
 }
 
-func NewPolicyTemplateProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *PolicyTemplateProvider {
+func NewPolicyTemplateProvider(privilegedClient ctrlruntimeclient.Client) *PolicyTemplateProvider {
 	return &PolicyTemplateProvider{
-		createMasterImpersonatedClient: createMasterImpersonatedClient,
-		privilegedClient:               privilegedClient,
+		privilegedClient: privilegedClient,
 	}
 }
 
-func (p *PolicyTemplateProvider) Create(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
-	client := p.privilegedClient
-
-	if err := client.Create(ctx, policyTemplate); err != nil {
+func (p *PolicyTemplateProvider) CreateUnsecured(ctx context.Context, policyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
+	if err := p.privilegedClient.Create(ctx, policyTemplate); err != nil {
 		return nil, err
 	}
 
 	return policyTemplate, nil
 }
 
-func (p *PolicyTemplateProvider) List(ctx context.Context) (*kubermaticv1.PolicyTemplateList, error) {
-	client := p.privilegedClient
-
+func (p *PolicyTemplateProvider) ListUnsecured(ctx context.Context) (*kubermaticv1.PolicyTemplateList, error) {
 	policyTemplateList := &kubermaticv1.PolicyTemplateList{}
-	if err := client.List(ctx, policyTemplateList); err != nil {
+	if err := p.privilegedClient.List(ctx, policyTemplateList); err != nil {
 		return nil, err
 	}
 
 	return policyTemplateList, nil
 }
 
-func (p *PolicyTemplateProvider) Get(ctx context.Context, policyTemplateName string) (*kubermaticv1.PolicyTemplate, error) {
-	client := p.privilegedClient
-
+func (p *PolicyTemplateProvider) GetUnsecured(ctx context.Context, policyTemplateName string) (*kubermaticv1.PolicyTemplate, error) {
 	policyTemplate := &kubermaticv1.PolicyTemplate{}
-	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyTemplateName}, policyTemplate); err != nil {
+	if err := p.privilegedClient.Get(ctx, ctrlruntimeclient.ObjectKey{Name: policyTemplateName}, policyTemplate); err != nil {
 		return nil, err
 	}
 
 	return policyTemplate, nil
 }
 
-func (p *PolicyTemplateProvider) Patch(ctx context.Context, user *provider.UserInfo, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
+func (p *PolicyTemplateProvider) PatchUnsecured(ctx context.Context, user *provider.UserInfo, updatedpolicyTemplate *kubermaticv1.PolicyTemplate) (*kubermaticv1.PolicyTemplate, error) {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyTemplate{}
@@ -101,7 +92,7 @@ func (p *PolicyTemplateProvider) Patch(ctx context.Context, user *provider.UserI
 	return updated, nil
 }
 
-func (p *PolicyTemplateProvider) Delete(ctx context.Context, policyTemplateName string, projectID string, user *provider.UserInfo) error {
+func (p *PolicyTemplateProvider) DeleteUnsecured(ctx context.Context, policyTemplateName string, projectID string, user *provider.UserInfo) error {
 	client := p.privilegedClient
 
 	existing := &kubermaticv1.PolicyTemplate{}

@@ -428,9 +428,9 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	backupStorageProvider := backupStorageProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
 
-	policyTemplateProvider := policyTemplateProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
+	policyTemplateProvider := policyTemplateProviderFactory(client)
 
-	policyBindingProvider := policyBindingProviderFactory(defaultImpersonationClient.CreateImpersonatedClient, client)
+	policyBindingProvider := policyBindingProviderFactory(client)
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,

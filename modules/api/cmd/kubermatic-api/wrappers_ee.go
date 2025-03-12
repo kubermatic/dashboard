@@ -53,10 +53,10 @@ func backupStorageProviderFactory(createMasterImpersonatedClient kubernetes.Impe
 	return eeapi.BackupStorageProviderFactory(createMasterImpersonatedClient, privilegedClient)
 }
 
-func policyTemplateProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
-	return eeapi.PolicyTemplateProviderFactory(createMasterImpersonatedClient, privilegedClient)
+func policyTemplateProviderFactory(privilegedClient ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
+	return eeapi.PolicyTemplateProviderFactory(privilegedClient)
 }
 
-func policyBindingProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.PolicyBindingProvider {
-	return eeapi.PolicyBindingProviderFactory(createMasterImpersonatedClient, privilegedClient)
+func policyBindingProviderFactory(privilegedClient ctrlruntimeclient.Client) provider.PolicyBindingProvider {
+	return eeapi.PolicyBindingProviderFactory(privilegedClient)
 }
