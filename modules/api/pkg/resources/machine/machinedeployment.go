@@ -69,11 +69,18 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
-	osp := getOperatingSystemProfile(nd)
-	if osp != "" {
+	// OSP is an optional value passed via annotations with fallback logic:
+	// 1. Use existing non-empty annotation if present
+	// 2. Fall back to datacenter-level defaults when annotation is missing/empty
+	// 3. Allow empty value to let OSM apply its defaulting logic
+	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp == "" {
+		osp = getOperatingSystemProfile(nd, dc)
+
 		if md.Annotations == nil {
 			md.Annotations = make(map[string]string)
 		}
+
+		// Set the osp value (even if empty) to enable OSM handling.
 		md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 	}
 
@@ -316,13 +323,26 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 	return &config, nil
 }
 
-// getOperatingSystemProfile returns the OSP selected while creating the cluster.
-func getOperatingSystemProfile(nd *apiv1.NodeDeployment) string {
-	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp != "" {
-		return osp
+func getOperatingSystemProfile(nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter) string {
+	if dc.Spec.DefaultOperatingSystemProfiles == nil {
+		return ""
 	}
 
-	return ""
+	// OS specifics
+	switch {
+	case nd.Spec.Template.OperatingSystem.Ubuntu != nil:
+		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemUbuntu]
+	case nd.Spec.Template.OperatingSystem.RHEL != nil:
+		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRHEL]
+	case nd.Spec.Template.OperatingSystem.Flatcar != nil:
+		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemFlatcar]
+	case nd.Spec.Template.OperatingSystem.RockyLinux != nil:
+		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemRockyLinux]
+	case nd.Spec.Template.OperatingSystem.AmazonLinux != nil:
+		return dc.Spec.DefaultOperatingSystemProfiles[providerconfig.OperatingSystemAmazonLinux2]
+	default:
+		return ""
+	}
 }
 
 func getProviderOS(config *providerconfig.Config, nd *apiv1.NodeDeployment) error {
