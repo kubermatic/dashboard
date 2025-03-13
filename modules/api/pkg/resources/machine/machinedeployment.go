@@ -75,13 +75,13 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// 3. Allow empty value to let OSM apply its defaulting logic
 	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp == "" {
 		osp = getOperatingSystemProfile(nd, dc)
+		if osp != "" {
+			if md.Annotations == nil {
+				md.Annotations = make(map[string]string)
+			}
 
-		if md.Annotations == nil {
-			md.Annotations = make(map[string]string)
+			md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 		}
-
-		// Set the osp value (even if empty) to enable OSM handling.
-		md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 	}
 
 	md.Namespace = metav1.NamespaceSystem
