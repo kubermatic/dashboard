@@ -27,13 +27,13 @@ import (
 	"go.uber.org/zap"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
+	controllerutil "k8c.io/kubermatic/v2/pkg/controller/util"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
+	kubermaticv1 "k8c.io/kubermatic/v2/sdk/apis/kubermatic/v1"
 	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
@@ -140,7 +140,7 @@ func (p *ClusterProvider) New(ctx context.Context, project *kubermaticv1.Project
 	}
 
 	// regular users are not allowed to update the status subresource, so we use the admin client
-	err = kubermaticv1helper.UpdateClusterStatus(ctx, p.client, newCluster, func(c *kubermaticv1.Cluster) {
+	err = controllerutil.UpdateClusterStatus(ctx, p.client, newCluster, func(c *kubermaticv1.Cluster) {
 		c.Status.UserEmail = userInfo.Email
 	})
 	if err != nil {
@@ -173,7 +173,7 @@ func (p *ClusterProvider) NewUnsecured(ctx context.Context, project *kubermaticv
 		return nil, fmt.Errorf("failed waiting for the new cluster to appear in the cache: %w", err)
 	}
 
-	err = kubermaticv1helper.UpdateClusterStatus(ctx, p.client, newCluster, func(c *kubermaticv1.Cluster) {
+	err = controllerutil.UpdateClusterStatus(ctx, p.client, newCluster, func(c *kubermaticv1.Cluster) {
 		c.Status.UserEmail = userEmail
 	})
 	if err != nil {
