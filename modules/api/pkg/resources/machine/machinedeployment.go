@@ -69,12 +69,19 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
-	osp := getOperatingSystemProfile(nd, dc)
-	if osp != "" {
-		if md.Annotations == nil {
-			md.Annotations = make(map[string]string)
+	// OSP is an optional value passed via annotations with fallback logic:
+	// 1. Use existing non-empty annotation if present
+	// 2. Fall back to datacenter-level defaults when annotation is missing/empty
+	// 3. Allow empty value to let OSM apply its defaulting logic
+	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp == "" {
+		osp = getOperatingSystemProfile(nd, dc)
+		if osp != "" {
+			if md.Annotations == nil {
+				md.Annotations = make(map[string]string)
+			}
+
+			md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 		}
-		md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 	}
 
 	md.Namespace = metav1.NamespaceSystem
