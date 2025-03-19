@@ -39,8 +39,8 @@ func listCBSLBucketObjects(ctx context.Context, request interface{}, userInfoGet
 	return storagelocation.ListCSBLBucketObjects(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
-func createCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.CreateCBSL(ctx, request, userInfoGetter, provider, projectProvider)
+func createCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+	return storagelocation.CreateCBSL(ctx, request, userInfoGetter, provider, projectProvider, settingsProvider)
 }
 
 func deleteCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {

@@ -60,11 +60,12 @@ type BackupStorageProvider struct {
 var _ provider.BackupStorageProvider = &BackupStorageProvider{}
 
 const (
-	ownerReferenceApi        = "kubermatic.k8s.io/v1"
-	ownerReferenceKind       = "ClusterBackupStorageLocation"
-	credentialsSecretKeyName = "cloud-credentials"
-	bslRegion                = "region"
-	bslS3Url                 = "s3Url"
+	ownerReferenceApi             = "kubermatic.k8s.io/v1"
+	ownerReferenceKind            = "ClusterBackupStorageLocation"
+	credentialsSecretKeyName      = "cloud-credentials"
+	bslRegion                     = "region"
+	bslS3Url                      = "s3Url"
+	bslChecksumAlgorithmConfigKey = "checksumAlgorithm"
 )
 
 func NewBackupStorageProvider(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) *BackupStorageProvider {
