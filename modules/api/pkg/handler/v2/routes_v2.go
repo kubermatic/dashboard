@@ -8341,7 +8341,7 @@ func (r Routing) createCBSL() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(storagelocation.CreateCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeCreateCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
+		)(storagelocation.CreateCBSLEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider, r.settingsProvider)), storagelocation.DecodeCreateCBSLReq, handler.EncodeJSON, r.defaultServerOptions()...,
 	)
 }
 
