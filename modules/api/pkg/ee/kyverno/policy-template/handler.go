@@ -73,7 +73,6 @@ type patchPolicyTemplateReq struct {
 	PolicyTemplateName string `json:"template_name"`
 	// in: body
 	// required: true
-	// swagger:ignore
 	Spec kubermaticv1.PolicyTemplateSpec `json:"spec"`
 }
 
