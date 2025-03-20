@@ -2331,8 +2331,7 @@ type BackupStorageLocationList struct {
 // PolicyTemplate defines a reusable blueprint of a Kyverno policy.
 // swagger:model PolicyTemplate
 type PolicyTemplate struct {
-	Name string `json:"name,omitempty"`
-	// swagger:ignore
+	Name string                          `json:"name,omitempty"`
 	Spec kubermaticv1.PolicyTemplateSpec `json:"spec"`
 }
 

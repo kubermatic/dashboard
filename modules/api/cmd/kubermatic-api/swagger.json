@@ -7680,6 +7680,15 @@
             "name": "template_name",
             "in": "path",
             "required": true
+          },
+          {
+            "x-go-name": "Spec",
+            "name": "spec",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PolicyTemplateSpec"
+            }
           }
         ],
         "responses": {
@@ -12565,6 +12574,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12576,13 +12592,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -38790,9 +38799,61 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/PolicyTemplateSpec"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "PolicyTemplateSpec": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "description": "Category is the category of the policy, specified as an annotation in the Kyverno policy\n\n+optional",
+          "type": "string",
+          "x-go-name": "Category"
+        },
+        "default": {
+          "description": "Default determines whether we apply the policy (create policy binding)\n\n+optional",
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
+        "description": {
+          "description": "Description is the description of the policy, specified as an annotation in the Kyverno policy",
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "enforced": {
+          "description": "Enforced indicates whether this policy is mandatory\n\nIf true, this policy is mandatory\nA PolicyBinding referencing it cannot disable it",
+          "type": "boolean",
+          "x-go-name": "Enforced"
+        },
+        "policySpec": {
+          "$ref": "#/definitions/RawExtension"
+        },
+        "projectID": {
+          "description": "ProjectID is the ID of the project for which the policy template is created\n\nRelevant only for project visibility policies\n+optional",
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "severity": {
+          "description": "Severity indicates the severity level of the policy\n\n+optional",
+          "type": "string",
+          "x-go-name": "Severity"
+        },
+        "title": {
+          "description": "Title is the title of the policy, specified as an annotation in the Kyverno policy",
+          "type": "string",
+          "x-go-name": "Title"
+        },
+        "visibility": {
+          "description": "Visibility specifies where the policy is visible.\n\nCan be one of: global, project, or cluster\n+kubebuilder:validation:Enum=global;project;cluster",
+          "type": "string",
+          "x-go-name": "Visibility"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "PolicyType": {
       "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",
