@@ -70,7 +70,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.2
-	k8c.io/kubermatic/v2 v2.25.14-0.20250301202613-f674d4647223
+	k8c.io/kubermatic/v2 v2.25.15-0.20250325122258-85fcff0c1a63
 	k8c.io/operating-system-manager v1.5.2
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.29.1
@@ -129,7 +129,7 @@ require (
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/distribution/distribution/v3 v3.0.0-20230629214736-bac7f02e02a1 // indirect
+	github.com/distribution/distribution/v3 v3.0.0-20230821082436-3e4c4ead4c3a // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.2 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.0 // indirect

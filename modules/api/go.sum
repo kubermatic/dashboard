@@ -248,8 +248,8 @@ github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZm
 github.com/dgryski/trifles v0.0.0-20200323201526-dd97f9abfb48/go.mod h1:if7Fbed8SFyPtHLHbg49SI7NAdJiC5WIA09pe59rfAA=
 github.com/digitalocean/godo v1.108.0 h1:fWyMENvtxpCpva1UbKzOFnyAS04N1FNuBWWfPeTGquQ=
 github.com/digitalocean/godo v1.108.0/go.mod h1:R6EmmWI8CT1+fCtjWY9UCB+L5uufuZH13wk3YhxycCs=
-github.com/distribution/distribution/v3 v3.0.0-20230629214736-bac7f02e02a1 h1:yRwt9RluqBtKyDLRY7J0Cf/TVqvG56vKx2Eyndy8qNQ=
-github.com/distribution/distribution/v3 v3.0.0-20230629214736-bac7f02e02a1/go.mod h1:+fqBJ4vPYo4Uu1ZE4d+bUtTLRXfdSL3NvCZIZ9GHv58=
+github.com/distribution/distribution/v3 v3.0.0-20230821082436-3e4c4ead4c3a h1:vPm/5pvt9fYKVOvYttDa7GmS/go9+FFZGKXLMh8Toxg=
+github.com/distribution/distribution/v3 v3.0.0-20230821082436-3e4c4ead4c3a/go.mod h1:WREzLx07iIFUGvbm6tBoqGt40zOC3whiM1qkcWOMFrs=
 github.com/dnaeon/go-vcr v1.2.0 h1:zHCHvJYTMh1N7xnV7zf1m1GPBF9Ad0Jk/whtQ1663qI=
 github.com/dnaeon/go-vcr v1.2.0/go.mod h1:R4UdLID7HZT3taECzJs4YgbbH6PIGXB6W/sc5OLb6RQ=
 github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96/go.mod h1:Qh8CwZgvJUkLughtfhJv5dyTYa91l1fOUCrgjqmcifM=
@@ -1421,8 +1421,8 @@ honnef.co/go/tools v0.0.1-2020.1.3/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9
 honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
 k8c.io/kubeone v1.7.2 h1:uLH19VEp1S5j4f3UwQP4CLHErJ23UiJM2MnbufNWDgI=
 k8c.io/kubeone v1.7.2/go.mod h1:9v2VFz/+l36cW65kd5YufEYHunbKlJ6P8SBakj05xgM=
-k8c.io/kubermatic/v2 v2.25.14-0.20250301202613-f674d4647223 h1:TdUXyVt7mufzg+/omOqKz49N8mH2ouR/YLsYOklA2i8=
-k8c.io/kubermatic/v2 v2.25.14-0.20250301202613-f674d4647223/go.mod h1:IrLBU1xfnP6GjbQiLN+tkQF8GQD5bu383IWzGLtZZhk=
+k8c.io/kubermatic/v2 v2.25.15-0.20250325122258-85fcff0c1a63 h1:N/RzjS23vNNyaUI2EYIjQf+519s+DuGyJ4WRLhJ5sa8=
+k8c.io/kubermatic/v2 v2.25.15-0.20250325122258-85fcff0c1a63/go.mod h1:JphDXQUu/C5xUaPpn/kfrfmsn3bKBmp0RJSP2FPFQPE=
 k8c.io/operating-system-manager v1.5.2 h1:zzRAGytDUNFlegQW31kUE3dc6tVzAdqZ6IxrbDFugOI=
 k8c.io/operating-system-manager v1.5.2/go.mod h1:h7gVySBkNOVDj2LAW90kDw2nwAROS5k9wVHeK6w/1KQ=
 k8c.io/reconciler v0.5.0 h1:BHpelg1UfI/7oBFctqOq8sX6qzflXpl3SlvHe7e8wak=
