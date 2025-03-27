@@ -36,7 +36,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	"k8c.io/dashboard/v2/pkg/watcher"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"

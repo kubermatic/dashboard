@@ -31,7 +31,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
