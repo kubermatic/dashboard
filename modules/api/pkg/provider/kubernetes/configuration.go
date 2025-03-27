@@ -23,7 +23,7 @@ import (
 	"go.uber.org/zap"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
