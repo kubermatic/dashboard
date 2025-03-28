@@ -27,10 +27,10 @@ import (
 
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	ksemver "k8c.io/kubermatic/sdk/v2/semver"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
-	vcd "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
-	"k8c.io/machine-controller/pkg/userdata/flatcar"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
+	"k8c.io/machine-controller/sdk/cloudprovider/vmwareclouddirector"
+	"k8c.io/machine-controller/sdk/providerconfig"
+	"k8c.io/machine-controller/sdk/userdata/flatcar"
 
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -2604,19 +2604,19 @@ func (spec *OpenNebulaNodeSpec) MarshalJSON() ([]byte, error) {
 // VMwareCloudDirectorNodeSpec VMware Cloud Director node settings
 // swagger:model VMwareCloudDirectorNodeSpec
 type VMwareCloudDirectorNodeSpec struct {
-	CPUs             int                  `json:"cpus"`
-	CPUCores         int                  `json:"cpuCores"`
-	MemoryMB         int                  `json:"memoryMB"`
-	DiskSizeGB       *int64               `json:"diskSizeGB,omitempty"`
-	DiskIOPS         *int64               `json:"diskIOPS,omitempty"`
-	Template         string               `json:"template"`
-	Catalog          string               `json:"catalog"`
-	StorageProfile   string               `json:"storageProfile"`
-	IPAllocationMode vcd.IPAllocationMode `json:"ipAllocationMode,omitempty"`
-	VApp             string               `json:"vapp,omitempty"`
-	Network          string               `json:"network,omitempty"`
-	PlacementPolicy  *string              `json:"placementPolicy,omitempty"`
-	SizingPolicy     *string              `json:"sizingPolicy,omitempty"`
+	CPUs             int                                  `json:"cpus"`
+	CPUCores         int                                  `json:"cpuCores"`
+	MemoryMB         int                                  `json:"memoryMB"`
+	DiskSizeGB       *int64                               `json:"diskSizeGB,omitempty"`
+	DiskIOPS         *int64                               `json:"diskIOPS,omitempty"`
+	Template         string                               `json:"template"`
+	Catalog          string                               `json:"catalog"`
+	StorageProfile   string                               `json:"storageProfile"`
+	IPAllocationMode vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
+	VApp             string                               `json:"vapp,omitempty"`
+	Network          string                               `json:"network,omitempty"`
+	PlacementPolicy  *string                              `json:"placementPolicy,omitempty"`
+	SizingPolicy     *string                              `json:"sizingPolicy,omitempty"`
 	// Additional metadata to set
 	// required: false
 	Metadata map[string]string `json:"metadata,omitempty"`
@@ -2658,20 +2658,20 @@ func (spec *VMwareCloudDirectorNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		CPUs             int                  `json:"cpus"`
-		CPUCores         int                  `json:"cpuCores"`
-		MemoryMB         int                  `json:"memoryMB"`
-		DiskSizeGB       *int64               `json:"diskSizeGB,omitempty"`
-		DiskIOPS         *int64               `json:"diskIOPS,omitempty"`
-		Catalog          string               `json:"catalog"`
-		Template         string               `json:"template"`
-		StorageProfile   string               `json:"storageProfile,omitempty"`
-		IPAllocationMode vcd.IPAllocationMode `json:"ipAllocationMode,omitempty"`
-		VApp             string               `json:"vapp,omitempty"`
-		Network          string               `json:"network,omitempty"`
-		Metadata         map[string]string    `json:"metadata,omitempty"`
-		PlacementPolicy  *string              `json:"placementPolicy,omitempty"`
-		SizingPolicy     *string              `json:"sizingPolicy,omitempty"`
+		CPUs             int                                  `json:"cpus"`
+		CPUCores         int                                  `json:"cpuCores"`
+		MemoryMB         int                                  `json:"memoryMB"`
+		DiskSizeGB       *int64                               `json:"diskSizeGB,omitempty"`
+		DiskIOPS         *int64                               `json:"diskIOPS,omitempty"`
+		Catalog          string                               `json:"catalog"`
+		Template         string                               `json:"template"`
+		StorageProfile   string                               `json:"storageProfile,omitempty"`
+		IPAllocationMode vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
+		VApp             string                               `json:"vapp,omitempty"`
+		Network          string                               `json:"network,omitempty"`
+		Metadata         map[string]string                    `json:"metadata,omitempty"`
+		PlacementPolicy  *string                              `json:"placementPolicy,omitempty"`
+		SizingPolicy     *string                              `json:"sizingPolicy,omitempty"`
 	}{
 		CPUs:             spec.CPUs,
 		CPUCores:         spec.CPUCores,
