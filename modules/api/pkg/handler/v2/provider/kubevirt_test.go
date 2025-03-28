@@ -34,7 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/fake"
-	"k8c.io/machine-controller/pkg/providerconfig/types"
+	"k8c.io/machine-controller/sdk/providerconfig"
 
 	corev1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
@@ -278,7 +278,7 @@ func TestListInstancetypeNoCredentialsEndpoint(t *testing.T) {
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
 						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
-							CredentialsReference: &types.GlobalSecretKeySelector{
+							CredentialsReference: &providerconfig.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
 							},
 						},
@@ -471,7 +471,7 @@ func TestListPreferenceNoCredentialsEndpoint(t *testing.T) {
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
 						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
-							CredentialsReference: &types.GlobalSecretKeySelector{
+							CredentialsReference: &providerconfig.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
 							},
 						},
@@ -658,7 +658,7 @@ func TestListStorageClassNoCredentialsEndpoint(t *testing.T) {
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
 						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
-							CredentialsReference: &types.GlobalSecretKeySelector{
+							CredentialsReference: &providerconfig.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
 							},
 						},
