@@ -32,9 +32,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
-	"k8c.io/machine-controller/pkg/cloudprovider/util"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
+	machinecontrollernet "k8c.io/machine-controller/sdk/net"
+	"k8c.io/machine-controller/sdk/providerconfig"
 	osmresources "k8c.io/operating-system-manager/pkg/controllers/osc/resources"
 
 	corev1 "k8s.io/api/core/v1"
@@ -301,7 +301,7 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 			CIDR:     nd.Spec.Template.Network.CIDR,
 			Gateway:  nd.Spec.Template.Network.Gateway,
 			DNS:      nd.Spec.Template.Network.DNS,
-			IPFamily: util.IPFamily(nd.Spec.Template.Network.IPFamily),
+			IPFamily: machinecontrollernet.IPFamily(nd.Spec.Template.Network.IPFamily),
 		}
 	}
 
@@ -311,13 +311,13 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 
 	switch {
 	case c.IsIPv4Only():
-		config.Network.IPFamily = util.IPFamilyIPv4
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv4
 	case c.IsIPv6Only():
-		config.Network.IPFamily = util.IPFamilyIPv6
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv6
 	case c.IsDualStack():
-		config.Network.IPFamily = util.IPFamilyIPv4IPv6
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv4IPv6
 	default:
-		config.Network.IPFamily = util.IPFamilyUnspecified
+		config.Network.IPFamily = machinecontrollernet.IPFamilyUnspecified
 	}
 
 	return &config, nil
