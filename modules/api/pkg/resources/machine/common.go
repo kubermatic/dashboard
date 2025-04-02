@@ -597,7 +597,6 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 			Instancetype: nodeSpec.Cloud.Kubevirt.Instancetype,
 			Preference:   nodeSpec.Cloud.Kubevirt.Preference,
 			Template: kubevirt.Template{
-				CPUs:   providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs},
 				Memory: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.Memory},
 				PrimaryDisk: kubevirt.PrimaryDisk{
 					Disk: kubevirt.Disk{
@@ -617,6 +616,18 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 				Key:  providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.NodeAffinityPreset.Key},
 			},
 		},
+	}
+
+	if nodeSpec.Cloud.Kubevirt.Instancetype == nil {
+		if dc.Spec.Kubevirt.EnableDedicatedCPUs {
+			vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
+			if err != nil {
+				return nil, err
+			}
+			config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
+		} else {
+			config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
+		}
 	}
 
 	var subnet string

@@ -352,7 +352,6 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 
 			Instancetype:                config.VirtualMachine.Instancetype,
 			Preference:                  config.VirtualMachine.Preference,
-			CPUs:                        config.VirtualMachine.Template.CPUs.Value,
 			Memory:                      config.VirtualMachine.Template.Memory.Value,
 			PrimaryDiskOSImage:          config.VirtualMachine.Template.PrimaryDisk.OsImage.Value,
 			PrimaryDiskStorageClassName: config.VirtualMachine.Template.PrimaryDisk.StorageClassName.Value,
@@ -361,6 +360,11 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 				Type: config.Affinity.NodeAffinityPreset.Type.Value,
 				Key:  config.Affinity.NodeAffinityPreset.Key.Value,
 			},
+		}
+		if config.VirtualMachine.Template.VCPUs.Cores != 0 {
+			cloudSpec.Kubevirt.CPUs = string(config.VirtualMachine.Template.VCPUs.Cores)
+		} else {
+			cloudSpec.Kubevirt.CPUs = config.VirtualMachine.Template.CPUs.Value
 		}
 		cloudSpec.Kubevirt.SecondaryDisks = make([]apiv1.SecondaryDisks, 0, len(config.VirtualMachine.Template.SecondaryDisks))
 		for _, sd := range config.VirtualMachine.Template.SecondaryDisks {
