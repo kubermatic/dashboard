@@ -97,6 +97,14 @@ linters:
         - pkg: github.com/Masterminds/semver/v3
           alias: semverlib
       no-unaliased: true
+    staticcheck:
+      checks:
+        - all
+        # disable "error strings should not be capitalized":
+        # but often errors start with k8s kinds and it's annoying to rephrase every error
+        - '-ST1005'
+        # very opinionated naming conventions
+        - '-ST1003'
   exclusions:
     generated: lax
     presets:

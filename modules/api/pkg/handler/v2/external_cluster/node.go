@@ -971,7 +971,7 @@ func patchMD(mdToPatch, patchedMD *apiv2.ExternalClusterMachineDeployment, patch
 	if err != nil {
 		return utilerrors.NewBadRequest("cannot decode patched md: %v", err)
 	}
-	patchedMD.NodeDeployment.Status.Replicas = patchedMD.Spec.Replicas
+	patchedMD.Status.Replicas = patchedMD.Spec.Replicas
 	return nil
 }
 

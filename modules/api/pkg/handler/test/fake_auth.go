@@ -159,11 +159,11 @@ func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.To
 	}, nil
 }
 
-func (p *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
+func (o *IssuerVerifier) OIDCConfig() *authtypes.OIDCConfiguration {
 	return &authtypes.OIDCConfiguration{
-		URL:          p.issuer,
-		ClientID:     p.clientID,
-		ClientSecret: p.clientSecret,
+		URL:          o.issuer,
+		ClientID:     o.clientID,
+		ClientSecret: o.clientSecret,
 		SecureCookie: securecookie.New([]byte(""), nil),
 	}
 }

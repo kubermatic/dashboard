@@ -38,7 +38,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	restclient "k8s.io/client-go/rest"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 	"k8s.io/client-go/tools/record"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -239,7 +238,7 @@ type ClusterProvider interface {
 	// GetAdminClientConfigForUserCluster returns a client config
 	//
 	// Note that the client you will get has admin privileges.
-	GetAdminClientConfigForUserCluster(ctx context.Context, c *kubermaticv1.Cluster) (*restclient.Config, error)
+	GetAdminClientConfigForUserCluster(ctx context.Context, c *kubermaticv1.Cluster) (*rest.Config, error)
 
 	// GetClientForUserCluster returns a client to interact with all resources in the given cluster
 	//

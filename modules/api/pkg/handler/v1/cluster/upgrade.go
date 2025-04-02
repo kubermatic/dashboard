@@ -73,7 +73,7 @@ func GetNodeUpgrades(configGetter provider.KubermaticConfigurationGetter) endpoi
 		if !ok {
 			return nil, utilerrors.NewWrongMethod(request, NodeUpgradesReq{})
 		}
-		err := req.TypeReq.Validate()
+		err := req.Validate()
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("%v", err)
 		}

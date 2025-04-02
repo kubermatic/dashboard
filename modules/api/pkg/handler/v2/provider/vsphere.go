@@ -439,9 +439,9 @@ type vSphereTagsNoCredentialsReq struct {
 }
 
 // GetSeedCluster returns the SeedCluster object.
-func (req vSphereTagsNoCredentialsReq) GetSeedCluster() apiv1.SeedCluster {
+func (r vSphereTagsNoCredentialsReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		ClusterID: req.ClusterID,
+		ClusterID: r.ClusterID,
 	}
 }
 

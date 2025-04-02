@@ -31,7 +31,6 @@ import (
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/handler/v2/networkdefaults"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticprovider "k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -55,9 +54,9 @@ type getDefaultClusterReq struct {
 }
 
 // GetSeedCluster returns the SeedCluster object.
-func (req getDefaultClusterReq) GetSeedCluster() apiv1.SeedCluster {
+func (r getDefaultClusterReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		SeedName: req.seedName,
+		SeedName: r.seedName,
 	}
 }
 
@@ -92,8 +91,8 @@ func DecodeGetDefaultClusterReq(ctx context.Context, r *http.Request) (interface
 
 // GetDefaultClusterEndpoint returns the default generated cluster spec for the given provider.
 func GetDefaultClusterEndpoint(
-	seedsGetter kubermaticprovider.SeedsGetter,
-	userInfoGetter kubermaticprovider.UserInfoGetter,
+	seedsGetter provider.SeedsGetter,
+	userInfoGetter provider.UserInfoGetter,
 	configGetter provider.KubermaticConfigurationGetter,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
@@ -127,13 +126,13 @@ func GetDefaultClusterEndpoint(
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		seed, _, err := kubermaticprovider.DatacenterFromSeedMap(adminUserInfo, seedsGetter, req.DC)
+		seed, _, err := provider.DatacenterFromSeedMap(adminUserInfo, seedsGetter, req.DC)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
 		// 3. Retrieve default Cluster Template.
-		privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(kubermaticprovider.PrivilegedClusterProvider)
+		privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
 		seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
 
 		defaultingTemplate, err := defaulting.GetDefaultingClusterTemplate(ctx, seedClient, seed)
