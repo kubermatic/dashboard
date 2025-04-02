@@ -101,6 +101,10 @@ export class KubeVirtTopologySpreadConstraint {
   whenUnsatisfiable: KubeVirtTopologyWhenUnsatisfiable;
 }
 
+export class KubeVirtVCPUs {
+  cores: number;
+}
+
 export enum KubeVirtAffinityPreset {
   Hard = 'hard',
   Soft = 'soft',

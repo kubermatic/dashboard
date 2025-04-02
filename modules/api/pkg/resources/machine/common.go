@@ -618,16 +618,14 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 		},
 	}
 
-	if nodeSpec.Cloud.Kubevirt.Instancetype == nil {
-		if dc.Spec.Kubevirt.EnableDedicatedCPUs {
-			vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
-			if err != nil {
-				return nil, err
-			}
-			config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
-		} else {
-			config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
+	if dc.Spec.Kubevirt.EnableDedicatedCPUs {
+		vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
+		if err != nil {
+			return nil, err
 		}
+		config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
+	} else {
+		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 	}
 
 	var subnet string

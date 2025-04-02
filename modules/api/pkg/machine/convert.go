@@ -362,7 +362,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			},
 		}
 		if config.VirtualMachine.Template.VCPUs.Cores != 0 {
-			cloudSpec.Kubevirt.CPUs = string(config.VirtualMachine.Template.VCPUs.Cores)
+			cloudSpec.Kubevirt.CPUs = strconv.Itoa(config.VirtualMachine.Template.VCPUs.Cores)
 		} else {
 			cloudSpec.Kubevirt.CPUs = config.VirtualMachine.Template.CPUs.Value
 		}
