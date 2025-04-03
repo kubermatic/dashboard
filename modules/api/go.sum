@@ -403,7 +403,6 @@ github.com/google/pprof v0.0.0-20241029153458-d1b30febd7db h1:097atOisP2aRj7vFgY
 github.com/google/pprof v0.0.0-20241029153458-d1b30febd7db/go.mod h1:vavhavw2zAxS5dIdcRluK6cSGGPlZynqzFM8NdvU144=
 github.com/google/s2a-go v0.1.8 h1:zZDs9gcbt9ZPLV0ndSyQk6Kacx2g/X+SKYovpnz3SMM=
 github.com/google/s2a-go v0.1.8/go.mod h1:6iNWHTpQ+nfNRN5E00MSdfDwVesa8hhS32PhPO8deJA=
-github.com/google/uuid v1.0.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/uuid v1.1.2/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
@@ -632,8 +631,6 @@ github.com/ovn-org/libovsdb v0.7.0 h1:owk3MHhaJ0gs0dWvTBtj7lPGEzbcyPrDYerEFqPXO/
 github.com/ovn-org/libovsdb v0.7.0/go.mod h1:dJbxEaalQl83nn904K32FaMjlH/qOObZ0bj4ejQ78AI=
 github.com/packethost/packngo v0.31.0 h1:LLH90ardhULWbagBIc3I3nl2uU75io0a7AwY6hyi0S4=
 github.com/packethost/packngo v0.31.0/go.mod h1:Io6VJqzkiqmIEQbpOjeIw9v8q9PfcTEq8TEY/tMQsfw=
-github.com/pborman/uuid v1.2.1 h1:+ZZIw58t/ozdjRaXh/3awHfmWRbzYxJoAdNJxe/3pvw=
-github.com/pborman/uuid v1.2.1/go.mod h1:X/NO0urCmaxf9VXbdlT7C2Yzkj2IKimNn4k+gtPdI/k=
 github.com/pelletier/go-toml/v2 v2.2.3 h1:YmeHyLY8mFWbdkNWwpr+qIL2bEqT0o95WSdkNHvL12M=
 github.com/pelletier/go-toml/v2 v2.2.3/go.mod h1:MfCQTFTvCcUyyvvwm1+G6H/jORL20Xlb6rzQu9GuUkc=
 github.com/peterhellberg/link v1.2.0 h1:UA5pg3Gp/E0F2WdX7GERiNrPQrM1K6CVJUUWfHa4t6c=
@@ -728,8 +725,6 @@ github.com/tidwall/match v1.1.1 h1:+Ho715JplO36QYgwN9PGYNhgZvoUSc9X2c80KVTi+GA=
 github.com/tidwall/match v1.1.1/go.mod h1:eRSPERbgtNPcGhD8UCthc6PmLEQXEWd3PRB5JTxsfmM=
 github.com/tidwall/pretty v1.2.0 h1:RWIZEg2iJ8/g6fDDYzMpobmaoGh5OLl4AXtGUGPcqCs=
 github.com/tidwall/pretty v1.2.0/go.mod h1:ITEVvHYasfjBbM0u2Pg8T2nJnzm8xPwvNhhsoaGGjNU=
-github.com/tinkerbell/tink v0.12.1 h1:5ZCiGY1te59Qz/udFlzjh1UwKtmFBPOgo/LSK0J9JyY=
-github.com/tinkerbell/tink v0.12.1/go.mod h1:H4w56sG0rMsEgHB3rBpW8/6KWKAvvAQWYHuZFpURkoU=
 github.com/toqueteos/webbrowser v1.2.0 h1:tVP/gpK69Fx+qMJKsLE7TD8LuGWPnEV71wBN9rrstGQ=
 github.com/toqueteos/webbrowser v1.2.0/go.mod h1:XWoZq4cyp9WeUeak7w7LXRUQf1F1ATJMir8RTqb4ayM=
 github.com/uber/jaeger-client-go v2.30.0+incompatible h1:D6wyKGCecFaSRUpo8lCVbaOOb6ThwMmTEbhRwtKR97o=
@@ -1149,8 +1144,8 @@ k8c.io/kubermatic/sdk/v2 v2.0.0-20250327140600-03329c8bfc7f h1:65ygWBdap21NG/Xcc
 k8c.io/kubermatic/sdk/v2 v2.0.0-20250327140600-03329c8bfc7f/go.mod h1:l7qjgKo7qLvJmgfT3FDvAx6ShLNpjdW7ew67v07SyUg=
 k8c.io/kubermatic/v2 v2.27.1-0.20250327140600-03329c8bfc7f h1:5J0Hirf+iLnonNJ1LQkFtfxOSDqxRVx2xmCK7R8dDxY=
 k8c.io/kubermatic/v2 v2.27.1-0.20250327140600-03329c8bfc7f/go.mod h1:cbZ2HwK5RxqEL8B7tSa+RvTwIB7lIvtfHC+6Xw1Aa4M=
-k8c.io/machine-controller v1.61.0 h1:d7KVD2CDG2K76ujSt5RPLUP3BCNDcioObdM1N0BUNlc=
-k8c.io/machine-controller v1.61.0/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
+k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c h1:wXd2RGtpYLf0lVobWqhFV6JE5U84sRawuWhuy6kgaXk=
+k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c/go.mod h1:j9SHRLpzFj5wOMlhdPJL+ub08P8rvVvQOFtg7JaLYb4=
 k8c.io/machine-controller/sdk v0.0.0-20250314150330-99a4aa5532ca h1:xEIfHlkbWcxy52ivPqVqhOEcYOMMvdWX3EERTmUXpsA=
 k8c.io/machine-controller/sdk v0.0.0-20250314150330-99a4aa5532ca/go.mod h1:/5eWTMcfa7mTQUQoqziaalViiHSVzqzy3fXjejT1qLg=
 k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108 h1:xiKGpydY/jsBVD5XT3zvAxW2pPKEtgcv526zdVFzbuw=

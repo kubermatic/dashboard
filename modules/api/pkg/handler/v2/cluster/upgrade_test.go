@@ -34,7 +34,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	k8csemver "k8c.io/kubermatic/sdk/v2/semver"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

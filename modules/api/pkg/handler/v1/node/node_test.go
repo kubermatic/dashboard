@@ -29,7 +29,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
