@@ -668,7 +668,7 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
 
-      if (!_.isEmpty(this._initialData.vcpus)) {
+      if (this._initialData.vcpus?.cores) {
         this.form.get(Controls.CPUs).setValue(this._initialData.vcpus.cores);
       } else {
         this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
