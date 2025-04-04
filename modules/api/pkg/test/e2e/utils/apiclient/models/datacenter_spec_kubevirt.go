@@ -31,6 +31,10 @@ type DatacenterSpecKubevirt struct {
 	// policy selected with DNSPolicy.
 	DNSPolicy string `json:"dnsPolicy,omitempty"`
 
+	// Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.
+	// Defaults to false.
+	EnableDedicatedCPUs bool `json:"enableDedicatedCpus,omitempty"`
+
 	// Optional: EnableDefaultNetworkPolicies enables deployment of default network policies like cluster isolation.
 	// Defaults to true.
 	EnableDefaultNetworkPolicies bool `json:"enableDefaultNetworkPolicies,omitempty"`

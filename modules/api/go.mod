@@ -70,10 +70,10 @@ require (
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/sdk/v2 v2.0.0-20250327140600-03329c8bfc7f
+	k8c.io/kubermatic/sdk/v2 v2.0.0-20250401220605-1b53dfa8d2c9
 	k8c.io/kubermatic/v2 v2.27.1-0.20250327140600-03329c8bfc7f
 	k8c.io/machine-controller/sdk v0.0.0-20250314150330-99a4aa5532ca
-	k8c.io/operating-system-manager v1.6.1-0.20241118134103-5db575f65108
+	k8c.io/operating-system-manager v1.6.1-0.20250319150447-d4fb655fcfaa
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.3
 	k8s.io/apiextensions-apiserver v0.31.3
@@ -283,11 +283,9 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.2.1 // indirect
 	k8s.io/component-base v0.31.3 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
-	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kube-aggregator v0.31.3 // indirect
 	k8s.io/kube-openapi v0.31.2 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
