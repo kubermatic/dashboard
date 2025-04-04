@@ -63,9 +63,9 @@ func ConvertInternalEventToExternal(event corev1.Event) apiv1.Event {
 
 	return apiv1.Event{
 		ObjectMeta: apiv1.ObjectMeta{
-			ID:                string(event.ObjectMeta.UID),
-			Name:              event.ObjectMeta.Name,
-			CreationTimestamp: apiv1.NewTime(event.ObjectMeta.CreationTimestamp.Time),
+			ID:                string(event.UID),
+			Name:              event.Name,
+			CreationTimestamp: apiv1.NewTime(event.CreationTimestamp.Time),
 		},
 		Message: event.Message,
 		Type:    event.Type,

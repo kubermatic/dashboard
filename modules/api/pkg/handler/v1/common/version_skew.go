@@ -94,7 +94,7 @@ func getKubeletVersions(ctx context.Context, client ctrlruntimeclient.Client) ([
 	// first let's go through the legacy non-MD nodes
 	for _, m := range machineList.Items {
 		// Only list Machines that are not controlled, i.e. by Machine Set.
-		if len(m.ObjectMeta.OwnerReferences) == 0 {
+		if len(m.OwnerReferences) == 0 {
 			ver := strings.TrimSpace(m.Spec.Versions.Kubelet)
 			kubeletVersionsSet[ver] = true
 		}

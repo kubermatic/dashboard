@@ -244,7 +244,7 @@ func (p *ExternalClusterProvider) GetVersion(ctx context.Context, masterClient c
 		return nil, err
 	}
 
-	version, err := client.DiscoveryClient.ServerVersion()
+	version, err := client.ServerVersion()
 	if err != nil {
 		return nil, err
 	}

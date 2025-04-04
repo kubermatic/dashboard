@@ -51,29 +51,29 @@ type proxyHandler struct {
 	projectProvider           provider.ProjectProvider
 }
 
-func (this *proxyHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
-	this.middlewares = middlewares
-	return this
+func (h *proxyHandler) Middlewares(middlewares ...endpoint.Middleware) Handler {
+	h.middlewares = middlewares
+	return h
 }
 
-func (this *proxyHandler) RequestFuncs(middlewares ...httptransport.RequestFunc) Handler {
-	this.requestFuncs = middlewares
-	return this
+func (h *proxyHandler) RequestFuncs(middlewares ...httptransport.RequestFunc) Handler {
+	h.requestFuncs = middlewares
+	return h
 }
 
-func (this *proxyHandler) Options(options ...httptransport.ServerOption) Handler {
-	this.options = options
-	return this
+func (h *proxyHandler) Options(options ...httptransport.ServerOption) Handler {
+	h.options = options
+	return h
 }
 
-func (this *proxyHandler) Install(router *mux.Router) {
+func (h *proxyHandler) Install(router *mux.Router) {
 	router.Methods(http.MethodGet).
 		PathPrefix("/projects/{project_id}/clusters/{cluster_id}/dashboard/proxy").
 		Queries("token", "{token}").
-		Handler(this.storeTokenHandler())
+		Handler(h.storeTokenHandler())
 
 	router.PathPrefix("/projects/{project_id}/clusters/{cluster_id}/dashboard/proxy").
-		Handler(this)
+		Handler(h)
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/dashboard/proxy
@@ -97,32 +97,32 @@ func (this *proxyHandler) Install(router *mux.Router) {
 //
 //	Responses:
 //		default: empty
-func (this *proxyHandler) storeTokenHandler() http.Handler {
+func (h *proxyHandler) storeTokenHandler() http.Handler {
 	return httptransport.NewServer(
-		this.chain(this.storeToken),
-		this.decodeProxyRequest,
-		this.encodeProxyResponse,
-		this.options...,
+		h.chain(h.storeToken),
+		h.decodeProxyRequest,
+		h.encodeProxyResponse,
+		h.options...,
 	)
 }
 
-func (this *proxyHandler) decodeProxyRequest(_ context.Context, r *http.Request) (interface{}, error) {
+func (h *proxyHandler) decodeProxyRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	return NewProxyRequest(r), nil
 }
 
-func (this *proxyHandler) encodeProxyResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+func (h *proxyHandler) encodeProxyResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	proxyResponse := response.(*ProxyResponse)
 
 	http.SetCookie(w, &http.Cookie{Name: tokenCookieName, Value: proxyResponse.token})
-	http.Redirect(w, proxyResponse.Request, proxyResponse.Request.URL.Path, http.StatusSeeOther)
+	http.Redirect(w, proxyResponse.Request, proxyResponse.URL.Path, http.StatusSeeOther)
 	return nil
 }
 
-func (this *proxyHandler) storeToken(ctx context.Context, request interface{}) (interface{}, error) {
+func (h *proxyHandler) storeToken(ctx context.Context, request interface{}) (interface{}, error) {
 	proxyRequest := request.(*ProxyRequest)
 
 	// Make sure the global settings have the Dashboard integration enabled.
-	if err := isEnabled(ctx, this.settingsProvider); err != nil {
+	if err := isEnabled(ctx, h.settingsProvider); err != nil {
 		return nil, err
 	}
 
@@ -144,24 +144,24 @@ func (this *proxyHandler) storeToken(ctx context.Context, request interface{}) (
 //
 //	Responses:
 //		default: empty
-func (this *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	proxyRequest := NewProxyRequest(r)
 
-	for _, requestFuncs := range this.requestFuncs {
+	for _, requestFuncs := range h.requestFuncs {
 		ctx = requestFuncs(ctx, r)
 	}
 
-	if _, err := this.chain(this.proxy(w, r))(ctx, proxyRequest); err != nil {
-		common.WriteHTTPError(this.logger, w, err)
+	if _, err := h.chain(h.proxy(w, r))(ctx, proxyRequest); err != nil {
+		common.WriteHTTPError(h.logger, w, err)
 		return
 	}
 }
 
-func (this *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) endpoint.Endpoint {
+func (h *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) endpoint.Endpoint {
 	return func(ctx context.Context, _ interface{}) (interface{}, error) {
 		// Make sure the global settings have the Dashboard integration enabled.
-		if err := isEnabled(ctx, this.settingsProvider); err != nil {
+		if err := isEnabled(ctx, h.settingsProvider); err != nil {
 			return nil, err
 		}
 
@@ -171,7 +171,7 @@ func (this *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) en
 			return nil, nil
 		}
 
-		token, err := this.getCookie(request, tokenCookieName)
+		token, err := h.getCookie(request, tokenCookieName)
 		if err != nil {
 			return nil, fmt.Errorf("required cookie %s missing: %w", tokenCookieName, err)
 		}
@@ -181,12 +181,12 @@ func (this *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) en
 			return nil, err
 		}
 
-		userCluster, clusterProvider, err := cluster.GetClusterProviderFromRequest(ctx, clusterRequest, this.projectProvider, this.privilegedProjectProvider, this.userInfoGetter)
+		userCluster, clusterProvider, err := cluster.GetClusterProviderFromRequest(ctx, clusterRequest, h.projectProvider, h.privilegedProjectProvider, h.userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
 
-		proxyURL, closeChan, err := this.getProxyURL(ctx, clusterProvider, userCluster)
+		proxyURL, closeChan, err := h.getProxyURL(ctx, clusterProvider, userCluster)
 		if err != nil {
 			return nil, err
 		}
@@ -207,7 +207,7 @@ func (this *proxyHandler) proxy(w http.ResponseWriter, request *http.Request) en
 	}
 }
 
-func (this *proxyHandler) getCookie(request *http.Request, name string) (string, error) {
+func (h *proxyHandler) getCookie(request *http.Request, name string) (string, error) {
 	cookie, err := request.Cookie(name)
 	if err != nil {
 		return "", err
@@ -216,7 +216,7 @@ func (this *proxyHandler) getCookie(request *http.Request, name string) (string,
 	return cookie.Value, nil
 }
 
-func (this *proxyHandler) getProxyURL(ctx context.Context, clusterProvider *kubernetes.ClusterProvider, userCluster *kubermaticv1.Cluster) (proxyURL *url.URL, closeChan chan struct{}, err error) {
+func (h *proxyHandler) getProxyURL(ctx context.Context, clusterProvider *kubernetes.ClusterProvider, userCluster *kubermaticv1.Cluster) (proxyURL *url.URL, closeChan chan struct{}, err error) {
 	// Ideally we would cache these to not open a port for every single request
 	portforwarder, closeChan, err := common.GetPortForwarder(
 		ctx,
@@ -229,7 +229,7 @@ func (this *proxyHandler) getProxyURL(ctx context.Context, clusterProvider *kube
 		return proxyURL, closeChan, fmt.Errorf("failed to get portforwarder for console: %w", err)
 	}
 
-	if err = common.ForwardPort(this.logger, portforwarder); err != nil {
+	if err = common.ForwardPort(h.logger, portforwarder); err != nil {
 		return
 	}
 
