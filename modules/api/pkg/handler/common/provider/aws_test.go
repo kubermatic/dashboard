@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"k8c.io/dashboard/v2/pkg/handler/common/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 )
 
 func TestAWSSizeARMFiltering(t *testing.T) {

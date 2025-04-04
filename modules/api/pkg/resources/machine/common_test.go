@@ -23,10 +23,10 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	anexia "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia"
-	anexiatypes "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia/types"
-	providerconfigtypes "k8c.io/machine-controller/pkg/providerconfig/types"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/machine-controller/sdk/cloudprovider/anexia"
+	anexiaprovider "k8c.io/machine-controller/sdk/cloudprovider/anexia"
+	"k8c.io/machine-controller/sdk/providerconfig"
 
 	"k8s.io/utils/ptr"
 )
@@ -41,7 +41,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 	tests := []struct {
 		name           string
 		anexiaNodeSpec apiv1.AnexiaNodeSpec
-		wantRawConf    *anexiatypes.RawConfig
+		wantRawConf    *anexia.RawConfig
 		wantErr        error
 	}{
 		{
@@ -53,13 +53,13 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				Memory:     4096,
 				DiskSize:   ptr.To[int64](80),
 			},
-			wantRawConf: &anexiatypes.RawConfig{
-				VlanID:     providerconfigtypes.ConfigVarString{Value: vlanID},
-				TemplateID: providerconfigtypes.ConfigVarString{Value: templateID},
-				LocationID: providerconfigtypes.ConfigVarString{Value: locationID},
+			wantRawConf: &anexia.RawConfig{
+				VlanID:     providerconfig.ConfigVarString{Value: vlanID},
+				TemplateID: providerconfig.ConfigVarString{Value: templateID},
+				LocationID: providerconfig.ConfigVarString{Value: locationID},
 				CPUs:       4,
 				Memory:     4096,
-				Disks: []anexiatypes.RawDisk{
+				Disks: []anexia.RawDisk{
 					{Size: 80},
 				},
 			},
@@ -79,17 +79,17 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 					},
 				},
 			},
-			wantRawConf: &anexiatypes.RawConfig{
-				VlanID:     providerconfigtypes.ConfigVarString{Value: vlanID},
-				TemplateID: providerconfigtypes.ConfigVarString{Value: templateID},
-				LocationID: providerconfigtypes.ConfigVarString{Value: locationID},
+			wantRawConf: &anexia.RawConfig{
+				VlanID:     providerconfig.ConfigVarString{Value: vlanID},
+				TemplateID: providerconfig.ConfigVarString{Value: templateID},
+				LocationID: providerconfig.ConfigVarString{Value: locationID},
 				CPUs:       4,
 				Memory:     4096,
 				DiskSize:   0,
-				Disks: []anexiatypes.RawDisk{
+				Disks: []anexia.RawDisk{
 					{
 						Size:            80,
-						PerformanceType: providerconfigtypes.ConfigVarString{Value: "ENT2"},
+						PerformanceType: providerconfig.ConfigVarString{Value: "ENT2"},
 					},
 				},
 			},
@@ -111,7 +111,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 				},
 			},
 			wantRawConf: nil,
-			wantErr:     anexia.ErrConfigDiskSizeAndDisks,
+			wantErr:     anexiaprovider.ErrConfigDiskSizeAndDisks,
 		},
 	}
 
@@ -139,7 +139,7 @@ func TestGetAnexiaProviderSpec(t *testing.T) {
 			} else {
 				assert.NotNil(t, result)
 
-				resultRawConfig := anexiatypes.RawConfig{}
+				resultRawConfig := anexia.RawConfig{}
 				err := json.Unmarshal(result.Raw, &resultRawConfig)
 				assert.Nil(t, err)
 

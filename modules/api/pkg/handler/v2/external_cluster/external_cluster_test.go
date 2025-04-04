@@ -28,7 +28,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	externalcluster "k8c.io/dashboard/v2/pkg/handler/v2/external_cluster"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
@@ -288,6 +288,8 @@ func TestDeleteClusterEndpoint(t *testing.T) {
 }
 
 func TestListClusters(t *testing.T) {
+	clusterVersion := *defaulting.DefaultKubernetesVersioning.Default
+
 	t.Parallel()
 	testcases := []struct {
 		Name                   string
@@ -306,7 +308,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: clusterVersion,
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -316,7 +318,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: clusterVersion,
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -339,7 +341,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: clusterVersion,
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -349,7 +351,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: clusterVersion,
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},

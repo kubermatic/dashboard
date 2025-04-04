@@ -17,6 +17,7 @@ import {
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
   KubeVirtTopologySpreadConstraint,
+  KubeVirtVCPUs,
 } from '@shared/entity/provider/kubevirt';
 import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmware-cloud-director';
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
@@ -239,6 +240,7 @@ export class KubeVirtNodeSpec {
   subnet?: string;
   flavorProfile: string;
   cpus?: string;
+  vcpus?: KubeVirtVCPUs;
   memory?: string;
   primaryDiskOSImage: string;
   primaryDiskStorageClassName: string;

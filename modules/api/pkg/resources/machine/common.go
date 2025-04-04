@@ -27,31 +27,30 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
-	alibaba "k8c.io/machine-controller/pkg/cloudprovider/provider/alibaba/types"
-	anexiaProvider "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia"
-	anexia "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia/types"
-	aws "k8c.io/machine-controller/pkg/cloudprovider/provider/aws/types"
-	azure "k8c.io/machine-controller/pkg/cloudprovider/provider/azure/types"
-	"k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
-	tink "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/plugins/tinkerbell/types"
-	baremetal "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/types"
-	digitalocean "k8c.io/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
-	equinixmetal "k8c.io/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
-	gce "k8c.io/machine-controller/pkg/cloudprovider/provider/gce/types"
-	hetzner "k8c.io/machine-controller/pkg/cloudprovider/provider/hetzner/types"
-	kubevirt "k8c.io/machine-controller/pkg/cloudprovider/provider/kubevirt/types"
-	nutanix "k8c.io/machine-controller/pkg/cloudprovider/provider/nutanix/types"
-	openstack "k8c.io/machine-controller/pkg/cloudprovider/provider/openstack/types"
-	vcd "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	vsphere "k8c.io/machine-controller/pkg/cloudprovider/provider/vsphere/types"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
-	"k8c.io/machine-controller/pkg/userdata/amzn2"
-	"k8c.io/machine-controller/pkg/userdata/flatcar"
-	"k8c.io/machine-controller/pkg/userdata/rhel"
-	"k8c.io/machine-controller/pkg/userdata/rockylinux"
-	"k8c.io/machine-controller/pkg/userdata/ubuntu"
+	alibaba "k8c.io/machine-controller/sdk/cloudprovider/alibaba"
+	anexia "k8c.io/machine-controller/sdk/cloudprovider/anexia"
+	aws "k8c.io/machine-controller/sdk/cloudprovider/aws"
+	azure "k8c.io/machine-controller/sdk/cloudprovider/azure"
+	baremetal "k8c.io/machine-controller/sdk/cloudprovider/baremetal"
+	"k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins"
+	tink "k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins/tinkerbell"
+	digitalocean "k8c.io/machine-controller/sdk/cloudprovider/digitalocean"
+	equinixmetal "k8c.io/machine-controller/sdk/cloudprovider/equinixmetal"
+	gce "k8c.io/machine-controller/sdk/cloudprovider/gce"
+	hetzner "k8c.io/machine-controller/sdk/cloudprovider/hetzner"
+	kubevirt "k8c.io/machine-controller/sdk/cloudprovider/kubevirt"
+	nutanix "k8c.io/machine-controller/sdk/cloudprovider/nutanix"
+	openstack "k8c.io/machine-controller/sdk/cloudprovider/openstack"
+	vcd "k8c.io/machine-controller/sdk/cloudprovider/vmwareclouddirector"
+	vsphere "k8c.io/machine-controller/sdk/cloudprovider/vsphere"
+	providerconfig "k8c.io/machine-controller/sdk/providerconfig"
+	"k8c.io/machine-controller/sdk/userdata/amzn2"
+	"k8c.io/machine-controller/sdk/userdata/flatcar"
+	"k8c.io/machine-controller/sdk/userdata/rhel"
+	"k8c.io/machine-controller/sdk/userdata/rockylinux"
+	"k8c.io/machine-controller/sdk/userdata/ubuntu"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -598,7 +597,6 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 			Instancetype: nodeSpec.Cloud.Kubevirt.Instancetype,
 			Preference:   nodeSpec.Cloud.Kubevirt.Preference,
 			Template: kubevirt.Template{
-				CPUs:   providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs},
 				Memory: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.Memory},
 				PrimaryDisk: kubevirt.PrimaryDisk{
 					Disk: kubevirt.Disk{
@@ -618,6 +616,16 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 				Key:  providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.NodeAffinityPreset.Key},
 			},
 		},
+	}
+
+	if dc.Spec.Kubevirt.EnableDedicatedCPUs {
+		vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
+		if err != nil {
+			return nil, err
+		}
+		config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
+	} else {
+		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 	}
 
 	var subnet string
@@ -740,7 +748,7 @@ func GetAnexiaProviderConfig(_ *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, d
 	}
 
 	if nodeSpec.Cloud.Anexia.DiskSize != nil && len(nodeSpec.Cloud.Anexia.Disks) > 0 {
-		return nil, anexiaProvider.ErrConfigDiskSizeAndDisks
+		return nil, anexia.ErrConfigDiskSizeAndDisks
 	}
 
 	return config, nil

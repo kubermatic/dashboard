@@ -27,10 +27,10 @@ import (
 	"github.com/gorilla/mux"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/handler/common"
+	v1common "k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -51,7 +51,7 @@ type listPresetsReq struct {
 // listProjectPresetsReq represents a request for a list of presets in a specific project
 // swagger:parameters listProjectPresets
 type listProjectPresetsReq struct {
-	common.ProjectReq
+	v1common.ProjectReq
 	listPresetsReq
 }
 
@@ -68,14 +68,14 @@ func DecodeListProjectPresets(ctx context.Context, r *http.Request) (interface{}
 		return nil, err
 	}
 
-	projectReq, err := common.DecodeProjectRequest(ctx, r)
+	projectReq, err := v1common.DecodeProjectRequest(ctx, r)
 	if err != nil {
 		return nil, err
 	}
 
 	return listProjectPresetsReq{
 		listPresetsReq: listReq.(listPresetsReq),
-		ProjectReq:     projectReq.(common.ProjectReq),
+		ProjectReq:     projectReq.(v1common.ProjectReq),
 	}, nil
 }
 
@@ -89,7 +89,7 @@ func ListPresets(presetProvider provider.PresetProvider, userInfoGetter provider
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
@@ -127,7 +127,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 
 		userInfo, err := userInfoGetter(ctx, req.ProjectID)
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if req.Name != "" {
@@ -215,7 +215,7 @@ func UpdatePresetStatus(presetProvider provider.PresetProvider, userInfoGetter p
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -233,11 +233,11 @@ func UpdatePresetStatus(presetProvider provider.PresetProvider, userInfoGetter p
 			return nil, err
 		}
 
-		if hasProvider, _ := kubermaticv1helper.HasProvider(preset, kubermaticv1.ProviderType(req.Provider)); !hasProvider {
+		if hasProvider, _ := common.PresetHasProvider(preset, kubermaticv1.ProviderType(req.Provider)); !hasProvider {
 			return nil, utilerrors.New(http.StatusConflict, fmt.Sprintf("trying to update preset with missing provider configuration for: %s", req.Provider))
 		}
 
-		kubermaticv1helper.SetProviderEnabled(preset, kubermaticv1.ProviderType(req.Provider), req.Body.Enabled)
+		common.SetPresetProviderEnabled(preset, kubermaticv1.ProviderType(req.Provider), req.Body.Enabled)
 		_, err = presetProvider.UpdatePreset(ctx, preset)
 		return nil, err
 	}
@@ -258,7 +258,7 @@ type listProviderPresetsReq struct {
 // listProjectProviderPresetsReq represents a request for a list of presets for a specific project
 // swagger:parameters listProjectProviderPresets
 type listProjectProviderPresetsReq struct {
-	common.ProjectReq
+	v1common.ProjectReq
 	listProviderPresetsReq
 }
 
@@ -298,14 +298,14 @@ func DecodeListProjectProviderPresets(ctx context.Context, r *http.Request) (int
 		return nil, err
 	}
 
-	projectReq, err := common.DecodeProjectRequest(ctx, r)
+	projectReq, err := v1common.DecodeProjectRequest(ctx, r)
 	if err != nil {
 		return nil, err
 	}
 
 	return listProjectProviderPresetsReq{
 		listProviderPresetsReq: listReq.(listProviderPresetsReq),
-		ProjectReq:             projectReq.(common.ProjectReq),
+		ProjectReq:             projectReq.(v1common.ProjectReq),
 	}, nil
 }
 
@@ -323,7 +323,7 @@ func ListProviderPresets(presetProvider provider.PresetProvider, userInfoGetter 
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
@@ -339,7 +339,7 @@ func ListProviderPresets(presetProvider provider.PresetProvider, userInfoGetter 
 			}
 
 			providerType := kubermaticv1.ProviderType(req.ProviderName)
-			providerPreset := kubermaticv1helper.GetProviderPreset(&preset, providerType)
+			providerPreset := common.GetProviderPreset(&preset, providerType)
 
 			// Preset does not contain requested provider configuration
 			if providerPreset == nil {
@@ -378,7 +378,7 @@ func ListProjectProviderPresets(presetProvider provider.PresetProvider, userInfo
 
 		userInfo, err := userInfoGetter(ctx, req.ProjectID)
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
@@ -389,7 +389,7 @@ func ListProjectProviderPresets(presetProvider provider.PresetProvider, userInfo
 
 		for _, preset := range presets {
 			providerType := kubermaticv1.ProviderType(req.ProviderName)
-			providerPreset := kubermaticv1helper.GetProviderPreset(&preset, providerType)
+			providerPreset := common.GetProviderPreset(&preset, providerType)
 
 			// Preset does not contain requested provider configuration
 			if providerPreset == nil {
@@ -439,11 +439,11 @@ func (r createPresetReq) Validate() error {
 		return fmt.Errorf("preset name cannot be empty")
 	}
 
-	if hasProvider, _ := kubermaticv1helper.HasProvider(convertAPIToInternalPreset(r.Body), kubermaticv1.ProviderType(r.ProviderName)); !hasProvider {
+	if hasProvider, _ := common.PresetHasProvider(convertAPIToInternalPreset(r.Body), kubermaticv1.ProviderType(r.ProviderName)); !hasProvider {
 		return fmt.Errorf("missing provider configuration for: %s", r.ProviderName)
 	}
 
-	err := kubermaticv1helper.Validate(convertAPIToInternalPreset(r.Body), kubermaticv1.ProviderType(r.ProviderName))
+	err := common.ValidatePreset(convertAPIToInternalPreset(r.Body), kubermaticv1.ProviderType(r.ProviderName))
 	if err != nil {
 		return err
 	}
@@ -453,7 +453,7 @@ func (r createPresetReq) Validate() error {
 			continue
 		}
 
-		if hasProvider, _ := kubermaticv1helper.HasProvider(convertAPIToInternalPreset(r.Body), providerType); hasProvider {
+		if hasProvider, _ := common.PresetHasProvider(convertAPIToInternalPreset(r.Body), providerType); hasProvider {
 			return fmt.Errorf("found unexpected provider configuration for: %s", providerType)
 		}
 	}
@@ -487,7 +487,7 @@ func CreatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -503,7 +503,7 @@ func CreatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 			return nil, err
 		}
 
-		if hasProvider, _ := kubermaticv1helper.HasProvider(preset, kubermaticv1.ProviderType(req.ProviderName)); hasProvider {
+		if hasProvider, _ := common.PresetHasProvider(preset, kubermaticv1.ProviderType(req.ProviderName)); hasProvider {
 			return nil, utilerrors.New(http.StatusConflict, fmt.Sprintf("%s provider configuration already exists for preset %s", req.ProviderName, preset.Name))
 		}
 
@@ -514,7 +514,7 @@ func CreatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 		}
 
 		providerType := kubermaticv1.ProviderType(req.ProviderName)
-		enabled := preset.Spec.IsEnabled() && kubermaticv1helper.IsProviderEnabled(preset, providerType)
+		enabled := preset.Spec.IsEnabled() && common.IsPresetProviderEnabled(preset, providerType)
 		return newAPIPreset(preset, enabled), nil
 	}
 }
@@ -556,7 +556,7 @@ func UpdatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -575,7 +575,7 @@ func UpdatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 		}
 
 		providerType := kubermaticv1.ProviderType(req.ProviderName)
-		enabled := preset.Spec.IsEnabled() && kubermaticv1helper.IsProviderEnabled(preset, providerType)
+		enabled := preset.Spec.IsEnabled() && common.IsPresetProviderEnabled(preset, providerType)
 		return newAPIPreset(preset, enabled), nil
 	}
 }
@@ -619,7 +619,7 @@ func DeletePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -692,7 +692,7 @@ func DeletePresetProvider(presetProvider provider.PresetProvider, userInfoGetter
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -709,11 +709,11 @@ func DeletePresetProvider(presetProvider provider.PresetProvider, userInfoGetter
 		}
 
 		providerName := kubermaticv1.ProviderType(req.ProviderName)
-		if hasProvider, _ := kubermaticv1helper.HasProvider(preset, providerName); !hasProvider {
+		if hasProvider, _ := common.PresetHasProvider(preset, providerName); !hasProvider {
 			return nil, utilerrors.NewNotFound("Preset", fmt.Sprintf("preset %s does not contain %s provider", req.PresetName, req.ProviderName))
 		}
 
-		preset = kubermaticv1helper.RemoveProvider(preset, providerName)
+		preset = common.RemovePresetProvider(preset, providerName)
 		_, err = presetProvider.UpdatePreset(ctx, preset)
 
 		return preset, err
@@ -772,7 +772,7 @@ func DeleteProviderPreset(presetProvider provider.PresetProvider, userInfoGetter
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if !userInfo.IsAdmin {
@@ -789,9 +789,9 @@ func DeleteProviderPreset(presetProvider provider.PresetProvider, userInfoGetter
 		}
 
 		// remove provider from preset
-		preset = kubermaticv1helper.RemoveProvider(preset, kubermaticv1.ProviderType(req.ProviderName))
+		preset = common.RemovePresetProvider(preset, kubermaticv1.ProviderType(req.ProviderName))
 
-		existingProviders := kubermaticv1helper.GetProviderList(preset)
+		existingProviders := common.GetPresetProviderList(preset)
 		if len(existingProviders) > 0 {
 			// Case: Remove provider from the preset
 			preset, err = presetProvider.UpdatePreset(ctx, preset)
@@ -849,7 +849,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.PresetName)
@@ -857,7 +857,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			if apierrors.IsNotFound(err) {
 				return nil, utilerrors.NewBadRequest("preset was not found.")
 			}
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		stats := apiv2.PresetStats{}
@@ -868,7 +868,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 		}
 		presetLabelRequirement, err := labels.NewRequirement(kubermaticv1.IsCredentialPresetLabelKey, selection.Equals, []string{"true"})
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		for seedName, seed := range seeds {
@@ -885,7 +885,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			}
 			clusters, err := clusterProvider.ListAll(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 			if err != nil {
-				return nil, common.KubernetesErrorToHTTPError(err)
+				return nil, v1common.KubernetesErrorToHTTPError(err)
 			}
 			for _, cluster := range clusters.Items {
 				if cluster.Annotations != nil {
@@ -898,7 +898,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 
 		templates, err := clusterTemplateProvider.ListALL(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 		for _, template := range templates {
 			if template.Annotations != nil {
@@ -913,7 +913,7 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 }
 
 func mergePresets(oldPreset *kubermaticv1.Preset, newPreset *kubermaticv1.Preset, providerType kubermaticv1.ProviderType) *kubermaticv1.Preset {
-	oldPreset = kubermaticv1helper.OverrideProvider(oldPreset, providerType, newPreset)
+	oldPreset = common.OverridePresetProvider(oldPreset, providerType, newPreset)
 	oldPreset.Spec.RequiredEmails = newPreset.Spec.RequiredEmails
 	return oldPreset
 }
@@ -921,10 +921,10 @@ func mergePresets(oldPreset *kubermaticv1.Preset, newPreset *kubermaticv1.Preset
 func newAPIPreset(preset *kubermaticv1.Preset, enabled bool) apiv2.Preset {
 	providers := make([]apiv2.PresetProvider, 0)
 	for _, providerType := range kubermaticv1.SupportedProviders {
-		if hasProvider, _ := kubermaticv1helper.HasProvider(preset, providerType); hasProvider {
+		if hasProvider, _ := common.PresetHasProvider(preset, providerType); hasProvider {
 			provider := apiv2.PresetProvider{
 				Name:    providerType,
-				Enabled: kubermaticv1helper.IsProviderEnabled(preset, providerType),
+				Enabled: common.IsPresetProviderEnabled(preset, providerType),
 			}
 			if providerType == kubermaticv1.VMwareCloudDirectorCloudProvider && preset.Spec.VMwareCloudDirector != nil {
 				if preset.Spec.VMwareCloudDirector.OVDCNetworks != nil {

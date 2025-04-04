@@ -34,7 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/hetzner"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/alibaba"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/anexia"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/nutanix"
@@ -42,7 +42,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vsphere"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
+	"k8c.io/machine-controller/sdk/providerconfig"
 	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
