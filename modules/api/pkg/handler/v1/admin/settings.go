@@ -165,6 +165,7 @@ func convertAPISettingsToSettingsSpec(settings *apiv2.GlobalSettings) (kubermati
 		StaticLabels:                     settings.StaticLabels,
 		Annotations:                      settings.Annotations,
 		Announcements:                    settings.Announcements,
+		ClusterBackupOptions:             settings.ClusterBackupOptions,
 	}
 
 	addDefaultAnnotations(&s.Annotations)
@@ -217,6 +218,7 @@ func ConvertCRDSettingsToAPISettingsSpec(settings *kubermaticv1.SettingSpec) api
 		StaticLabels:                     settings.StaticLabels,
 		Annotations:                      settings.Annotations,
 		Announcements:                    settings.Announcements,
+		ClusterBackupOptions:             settings.ClusterBackupOptions,
 	}
 
 	addDefaultAnnotations(&s.Annotations)

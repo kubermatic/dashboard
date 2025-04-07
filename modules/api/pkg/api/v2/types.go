@@ -2235,6 +2235,10 @@ type GlobalSettings struct {
 
 	// The announcement feature allows administrators to broadcast important messages to all users.
 	Announcements map[string]kubermaticv1.Announcement `json:"announcements,omitempty"`
+
+	// ClusterBackupOptions are the settings for cluster backup functionality.
+	// +optional
+	ClusterBackupOptions *kubermaticv1.ClusterBackupOptions `json:"clusterBackupOptions,omitempty"`
 }
 
 // ApplicationSettings defines common settings for applications
