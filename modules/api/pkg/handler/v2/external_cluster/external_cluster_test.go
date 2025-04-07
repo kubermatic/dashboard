@@ -306,7 +306,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: "v1.31.7",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -316,7 +316,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: "v1.31.7",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -339,7 +339,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterAbcID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: "v1.31.7",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
@@ -349,7 +349,7 @@ func TestListClusters(t *testing.T) {
 						ID:   "clusterDefID",
 					},
 					Spec: apiv1.ClusterSpec{
-						Version: "v1.31.1",
+						Version: "v1.31.7",
 					},
 					Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: test.GenDefaultProject().Name},
 				},
