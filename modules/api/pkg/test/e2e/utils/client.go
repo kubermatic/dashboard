@@ -968,7 +968,6 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv2.GlobalSettin
 			Enabled:  gSettings.CleanupOptions.Enabled,
 			Enforced: gSettings.CleanupOptions.Enforced,
 		},
-		ClusterBackupOptions:  gSettings.ClusterBackupOptions,
 		DefaultNodeCount:      gSettings.DefaultNodeCount,
 		DisplayDemoInfo:       gSettings.DisplayDemoInfo,
 		DisplayAPIDocs:        gSettings.DisplayAPIDocs,
