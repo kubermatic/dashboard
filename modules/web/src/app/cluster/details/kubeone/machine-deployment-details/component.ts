@@ -40,6 +40,7 @@ import {major, minor} from 'semver';
   selector: 'km-kubeone-machine-deployment-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: ExternalMachineDeployment;

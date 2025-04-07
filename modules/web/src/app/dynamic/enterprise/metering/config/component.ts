@@ -33,6 +33,7 @@ import {take} from 'rxjs';
   selector: 'km-metering-config',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class MeteringConfigComponent {
   @Input() config: MeteringConfiguration;

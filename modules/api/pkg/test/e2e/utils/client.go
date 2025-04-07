@@ -42,8 +42,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/tokens"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/users"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
 
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/util/wait"

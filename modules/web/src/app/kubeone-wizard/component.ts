@@ -36,6 +36,7 @@ import {KubeOneWizardStep, StepRegistry, steps} from './config';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class KubeOneWizardComponent implements OnInit, OnDestroy {
   readonly StepRegistry = StepRegistry;

@@ -30,11 +30,11 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/validation"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
-	"k8c.io/machine-controller/pkg/cloudprovider/util"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
+	machinecontrollernet "k8c.io/machine-controller/sdk/net"
+	"k8c.io/machine-controller/sdk/providerconfig"
 	osmresources "k8c.io/operating-system-manager/pkg/controllers/osc/resources"
 
 	corev1 "k8s.io/api/core/v1"
@@ -69,12 +69,19 @@ func Deployment(ctx context.Context, c *kubermaticv1.Cluster, nd *apiv1.NodeDepl
 	// Add Annotations to Machine Deployment
 	md.Annotations = nd.Annotations
 
-	osp := getOperatingSystemProfile(nd, dc)
-	if osp != "" {
-		if md.Annotations == nil {
-			md.Annotations = make(map[string]string)
+	// OSP is an optional value passed via annotations with fallback logic:
+	// 1. Use existing non-empty annotation if present
+	// 2. Fall back to datacenter-level defaults when annotation is missing/empty
+	// 3. Allow empty value to let OSM apply its defaulting logic
+	if osp := nd.Annotations[osmresources.MachineDeploymentOSPAnnotation]; osp == "" {
+		osp = getOperatingSystemProfile(nd, dc)
+		if osp != "" {
+			if md.Annotations == nil {
+				md.Annotations = make(map[string]string)
+			}
+
+			md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 		}
-		md.Annotations[osmresources.MachineDeploymentOSPAnnotation] = osp
 	}
 
 	md.Namespace = metav1.NamespaceSystem
@@ -294,7 +301,7 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 			CIDR:     nd.Spec.Template.Network.CIDR,
 			Gateway:  nd.Spec.Template.Network.Gateway,
 			DNS:      nd.Spec.Template.Network.DNS,
-			IPFamily: util.IPFamily(nd.Spec.Template.Network.IPFamily),
+			IPFamily: machinecontrollernet.IPFamily(nd.Spec.Template.Network.IPFamily),
 		}
 	}
 
@@ -304,13 +311,13 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 
 	switch {
 	case c.IsIPv4Only():
-		config.Network.IPFamily = util.IPFamilyIPv4
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv4
 	case c.IsIPv6Only():
-		config.Network.IPFamily = util.IPFamilyIPv6
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv6
 	case c.IsDualStack():
-		config.Network.IPFamily = util.IPFamilyIPv4IPv6
+		config.Network.IPFamily = machinecontrollernet.IPFamilyIPv4IPv6
 	default:
-		config.Network.IPFamily = util.IPFamilyUnspecified
+		config.Network.IPFamily = machinecontrollernet.IPFamilyUnspecified
 	}
 
 	return &config, nil

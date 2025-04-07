@@ -15,7 +15,7 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {Injector, NgModule, Optional, SkipSelf} from '@angular/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {HelpPanelComponent} from '@core/components/help-panel/component';
@@ -174,7 +174,7 @@ const interceptors = [
 @NgModule({
   declarations: [...components],
   exports: [...components],
-  imports: [CommonModule, RouterModule, SharedModule, GlobalModule, BrowserAnimationsModule],
+  imports: [CommonModule, RouterModule, SharedModule, GlobalModule, NoopAnimationsModule],
   providers: [
     ...services,
     ...interceptors,

@@ -24,6 +24,7 @@ export enum ChipType {
   selector: 'km-chip',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ChipComponent {
   @Input() text: string;

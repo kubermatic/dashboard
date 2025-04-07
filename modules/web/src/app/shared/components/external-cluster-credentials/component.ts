@@ -27,6 +27,7 @@ enum Controls {
   selector: 'km-external-cluster-credentials-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class CredentialsStepComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

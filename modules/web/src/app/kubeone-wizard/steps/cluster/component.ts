@@ -47,6 +47,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeOneClusterStepComponent extends StepBase implements OnInit {
   readonly Controls = Controls;

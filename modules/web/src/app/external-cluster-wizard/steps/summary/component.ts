@@ -22,6 +22,7 @@ import {StepRegistry} from '../../config';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class ExternalClusterSummaryStepComponent implements OnInit {
   readonly ExternalClusterProvider = ExternalClusterProvider;

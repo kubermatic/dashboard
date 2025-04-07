@@ -26,6 +26,7 @@ enum Control {
 @Component({
   selector: 'km-digitalocean-provider-settings',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _tokenLength = 64;

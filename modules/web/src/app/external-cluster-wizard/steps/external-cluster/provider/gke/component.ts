@@ -131,6 +131,7 @@ export enum Zones {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class GKEClusterSettingsComponent
   extends StepBase

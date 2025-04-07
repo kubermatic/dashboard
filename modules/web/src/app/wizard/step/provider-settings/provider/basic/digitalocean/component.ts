@@ -41,6 +41,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class DigitalOceanProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

@@ -13,9 +13,11 @@
 // limitations under the License.
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
   preset: 'jest-preset-angular',
-  roots: ['src'],
+  roots: ['<rootDir>/src'],
+  setupFiles: ['jest-canvas-mock'],
   setupFilesAfterEnv: ['<rootDir>/src/test.base.ts'],
   moduleNameMapper: {
     '^@app/(.*)$': '<rootDir>/src/app/$1',
@@ -24,6 +26,6 @@ module.exports = {
     '^@assets/(.*)$': '<rootDir>/src/assets/$1',
     '^@environments/(.*)$': '<rootDir>/src/environments/$1',
     '^@test/(.*)$': '<rootDir>/src/test/$1',
+    '^d3-(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js' // d3 is being used by ngx-charts
   },
-  transformIgnorePatterns: ['node_modules/?!(@swimlane)/'],
 };

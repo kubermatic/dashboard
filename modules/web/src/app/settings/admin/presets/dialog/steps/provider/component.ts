@@ -45,6 +45,7 @@ const UNSUPPORTED_PROVIDERS = [NodeProvider.BRINGYOUROWN];
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class PresetProviderStepComponent extends BaseFormValidator implements OnInit {
   @Input() existingProviders: PresetProvider[] = [];

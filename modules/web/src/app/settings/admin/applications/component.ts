@@ -30,6 +30,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-applications',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ApplicationsComponent implements OnInit, OnChanges {
   applications: ApplicationDefinition[] = [];

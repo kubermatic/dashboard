@@ -33,6 +33,7 @@ export class Auth {
   private readonly _clientId = 'kubermatic';
   private readonly _defaultScope = 'openid email profile groups';
   private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
+  private readonly _maxCookieSize = 4000;
 
   constructor(
     private readonly _cookieService: CookieService,
@@ -48,17 +49,12 @@ export class Auth {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this._removeFragment();
-        let secure = true;
-        if (location.protocol === 'http:') {
-          secure = false;
-        }
-        this._cookieService.set(this._cookie.token, token, 1, '/', null, secure, 'Lax');
-        // localhost is only served via http, though secure cookie is not possible
-        // following line will only work when domain is localhost
-        this._cookieService.set(this._cookie.token, token, 1, '/', 'localhost', false, 'Lax');
-        this._cookieService.set(this._cookie.token, token, 1, '/', '127.0.0.1', false, 'Lax');
+        this._tokenService.token = token;
+        this._setTokenCookies(token);
       }
       this._previousRouteService.loadRouting();
+    } else {
+      this._tokenService.token = this._getToken();
     }
   }
 
@@ -81,7 +77,7 @@ export class Auth {
   }
 
   getBearerToken(): string {
-    return this._cookieService.get(this._cookie.token);
+    return this._cookieService.get(this._cookie.token) || this._tokenService.token;
   }
 
   getNonce(): string {
@@ -120,7 +116,7 @@ export class Auth {
       .logout()
       .pipe(
         tap(_ => {
-          this._cookieService.delete(this._cookie.token, '/');
+          this._deleteToken();
           this._cookieService.delete(this._cookie.nonce, '/');
         })
       )
@@ -165,6 +161,49 @@ export class Auth {
     }
   }
 
+  private _setTokenCookies(token: string): void {
+    const numOfCookies = Math.ceil(token.length / this._maxCookieSize);
+    if (numOfCookies > 1) {
+      for (let i = 0; i < numOfCookies; i++) {
+        const tokenPart = token.slice(i * this._maxCookieSize, (i + 1) * this._maxCookieSize);
+        const cookieName = `${this._cookie.tokenPrefix}${i + 1}`;
+        this._setCookie(cookieName, tokenPart);
+      }
+    } else {
+      this._setCookie(this._cookie.token, token);
+    }
+  }
+
+  private _getToken(): string {
+    if (this._cookieService.check(this._cookie.token)) {
+      return this._cookieService.get(this._cookie.token);
+    }
+    let token = '';
+    let count = 1;
+    let tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    while (tokenPart) {
+      token += tokenPart;
+      count++;
+      tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    }
+    return token;
+  }
+
+  private _deleteToken(): void {
+    if (this._cookieService.check(this._cookie.token)) {
+      this._cookieService.delete(this._cookie.token);
+      return;
+    }
+    let count = 1;
+    let tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    while (tokenPart) {
+      this._cookieService.delete(`${this._cookie.tokenPrefix}${count}`, '/');
+      count++;
+      tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
+    }
+    this._tokenService.token = null;
+  }
+
   private _getTokenFromQuery(): string {
     const results = new RegExp('[?&#]id_token=([^&#]*)').exec(window.location.href);
     return results === null ? null : results[1] || '';
@@ -173,5 +212,17 @@ export class Auth {
   private _removeFragment(): void {
     const currentHref = window.location.href;
     history.replaceState({}, '', currentHref.slice(0, currentHref.indexOf('#')));
+  }
+
+  private _setCookie(cookieName: string, value: string) {
+    let secure = true;
+    if (location.protocol === 'http:') {
+      secure = false;
+    }
+    this._cookieService.set(cookieName, value, 1, '/', null, secure, 'Lax');
+    // localhost is only served via http, though secure cookie is not possible
+    // following line will only work when domain is localhost
+    this._cookieService.set(cookieName, value, 1, '/', 'localhost', false, 'Lax');
+    this._cookieService.set(cookieName, value, 1, '/', '127.0.0.1', false, 'Lax');
   }
 }

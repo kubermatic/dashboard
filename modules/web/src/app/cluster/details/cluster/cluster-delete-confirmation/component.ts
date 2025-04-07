@@ -29,6 +29,7 @@ import {take, takeUntil} from 'rxjs/operators';
   selector: 'km-cluster-delete-confirmation',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input() cluster: Cluster;

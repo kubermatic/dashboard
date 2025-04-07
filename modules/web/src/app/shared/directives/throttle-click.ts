@@ -18,6 +18,7 @@ import {throttleTime} from 'rxjs/operators';
 
 @Directive({
   selector: '[kmThrottleClick]',
+  standalone: false,
 })
 export class ThrottleClickDirective implements OnInit, OnDestroy {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers

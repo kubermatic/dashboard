@@ -50,6 +50,7 @@ export enum CredentialsType {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VMwareCloudDirectorSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

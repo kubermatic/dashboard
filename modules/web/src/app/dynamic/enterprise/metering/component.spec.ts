@@ -21,7 +21,6 @@
 import {ComponentFixture, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
 import {DatacenterService} from '@app/core/services/datacenter';
 import {SharedModule} from '@app/shared/module';
 import {fakeSeedSettings} from '@test/data/datacenter';
@@ -43,7 +42,7 @@ describe('MeteringComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule, NoopAnimationsModule],
+      imports: [SharedModule, NoopAnimationsModule],
       declarations: [
         MeteringComponent,
         MeteringConfigComponent,

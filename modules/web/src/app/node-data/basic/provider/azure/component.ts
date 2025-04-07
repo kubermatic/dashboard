@@ -76,6 +76,7 @@ enum ZoneState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();

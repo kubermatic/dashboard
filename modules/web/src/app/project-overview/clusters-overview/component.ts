@@ -28,6 +28,7 @@ import _ from 'lodash';
   selector: 'km-clusters-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() project: Project;

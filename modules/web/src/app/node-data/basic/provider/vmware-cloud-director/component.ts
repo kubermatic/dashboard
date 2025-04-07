@@ -115,6 +115,7 @@ enum NetworkState {
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VMwareCloudDirectorBasicNodeDataComponent
   extends BaseFormValidator

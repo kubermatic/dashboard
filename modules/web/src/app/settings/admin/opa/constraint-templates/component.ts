@@ -33,6 +33,7 @@ import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
   selector: 'km-constraint-templates-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestroy {
   constraintTemplates: ConstraintTemplate[] = [];

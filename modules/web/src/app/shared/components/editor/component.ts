@@ -31,6 +31,7 @@ export enum EditorHeaderClass {
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @Input() header = '';

@@ -50,7 +50,7 @@ func TestKubermaticVersion(t *testing.T) {
 	}
 
 	expectedVersions := apiv1.KubermaticVersions{
-		API: kubermatic.NewFakeVersions().Kubermatic,
+		API: kubermatic.GetFakeVersions().GitVersion,
 	}
 
 	if !diff.SemanticallyEqual(expectedVersions, gotVersion) {

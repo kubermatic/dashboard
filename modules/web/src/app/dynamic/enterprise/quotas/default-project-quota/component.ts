@@ -33,6 +33,7 @@ enum Controls {
   selector: 'km-default-project-quota',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
+  standalone: false,
 })
 export class DefaultProjectQuotaComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;

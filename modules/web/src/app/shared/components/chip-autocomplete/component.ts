@@ -67,6 +67,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator {
   readonly Controls = Controls;

@@ -65,6 +65,7 @@ set -x
 ./_build/kubermatic-api $API_EXTRA_ARGS \
   -kubeconfig=$KUBECONFIG \
   -ca-bundle=certs/ca-bundle.pem \
+  -feature-gates=$FEATURE_GATES \
   -worker-name="$(worker_name)" \
   -internal-address=127.0.0.1:18085 \
   -prometheus-url=http://localhost:9090 \

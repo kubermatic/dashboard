@@ -21,6 +21,7 @@ import {VersionInfo} from '@shared/entity/version-info';
   selector: 'km-footer',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class FooterComponent {
   @Input() version: VersionInfo;

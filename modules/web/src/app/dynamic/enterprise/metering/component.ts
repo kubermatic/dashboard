@@ -29,6 +29,7 @@ import {Report} from '@app/shared/entity/metering';
 @Component({
   selector: 'km-metering',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();

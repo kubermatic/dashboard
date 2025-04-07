@@ -60,6 +60,7 @@ enum Column {
   selector: 'km-serviceaccount',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   readonly Column = Column;

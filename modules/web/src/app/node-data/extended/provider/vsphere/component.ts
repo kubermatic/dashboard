@@ -40,6 +40,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;

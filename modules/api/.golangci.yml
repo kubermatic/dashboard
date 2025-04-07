@@ -86,13 +86,13 @@ linters-settings:
     no-unaliased: true
     alias:
       # KKP
-      - pkg: k8c.io/kubermatic/v2/pkg/api/v1
+      - pkg: k8c.io/kubermatic/sdk/v2/api/v1
         alias: apiv1
-      - pkg: k8c.io/kubermatic/v2/pkg/api/v2
+      - pkg: k8c.io/kubermatic/sdk/v2/api/v2
         alias: apiv2
-      - pkg: k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1
+      - pkg: k8c.io/kubermatic/sdk/v2/apis/apps.kubermatic/v1
         alias: appskubermaticv1
-      - pkg: k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1
+      - pkg: k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1
         alias: kubermaticv1
       - pkg: k8c.io/kubermatic/v2/pkg/util/errors
         alias: utilerrors
@@ -113,7 +113,7 @@ linters-settings:
       - pkg: sigs.k8s.io/controller-runtime/pkg/client
         alias: ctrlruntimeclient
       # Misc
-      - pkg: k8c.io/machine-controller/pkg/apis/cluster/v1alpha1
+      - pkg: k8c.io/machine-controller/sdk/apis/cluster/v1alpha1
         alias: clusterv1alpha1
       - pkg: github.com/Masterminds/semver/v3
         alias: semverlib

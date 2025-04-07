@@ -15,16 +15,8 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {DatacenterMockService} from '@test/services/datacenter-mock';
-import {MatDialogMock} from '@test/services/mat-dialog-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
-import {fakeConstraintTemplates} from '@test/data/opa';
 import {DatacenterService} from '@core/services/datacenter';
 import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
@@ -32,6 +24,13 @@ import {OPAService} from '@core/services/opa';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {fakeConstraintTemplates} from '@test/data/opa';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {MatDialogMock} from '@test/services/mat-dialog-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {of} from 'rxjs';
 import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
 import {AdminsComponent} from './admins/component';
@@ -53,7 +52,7 @@ describe('AdminSettingsComponent', () => {
     opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         AdminSettingsComponent,
         DynamicDatacentersComponent,

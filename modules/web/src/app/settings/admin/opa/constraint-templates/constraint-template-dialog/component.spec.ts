@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -45,7 +45,7 @@ describe('ConstraintTemplateDialog', () => {
     patchCTSpy = opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [ConstraintTemplateDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

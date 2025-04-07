@@ -16,7 +16,7 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -26,12 +26,12 @@ import {SettingsService} from '@core/services/settings';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
 import {fakeProject} from '@test/data/project';
 import {fakeSSHKeys} from '@test/data/sshkey';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {ProjectMockService} from '@test/services/project-mock';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
 import {SettingsMockService} from '@test/services/settings-mock';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 import {UserMockService} from '@test/services/user-mock';
@@ -45,14 +45,7 @@ describe('SSHKeyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        SharedModule,
-        MatTabsModule,
-        DialogTestModule,
-      ],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatTabsModule],
       declarations: [SSHKeyComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

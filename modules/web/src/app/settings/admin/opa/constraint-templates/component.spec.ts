@@ -15,15 +15,15 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeConstraintTemplates} from '@test/data/opa';
-import {UserMockService} from '@test/services/user-mock';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
-import {UserService} from '@core/services/user';
 import {OPAService} from '@core/services/opa';
+import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeConstraintTemplates} from '@test/data/opa';
+import {UserMockService} from '@test/services/user-mock';
 import {of} from 'rxjs';
 import {ConstraintTemplatesComponent} from './component';
 
@@ -42,7 +42,7 @@ describe('ConstraintTemplatesComponent', () => {
     deleteConstraintTemplateSpy = opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [ConstraintTemplatesComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},

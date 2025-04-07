@@ -16,21 +16,20 @@ import {HttpClientModule} from '@angular/common/http';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeProjects} from '@test/data/project';
-import {RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {NotificationPanelComponent} from '@core/components/notification-panel/component';
 import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';
 import {SharedModule} from '@shared/module';
+import {fakeProjects} from '@test/data/project';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {MockComponent} from 'ng2-mock-component';
 import {UserPanelComponent} from '../../user-panel/component';
 import {NavigationComponent} from '../component';
@@ -41,18 +40,13 @@ describe('ProjectSelectorComponent', () => {
   let component: ProjectSelectorComponent;
 
   beforeEach(() => {
+    const MockLink = MockComponent({
+      selector: 'a',
+      inputs: ['routerLink', 'routerLinkActiveOptions'],
+    });
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
-      declarations: [
-        NavigationComponent,
-        NotificationPanelComponent,
-        ProjectSelectorComponent,
-        UserPanelComponent,
-        MockComponent({
-          selector: 'a',
-          inputs: ['routerLink', 'routerLinkActiveOptions'],
-        }),
-      ],
+      imports: [BrowserModule, HttpClientModule, MockLink, NoopAnimationsModule, SharedModule],
+      declarations: [NavigationComponent, NotificationPanelComponent, ProjectSelectorComponent, UserPanelComponent],
       providers: [
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: UserService, useClass: UserMockService},

@@ -23,6 +23,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
   selector: 'km-cluster-panel',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ClusterPanelComponent {
   @Input() cluster: Cluster | ExternalCluster;

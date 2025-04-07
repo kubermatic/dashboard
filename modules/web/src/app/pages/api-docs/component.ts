@@ -15,13 +15,14 @@
 import {DOCUMENT} from '@angular/common';
 import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import SwaggerUI from 'swagger-ui';
-import {AppConfigService} from '@app/config.service';
 
 @Component({
   selector: 'km-api-docs',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
@@ -34,7 +35,12 @@ export class ApiDocsComponent implements OnInit {
   ngOnInit(): void {
     this._appConfigService.getSwaggerJson().subscribe(_ => {
       SwaggerUI({
-        dom_id: '#km-swagger-container',
+        domNode: this._document.getElementById('km-swagger-container'),
+        deepLinking: true,
+        displayRequestDuration: true,
+        filter: true,
+        tryItOutEnabled: true,
+        requestSnippetsEnabled: true,
         url: `${this._document.location.origin}/api/swagger.json`,
         requestInterceptor: req => {
           const token = this._auth.getBearerToken();

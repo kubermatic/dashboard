@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
@@ -43,7 +43,7 @@ describe('AlertmanagerConfigDialog', () => {
     putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [AlertmanagerConfigDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

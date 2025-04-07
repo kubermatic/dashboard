@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
@@ -46,7 +46,7 @@ describe('RuleGroupDialog', () => {
     createRuleGroupSpy = mlaMock.createRuleGroup.mockReturnValue(asyncData(fakeRuleGroups()[0]));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [RuleGroupDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

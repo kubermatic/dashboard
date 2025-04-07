@@ -39,6 +39,7 @@ import {View} from '@app/shared/entity/common';
   selector: 'km-external-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   readonly Provider = ExternalClusterProvider;

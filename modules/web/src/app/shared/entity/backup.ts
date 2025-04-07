@@ -151,7 +151,7 @@ export class ClusterBackup {
 }
 
 export class ClusterBackupSpec {
-  includedNamespaces?: string[] | string;
+  includedNamespaces?: string[];
   storageLocation: string;
   defaultVolumesToFsBackup: boolean;
   clusterid: string;
@@ -183,7 +183,7 @@ export class ClusterRestore {
 
 export class ClusterRestoreConfigSpec {
   backupName: string;
-  includedNamespaces: string[];
+  includedNamespaces?: string[];
   scheduleName?: string;
   clusterid?: string;
   labels?: Record<string, string>;

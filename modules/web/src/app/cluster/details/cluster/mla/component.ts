@@ -21,6 +21,7 @@ import _ from 'lodash';
 @Component({
   selector: 'km-mla',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class MLAComponent {
   @Input() cluster: Cluster;

@@ -25,6 +25,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
   selector: 'km-project-selector',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class ProjectSelectorComponent implements OnInit, OnDestroy {
   @Input() showSidenav: boolean;

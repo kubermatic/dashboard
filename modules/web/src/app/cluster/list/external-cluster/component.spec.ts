@@ -17,24 +17,24 @@ import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick, waitFo
 import {BrowserModule, By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
 import {AppConfigService} from '@app/config.service';
-import {ExternalClusterService} from '@core/services/external-cluster';
-import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {AuthMockService} from '@test/services/auth-mock';
-import {ProjectMockService} from '@test/services/project-mock';
-import {SettingsMockService} from '@test/services/settings-mock';
-import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {KubeOnePresetsService} from '@core/services/kubeone-wizard/kubeone-presets';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
 import {fakeCustomExternalCluster} from '@test/data/external-cluster';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {defer, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
@@ -62,7 +62,7 @@ describe('ExternalClusterListComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       declarations: [ExternalClusterListComponent],
       providers: [
         {provide: ClusterService, useValue: clusterServiceMock},

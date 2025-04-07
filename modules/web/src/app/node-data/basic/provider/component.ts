@@ -39,6 +39,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class BasicNodeDataComponent extends BaseFormValidator implements OnInit {
   @Input() provider: string;

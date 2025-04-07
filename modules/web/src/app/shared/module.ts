@@ -25,6 +25,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatNativeDateModule, MatOptionModule, MatRippleModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -47,7 +48,6 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatTreeModule} from '@angular/material/tree';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
@@ -59,6 +59,7 @@ import {AKSClusterSelectComponent} from '@shared/components/add-external-cluster
 import {EKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 import {GKEClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
+import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
 import {ApplicationDefinitionCardComponent} from '@shared/components/application-list/application-definition-card/component';
 import {ApplicationMethodIconComponent} from '@shared/components/application-list/application-method-icon/component';
@@ -105,6 +106,7 @@ import {AddonsListComponent} from './components/addon-list/component';
 import {EditAddonDialogComponent} from './components/addon-list/edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './components/addon-list/install-addon-dialog/component';
 import {AnnotationFormComponent} from './components/annotation-form/component';
+import {AnnouncementBannerComponent} from './components/announcement-banner/component';
 import {ChipListComponent} from './components/chip-list/component';
 import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
@@ -139,8 +141,6 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {ValueChangedIndicatorDirective} from './directives/value-changed-indicator';
 import {PipesModule} from './pipes/ngx-filter-pipe/module';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {AnnouncementBannerComponent} from './components/announcement-banner/component';
-import {AnnouncementsDialogComponent} from '@shared/components/announcements-dialog/component';
 
 const modules = [
   CommonModule,
@@ -187,8 +187,8 @@ const modules = [
   ScrollingModule,
   PipesModule,
   MonacoEditorModule,
-  NgxChartsModule,
   MatTreeModule,
+  NgxChartsModule,
 ];
 
 const components = [

@@ -22,7 +22,6 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {SharedModule} from '@app/shared/module';
@@ -47,7 +46,7 @@ describe('MeteringScheduleConfigComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule, NoopAnimationsModule],
+      imports: [SharedModule, NoopAnimationsModule],
       declarations: [
         MeteringReportListComponent,
         MeteringScheduleAddDialog,

@@ -35,6 +35,7 @@ class ChartColorData {
   selector: 'km-providers-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class ProvidersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];

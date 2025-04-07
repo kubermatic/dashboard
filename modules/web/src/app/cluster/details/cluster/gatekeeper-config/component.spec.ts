@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {fakeGatekeeperConfig} from '@test/data/opa';
-import {fakeProject} from '@test/data/project';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
+import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeGatekeeperConfig} from '@test/data/opa';
+import {fakeProject} from '@test/data/project';
 import {of} from 'rxjs';
 import {GatekeeperConfigComponent} from './component';
 
@@ -33,7 +33,7 @@ describe('GatekeeperConfigComponent', () => {
   let component: GatekeeperConfigComponent;
   let deleteGatekeeperConfigSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     const opaMock = {
       deleteGatekeeperConfig: jest.fn(),
       refreshGatekeeperConfig: () => {},
@@ -41,14 +41,14 @@ describe('GatekeeperConfigComponent', () => {
     deleteGatekeeperConfigSpy = opaMock.deleteGatekeeperConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, CoreModule],
       declarations: [GatekeeperConfigComponent],
       providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
-  }));
+  });
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(GatekeeperConfigComponent);
     component = fixture.componentInstance;
     noop = TestBed.createComponent(NoopConfirmDialogComponent);
@@ -57,7 +57,7 @@ describe('GatekeeperConfigComponent', () => {
     component.gatekeeperConfig = fakeGatekeeperConfig();
     component.isClusterRunning = true;
     fixture.detectChanges();
-  }));
+  });
 
   it('should create the gatekeeper config component', fakeAsync(() => {
     expect(component).toBeTruthy();

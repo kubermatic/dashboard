@@ -15,24 +15,24 @@
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@test/data/cluster';
-import {fakeProject} from '@test/data/project';
-import {NotificationMockService} from '@test/services/notification-mock';
-import {RouterStub} from '@test/services/router-stubs';
-import {AppConfigMockService} from '@test/services/app-config-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@test/services/project-mock';
 import {ClusterService} from '@core/services/cluster';
-import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
-import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {EndOfLifeService} from '@core/services/eol';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeProject} from '@test/data/project';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {NotificationMockService} from '@test/services/notification-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
 import {of} from 'rxjs';
 import {VersionChangeDialogComponent} from './component';
 
@@ -51,7 +51,7 @@ describe('ChangeClusterVersionComponent', () => {
     upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [VersionChangeDialogComponent],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},

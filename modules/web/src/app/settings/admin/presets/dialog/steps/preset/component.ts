@@ -50,6 +50,7 @@ enum ProjectState {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;

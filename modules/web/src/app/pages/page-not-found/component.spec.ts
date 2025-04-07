@@ -14,14 +14,13 @@
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule, By} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import {RouterStub} from '@test/services/router-stubs';
-import {AuthMockService} from '@test/services/auth-mock';
-import {click} from '@test/utils/click-handler';
 import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
+import {AuthMockService} from '@test/services/auth-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {click} from '@test/utils/click-handler';
 import {PageNotFoundComponent} from './component';
 
 describe('PageNotFoundComponent', () => {
@@ -32,7 +31,7 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [PageNotFoundComponent],
       providers: [
         {provide: Router, useClass: RouterStub},

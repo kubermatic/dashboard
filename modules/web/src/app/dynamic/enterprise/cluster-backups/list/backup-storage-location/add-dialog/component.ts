@@ -24,9 +24,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
 import {BackupStorageLocation, CreateBackupStorageLocation, SupportedBSLProviders} from '@app/shared/entity/backup';
-import {Observable, Subject, takeUntil} from 'rxjs';
-import * as y from 'js-yaml';
 import {CBSL_SYNC_PERIOD, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import * as y from 'js-yaml';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 export interface AddBackupStorageLocationDialogConfig {
   projectID: string;
@@ -50,6 +50,7 @@ enum Controls {
   selector: 'km-add-backup-storage-location-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
@@ -114,7 +115,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         } else {
           config = {
             region: this.form.get(Controls.Region).value,
-            s3Url: this.form.get(Controls.Endpoints).value,
+            s3Url: this.form.get(Controls.Endpoints).value?.trim(),
           };
         }
         try {

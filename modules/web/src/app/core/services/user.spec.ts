@@ -15,13 +15,12 @@
 import {HttpClientModule} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-import {SharedModule} from '@shared/module';
-import {AppConfigService} from '@app/config.service';
 import {COOKIE, COOKIE_DI_TOKEN} from '@app/config';
+import {AppConfigService} from '@app/config.service';
+import {SharedModule} from '@shared/module';
 import {fakeUserGroupConfig} from '@test/data/user-group-config';
-import {RouterTestingModule} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
 import {Auth} from './auth/service';
@@ -34,7 +33,7 @@ describe('Service: UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, SharedModule],
       providers: [
         {provide: COOKIE_DI_TOKEN, useValue: COOKIE},
         UserService,

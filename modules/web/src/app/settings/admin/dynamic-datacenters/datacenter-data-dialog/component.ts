@@ -62,6 +62,7 @@ enum Title {
   selector: 'km-add-admin-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();

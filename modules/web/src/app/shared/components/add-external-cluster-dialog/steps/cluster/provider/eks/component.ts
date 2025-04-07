@@ -25,6 +25,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-eks-cluster-select',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class EKSClusterSelectComponent implements OnInit, OnDestroy {
   @Input() projectID: string;

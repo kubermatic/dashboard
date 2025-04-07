@@ -17,5 +17,6 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'km-dialog-title',
   templateUrl: './template.html',
+  standalone: false,
 })
 export class DialogTitleComponent {}

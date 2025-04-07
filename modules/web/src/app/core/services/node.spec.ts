@@ -15,18 +15,18 @@
 import {fakeAsync, flush, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {CoreModule} from '@core/module';
+import {NotificationService} from '@core/services/notification';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {machineDeploymentsFake} from '@test/data/node';
 import {fakeProject} from '@test/data/project';
-import {CoreModule} from '@core/module';
-import {NotificationService} from '@core/services/notification';
+import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
 import {NotificationMockService} from '@test/services/notification-mock';
 import {of} from 'rxjs';
-import {NodeService} from './node';
-import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
 import {MachineDeploymentService} from './machine-deployment';
+import {NodeService} from './node';
 
 class MatDialogMock {
   open(): any {
@@ -37,7 +37,7 @@ class MatDialogMock {
 describe('NodeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, MatSnackBarModule, CoreModule],
+      imports: [NoopAnimationsModule, MatSnackBarModule, CoreModule],
       providers: [
         NodeService,
         GoogleAnalyticsService,

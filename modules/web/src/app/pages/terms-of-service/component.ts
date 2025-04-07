@@ -20,6 +20,7 @@ import {Auth} from '@core/services/auth/service';
   selector: 'km-terms-of-service',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class TermsOfServiceComponent {
   constructor(

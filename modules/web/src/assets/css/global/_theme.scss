@@ -252,7 +252,7 @@
     background-color: map.get($colors, background-hover);
   }
 
-  .km-mat-row.km-pointer.km-selected {
+  .km-mat-row.km-selected {
     background-color: map.get($colors, background-hover);
 
     td {

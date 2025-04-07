@@ -29,6 +29,7 @@ enum Column {
   selector: 'km-announcements-dialog',
   templateUrl: './template.html',
   styleUrl: './style.scss',
+  standalone: false,
 })
 export class AnnouncementsDialogComponent implements OnInit {
   readonly Column = Column;

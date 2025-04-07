@@ -51,6 +51,7 @@ enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];

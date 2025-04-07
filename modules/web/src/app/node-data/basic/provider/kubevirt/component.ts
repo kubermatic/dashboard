@@ -134,6 +134,7 @@ class OSImageDropdownOption {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator
@@ -661,12 +662,17 @@ export class KubeVirtBasicNodeDataComponent
   private _init(): void {
     if (this._initialData) {
       this.form.get(Controls.Memory).setValue(parseInt(this._initialData.memory) || this._defaultMemory);
-      this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
+
+      if (this._initialData.vcpus?.cores) {
+        this.form.get(Controls.CPUs).setValue(this._initialData.vcpus.cores);
+      } else {
+        this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
+      }
 
       if (this._initialData.instancetype) {
         this.form.get(Controls.InstanceType).setValue(this._getSelectedInstanceTypeId(this._initialData.instancetype));

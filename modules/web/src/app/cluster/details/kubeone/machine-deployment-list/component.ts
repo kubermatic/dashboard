@@ -49,6 +49,7 @@ enum Column {
   selector: 'km-kubeone-machine-deployment-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  standalone: false,
 })
 export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
   readonly column = Column;

@@ -19,6 +19,7 @@ import {ProjectOwner} from '../../entity/project';
   selector: 'km-initials-circle',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  standalone: false,
 })
 export class InitialsCircleComponent implements OnInit, OnChanges {
   @Input() owners: ProjectOwner[];

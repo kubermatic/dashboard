@@ -42,6 +42,7 @@ export enum Controls {
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class GCPSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;

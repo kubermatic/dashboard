@@ -22,29 +22,29 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
-	clusterv1alpha1 "k8c.io/machine-controller/pkg/apis/cluster/v1alpha1"
-	alibaba "k8c.io/machine-controller/pkg/cloudprovider/provider/alibaba/types"
-	anexia "k8c.io/machine-controller/pkg/cloudprovider/provider/anexia/types"
-	aws "k8c.io/machine-controller/pkg/cloudprovider/provider/aws/types"
-	azure "k8c.io/machine-controller/pkg/cloudprovider/provider/azure/types"
-	plugins "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/plugins"
-	baremetal "k8c.io/machine-controller/pkg/cloudprovider/provider/baremetal/types"
-	digitalocean "k8c.io/machine-controller/pkg/cloudprovider/provider/digitalocean/types"
-	equinixmetal "k8c.io/machine-controller/pkg/cloudprovider/provider/equinixmetal/types"
-	gce "k8c.io/machine-controller/pkg/cloudprovider/provider/gce/types"
-	hetzner "k8c.io/machine-controller/pkg/cloudprovider/provider/hetzner/types"
-	kubevirt "k8c.io/machine-controller/pkg/cloudprovider/provider/kubevirt/types"
-	nutanix "k8c.io/machine-controller/pkg/cloudprovider/provider/nutanix/types"
-	opennebula "k8c.io/machine-controller/pkg/cloudprovider/provider/opennebula/types"
-	openstack "k8c.io/machine-controller/pkg/cloudprovider/provider/openstack/types"
-	vcd "k8c.io/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
-	vsphere "k8c.io/machine-controller/pkg/cloudprovider/provider/vsphere/types"
-	providerconfig "k8c.io/machine-controller/pkg/providerconfig/types"
-	"k8c.io/machine-controller/pkg/userdata/amzn2"
-	"k8c.io/machine-controller/pkg/userdata/flatcar"
-	"k8c.io/machine-controller/pkg/userdata/rhel"
-	"k8c.io/machine-controller/pkg/userdata/rockylinux"
-	"k8c.io/machine-controller/pkg/userdata/ubuntu"
+	clusterv1alpha1 "k8c.io/machine-controller/sdk/apis/cluster/v1alpha1"
+	alibaba "k8c.io/machine-controller/sdk/cloudprovider/alibaba"
+	anexia "k8c.io/machine-controller/sdk/cloudprovider/anexia"
+	aws "k8c.io/machine-controller/sdk/cloudprovider/aws"
+	azure "k8c.io/machine-controller/sdk/cloudprovider/azure"
+	baremetal "k8c.io/machine-controller/sdk/cloudprovider/baremetal"
+	plugins "k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins"
+	digitalocean "k8c.io/machine-controller/sdk/cloudprovider/digitalocean"
+	equinixmetal "k8c.io/machine-controller/sdk/cloudprovider/equinixmetal"
+	gce "k8c.io/machine-controller/sdk/cloudprovider/gce"
+	hetzner "k8c.io/machine-controller/sdk/cloudprovider/hetzner"
+	kubevirt "k8c.io/machine-controller/sdk/cloudprovider/kubevirt"
+	nutanix "k8c.io/machine-controller/sdk/cloudprovider/nutanix"
+	opennebula "k8c.io/machine-controller/sdk/cloudprovider/opennebula"
+	openstack "k8c.io/machine-controller/sdk/cloudprovider/openstack"
+	vcd "k8c.io/machine-controller/sdk/cloudprovider/vmwareclouddirector"
+	vsphere "k8c.io/machine-controller/sdk/cloudprovider/vsphere"
+	"k8c.io/machine-controller/sdk/providerconfig"
+	"k8c.io/machine-controller/sdk/userdata/amzn2"
+	"k8c.io/machine-controller/sdk/userdata/flatcar"
+	"k8c.io/machine-controller/sdk/userdata/rhel"
+	"k8c.io/machine-controller/sdk/userdata/rockylinux"
+	"k8c.io/machine-controller/sdk/userdata/ubuntu"
 
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/utils/ptr"
@@ -297,6 +297,8 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		}
 	case providerconfig.CloudProviderEdge:
 		cloudSpec.Edge = &apiv1.EdgeNodeSpec{}
+	case providerconfig.CloudProviderExternal:
+		// do nothing here as the external cloud provider doesn't have any specific cloud spec.
 	case providerconfig.CloudProviderGoogle:
 		config := &gce.CloudProviderSpec{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
@@ -350,7 +352,6 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 
 			Instancetype:                config.VirtualMachine.Instancetype,
 			Preference:                  config.VirtualMachine.Preference,
-			CPUs:                        config.VirtualMachine.Template.CPUs.Value,
 			Memory:                      config.VirtualMachine.Template.Memory.Value,
 			PrimaryDiskOSImage:          config.VirtualMachine.Template.PrimaryDisk.OsImage.Value,
 			PrimaryDiskStorageClassName: config.VirtualMachine.Template.PrimaryDisk.StorageClassName.Value,
@@ -359,6 +360,11 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 				Type: config.Affinity.NodeAffinityPreset.Type.Value,
 				Key:  config.Affinity.NodeAffinityPreset.Key.Value,
 			},
+		}
+		if config.VirtualMachine.Template.VCPUs.Cores != 0 {
+			cloudSpec.Kubevirt.CPUs = strconv.Itoa(config.VirtualMachine.Template.VCPUs.Cores)
+		} else {
+			cloudSpec.Kubevirt.CPUs = config.VirtualMachine.Template.CPUs.Value
 		}
 		cloudSpec.Kubevirt.SecondaryDisks = make([]apiv1.SecondaryDisks, 0, len(config.VirtualMachine.Template.SecondaryDisks))
 		for _, sd := range config.VirtualMachine.Template.SecondaryDisks {

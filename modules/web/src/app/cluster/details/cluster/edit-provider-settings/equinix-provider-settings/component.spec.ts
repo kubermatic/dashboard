@@ -15,11 +15,11 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ClusterMockService} from '@test/services/cluster-mock';
-import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
@@ -38,7 +38,7 @@ describe('EquinixProviderSettingsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,
