@@ -12574,13 +12574,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12592,6 +12585,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -38709,7 +38709,7 @@
           "$ref": "#/definitions/PolicyTargetSpec"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PolicyBindingStatus": {
       "type": "object",
@@ -38730,7 +38730,7 @@
           "x-go-name": "ObservedGeneration"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PolicyRule": {
       "description": "PolicyRule holds information that describes a policy rule, but does not contain information\nabout who the rule applies to or which namespace the rule applies to.",
@@ -38790,7 +38790,7 @@
           "$ref": "#/definitions/ResourceSelector"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PolicyTemplate": {
       "type": "object",
@@ -38853,7 +38853,7 @@
           "x-go-name": "Visibility"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PolicyType": {
       "description": "PolicyType string describes the NetworkPolicy type\nThis type is beta-level in 1.8\n+enum",
@@ -39865,7 +39865,7 @@
           "x-go-name": "SelectAll"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "ResourceType": {
       "type": "string",
