@@ -69,9 +69,9 @@ require (
 	google.golang.org/api v0.197.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.26.6-0.20250325123258-a6004d731837
+	k8c.io/kubermatic/v2 v2.26.7-0.20250407185515-9e9d22743d4a
 	k8c.io/machine-controller v1.60.1
-	k8c.io/operating-system-manager v1.6.2
+	k8c.io/operating-system-manager v1.6.4
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.31.2
 	k8s.io/apiextensions-apiserver v0.31.1
@@ -164,7 +164,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/cel-go v0.20.1 // indirect
 	github.com/google/gnostic-models v0.6.9-0.20230804172637-c7be7c783f49 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
@@ -178,7 +177,6 @@ require (
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
-	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.1-0.20220621161143-b0104c826a24 // indirect
@@ -200,11 +198,9 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/moby/locker v1.0.1 // indirect
-	github.com/moby/spdystream v0.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
 	github.com/nutanix-cloud-native/prism-go-client v0.5.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
@@ -251,7 +247,6 @@ require (
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/term v0.27.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
