@@ -1,8 +1,8 @@
 module k8c.io/dashboard/v2
 
-go 1.21
+go 1.22
 
-toolchain go1.21.6
+toolchain go1.22.12
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20231211165245-0e22ad1266d6
@@ -70,8 +70,8 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.2
-	k8c.io/kubermatic/v2 v2.25.15-0.20250325122258-85fcff0c1a63
-	k8c.io/operating-system-manager v1.5.2
+	k8c.io/kubermatic/v2 v2.25.16-0.20250407185614-8addaaee9dca
+	k8c.io/operating-system-manager v1.5.5
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.29.1
 	k8s.io/apiextensions-apiserver v0.29.1
@@ -152,7 +152,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/cel-go v0.17.7 // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
