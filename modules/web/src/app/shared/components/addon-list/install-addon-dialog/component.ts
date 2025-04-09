@@ -28,6 +28,7 @@ import {
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {getEditionVersion} from '@shared/utils/common';
+import _ from 'lodash';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
@@ -77,7 +78,7 @@ export class InstallAddonDialogComponent {
   }
 
   getAddonShortDescription(name: string): string {
-    return getAddonShortDescription(this.addonConfigs.get(name));
+    return _.escape(getAddonShortDescription(this.addonConfigs.get(name)));
   }
 
   select(name: string): void {

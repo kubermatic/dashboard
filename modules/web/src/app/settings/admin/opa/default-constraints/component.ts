@@ -185,7 +185,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Default Constraint',
-        message: `Delete <b>${defaultConstraint.name}</b> default constraint permanently?`,
+        message: `Delete <b>${_.escape(defaultConstraint.name)}</b> default constraint permanently?`,
         confirmLabel: 'Delete',
       },
     };

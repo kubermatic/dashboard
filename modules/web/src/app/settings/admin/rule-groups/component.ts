@@ -172,7 +172,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Delete <b>${adminRuleGroup.name}</b> rule group of <b>${adminRuleGroup.seed}</b> seed permanently?`,
+        message: `Delete <b>${_.escape(adminRuleGroup.name)}</b> rule group of <b>${_.escape(adminRuleGroup.seed)}</b> seed permanently?`,
         confirmLabel: 'Delete',
       },
     };
