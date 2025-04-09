@@ -698,7 +698,7 @@ func clusterProviderFactory(mapper meta.RESTMapper, seedKubeconfigGetter provide
 			return nil, fmt.Errorf("failed to create dynamic seed client: %w", err)
 		}
 
-		userClusterConnectionProvider, err := client.NewExternal(seedCtrlruntimeClient)
+		userClusterConnectionProvider, err := client.NewExternalWithProxy(seedCtrlruntimeClient, seed.GetManagementProxyURL())
 		if err != nil {
 			return nil, fmt.Errorf("failed to get userClusterConnectionProvider: %w", err)
 		}
