@@ -13,19 +13,20 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterBinding, ClusterServiceAccount, Kind, SimpleClusterBinding} from '@shared/entity/rbac';
+import {iif, Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
 import {AddBindingDialogComponent} from './add-binding-dialog/component';
-import {iif, Subject} from 'rxjs';
-import {FormControl} from '@angular/forms';
-import {AddServiceAccountDialogComponent} from './add-service-account-dialog/component';
 import {AddServiceAccountBindingDialogComponent} from './add-service-account-binding-dialog/component';
-import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
+import {AddServiceAccountDialogComponent} from './add-service-account-dialog/component';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-rbac',
@@ -102,7 +103,7 @@ export class RBACComponent implements OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Service Account',
-        message: `Delete service account <b>${element.name}</b> of <b>${this.cluster.name}</b> cluster permanently?`,
+        message: `Delete service account <b>${_.escape(element.name)}</b> of <b>${_.escape(this.cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -128,9 +129,7 @@ export class RBACComponent implements OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Binding',
-        message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${
-          this.cluster.name
-        }</b> cluster permanently?`,
+        message: `Delete binding for ${element.kind.toLowerCase()} <b>${_.escape(element.name)}</b> of <b>${_.escape(this.cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

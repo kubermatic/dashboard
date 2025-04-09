@@ -30,6 +30,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
+import _ from 'lodash';
 import {filter, switchMap, take} from 'rxjs';
 
 enum Column {
@@ -111,7 +112,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Schedule Configuration',
-        message: `Delete <b>${name}</b> schedule permanently?`,
+        message: `Delete <b>${_.escape(name)}</b> schedule permanently?`,
         confirmLabel: 'Delete',
         warning: 'Deleting this will NOT remove reports related to it.',
       },

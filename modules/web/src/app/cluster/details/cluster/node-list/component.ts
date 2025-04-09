@@ -150,7 +150,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Node',
-        message: `Delete <b>${node.name}</b> node of <b>${this.mdName}</b> machine deployment of <b>${this.cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${_.escape(node.name)}</b> node of <b>${_.escape(this.mdName)}</b> machine deployment of <b>${_.escape(this.cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
