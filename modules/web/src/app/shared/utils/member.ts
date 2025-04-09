@@ -31,12 +31,13 @@ export enum Group {
 
 export class MemberUtils {
   static getGroupInProject(member: Member, projectID: string): string {
-    if (!member || !member.projects) {
-      return '';
-    }
+    if (!member?.projects) return '';
 
-    const project = member.projects.find(memberProject => memberProject.id === projectID);
-    return project ? project.group : '';
+    const priority = [Group.Owner, Group.ProjectManager, Group.Editor, Group.Viewer];
+
+    const groups = member.projects.filter(p => p.id === projectID).map(p => p.group);
+
+    return priority.find(role => groups.includes(role)) || '';
   }
 
   static getGroupDisplayName(groupInternalName: string): string {
