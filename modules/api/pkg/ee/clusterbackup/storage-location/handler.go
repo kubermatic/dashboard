@@ -194,20 +194,31 @@ func ListCSBLBucketObjects(ctx context.Context, request interface{}, userInfoGet
 	return provider.ListBucketObjects(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 }
 
-func CreateCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func CreateCBSL(
+	ctx context.Context,
+	request interface{},
+	userInfoGetter provider.UserInfoGetter,
+	provider provider.BackupStorageProvider,
+	projectProvider provider.ProjectProvider,
+	settingsProvider provider.SettingsProvider,
+) (*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(createCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
 	user, err := userInfoGetter(ctx, req.ProjectID)
+	if err != nil {
+		return nil, err
+	}
 
+	settings, err := settingsProvider.GetGlobalSettings(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	cbslName := req.Body.Name
-	cbslSpec := req.Body.CBSLSpec.DeepCopy()
+	cbslSpec := getCBSLSpec(req.Body.CBSLSpec.DeepCopy(), settings.Spec.ClusterBackupOptions)
 	creds := req.Body.Credentials
 	cbsl := &kubermaticv1.ClusterBackupStorageLocation{
 		Spec: *cbslSpec,
@@ -223,6 +234,25 @@ func CreateCBSL(ctx context.Context, request interface{}, userInfoGetter provide
 		Spec:        *created.Spec.DeepCopy(),
 		Status:      *created.Status.DeepCopy(),
 	}, nil
+}
+
+// getCBSLSpec returns BSL spec based on the default BackupOptions defined in the KubermaticSettings.
+func getCBSLSpec(bsl *velerov1.BackupStorageLocationSpec, options *kubermaticv1.ClusterBackupOptions) *velerov1.BackupStorageLocationSpec {
+	if options == nil || bsl == nil {
+		return bsl
+	}
+
+	algo := options.DefaultChecksumAlgorithm
+	if algo == nil {
+		return bsl
+	}
+
+	_, exists := bsl.Config[bslChecksumAlgorithmConfigKey]
+	if !exists {
+		bsl.Config[bslChecksumAlgorithmConfigKey] = *algo
+	}
+
+	return bsl
 }
 
 func DeleteCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) error {

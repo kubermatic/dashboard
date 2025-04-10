@@ -29608,6 +29608,17 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ClusterBackupOptions": {
+      "type": "object",
+      "properties": {
+        "defaultChecksumAlgorithm": {
+          "description": "DefaultChecksumAlgorithm allows setting a default checksum algorithm used by Velero for uploading objects to S3.\n\nOptional",
+          "type": "string",
+          "x-go-name": "DefaultChecksumAlgorithm"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
     "ClusterBackupStorageLocation": {
       "type": "object",
       "title": "ClusterBackupStorageLocation is the object representing a Cluster Backup Storage Location.",
@@ -33676,6 +33687,9 @@
         },
         "cleanupOptions": {
           "$ref": "#/definitions/CleanupOptions"
+        },
+        "clusterBackupOptions": {
+          "$ref": "#/definitions/ClusterBackupOptions"
         },
         "customLinks": {
           "$ref": "#/definitions/CustomLinks"

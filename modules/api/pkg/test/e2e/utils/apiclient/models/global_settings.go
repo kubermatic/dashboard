@@ -89,6 +89,9 @@ type GlobalSettings struct {
 	// cleanup options
 	CleanupOptions *CleanupOptions `json:"cleanupOptions,omitempty"`
 
+	// cluster backup options
+	ClusterBackupOptions *ClusterBackupOptions `json:"clusterBackupOptions,omitempty"`
+
 	// custom links
 	CustomLinks CustomLinks `json:"customLinks,omitempty"`
 
@@ -134,6 +137,10 @@ func (m *GlobalSettings) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCleanupOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateClusterBackupOptions(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -261,6 +268,25 @@ func (m *GlobalSettings) validateCleanupOptions(formats strfmt.Registry) error {
 				return ve.ValidateName("cleanupOptions")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cleanupOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) validateClusterBackupOptions(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClusterBackupOptions) { // not required
+		return nil
+	}
+
+	if m.ClusterBackupOptions != nil {
+		if err := m.ClusterBackupOptions.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterBackupOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterBackupOptions")
 			}
 			return err
 		}
@@ -458,6 +484,10 @@ func (m *GlobalSettings) ContextValidate(ctx context.Context, formats strfmt.Reg
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateClusterBackupOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateCustomLinks(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -559,6 +589,22 @@ func (m *GlobalSettings) contextValidateCleanupOptions(ctx context.Context, form
 				return ve.ValidateName("cleanupOptions")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cleanupOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *GlobalSettings) contextValidateClusterBackupOptions(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ClusterBackupOptions != nil {
+		if err := m.ClusterBackupOptions.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("clusterBackupOptions")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("clusterBackupOptions")
 			}
 			return err
 		}
