@@ -217,10 +217,6 @@ func CreateCBSL(
 		return nil, err
 	}
 
-	if settings == nil {
-		return nil, fmt.Errorf("no settings found for project %s", req.ProjectID)
-	}
-
 	cbslName := req.Body.Name
 	cbslSpec := getCBSLSpec(req.Body.CBSLSpec.DeepCopy(), settings.Spec.ClusterBackupOptions)
 	creds := req.Body.Credentials
