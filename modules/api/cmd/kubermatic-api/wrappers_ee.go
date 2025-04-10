@@ -52,3 +52,11 @@ func groupProjectBindingFactory(createMasterImpersonatedClient kubernetes.Impers
 func backupStorageProviderFactory(createMasterImpersonatedClient kubernetes.ImpersonationClient, privilegedClient ctrlruntimeclient.Client) provider.BackupStorageProvider {
 	return eeapi.BackupStorageProviderFactory(createMasterImpersonatedClient, privilegedClient)
 }
+
+func policyTemplateProviderFactory(privilegedClient ctrlruntimeclient.Client) provider.PolicyTemplateProvider {
+	return eeapi.PolicyTemplateProviderFactory(privilegedClient)
+}
+
+func policyBindingProviderFactory(privilegedClient ctrlruntimeclient.Client) provider.PolicyBindingProvider {
+	return eeapi.PolicyBindingProviderFactory(privilegedClient)
+}

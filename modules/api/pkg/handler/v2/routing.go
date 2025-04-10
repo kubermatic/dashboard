@@ -91,6 +91,8 @@ type Routing struct {
 	etcdRestoreProjectProviderGetter               provider.EtcdRestoreProjectProviderGetter
 	backupStorageProvider                          provider.BackupStorageProvider
 	backupCredentialsProviderGetter                provider.BackupCredentialsProviderGetter
+	policyTemplateProvider                         provider.PolicyTemplateProvider
+	policyBindingProvider                          provider.PolicyBindingProvider
 	privilegedMLAAdminSettingProviderGetter        provider.PrivilegedMLAAdminSettingProviderGetter
 	seedProvider                                   provider.SeedProvider
 	resourceQuotaProvider                          provider.ResourceQuotaProvider
@@ -157,6 +159,8 @@ func NewV2Routing(routingParams handler.RoutingParams) Routing {
 		etcdBackupConfigProjectProviderGetter:          routingParams.EtcdBackupConfigProjectProviderGetter,
 		etcdRestoreProjectProviderGetter:               routingParams.EtcdRestoreProjectProviderGetter,
 		backupStorageProvider:                          routingParams.BackupStorageProvider,
+		policyTemplateProvider:                         routingParams.PolicyTemplateProvider,
+		policyBindingProvider:                          routingParams.PolicyBindingProvider,
 		backupCredentialsProviderGetter:                routingParams.BackupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        routingParams.PrivilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   routingParams.SeedProvider,
