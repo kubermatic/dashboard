@@ -36,7 +36,6 @@ import (
 	machineconversions "k8c.io/dashboard/v2/pkg/machine"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
-	machineresource "k8c.io/dashboard/v2/pkg/resources/machine"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
@@ -108,7 +107,7 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, utilerrors.NewBadRequest("node deployment validation failed: %s", err)
 	}
 
-	md, err := machineresource.Deployment(ctx, cluster, nd, dc, keys, settingsProvider)
+	md, err := machine.Deployment(ctx, cluster, nd, dc, keys, settingsProvider)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -550,7 +549,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	patchedMachineDeployment, err := machineresource.Deployment(ctx, cluster, patchedNodeDeployment, dc, keys, settingsProvider)
+	patchedMachineDeployment, err := machine.Deployment(ctx, cluster, patchedNodeDeployment, dc, keys, settingsProvider)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -933,7 +932,7 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 
 func getAutoscalingConfiguration(md *clusterv1alpha1.MachineDeployment) (*uint32, *uint32, error) {
 	var minReplicas *uint32
-	if minSize, ok := md.Annotations[machineresource.AutoscalerMinSizeAnnotation]; ok && minSize != "" {
+	if minSize, ok := md.Annotations[machine.AutoscalerMinSizeAnnotation]; ok && minSize != "" {
 		minInt, err := strconv.ParseInt(minSize, 10, 32)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %w", err)
@@ -942,7 +941,7 @@ func getAutoscalingConfiguration(md *clusterv1alpha1.MachineDeployment) (*uint32
 	}
 
 	var maxReplicas *uint32
-	if maxSize, ok := md.Annotations[machineresource.AutoscalerMaxSizeAnnotation]; ok && maxSize != "" {
+	if maxSize, ok := md.Annotations[machine.AutoscalerMaxSizeAnnotation]; ok && maxSize != "" {
 		maxInt, err := strconv.ParseInt(maxSize, 10, 32)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %w", err)

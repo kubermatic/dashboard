@@ -182,8 +182,8 @@ func (o *OpenIDClient) GetRedirectURI(path string) (string, error) {
 	return fmt.Sprintf("%s://%s%s", u.Scheme, u.Host, path), nil
 }
 
-func (c OpenIDClient) OIDCConfig() *authtypes.OIDCConfiguration {
-	return c.oidcConfig
+func (o OpenIDClient) OIDCConfig() *authtypes.OIDCConfiguration {
+	return o.oidcConfig
 }
 
 func (o *OpenIDClient) oauth2Config(overwriteRedirectURI string, scopes ...string) *oauth2.Config {

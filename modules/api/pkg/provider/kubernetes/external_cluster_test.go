@@ -272,17 +272,17 @@ func genCloudCluster(name, region, projectID string, cloud kubermaticv1.Provider
 			Cloud: kubermaticv1.CloudSpec{},
 		},
 	}
-	switch {
-	case cloud == kubermaticv1.AWSCloudProvider:
+	switch cloud {
+	case kubermaticv1.AWSCloudProvider:
 		cluster.Spec.Cloud.AWS = &kubermaticv1.AWSCloudSpec{
 			AccessKeyID:     defaultAccessKeyID,
 			SecretAccessKey: defaultSecretAccessKey,
 		}
-	case cloud == kubermaticv1.GCPCloudProvider:
+	case kubermaticv1.GCPCloudProvider:
 		cluster.Spec.Cloud.GCP = &kubermaticv1.GCPCloudSpec{
 			ServiceAccount: defaultServiceAccount,
 		}
-	case cloud == kubermaticv1.AzureCloudProvider:
+	case kubermaticv1.AzureCloudProvider:
 		cluster.Spec.Cloud.Azure = &kubermaticv1.AzureCloudSpec{
 			TenantID:       defaultTenantID,
 			SubscriptionID: defaultSubscriptionID,

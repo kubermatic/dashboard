@@ -197,8 +197,8 @@ func getKubeOneMachineDeployments(ctx context.Context, masterClient ctrlruntimec
 }
 
 func patchKubeOneMachineDeployment(ctx context.Context, masterClient ctrlruntimeclient.Client, machineDeployment *clusterv1alpha1.MachineDeployment, oldmd, newmd *apiv2.ExternalClusterMachineDeployment, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
-	currentVersion := oldmd.NodeDeployment.Spec.Template.Versions.Kubelet
-	desiredVersion := newmd.NodeDeployment.Spec.Template.Versions.Kubelet
+	currentVersion := oldmd.Spec.Template.Versions.Kubelet
+	desiredVersion := newmd.Spec.Template.Versions.Kubelet
 	if desiredVersion != currentVersion {
 		machineDeployment.Spec.Template.Spec.Versions.Kubelet = desiredVersion
 		userClusterClient, err := clusterProvider.GetClient(ctx, masterClient, cluster)
@@ -211,8 +211,8 @@ func patchKubeOneMachineDeployment(ctx context.Context, masterClient ctrlruntime
 		return newmd, nil
 	}
 
-	currentReplicas := oldmd.NodeDeployment.Spec.Replicas
-	desiredReplicas := newmd.NodeDeployment.Spec.Replicas
+	currentReplicas := oldmd.Spec.Replicas
+	desiredReplicas := newmd.Spec.Replicas
 	if desiredReplicas != currentReplicas {
 		machineDeployment.Spec.Replicas = &desiredReplicas
 		userClusterClient, err := clusterProvider.GetClient(ctx, masterClient, cluster)
@@ -247,20 +247,20 @@ func getKubeOneAPIMachineDeployment(ctx context.Context,
 
 func setKubeOneCloudCredentials(preset *kubermaticv1.Preset, providerName string, kubeOneCloudSpec apiv2.KubeOneCloudSpec) (*apiv2.KubeOneCloudSpec, error) {
 	// TODO: Add support for the remaining KubeOne Supported Providers.
-	switch {
-	case providerName == resources.KubeOneAWS:
+	switch providerName {
+	case resources.KubeOneAWS:
 		return setAWSCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneGCP:
+	case resources.KubeOneGCP:
 		return setGCPCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneAzure:
+	case resources.KubeOneAzure:
 		return setAzureCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneHetzner:
+	case resources.KubeOneHetzner:
 		return setHetznerCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneDigitalOcean:
+	case resources.KubeOneDigitalOcean:
 		return setDigitalOceanCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneOpenStack:
+	case resources.KubeOneOpenStack:
 		return setOpenStackCredentials(preset, kubeOneCloudSpec)
-	case providerName == resources.KubeOneVSphere:
+	case resources.KubeOneVSphere:
 		return setVsphereCredentials(preset, kubeOneCloudSpec)
 	}
 

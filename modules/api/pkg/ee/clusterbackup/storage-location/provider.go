@@ -159,7 +159,7 @@ func (p *BackupStorageProvider) Create(ctx context.Context, userInfo *provider.U
 		UID:        cbsl.UID,
 	}
 
-	secret.ObjectMeta.OwnerReferences = append(secret.ObjectMeta.OwnerReferences, ownerReference)
+	secret.OwnerReferences = append(secret.OwnerReferences, ownerReference)
 
 	if err := p.privilegedClient.Create(ctx, secret); err != nil {
 		return nil, err

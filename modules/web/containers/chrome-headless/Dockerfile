@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.23-node-20-kind-0.26-10
+FROM quay.io/kubermatic/build:go-1.24-node-20-kind-0.27-3
 
 LABEL maintainer="support@kubermatic.com"
 

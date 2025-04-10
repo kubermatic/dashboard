@@ -42,10 +42,10 @@ type baseHandler struct {
 	options []httptransport.ServerOption
 }
 
-func (this *baseHandler) chain(endpoint endpoint.Endpoint) endpoint.Endpoint {
-	if len(this.middlewares) > 0 {
-		for i := len(this.middlewares) - 1; i >= 0; i-- {
-			endpoint = this.middlewares[i](endpoint)
+func (h *baseHandler) chain(endpoint endpoint.Endpoint) endpoint.Endpoint {
+	if len(h.middlewares) > 0 {
+		for i := len(h.middlewares) - 1; i >= 0; i-- {
+			endpoint = h.middlewares[i](endpoint)
 		}
 	}
 
