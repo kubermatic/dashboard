@@ -249,12 +249,14 @@ limitations under the License.
         </mat-card-title>
       </mat-card-header>
 
-      <mat-checkbox *ngIf="!isDialogView()"
-                    [name]="Controls.EnableClusterAutoscalingApp"
-                    [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+      <div fxLayoutAlign=" center"
+           *ngIf="!isDialogView()">
+        <mat-checkbox [name]="Controls.EnableClusterAutoscalingApp"
+                      [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+        </mat-checkbox>
         <i class="km-icon-info km-pointer"
-           matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
-      </mat-checkbox>
+           [matTooltip]="autoscalingTooltipText"></i>
+      </div>
 
       <km-number-stepper label="Min Replicas"
                          mode="all"
