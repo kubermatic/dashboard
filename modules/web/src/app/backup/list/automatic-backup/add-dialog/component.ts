@@ -23,6 +23,7 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {EMPTY, iif, Observable, Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -121,7 +122,7 @@ export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Cluster]: this._builder.control('', Validators.required),
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control('', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]),
       [Controls.Destination]: this._builder.control('', Validators.required),
       [Controls.Group]: this._builder.control(DefaultSchuleOption.Daily, Validators.required),
       [Controls.Schedule]: this._builder.control(''),
