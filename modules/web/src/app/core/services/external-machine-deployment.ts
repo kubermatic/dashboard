@@ -14,6 +14,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, map, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
@@ -148,7 +149,7 @@ export class ExternalMachineDeploymentService {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: `Delete ${cluster?.cloud.eks ? 'Node Group' : 'Node Pool'}`,
-        message: `Delete <b>${md.name}</b> of <b>${cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${_.escape(md.name)}</b> of <b>${_.escape(cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

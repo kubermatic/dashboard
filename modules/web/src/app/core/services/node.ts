@@ -20,6 +20,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
+import _ from 'lodash';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, finalize, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
@@ -157,7 +158,7 @@ export class NodeService {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Machine Deployment',
-        message: `Delete <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${_.escape(md.name)}</b> machine deployment of <b>${_.escape(cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -201,7 +202,7 @@ export class NodeService {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Restart Machine Deployment',
-        message: `Perform rolling restart of <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster?`,
+        message: `Perform rolling restart of <b>${_.escape(md.name)}</b> machine deployment of <b>${_.escape(cluster.name)}</b> cluster?`,
         confirmLabel: 'Restart',
       },
     };

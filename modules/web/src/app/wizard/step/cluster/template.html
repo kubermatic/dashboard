@@ -54,6 +54,9 @@ limitations under the License.
         <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
           Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
         </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+          Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+        </mat-error>
       </mat-form-field>
 
       <mat-card-header class="km-no-padding">

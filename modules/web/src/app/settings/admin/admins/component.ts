@@ -22,6 +22,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Admin, Member} from '@shared/entity/member';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {AddAdminDialogComponent} from './add-admin-dialog/component';
@@ -85,7 +86,7 @@ export class AdminsComponent implements OnInit, OnChanges {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Remove Administrator',
-        message: `Remove <b>${admin.name}</b> from administrators?`,
+        message: `Remove <b>${_.escape(admin.name)}</b> from administrators?`,
         confirmLabel: 'Remove',
       },
     };

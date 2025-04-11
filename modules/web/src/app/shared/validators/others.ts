@@ -40,3 +40,6 @@ export const Cluster_BACKUP_EXPIRES_IN = Validators.pattern('^(0|[0-9]{1,2}h?[0-
 // String shouldn't start with ( or [ or } or ) or |
 export const KUBERNETES_ANNOTATION_VALUE_PATTERN = '^[^(})|\\[]*';
 export const KUBERNETES_ANNOTATION_VALUE_PATTERN_VALIDATOR = Validators.pattern(KUBERNETES_ANNOTATION_VALUE_PATTERN);
+
+export const NON_SPECIAL_CHARACTERS_PATTERN = /^[^|"<>[\]{}`\\';&]+$/;
+export const NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR = Validators.pattern(NON_SPECIAL_CHARACTERS_PATTERN);

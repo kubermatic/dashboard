@@ -126,8 +126,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Remove SSH Key',
-        message: `Remove <b>${sshKey.name}</b>
-          SSH key from <b>${this.cluster.name}</b> cluster?`,
+        message: `Remove <b>${_.escape(sshKey.name)}</b>
+          SSH key from <b>${_.escape(this.cluster.name)}</b> cluster?`,
         confirmLabel: 'Remove',
       },
     };

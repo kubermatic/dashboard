@@ -267,8 +267,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       const config: MatDialogConfig = {
         data: {
           title: 'Delete Application',
-          message: `Delete <b>${application.name}</b> application${
-            this.cluster ? ` of <b>${this.cluster.name}</b> cluster permanently` : ''
+          message: `Delete <b>${_.escape(application.name)}</b> application${
+            this.cluster ? ` of <b>${_.escape(this.cluster.name)}</b> cluster permanently` : ''
           }?`,
           confirmLabel: 'Delete',
         },

@@ -37,6 +37,9 @@ END OF TERMS AND CONDITIONS
         <mat-error *ngIf="form.controls.group.hasError('required')">
           <strong>Required</strong>
         </mat-error>
+        <mat-error *ngIf="form.get(Controls.Group).hasError('pattern')">
+          Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+        </mat-error>
       </mat-form-field>
 
       <label class="km-radio-group-label">Select a Role</label>

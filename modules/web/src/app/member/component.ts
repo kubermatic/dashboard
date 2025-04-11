@@ -203,7 +203,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Remove Member',
-        message: `Remove <b>${member.name}</b> from <b>${this._selectedProject.name}</b> project?`,
+        message: `Remove <b>${_.escape(member.name)}</b> from <b>${_.escape(this._selectedProject.name)}</b> project?`,
         confirmLabel: 'Remove',
       },
     };

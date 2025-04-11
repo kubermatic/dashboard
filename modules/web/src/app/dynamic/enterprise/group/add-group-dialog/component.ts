@@ -23,6 +23,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {Observable} from 'rxjs';
 import {Group} from '@app/dynamic/enterprise/group/entity';
 import {GroupService} from '@app/dynamic/enterprise/group/service';
@@ -52,7 +53,7 @@ export class AddGroupDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Group]: this._builder.control('', Validators.required),
+      [Controls.Group]: this._builder.control('', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]),
       [Controls.Role]: this._builder.control('', Validators.required),
     });
   }

@@ -66,7 +66,6 @@ export function hasAddonLogoData(addonConfig: AddonConfig): boolean {
   return !!addonConfig && !!addonConfig.spec && !!addonConfig.spec.logo && !!addonConfig.spec.logoFormat;
 }
 
-// Before using it in HTML it has to be go through DomSanitizer.bypassSecurityTrustUrl() method.
 export function getAddonLogoData(addonConfig: AddonConfig): string {
   return addonConfig && addonConfig.spec
     ? `data:image/${addonConfig.spec.logoFormat};base64,${addonConfig.spec.logo}`

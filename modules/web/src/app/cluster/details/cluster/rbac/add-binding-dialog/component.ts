@@ -16,6 +16,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {MatDialogRef} from '@angular/material/dialog';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
@@ -84,7 +85,7 @@ export class AddBindingDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Email]: new FormControl('', [Validators.required]),
+      [Controls.Email]: new FormControl('', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]),
       [Controls.Group]: new FormControl(''),
       [Controls.Role]: new FormControl('', [Validators.required]),
       [Controls.Namespace]: new FormControl(''),
@@ -139,9 +140,9 @@ export class AddBindingDialogComponent implements OnInit, OnDestroy {
     this.form.get(Controls.Email).clearValidators();
     this.form.get(Controls.Group).clearValidators();
     if (this.subjectType === Kind.User) {
-      this.form.get(Controls.Email).setValidators([Validators.required]);
+      this.form.get(Controls.Email).setValidators([Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]);
     } else {
-      this.form.get(Controls.Group).setValidators([Validators.required]);
+      this.form.get(Controls.Group).setValidators([Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]);
     }
     this.form.get(Controls.Email).updateValueAndValidity();
     this.form.get(Controls.Group).updateValueAndValidity();

@@ -17,6 +17,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {AdminSettings} from '@shared/entity/settings';
+import _ from 'lodash';
 import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
 import {finalize, take} from 'rxjs/operators';
@@ -72,9 +73,9 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
           if (machineDeployments.length > 0) {
             const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(', ');
             if (this.clusterProvider === ExternalClusterProvider.EKS) {
-              this.warningMessage = `Cluster has nodegroups attached (<b>${nodegroupNames}</b>). Please delete nodegroups before deleting the cluster.`;
+              this.warningMessage = `Cluster has nodegroups attached (<b>${_.escape(nodegroupNames)}</b>). Please delete nodegroups before deleting the cluster.`;
             } else {
-              this.warningMessage = `Cluster has nodegroups attached (<b>${nodegroupNames}</b>).`;
+              this.warningMessage = `Cluster has nodegroups attached (<b>${_.escape(nodegroupNames)}</b>).`;
             }
           } else {
             this.warningMessage = '';

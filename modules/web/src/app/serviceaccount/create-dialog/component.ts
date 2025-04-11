@@ -18,6 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
 import {Observable} from 'rxjs';
@@ -39,7 +40,7 @@ export class CreateServiceAccountDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]),
       group: new FormControl('editors', [Validators.required]),
     });
   }

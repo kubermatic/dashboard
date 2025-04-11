@@ -230,7 +230,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Cluster Template',
-        message: `Delete <b>${template.name}</b> cluster template permanently? The clusters created using this template will not be deleted.`,
+        message: `Delete <b>${_.escape(template.name)}</b> cluster template permanently? The clusters created using this template will not be deleted.`,
         confirmLabel: 'Delete',
       },
     };

@@ -31,6 +31,9 @@ limitations under the License.
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
         <strong>Required</strong>
       </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+        Constraint Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field fxFlex>

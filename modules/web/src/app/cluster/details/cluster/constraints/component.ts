@@ -173,7 +173,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Constraint',
-        message: `Delete <b>${constraint.name}</b> OPA constraint of <b>${this.cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${_.escape(constraint.name)}</b> OPA constraint of <b>${_.escape(this.cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

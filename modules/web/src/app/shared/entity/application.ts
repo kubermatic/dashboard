@@ -170,7 +170,6 @@ export enum ApplicationLabelValue {
   KKP = 'kkp',
 }
 
-// Before using it in HTML it has to be go through DomSanitizer.bypassSecurityTrustUrl() method.
 export function getApplicationLogoData(applicationDefinition: ApplicationDefinition): string {
   return applicationDefinition?.spec?.logo && applicationDefinition.spec.logoFormat
     ? `data:image/${applicationDefinition.spec.logoFormat};base64,${applicationDefinition.spec.logo}`
