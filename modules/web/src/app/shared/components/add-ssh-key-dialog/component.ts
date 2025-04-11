@@ -18,6 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {SSHKey} from '@shared/entity/ssh-key';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {Observable} from 'rxjs';
@@ -49,7 +50,7 @@ export class AddSshKeyDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      [Controls.Name]: ['', [Validators.required]],
+      [Controls.Name]: ['', [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]],
       [Controls.Key]: ['', [Validators.required, SSHKeyFormValidator()]],
     });
     this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
