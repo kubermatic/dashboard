@@ -126,6 +126,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
+  autoscalingTooltipText =
+    'Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application.';
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -236,6 +238,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       } else {
         this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
       }
+    }
+
+    if (!this._isClusterAutoscalingAppExist()) {
+      this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+      this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+      this.autoscalingTooltipText =
+        'To enable autoscaling, the Cluster Autoscaler application must be added to the applications catalog.';
     }
 
     this.currentNodeOS = (this.dialogEditMode || this.wizardMode) && this._nodeDataService.operatingSystem;
@@ -675,5 +684,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       ...this._quotaCalculationService.quotaPayload,
       replicas: this._nodeDataService.nodeData.count,
     };
+  }
+
+  private _isClusterAutoscalingAppExist(): boolean {
+    return !!this._applicationService.applicationDefinitions.find(app => app.name === "CLUSTER_AUTOSCALING_APP_DEF_NAME");
   }
 }
