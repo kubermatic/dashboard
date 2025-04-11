@@ -14,7 +14,6 @@
 
 import {Component, Input, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {
   Addon,
@@ -62,7 +61,6 @@ export class InstallAddonDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<Component>,
-    private readonly _domSanitizer: DomSanitizer,
     private readonly _builder: FormBuilder
   ) {}
 
@@ -74,8 +72,8 @@ export class InstallAddonDialogComponent {
     return hasAddonFormData(this.addonConfigs.get(name));
   }
 
-  getAddonLogo(name: string): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
+  getAddonLogo(name: string): string {
+    return getAddonLogoData(this.addonConfigs.get(name));
   }
 
   getAddonShortDescription(name: string): string {
