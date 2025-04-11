@@ -17,9 +17,11 @@ import (
 // swagger:model PodDNSConfigOption
 type PodDNSConfigOption struct {
 
+	// Name is this DNS resolver option's name.
 	// Required.
 	Name string `json:"name,omitempty"`
 
+	// Value is this DNS resolver option's value.
 	// +optional
 	Value string `json:"value,omitempty"`
 }
