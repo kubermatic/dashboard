@@ -15,7 +15,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {
   AddonConfig,
@@ -56,7 +55,6 @@ export class EditAddonDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<EditAddonDialogComponent>,
-    private readonly _domSanitizer: DomSanitizer,
     private readonly _builder: FormBuilder
   ) {}
 
@@ -86,8 +84,8 @@ export class EditAddonDialogComponent implements OnInit {
     return hasAddonLogoData(this.addonConfig);
   }
 
-  getAddonLogo(): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfig));
+  getAddonLogo(): string {
+    return getAddonLogoData(this.addonConfig);
   }
 
   private _getAddonPatch(): Addon {
