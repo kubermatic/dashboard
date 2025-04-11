@@ -100,7 +100,11 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
+<<<<<<< Updated upstream
 replace k8s.io/client-go => k8s.io/client-go v0.32.3
+=======
+replace k8s.io/client-go => k8s.io/client-go v0.32.1
+>>>>>>> Stashed changes
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
@@ -180,6 +184,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/btree v1.1.3 // indirect
 	github.com/google/cel-go v0.22.1 // indirect
 	github.com/google/gnostic-models v0.6.9 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
@@ -194,8 +199,8 @@ require (
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
+	github.com/hetznercloud/hcloud-go/v2 v2.21.0 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
-	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.1-0.20220621161143-b0104c826a24 // indirect
@@ -256,11 +261,19 @@ require (
 	github.com/toqueteos/webbrowser v1.2.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.mongodb.org/mongo-driver v1.17.1 // indirect
+<<<<<<< Updated upstream
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.57.0 // indirect
 	go.opentelemetry.io/otel v1.32.0 // indirect
 	go.opentelemetry.io/otel/metric v1.32.0 // indirect
 	go.opentelemetry.io/otel/trace v1.32.0 // indirect
+=======
+	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.59.0 // indirect
+	go.opentelemetry.io/otel v1.34.0 // indirect
+	go.opentelemetry.io/otel/metric v1.34.0 // indirect
+	go.opentelemetry.io/otel/trace v1.34.0 // indirect
+>>>>>>> Stashed changes
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
@@ -282,11 +295,20 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
+	gopkg.in/validator.v2 v2.0.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.2.1 // indirect
+<<<<<<< Updated upstream
 	k8s.io/component-base v0.31.3 // indirect
 	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
 	k8s.io/kube-aggregator v0.31.3 // indirect
+=======
+	k8s.io/component-base v0.32.1 // indirect
+	k8s.io/gengo/v2 v2.0.0-20240911193312-2b36238f13e9 // indirect
+	k8s.io/klog v1.0.0 // indirect
+	k8s.io/kube-aggregator v0.32.1 // indirect
+>>>>>>> Stashed changes
 	k8s.io/kube-openapi v0.31.2 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.2.1 // indirect
