@@ -30264,7 +30264,7 @@
           "x-go-name": "Key"
         },
         "name": {
-          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -35360,11 +35360,12 @@
       "x-go-package": "k8s.io/apimachinery/pkg/apis/meta/v1"
     },
     "LocalObjectReference": {
-      "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.\n+structType=atomic",
+      "description": "New uses of this type are discouraged because of difficulty describing its usage when embedded in APIs.\n1. Invalid usage help.  It is impossible to add specific help for individual usage.  In most embedded usages, there are particular\nrestrictions like, \"must refer only to types A and B\" or \"UID not honored\" or \"name must be restricted\".\nThose cannot be well described when embedded.\n2. Inconsistent validation.  Because the usages are different, the validation rules are different by usage, which makes it hard for users to predict what will happen.\n3. We cannot easily change it.  Because this type is embedded in many locations, updates to this type\nwill affect numerous schemas.  Don't make new APIs embed an underspecified API type they do not control.\n\nInstead of using this type, create a locally provided and used type that is well-focused on your reference.\nFor example, ServiceReferences for admission registration: https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533 .\n+structType=atomic",
       "type": "object",
+      "title": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
       "properties": {
         "name": {
-          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         }
@@ -38020,12 +38021,12 @@
       "title": "PodDNSConfigOption defines DNS resolver options of a pod.",
       "properties": {
         "name": {
-          "description": "Required.",
+          "description": "Name is this DNS resolver option's name.\nRequired.",
           "type": "string",
           "x-go-name": "Name"
         },
         "value": {
-          "description": "+optional",
+          "description": "Value is this DNS resolver option's value.\n+optional",
           "type": "string",
           "x-go-name": "Value"
         }
@@ -39324,7 +39325,7 @@
           "x-go-name": "Key"
         },
         "name": {
-          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.",
           "type": "string",
           "x-go-name": "Name"
         },

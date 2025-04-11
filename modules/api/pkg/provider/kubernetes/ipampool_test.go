@@ -116,9 +116,11 @@ func TestListIPAMPools(t *testing.T) {
 			},
 		},
 		{
-			name:             "empty list",
-			existingObjects:  []ctrlruntimeclient.Object{},
-			expectedResponse: &kubermaticv1.IPAMPoolList{},
+			name:            "empty list",
+			existingObjects: []ctrlruntimeclient.Object{},
+			expectedResponse: &kubermaticv1.IPAMPoolList{
+				Items: []kubermaticv1.IPAMPool{},
+			},
 		},
 	}
 
