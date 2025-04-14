@@ -39,6 +39,12 @@ limitations under the License.
                matInput
                required>
         <mat-hint>The name of the created automatic backup.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+          Name cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+        </mat-error>
       </mat-form-field>
 
       <div *ngIf="hasClusterInput() && !this.isLoadingDestinations"

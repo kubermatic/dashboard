@@ -32,6 +32,7 @@ import {
   IPV4_CIDR_PATTERN_VALIDATOR,
   IPV4_IPV6_CIDR_PATTERN,
   IPV6_CIDR_PATTERN_VALIDATOR,
+  NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
 } from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -572,6 +573,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: this._builder.control(this._clusterSpecService?.cluster?.name ?? '', [
         Validators.required,
         Validators.minLength(this._minNameLength),
+        NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
       ]),
       [Controls.Version]: this._builder.control(clusterSpec?.version ?? '', [Validators.required]),
       [Controls.ContainerRuntime]: this._builder.control(clusterSpec?.containerRuntime ?? ContainerRuntime.Containerd, [

@@ -43,6 +43,9 @@ limitations under the License.
           <mat-error *ngIf="form.get(Controls.Email).hasError(ErrorType.Required)">
             <strong>Required</strong>
           </mat-error>
+          <mat-error *ngIf="form.get(Controls.Email).hasError('pattern')">
+            User Email cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex
@@ -54,6 +57,9 @@ limitations under the License.
                  autocomplete="off">
           <mat-error *ngIf="form.get(Controls.Group).hasError(ErrorType.Required)">
             <strong>Required</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get(Controls.Group).hasError('pattern')">
+            Group cannot contain special characters like | " &lt; &gt; &lbrace; &rbrace; [ ] ` \ ' ; &
           </mat-error>
         </mat-form-field>
 

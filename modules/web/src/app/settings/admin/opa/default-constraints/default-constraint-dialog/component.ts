@@ -20,6 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common';
 import {DialogActionMode} from '@shared/types/common';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
@@ -76,7 +77,7 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(
         this.data.mode === this.Mode.Edit ? this.data.defaultConstraint.name : '',
-        [Validators.required]
+        [Validators.required, NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR]
       ),
       [Controls.ConstraintTemplate]: this._builder.control(
         {

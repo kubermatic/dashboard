@@ -187,7 +187,7 @@ export class QuotasComponent implements OnInit {
     const config = {
       data: {
         title: 'Delete Quota',
-        message: `Delete quota for <b>${subjectHumanReadableName ?? name}</b>?`,
+        message: `Delete quota for <b>${_.escape(subjectHumanReadableName ?? name)}</b>?`,
         confirmLabel: 'Delete',
       },
     } as MatDialogConfig;
