@@ -21,6 +21,7 @@ import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/en
 import {DialogActionMode} from '@shared/types/common';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as countryCodeLookup from 'country-code-lookup';
 import * as y from 'js-yaml';
 import _ from 'lodash';
@@ -96,7 +97,10 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     }
 
     this.form = new FormGroup({
-      name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
+      name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [
+        Validators.required,
+        NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
+      ]),
       provider: new FormControl(
         {value: this.data.isEditing ? this.data.datacenter.spec.provider : '', disabled: this.data.isEditing},
         [Validators.required]

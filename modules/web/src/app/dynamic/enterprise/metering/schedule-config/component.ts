@@ -19,18 +19,19 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {filter, switchMap, take} from 'rxjs';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
 import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {MeteringReportConfiguration} from '@shared/entity/datacenter';
+import _ from 'lodash';
+import {filter, switchMap, take} from 'rxjs';
 
 enum Column {
   name = 'name',
@@ -110,7 +111,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Schedule Configuration',
-        message: `Delete <b>${name}</b> schedule permanently?`,
+        message: `Delete <b>${_.escape(name)}</b> schedule permanently?`,
         confirmLabel: 'Delete',
         warning: 'Deleting this will NOT remove reports related to it.',
       },

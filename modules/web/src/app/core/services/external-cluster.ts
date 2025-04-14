@@ -33,6 +33,7 @@ import {PresetList} from '@shared/entity/preset';
 import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSClusterRole, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
+import _ from 'lodash';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
 
@@ -364,7 +365,9 @@ export class ExternalClusterService {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Disconnect Cluster',
-        message: `Are you sure you want to disconnect <b>${cluster.name}</b> cluster? This action will not remove the cluster from the cloud provider’s end.`,
+        message: `Are you sure you want to disconnect <b>${_.escape(
+          cluster.name
+        )}</b> cluster? This action will not remove the cluster from the cloud provider’s end.`,
         confirmLabel: 'Disconnect',
         throttleButton: true,
         observable: this.deleteExternalCluster(projectID, cluster.id, DeleteExternalClusterAction.Disconnect),

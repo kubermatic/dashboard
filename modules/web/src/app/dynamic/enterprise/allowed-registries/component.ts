@@ -137,7 +137,7 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Allowed Registry',
-        message: `Delete <b>${allowedRegistry.name}</b> allowed registry permanently?`,
+        message: `Delete <b>${_.escape(allowedRegistry.name)}</b> allowed registry permanently?`,
         confirmLabel: 'Delete',
       },
     };

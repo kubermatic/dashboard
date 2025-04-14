@@ -29,6 +29,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
+import _ from 'lodash';
 import {filter, switchMap, take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
 
@@ -128,7 +129,9 @@ export class ServiceAccountTokenComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Token',
-        message: `Delete <b>${token.name}</b> token of <b>${this.serviceaccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
+        message: `Delete <b>${_.escape(token.name)}</b> token of <b>${_.escape(
+          this.serviceaccount.name
+        )}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };
