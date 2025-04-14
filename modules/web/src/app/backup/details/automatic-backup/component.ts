@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HealthStatus, getBackupHealthStatus} from '@app/shared/utils/health-status';
+import {getBackupHealthStatus, HealthStatus} from '@app/shared/utils/health-status';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -26,6 +26,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -104,7 +105,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete <b>${backup.name}</b> automatic backup of <b>${this.selectedProject.name}</b> project and all its associated backups permanently?`,
+        message: `Delete <b>${_.escape(backup.name)}</b> automatic backup of <b>${_.escape(this.selectedProject.name)}</b> project and all its associated backups permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };

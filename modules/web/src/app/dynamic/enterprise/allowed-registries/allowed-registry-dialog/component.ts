@@ -23,6 +23,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {getIconClassForButton} from '@shared/utils/common';
+import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {AllowedRegistry} from '../entity';
@@ -66,6 +67,7 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Name]: new FormControl(this.data.mode === this.Mode.Edit ? this.data.allowedRegistry.name : '', [
         Validators.required,
+        NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR,
       ]),
       [Controls.RegistryPrefix]: new FormControl(
         this.data.mode === this.Mode.Edit ? this.data.allowedRegistry.spec.registryPrefix : '',

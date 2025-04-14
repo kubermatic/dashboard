@@ -132,7 +132,7 @@ export class GroupComponent extends DynamicTab implements OnInit, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Remove Group',
-        message: `Remove <b>${group.group}</b> group from <b>${this._selectedProject.name}</b> project?`,
+        message: `Remove <b>${_.escape(group.group)}</b> group from <b>${_.escape(this._selectedProject.name)}</b> project?`,
         confirmLabel: 'Remove',
       },
     };
