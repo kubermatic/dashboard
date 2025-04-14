@@ -45,7 +45,7 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@shared/entity/application';
+import {ApplicationDefinition, CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@shared/entity/application';
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
@@ -126,6 +126,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
+  autoscalingTooltipText =
+    'Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application.';
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -237,6 +239,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
       }
     }
+
+    this._applicationService
+      .listApplicationDefinitions()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(apps => {
+        if (!this._isClusterAutoscalingAppExist(apps)) {
+          this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+          this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+          this.autoscalingTooltipText =
+            'To enable autoscaling, the Cluster Autoscaler application must be added to the applications catalog.';
+        }
+      });
 
     this.currentNodeOS = (this.dialogEditMode || this.wizardMode) && this._nodeDataService.operatingSystem;
 
@@ -675,5 +689,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       ...this._quotaCalculationService.quotaPayload,
       replicas: this._nodeDataService.nodeData.count,
     };
+  }
+
+  private _isClusterAutoscalingAppExist(apps: ApplicationDefinition[]): boolean {
+    return !!apps.find(app => app.name === CLUSTER_AUTOSCALING_APP_DEF_NAME);
   }
 }
