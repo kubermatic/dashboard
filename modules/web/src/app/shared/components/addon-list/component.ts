@@ -14,7 +14,6 @@
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
 import _ from 'lodash';
@@ -55,7 +54,6 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
-    private readonly _domSanitizer: DomSanitizer,
     private readonly _dialogModeService: DialogModeService
   ) {}
 
@@ -95,8 +93,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     return hasAddonLogoData(this.addonConfigs.get(name));
   }
 
-  getAddonLogo(name: string): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
+  getAddonLogo(name: string): string {
+    return getAddonLogoData(this.addonConfigs.get(name));
   }
 
   canAdd(): boolean {
@@ -164,7 +162,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Addon',
-        message: `Delete <b>${addon.name}</b> addon of <b>${this.cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${_.escape(addon.name)}</b> addon of <b>${_.escape(this.cluster.name)}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

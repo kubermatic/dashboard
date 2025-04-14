@@ -14,7 +14,6 @@
 
 import {Component, Input, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {
   Addon,
@@ -28,6 +27,7 @@ import {
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {getEditionVersion} from '@shared/utils/common';
+import _ from 'lodash';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
@@ -60,7 +60,6 @@ export class InstallAddonDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<Component>,
-    private readonly _domSanitizer: DomSanitizer,
     private readonly _builder: FormBuilder
   ) {}
 
@@ -72,12 +71,12 @@ export class InstallAddonDialogComponent {
     return hasAddonFormData(this.addonConfigs.get(name));
   }
 
-  getAddonLogo(name: string): SafeUrl {
-    return this._domSanitizer.bypassSecurityTrustUrl(getAddonLogoData(this.addonConfigs.get(name)));
+  getAddonLogo(name: string): string {
+    return getAddonLogoData(this.addonConfigs.get(name));
   }
 
   getAddonShortDescription(name: string): string {
-    return getAddonShortDescription(this.addonConfigs.get(name));
+    return _.escape(getAddonShortDescription(this.addonConfigs.get(name)));
   }
 
   select(name: string): void {
