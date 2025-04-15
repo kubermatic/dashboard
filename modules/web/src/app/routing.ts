@@ -115,6 +115,10 @@ function createRouting(): Routes {
           loadChildren: () => DynamicModule.ClusterBackups,
         },
         {
+          path: `projects/:projectID/${View.KyvernoPolicies}`,
+          loadChildren: () => DynamicModule.KyvernoPolicies,
+        },
+        {
           path: 'account',
           loadChildren: () => import('./settings/user/module').then(m => m.UserSettingsModule),
           data: {preload: true},
