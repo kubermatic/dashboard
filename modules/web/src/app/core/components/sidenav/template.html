@@ -228,6 +228,19 @@ limitations under the License.
       </ng-container>
     </km-side-nav-field>
 
+    <div [matTooltip]="getTooltip(view.KyvernoPolicies)"
+    [ngClass]="{'km-disabled': !isDisabledField(view.KyvernoPolicies)}"
+    class="menu-item">
+ <a id="km-nav-item-cluster-templates"
+    fxLayoutAlign=" center"
+    fxLayoutGap="20px"
+    [routerLink]="getRouterLink(view.KyvernoPolicies)"
+    [ngClass]="getLinkClass(view.KyvernoPolicies)">
+   <i class="km-icon-cluster-template"></i>
+   <span *ngIf="!isSidenavCollapsed">{{ViewDisplayName.KyvernoPolicies}}</span>
+ </a>
+</div>
+
     <km-side-nav-field [label]="projectSidenavSections.Access"
                        icon="km-icon-key"
                        [isSidenavCollapsed]="isSidenavCollapsed"
