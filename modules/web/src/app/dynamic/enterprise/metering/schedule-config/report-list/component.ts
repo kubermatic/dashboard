@@ -24,14 +24,15 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {UserService} from '@core/services/user';
 import {Report} from '@shared/entity/metering';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
+import _ from 'lodash';
+import {Subject} from 'rxjs';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Column {
   name = 'name',
@@ -151,7 +152,7 @@ export class MeteringReportListComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Metering Report',
-        message: `Do you want to delete <b>${reportName}</b> report permanently?`,
+        message: `Do you want to delete <b>${_.escape(reportName)}</b> report permanently?`,
         confirmLabel: 'Delete',
         warning: 'This change is permanent.',
       },

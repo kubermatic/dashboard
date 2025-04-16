@@ -27,6 +27,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -111,7 +112,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Restore Object',
-        message: `Delete <b>${restore.name}</b> restore object permanently?`,
+        message: `Delete <b>${_.escape(restore.name)}</b> restore object permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };

@@ -32,3 +32,6 @@ export const GKE_POOL_NAME_VALIDATOR = Validators.pattern('(?:[a-z](?:[-a-z0-9]{
 export const URL_PATTERN_VALIDATOR = Validators.pattern(
   /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/
 );
+
+export const NON_SPECIAL_CHARACTERS_PATTERN = /^[^|"<>[\]{}`\\';&]+$/;
+export const NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR = Validators.pattern(NON_SPECIAL_CHARACTERS_PATTERN);

@@ -14,7 +14,6 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Application, ApplicationDefinition, getApplicationLogoData} from '@shared/entity/application';
@@ -34,8 +33,7 @@ export class ApplicationService {
 
   constructor(
     private readonly _appConfigService: AppConfigService,
-    private readonly _httpClient: HttpClient,
-    private readonly _domSanitizer: DomSanitizer
+    private readonly _httpClient: HttpClient
   ) {}
 
   get applications(): Application[] {
@@ -60,7 +58,7 @@ export class ApplicationService {
                   this._applicationDefinitions = appDefs.map(appDef => {
                     const logoData = getApplicationLogoData(appDef);
                     if (logoData) {
-                      appDef.spec.logoData = this._domSanitizer.bypassSecurityTrustUrl(logoData);
+                      appDef.spec.logoData = logoData;
                     }
                     const oldAppDef = this._applicationDefinitions.find(item => item.name === appDef.name);
                     if (oldAppDef) {
@@ -85,7 +83,7 @@ export class ApplicationService {
       tap(appDef => {
         const logoData = getApplicationLogoData(appDef);
         if (logoData) {
-          appDef.spec.logoData = this._domSanitizer.bypassSecurityTrustUrl(logoData);
+          appDef.spec.logoData = logoData;
         }
         this._applicationDefinitions = this._applicationDefinitions.map(item => {
           if (item.name === name) {

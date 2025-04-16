@@ -25,6 +25,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
@@ -200,7 +201,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Reset Alertmanager Config',
-        message: `Reset Alertmanager config of <b>${this.cluster.name}</b> cluster to default?`,
+        message: `Reset Alertmanager config of <b>${_.escape(this.cluster.name)}</b> cluster to default?`,
         confirmLabel: 'Reset',
       },
     };

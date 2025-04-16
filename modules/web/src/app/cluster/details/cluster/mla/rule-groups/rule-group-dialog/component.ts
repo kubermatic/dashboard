@@ -94,7 +94,9 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
       case Mode.Add:
         return 'Create recording and alerting rule group';
       case Mode.Edit:
-        return `Edit <b>${this.data.ruleGroup.name}</b> recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
+        return `Edit <b>${_.escape(this.data.ruleGroup.name)}</b> recording and alerting rule group of <b>${_.escape(
+          this.data.cluster.name
+        )}</b> cluster`;
     }
   }
 

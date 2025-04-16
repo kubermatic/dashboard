@@ -32,6 +32,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
@@ -138,7 +139,9 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete <b>${backup.name}</b> automatic backup of <b>${this._selectedProject.name}</b> project and all its associated backups permanently?`,
+        message: `Delete <b>${_.escape(backup.name)}</b> automatic backup of <b>${_.escape(
+          this._selectedProject.name
+        )}</b> project and all its associated backups permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };
