@@ -22,6 +22,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
+import _ from 'lodash';
 import {filter, switchMap, take} from 'rxjs/operators';
 import {DestinationDialog, Mode} from './destination-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
@@ -118,7 +119,7 @@ export class DestinationsComponent implements OnInit {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Destination',
-        message: `Delete <b>${destination.destinationName}</b> destination permanently?`,
+        message: `Delete <b>${_.escape(destination.destinationName)}</b> destination permanently?`,
         warning: 'Associated backups and snapshots will not be usable after deleting this destination.',
         confirmLabel: 'Delete Destination',
       } as ConfirmationDialogConfig,

@@ -231,7 +231,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Service Account',
-        message: `Delete <b>${serviceAccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
+        message: `Delete <b>${_.escape(serviceAccount.name)}</b> service account of <b>${_.escape(this._selectedProject.name)}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };
