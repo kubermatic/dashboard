@@ -228,13 +228,13 @@ func createBSL(ctx context.Context, client ctrlruntimeclient.Client, backupProvi
 		UID:        bsl.UID,
 	}
 	if !existingSecret {
-		secret.ObjectMeta.OwnerReferences = append(secret.ObjectMeta.OwnerReferences, ownerReferences)
+		secret.OwnerReferences = append(secret.OwnerReferences, ownerReferences)
 		if err := client.Create(ctx, secret); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	} else {
 		ownerRefExist := false
-		for _, ownerRef := range secret.ObjectMeta.OwnerReferences {
+		for _, ownerRef := range secret.OwnerReferences {
 			if ownerRef.UID == bsl.UID {
 				ownerRefExist = true
 				break
@@ -242,7 +242,7 @@ func createBSL(ctx context.Context, client ctrlruntimeclient.Client, backupProvi
 		}
 		if !ownerRefExist {
 			updatedSecret := secret.DeepCopy()
-			updatedSecret.ObjectMeta.OwnerReferences = append(updatedSecret.ObjectMeta.OwnerReferences, ownerReferences)
+			updatedSecret.OwnerReferences = append(updatedSecret.OwnerReferences, ownerReferences)
 			if err := client.Patch(ctx, updatedSecret, ctrlruntimeclient.MergeFrom(secret)); err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -349,7 +349,7 @@ func ListBSLEndpoint(ctx context.Context, request interface{}, userInfoGetter pr
 	for _, bsl := range bslList.Items {
 		res = append(res, apiv2.BackupStorageLocationOverview{
 			Name:         bsl.Name,
-			CreationDate: bsl.ObjectMeta.CreationTimestamp.Time,
+			CreationDate: bsl.CreationTimestamp.Time,
 			CBSLName:     bsl.Labels[CBSL],
 			Region:       bsl.Spec.Config[bslRegion],
 			Prefix:       bsl.Spec.ObjectStorage.Prefix,

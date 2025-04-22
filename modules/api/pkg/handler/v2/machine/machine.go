@@ -86,9 +86,9 @@ func (r *createMachineDeploymentReq) ValidateCreateNodeDeploymentReq() error {
 }
 
 // GetSeedCluster returns the SeedCluster object.
-func (req createMachineDeploymentReq) GetSeedCluster() apiv1.SeedCluster {
+func (r createMachineDeploymentReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		ClusterID: req.ClusterID,
+		ClusterID: r.ClusterID,
 	}
 }
 
@@ -134,9 +134,9 @@ func DecodeDeleteMachineDeploymentNode(c context.Context, r *http.Request) (inte
 }
 
 // GetSeedCluster returns the SeedCluster object.
-func (req deleteMachineDeploymentNodeReq) GetSeedCluster() apiv1.SeedCluster {
+func (r deleteMachineDeploymentNodeReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		ClusterID: req.ClusterID,
+		ClusterID: r.ClusterID,
 	}
 }
 

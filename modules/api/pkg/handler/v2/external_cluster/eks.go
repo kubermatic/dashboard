@@ -841,7 +841,7 @@ func createMachineDeploymentFromEKSNodePool(nodeGroup *ekstypes.Nodegroup, ready
 
 	scalingConfig := nodeGroup.ScalingConfig
 	if scalingConfig != nil {
-		md.NodeDeployment.Status.Replicas = ptr.Deref(scalingConfig.DesiredSize, 0)
+		md.Status.Replicas = ptr.Deref(scalingConfig.DesiredSize, 0)
 		md.Spec.Replicas = ptr.Deref(scalingConfig.DesiredSize, 0)
 		md.Cloud.EKS.ScalingConfig = apiv2.EKSNodegroupScalingConfig{
 			DesiredSize: ptr.Deref(scalingConfig.DesiredSize, 0),
@@ -874,19 +874,19 @@ func patchEKSMachineDeployment(ctx context.Context, oldMD, newMD *apiv2.External
 	// It's required to update NodeGroup size separately.
 
 	clusterName := cloudSpec.Name
-	nodeGroupName := newMD.NodeDeployment.Name
+	nodeGroupName := newMD.Name
 
-	currentReplicas := oldMD.NodeDeployment.Spec.Replicas
-	desiredReplicas := newMD.NodeDeployment.Spec.Replicas
-	currentVersion := oldMD.NodeDeployment.Spec.Template.Versions.Kubelet
-	desiredVersion := newMD.NodeDeployment.Spec.Template.Versions.Kubelet
+	currentReplicas := oldMD.Spec.Replicas
+	desiredReplicas := newMD.Spec.Replicas
+	currentVersion := oldMD.Spec.Template.Versions.Kubelet
+	desiredVersion := newMD.Spec.Template.Versions.Kubelet
 	if desiredReplicas != currentReplicas {
 		_, err = eksprovider.ResizeNodeGroup(ctx, client, clusterName, nodeGroupName, currentReplicas, desiredReplicas)
 		if err != nil {
 			return nil, err
 		}
-		newMD.NodeDeployment.Status.Replicas = desiredReplicas
-		newMD.NodeDeployment.Spec.Template.Versions.Kubelet = currentVersion
+		newMD.Status.Replicas = desiredReplicas
+		newMD.Spec.Template.Versions.Kubelet = currentVersion
 		return newMD, nil
 	}
 
@@ -895,7 +895,7 @@ func patchEKSMachineDeployment(ctx context.Context, oldMD, newMD *apiv2.External
 		if err != nil {
 			return nil, err
 		}
-		newMD.NodeDeployment.Spec.Replicas = currentReplicas
+		newMD.Spec.Replicas = currentReplicas
 		return newMD, nil
 	}
 

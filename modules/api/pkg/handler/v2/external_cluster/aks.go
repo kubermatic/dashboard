@@ -789,7 +789,7 @@ func createMachineDeploymentFromAKSNodePoll(nodePool *armcontainerservice.Manage
 		md.Cloud.AKS.Configuration.MaxSurgeUpgradeSetting = to.String(nodePool.UpgradeSettings.MaxSurge)
 	}
 	if nodePool.ProvisioningState != nil && (nodePool.PowerState != nil && nodePool.PowerState.Code != nil) {
-		state := aks.ConvertMDStatus(*nodePool.ProvisioningState, *nodePool.PowerState.Code, md.NodeDeployment.Status.ReadyReplicas)
+		state := aks.ConvertMDStatus(*nodePool.ProvisioningState, *nodePool.PowerState.Code, md.Status.ReadyReplicas)
 		md.Phase = apiv2.ExternalClusterMDPhase{
 			State: state,
 			AKS: &apiv2.AKSMDPhase{
@@ -821,17 +821,17 @@ func patchAKSMachineDeployment(ctx context.Context, oldCluster, newCluster *apiv
 		return nil, err
 	}
 
-	nodePoolName := newCluster.NodeDeployment.Name
-	currentReplicas := oldCluster.NodeDeployment.Spec.Replicas
-	desiredReplicas := newCluster.NodeDeployment.Spec.Replicas
-	currentVersion := oldCluster.NodeDeployment.Spec.Template.Versions.Kubelet
-	desiredVersion := newCluster.NodeDeployment.Spec.Template.Versions.Kubelet
+	nodePoolName := newCluster.Name
+	currentReplicas := oldCluster.Spec.Replicas
+	desiredReplicas := newCluster.Spec.Replicas
+	currentVersion := oldCluster.Spec.Template.Versions.Kubelet
+	desiredVersion := newCluster.Spec.Template.Versions.Kubelet
 	if desiredReplicas != currentReplicas {
 		_, err = resizeAKSNodePool(ctx, *agentPoolClient, cloud, nodePoolName, desiredReplicas)
 		if err != nil {
 			return nil, err
 		}
-		newCluster.NodeDeployment.Status.Replicas = desiredReplicas
+		newCluster.Status.Replicas = desiredReplicas
 		return newCluster, nil
 	}
 	if desiredVersion != currentVersion {
@@ -839,7 +839,7 @@ func patchAKSMachineDeployment(ctx context.Context, oldCluster, newCluster *apiv
 		if err != nil {
 			return nil, err
 		}
-		newCluster.NodeDeployment.Spec.Replicas = currentReplicas
+		newCluster.Spec.Replicas = currentReplicas
 		return newCluster, nil
 	}
 

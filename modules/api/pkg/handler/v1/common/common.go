@@ -303,7 +303,7 @@ func ValidateUserCanModifyProject(ctx context.Context, userInfoGetter provider.U
 	}
 
 	// Only KKP admins and project owners/editors are allowed to perform this operation.
-	if !(userInfo.IsAdmin || userInfo.Roles.HasAny("editors", "owners")) {
+	if !userInfo.IsAdmin && !userInfo.Roles.HasAny("editors", "owners") {
 		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have privileges to perform this action. Please contact your administrator.", userInfo.Email))
 	}
 	return nil

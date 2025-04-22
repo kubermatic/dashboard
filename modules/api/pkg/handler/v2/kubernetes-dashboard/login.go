@@ -139,7 +139,7 @@ func (l *loginHandler) redirect(ctx context.Context, request interface{}) (respo
 	}
 
 	// get the redirect uri
-	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(loginRequest.Request.URL.Path)
+	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(loginRequest.URL.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +232,7 @@ func (l *loginHandler) oidcCallback(ctx context.Context, request interface{}) (r
 	}
 
 	// get the redirect uri
-	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.Request.URL.Path)
+	redirectURI, err := oidcIssuerVerifier.GetRedirectURI(oidcCallbackRequest.URL.Path)
 	if err != nil {
 		return nil, err
 	}

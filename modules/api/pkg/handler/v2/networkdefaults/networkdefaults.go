@@ -51,9 +51,9 @@ type getNetworkDefaultsReq struct {
 }
 
 // GetSeedCluster returns the SeedCluster object.
-func (req getNetworkDefaultsReq) GetSeedCluster() apiv1.SeedCluster {
+func (r getNetworkDefaultsReq) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		SeedName: req.seedName,
+		SeedName: r.seedName,
 	}
 }
 

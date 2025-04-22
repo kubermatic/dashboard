@@ -151,7 +151,8 @@ func (l *instancetypeListWrapper) addInstanceType(category apiv2.VirtualMachineI
 }
 
 func newInstancetype(category apiv2.VirtualMachineInstancetypeCategory, cpu uint32, memory string) instancetypeWrapper {
-	if category == apiv2.InstancetypeKubermatic {
+	switch category {
+	case apiv2.InstancetypeKubermatic:
 		instancetype := &kvinstancetypev1alpha1.VirtualMachineInstancetype{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: instancetypeName(cpu, memory),
@@ -160,7 +161,8 @@ func newInstancetype(category apiv2.VirtualMachineInstancetypeCategory, cpu uint
 		}
 
 		return &standardInstancetypeWrapper{instancetype}
-	} else if category == apiv2.InstancetypeCustom {
+
+	case apiv2.InstancetypeCustom:
 		instancetype := &kvinstancetypev1alpha1.VirtualMachineClusterInstancetype{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: "small-1",

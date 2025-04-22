@@ -239,7 +239,8 @@ func mockNutanixClient(dc *kubermaticv1.DatacenterSpecNutanix, creds *providerco
 		projectList apiv1.NutanixProjectList
 	)
 
-	if dc.Endpoint == "127.0.0.1" {
+	switch dc.Endpoint {
+	case "127.0.0.1":
 		clusterList = apiv1.NutanixClusterList{
 			{
 				Name: "dc1-cluster",
@@ -250,7 +251,7 @@ func mockNutanixClient(dc *kubermaticv1.DatacenterSpecNutanix, creds *providerco
 				Name: "dc1-project",
 			},
 		}
-	} else if dc.Endpoint == "127.0.0.2" {
+	case "127.0.0.2":
 		clusterList = apiv1.NutanixClusterList{
 			{
 				Name: "dc2-cluster1",

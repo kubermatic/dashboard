@@ -67,9 +67,10 @@ func (watcher *SettingsWatcher) onEvent(delta toolscache.DeltaType, obj interfac
 	}
 
 	if settings != nil && settings.Name == kubermaticv1.GlobalSettingsName {
-		if delta == toolscache.Added || delta == toolscache.Updated {
+		switch delta {
+		case toolscache.Added, toolscache.Updated:
 			watcher.publisher.Publish(settings, pubsub.LinearTreeTraverser([]uint64{}))
-		} else if delta == toolscache.Deleted {
+		case toolscache.Deleted:
 			watcher.publisher.Publish(nil, pubsub.LinearTreeTraverser([]uint64{}))
 		}
 	}

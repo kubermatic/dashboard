@@ -40,13 +40,13 @@ func (r *InitialRequest) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-func (this *InitialRequest) decode(r *http.Request) *InitialRequest {
-	this.ProjectID = r.URL.Query().Get("projectID")
-	this.ClusterID = r.URL.Query().Get("clusterID")
+func (r *InitialRequest) decode(req *http.Request) *InitialRequest {
+	r.ProjectID = req.URL.Query().Get("projectID")
+	r.ClusterID = req.URL.Query().Get("clusterID")
 
-	this.Request = r
+	r.Request = req
 
-	return this
+	return r
 }
 
 func NewInitialRequest(r *http.Request) *InitialRequest {
@@ -69,18 +69,18 @@ func (r *OIDCCallbackRequest) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-func (this *OIDCCallbackRequest) decode(r *http.Request) (*OIDCCallbackRequest, error) {
-	this.Code = r.URL.Query().Get("code")
-	state := r.URL.Query().Get("state")
-	this.Request = r
+func (r *OIDCCallbackRequest) decode(req *http.Request) (*OIDCCallbackRequest, error) {
+	r.Code = req.URL.Query().Get("code")
+	state := req.URL.Query().Get("state")
+	r.Request = req
 
 	var err error
-	this.State, err = decodeOIDCState(state)
+	r.State, err = decodeOIDCState(state)
 	if err != nil {
 		return nil, err
 	}
 
-	return this, nil
+	return r, nil
 }
 
 func NewOIDCCallbackRequest(r *http.Request) (*OIDCCallbackRequest, error) {
@@ -100,24 +100,24 @@ type ProxyRequest struct {
 	Token string `json:"token"`
 }
 
-func (this *ProxyRequest) decode(r *http.Request) *ProxyRequest {
+func (r *ProxyRequest) decode(req *http.Request) *ProxyRequest {
 	// Path params
-	this.ProjectID = mux.Vars(r)["project_id"]
-	this.ClusterID = mux.Vars(r)["cluster_id"]
+	r.ProjectID = mux.Vars(req)["project_id"]
+	r.ClusterID = mux.Vars(req)["cluster_id"]
 
 	// Query params
-	this.Token = r.URL.Query().Get("token")
+	r.Token = req.URL.Query().Get("token")
 
 	// Embed original request
-	this.Request = r
+	r.Request = req
 
-	return this
+	return r
 }
 
 // GetSeedCluster implements the middleware.seedClusterGetter interface.
-func (this *ProxyRequest) GetSeedCluster() apiv1.SeedCluster {
+func (r *ProxyRequest) GetSeedCluster() apiv1.SeedCluster {
 	return apiv1.SeedCluster{
-		ClusterID: this.ClusterID,
+		ClusterID: r.ClusterID,
 	}
 }
 

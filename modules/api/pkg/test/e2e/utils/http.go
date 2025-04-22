@@ -95,8 +95,8 @@ func (r *retryRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	}
 
 	// do at least an attempt
-	if r.Backoff.Steps <= 0 {
-		r.Backoff.Steps = 1
+	if r.Steps <= 0 {
+		r.Steps = 1
 	}
 	err := wait.ExponentialBackoff(wait.Backoff(r.Backoff), func() (bool, error) {
 		var reqErr error
