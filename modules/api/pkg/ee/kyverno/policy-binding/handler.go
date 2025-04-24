@@ -246,9 +246,10 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, err
 	}
 	return &apiv2.PolicyBinding{
-		Name:   created.Name,
-		Spec:   created.Spec,
-		Status: created.Status,
+		Name:      created.Name,
+		NameSpace: created.Namespace,
+		Spec:      created.Spec,
+		Status:    created.Status,
 	}, nil
 }
 
@@ -305,9 +306,10 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		return nil, err
 	}
 	return &apiv2.PolicyBinding{
-		Name:   patchedPolicyBinding.Name,
-		Spec:   *patchedPolicyBinding.Spec.DeepCopy(),
-		Status: patchedPolicyBinding.Status,
+		Name:      patchedPolicyBinding.Name,
+		NameSpace: patchedPolicyBinding.Namespace,
+		Spec:      *patchedPolicyBinding.Spec.DeepCopy(),
+		Status:    patchedPolicyBinding.Status,
 	}, nil
 }
 

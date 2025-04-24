@@ -1,1 +1,109 @@
-<h1>Policy Binding List Component</h1>
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2025 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<div class="header">
+  <div fxLayoutAlign="end">
+    <button mat-flat-button
+            [color]="projectID ? 'primary' : 'quaternary'"
+            (click)="openBindingDialog(mode.Add)"
+            [disabled]="!hasOwnerRole">
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
+      <span>Create Policy Binding</span>
+    </button>
+  </div>
+
+  <table class="km-table"
+         mat-table
+         matSort
+         [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell
+          *matHeaderCellDef>Name</th>
+      <td mat-cell
+          *matCellDef="let element">
+        <span>{{element.name}}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="namespace">
+      <th mat-header-cell
+          *matHeaderCellDef>Namespace
+      <td mat-cell
+          *matCellDef="let element">
+        <span>{{element.namespace}}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="scope">
+      <th mat-header-cell
+          *matHeaderCellDef>Scope
+      <td mat-cell
+          *matCellDef="let element">
+        <span>{{element.spec?.scope}}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="template">
+      <th mat-header-cell
+          *matHeaderCellDef>Template
+      <td mat-cell
+          *matCellDef="let element">
+        <span>{{element.spec?.policyTemplateRef?.name}}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell"></th>
+      <td mat-cell
+          *matCellDef="let element">
+        <div fxLayoutAlign="end"
+             class="km-table-actions">
+          <button mat-icon-button
+                  matTooltip="delete binding"
+                  (click)="deleteBinding(element)"
+                  [disabled]="!hasOwnerRole">
+            <i class="km-icon-mask km-icon-delete"></i>
+          </button>
+          <button mat-icon-button
+                  matTooltip="edit binding"
+                  (click)="openBindingDialog(mode.Edit, element)"
+                  [disabled]="!hasOwnerRole">
+            <i class="km-icon-mask km-icon-edit"></i>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+    <tr mat-header-row
+    *matHeaderRowDef="columns"></tr>
+    <tr mat-row
+    *matRowDef="let row; columns: columns;"></tr>
+  </table>
+  <div class="km-row km-empty-list-msg"
+  *ngIf="!dataSource.data.length && loadingBindings">No policy bindings are available.</div>
+  <div [hidden]="!dataSource.data.length"
+       class="km-paginator-container">
+    <div fxLayout="row"
+         fxLayoutAlign="flex-end center">
+      <km-pagination-page-size></km-pagination-page-size>
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>
