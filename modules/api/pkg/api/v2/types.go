@@ -2346,9 +2346,10 @@ type PolicyTemplate struct {
 // optionally enables or disables it (if the template is not enforced).
 // swagger:model PolicyBinding
 type PolicyBinding struct {
-	Name   string                           `json:"name"`
-	Spec   kubermaticv1.PolicyBindingSpec   `json:"spec"`
-	Status kubermaticv1.PolicyBindingStatus `json:"status"`
+	Name      string                           `json:"name"`
+	NameSpace string                           `json:"namespace"`
+	Spec      kubermaticv1.PolicyBindingSpec   `json:"spec"`
+	Status    kubermaticv1.PolicyBindingStatus `json:"status"`
 }
 
 // BackupStorageLocationBucketObject represents a S3 object of Backup Storage Location Bucket.
