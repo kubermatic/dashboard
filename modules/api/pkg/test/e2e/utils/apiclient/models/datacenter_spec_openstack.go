@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -47,6 +48,9 @@ type DatacenterSpecOpenstack struct {
 	// Optional
 	IgnoreVolumeAZ bool `json:"ignoreVolumeAZ,omitempty"`
 
+	// Optional: List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.
+	LoadBalancerClasses []*LoadBalancerClass `json:"loadBalancerClasses"`
+
 	// Optional: Gets mapped to the "lb-method" setting in the cloud config.
 	// defaults to "ROUND_ROBIN".
 	LoadBalancerMethod string `json:"loadBalancerMethod,omitempty"`
@@ -85,6 +89,10 @@ type DatacenterSpecOpenstack struct {
 func (m *DatacenterSpecOpenstack) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateLoadBalancerClasses(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateImages(formats); err != nil {
 		res = append(res, err)
 	}
@@ -100,6 +108,32 @@ func (m *DatacenterSpecOpenstack) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *DatacenterSpecOpenstack) validateLoadBalancerClasses(formats strfmt.Registry) error {
+	if swag.IsZero(m.LoadBalancerClasses) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.LoadBalancerClasses); i++ {
+		if swag.IsZero(m.LoadBalancerClasses[i]) { // not required
+			continue
+		}
+
+		if m.LoadBalancerClasses[i] != nil {
+			if err := m.LoadBalancerClasses[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -164,6 +198,10 @@ func (m *DatacenterSpecOpenstack) validateNodeSizeRequirements(formats strfmt.Re
 func (m *DatacenterSpecOpenstack) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateLoadBalancerClasses(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateImages(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -179,6 +217,26 @@ func (m *DatacenterSpecOpenstack) ContextValidate(ctx context.Context, formats s
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *DatacenterSpecOpenstack) contextValidateLoadBalancerClasses(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.LoadBalancerClasses); i++ {
+
+		if m.LoadBalancerClasses[i] != nil {
+			if err := m.LoadBalancerClasses[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("loadBalancerClasses" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
