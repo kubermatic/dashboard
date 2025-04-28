@@ -49,7 +49,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				IPv6: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "fd01::/48",
-					ServicesCIDR:            "fd02::/120",
+					ServicesCIDR:            "fd02::/108",
 					NodeCIDRMaskSize:        64,
 					NodePortsAllowedIPRange: "::/0",
 				},
@@ -72,7 +72,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				IPv6: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "fd01::/48",
-					ServicesCIDR:            "fd02::/120",
+					ServicesCIDR:            "fd02::/108",
 					NodeCIDRMaskSize:        64,
 					NodePortsAllowedIPRange: "::/0",
 				},
@@ -95,7 +95,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				IPv6: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "fd01::/48",
-					ServicesCIDR:            "fd02::/120",
+					ServicesCIDR:            "fd02::/108",
 					NodeCIDRMaskSize:        64,
 					NodePortsAllowedIPRange: "::/0",
 				},
@@ -133,7 +133,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				IPv6: &apiv2.NetworkDefaultsIPFamily{
 					PodsCIDR:                "fd01::/48",
-					ServicesCIDR:            "fd02::/120",
+					ServicesCIDR:            "fd02::/108",
 					NodeCIDRMaskSize:        64,
 					NodePortsAllowedIPRange: "::/0",
 				},
