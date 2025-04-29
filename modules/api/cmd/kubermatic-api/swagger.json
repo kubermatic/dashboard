@@ -31118,6 +31118,14 @@
           "type": "boolean",
           "x-go-name": "IPv6Enabled"
         },
+        "loadBalancerClasses": {
+          "description": "Optional: List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadBalancerClass"
+          },
+          "x-go-name": "LoadBalancerClasses"
+        },
         "loadBalancerMethod": {
           "description": "Optional: Gets mapped to the \"lb-method\" setting in the cloud config.\ndefaults to \"ROUND_ROBIN\".",
           "type": "string",
@@ -35296,6 +35304,47 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "LBClass": {
+      "type": "object",
+      "properties": {
+        "floatingNetworkID": {
+          "description": "FloatingNetworkID is the external network used to create floating IP for the load balancer VIP.",
+          "type": "string",
+          "x-go-name": "FloatingNetworkID"
+        },
+        "floatingSubnet": {
+          "description": "FloatingSubnet is a name pattern for the external network subnet used to create floating IP for the load balancer VIP.",
+          "type": "string",
+          "x-go-name": "FloatingSubnet"
+        },
+        "floatingSubnetID": {
+          "description": "FloatingSubnetID is the external network subnet used to create floating IP for the load balancer VIP.",
+          "type": "string",
+          "x-go-name": "FloatingSubnetID"
+        },
+        "floatingSubnetTags": {
+          "description": "FloatingSubnetTags is a comma separated list of tags for the external network subnet used to create floating IP for the load balancer VIP.",
+          "type": "string",
+          "x-go-name": "FloatingSubnetTags"
+        },
+        "memberSubnetID": {
+          "description": "MemberSubnetID is the ID of the Neutron network on which to create the members of the load balancer.",
+          "type": "string",
+          "x-go-name": "MemberSubnetID"
+        },
+        "networkID": {
+          "description": "NetworkID is the ID of the Neutron network on which to create load balancer VIP, not needed if subnet-id is set.",
+          "type": "string",
+          "x-go-name": "NetworkID"
+        },
+        "subnetID": {
+          "description": "SubnetID is the ID of the Neutron subnet on which to create load balancer VIP.",
+          "type": "string",
+          "x-go-name": "SubnetID"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
     "LBSKU": {
       "type": "string",
       "title": "Azure SKU for Load Balancers. Possible values are `basic` and `standard`.",
@@ -35358,6 +35407,20 @@
         }
       },
       "x-go-package": "k8s.io/apimachinery/pkg/apis/meta/v1"
+    },
+    "LoadBalancerClass": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "$ref": "#/definitions/LBClass"
+        },
+        "name": {
+          "description": "Name is the name of the load balancer class.\n\n+kubebuilder:validation:MinLength=1",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "LocalObjectReference": {
       "description": "New uses of this type are discouraged because of difficulty describing its usage when embedded in APIs.\n1. Invalid usage help.  It is impossible to add specific help for individual usage.  In most embedded usages, there are particular\nrestrictions like, \"must refer only to types A and B\" or \"UID not honored\" or \"name must be restricted\".\nThose cannot be well described when embedded.\n2. Inconsistent validation.  Because the usages are different, the validation rules are different by usage, which makes it hard for users to predict what will happen.\n3. We cannot easily change it.  Because this type is embedded in many locations, updates to this type\nwill affect numerous schemas.  Don't make new APIs embed an underspecified API type they do not control.\n\nInstead of using this type, create a locally provided and used type that is well-focused on your reference.\nFor example, ServiceReferences for admission registration: https://github.com/kubernetes/api/blob/release-1.17/admissionregistration/v1/types.go#L533 .\n+structType=atomic",
@@ -37469,7 +37532,7 @@
           "x-go-name": "RouterID"
         },
         "securityGroups": {
-          "description": "SecurityGroups is a comma-separated list of group names that shall be used for Machines in the cluster.\nIf this field is left empty, a single default security group will be created and this field will be filled-in.",
+          "description": "SecurityGroups is the name of the security group (only supports a singular security group) that will be used for Machines in the cluster.\nIf this field is left empty, a default security group will be created and used.",
           "type": "string",
           "x-go-name": "SecurityGroups"
         },
