@@ -62,6 +62,7 @@ func createCBSL(
 	_ provider.UserInfoGetter,
 	_ provider.BackupStorageProvider,
 	_ provider.ProjectProvider,
+	_ provider.SettingsProvider,
 ) (*apiv2.ClusterBackupStorageLocation, error) {
 	return nil, nil
 }
