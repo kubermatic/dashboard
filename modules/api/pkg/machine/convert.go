@@ -215,6 +215,9 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		if config.RootDiskSizeGB != nil && *config.RootDiskSizeGB > 0 {
 			cloudSpec.Openstack.RootDiskSizeGB = config.RootDiskSizeGB
 		}
+		if cd := config.ConfigDrive.Value; cd != nil {
+			cloudSpec.Openstack.ConfigDrive = *cd
+		}
 	case providerconfig.CloudProviderHetzner:
 		config := &hetzner.RawConfig{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
