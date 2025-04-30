@@ -37,6 +37,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8s.io/apimachinery/pkg/util/sets"
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -162,7 +163,7 @@ func KubeVirtVPCsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGet
 }
 
 func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
-	seedsGetter provider.SeedsGetter, projectID, clusterID string) (interface{}, error) {
+	seedsGetter provider.SeedsGetter, projectID, clusterID, storageClassName string) (interface{}, error) {
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -185,10 +186,32 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 		for _, vpc := range datacenter.Spec.Kubevirt.ProviderNetwork.VPCs {
 			if cluster.Spec.Cloud.Kubevirt.VPCName == vpc.Name {
 				for _, subnet := range vpc.Subnets {
-					kvSubnet := apiv2.KubeVirtSubnet{
-						Name: subnet.Name,
+					if datacenter.Spec.Kubevirt.MatchSubnetAndStorageLocation != nil && *datacenter.Spec.Kubevirt.MatchSubnetAndStorageLocation {
+						for _, sc := range datacenter.Spec.Kubevirt.InfraStorageClasses {
+							if storageClassName == "" && sc.IsDefaultClass != nil && *sc.IsDefaultClass {
+								storageClassName = sc.Name
+							}
+							if sc.Name == storageClassName {
+								scRegions := sets.New[string]().Insert(sc.Regions...)
+								scZones := sets.New[string]().Insert(sc.Zones...)
+
+								if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
+									kvSubnet := apiv2.KubeVirtSubnet{
+										Name: subnet.Name,
+									}
+
+									kvSubnets = append(kvSubnets, kvSubnet)
+								}
+							}
+						}
+
+					} else {
+						kvSubnet := apiv2.KubeVirtSubnet{
+							Name: subnet.Name,
+						}
+
+						kvSubnets = append(kvSubnets, kvSubnet)
 					}
-					kvSubnets = append(kvSubnets, kvSubnet)
 				}
 			}
 		}
