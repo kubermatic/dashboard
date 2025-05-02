@@ -12779,6 +12779,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "StorageClassName",
+            "name": "storageClassName",
+            "in": "query"
           }
         ],
         "responses": {
@@ -20436,6 +20442,11 @@
           {
             "type": "string",
             "name": "VPCName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "StorageClassName",
             "in": "header"
           }
         ],
@@ -31022,6 +31033,11 @@
           },
           "x-go-name": "InfraStorageClasses"
         },
+        "matchSubnetAndStorageLocation": {
+          "description": "Optional: MatchSubnetAndStorageLocation if set to true, the region and zone of the subnet and storage class must match. For\nexample, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.\notherwise KKP will reject the creation of the machine deployment and eventually the cluster.",
+          "type": "boolean",
+          "x-go-name": "MatchSubnetAndStorageLocation"
+        },
         "namespacedMode": {
           "$ref": "#/definitions/NamespacedMode"
         },
@@ -32149,6 +32165,15 @@
       "type": "object",
       "title": "EtcdBackupRestore holds the configuration of the automatic backup and restores.",
       "properties": {
+        "backupCount": {
+          "description": "BackupCount specifies the maximum number of backups to retain (defaults to DefaultKeptBackupsCount).\nOldest backups are automatically deleted when this limit is exceeded. Only applies when Schedule is configured.",
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "BackupCount"
+        },
+        "backupInterval": {
+          "$ref": "#/definitions/Duration"
+        },
         "defaultDestination": {
           "description": "DefaultDestination marks the default destination that will be used for the default etcd backup config which is\ncreated for every user cluster. Has to correspond to a destination in Destinations.\nIf removed, it removes the related default etcd backup configs.",
           "type": "string",
@@ -39814,6 +39839,22 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "regions": {
+          "description": "Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters\nto span multiple regions",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Regions"
+        },
+        "zones": {
+          "description": "Zones represent a logical failure domain. It is common for Kubernetes clusters to span multiple zones\nfor increased availability",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Zones"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"

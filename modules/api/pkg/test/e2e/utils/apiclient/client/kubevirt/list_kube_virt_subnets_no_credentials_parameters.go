@@ -67,6 +67,9 @@ type ListKubeVirtSubnetsNoCredentialsParams struct {
 	// ProjectID.
 	ProjectID string
 
+	// StorageClassName.
+	StorageClassName *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -142,6 +145,17 @@ func (o *ListKubeVirtSubnetsNoCredentialsParams) SetProjectID(projectID string) 
 	o.ProjectID = projectID
 }
 
+// WithStorageClassName adds the storageClassName to the list kube virt subnets no credentials params
+func (o *ListKubeVirtSubnetsNoCredentialsParams) WithStorageClassName(storageClassName *string) *ListKubeVirtSubnetsNoCredentialsParams {
+	o.SetStorageClassName(storageClassName)
+	return o
+}
+
+// SetStorageClassName adds the storageClassName to the list kube virt subnets no credentials params
+func (o *ListKubeVirtSubnetsNoCredentialsParams) SetStorageClassName(storageClassName *string) {
+	o.StorageClassName = storageClassName
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListKubeVirtSubnetsNoCredentialsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -158,6 +172,23 @@ func (o *ListKubeVirtSubnetsNoCredentialsParams) WriteToRequest(r runtime.Client
 	// path param project_id
 	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
 		return err
+	}
+
+	if o.StorageClassName != nil {
+
+		// query param storageClassName
+		var qrStorageClassName string
+
+		if o.StorageClassName != nil {
+			qrStorageClassName = *o.StorageClassName
+		}
+		qStorageClassName := qrStorageClassName
+		if qStorageClassName != "" {
+
+			if err := r.SetQueryParam("storageClassName", qStorageClassName); err != nil {
+				return err
+			}
+		}
 	}
 
 	if len(res) > 0 {
