@@ -204,7 +204,6 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 								}
 							}
 						}
-
 					} else {
 						kvSubnet := apiv2.KubeVirtSubnet{
 							Name: subnet.Name,

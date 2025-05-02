@@ -354,7 +354,6 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 									}
 								}
 							}
-
 						} else {
 							kvSubnet := apiv2.KubeVirtSubnet{
 								Name: subnet.Name,
@@ -498,7 +497,7 @@ func DecodeKubeVirtSubnetsNoCredentialReq(c context.Context, r *http.Request) (i
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.StorageClassName, _ = mux.Vars(r)["storageClassName"]
+	req.StorageClassName = mux.Vars(r)["storageClassName"]
 
 	return req, nil
 }
