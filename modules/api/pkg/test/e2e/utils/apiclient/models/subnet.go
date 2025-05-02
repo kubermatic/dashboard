@@ -19,6 +19,14 @@ type Subnet struct {
 
 	// name
 	Name string `json:"name,omitempty"`
+
+	// Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters
+	// to span multiple regions
+	Regions []string `json:"regions"`
+
+	// Zones represent a logical failure domain. It is common for Kubernetes clusters to span multiple zones
+	// for increased availability
+	Zones []string `json:"zones"`
 }
 
 // Validate validates this subnet
