@@ -1149,6 +1149,8 @@ k8c.io/kubermatic/v2 v2.27.3-0.20250407231911-b56d2995a821 h1:Kfd1L7A9j4cM2x/ICX
 k8c.io/kubermatic/v2 v2.27.3-0.20250407231911-b56d2995a821/go.mod h1:rc/2inBvHXCBIPmzawH1NYICKkVPnm9ASBZl63wdUz0=
 k8c.io/machine-controller v1.61.1 h1:Zy3kg9t0WrDN0Wo3y/pAJp7jdkThcJt070f0fAL9MVc=
 k8c.io/machine-controller v1.61.1/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
+k8c.io/kubermatic/sdk/v2 v2.0.0-20250430122852-785bfc52a3ea h1:acCgBOx1T3fWyGmxRQ8qGz9v3RdokQS7eHxCn2QhJCw=
+k8c.io/kubermatic/sdk/v2 v2.0.0-20250430122852-785bfc52a3ea/go.mod h1:l7qjgKo7qLvJmgfT3FDvAx6ShLNpjdW7ew67v07SyUg=
 k8c.io/operating-system-manager v1.6.4 h1:MDtULmZeqsLEg9Fs96i41qVKOyakyV31OcxU54edQTI=
 k8c.io/operating-system-manager v1.6.4/go.mod h1:Dh9IZp5pb5G3s2r6ZrHUb+gTuHw5AmbIFYuFxIcgU7o=
 k8c.io/reconciler v0.5.0 h1:BHpelg1UfI/7oBFctqOq8sX6qzflXpl3SlvHe7e8wak=

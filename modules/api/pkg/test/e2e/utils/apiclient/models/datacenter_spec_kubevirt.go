@@ -45,6 +45,11 @@ type DatacenterSpecKubevirt struct {
 	// kubevirt-<infra-storageClass-name>
 	InfraStorageClasses []*KubeVirtInfraStorageClass `json:"infraStorageClasses"`
 
+	// Optional: MatchSubnetAndStorageLocation if set to true, the region and zone of the subnet and storage class must match. For
+	// example, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.
+	// otherwise KKP will reject the creation of the machine deployment and eventually the cluster.
+	MatchSubnetAndStorageLocation bool `json:"matchSubnetAndStorageLocation,omitempty"`
+
 	// csi driver operator
 	CsiDriverOperator *KubeVirtCSIDriverOperator `json:"csiDriverOperator,omitempty"`
 
