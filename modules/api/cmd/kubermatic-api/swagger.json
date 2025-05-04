@@ -12108,6 +12108,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12119,13 +12126,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -12768,6 +12768,12 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "StorageClassName",
+            "name": "storageClassName",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12779,12 +12785,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "StorageClassName",
-            "name": "storageClassName",
-            "in": "query"
           }
         ],
         "responses": {
@@ -32146,15 +32146,6 @@
       "type": "object",
       "title": "EtcdBackupRestore holds the configuration of the automatic backup and restores.",
       "properties": {
-        "backupCount": {
-          "description": "BackupCount specifies the maximum number of backups to retain (defaults to DefaultKeptBackupsCount).\nOldest backups are automatically deleted when this limit is exceeded. Only applies when Schedule is configured.",
-          "type": "integer",
-          "format": "int64",
-          "x-go-name": "BackupCount"
-        },
-        "backupInterval": {
-          "$ref": "#/definitions/Duration"
-        },
         "defaultDestination": {
           "description": "DefaultDestination marks the default destination that will be used for the default etcd backup config which is\ncreated for every user cluster. Has to correspond to a destination in Destinations.\nIf removed, it removes the related default etcd backup configs.",
           "type": "string",

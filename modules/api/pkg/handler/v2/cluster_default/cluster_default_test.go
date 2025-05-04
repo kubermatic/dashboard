@@ -50,7 +50,7 @@ func TestGetEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
-			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","aws":{}},"version":"v1.31.7","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
+			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","aws":{}},"version":"v1.31.8","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
 		},
 		{
 			Name:     "Default cluster for Azure",
@@ -61,7 +61,7 @@ func TestGetEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
-			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","azure":{"assignAvailabilitySet":null}},"version":"v1.31.7","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
+			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","azure":{"assignAvailabilitySet":null}},"version":"v1.31.8","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
 		},
 		{
 			Name:     "Default cluster for vSphere",
@@ -72,7 +72,7 @@ func TestGetEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
-			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","vsphere":{}},"version":"v1.31.7","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
+			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","vsphere":{}},"version":"v1.31.8","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
 		},
 		{
 			Name:     "Default cluster for GCP",
@@ -83,7 +83,7 @@ func TestGetEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
-			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","gcp":{}},"version":"v1.31.7","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
+			ExpectedResponse:       `{"name":"","creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","gcp":{}},"version":"v1.31.8","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20","fd02::/120"]},"pods":{"cidrBlocks":["172.25.0.0/16","fd01::/48"]},"nodeCidrMaskSizeIPv4":24,"nodeCidrMaskSizeIPv6":64,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.6"},"exposeStrategy":"NodePort"},"status":{"version":"","url":"","externalCCMMigration":""}}`,
 		},
 	}
 
