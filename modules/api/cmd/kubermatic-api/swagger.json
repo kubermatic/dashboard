@@ -37639,6 +37639,11 @@
           "type": "string",
           "x-go-name": "AvailabilityZone"
         },
+        "configDrive": {
+          "description": "ConfigDrive enables a configuration drive that will be attached to the instance when it boots.",
+          "type": "boolean",
+          "x-go-name": "ConfigDrive"
+        },
         "diskSize": {
           "description": "if set, the rootDisk will be a volume. If not, the rootDisk will be on ephemeral storage and its size will be derived from the flavor",
           "type": "integer",

@@ -1931,6 +1931,9 @@ type OpenstackNodeSpec struct {
 	// UUID of the server group, used to configure affinity or anti-affinity of the VM instances relative to hypervisor
 	// required: false
 	ServerGroup string `json:"serverGroup"`
+	// ConfigDrive enables a configuration drive that will be attached to the instance when it boots.
+	// required: false
+	ConfigDrive bool `json:"configDrive"`
 }
 
 func (spec *OpenstackNodeSpec) MarshalJSON() ([]byte, error) {
@@ -1958,6 +1961,7 @@ func (spec *OpenstackNodeSpec) MarshalJSON() ([]byte, error) {
 		InstanceReadyCheckPeriod  string            `json:"instanceReadyCheckPeriod"`
 		InstanceReadyCheckTimeout string            `json:"instanceReadyCheckTimeout"`
 		ServerGroup               string            `json:"serverGroup"`
+		ConfigDrive               bool              `json:"configDrive"`
 	}{
 		Flavor:                    spec.Flavor,
 		Image:                     spec.Image,
@@ -1968,6 +1972,7 @@ func (spec *OpenstackNodeSpec) MarshalJSON() ([]byte, error) {
 		InstanceReadyCheckPeriod:  spec.InstanceReadyCheckPeriod,
 		InstanceReadyCheckTimeout: spec.InstanceReadyCheckTimeout,
 		ServerGroup:               spec.ServerGroup,
+		ConfigDrive:               spec.ConfigDrive,
 	}
 
 	return json.Marshal(&res)
