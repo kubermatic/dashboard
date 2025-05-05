@@ -241,9 +241,8 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 	if err := client.List(ctx, &customInstancetypes); err != nil {
 		return instancetypes, err
 	}
-
 	// "standard" (namespaced)
-	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.DisableDefaultInstanceTypes {
+	if datacenter.Spec.Kubevirt != nil && !datacenter.Spec.Kubevirt.DisableDefaultInstanceTypes {
 		standardInstancetypes.Items = kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
 	}
 
@@ -306,7 +305,6 @@ func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacente
 	if err != nil {
 		return nil, err
 	}
-
 	instancetypes, err := kubeVirtInstancetypes(ctx, client, datacenter)
 	if err != nil {
 		return nil, err
@@ -365,9 +363,8 @@ func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, d
 	if err := client.List(ctx, &customPreferences); err != nil {
 		return preferences, err
 	}
-
 	// "standard" (namespaced)
-	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.DisableDefaultPreferences {
+	if datacenter.Spec.Kubevirt != nil && !datacenter.Spec.Kubevirt.DisableDefaultPreferences {
 		standardPreferences.Items = kubevirt.GetKubermaticStandardPreferences(client, &kvmanifests.StandardPreferenceGetter{})
 	}
 
