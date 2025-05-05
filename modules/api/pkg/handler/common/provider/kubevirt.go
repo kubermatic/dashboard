@@ -233,7 +233,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 // kubeVirtInstancetypes returns the kvinstancetypev1alpha1.VirtualMachineInstanceType:
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
-func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, kubeconfig string) (instancetypeListWrapper, error) {
+func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client, datacenter *kubermaticv1.Datacenter) (instancetypeListWrapper, error) {
 	instancetypes := instancetypeListWrapper{}
 	customInstancetypes := kvinstancetypev1alpha1.VirtualMachineClusterInstancetypeList{}
 	standardInstancetypes := kvinstancetypev1alpha1.VirtualMachineInstancetypeList{}
@@ -241,8 +241,11 @@ func kubeVirtInstancetypes(ctx context.Context, client ctrlruntimeclient.Client,
 	if err := client.List(ctx, &customInstancetypes); err != nil {
 		return instancetypes, err
 	}
+
 	// "standard" (namespaced)
-	standardInstancetypes.Items = kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.DisableDefaultInstanceTypes {
+		standardInstancetypes.Items = kubevirt.GetKubermaticStandardInstancetypes(client, &kvmanifests.StandardInstancetypeGetter{})
+	}
 
 	// Wrap
 	if len(customInstancetypes.Items) > 0 || len(standardInstancetypes.Items) > 0 {
@@ -289,22 +292,6 @@ func newAPIPreference(w preferenceWrapper) (*apiv2.VirtualMachinePreference, err
 // - concatenated with kubermatic standard from yaml manifests
 // The list is filtered based on the Resource Quota.
 func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacenterName string, cluster *kubermaticv1.Cluster, settingsProvider provider.SettingsProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.VirtualMachineInstancetypeList, error) {
-	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	instancetypes, err := kubeVirtInstancetypes(ctx, client, kubeconfig)
-	if err != nil {
-		return nil, err
-	}
-
-	// conversion to api type
-	res, err := instancetypes.toApi()
-	if err != nil {
-		return nil, err
-	}
-
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -313,6 +300,22 @@ func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacente
 	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
 	if err != nil {
 		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	instancetypes, err := kubeVirtInstancetypes(ctx, client, datacenter)
+	if err != nil {
+		return nil, err
+	}
+
+	// conversion to api type
+	res, err := instancetypes.toApi()
+	if err != nil {
+		return nil, err
 	}
 
 	var infraNS string
@@ -354,7 +357,7 @@ func KubeVirtInstancetypes(ctx context.Context, projectID, kubeconfig, datacente
 // kubeVirtPreferences returns the kvinstancetypev1alpha1.VirtualMachinePreference:
 // - custom (cluster-wide)
 // - concatenated with kubermatic standard from yaml manifests.
-func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, kubeconfig string) (preferenceListWrapper, error) {
+func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, datacenter *kubermaticv1.Datacenter) (preferenceListWrapper, error) {
 	preferences := preferenceListWrapper{}
 	customPreferences := kvinstancetypev1alpha1.VirtualMachineClusterPreferenceList{}
 	standardPreferences := kvinstancetypev1alpha1.VirtualMachinePreferenceList{}
@@ -362,8 +365,11 @@ func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, k
 	if err := client.List(ctx, &customPreferences); err != nil {
 		return preferences, err
 	}
+
 	// "standard" (namespaced)
-	standardPreferences.Items = kubevirt.GetKubermaticStandardPreferences(client, &kvmanifests.StandardPreferenceGetter{})
+	if datacenter.Spec.Kubevirt != nil && datacenter.Spec.Kubevirt.DisableDefaultPreferences {
+		standardPreferences.Items = kubevirt.GetKubermaticStandardPreferences(client, &kvmanifests.StandardPreferenceGetter{})
+	}
 
 	// Wrap
 	if len(customPreferences.Items) > 0 || len(standardPreferences.Items) > 0 {
@@ -386,22 +392,6 @@ func kubeVirtPreferences(ctx context.Context, client ctrlruntimeclient.Client, k
 // - concatenated with kubermatic standard from yaml manifests.
 // No filtering due to quota is needed.
 func KubeVirtPreferences(ctx context.Context, projectID, kubeconfig, datacenterName string, cluster *kubermaticv1.Cluster, _ provider.SettingsProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter) (*apiv2.VirtualMachinePreferenceList, error) {
-	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	preferences, err := kubeVirtPreferences(ctx, client, kubeconfig)
-	if err != nil {
-		return nil, err
-	}
-
-	// conversion to api type
-	res, err := preferences.toApi()
-	if err != nil {
-		return nil, err
-	}
-
 	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
@@ -410,6 +400,22 @@ func KubeVirtPreferences(ctx context.Context, projectID, kubeconfig, datacenterN
 	_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
 	if err != nil {
 		return nil, fmt.Errorf("error getting dc: %w", err)
+	}
+
+	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	preferences, err := kubeVirtPreferences(ctx, client, datacenter)
+	if err != nil {
+		return nil, err
+	}
+
+	// conversion to api type
+	res, err := preferences.toApi()
+	if err != nil {
+		return nil, err
 	}
 
 	var infraNS string
