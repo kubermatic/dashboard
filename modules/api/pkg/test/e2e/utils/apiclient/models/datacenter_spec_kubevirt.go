@@ -31,6 +31,13 @@ type DatacenterSpecKubevirt struct {
 	// policy selected with DNSPolicy.
 	DNSPolicy string `json:"dnsPolicy,omitempty"`
 
+	// DisableDefaultInstanceTypes prevents KKP from automatically creating default instance types.
+	// (standard-2, standard-4, standard-8) in KubeVirt environments.
+	DisableDefaultInstanceTypes bool `json:"disableDefaultInstanceTypes,omitempty"`
+
+	// DisableKubermaticPreferences prevents KKP from setting default KubeVirt preferences.
+	DisableDefaultPreferences bool `json:"disableDefaultPreferences,omitempty"`
+
 	// Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.
 	// Defaults to false.
 	EnableDedicatedCPUs bool `json:"enableDedicatedCpus,omitempty"`
