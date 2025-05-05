@@ -21,6 +21,9 @@ type PublicKubevirtCloudSpec struct {
 
 	// pre allocated data volumes
 	PreAllocatedDataVolumes []*PreAllocatedDataVolume `json:"preAllocatedDataVolumes"`
+
+	// v p c name
+	VPCName string `json:"vpcName,omitempty"`
 }
 
 // Validate validates this public kubevirt cloud spec

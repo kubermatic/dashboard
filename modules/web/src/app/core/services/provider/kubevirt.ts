@@ -45,8 +45,11 @@ export class KubeVirtService {
     return this._httpClient.get<KubeVirtStorageClass[]>(url);
   }
 
-  getSubnets(projectID: string, clusterID: string): Observable<KubeVirtSubnet[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/subnets`;
+  getSubnets(projectID: string, clusterID: string, storageClass?: string): Observable<KubeVirtSubnet[]> {
+    let url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/kubevirt/subnets`;
+    if (storageClass) {
+      url = `${url}?storageClassName=${storageClass}`;
+    }
     return this._httpClient.get<KubeVirtSubnet[]>(url);
   }
 
