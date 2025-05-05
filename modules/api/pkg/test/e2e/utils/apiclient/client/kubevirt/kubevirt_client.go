@@ -40,6 +40,8 @@ type ClientService interface {
 
 	ListKubeVirtSubnetsNoCredentials(params *ListKubeVirtSubnetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtSubnetsNoCredentialsOK, error)
 
+	ListKubeVirtVPCsNoCredentials(params *ListKubeVirtVPCsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVPCsNoCredentialsOK, error)
+
 	ListKubevirtImages(params *ListKubevirtImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtImagesOK, error)
 
 	ListKubevirtStorageClassesNoCredentials(params *ListKubevirtStorageClassesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesNoCredentialsOK, error)
@@ -258,7 +260,7 @@ func (a *Client) ListKubeVirtSubnetsNoCredentials(params *ListKubeVirtSubnetsNoC
 	op := &runtime.ClientOperation{
 		ID:                 "listKubeVirtSubnetsNoCredentials",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -282,6 +284,44 @@ func (a *Client) ListKubeVirtSubnetsNoCredentials(params *ListKubeVirtSubnetsNoC
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListKubeVirtSubnetsNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListKubeVirtVPCsNoCredentials List VPCs for a cluster
+*/
+func (a *Client) ListKubeVirtVPCsNoCredentials(params *ListKubeVirtVPCsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVPCsNoCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListKubeVirtVPCsNoCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listKubeVirtVPCsNoCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListKubeVirtVPCsNoCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListKubeVirtVPCsNoCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListKubeVirtVPCsNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

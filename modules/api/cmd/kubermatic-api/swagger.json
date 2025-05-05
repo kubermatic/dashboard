@@ -12755,7 +12755,7 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs": {
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets": {
       "get": {
         "produces": [
           "application/json"
@@ -12792,6 +12792,48 @@
             "description": "KubeVirtSubnetList",
             "schema": {
               "$ref": "#/definitions/KubeVirtSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs": {
+      "get": {
+        "description": "List VPCs for a cluster",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "kubevirt"
+        ],
+        "operationId": "listKubeVirtVPCsNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "KubeVirtVPCList",
+            "schema": {
+              "$ref": "#/definitions/KubeVirtVPCList"
             }
           },
           "default": {
@@ -38767,6 +38809,10 @@
             "$ref": "#/definitions/PreAllocatedDataVolume"
           },
           "x-go-name": "PreAllocatedDataVolumes"
+        },
+        "vpcName": {
+          "type": "string",
+          "x-go-name": "VPCName"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"

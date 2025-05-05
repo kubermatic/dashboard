@@ -22,7 +22,7 @@ import {
   KubeVirtVPC,
 } from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {EMPTY, Observable} from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 import {Provider} from './provider';
 
 export class KubeVirt extends Provider {
@@ -103,22 +103,24 @@ export class KubeVirt extends Provider {
     return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
   }
 
-  subnets(vpcName: string, onLoadingCb: () => void = null): Observable<KubeVirtSubnet[]> {
+  subnets(vpcName: string, onLoadingCb: () => void = null, storageClass?: string): Observable<KubeVirtSubnet[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
 
     // Either credential header is present or vpcName is not empty
     if (!this._headers.has(Provider.SharedHeader.Credential) && !vpcName) {
-      return EMPTY;
+      return of<KubeVirtSubnet[]>([]);
     }
 
     if (onLoadingCb) {
       onLoadingCb();
     }
 
-    const headers = vpcName ? this._headers.set(KubeVirt.Header.VPCName, vpcName) : this._headers;
-
+    let headers = vpcName ? this._headers.set(KubeVirt.Header.VPCName, vpcName) : this._headers;
+    if (storageClass) {
+      headers = headers.append(KubeVirt.Header.StorageClassName, storageClass);
+    }
     const url = `${this._newRestRoot}/projects/${this._projectID}/providers/${this._provider}/subnets`;
     return this._http.get<KubeVirtSubnet[]>(url, {headers});
   }
@@ -141,5 +143,6 @@ export namespace KubeVirt {
     Kubeconfig = 'Kubeconfig',
     DatacenterName = 'DatacenterName',
     VPCName = 'VPCName',
+    StorageClassName = 'StorageClassName',
   }
 }

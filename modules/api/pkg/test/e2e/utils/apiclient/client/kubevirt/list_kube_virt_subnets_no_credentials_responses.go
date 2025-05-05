@@ -81,11 +81,11 @@ func (o *ListKubeVirtSubnetsNoCredentialsOK) IsCode(code int) bool {
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs][%d] listKubeVirtSubnetsNoCredentialsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets][%d] listKubeVirtSubnetsNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs][%d] listKubeVirtSubnetsNoCredentialsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets][%d] listKubeVirtSubnetsNoCredentialsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsOK) GetPayload() models.KubeVirtSubnetList {
@@ -151,11 +151,11 @@ func (o *ListKubeVirtSubnetsNoCredentialsDefault) IsCode(code int) bool {
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs][%d] listKubeVirtSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets][%d] listKubeVirtSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs][%d] listKubeVirtSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets][%d] listKubeVirtSubnetsNoCredentials default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListKubeVirtSubnetsNoCredentialsDefault) GetPayload() *models.ErrorResponse {
