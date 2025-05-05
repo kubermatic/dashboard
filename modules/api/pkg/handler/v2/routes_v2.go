@@ -4967,7 +4967,7 @@ func (r Routing) listKubeVirtVPCsNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vpcs kubevirt listKubeVirtSubnetsNoCredentials
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/subnets kubevirt listKubeVirtSubnetsNoCredentials
 //
 // List Subnets for a VPC associated with a cluster.
 //
