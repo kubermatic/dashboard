@@ -70,6 +70,9 @@ type ListProjectKubevirtSubnetsParams struct {
 	// Kubeconfig.
 	Kubeconfig *string
 
+	// StorageClassName.
+	StorageClassName *string
+
 	// VPCName.
 	VPCName *string
 
@@ -162,6 +165,17 @@ func (o *ListProjectKubevirtSubnetsParams) SetKubeconfig(kubeconfig *string) {
 	o.Kubeconfig = kubeconfig
 }
 
+// WithStorageClassName adds the storageClassName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) WithStorageClassName(storageClassName *string) *ListProjectKubevirtSubnetsParams {
+	o.SetStorageClassName(storageClassName)
+	return o
+}
+
+// SetStorageClassName adds the storageClassName to the list project kubevirt subnets params
+func (o *ListProjectKubevirtSubnetsParams) SetStorageClassName(storageClassName *string) {
+	o.StorageClassName = storageClassName
+}
+
 // WithVPCName adds the vPCName to the list project kubevirt subnets params
 func (o *ListProjectKubevirtSubnetsParams) WithVPCName(vPCName *string) *ListProjectKubevirtSubnetsParams {
 	o.SetVPCName(vPCName)
@@ -212,6 +226,14 @@ func (o *ListProjectKubevirtSubnetsParams) WriteToRequest(r runtime.ClientReques
 
 		// header param Kubeconfig
 		if err := r.SetHeaderParam("Kubeconfig", *o.Kubeconfig); err != nil {
+			return err
+		}
+	}
+
+	if o.StorageClassName != nil {
+
+		// header param StorageClassName
+		if err := r.SetHeaderParam("StorageClassName", *o.StorageClassName); err != nil {
 			return err
 		}
 	}

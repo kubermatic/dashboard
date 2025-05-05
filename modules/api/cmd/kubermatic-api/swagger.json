@@ -12108,6 +12108,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12119,13 +12126,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -12766,6 +12766,12 @@
         "summary": "List Subnets for a VPC associated with a cluster.",
         "operationId": "listKubeVirtSubnetsNoCredentials",
         "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "StorageClassName",
+            "name": "storageClassName",
+            "in": "query"
+          },
           {
             "type": "string",
             "x-go-name": "ProjectID",
@@ -20436,6 +20442,11 @@
           {
             "type": "string",
             "name": "VPCName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "StorageClassName",
             "in": "header"
           }
         ],
@@ -31011,6 +31022,11 @@
           },
           "x-go-name": "InfraStorageClasses"
         },
+        "matchSubnetAndStorageLocation": {
+          "description": "Optional: MatchSubnetAndStorageLocation if set to true, the region and zone of the subnet and storage class must match. For\nexample, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.\notherwise KKP will reject the creation of the machine deployment and eventually the cluster.",
+          "type": "boolean",
+          "x-go-name": "MatchSubnetAndStorageLocation"
+        },
         "namespacedMode": {
           "$ref": "#/definitions/NamespacedMode"
         },
@@ -39736,6 +39752,22 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        },
+        "regions": {
+          "description": "Regions represents a larger domain, made up of one or more zones. It is uncommon for Kubernetes clusters\nto span multiple regions",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Regions"
+        },
+        "zones": {
+          "description": "Zones represent a logical failure domain. It is common for Kubernetes clusters to span multiple zones\nfor increased availability",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Zones"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"

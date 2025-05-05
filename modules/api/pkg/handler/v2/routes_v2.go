@@ -4985,7 +4985,7 @@ func (r Routing) listKubeVirtSubnetsNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.KubeVirtSubnetsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
-		provider.DecodeKubeVirtGenericNoCredentialReq,
+		provider.DecodeKubeVirtSubnetsNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
