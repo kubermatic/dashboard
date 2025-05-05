@@ -24,6 +24,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
+import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {GlobalModule} from '@core/services/global/module';
@@ -56,7 +57,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {filter, map, takeUntil} from 'rxjs/operators';
+import {filter, map, take, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   InstanceType = 'instancetype',
@@ -181,7 +182,8 @@ export class KubeVirtBasicNodeDataComponent
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super();
 
@@ -267,7 +269,7 @@ export class KubeVirtBasicNodeDataComponent
         }
       });
 
-    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
+    this._subnetsObservable().pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
   }
 
   ngAfterViewChecked(): void {
@@ -299,6 +301,10 @@ export class KubeVirtBasicNodeDataComponent
 
   get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
     return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
+  }
+
+  get isSubnetsRequired(): boolean {
+    return !!this._clusterSpecService.cluster?.spec?.cloud?.kubevirt?.vpcName;
   }
 
   getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
@@ -451,8 +457,12 @@ export class KubeVirtBasicNodeDataComponent
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
-  private get _subnetsObservable(): Observable<KubeVirtSubnet[]> {
-    return this._nodeDataService.kubeVirt.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
+  private _subnetsObservable(storageClass?: string): Observable<KubeVirtSubnet[]> {
+    return this._nodeDataService.kubeVirt.subnets(
+      this._clearSubnet.bind(this),
+      this._onSubnetLoading.bind(this),
+      storageClass
+    );
   }
 
   private _onSubnetLoading(): void {
@@ -624,6 +634,7 @@ export class KubeVirtBasicNodeDataComponent
 
   onStorageClassChange(storageClass: string): void {
     this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskStorageClassName = storageClass;
+    this._subnetsObservable(storageClass).pipe(take(1)).subscribe(this._setDefaultSubnet.bind(this));
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 

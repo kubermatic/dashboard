@@ -1346,6 +1346,7 @@ func newPublicGCPCloudSpec(internal *kubermaticv1.GCPCloudSpec) (public *PublicG
 
 // PublicKubevirtCloudSpec is a public counterpart of apiv1.KubevirtCloudSpec.
 type PublicKubevirtCloudSpec struct {
+	VPCName                 string                                `json:"vpcName,omitempty"`
 	PreAllocatedDataVolumes []kubermaticv1.PreAllocatedDataVolume `json:"preAllocatedDataVolumes,omitempty"`
 }
 
@@ -1355,6 +1356,7 @@ func newPublicKubevirtCloudSpec(internal *kubermaticv1.KubevirtCloudSpec) (publi
 	}
 
 	return &PublicKubevirtCloudSpec{
+		VPCName:                 internal.VPCName,
 		PreAllocatedDataVolumes: internal.PreAllocatedDataVolumes,
 	}
 }

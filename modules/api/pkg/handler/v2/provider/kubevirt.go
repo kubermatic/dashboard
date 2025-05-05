@@ -87,7 +87,7 @@ type KubeVirtGenericNoCredentialReq struct {
 // swagger:parameters listKubeVirtSubnetsNoCredentials
 type KubeVirtSubnetsNoCredentialReq struct {
 	cluster.GetClusterReq
-
+	// in: query
 	StorageClassName string `json:"storageClassName,omitempty"`
 }
 
@@ -497,7 +497,7 @@ func DecodeKubeVirtSubnetsNoCredentialReq(c context.Context, r *http.Request) (i
 	}
 
 	req.ProjectReq = pr.(common.ProjectReq)
-	req.StorageClassName = mux.Vars(r)["storageClassName"]
+	req.StorageClassName = r.URL.Query().Get("storageClassName")
 
 	return req, nil
 }
