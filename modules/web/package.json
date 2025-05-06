@@ -1,7 +1,7 @@
 {
   "name": "kubermatic-dashboard",
   "description": "Kubermatic Dashboard",
-  "version": "2.25.16",
+  "version": "2.25.17",
   "type": "module",
   "license": "proprietary",
   "repository": "https://github.com/kubermatic/dashboard",

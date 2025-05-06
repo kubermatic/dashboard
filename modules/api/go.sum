@@ -1421,8 +1421,8 @@ honnef.co/go/tools v0.0.1-2020.1.3/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9
 honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
 k8c.io/kubeone v1.7.2 h1:uLH19VEp1S5j4f3UwQP4CLHErJ23UiJM2MnbufNWDgI=
 k8c.io/kubeone v1.7.2/go.mod h1:9v2VFz/+l36cW65kd5YufEYHunbKlJ6P8SBakj05xgM=
-k8c.io/kubermatic/v2 v2.25.16-0.20250407185614-8addaaee9dca h1:70hOA+a3iN5P7r4vlaOa/Yaf8xVdn1Y5ViqSoPSVNiQ=
-k8c.io/kubermatic/v2 v2.25.16-0.20250407185614-8addaaee9dca/go.mod h1:bbgxvcVvUNxchLd76Df5zuLne34Bm7SD9CKuiPa8pEM=
+k8c.io/kubermatic/v2 v2.25.17-0.20250429124054-45c86a2d771b h1:c5MR5tQCNgPo+cmzKlV1sQaynDIRM8R/LMPDnu34OQg=
+k8c.io/kubermatic/v2 v2.25.17-0.20250429124054-45c86a2d771b/go.mod h1:bbgxvcVvUNxchLd76Df5zuLne34Bm7SD9CKuiPa8pEM=
 k8c.io/operating-system-manager v1.5.5 h1:q/J07WTUaW2oPJALlbRm+FEKdDC/wu98/58AUCA7NsM=
 k8c.io/operating-system-manager v1.5.5/go.mod h1:h7gVySBkNOVDj2LAW90kDw2nwAROS5k9wVHeK6w/1KQ=
 k8c.io/reconciler v0.5.0 h1:BHpelg1UfI/7oBFctqOq8sX6qzflXpl3SlvHe7e8wak=
