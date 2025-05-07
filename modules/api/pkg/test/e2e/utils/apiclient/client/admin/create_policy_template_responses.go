@@ -93,11 +93,11 @@ func (o *CreatePolicyTemplateOK) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyTemplateOK) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyTemplateOK) GetPayload() *models.PolicyTemplate {
@@ -155,11 +155,11 @@ func (o *CreatePolicyTemplateUnauthorized) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *CreatePolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *CreatePolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *CreatePolicyTemplateForbidden) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateForbidden ", 403)
 }
 
 func (o *CreatePolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplateForbidden ", 403)
 }
 
 func (o *CreatePolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *CreatePolicyTemplateDefault) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyTemplateDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyTemplateDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/policytemplate][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policytemplates][%d] createPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyTemplateDefault) GetPayload() *models.ErrorResponse {

@@ -92,11 +92,11 @@ func (o *DeletePolicyTemplateOK) IsCode(code int) bool {
 }
 
 func (o *DeletePolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateOK ", 200)
 }
 
 func (o *DeletePolicyTemplateOK) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateOK ", 200)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateOK ", 200)
 }
 
 func (o *DeletePolicyTemplateOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -143,11 +143,11 @@ func (o *DeletePolicyTemplateUnauthorized) IsCode(code int) bool {
 }
 
 func (o *DeletePolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
 }
 
 func (o *DeletePolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateUnauthorized ", 401)
 }
 
 func (o *DeletePolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -194,11 +194,11 @@ func (o *DeletePolicyTemplateForbidden) IsCode(code int) bool {
 }
 
 func (o *DeletePolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
 }
 
 func (o *DeletePolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplateForbidden ", 403)
 }
 
 func (o *DeletePolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -255,11 +255,11 @@ func (o *DeletePolicyTemplateDefault) IsCode(code int) bool {
 }
 
 func (o *DeletePolicyTemplateDefault) Error() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyTemplateDefault) String() string {
-	return fmt.Sprintf("[DELETE /api/v2/policytemplate/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[DELETE /api/v2/policytemplates/{template_name}][%d] deletePolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *DeletePolicyTemplateDefault) GetPayload() *models.ErrorResponse {

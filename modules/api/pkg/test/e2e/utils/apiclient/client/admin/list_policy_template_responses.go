@@ -93,11 +93,11 @@ func (o *ListPolicyTemplateOK) IsCode(code int) bool {
 }
 
 func (o *ListPolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyTemplateOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyTemplateOK) GetPayload() []*models.PolicyTemplate {
@@ -153,11 +153,11 @@ func (o *ListPolicyTemplateUnauthorized) IsCode(code int) bool {
 }
 
 func (o *ListPolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *ListPolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *ListPolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,11 +204,11 @@ func (o *ListPolicyTemplateForbidden) IsCode(code int) bool {
 }
 
 func (o *ListPolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateForbidden ", 403)
 }
 
 func (o *ListPolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplateForbidden ", 403)
 }
 
 func (o *ListPolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -265,11 +265,11 @@ func (o *ListPolicyTemplateDefault) IsCode(code int) bool {
 }
 
 func (o *ListPolicyTemplateDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyTemplateDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates][%d] listPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyTemplateDefault) GetPayload() *models.ErrorResponse {

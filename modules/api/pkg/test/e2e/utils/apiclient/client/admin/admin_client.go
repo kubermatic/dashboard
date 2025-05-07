@@ -220,7 +220,7 @@ func (a *Client) CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "createPolicyBinding",
 		Method:             "POST",
-		PathPattern:        "/api/v2/policybinding",
+		PathPattern:        "/api/v2/policybindings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -258,7 +258,7 @@ func (a *Client) CreatePolicyTemplate(params *CreatePolicyTemplateParams, authIn
 	op := &runtime.ClientOperation{
 		ID:                 "createPolicyTemplate",
 		Method:             "POST",
-		PathPattern:        "/api/v2/policytemplate",
+		PathPattern:        "/api/v2/policytemplates",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -448,7 +448,7 @@ func (a *Client) DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "deletePolicyBinding",
 		Method:             "DELETE",
-		PathPattern:        "/api/v2/policybinding/{namespace}/{binding_name}",
+		PathPattern:        "/api/v2/policybindings/{binding_name}/{namespace}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -486,7 +486,7 @@ func (a *Client) DeletePolicyTemplate(params *DeletePolicyTemplateParams, authIn
 	op := &runtime.ClientOperation{
 		ID:                 "deletePolicyTemplate",
 		Method:             "DELETE",
-		PathPattern:        "/api/v2/policytemplate/{template_name}",
+		PathPattern:        "/api/v2/policytemplates/{template_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -752,7 +752,7 @@ func (a *Client) GetPolicyBinding(params *GetPolicyBindingParams, authInfo runti
 	op := &runtime.ClientOperation{
 		ID:                 "getPolicyBinding",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policybinding/{namespace}/{binding_name}",
+		PathPattern:        "/api/v2/policybindings/{binding_name}/{namespace}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -790,7 +790,7 @@ func (a *Client) GetPolicyTemplate(params *GetPolicyTemplateParams, authInfo run
 	op := &runtime.ClientOperation{
 		ID:                 "getPolicyTemplate",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policytemplate/{template_name}",
+		PathPattern:        "/api/v2/policytemplates/{template_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -942,7 +942,7 @@ func (a *Client) ListPolicyBinding(params *ListPolicyBindingParams, authInfo run
 	op := &runtime.ClientOperation{
 		ID:                 "listPolicyBinding",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policybinding",
+		PathPattern:        "/api/v2/policybindings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -980,7 +980,7 @@ func (a *Client) ListPolicyTemplate(params *ListPolicyTemplateParams, authInfo r
 	op := &runtime.ClientOperation{
 		ID:                 "listPolicyTemplate",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policytemplate",
+		PathPattern:        "/api/v2/policytemplates",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -1094,7 +1094,7 @@ func (a *Client) PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo r
 	op := &runtime.ClientOperation{
 		ID:                 "patchPolicyBinding",
 		Method:             "PATCH",
-		PathPattern:        "/api/v2/policybinding/{binding_name}",
+		PathPattern:        "/api/v2/policybindings/{binding_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -1132,7 +1132,7 @@ func (a *Client) PatchpolicyTemplate(params *PatchpolicyTemplateParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "patchpolicyTemplate",
 		Method:             "PATCH",
-		PathPattern:        "/api/v2/policytemplate/{template_name}",
+		PathPattern:        "/api/v2/policytemplates/{template_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

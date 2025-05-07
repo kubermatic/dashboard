@@ -93,11 +93,11 @@ func (o *PatchpolicyTemplateOK) IsCode(code int) bool {
 }
 
 func (o *PatchpolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchpolicyTemplateOK) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *PatchpolicyTemplateOK) GetPayload() *models.PolicyTemplate {
@@ -155,11 +155,11 @@ func (o *PatchpolicyTemplateUnauthorized) IsCode(code int) bool {
 }
 
 func (o *PatchpolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
 }
 
 func (o *PatchpolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateUnauthorized ", 401)
 }
 
 func (o *PatchpolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *PatchpolicyTemplateForbidden) IsCode(code int) bool {
 }
 
 func (o *PatchpolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
 }
 
 func (o *PatchpolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplateForbidden ", 403)
 }
 
 func (o *PatchpolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *PatchpolicyTemplateDefault) IsCode(code int) bool {
 }
 
 func (o *PatchpolicyTemplateDefault) Error() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchpolicyTemplateDefault) String() string {
-	return fmt.Sprintf("[PATCH /api/v2/policytemplate/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[PATCH /api/v2/policytemplates/{template_name}][%d] patchpolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *PatchpolicyTemplateDefault) GetPayload() *models.ErrorResponse {

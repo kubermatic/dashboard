@@ -221,7 +221,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		}
 	}
 	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
-		return nil, fmt.Errorf("project owners can only create policybinding on there projects")
+		return nil, fmt.Errorf("project owners can only create policybinding on their projects")
 	}
 
 	policyBindingSpec := req.Body.Spec.DeepCopy()
@@ -275,7 +275,7 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		}
 	}
 	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
-		return nil, fmt.Errorf("project owners can only update policybinding on there projects")
+		return nil, fmt.Errorf("project owners can only update policybinding on their projects")
 	}
 
 	policyBindingSpec := req.Body.Spec.DeepCopy()

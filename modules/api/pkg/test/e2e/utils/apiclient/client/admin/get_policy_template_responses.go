@@ -93,11 +93,11 @@ func (o *GetPolicyTemplateOK) IsCode(code int) bool {
 }
 
 func (o *GetPolicyTemplateOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyTemplateOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateOK  %+v", 200, o.Payload)
 }
 
 func (o *GetPolicyTemplateOK) GetPayload() *models.PolicyTemplate {
@@ -155,11 +155,11 @@ func (o *GetPolicyTemplateUnauthorized) IsCode(code int) bool {
 }
 
 func (o *GetPolicyTemplateUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *GetPolicyTemplateUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateUnauthorized ", 401)
 }
 
 func (o *GetPolicyTemplateUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *GetPolicyTemplateForbidden) IsCode(code int) bool {
 }
 
 func (o *GetPolicyTemplateForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateForbidden ", 403)
 }
 
 func (o *GetPolicyTemplateForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplateForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplateForbidden ", 403)
 }
 
 func (o *GetPolicyTemplateForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *GetPolicyTemplateDefault) IsCode(code int) bool {
 }
 
 func (o *GetPolicyTemplateDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPolicyTemplateDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/policytemplate/{template_name}][%d] getPolicyTemplate default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policytemplates/{template_name}][%d] getPolicyTemplate default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetPolicyTemplateDefault) GetPayload() *models.ErrorResponse {

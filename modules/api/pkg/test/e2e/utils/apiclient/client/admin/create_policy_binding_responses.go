@@ -93,11 +93,11 @@ func (o *CreatePolicyBindingOK) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyBindingOK) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyBindingOK) String() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *CreatePolicyBindingOK) GetPayload() *models.PolicyBinding {
@@ -155,11 +155,11 @@ func (o *CreatePolicyBindingUnauthorized) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingUnauthorized ", 401)
 }
 
 func (o *CreatePolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingUnauthorized ", 401)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingUnauthorized ", 401)
 }
 
 func (o *CreatePolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *CreatePolicyBindingForbidden) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingForbidden ", 403)
 }
 
 func (o *CreatePolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBindingForbidden ", 403)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBindingForbidden ", 403)
 }
 
 func (o *CreatePolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *CreatePolicyBindingDefault) IsCode(code int) bool {
 }
 
 func (o *CreatePolicyBindingDefault) Error() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBinding default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyBindingDefault) String() string {
-	return fmt.Sprintf("[POST /api/v2/policybinding][%d] createPolicyBinding default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[POST /api/v2/policybindings][%d] createPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *CreatePolicyBindingDefault) GetPayload() *models.ErrorResponse {

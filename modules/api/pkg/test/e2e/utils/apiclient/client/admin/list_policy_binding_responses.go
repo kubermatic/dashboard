@@ -93,11 +93,11 @@ func (o *ListPolicyBindingOK) IsCode(code int) bool {
 }
 
 func (o *ListPolicyBindingOK) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyBindingOK) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingOK  %+v", 200, o.Payload)
 }
 
 func (o *ListPolicyBindingOK) GetPayload() []*models.PolicyBinding {
@@ -153,11 +153,11 @@ func (o *ListPolicyBindingUnauthorized) IsCode(code int) bool {
 }
 
 func (o *ListPolicyBindingUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingUnauthorized ", 401)
 }
 
 func (o *ListPolicyBindingUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingUnauthorized ", 401)
 }
 
 func (o *ListPolicyBindingUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,11 +204,11 @@ func (o *ListPolicyBindingForbidden) IsCode(code int) bool {
 }
 
 func (o *ListPolicyBindingForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingForbidden ", 403)
 }
 
 func (o *ListPolicyBindingForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBindingForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBindingForbidden ", 403)
 }
 
 func (o *ListPolicyBindingForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -265,11 +265,11 @@ func (o *ListPolicyBindingDefault) IsCode(code int) bool {
 }
 
 func (o *ListPolicyBindingDefault) Error() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBinding default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyBindingDefault) String() string {
-	return fmt.Sprintf("[GET /api/v2/policybinding][%d] listPolicyBinding default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/policybindings][%d] listPolicyBinding default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListPolicyBindingDefault) GetPayload() *models.ErrorResponse {

@@ -1532,8 +1532,8 @@ k8c.io/kubermatic/sdk/v2 v2.0.0-20250430122852-785bfc52a3ea h1:acCgBOx1T3fWyGmxR
 k8c.io/kubermatic/sdk/v2 v2.0.0-20250430122852-785bfc52a3ea/go.mod h1:l7qjgKo7qLvJmgfT3FDvAx6ShLNpjdW7ew67v07SyUg=
 k8c.io/kubermatic/v2 v2.27.1-0.20250424095153-658ddd1df557 h1:+vfdbJZIZ7VjQdxpoYjgXA26QlP20075QzCBMMV2fC0=
 k8c.io/kubermatic/v2 v2.27.1-0.20250424095153-658ddd1df557/go.mod h1:j7HzF3EQFZva6H5ZaHRN/rVn3hZACJSLCY51h1j9P68=
-k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c h1:wXd2RGtpYLf0lVobWqhFV6JE5U84sRawuWhuy6kgaXk=
-k8c.io/machine-controller v1.59.1-0.20241011055903-713b23c97a6c/go.mod h1:j9SHRLpzFj5wOMlhdPJL+ub08P8rvVvQOFtg7JaLYb4=
+k8c.io/machine-controller v1.61.1 h1:Zy3kg9t0WrDN0Wo3y/pAJp7jdkThcJt070f0fAL9MVc=
+k8c.io/machine-controller v1.61.1/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
 k8c.io/machine-controller/sdk v0.0.0-20250401130405-7b6ae89532d1 h1:rZL9lICojHMeW76rghuKcYsAF0QkNoEvYJR+Zjphr78=
 k8c.io/machine-controller/sdk v0.0.0-20250401130405-7b6ae89532d1/go.mod h1:/5eWTMcfa7mTQUQoqziaalViiHSVzqzy3fXjejT1qLg=
 k8c.io/operating-system-manager v1.6.4 h1:MDtULmZeqsLEg9Fs96i41qVKOyakyV31OcxU54edQTI=

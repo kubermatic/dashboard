@@ -7247,7 +7247,7 @@
         }
       }
     },
-    "/api/v2/policybinding": {
+    "/api/v2/policybindings": {
       "get": {
         "description": "List all policy bindings, If query parameter `project_id` is set then the endpoint will return only the policy bindings that are associated with the project. Only available in Kubermatic Enterprise Edition",
         "produces": [
@@ -7333,7 +7333,7 @@
         }
       }
     },
-    "/api/v2/policybinding/{binding_name}": {
+    "/api/v2/policybindings/{binding_name}": {
       "patch": {
         "description": "Patch policy binding. Only available in Kubermatic Enterprise Edition",
         "consumes": [
@@ -7387,7 +7387,7 @@
         }
       }
     },
-    "/api/v2/policybinding/{namespace}/{binding_name}": {
+    "/api/v2/policybindings/{binding_name}/{namespace}": {
       "get": {
         "description": "Get policy binding, If query parameter `project_id` is set then the endpoint will return only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition",
         "produces": [
@@ -7487,7 +7487,7 @@
         }
       }
     },
-    "/api/v2/policytemplate": {
+    "/api/v2/policytemplates": {
       "get": {
         "description": "List all policy templates, If query parameter `project_id` is set then the endpoint will return only the policy templates that are associated with the project. Only available in Kubermatic Enterprise Edition",
         "produces": [
@@ -7573,7 +7573,7 @@
         }
       }
     },
-    "/api/v2/policytemplate/{template_name}": {
+    "/api/v2/policytemplates/{template_name}": {
       "get": {
         "description": "Get policy template, If the query parameter project_id is set, the endpoint will return the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition",
         "produces": [
