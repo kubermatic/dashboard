@@ -2328,6 +2328,22 @@ type BackupStorageLocationList struct {
 	Items []BackupStorageLocationOverview `json:"items"`
 }
 
+// PolicyTemplate defines a reusable blueprint of a Kyverno policy.
+// swagger:model PolicyTemplate
+type PolicyTemplate struct {
+	Name string                          `json:"name,omitempty"`
+	Spec kubermaticv1.PolicyTemplateSpec `json:"spec"`
+}
+
+// PolicyBinding binds a PolicyTemplate to specific clusters/projects and
+// optionally enables or disables it (if the template is not enforced).
+// swagger:model PolicyBinding
+type PolicyBinding struct {
+	Name   string                           `json:"name"`
+	Spec   kubermaticv1.PolicyBindingSpec   `json:"spec"`
+	Status kubermaticv1.PolicyBindingStatus `json:"status"`
+}
+
 // BackupStorageLocationBucketObject represents a S3 object of Backup Storage Location Bucket.
 // swagger:model BackupStorageLocationBucketObject
 type BackupStorageLocationBucketObject struct {

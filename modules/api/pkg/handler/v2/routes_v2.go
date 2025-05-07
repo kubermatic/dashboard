@@ -53,6 +53,8 @@ import (
 	groupprojectbinding "k8c.io/dashboard/v2/pkg/handler/v2/group-project-binding"
 	ipampool "k8c.io/dashboard/v2/pkg/handler/v2/ipampool"
 	kubernetesdashboard "k8c.io/dashboard/v2/pkg/handler/v2/kubernetes-dashboard"
+	policybinding "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-binding"
+	policytemplate "k8c.io/dashboard/v2/pkg/handler/v2/kyverno/policy-template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/machine"
 	mlaadminsetting "k8c.io/dashboard/v2/pkg/handler/v2/mla_admin_setting"
 	"k8c.io/dashboard/v2/pkg/handler/v2/networkdefaults"
@@ -1713,6 +1715,47 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/seeds/status").
 		Handler(r.listSeedStatus())
+
+	// Define endpoints to manage kyverno policies
+	mux.Methods(http.MethodGet).
+		Path("/policytemplates").
+		Handler(r.listKyvernoPolicyTemplates())
+
+	mux.Methods(http.MethodPost).
+		Path("/policytemplates").
+		Handler(r.createKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodGet).
+		Path("/policytemplates/{template_name}").
+		Handler(r.getKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodPatch).
+		Path("/policytemplates/{template_name}").
+		Handler(r.patchKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodDelete).
+		Path("/policytemplates/{template_name}").
+		Handler(r.deleteKyvernoPolicyTemplate())
+
+	mux.Methods(http.MethodGet).
+		Path("/policybindings").
+		Handler(r.listKyvernoPolicyBindings())
+
+	mux.Methods(http.MethodGet).
+		Path("/policybindings/{binding_name}/{namespace}").
+		Handler(r.getKyvernoPolicyBinding())
+
+	mux.Methods(http.MethodPost).
+		Path("/policybindings").
+		Handler(r.createKyvernoPolicyBinding())
+
+	mux.Methods(http.MethodPatch).
+		Path("/policybindings/{binding_name}").
+		Handler(r.patchKyvernoPolicyBinding())
+
+	mux.Methods(http.MethodDelete).
+		Path("/policybindings/{binding_name}/{namespace}").
+		Handler(r.deleteKyvernoPolicyBinding())
 }
 
 // swagger:route GET /api/v2/projects/{project_id}/providers/aws/sizes project listProjectAWSSizes
@@ -11179,6 +11222,263 @@ func (r Routing) listSeedStatus() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(seedoverview.ListSeedStatus(r.seedsGetter)),
 		common.DecodeEmptyReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// Define endpoints to manage kyverno policies
+//
+// swagger:route GET /api/v2/policytemplates admin listPolicyTemplate
+//
+//	List all policy templates, If query parameter `project_id` is set then the endpoint will return only the policy templates that are associated with the project. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []PolicyTemplate
+//	  401: empty
+//	  403: empty
+func (r Routing) listKyvernoPolicyTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.ListEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeListPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/policytemplates/{template_name} admin getPolicyTemplate
+//
+//	Get policy template, If the query parameter project_id is set, the endpoint will return the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyTemplate
+//	  401: empty
+//	  403: empty
+
+func (r Routing) getKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.GetEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeGetPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/policytemplates admin createPolicyTemplate
+//
+//	Create policy template. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyTemplate
+//	  401: empty
+//	  403: empty
+func (r Routing) createKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.CreateEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeCreatePolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v2/policytemplates/{template_name} admin patchpolicyTemplate
+//
+//	Patch policy template. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyTemplate
+//	  401: empty
+//	  403: empty
+
+func (r Routing) patchKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.PatchEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodePatchPolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route DELETE /api/v2/policytemplates/{template_name} admin deletePolicyTemplate
+//
+//	Delete policy template, If the query parameter project_id is set, the endpoint will delete the policy template if it is associated with the specified project_id. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+//	  401: empty
+//	  403: empty
+
+func (r Routing) deleteKyvernoPolicyTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policytemplate.DeleteEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		policytemplate.DecodeDeletePolicyTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/policybindings admin listPolicyBinding
+//
+//	List all policy bindings, If query parameter `project_id` is set then the endpoint will return only the policy bindings that are associated with the project. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []PolicyBinding
+//	  401: empty
+//	  403: empty
+
+func (r Routing) listKyvernoPolicyBindings() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeListPolicyBindingReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/policybindings/{binding_name}/{namespace} admin getPolicyBinding
+//
+//	Get policy binding, If query parameter `project_id` is set then the endpoint will return only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+
+func (r Routing) getKyvernoPolicyBinding() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policybinding.GetEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeGetPolicyBindingReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/policybindings admin createPolicyBinding
+//
+//	Create policy binding, Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+func (r Routing) createKyvernoPolicyBinding() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policybinding.CreateEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeCreatePolicyBindingReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PATCH /api/v2/policybindings/{binding_name} admin patchPolicyBinding
+//
+//	Patch policy binding. Only available in Kubermatic Enterprise Edition
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PolicyBinding
+//	  401: empty
+//	  403: empty
+func (r Routing) patchKyvernoPolicyBinding() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policybinding.PatchEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodePatchPolicyBindingReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route DELETE /api/v2/policybindings/{binding_name}/{namespace} admin deletePolicyBinding
+//
+//	Delete policy binding, If query parameter `project_id` is set then the endpoint will delete only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition
+//
+// Responses:
+//
+//	default: errorResponse
+//	200: empty
+//	401: empty
+//	403: empty
+func (r Routing) deleteKyvernoPolicyBinding() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(policybinding.DeleteEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+		policybinding.DecodeDeletePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
