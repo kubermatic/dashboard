@@ -29,7 +29,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"slices"
 
 	"github.com/gorilla/mux"
 
@@ -107,8 +106,6 @@ type patchPolicyBindingBody struct {
 	ProjectID string `json:"projectID"`
 }
 
-const globalScope = "global"
-
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
 	req, ok := request.(listPolicyBindingReq)
 	if !ok {
@@ -131,7 +128,9 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 	}
 	res := []*apiv2.PolicyBinding{}
 	for _, policyBinding := range policyBindingList.Items {
-		if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+		// TODO(@ahmadhamzh): Please fix this
+		// if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+		if req.ProjectID == "" {
 			res = append(res, &apiv2.PolicyBinding{
 				Name:   policyBinding.Name,
 				Spec:   policyBinding.Spec,
@@ -171,7 +170,9 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 		return nil, err
 	}
 
-	if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+	// TODO(@ahmadhamzh): Please fix this
+	// if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
+	if req.ProjectID == "" {
 		return &apiv2.PolicyBinding{
 			Name:   policyBinding.Name,
 			Spec:   policyBinding.Spec,
@@ -215,14 +216,15 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !userInfo.Roles.Has("owners") && !userInfo.IsAdmin {
 		return nil, fmt.Errorf("Only admins and project owners can create policy bindings")
 	}
-	if !userInfo.IsAdmin {
-		if req.Body.Spec.Scope == globalScope {
-			return nil, fmt.Errorf("Only admins can create policy binding with global scope")
-		}
-	}
-	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
-		return nil, fmt.Errorf("project owners can only create policybinding on their projects")
-	}
+	//
+	// if !userInfo.IsAdmin {
+	// 	if req.Body.Spec.Scope == globalScope {
+	// 		return nil, fmt.Errorf("Only admins can create policy binding with global scope")
+	// 	}
+	// }
+	// if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
+	// 	return nil, fmt.Errorf("project owners can only create policybinding on their projects")
+	// }
 
 	policyBindingSpec := req.Body.Spec.DeepCopy()
 
@@ -269,14 +271,15 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	if !userInfo.Roles.Has("owners") && !userInfo.IsAdmin {
 		return nil, fmt.Errorf("Only admins and project owners can update policy bindings")
 	}
-	if !userInfo.IsAdmin {
-		if req.Body.Spec.Scope == globalScope {
-			return nil, fmt.Errorf("Only admins can update policy binding with global scope")
-		}
-	}
-	if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
-		return nil, fmt.Errorf("project owners can only update policybinding on their projects")
-	}
+	// TODO(@ahmadhamzh): Please fix this
+	// if !userInfo.IsAdmin {
+	// 	if req.Body.Spec.Scope == globalScope {
+	// 		return nil, fmt.Errorf("Only admins can update policy binding with global scope")
+	// 	}
+	// }
+	// if !slices.Contains(req.Body.Spec.Target.Projects.Name, req.Body.ProjectID) && !userInfo.IsAdmin {
+	// 	return nil, fmt.Errorf("project owners can only update policybinding on their projects")
+	// }
 
 	policyBindingSpec := req.Body.Spec.DeepCopy()
 	policyBinding := &kubermaticv1.PolicyBinding{

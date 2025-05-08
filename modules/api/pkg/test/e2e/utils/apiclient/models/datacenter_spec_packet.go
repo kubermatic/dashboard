@@ -12,7 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// DatacenterSpecPacket DatacenterSpecPacket describes a Packet datacenter.
+// DatacenterSpecPacket Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.
+//
+// This provider is no longer supported. Migrate your configurations away from "packet" immediately.
+// DatacenterSpecPacket describes a Packet datacenter.
 //
 // swagger:model DatacenterSpecPacket
 type DatacenterSpecPacket struct {

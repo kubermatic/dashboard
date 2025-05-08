@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -17,6 +18,13 @@ import (
 //
 // swagger:model AuditSidecarSettings
 type AuditSidecarSettings struct {
+
+	// ExtraEnvs are the additional environment variables that can be set for the audit logging sidecar.
+	// Additional environment variables can be set and passed to the AuditSidecarConfiguration field
+	// to allow passing variables to the fluent-bit configuration.
+	// Only, `Value` field is supported for the environment variables; `ValueFrom` field is not supported.
+	// By default, `CLUSTER_ID` is set as an environment variable in the audit-logging sidecar.
+	ExtraEnvs []*EnvVar `json:"extraEnvs"`
 
 	// config
 	Config *AuditSidecarConfiguration `json:"config,omitempty"`
@@ -29,6 +37,10 @@ type AuditSidecarSettings struct {
 func (m *AuditSidecarSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateExtraEnvs(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateConfig(formats); err != nil {
 		res = append(res, err)
 	}
@@ -40,6 +52,32 @@ func (m *AuditSidecarSettings) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *AuditSidecarSettings) validateExtraEnvs(formats strfmt.Registry) error {
+	if swag.IsZero(m.ExtraEnvs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.ExtraEnvs); i++ {
+		if swag.IsZero(m.ExtraEnvs[i]) { // not required
+			continue
+		}
+
+		if m.ExtraEnvs[i] != nil {
+			if err := m.ExtraEnvs[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("extraEnvs" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extraEnvs" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -85,6 +123,10 @@ func (m *AuditSidecarSettings) validateResources(formats strfmt.Registry) error 
 func (m *AuditSidecarSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateExtraEnvs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -96,6 +138,26 @@ func (m *AuditSidecarSettings) ContextValidate(ctx context.Context, formats strf
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *AuditSidecarSettings) contextValidateExtraEnvs(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.ExtraEnvs); i++ {
+
+		if m.ExtraEnvs[i] != nil {
+			if err := m.ExtraEnvs[i].ContextValidate(ctx, formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("extraEnvs" + "." + strconv.Itoa(i))
+				} else if ce, ok := err.(*errors.CompositeError); ok {
+					return ce.ValidateName("extraEnvs" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

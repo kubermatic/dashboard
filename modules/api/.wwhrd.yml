@@ -64,3 +64,4 @@ exceptions:
   - github.com/r3labs/diff # MPL-2.0
   - github.com/rcrowley/go-metrics # BSD-2-Clause-Views licensed packages
   - github.com/alibabacloud-go/cr-20160607/client # Alibaba Cloud CR client (Apache-2.0)
+  - github.com/letsencrypt/boulder/core/proto # MPL-2.0 (https://github.com/letsencrypt/boulder/blob/main/LICENSE.txt)

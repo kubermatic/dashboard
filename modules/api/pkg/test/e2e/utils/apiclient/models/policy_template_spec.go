@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -22,7 +23,7 @@ type PolicyTemplateSpec struct {
 	// +optional
 	Category string `json:"category,omitempty"`
 
-	// Default determines whether we apply the policy (create policy binding)
+	// Default determines whether we apply the policy (create policy binding) by default
 	//
 	// +optional
 	Default bool `json:"default,omitempty"`
@@ -35,6 +36,11 @@ type PolicyTemplateSpec struct {
 	// If true, this policy is mandatory
 	// A PolicyBinding referencing it cannot disable it
 	Enforced bool `json:"enforced,omitempty"`
+
+	// NamespacedPolicy dictates the type of Kyverno resource to be created in this User Cluster.
+	//
+	// +optional
+	NamespacedPolicy bool `json:"namespacedPolicy,omitempty"`
 
 	// ProjectID is the ID of the project for which the policy template is created
 	//
@@ -53,20 +59,77 @@ type PolicyTemplateSpec struct {
 	// Visibility specifies where the policy is visible.
 	//
 	// Can be one of: global, project, or cluster
-	// +kubebuilder:validation:Enum=global;project;cluster
+	// +kubebuilder:validation:Enum=Global;Project;Cluster
+	// +kubebuilder:validation:Required
 	Visibility string `json:"visibility,omitempty"`
 
 	// policy spec
 	PolicySpec RawExtension `json:"policySpec,omitempty"`
+
+	// target
+	Target *PolicyTemplateTarget `json:"target,omitempty"`
 }
 
 // Validate validates this policy template spec
 func (m *PolicyTemplateSpec) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateTarget(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this policy template spec based on context it is used
+func (m *PolicyTemplateSpec) validateTarget(formats strfmt.Registry) error {
+	if swag.IsZero(m.Target) { // not required
+		return nil
+	}
+
+	if m.Target != nil {
+		if err := m.Target.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("target")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("target")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this policy template spec based on the context it is used
 func (m *PolicyTemplateSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateTarget(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PolicyTemplateSpec) contextValidateTarget(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Target != nil {
+		if err := m.Target.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("target")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("target")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

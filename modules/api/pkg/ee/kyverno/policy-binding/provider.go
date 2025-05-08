@@ -2,8 +2,6 @@ package policybinding
 
 import (
 	"context"
-	"fmt"
-	"slices"
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -59,13 +57,14 @@ func (p *PolicyBindingProvider) PatchUnsecured(ctx context.Context, user *provid
 
 	updated := existing.DeepCopy()
 	updated.Spec = updatedPolicyBinding.Spec
-	if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || user.IsAdmin {
-		if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
-			return nil, err
-		}
-	} else {
-		return nil, fmt.Errorf("user %s is not allowed to update the policy binding %s", user.Email, updated.Name)
-	}
+	// TODO(@ahmadhamzh): Please fix this
+	// if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || user.IsAdmin {
+	// 	if err := client.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+	// 		return nil, err
+	// 	}
+	// } else {
+	// 	return nil, fmt.Errorf("user %s is not allowed to update the policy binding %s", user.Email, updated.Name)
+	// }
 
 	return updated, nil
 }
@@ -77,13 +76,14 @@ func (p *PolicyBindingProvider) DeleteUnsecured(ctx context.Context, user *provi
 	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: policyTemplateName}, existing); err != nil {
 		return err
 	}
-	if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || (user.IsAdmin && projectID == "") {
-		if err := client.Delete(ctx, existing); err != nil {
-			return err
-		}
-	} else {
-		return fmt.Errorf("user %s is not allowed to delete the policy binding %s", user.Email, policyTemplateName)
-	}
+	// TODO(@ahmadhamzh): Please fix this
+	// if existing.Spec.Target.Projects.SelectAll || slices.Contains(existing.Spec.Target.Projects.Name, projectID) || (user.IsAdmin && projectID == "") {
+	// 	if err := client.Delete(ctx, existing); err != nil {
+	// 		return err
+	// 	}
+	// } else {
+	// 	return fmt.Errorf("user %s is not allowed to delete the policy binding %s", user.Email, policyTemplateName)
+	// }
 
 	return nil
 }

@@ -18,37 +18,54 @@ import (
 // swagger:model PolicyBindingSpec
 type PolicyBindingSpec struct {
 
-	// NamespacedPolicy is a boolean to indicate if the policy binding is namespaced
-	NamespacedPolicy bool `json:"namespacedPolicy,omitempty"`
-
-	// Scope specifies the scope of the policy.
-	// Can be one of: global, project, or cluster
+	// Enabled controls whether the policy defined by the template should be actively applied to the cluster.
 	//
-	// +kubebuilder:validation:Enum=global;project;cluster
-	Scope string `json:"scope,omitempty"`
+	// Relevant only if the referenced PolicyTemplate has spec.enforced=false.
+	//
+	// +optional
+	Enabled bool `json:"enabled,omitempty"`
+
+	// namespace selector
+	NamespaceSelector *LabelSelector `json:"namespaceSelector,omitempty"`
 
 	// policy template ref
 	PolicyTemplateRef *ObjectReference `json:"policyTemplateRef,omitempty"`
-
-	// target
-	Target *PolicyTargetSpec `json:"target,omitempty"`
 }
 
 // Validate validates this policy binding spec
 func (m *PolicyBindingSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validatePolicyTemplateRef(formats); err != nil {
+	if err := m.validateNamespaceSelector(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateTarget(formats); err != nil {
+	if err := m.validatePolicyTemplateRef(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PolicyBindingSpec) validateNamespaceSelector(formats strfmt.Registry) error {
+	if swag.IsZero(m.NamespaceSelector) { // not required
+		return nil
+	}
+
+	if m.NamespaceSelector != nil {
+		if err := m.NamespaceSelector.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("namespaceSelector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("namespaceSelector")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -71,40 +88,37 @@ func (m *PolicyBindingSpec) validatePolicyTemplateRef(formats strfmt.Registry) e
 	return nil
 }
 
-func (m *PolicyBindingSpec) validateTarget(formats strfmt.Registry) error {
-	if swag.IsZero(m.Target) { // not required
-		return nil
-	}
-
-	if m.Target != nil {
-		if err := m.Target.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("target")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("target")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 // ContextValidate validate this policy binding spec based on the context it is used
 func (m *PolicyBindingSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidatePolicyTemplateRef(ctx, formats); err != nil {
+	if err := m.contextValidateNamespaceSelector(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateTarget(ctx, formats); err != nil {
+	if err := m.contextValidatePolicyTemplateRef(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *PolicyBindingSpec) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NamespaceSelector != nil {
+		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("namespaceSelector")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("namespaceSelector")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -116,22 +130,6 @@ func (m *PolicyBindingSpec) contextValidatePolicyTemplateRef(ctx context.Context
 				return ve.ValidateName("policyTemplateRef")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("policyTemplateRef")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *PolicyBindingSpec) contextValidateTarget(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Target != nil {
-		if err := m.Target.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("target")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("target")
 			}
 			return err
 		}

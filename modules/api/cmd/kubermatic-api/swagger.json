@@ -29100,6 +29100,14 @@
         "config": {
           "$ref": "#/definitions/AuditSidecarConfiguration"
         },
+        "extraEnvs": {
+          "description": "ExtraEnvs are the additional environment variables that can be set for the audit logging sidecar.\nAdditional environment variables can be set and passed to the AuditSidecarConfiguration field\nto allow passing variables to the fluent-bit configuration.\nOnly, `Value` field is supported for the environment variables; `ValueFrom` field is not supported.\nBy default, `CLUSTER_ID` is set as an environment variable in the audit-logging sidecar.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EnvVar"
+          },
+          "x-go-name": "ExtraEnvs"
+        },
         "resources": {
           "$ref": "#/definitions/ResourceRequirements"
         }
@@ -31549,6 +31557,16 @@
           },
           "x-go-name": "CustomNetworkPolicies"
         },
+        "disableDefaultInstanceTypes": {
+          "description": "DisableDefaultInstanceTypes prevents KKP from automatically creating default instance types.\n(standard-2, standard-4, standard-8) in KubeVirt environments.",
+          "type": "boolean",
+          "x-go-name": "DisableDefaultInstanceTypes"
+        },
+        "disableDefaultPreferences": {
+          "description": "DisableKubermaticPreferences prevents KKP from setting default KubeVirt preferences.",
+          "type": "boolean",
+          "x-go-name": "DisableDefaultPreferences"
+        },
         "dnsConfig": {
           "$ref": "#/definitions/PodDNSConfig"
         },
@@ -31727,8 +31745,9 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "DatacenterSpecPacket": {
+      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nDatacenterSpecPacket describes a Packet datacenter.",
       "type": "object",
-      "title": "DatacenterSpecPacket describes a Packet datacenter.",
+      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
       "properties": {
         "facilities": {
           "description": "The list of enabled facilities, for example \"ams1\", for a full list of available\nfacilities see https://metal.equinix.com/developers/docs/locations/facilities/",
@@ -36622,6 +36641,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "NetworkPolicy": {
+      "type": "object",
+      "title": "NetworkPolicy describes if and which network policies will be deployed by default to kubevirt userclusters.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "mode": {
+          "$ref": "#/definitions/NetworkPolicyMode"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
     "NetworkPolicyEgressRule": {
       "description": "NetworkPolicyEgressRule describes a particular set of traffic that is allowed out of pods\nmatched by a NetworkPolicySpec's podSelector. The traffic must match both ports and to.\nThis type is beta-level in 1.8",
       "type": "object",
@@ -36667,6 +36700,11 @@
         }
       },
       "x-go-package": "k8s.io/api/networking/v1"
+    },
+    "NetworkPolicyMode": {
+      "description": "NetworkPolicyMode maps directly to the values supported by the kubermatic network policy mode for kubevirt\nworker nodes in kube-ovn environments.\n+kubebuilder:validation:Enum=deny;allow",
+      "type": "string",
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "NetworkPolicyPeer": {
       "description": "NetworkPolicyPeer describes a peer to allow traffic to/from. Only certain combinations of\nfields are allowed",
@@ -38444,7 +38482,9 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Packet": {
+      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.",
       "type": "object",
+      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
       "properties": {
         "apiKey": {
           "type": "string",
@@ -38493,8 +38533,9 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PacketCloudSpec": {
+      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nPacketCloudSpec specifies access data to a Packet cloud.",
       "type": "object",
-      "title": "PacketCloudSpec specifies access data to a Packet cloud.",
+      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
       "properties": {
         "apiKey": {
           "type": "string",
@@ -38692,21 +38733,16 @@
       "type": "object",
       "title": "PolicyBindingSpec describes how and where to apply the referenced PolicyTemplate.",
       "properties": {
-        "namespacedPolicy": {
-          "description": "NamespacedPolicy is a boolean to indicate if the policy binding is namespaced",
+        "enabled": {
+          "description": "Enabled controls whether the policy defined by the template should be actively applied to the cluster.\n\nRelevant only if the referenced PolicyTemplate has spec.enforced=false.\n\n+optional",
           "type": "boolean",
-          "x-go-name": "NamespacedPolicy"
+          "x-go-name": "Enabled"
+        },
+        "namespaceSelector": {
+          "$ref": "#/definitions/LabelSelector"
         },
         "policyTemplateRef": {
           "$ref": "#/definitions/ObjectReference"
-        },
-        "scope": {
-          "description": "Scope specifies the scope of the policy.\nCan be one of: global, project, or cluster\n\n+kubebuilder:validation:Enum=global;project;cluster",
-          "type": "string",
-          "x-go-name": "Scope"
-        },
-        "target": {
-          "$ref": "#/definitions/PolicyTargetSpec"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -38715,6 +38751,11 @@
       "type": "object",
       "title": "PolicyBindingStatus is the status of the policy binding.",
       "properties": {
+        "active": {
+          "description": "Active reflects whether the Kyverno policy exists and is active in this User Cluster.\n\n+optional",
+          "type": "boolean",
+          "x-go-name": "Active"
+        },
         "conditions": {
           "description": "Conditions represents the latest available observations of the policy binding's current state\n+optional\n+listType=map\n+listMapKey=type",
           "type": "array",
@@ -38728,6 +38769,11 @@
           "type": "integer",
           "format": "int64",
           "x-go-name": "ObservedGeneration"
+        },
+        "templateEnforced": {
+          "description": "TemplateEnforced reflects the value of `spec.enforced` from PolicyTemplate\n\n+optional",
+          "type": "boolean",
+          "x-go-name": "TemplateEnforced"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -38779,19 +38825,6 @@
       },
       "x-go-package": "k8s.io/api/rbac/v1"
     },
-    "PolicyTargetSpec": {
-      "type": "object",
-      "title": "PolicyTargetSpec indicates how to select projects/clusters in Kubermatic.",
-      "properties": {
-        "clusters": {
-          "$ref": "#/definitions/ResourceSelector"
-        },
-        "projects": {
-          "$ref": "#/definitions/ResourceSelector"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-    },
     "PolicyTemplate": {
       "type": "object",
       "title": "PolicyTemplate defines a reusable blueprint of a Kyverno policy.",
@@ -38815,7 +38848,7 @@
           "x-go-name": "Category"
         },
         "default": {
-          "description": "Default determines whether we apply the policy (create policy binding)\n\n+optional",
+          "description": "Default determines whether we apply the policy (create policy binding) by default\n\n+optional",
           "type": "boolean",
           "x-go-name": "Default"
         },
@@ -38828,6 +38861,11 @@
           "description": "Enforced indicates whether this policy is mandatory\n\nIf true, this policy is mandatory\nA PolicyBinding referencing it cannot disable it",
           "type": "boolean",
           "x-go-name": "Enforced"
+        },
+        "namespacedPolicy": {
+          "description": "NamespacedPolicy dictates the type of Kyverno resource to be created in this User Cluster.\n\n+optional",
+          "type": "boolean",
+          "x-go-name": "NamespacedPolicy"
         },
         "policySpec": {
           "$ref": "#/definitions/RawExtension"
@@ -38842,15 +38880,31 @@
           "type": "string",
           "x-go-name": "Severity"
         },
+        "target": {
+          "$ref": "#/definitions/PolicyTemplateTarget"
+        },
         "title": {
           "description": "Title is the title of the policy, specified as an annotation in the Kyverno policy",
           "type": "string",
           "x-go-name": "Title"
         },
         "visibility": {
-          "description": "Visibility specifies where the policy is visible.\n\nCan be one of: global, project, or cluster\n+kubebuilder:validation:Enum=global;project;cluster",
+          "description": "Visibility specifies where the policy is visible.\n\nCan be one of: global, project, or cluster\n+kubebuilder:validation:Enum=Global;Project;Cluster\n+kubebuilder:validation:Required",
           "type": "string",
           "x-go-name": "Visibility"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "PolicyTemplateTarget": {
+      "type": "object",
+      "title": "PolicyTemplateTarget allows specifying label selectors for Projects and Clusters.",
+      "properties": {
+        "clusterSelector": {
+          "$ref": "#/definitions/LabelSelector"
+        },
+        "projectSelector": {
+          "$ref": "#/definitions/LabelSelector"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -39247,7 +39301,11 @@
           "type": "string",
           "x-go-name": "Name"
         },
+        "networkPolicy": {
+          "$ref": "#/definitions/NetworkPolicy"
+        },
         "networkPolicyEnabled": {
+          "description": "Deprecated: Use .networkPolicy.enabled instead.",
           "type": "boolean",
           "x-go-name": "NetworkPolicyEnabled"
         },
@@ -39843,29 +39901,6 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
-    },
-    "ResourceSelector": {
-      "type": "object",
-      "title": "ResourceSelector is a struct that contains the label selector, name, and selectAll fields.",
-      "properties": {
-        "labelSelector": {
-          "$ref": "#/definitions/LabelSelector"
-        },
-        "name": {
-          "description": "Name is a list of names to select the resources (projects/clusters)",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "x-go-name": "Name"
-        },
-        "selectAll": {
-          "description": "SelectAll is a boolean to select all the resources (projects/clusters) from cluster admins.",
-          "type": "boolean",
-          "x-go-name": "SelectAll"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "ResourceType": {
       "type": "string",
