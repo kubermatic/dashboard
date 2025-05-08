@@ -13,7 +13,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// PacketCloudSpec PacketCloudSpec specifies access data to a Packet cloud.
+// PacketCloudSpec Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.
+//
+// This provider is no longer supported. Migrate your configurations away from "packet" immediately.
+// PacketCloudSpec specifies access data to a Packet cloud.
 //
 // swagger:model PacketCloudSpec
 type PacketCloudSpec struct {

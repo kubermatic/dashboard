@@ -22,11 +22,14 @@ type ProviderNetwork struct {
 	// name
 	Name string `json:"name,omitempty"`
 
-	// network policy enabled
+	// Deprecated: Use .networkPolicy.enabled instead.
 	NetworkPolicyEnabled bool `json:"networkPolicyEnabled,omitempty"`
 
 	// v p cs
 	VPCs []*VPC `json:"vpcs"`
+
+	// network policy
+	NetworkPolicy *NetworkPolicy `json:"networkPolicy,omitempty"`
 }
 
 // Validate validates this provider network
@@ -34,6 +37,10 @@ func (m *ProviderNetwork) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateVPCs(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNetworkPolicy(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -69,11 +76,34 @@ func (m *ProviderNetwork) validateVPCs(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *ProviderNetwork) validateNetworkPolicy(formats strfmt.Registry) error {
+	if swag.IsZero(m.NetworkPolicy) { // not required
+		return nil
+	}
+
+	if m.NetworkPolicy != nil {
+		if err := m.NetworkPolicy.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("networkPolicy")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("networkPolicy")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this provider network based on the context it is used
 func (m *ProviderNetwork) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateVPCs(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNetworkPolicy(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -98,6 +128,22 @@ func (m *ProviderNetwork) contextValidateVPCs(ctx context.Context, formats strfm
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *ProviderNetwork) contextValidateNetworkPolicy(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NetworkPolicy != nil {
+		if err := m.NetworkPolicy.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("networkPolicy")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("networkPolicy")
+			}
+			return err
+		}
 	}
 
 	return nil

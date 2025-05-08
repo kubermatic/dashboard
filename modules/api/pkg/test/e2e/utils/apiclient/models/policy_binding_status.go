@@ -19,6 +19,11 @@ import (
 // swagger:model PolicyBindingStatus
 type PolicyBindingStatus struct {
 
+	// Active reflects whether the Kyverno policy exists and is active in this User Cluster.
+	//
+	// +optional
+	Active bool `json:"active,omitempty"`
+
 	// Conditions represents the latest available observations of the policy binding's current state
 	// +optional
 	// +listType=map
@@ -29,6 +34,11 @@ type PolicyBindingStatus struct {
 	//
 	// +optional
 	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
+
+	// TemplateEnforced reflects the value of `spec.enforced` from PolicyTemplate
+	//
+	// +optional
+	TemplateEnforced bool `json:"templateEnforced,omitempty"`
 }
 
 // Validate validates this policy binding status

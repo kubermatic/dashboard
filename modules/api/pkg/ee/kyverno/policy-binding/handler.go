@@ -106,8 +106,6 @@ type patchPolicyBindingBody struct {
 	ProjectID string `json:"projectID"`
 }
 
-const globalScope = "global"
-
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
 	req, ok := request.(listPolicyBindingReq)
 	if !ok {
@@ -133,7 +131,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		// TODO(@ahmadhamzh): Please fix this
 		// if policyBinding.Spec.Target.Projects.SelectAll || slices.Contains(policyBinding.Spec.Target.Projects.Name, req.ProjectID) || req.ProjectID == "" {
 		if req.ProjectID == "" {
-				res = append(res, &apiv2.PolicyBinding{
+			res = append(res, &apiv2.PolicyBinding{
 				Name:   policyBinding.Name,
 				Spec:   policyBinding.Spec,
 				Status: policyBinding.Status,
