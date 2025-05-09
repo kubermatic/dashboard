@@ -86,7 +86,11 @@ type deletePolicyTemplateReq struct {
 	ProjectID string `json:"project_id,omitempty"`
 }
 
-const globalVisibility = "global"
+const (
+	globalVisibility  = "Global"
+	projectVisibility = "Project"
+	clusterVisibility = "Cluster"
+)
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) (interface{}, error) {
 	req, ok := request.(listPolicyTemplateReq)
@@ -109,7 +113,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 
 	res := []*apiv2.PolicyTemplate{}
 	for _, policyTemplate := range policyTemplateList.Items {
-		if req.ProjectID == "" || policyTemplate.Spec.ProjectID == req.ProjectID || policyTemplate.Spec.Visibility == globalVisibility {
+		if req.ProjectID == "" || (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) {
 			res = append(res, &apiv2.PolicyTemplate{
 				Name: policyTemplate.Name,
 				Spec: *policyTemplate.Spec.DeepCopy(),
@@ -176,6 +180,21 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
+	// check this approach
+	// fmt.Println("======================")
+	// fmt.Println("======================")
+	// fmt.Println(kubernetes.IsEmptySelector(req.Body.Spec.Target.ProjectSelector))
+	// fmt.Println("======================")
+	// fmt.Println("======================")
+
+	if req.Body.Spec.ProjectID == "" && req.Body.Spec.Visibility == "Project" {
+		return nil, fmt.Errorf("ProjectID is required for Project visibility")
+	}
+
+	selector := req.Body.Spec.Target.ProjectSelector
+	if req.Body.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
+	}
 
 	userInfo, err := userInfoGetter(ctx, req.Body.Spec.ProjectID)
 
@@ -229,6 +248,11 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	req, ok := request.(patchPolicyTemplateReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	selector := req.Spec.Target.ProjectSelector
+	if req.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 
 	userInfo, err := userInfoGetter(ctx, req.Spec.ProjectID)
