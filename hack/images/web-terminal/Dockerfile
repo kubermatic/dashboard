@@ -19,14 +19,14 @@ ARG TARGETARCH
 
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.30.txt
-ENV KUBECTL_VERSION=v1.30.5
+# Source: https://dl.k8s.io/release/stable-1.31.txt
+ENV KUBECTL_VERSION=v1.31.8
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.16.1
+ENV HELM_VERSION=v3.17.3
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.3.40
+ENV K8SGPT_VERSION=v0.4.15
 
 ENV USER=webshell
 ENV GROUP=webshell
