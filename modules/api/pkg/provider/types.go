@@ -393,10 +393,11 @@ type ProjectProvider interface {
 
 // UserInfo represent authenticated user.
 type UserInfo struct {
-	Email   string
-	Groups  []string
-	Roles   sets.Set[string]
-	IsAdmin bool
+	Email          string
+	Groups         []string
+	Roles          sets.Set[string]
+	IsAdmin        bool
+	IsGlobalViewer bool
 }
 
 // ProjectMemberListOptions allows to set filters that will be applied to filter the result.

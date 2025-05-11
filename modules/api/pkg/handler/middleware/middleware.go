@@ -252,6 +252,7 @@ func UserInfoUnauthorized(userProjectMapper provider.ProjectMemberMapper, userPr
 				uInfo := &provider.UserInfo{Email: user.Spec.Email, IsAdmin: true}
 				return next(context.WithValue(ctx, UserInfoContextKey, uInfo), request)
 			}
+
 			uInfo, err := createUserInfo(ctx, user, projectID, userProjectMapper)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
@@ -402,7 +403,7 @@ func createUserInfo(ctx context.Context, user *kubermaticv1.User, projectID stri
 		groups.Insert(user.Spec.Groups...)
 	}
 
-	return &provider.UserInfo{Email: user.Spec.Email, Groups: sets.List(groups), Roles: roles}, nil
+	return &provider.UserInfo{Email: user.Spec.Email, Groups: sets.List(groups), Roles: roles, IsGlobalViewer: user.Spec.IsGlobalViewer}, nil
 }
 
 func GetClusterProvider(ctx context.Context, request interface{}, seedsGetter provider.SeedsGetter, clusterProviderGetter provider.ClusterProviderGetter) (provider.ClusterProvider, context.Context, error) {
