@@ -13,9 +13,9 @@
 // limitations under the License.
 
 export enum Visibilities {
-  Global = 'global',
-  Project = 'project',
-  Cluster = 'cluster',
+  Global = 'Global',
+  Project = 'Project',
+  Cluster = 'Cluster',
 }
 
 export class PolicyTemplate {
@@ -27,14 +27,23 @@ export class PolicyTemplateSpec {
   title: string;
   description: string;
   category?: string;
-  severity?: string;
-  visibility: 'global' | 'project' | 'cluster';
+  visibility: 'Global' | 'Project' | 'Cluster';
   projectID?: string;
   default?: boolean;
   enforced: boolean;
+  namespacedPolicy?: boolean;
+  target: PolicyTemplateTarget;
   policySpec: object;
 }
 
+export class PolicyTemplateTarget {
+  projectSelector: {
+    matchLabels: object;
+  };
+  clusterSelector: {
+    matchLabels: object;
+  };
+}
 export class PolicyBinding {
   name: string;
   namespace: string;
@@ -45,22 +54,10 @@ export class PolicyBinding {
 
 export class PolicyBindingSpec {
   policyTemplateRef: PolicyTemplateRef;
-  namespacedPolicy: boolean;
-  scope: 'global' | 'project' | 'cluster';
-  target: PolicyTargetSpec;
+  namespaceSelector: object;
 }
 
 export class PolicyTemplateRef {
   name: string;
-  [key: string]: any
-}
-
-export class PolicyTargetSpec {
-  projects: ResourceSelector;
-  clusters: ResourceSelector;
-}
-
-export class ResourceSelector {
-  name?: string[];
-  selectAll?: boolean;
+  [key: string]: any;
 }

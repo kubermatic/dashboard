@@ -1073,6 +1073,9 @@ type ClusterSpec struct {
 
 	// Optional: BackupConfig contains the configuration options for managing the Cluster Backup Velero integration feature.
 	BackupConfig *kubermaticv1.BackupConfig `json:"backupConfig,omitempty"`
+
+	// Kyverno holds the configuration for the Kyverno policy management component.
+	Kyverno *kubermaticv1.KyvernoSettings `json:"kyverno,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1104,6 +1107,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		ExposeStrategy                       kubermaticv1.ExposeStrategy            `json:"exposeStrategy,omitempty"`
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 		DisableCSIDriver                     bool                                   `json:"disableCsiDriver,omitempty"`
+		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1149,6 +1153,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		ExposeStrategy:                       cs.ExposeStrategy,
 		APIServerAllowedIPRanges:             cs.APIServerAllowedIPRanges,
 		DisableCSIDriver:                     cs.DisableCSIDriver,
+		Kyverno:                              cs.Kyverno,
 	})
 
 	return ret, err

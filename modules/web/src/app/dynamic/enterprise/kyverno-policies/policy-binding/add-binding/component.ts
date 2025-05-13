@@ -18,36 +18,31 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ClusterService } from "@app/core/services/cluster";
-import { KyvernoService } from "@app/core/services/kyverno";
-import { NotificationService } from "@app/core/services/notification";
-import { ProjectService } from "@app/core/services/project";
-import { Cluster } from "@app/shared/entity/cluster";
-import { PolicyBinding, PolicyBindingSpec, PolicyTargetSpec, PolicyTemplate, PolicyTemplateRef, ResourceSelector, Visibilities } from "@app/shared/entity/kyverno";
-import { Project } from "@app/shared/entity/project";
-import { DialogActionMode } from "@app/shared/types/common";
-import { KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR } from "@app/shared/validators/others";
-import { Observable, Subject, take, takeUntil } from "rxjs";
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {KyvernoService} from '@app/core/services/kyverno';
+import {NotificationService} from '@app/core/services/notification';
+import {
+  PolicyBinding,
+  PolicyBindingSpec,
+  PolicyTemplate,
+  PolicyTemplateRef,
+  Visibilities,
+} from '@app/shared/entity/kyverno';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 export interface AddPolicyBindingDialogConfig {
-  mode: DialogActionMode;
   projectID: string;
-  binding: PolicyBinding;
+  clusterID: string;
+  policyTemplates: PolicyTemplate[];
 }
 
 enum Controls {
   Name = 'name',
-  NameSpace = 'namespace',
   Template = 'template',
-  NamespacedPolicy = 'namespacedPolicy',
-  Scope = 'scope',
-  Projects = 'projects',
-  AllProjects = 'allProjects',
-  Clusters = 'clusters',
-  AllClusters = 'allClusters'
+  NamespaceSelectors = 'namespaceSelectors',
 }
 
 @Component({
@@ -60,195 +55,66 @@ export class AddPolicyBindingDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   scopes = Object.values(Visibilities);
   form: FormGroup;
-  mode: DialogActionMode;
-  icon: string = this._config.mode === DialogActionMode.Edit ? 'km-icon-save' : 'km-icon-add';
-  label: string = this._config.mode === DialogActionMode.Edit ? 'Save Changes' : 'Create';
-  projects: Project[] = [];
-  clusters: Cluster[] = [];
-  allPolicyTemplates: PolicyTemplate[] = [];
-  filteredTemplates: PolicyTemplate[] = [];
+  projectID: string = this._config.projectID ?? '';
+  clusterID: string = this._config.clusterID ?? '';
+  policyTemplates: PolicyTemplate[] = this._config.policyTemplates;
+  selectedTemplate: PolicyTemplate;
+  selectorsLabels: Record<string, string> = {};
+
   constructor(
-      private readonly _dialogRef: MatDialogRef<AddPolicyBindingDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) private readonly _config: AddPolicyBindingDialogConfig,
-      private readonly _builder: FormBuilder,
-      private readonly _projectService: ProjectService,
-      private readonly _clusterService: ClusterService,
-      private _kyvernoService: KyvernoService,
-      private readonly _notificationService: NotificationService,
-    ) {}
+    private readonly _dialogRef: MatDialogRef<AddPolicyBindingDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private readonly _config: AddPolicyBindingDialogConfig,
+    private readonly _builder: FormBuilder,
+    private _kyvernoService: KyvernoService,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this._initForm();
-    this.mode = this._config.mode
-    this._kyvernoService.listPolicyTemplates(this._config.projectID).pipe(take(1)).subscribe(templates => {
-      this.allPolicyTemplates = templates
-      // check if we need to filter Templates based on Project
-      this.filteredTemplates = templates
-    });
-
-    if (!this._config.projectID) {
-      this._projectService.projects.pipe(take(1)).subscribe((projects: Project[]) => this.projects = projects)
-
-    } else {
-
-      this.scopes = [Visibilities.Project, Visibilities.Cluster]
-
-      this._projectService.selectedProject.pipe(take(1)).subscribe((project: Project) => {
-        this.projects = [project];
-      })
-
-      this._getProjectClusters(this._config.projectID);
-      this.form.get(Controls.AllProjects).setValue(false)
-      this.form.get(Controls.AllProjects).disable();
-    }
-    // this._cdr.detectChanges();
-
-     this.form.get(Controls.AllProjects).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(value => {
-      const projectsControl = this.form.get(Controls.Projects)
-      if (value) {
-        projectsControl.setValue([]);
-        projectsControl.clearValidators();
-        projectsControl.disable();
-        this.form.get(Controls.AllClusters).setValue(true)
-      } else {
-        projectsControl.setValidators(Validators.required)
-      }
-      projectsControl.updateValueAndValidity();
-    })
-
-    this.form.get(Controls.AllClusters).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(value => {
-      const clustersControl = this.form.get(Controls.Clusters)
-
-      if (value) {
-        clustersControl.setValue(null);
-        clustersControl.clearValidators();
-        clustersControl.disable();
-      } else {
-        clustersControl.enable()
-        clustersControl.setValidators(Validators.required)
-      }
-      clustersControl.updateValueAndValidity();
-    })
+    this.form
+      .get(Controls.Template)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((templateName: string) => {
+        this.selectedTemplate = this.policyTemplates.find((template: PolicyTemplate) => template.name === templateName);
+      });
   }
 
   ngOnDestroy(): void {
-      this._unsubscribe.next();
-      this._unsubscribe.complete();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getObservable(): Observable<PolicyBinding> {
-    if (this._config.mode === DialogActionMode.Edit) {
-      return this._kyvernoService.patchPolicyBinding(this._getPolicyBindingObject());
-    }
-    return this._kyvernoService.createPolicyBinding(this._getPolicyBindingObject())
+    return this._kyvernoService.createPolicyBinding(this._getPolicyBindingObject(), this.projectID, this.clusterID);
   }
-
-  //
-  //
-  // add a new icon for kyverno on the side nav
-  //
-  //
 
   onNext(binding: PolicyBinding): void {
     this._dialogRef.close(binding);
-    this._notificationService.success(`${this._config.mode === DialogActionMode.Edit ? 'Updated' : 'Created'} policy binding ${binding.name}`)
+    this._notificationService.success(`Created policy binding ${binding.name}`);
   }
-
-  // check the function later
-  projectDisplayFn(projectId: string[]): string {
-    if (projectId?.length) {
-      return projectId
-        ?.map(id => {
-          return this.projects.find(project => project.id === id)?.name;
-        })
-        .join(', ');
-    }
-    return '';
-  }
-
-  clusterDisplayFn(clusterId: string[]): string {
-    if (clusterId?.length) {
-      return clusterId
-        ?.map(id => {
-          return this.clusters.find(cluster => cluster.id === id)?.name;
-        })
-        .join(', ');
-    }
-    return '';
-  }
-
 
   private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this._config.binding?.name ?? '', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,]),
-      [Controls.NameSpace]: this._builder.control(this._config.binding?.namespace ?? '', Validators.required),
-      [Controls.Template]: this._builder.control(this._config.binding?.spec?.policyTemplateRef?.name ?? '', Validators.required),
-      [Controls.Scope]: this._builder.control(this._config.binding?.spec?.scope ?? this._config.projectID ? Visibilities.Project : Visibilities.Global, Validators.required),
-      [Controls.NamespacedPolicy]: this._builder.control(this._config.binding?.spec?.namespacedPolicy ?? false),
-      [Controls.Projects]: this._builder.control(this._config.binding?.spec?.target?.projects?.name ?? this._config.projectID ? [this._config.projectID] :[], Validators.required),
-      [Controls.AllProjects]: this._builder.control(this._config.binding?.spec?.target?.projects?.selectAll ?? false),
-      [Controls.Clusters]: this._builder.control(this._config.binding?.spec?.target?.clusters?.name ?? null, Validators.required),
-      [Controls.AllClusters]: this._builder.control(this._config.binding?.spec?.target?.clusters?.selectAll ?? false),
-    })
-
-    if (this._config.mode === DialogActionMode.Edit) {
-      this.form.get(Controls.Name).disable();
-      this.form.get(Controls.NameSpace).disable();
-    }
-  }
-
-  private _getProjectClusters(projectID: string): void {
-    this._clusterService.projectClusterList(projectID).pipe(take(1)).subscribe(projectClusters => {
-      this.clusters = projectClusters.clusters
-      console.log(projectClusters);
-
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
+      [Controls.Template]: this._builder.control('', Validators.required),
+      [Controls.NamespaceSelectors]: this._builder.control(false),
     });
   }
 
   private _getPolicyBindingObject(): PolicyBinding {
     const policyBinding = {
       name: this.form.get(Controls.Name).value,
-      namespace: this.form.get(Controls.NameSpace).value,
       spec: {
         policyTemplateRef: {
-          name: this.form.get(Controls.Template).value
+          name: this.form.get(Controls.Template).value,
         } as PolicyTemplateRef,
-        namespacedPolicy: this.form.get(Controls.NamespacedPolicy).value,
-        scope: this.form.get(Controls.Scope).value,
-        target: {
-          projects: {
-            selectAll: this.form.get(Controls.AllProjects).value
-          },
-          clusters: {
-            selectAll: this.form.get(Controls.AllClusters).value
-          } as ResourceSelector
-        } as PolicyTargetSpec
-      } as PolicyBindingSpec
-    } as PolicyBinding
+        namespaceSelector: this.form.get(Controls.NamespaceSelectors).value,
+      } as PolicyBindingSpec,
+    } as PolicyBinding;
 
-    if (this._config.projectID) {
-      policyBinding.projectID = this._config.projectID
+    if (this.projectID) {
+      policyBinding.projectID = this.projectID;
     }
-    if (this.form.get(Controls.AllProjects).value) {
-      policyBinding.spec.target.projects = {
-        selectAll: this.form.get(Controls.AllProjects).value
-      }
-    } else {
-      policyBinding.spec.target.projects = {
-        name: this.form.get(Controls.Projects).value?.select
-      }
-    }
-
-    if (this.form.get(Controls.AllClusters).value) {
-      policyBinding.spec.target.clusters = {
-        selectAll: this.form.get(Controls.AllClusters).value
-      }
-    } else {
-      policyBinding.spec.target.clusters = {
-        name: this.form.get(Controls.Clusters).value?.select
-      }
-    }
-
-    return policyBinding
+    return policyBinding;
   }
 }

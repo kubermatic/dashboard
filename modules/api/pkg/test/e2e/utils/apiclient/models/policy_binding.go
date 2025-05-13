@@ -22,6 +22,9 @@ type PolicyBinding struct {
 	// name
 	Name string `json:"name,omitempty"`
 
+	// name space
+	NameSpace string `json:"namespace,omitempty"`
+
 	// spec
 	Spec *PolicyBindingSpec `json:"spec,omitempty"`
 

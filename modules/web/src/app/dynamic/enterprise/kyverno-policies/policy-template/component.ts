@@ -36,6 +36,7 @@ import {
   ConfirmationDialogConfig,
 } from '@app/shared/components/confirmation-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'km-kyverno-policiy-template-list',
@@ -50,7 +51,8 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
   mode = DialogActionMode;
   private readonly _unsubscribe = new Subject<void>();
   dataSource = new MatTableDataSource<PolicyTemplate>();
-  columns = ['name', 'title', 'visibility', 'projectID', 'actions'];
+  policyTemplates: PolicyTemplate[] = [];
+  columns = ['name', 'default', 'enforce', 'actions'];
   loadingTemplates = false;
   hasOwnerRole = false;
 
@@ -69,10 +71,11 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this.getPolicyTemplates();
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => {
       if (user.isAdmin) {
-        this.hasOwnerRole = true
+        this.hasOwnerRole = true;
       } else {
-        this.hasOwnerRole =
-          user.projects.some(project => project.id === this.projectID && project.group === Group.Owner)
+        this.hasOwnerRole = user.projects.some(
+          project => project.id === this.projectID && project.group === Group.Owner
+        );
       }
     });
 
@@ -129,8 +132,27 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
       .listPolicyTemplates(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(templates => {
+        this.policyTemplates = templates;
         this.dataSource.data = templates;
         this.loadingTemplates = false;
       });
+  }
+
+  onDefaultChange(event: MatSlideToggleChange, template: PolicyTemplate): void {
+    const patchedTemplate = template;
+    patchedTemplate.spec.default = event.checked;
+    this._kyvernoService
+      .patchPolicyTemplate(patchedTemplate)
+      .pipe(take(1))
+      .subscribe(_ => this.getPolicyTemplates());
+  }
+
+  onEnforcedChange(event: MatSlideToggleChange, template: PolicyTemplate): void {
+    const patchedTemplate = template;
+    patchedTemplate.spec.enforced = event.checked;
+    this._kyvernoService
+      .patchPolicyTemplate(patchedTemplate)
+      .pipe(take(1))
+      .subscribe(_ => this.getPolicyTemplates());
   }
 }

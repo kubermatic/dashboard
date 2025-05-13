@@ -57,9 +57,15 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Category</mat-label>
+      <input [formControlName]="controls.Category"
+             matInput>
+      <mat-hint>the category of the policy.</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Visibility</mat-label>
       <mat-select [formControlName]="controls.Visibility">
-        <mat-option *ngFor="let visibility of visibilities"
+        <mat-option *ngFor="let visibility of visibilitiesArray"
                     [value]="visibility">{{visibility}}</mat-option>
       </mat-select>
       <mat-hint>visibility specifies where the policy is visible.</mat-hint>
@@ -67,7 +73,7 @@ END OF TERMS AND CONDITIONS
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="form.get(controls.Visibility).value === 'project'">
+    <mat-form-field *ngIf="form.get(controls.Visibility).value !== visibilities.Global">
       <mat-label>Project</mat-label>
       <mat-select [formControlName]="controls.Project">
         <mat-option *ngFor="let project of projects"
@@ -75,10 +81,21 @@ END OF TERMS AND CONDITIONS
       </mat-select>
       <mat-hint>the project for which the policy template is created.</mat-hint>
     </mat-form-field>
-    <mat-checkbox [formControlName]="controls.Default">Add create policy binding.
+    <mat-checkbox [formControlName]="controls.Default">Create policy binding.
     </mat-checkbox>
-    <mat-checkbox [formControlName]="controls.Enforced">Prevent disabling instances of this policy.
+    <mat-checkbox [formControlName]="controls.Enforced">Enforce enable binding.
     </mat-checkbox>
+    <mat-checkbox [formControlName]="controls.NamespacedPolicy">let the created resources from this template Namespaced.
+    </mat-checkbox>
+    <km-label-form *ngIf="form.get(controls.Visibility).value === visibilities.Global"
+                   title="Projects Labels Selector"
+                   [(labels)]="projectsLabels"
+                   noValidators="true"
+                   [formControlName]="controls.ProjectSelector"></km-label-form>
+    <km-label-form title="Clusters Labels Selector"
+                   [(labels)]="clustersLabels"
+                   noValidators="true"
+                   [formControlName]="controls.ClusterSelector"></km-label-form>
     <km-editor [(model)]="policySpec"
                height="370px"
                header="values.yaml">

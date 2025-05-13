@@ -20,8 +20,10 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<div class="header">
-  <div fxLayoutAlign="end">
+<mat-card appearance="outlined"
+          class="km-card">
+  <mat-card-header>
+    <mat-card-title>Policy Templates</mat-card-title>
     <button mat-flat-button
             [color]="projectID ?  'primary' : 'quaternary'"
             (click)="openTemplateDialog(mode.Add)"
@@ -30,84 +32,96 @@ END OF TERMS AND CONDITIONS
          matButtonIcon></i>
       <span>Create Policy Template</span>
     </button>
-  </div>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-25">Name</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.name}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="default">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">
+          Default
+          <div class="km-icon-info km-pointer tooltip"
+               matTooltip="Default templates will create a policybinding"></div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <mat-slide-toggle [checked]="element.spec.default"
+                            (change)="onDefaultChange($event, element)">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="enforce">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">
+          Enforce
+          <div class="km-icon-info km-pointer tooltip"
+               matTooltip="if enforced, Policy Binding referencing it cannot disable it."></div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <mat-slide-toggle [checked]="element.spec.enforced"
+                            (change)="onEnforcedChange($event, element)">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <button mat-icon-button
+                    matTooltip="delete template"
+                    (click)="deleteTemplate(element.name)"
+                    [disabled]="!hasOwnerRole">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+            <button mat-icon-button
+                    matTooltip="edit template"
+                    (click)="openTemplateDialog(mode.Edit, element)"
+                    [disabled]="!hasOwnerRole">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row
+          *matHeaderRowDef="columns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: columns;"></tr>
+    </table>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!policyTemplates.length && !loadingTemplates">No policy templates are available.</div>
 
-  <table class="km-table"
-         mat-table
-         matSort
-         [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell
-          *matHeaderCellDef>Name</th>
-      <td mat-cell
-          *matCellDef="let element">
-        <span>{{element.name}}</span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="title">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell">Title</th>
-      <td mat-cell
-          *matCellDef="let element">
-        <span>{{element.spec.title}}</span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="visibility">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell">Visibility</th>
-      <td mat-cell
-          *matCellDef="let element">
-        <span>{{element.spec.visibility}}</span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="projectID">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell">Project</th>
-      <td mat-cell
-          *matCellDef="let element">
-        <span>{{element.spec.projectID}}</span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <div fxLayoutAlign="end"
-             class="km-table-actions">
-          <button mat-icon-button
-                  matTooltip="delete template"
-                  (click)="deleteTemplate(element.name)"
-                  [disabled]="!hasOwnerRole">
-            <i class="km-icon-mask km-icon-delete"></i>
-          </button>
-          <button mat-icon-button
-                  matTooltip="edit template"
-                  (click)="openTemplateDialog(mode.Edit, element)"
-                  [disabled]="!hasOwnerRole">
-            <i class="km-icon-mask km-icon-edit"></i>
-          </button>
-        </div>
-      </td>
-    </ng-container>
-    <tr mat-header-row
-        *matHeaderRowDef="columns"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: columns;"></tr>
-  </table>
-  <div class="km-row km-empty-list-msg"
-       *ngIf="!dataSource.data.length && loadingTemplates">No policy templates are available.</div>
-
-  <div [hidden]="!dataSource.data.length"
-       class="km-paginator-container">
-    <div fxLayout="row"
-         fxLayoutAlign="flex-end center">
-      <km-pagination-page-size></km-pagination-page-size>
-      <mat-paginator showFirstLastButtons></mat-paginator>
+    <div class="km-row"
+         *ngIf="loadingTemplates && !policyTemplates.length">
+      <mat-spinner color="accent"
+                   class="km-spinner km-with-spacing"
+                   [diameter]="25"></mat-spinner>
     </div>
-  </div>
-</div>
+
+    <div [hidden]="!policyTemplates.length"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

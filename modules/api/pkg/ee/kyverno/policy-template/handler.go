@@ -33,6 +33,7 @@ import (
 	"github.com/gorilla/mux"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -180,19 +181,13 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
-	// check this approach
-	// fmt.Println("======================")
-	// fmt.Println("======================")
-	// fmt.Println(kubernetes.IsEmptySelector(req.Body.Spec.Target.ProjectSelector))
-	// fmt.Println("======================")
-	// fmt.Println("======================")
 
 	if req.Body.Spec.ProjectID == "" && req.Body.Spec.Visibility == "Project" {
 		return nil, fmt.Errorf("ProjectID is required for Project visibility")
 	}
 
 	selector := req.Body.Spec.Target.ProjectSelector
-	if req.Body.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+	if req.Body.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
 		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 
@@ -251,7 +246,7 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	}
 
 	selector := req.Spec.Target.ProjectSelector
-	if req.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+	if req.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
 		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 

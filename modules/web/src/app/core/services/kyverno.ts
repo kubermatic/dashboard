@@ -25,7 +25,7 @@ export class KyvernoService {
   constructor(private readonly _http: HttpClient) {}
 
   listPolicyTemplates(projectID?: string): Observable<PolicyTemplate[]> {
-    const url = `${this._newRestRoot}/policytemplate`;
+    const url = `${this._newRestRoot}/policytemplates`;
     if (projectID) {
       return this._http.get<PolicyTemplate[]>(`${url}?project_id=${projectID}`);
     }
@@ -33,43 +33,36 @@ export class KyvernoService {
   }
 
   createPolicyTemplate(template: PolicyTemplate): Observable<PolicyTemplate> {
-    const url = `${this._newRestRoot}/policytemplate`;
+    const url = `${this._newRestRoot}/policytemplates`;
     return this._http.post<PolicyTemplate>(url, template);
   }
 
   patchPolicyTemplate(template: PolicyTemplate): Observable<PolicyTemplate> {
-    const url = `${this._newRestRoot}/policytemplate/${template.name}`;
+    const url = `${this._newRestRoot}/policytemplates/${template.name}`;
     return this._http.patch<PolicyTemplate>(url, template);
   }
 
   deletePolicyTemplate(name: string, projectID?: string): Observable<void> {
-    const url = `${this._newRestRoot}/policytemplate/${name}`;
+    const url = `${this._newRestRoot}/policytemplates/${name}`;
     if (projectID) {
       return this._http.delete<void>(`${url}?project_id=${projectID}`);
     }
     return this._http.delete<void>(url);
   }
 
-  listPolicyBindings(projectID: string): Observable<PolicyBinding[]> {
-    const url = `${this._newRestRoot}/policybinding`;
-    if (projectID) {
-      return this._http.get<PolicyBinding[]>(`${url}?project_id=${projectID}`);
-    }
+  listPolicyBindings(projectID: string, clusterID: string): Observable<PolicyBinding[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/policybindings`;
+
     return this._http.get<PolicyBinding[]>(url);
   }
 
-  createPolicyBinding(binding: PolicyBinding): Observable<PolicyBinding> {
-    const url = `${this._newRestRoot}/policybinding`;
+  createPolicyBinding(binding: PolicyBinding, projectID: string, clusterID: string): Observable<PolicyBinding> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/policybindings`;
     return this._http.post<PolicyBinding>(url, binding);
   }
 
-  patchPolicyBinding(binding: PolicyBinding): Observable<PolicyBinding> {
-    const url = `${this._newRestRoot}/policybinding/${binding.name}`;
-    return this._http.patch<PolicyBinding>(url, binding);
-  }
-
-  deletePolicyBinding(binding: PolicyBinding, projectID?: string): Observable<void> {
-    const url = `${this._newRestRoot}/policybinding/${binding.namespace}/${binding.name}`;
+  deletePolicyBinding(bindingName: string, projectID: string, clusterID: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/policybindings/${bindingName}`;
     if (projectID) {
       return this._http.delete<void>(`${url}?project_id=${projectID}`);
     }
