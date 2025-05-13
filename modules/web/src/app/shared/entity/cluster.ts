@@ -349,6 +349,7 @@ export class ClusterSpec {
   machineNetworks?: MachineNetwork[];
   auditLogging?: AuditLoggingSettings;
   opaIntegration?: OPAIntegration;
+  kyverno?: KyvernoIntegration;
   kubernetesDashboard?: KubernetesDashboard;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
@@ -478,6 +479,9 @@ export class OPAIntegration {
   enabled: boolean;
 }
 
+export class KyvernoIntegration {
+  enabled: boolean;
+}
 export class MachineNetwork {
   cidr: string;
   dnsServers: string[];
@@ -550,6 +554,7 @@ export class ClusterSpecPatch {
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
+  kyverno?: KyvernoIntegration;
   clusterNetwork?: ClusterNetwork;
   kubernetesDashboard?: KubernetesDashboard;
   disableCsiDriver?: boolean;

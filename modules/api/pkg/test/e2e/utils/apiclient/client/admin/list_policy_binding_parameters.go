@@ -61,8 +61,11 @@ ListPolicyBindingParams contains all the parameters to send to the API endpoint
 */
 type ListPolicyBindingParams struct {
 
+	// ClusterID.
+	ClusterID string
+
 	// ProjectID.
-	ProjectID *string
+	ProjectID string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -117,14 +120,25 @@ func (o *ListPolicyBindingParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithClusterID adds the clusterID to the list policy binding params
+func (o *ListPolicyBindingParams) WithClusterID(clusterID string) *ListPolicyBindingParams {
+	o.SetClusterID(clusterID)
+	return o
+}
+
+// SetClusterID adds the clusterId to the list policy binding params
+func (o *ListPolicyBindingParams) SetClusterID(clusterID string) {
+	o.ClusterID = clusterID
+}
+
 // WithProjectID adds the projectID to the list policy binding params
-func (o *ListPolicyBindingParams) WithProjectID(projectID *string) *ListPolicyBindingParams {
+func (o *ListPolicyBindingParams) WithProjectID(projectID string) *ListPolicyBindingParams {
 	o.SetProjectID(projectID)
 	return o
 }
 
 // SetProjectID adds the projectId to the list policy binding params
-func (o *ListPolicyBindingParams) SetProjectID(projectID *string) {
+func (o *ListPolicyBindingParams) SetProjectID(projectID string) {
 	o.ProjectID = projectID
 }
 
@@ -136,21 +150,14 @@ func (o *ListPolicyBindingParams) WriteToRequest(r runtime.ClientRequest, reg st
 	}
 	var res []error
 
-	if o.ProjectID != nil {
+	// path param cluster_id
+	if err := r.SetPathParam("cluster_id", o.ClusterID); err != nil {
+		return err
+	}
 
-		// query param project_id
-		var qrProjectID string
-
-		if o.ProjectID != nil {
-			qrProjectID = *o.ProjectID
-		}
-		qProjectID := qrProjectID
-		if qProjectID != "" {
-
-			if err := r.SetQueryParam("project_id", qProjectID); err != nil {
-				return err
-			}
-		}
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
+		return err
 	}
 
 	if len(res) > 0 {

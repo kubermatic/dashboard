@@ -21,7 +21,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {PolicyTemplate, PolicyTemplateSpec, Visibilities} from '@app/shared/entity/kyverno';
+import {PolicyTemplate, PolicyTemplateSpec, PolicyTemplateTarget, Visibilities} from '@app/shared/entity/kyverno';
 import {DialogActionMode} from '@app/shared/types/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {Observable, Subject, take} from 'rxjs';
@@ -41,10 +41,14 @@ enum Controls {
   Name = 'name',
   Title = 'title',
   Description = 'description',
+  Category = 'category',
   Visibility = 'visibility',
   Project = 'project',
   Default = 'default',
   Enforced = 'enforced',
+  NamespacedPolicy = 'namespacedPolicy',
+  ProjectSelector = 'projectSelector',
+  ClusterSelector = 'clusterSelector',
 }
 
 @Component({
@@ -55,7 +59,8 @@ enum Controls {
 export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
-  readonly visibilities = Object.values(Visibilities);
+  visibilities = Visibilities;
+  visibilitiesArray = Object.values(Visibilities);
   form: FormGroup;
   policySpec = '';
   isYamlEditorValid = true;
@@ -63,6 +68,8 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   icon: string = this._config.mode === DialogActionMode.Edit ? 'km-icon-save' : 'km-icon-add';
   label: string = this._config.mode === DialogActionMode.Edit ? 'Save Changes' : 'Create';
   projects: Project[] = [];
+  projectsLabels: Record<string, string>;
+  clustersLabels: Record<string, string>;
 
   constructor(
     private readonly _dialogRef: MatDialogRef<AddPolicyTemplateDialogComponent>,
@@ -74,18 +81,30 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.projectsLabels =
+      (this._config.template?.spec?.target?.projectSelector?.matchLabels as Record<string, string>) ?? {};
+    this.clustersLabels =
+      (this._config.template?.spec?.target?.clusterSelector?.matchLabels as Record<string, string>) ?? {};
+
     this._initForm();
     this.mode = this._config.mode;
+    if (this.mode === DialogActionMode.Edit) {
+      this.form.get(Controls.Name).disable();
+      this.policySpec = y.dump(this._config.template?.spec?.policySpec);
+    }
+
     if (!this._config.projectID) {
       this._projectService.projects.pipe(take(1)).subscribe((projects: Project[]) => (this.projects = projects));
+      this.form.get(Controls.Visibility).setValue(Visibilities.Global);
     } else {
       this._projectService.selectedProject.pipe(take(1)).subscribe((project: Project) => {
         this.projects = [project];
-        // check to disable the project
-        this.form.get(Controls.Project).setValue(project.id);
-        this.form.get(Controls.Visibility).setValue(Visibilities.Project);
-        this.form.get(Controls.Visibility).disable();
       });
+
+      this.visibilitiesArray = this.visibilitiesArray.filter(visibility => visibility !== Visibilities.Global);
+      this.form.get(Controls.Project).setValue(this._config.projectID);
+      this.form.get(Controls.Project).disable();
+      this.form.get(Controls.Visibility).setValue(Visibilities.Project);
     }
   }
 
@@ -123,15 +142,15 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
         this._config.template?.spec?.description ?? '',
         Validators.required
       ),
+      [Controls.Category]: this._builder.control(this._config.template?.spec?.category ?? ''),
       [Controls.Visibility]: this._builder.control(this._config.template?.spec?.visibility ?? '', Validators.required),
       [Controls.Project]: this._builder.control(this._config.template?.spec?.projectID ?? ''),
       [Controls.Default]: this._builder.control(this._config.template?.spec?.default ?? false),
       [Controls.Enforced]: this._builder.control(this._config.template?.spec?.enforced ?? false),
+      [Controls.NamespacedPolicy]: this._builder.control(this._config.template?.spec?.namespacedPolicy ?? false),
+      [Controls.ProjectSelector]: this._builder.control(''),
+      [Controls.ClusterSelector]: this._builder.control(''),
     });
-    if (this._config.mode === DialogActionMode.Edit) {
-      this.form.get(Controls.Name).disable();
-      this.policySpec = y.dump({policySpec: this._config.template?.spec?.policySpec});
-    }
   }
 
   private _getPolicyTemplateObject(): PolicyTemplate {
@@ -140,12 +159,30 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       spec: {
         title: this.form.get(Controls.Title).value,
         description: this.form.get(Controls.Description).value,
+        category: this.form.get(Controls.Category).value,
         visibility: this.form.get(Controls.Visibility).value,
         projectID: this.form.get(Controls.Project).value,
         default: this.form.get(Controls.Default).value,
         enforced: this.form.get(Controls.Enforced).value,
+        namespacedPolicy: this.form.get(Controls.NamespacedPolicy).value,
+        target: {
+          projectSelector: {
+            matchLabels: this.projectsLabels,
+          },
+          clusterSelector: {
+            matchLabels: this.clustersLabels,
+          },
+        } as PolicyTemplateTarget,
       } as PolicyTemplateSpec,
     } as PolicyTemplate;
+
+    if (this.form.get(Controls.Visibility).value === Visibilities.Project) {
+      delete policyTemplate.spec.target.projectSelector;
+    }
+
+    if (this.form.get(Controls.Visibility).value === Visibilities.Global) {
+      policyTemplate.spec.projectID = '';
+    }
 
     try {
       policyTemplate.spec.policySpec = y.load(this.policySpec) as object;

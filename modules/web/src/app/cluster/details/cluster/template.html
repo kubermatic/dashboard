@@ -551,6 +551,11 @@ limitations under the License.
                             [projectID]="projectID"
                             [isClusterRunning]="isClusterRunning && isOPARunning"></km-gatekeeper-config>
     </km-tab>
+    <km-tab label="Kyverno Policies"
+            *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled">
+      <km-kyverno-policiy-binding-list [projectID]="projectID"
+                                       [cluster]="cluster"></km-kyverno-policiy-binding-list>
+    </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">
       <km-mla [alertmanagerConfig]="alertmanagerConfig"

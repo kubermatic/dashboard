@@ -33,6 +33,7 @@ import (
 	"github.com/gorilla/mux"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -92,7 +93,7 @@ const (
 	clusterVisibility = "Cluster"
 )
 
-func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) (interface{}, error) {
+func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.PrivilegedProjectProvider, provider provider.PolicyTemplateProvider) (interface{}, error) {
 	req, ok := request.(listPolicyTemplateReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -111,9 +112,18 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, err
 	}
 
+	project := &kubermaticv1.Project{}
+	if req.ProjectID != "" {
+		project, err = projectProvider.GetUnsecured(ctx, req.ProjectID, nil)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	res := []*apiv2.PolicyTemplate{}
 	for _, policyTemplate := range policyTemplateList.Items {
-		if req.ProjectID == "" || (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) {
+		if req.ProjectID == "" || (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) || ((HasCommonLabel(policyTemplate.Spec.Target, project.Labels)) && policyTemplate.Spec.Visibility == globalVisibility) {
 			res = append(res, &apiv2.PolicyTemplate{
 				Name: policyTemplate.Name,
 				Spec: *policyTemplate.Spec.DeepCopy(),
@@ -180,19 +190,13 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
-	// check this approach
-	// fmt.Println("======================")
-	// fmt.Println("======================")
-	// fmt.Println(kubernetes.IsEmptySelector(req.Body.Spec.Target.ProjectSelector))
-	// fmt.Println("======================")
-	// fmt.Println("======================")
 
 	if req.Body.Spec.ProjectID == "" && req.Body.Spec.Visibility == "Project" {
 		return nil, fmt.Errorf("ProjectID is required for Project visibility")
 	}
 
 	selector := req.Body.Spec.Target.ProjectSelector
-	if req.Body.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+	if req.Body.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
 		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 
@@ -251,7 +255,7 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	}
 
 	selector := req.Spec.Target.ProjectSelector
-	if req.Spec.ProjectID != "" && (selector == nil || (len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0)) {
+	if req.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
 		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 
@@ -337,4 +341,24 @@ func DecodeDeletePolicyTemplateReq(ctx context.Context, r *http.Request) (interf
 	req.ProjectID = r.URL.Query().Get("project_id")
 
 	return req, nil
+}
+
+func HasCommonLabel(target *kubermaticv1.PolicyTemplateTarget, projectLabel map[string]string) bool {
+	if target == nil || IsLabelSelectorEmpty(target.ProjectSelector) {
+		return true
+	}
+
+	for key, val := range target.ProjectSelector.MatchLabels {
+		if projectVal, exists := projectLabel[key]; exists && projectVal == val {
+			return true
+		}
+	}
+	return false
+}
+
+func IsLabelSelectorEmpty(selector *metav1.LabelSelector) bool {
+	if selector == nil {
+		return true
+	}
+	return len(selector.MatchLabels) == 0 && len(selector.MatchExpressions) == 0
 }

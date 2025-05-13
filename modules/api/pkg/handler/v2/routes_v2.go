@@ -11271,7 +11271,7 @@ func (r Routing) listKyvernoPolicyTemplates() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policytemplate.ListEndpoint(r.userInfoGetter, r.policyTemplateProvider)),
+		)(policytemplate.ListEndpoint(r.userInfoGetter, r.privilegedProjectProvider, r.policyTemplateProvider)),
 		policytemplate.DecodeListPolicyTemplateReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

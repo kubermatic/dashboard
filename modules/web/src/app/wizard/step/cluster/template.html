@@ -502,6 +502,10 @@ limitations under the License.
                  matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
             </mat-checkbox>
 
+            <mat-checkbox [formControlName]="Controls.KyvernoIntegration">
+              Kyverno Integration
+            </mat-checkbox>
+
             <ng-container *ngIf="isMLAEnabled">
               <mat-checkbox [formControlName]="Controls.MLALogging">
                 User Cluster Logging

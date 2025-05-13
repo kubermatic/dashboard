@@ -22,11 +22,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {KyvernoPoliciesComponent} from './component';
 import {AuthGuard, AuthzGuard} from '@app/core/services/auth/guard';
 import {NgModule} from '@angular/core';
-import {KyvernoPoliciyBindingListComponent} from './policy-binding/component';
 import {KyvernoPoliciyTemplateListComponent} from './policy-template/component';
 import {SharedModule} from '@app/shared/module';
 import {AddPolicyTemplateDialogComponent} from './policy-template/add-template/component';
-import { AddPolicyBindingDialogComponent } from './policy-binding/add-binding/component';
 
 const routes: Routes = [
   {
@@ -38,12 +36,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [
-    KyvernoPoliciesComponent,
-    KyvernoPoliciyBindingListComponent,
-    KyvernoPoliciyTemplateListComponent,
-    AddPolicyTemplateDialogComponent,
-    AddPolicyBindingDialogComponent,
-  ],
+  declarations: [KyvernoPoliciesComponent, KyvernoPoliciyTemplateListComponent, AddPolicyTemplateDialogComponent],
 })
 export class KyvernoPoliciesModule {}

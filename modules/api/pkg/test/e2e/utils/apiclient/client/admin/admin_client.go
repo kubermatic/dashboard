@@ -220,7 +220,7 @@ func (a *Client) CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "createPolicyBinding",
 		Method:             "POST",
-		PathPattern:        "/api/v2/policybindings",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -448,7 +448,7 @@ func (a *Client) DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo
 	op := &runtime.ClientOperation{
 		ID:                 "deletePolicyBinding",
 		Method:             "DELETE",
-		PathPattern:        "/api/v2/policybindings/{binding_name}/{namespace}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -752,7 +752,7 @@ func (a *Client) GetPolicyBinding(params *GetPolicyBindingParams, authInfo runti
 	op := &runtime.ClientOperation{
 		ID:                 "getPolicyBinding",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policybindings/{binding_name}/{namespace}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -942,7 +942,7 @@ func (a *Client) ListPolicyBinding(params *ListPolicyBindingParams, authInfo run
 	op := &runtime.ClientOperation{
 		ID:                 "listPolicyBinding",
 		Method:             "GET",
-		PathPattern:        "/api/v2/policybindings",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
@@ -1094,7 +1094,7 @@ func (a *Client) PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo r
 	op := &runtime.ClientOperation{
 		ID:                 "patchPolicyBinding",
 		Method:             "PATCH",
-		PathPattern:        "/api/v2/policybindings/{binding_name}",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

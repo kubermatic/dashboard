@@ -25,7 +25,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func listEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyTemplateProvider) (interface{}, error) {
+func listEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, projectProvider provider.PrivilegedProjectProvider, _ provider.PolicyTemplateProvider) (interface{}, error) {
 	return nil, nil
 }
 

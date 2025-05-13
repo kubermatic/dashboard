@@ -21,12 +21,6 @@ type CreatePolicyBindingBody struct {
 	// name
 	Name string `json:"name,omitempty"`
 
-	// namespace
-	Namespace string `json:"namespace,omitempty"`
-
-	// project ID
-	ProjectID string `json:"projectID,omitempty"`
-
 	// spec
 	Spec *PolicyBindingSpec `json:"spec,omitempty"`
 }

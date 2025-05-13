@@ -20,7 +20,7 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<km-dialog-title>{{mode}} policy binding</km-dialog-title>
+<km-dialog-title>Create Policy Pinding</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field>
@@ -37,19 +37,9 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Namespace</mat-label>
-      <input [formControlName]="controls.NameSpace"
-             matInput
-             required>
-      <mat-hint>The namespace where the binding will be applied.</mat-hint>
-      <mat-error *ngIf="form.get(controls.NameSpace).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
       <mat-label>Policy Template</mat-label>
       <mat-select [formControlName]="controls.Template">
-        <mat-option *ngFor="let template of filteredTemplates"
+        <mat-option *ngFor="let template of policyTemplates"
                     [value]="template.name">{{template.name}}</mat-option>
       </mat-select>
       <mat-hint>Policy Template references the PolicyTemplate by name</mat-hint>
@@ -57,63 +47,18 @@ END OF TERMS AND CONDITIONS
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Scope</mat-label>
-      <mat-select [formControlName]="controls.Scope">
-        <mat-option *ngFor="let scope of scopes"
-                    [value]="scope">{{scope}}</mat-option>
-      </mat-select>
-      <mat-hint>Scope specifies the scope of the policy.</mat-hint>
-      <mat-error *ngIf="form.get(controls.Scope).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-checkbox [formControlName]="controls.NamespacedPolicy">Make it Namespaced Policy.
-    </mat-checkbox>
-    <km-combobox filterBy="name"
-               selectBy="id"
-               hint="Apply the binding to projects."
-               inputLabel="Select project by name"
-               [multiple]="true"
-               [options]="projects"
-               [isDisabled]="projects.length === 1"
-               [formControlName]="controls.Projects"
-               label="project"
-               [valueFormatter]="projectDisplayFn.bind(this)">
-    <div *option="let project">{{project.name}}</div>
-  </km-combobox>
-  <mat-checkbox [formControlName]="controls.AllProjects">Apply binding to all projects.
-  </mat-checkbox>
-  <!-- add a label functionalty to update state of cluster when fetch the clusters  -->
-  <km-combobox *ngIf="clusters.length"
-               filterBy="name"
-               selectBy="id"
-               hint="Apply the binding to clusters."
-               inputLabel="Select cluster by name"
-               [multiple]="true"
-               [options]="clusters"
-               [formControlName]="controls.Clusters"
-               label="cluster"
-               [valueFormatter]="clusterDisplayFn.bind(this)">
-    <div *option="let project">{{project.name}}</div>
-  </km-combobox>
-  <mat-form-field *ngIf="!clusters.length">
-    <mat-label>Clusters</mat-label>
-    <input [formControlName]="controls.Clusters"
-           matInput
-           required>
-    <mat-hint>Clusters to apply the binding on.</mat-hint>
-  </mat-form-field>
-  <mat-checkbox [formControlName]="controls.AllClusters">Apply binding to all clusters.
-  </mat-checkbox>
+    <km-label-form *ngIf="selectedTemplate?.spec?.namespacedPolicy"
+                   title="Name space Labels Selector"
+                   [(labels)]="selectorsLabels"
+                   noValidators="true"
+                   [formControlName]="controls.NamespaceSelectors"></km-label-form>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <km-button [icon]="icon"
-             [label]="label"
+  <km-button icon="km-icon-add"
+             label="create"
              [disabled]="form.invalid"
              [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>
 </mat-dialog-actions>
-

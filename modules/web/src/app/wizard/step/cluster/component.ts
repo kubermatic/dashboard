@@ -109,6 +109,7 @@ enum Controls {
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   EventRateLimitConfig = 'eventRateLimitConfig',
   OPAIntegration = 'opaIntegration',
+  KyvernoIntegration = 'kyvernoIntegration',
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
@@ -448,6 +449,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ClusterBackup).valueChanges,
       this.form.get(Controls.KubernetesDashboardEnabled).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
+      this.form.get(Controls.KyvernoIntegration).valueChanges,
       this.form.get(Controls.Konnectivity).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
       this.form.get(Controls.MLAMonitoring).valueChanges,
@@ -604,6 +606,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
       [Controls.ClusterBackup]: this._builder.control(clusterSpec?.backupConfig || false),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
+      [Controls.KyvernoIntegration]: this._builder.control(clusterSpec?.kyverno?.enabled ?? false),
       [Controls.Konnectivity]: this._builder.control(clusterSpec?.clusterNetwork?.konnectivityEnabled ?? true),
       [Controls.MLALogging]: this._builder.control(clusterSpec?.mla?.loggingEnabled ?? false),
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
@@ -704,6 +707,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
           [Controls.ClusterBackup]: clusterSpec.backupConfig || false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
+          [Controls.KyvernoIntegration]:
+            clusterSpec?.kyverno?.enabled ?? this.controlValue(Controls.KyvernoIntegration),
           [Controls.Konnectivity]:
             clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),
           [Controls.MLALogging]: clusterSpec?.mla?.loggingEnabled ?? this.controlValue(Controls.MLALogging),
@@ -1092,6 +1097,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
+        },
+        kyverno: {
+          enabled: this.controlValue(Controls.KyvernoIntegration),
         },
         kubernetesDashboard: {
           enabled: this.controlValue(Controls.KubernetesDashboardEnabled),
