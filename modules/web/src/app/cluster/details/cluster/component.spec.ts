@@ -61,6 +61,8 @@ import {MachineNetworksDisplayComponent} from './machine-networks-display/compon
 import {MLAComponent} from './mla/component';
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
+import {FeatureGateService} from '@app/core/services/feature-gate';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -116,6 +118,7 @@ describe('ClusterDetailsComponent', () => {
         {provide: AddonService, useClass: AddonServiceMock},
         {provide: ApplicationService, useClass: ApplicationServiceMock},
         {provide: PresetsService, useClass: PresetServiceMock},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
         EndOfLifeService,
         GoogleAnalyticsService,
         NotificationService,

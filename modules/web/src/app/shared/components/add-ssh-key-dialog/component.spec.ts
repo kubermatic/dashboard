@@ -20,7 +20,7 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {SharedModule} from '@shared/module';
 import {fakeProject} from '@test/data/project';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';

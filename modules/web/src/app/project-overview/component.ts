@@ -30,7 +30,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {ServiceAccountService} from '@core/services/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {BackupService} from '@core/services/backup';

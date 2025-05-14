@@ -29,7 +29,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 
 enum Controls {
   Keys = 'keys',

@@ -29,7 +29,7 @@ import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ClusterSSHKeysComponent} from './component';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {asyncData} from '@test/services/cluster-mock';
 import {fakeSSHKeys} from '@test/data/sshkey';
 
