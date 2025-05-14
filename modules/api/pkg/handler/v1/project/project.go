@@ -259,7 +259,7 @@ func ListEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provid
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		if (req.DisplayAll && userInfo.IsAdmin) || (userInfo.IsGlobalViewer) {
+		if req.DisplayAll && (userInfo.IsAdmin || userInfo.IsGlobalViewer) {
 			return getAllProjectsForAdmin(ctx, userInfo, projectProvider, memberProvider, userProvider, clusterProviderGetter, seedsGetter)
 		}
 
