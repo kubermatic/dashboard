@@ -33263,6 +33263,10 @@
       "description": "FeatureGates represents an object holding feature gate settings",
       "type": "object",
       "properties": {
+        "disableUserSSHKey": {
+          "type": "boolean",
+          "x-go-name": "DisableUserSSHKey"
+        },
         "oidcKubeCfgEndpoint": {
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"

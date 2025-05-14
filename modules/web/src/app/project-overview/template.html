@@ -86,7 +86,8 @@ limitations under the License.
             <div value>{{backups.length}}</div>
           </km-property>
         </div>
-        <div fxLayoutAlign=" center"
+        <div *ngIf="isUserSshKeyEnabled"
+             fxLayoutAlign=" center"
              fxLayoutGap="15px"
              fxFlex>
           <i class="km-icon-mask km-icon-key"></i>

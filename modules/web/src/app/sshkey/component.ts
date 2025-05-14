@@ -18,6 +18,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -50,6 +51,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKey>();
+  isUserSshKeyEnabled = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -67,7 +69,8 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     public dialog: MatDialog,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _projectService: ProjectService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _featureGatesService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +78,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
+
+    this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
+      this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
+    });
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 

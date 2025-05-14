@@ -52,6 +52,7 @@ import {EditProjectComponent} from '@app/project/edit-project/component';
 import {MatDialog} from '@angular/material/dialog';
 import {AllowedOperatingSystems} from '@app/shared/entity/settings';
 import {DialogModeService} from '@app/core/services/dialog-mode';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 
 @Component({
   selector: 'km-project-overview',
@@ -92,6 +93,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _unsubscribeLoadMembers = new Subject<void>();
   private _currentGroupConfig: GroupConfig;
   private readonly _refreshTime = 15;
+  isUserSshKeyEnabled = false;
 
   constructor(
     private readonly _userService: UserService,
@@ -107,7 +109,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _params: ParamsService,
     private readonly _matDialog: MatDialog,
-    private readonly _dialogModeService: DialogModeService
+    private readonly _dialogModeService: DialogModeService,
+    private readonly _featureGatesService: FeatureGateService
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
@@ -187,6 +190,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       this.isLoadingClusters = true;
       this.isLoadingExternalClusters = true;
     });
+
+    this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
+      this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
+      if (this.isUserSshKeyEnabled) {
+        this._loadSSHKeys();
+      }
+    });
   }
 
   private _loadData() {
@@ -195,7 +205,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadClusters();
     this._loadExternalClusters();
     this._loadClusterTemplates();
-    this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
 

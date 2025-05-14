@@ -1125,6 +1125,7 @@ type FeatureGates struct {
 	OIDCKubeCfgEndpoint    *bool `json:"oidcKubeCfgEndpoint,omitempty"`
 	OperatingSystemManager *bool `json:"operatingSystemManager,omitempty"`
 	OpenIDAuthPlugin       *bool `json:"openIDAuthPlugin,omitempty"`
+	DisableUserSSHKey      *bool `json:"disableUserSSHKey,omitempty"`
 }
 
 // ExternalClusterMachineDeploymentCloudSpec represents an object holding machine deployment cloud details.

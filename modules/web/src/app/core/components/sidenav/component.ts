@@ -27,9 +27,10 @@ import {GroupConfig} from '@shared/model/Config';
 import {sidenavCollapsibleWidth} from '@shared/constants/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 
 @Component({
   selector: 'km-sidenav',
@@ -46,6 +47,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   currentUser: Member;
   isSidenavCollapsed: boolean;
   adminSettings: AdminSettings;
+  isUserSshKeyEnabled = false;
 
   private readonly _debounceTime = 500;
   private _selectedProject = {} as Project;
@@ -58,7 +60,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private _router: Router,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _featureGatesService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +73,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
       });
 
     this._userService.currentUser.subscribe(user => (this.currentUser = user));
+
+    this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
+      this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
+    });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.isSidenavCollapsed = settings.collapseSidenav;
