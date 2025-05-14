@@ -18,12 +18,6 @@ import (
 // swagger:model patchPolicyBindingBody
 type PatchPolicyBindingBody struct {
 
-	// namespace
-	Namespace string `json:"namespace,omitempty"`
-
-	// project ID
-	ProjectID string `json:"projectID,omitempty"`
-
 	// spec
 	Spec *PolicyBindingSpec `json:"Spec,omitempty"`
 }

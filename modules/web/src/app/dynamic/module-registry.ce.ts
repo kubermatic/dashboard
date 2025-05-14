@@ -22,6 +22,7 @@ export namespace DynamicModule {
   export const Metering = import('./community/metering/module').then(module => module.MeteringModule);
   export const Quotas = import('./community/quotas/module').then(module => module.QuotasModule);
   export const Group = import('./community/group/module').then(module => module.GroupModule);
-  export const ClusterBackups = import('./community/cluster-backups/module').then(module => module.ClusterBackupsModule)
+  export const ClusterBackups = import('./community/cluster-backups/module').then(module => module.ClusterBackupsModule);
+  export const KyvernoPolicies = import('./community/kyverno-policies/module').then(module => module.KyvernoPoliciesModule);
   export const isEnterpriseEdition = false;
 }

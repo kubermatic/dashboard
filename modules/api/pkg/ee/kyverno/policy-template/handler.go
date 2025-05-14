@@ -33,6 +33,7 @@ import (
 	"github.com/gorilla/mux"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -86,7 +87,11 @@ type deletePolicyTemplateReq struct {
 	ProjectID string `json:"project_id,omitempty"`
 }
 
-const globalVisibility = "global"
+const (
+	globalVisibility  = "Global"
+	projectVisibility = "Project"
+	clusterVisibility = "Cluster"
+)
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyTemplateProvider) (interface{}, error) {
 	req, ok := request.(listPolicyTemplateReq)
@@ -109,7 +114,7 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 
 	res := []*apiv2.PolicyTemplate{}
 	for _, policyTemplate := range policyTemplateList.Items {
-		if req.ProjectID == "" || policyTemplate.Spec.ProjectID == req.ProjectID || policyTemplate.Spec.Visibility == globalVisibility {
+		if req.ProjectID == "" || (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) {
 			res = append(res, &apiv2.PolicyTemplate{
 				Name: policyTemplate.Name,
 				Spec: *policyTemplate.Spec.DeepCopy(),
@@ -177,6 +182,15 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
+	if req.Body.Spec.ProjectID == "" && req.Body.Spec.Visibility == "Project" {
+		return nil, fmt.Errorf("ProjectID is required for Project visibility")
+	}
+
+	selector := req.Body.Spec.Target.ProjectSelector
+	if req.Body.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
+		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
+	}
+
 	userInfo, err := userInfoGetter(ctx, req.Body.Spec.ProjectID)
 
 	if err != nil {
@@ -229,6 +243,11 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 	req, ok := request.(patchPolicyTemplateReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	selector := req.Spec.Target.ProjectSelector
+	if req.Spec.ProjectID != "" && !kubernetes.IsEmptySelector(selector) {
+		return nil, fmt.Errorf("cannot use projectSelector when projectID is specified")
 	}
 
 	userInfo, err := userInfoGetter(ctx, req.Spec.ProjectID)
