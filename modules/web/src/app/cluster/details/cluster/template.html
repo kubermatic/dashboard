@@ -103,7 +103,8 @@ limitations under the License.
               <span>Edit Provider</span>
             </button>
           </span>
-          <span [matTooltip]="!isSSHKeysEditEnabled() ? 'This action is not available for viewer role users.' : ''">
+          <span *ngIf="isUserSshKeyEnabled"
+                [matTooltip]="!isSSHKeysEditEnabled() ? 'This action is not available for viewer role users.' : ''">
             <button mat-menu-item
                     [ngClass]="{'remove-hover': !isClusterRunning || !isSSHKeysEditEnabled()}"
                     (click)="editSSHKeys()"
@@ -199,7 +200,7 @@ limitations under the License.
           <div key>Container Runtime</div>
           <div value>{{cluster.spec.containerRuntime}}</div>
         </km-property>
-        <km-property>
+        <km-property *ngIf="isUserSshKeyEnabled">
           <div key>SSH Keys</div>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>

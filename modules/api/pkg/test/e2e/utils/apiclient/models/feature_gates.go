@@ -17,6 +17,9 @@ import (
 // swagger:model FeatureGates
 type FeatureGates struct {
 
+	// disable user SSH key
+	DisableUserSSHKey bool `json:"disableUserSSHKey,omitempty"`
+
 	// o ID c kube cfg endpoint
 	OIDCKubeCfgEndpoint bool `json:"oidcKubeCfgEndpoint,omitempty"`
 

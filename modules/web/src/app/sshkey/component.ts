@@ -21,7 +21,7 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
@@ -50,6 +50,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKey>();
+  isUserSshKeyEnabled = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

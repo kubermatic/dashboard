@@ -22,6 +22,7 @@ import {catchError, shareReplay, switchMap} from 'rxjs/operators';
 export interface FeatureGates {
   oidcKubeCfgEndpoint?: boolean;
   openIDAuthPlugin?: boolean;
+  disableUserSSHKey?: boolean;
 }
 
 @Injectable({

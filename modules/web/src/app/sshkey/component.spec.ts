@@ -23,7 +23,7 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
@@ -36,6 +36,8 @@ import {SettingsMockService} from '@test/services/settings-mock';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {SSHKeyComponent} from './component';
+import {FeatureGateService} from '@app/core/services/feature-gate';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
@@ -55,6 +57,7 @@ describe('SSHKeyComponent', () => {
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: SettingsService, useClass: SettingsMockService},
         {provide: SSHKeyService, useClass: SSHKeyMockService},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
         MatDialog,
         GoogleAnalyticsService,
         NotificationService,

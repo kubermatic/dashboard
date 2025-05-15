@@ -267,7 +267,8 @@ limitations under the License.
         </km-expansion-panel>
       </div>
 
-      <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
+      <km-wizard-cluster-ssh-keys *ngIf="isUserSshKeyEnabled"
+                                  [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
     </div>
 
     <div fxFlex>
@@ -517,7 +518,8 @@ limitations under the License.
               </mat-checkbox>
             </ng-container>
 
-            <mat-checkbox [formControlName]="Controls.UserSSHKeyAgent">
+            <mat-checkbox *ngIf="isUserSshKeyEnabled"
+                          [formControlName]="Controls.UserSSHKeyAgent">
               User SSH Key Agent
               <i class="km-icon-info km-pointer"
                  matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>

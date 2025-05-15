@@ -19,7 +19,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';

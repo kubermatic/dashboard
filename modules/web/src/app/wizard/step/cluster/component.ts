@@ -80,6 +80,7 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -181,6 +182,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   backupStorageLocationLabel: BSLListState = BSLListState.Ready;
   provider: NodeProvider;
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
+  isUserSshKeyEnabled = false;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -220,6 +222,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _applicationService: ApplicationService,
     private readonly _projectService: ProjectService,
     private readonly _clusterBackupService: ClusterBackupService,
+    private readonly _featureGatesService: FeatureGateService,
     wizard: WizardService
   ) {
     super(wizard);
@@ -227,6 +230,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   ngOnInit(): void {
     this.provider = this._clusterSpecService.provider;
+    this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
+      this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
+    });
     this._initForm();
 
     this.clusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;

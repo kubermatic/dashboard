@@ -20,7 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {Observable} from 'rxjs';
 
 enum Controls {

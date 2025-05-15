@@ -29,11 +29,17 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/features"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
-func CreateEndpoint(keyProvider provider.SSHKeyProvider, privilegedSSHKeyProvider provider.PrivilegedSSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+const DisableUserSSHKey = "DisableUserSSHKey"
+
+func CreateEndpoint(keyProvider provider.SSHKeyProvider, privilegedSSHKeyProvider provider.PrivilegedSSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, features features.FeatureGate) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		if features.Enabled(DisableUserSSHKey) {
+			return nil, fmt.Errorf("User SSH keys feature is disabled")
+		}
 		req, ok := request.(CreateReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
@@ -87,8 +93,11 @@ func createUserSSHKey(ctx context.Context, userInfoGetter provider.UserInfoGette
 	return keyProvider.Create(ctx, userInfo, project, keyName, pubKey)
 }
 
-func DeleteEndpoint(keyProvider provider.SSHKeyProvider, privilegedSSHKeyProvider provider.PrivilegedSSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func DeleteEndpoint(keyProvider provider.SSHKeyProvider, privilegedSSHKeyProvider provider.PrivilegedSSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, features features.FeatureGate) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		if features.Enabled(DisableUserSSHKey) {
+			return nil, fmt.Errorf("SSH keys feature is disabled")
+		}
 		req, ok := request.(DeleteReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
@@ -119,8 +128,11 @@ func deleteUserSSHKey(ctx context.Context, userInfoGetter provider.UserInfoGette
 	return keyProvider.Delete(ctx, userInfo, keyName)
 }
 
-func ListEndpoint(keyProvider provider.SSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func ListEndpoint(keyProvider provider.SSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, features features.FeatureGate) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		if features.Enabled(DisableUserSSHKey) {
+			return nil, fmt.Errorf("SSH keys feature is disabled")
+		}
 		req, ok := request.(ListReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")

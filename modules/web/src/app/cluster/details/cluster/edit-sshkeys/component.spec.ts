@@ -20,7 +20,7 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {AppConfigMockService} from '@test/services/app-config-mock';

@@ -233,7 +233,8 @@ limitations under the License.
                        [isSidenavCollapsed]="isSidenavCollapsed"
                        [lastItem]=true>
       <ng-container *ngIf="!isSidenavCollapsed">
-        <div [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
+        <div *ngIf="isUserSshKeyEnabled"
+             [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
              class="sub-menu-item">
           <a id="km-nav-item-sshkeys"
              fxLayoutAlign=" center"
@@ -270,7 +271,8 @@ limitations under the License.
       </ng-container>
 
       <ng-container *ngIf="isSidenavCollapsed">
-        <a fxLayoutAlign=" center"
+        <a *ngIf="isUserSshKeyEnabled"
+           fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.SSHKeys)"
            class="collapsed-sub-menu-item"
            [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}">
@@ -298,6 +300,7 @@ limitations under the License.
            [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}">
           <span>Service Accounts</span></a>
       </ng-container>
+
     </km-side-nav-field>
 
     <ng-container *ngIf="(adminSettings.customLinks| kmLinkLocation: 'Default') as filtered">

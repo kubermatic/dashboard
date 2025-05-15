@@ -62,7 +62,7 @@ import {VSphereService} from '@core/services/provider/vsphere';
 import {RBACService} from '@core/services/rbac';
 import {ServiceAccountService} from '@core/services/service-account';
 import {SettingsService} from '@core/services/settings';
-import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyService} from '@app/core/services/ssh-key/ssh-key';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {TokenService} from '@core/services/token';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -80,6 +80,7 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterBackupService} from './services/cluster-backup';
+import {SSHKeyGuard} from './services/ssh-key/guard';
 
 const components = [
   SidenavComponent,
@@ -100,6 +101,7 @@ const services = [
   AuthGuard,
   AuthzGuard,
   AdminGuard,
+  SSHKeyGuard,
   DatacenterService,
   NameGeneratorService,
   ClusterService,

@@ -39,6 +39,9 @@ func (fg featureGatesProvider) GetFeatureGates() (apiv2.FeatureGates, error) {
 	if v, ok := fg[features.OpenIDAuthPlugin]; ok {
 		f.OpenIDAuthPlugin = &v
 	}
+	if v, ok := fg[features.DisableUserSSHKey]; ok {
+		f.DisableUserSSHKey = &v
+	}
 
 	return f, nil
 }

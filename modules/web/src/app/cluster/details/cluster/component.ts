@@ -78,6 +78,7 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 
 @Component({
   selector: 'km-cluster-details',
@@ -126,6 +127,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   showTerminal = false;
   onExpandChange$ = new EventEmitter<boolean>();
   isDualStackNetworkSelected: boolean;
+  isUserSshKeyEnabled = false;
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -154,13 +156,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _applicationService: ApplicationService,
     private readonly _dialogModeService: DialogModeService,
     readonly settingsService: SettingsService,
-    private readonly _presetService: PresetsService
+    private readonly _presetService: PresetsService,
+    private readonly _featureGatesService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
+
+    this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
+      this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
+    });
 
     this._userService
       .getCurrentUserGroup(this.projectID)

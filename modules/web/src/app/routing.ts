@@ -19,6 +19,7 @@ import {Observable, of} from 'rxjs';
 import {DashboardComponent} from './dashboard/component';
 import {DynamicModule} from './dynamic/module-registry';
 import {View} from './shared/entity/common';
+import {SSHKeyGuard} from './core/services/ssh-key/guard';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
   preload(route: Route, load: Function): Observable<any> {
@@ -55,6 +56,7 @@ function createRouting(): Routes {
         {
           path: 'projects/:projectID/sshkeys',
           loadChildren: () => import('./sshkey/module').then(m => m.SSHKeyModule),
+          canActivate: [SSHKeyGuard],
         },
         {
           path: 'projects/:projectID/members',
