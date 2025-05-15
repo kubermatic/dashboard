@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/ee/group-project-binding/handler"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1/helper"
@@ -202,6 +203,11 @@ func (p *ProjectMemberProvider) MapUserToGroups(ctx context.Context, user *kuber
 	if user.Spec.IsAdmin {
 		groups.Insert(fmt.Sprintf("owners-%s", projectID))
 	}
+
+	if user.Spec.IsGlobalViewer {
+		groups.Insert(fmt.Sprintf("viewers-%s", projectID))
+	}
+
 	if groups.Len() > 0 {
 		return groups, nil
 	} else {
@@ -285,6 +291,11 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 		roles.Insert("owners")
 		return roles, nil
 	}
+
+	if user.Spec.IsGlobalViewer {
+		roles.Insert(handler.ViewersRole)
+	}
+
 	for _, gpb := range groupProjectBindings.Items {
 		if slice.ContainsString(user.Spec.Groups, gpb.Spec.Group, nil) && gpb.Spec.ProjectID == projectID {
 			roles.Insert(gpb.Spec.Role)
