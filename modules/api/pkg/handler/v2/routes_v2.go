@@ -1433,6 +1433,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/bucketobjects").
 		Handler(r.listCBSLBucketObjects())
 
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials").
+		Handler(r.getCBSLCredentials())
+
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clusterbackupstoragelocation").
 		Handler(r.createCBSL())
@@ -8361,6 +8365,27 @@ func (r Routing) listCBSLBucketObjects() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(storagelocation.ListCBSLBucketObjectsEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeListCBSLBucketObjectsReq, handler.EncodeJSON, r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials project getClusterBackupStorageLocationCredentials
+//
+//	Get credentials of a cluster backup storage location for a given project based on its name
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: S3BackupCredentials
+//	  401: empty
+//	  403: empty
+func (r Routing) getCBSLCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(storagelocation.GetCBSLCredentialsEndpoint(r.userInfoGetter, r.backupStorageProvider, r.projectProvider)), storagelocation.DecodeGetCBSLCredentialsReq, handler.EncodeJSON, r.defaultServerOptions()...,
 	)
 }
 

@@ -69,6 +69,7 @@
     "@angular/platform-browser": "19.2.1",
     "@angular/platform-browser-dynamic": "19.2.1",
     "@angular/router": "19.2.1",
+    "@aws-sdk/client-s3": "^3.808.0",
     "@fontsource/inconsolata": "5.2.5",
     "@fontsource/roboto": "5.1.1",
     "@fontsource/roboto-mono": "5.2.5",

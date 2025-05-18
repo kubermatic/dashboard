@@ -124,6 +124,8 @@ type ClientService interface {
 
 	GetClusterBackupStorageLocation(params *GetClusterBackupStorageLocationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterBackupStorageLocationOK, error)
 
+	GetClusterBackupStorageLocationCredentials(params *GetClusterBackupStorageLocationCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterBackupStorageLocationCredentialsOK, error)
+
 	GetClusterEvents(params *GetClusterEventsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterEventsOK, error)
 
 	GetClusterEventsV2(params *GetClusterEventsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterEventsV2OK, error)
@@ -2176,6 +2178,44 @@ func (a *Client) GetClusterBackupStorageLocation(params *GetClusterBackupStorage
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetClusterBackupStorageLocationDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetClusterBackupStorageLocationCredentials Get credentials of a cluster backup storage location for a given project based on its name
+*/
+func (a *Client) GetClusterBackupStorageLocationCredentials(params *GetClusterBackupStorageLocationCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterBackupStorageLocationCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetClusterBackupStorageLocationCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getClusterBackupStorageLocationCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetClusterBackupStorageLocationCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetClusterBackupStorageLocationCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetClusterBackupStorageLocationCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

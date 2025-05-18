@@ -528,6 +528,10 @@
   @include mixins.mask-image('/assets/images/icons/import.svg', 24px);
 }
 
+.km-icon-upload {
+  @include mixins.mask-image('/assets/images/icons/upload.svg', 24px);
+}
+
 .km-provider-logo-alibaba {
   @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 115px, 30px);
 }

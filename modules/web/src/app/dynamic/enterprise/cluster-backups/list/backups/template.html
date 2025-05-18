@@ -47,8 +47,7 @@ END OF TERMS AND CONDITIONS
                        (queryChange)="onSearch($event)"></km-search-field>
 
       <div fxFlex></div>
-      <div class="action-button"
-           *ngIf="clusters?.length">
+      <div class="action-button">
         <button *ngIf="selectedBackups.length"
                 mat-flat-button
                 type="button"
@@ -58,20 +57,30 @@ END OF TERMS AND CONDITIONS
         </button>
         <button mat-flat-button
                 type="button"
-                (click)="importBackups()"
+                (click)="uploadBackups()"
                 [disabled]="!canAdd">
-          <i class="km-icon-mask km-icon-import"
+          <i class="km-icon-mask km-icon-upload"
              matButtonIcon></i>
-          <span>Import External Backups</span>
+          <span>Upload Backups</span>
         </button>
-        <button mat-flat-button
-                type="button"
-                (click)="addBackup()"
-                [disabled]="!canAdd">
-          <i class="km-icon-mask km-icon-add"
-             matButtonIcon></i>
-          <span>Create Cluster Backup</span>
-        </button>
+        <ng-container *ngIf="clusters?.length">
+          <button mat-flat-button
+                  type="button"
+                  (click)="importBackups()"
+                  [disabled]="!canAdd">
+            <i class="km-icon-mask km-icon-import"
+               matButtonIcon></i>
+            <span>Import External Backups</span>
+          </button>
+          <button mat-flat-button
+                  type="button"
+                  (click)="addBackup()"
+                  [disabled]="!canAdd">
+            <i class="km-icon-mask km-icon-add"
+               matButtonIcon></i>
+            <span>Create Cluster Backup</span>
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>

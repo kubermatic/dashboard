@@ -1,0 +1,98 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2025 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+<div>
+  <km-dialog-title>Upload Backups</km-dialog-title>
+  <mat-dialog-content class="upload-backup-dialog-content">
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>{{ backupStorageLocationLabel }}</mat-label>
+        <mat-select [formControlName]="Controls.BSL"
+                    disableOptionCentering>
+          <mat-option *ngFor="let bsl of backupStorageLocations"
+                      [value]="bsl.name">{{ bsl.displayName }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get(Controls.BSL).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Backup Name</mat-label>
+        <input [formControlName]="Controls.BackupName"
+               matInput
+               required>
+        <mat-hint>The name of directory where this backup will be uploaded on S3.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.BackupName).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div fxLayout="column"
+           fxLayoutGap="10px">
+        <div fxLayoutAlign=" center"
+             fxLayoutGap="10px">
+          <input type="file"
+                 #backupsDirectoryInput
+                 webkitdirectory
+                 hidden
+                 (change)="onBackupsDirectorySelected($event)" />
+          <button mat-flat-button
+                  type="button"
+                  color="alternative"
+                  (click)="backupsDirectoryInput.click()">
+            <span>Select Backups Directory</span>
+          </button>
+          <span *ngIf="selectedBackupsDirectory">{{selectedBackupsDirectory}}</span>
+        </div>
+
+        <div fxLayoutAlign=" center"
+             fxLayoutGap="10px">
+          <input type="file"
+                 #kopiaDirectoryInput
+                 hidden
+                 webkitdirectory
+                 (change)="onKopiaDirectorySelected($event)" />
+          <button mat-flat-button
+                  type="button"
+                  color="alternative"
+                  (click)="kopiaDirectoryInput.click()">
+            <span>Select Kopia Directory</span>
+          </button>
+          <span *ngIf="selectedKopiaDirectory">{{selectedKopiaDirectory}}</span>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-flat-button
+            type="button"
+            (click)="onUpload()"
+            [disabled]="form.invalid || !selectedBackupFiles?.length || !selectedKopiaFiles?.length || isUploading">
+      <i class="km-icon-mask"
+         [ngClass]="isUploading ? 'km-icon-pending': 'km-icon-upload'"
+         matButtonIcon></i>
+      <span>Upload Backups</span>
+    </button>
+  </mat-dialog-actions>
+</div>
