@@ -19,7 +19,44 @@
 // END OF TERMS AND CONDITIONS
 
 @use 'mixins';
+@use 'variables';
 
-.km-icon-mask {
-  @include mixins.size(24px, $force: true);
+.upload-backup-dialog-content {
+  .km-icon-mask {
+    @include mixins.size(24px, $force: true);
+  }
+
+  .select-directory-button {
+    margin-left: 0;
+  }
+
+}
+
+.dialog-actions-container {
+  padding-left: 20px;
+  width: 100%;
+
+  .upload-progress {
+    width: 100%;
+
+    p {
+      font-size: variables.$font-size-body;
+      margin: 0;
+      word-break: break-all;
+      word-wrap: break-word;
+    }
+  }
+
+  .error-message {
+    font-size: variables.$font-size-body;
+    margin-top: 10px;
+
+    span {
+      word-wrap: break-word;
+    }
+  }
+
+  .mdc-button {
+    width: max-content;
+  }
 }

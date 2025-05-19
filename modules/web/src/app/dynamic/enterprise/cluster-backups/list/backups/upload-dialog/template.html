@@ -20,7 +20,7 @@
 END OF TERMS AND CONDITIONS
 -->
 <div>
-  <km-dialog-title>Upload Backups</km-dialog-title>
+  <km-dialog-title [disableClose]="isUploading">Upload Backups</km-dialog-title>
   <mat-dialog-content class="upload-backup-dialog-content">
     <form [formGroup]="form">
       <mat-form-field>
@@ -36,63 +36,137 @@ END OF TERMS AND CONDITIONS
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Backup Name</mat-label>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Backup Directory Name</mat-label>
         <input [formControlName]="Controls.BackupName"
                matInput
                required>
-        <mat-hint>The name of directory where this backup will be uploaded on S3.</mat-hint>
+        <mat-hint>Specify name of the directory where these files will be uploaded to S3.
+          This will create a sub-directory within a parent directory named after the current project ID.
+          To create nested sub-directories, use the / separator (e.g. <code>directory-1/sub-directory-1</code>).
+        </mat-hint>
         <mat-error *ngIf="form.get(Controls.BackupName).hasError('required')">
           <strong>Required</strong>
         </mat-error>
       </mat-form-field>
 
+      <div class="km-info-container">
+        <h4 class="info-title">Usage Guidelines</h4>
+        <p class="info-description">
+          Select the backup and kopia files to upload to the specified directory within the S3 bucket of the
+          chosen backup storage location. Backup files will be placed in the {{backupsDirectoryName}} directory,
+          and kopia files in the {{kopiaDirectoryName}} directory.
+          <br />
+          Please visit the
+          <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/cluster-backup/"
+             target="_blank"
+             rel="noopener noreferrer"
+             fxLayout="row inline"
+             fxLayoutAlign=" center">
+            documentation <i class="km-icon-external-link i-18"></i>
+          </a> to learn more about cluster backups.
+          <br />
+          <br />
+          <strong>NOTE:</strong> Please keep this window open until all files are uploaded. Closing it prematurely may
+          result in unfinished multi-part uploads, which could incur additional storage charges.
+        </p>
+      </div>
+
       <div fxLayout="column"
-           fxLayoutGap="10px">
-        <div fxLayoutAlign=" center"
-             fxLayoutGap="10px">
-          <input type="file"
-                 #backupsDirectoryInput
-                 webkitdirectory
-                 hidden
-                 (change)="onBackupsDirectorySelected($event)" />
-          <button mat-flat-button
-                  type="button"
-                  color="alternative"
-                  (click)="backupsDirectoryInput.click()">
-            <span>Select Backups Directory</span>
-          </button>
-          <span *ngIf="selectedBackupsDirectory">{{selectedBackupsDirectory}}</span>
+           fxLayoutGap="20px">
+        <div>
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <input type="file"
+                   #backupsDirectoryInput
+                   webkitdirectory
+                   hidden
+                   (change)="onBackupsDirectorySelected($event)" />
+            <button mat-flat-button
+                    type="button"
+                    color="quaternary"
+                    class="select-directory-button"
+                    matTooltip="Select a directory containing backup files which will be uploaded to {{backupsDirectoryName}} directory in S3."
+                    [disabled]="isUploading"
+                    (click)="backupsDirectoryInput.click()">
+              <span>Select Backups Directory</span>
+            </button>
+            <span *ngIf="selectedBackupsDirectoryName">{{selectedBackupsDirectoryName}} ({{selectedBackupFiles.length}} files selected)</span>
+          </div>
+          <mat-error *ngIf="form.get(Controls.BackupsDirectory).hasError('fileSize')">
+            <strong>Selected directory contains files larger than the allowed size limit.</strong>
+          </mat-error>
         </div>
 
-        <div fxLayoutAlign=" center"
-             fxLayoutGap="10px">
-          <input type="file"
-                 #kopiaDirectoryInput
-                 hidden
-                 webkitdirectory
-                 (change)="onKopiaDirectorySelected($event)" />
-          <button mat-flat-button
-                  type="button"
-                  color="alternative"
-                  (click)="kopiaDirectoryInput.click()">
-            <span>Select Kopia Directory</span>
-          </button>
-          <span *ngIf="selectedKopiaDirectory">{{selectedKopiaDirectory}}</span>
+        <div>
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <input type="file"
+                   #kopiaDirectoryInput
+                   hidden
+                   webkitdirectory
+                   (change)="onKopiaDirectorySelected($event)" />
+            <button mat-flat-button
+                    type="button"
+                    color="quaternary"
+                    class="select-directory-button"
+                    matTooltip="Select a directory containing kopia files which will be uploaded to {{kopiaDirectoryName}} directory in S3."
+                    [disabled]="isUploading"
+                    (click)="kopiaDirectoryInput.click()">
+              <span>Select Kopia Directory</span>
+            </button>
+            <span *ngIf="selectedKopiaDirectoryName">{{selectedKopiaDirectoryName}} ({{selectedKopiaFiles.length}} files selected)</span>
+          </div>
+          <mat-error *ngIf="form.get(Controls.KopiaDirectory).hasError('fileSize')">
+            <strong>Selected directory contains files larger than the allowed size limit.</strong>
+          </mat-error>
         </div>
       </div>
     </form>
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            type="button"
-            (click)="onUpload()"
-            [disabled]="form.invalid || !selectedBackupFiles?.length || !selectedKopiaFiles?.length || isUploading">
-      <i class="km-icon-mask"
-         [ngClass]="isUploading ? 'km-icon-pending': 'km-icon-upload'"
-         matButtonIcon></i>
-      <span>Upload Backups</span>
-    </button>
+    <div fxLayoutAlign="flex-end center"
+         fxLayoutGap="20px"
+         class="dialog-actions-container">
+      <div *ngIf="isUploading"
+           fxLayout="column"
+           fxLayoutGap="10px"
+           class="upload-progress">
+        <mat-progress-bar mode="determinate"
+                          color="primary"
+                          [value]="totalProgress"
+                          matTooltip="{{totalProgress}}%"></mat-progress-bar>
+        <p>Uploading {{currentUploadFileName}}</p>
+      </div>
+      <div *ngIf="errorMessage"
+           fxLayoutAlign=" center"
+           class="error-message">
+        <i class="km-icon-warning"></i>
+        <span>{{errorMessage}}</span>
+      </div>
+      <div fxLayout="row">
+        <button *ngIf="isUploading"
+                mat-flat-button
+                type="button"
+                color="quaternary"
+                [disabled]="isCancelTriggered"
+                (click)="onCancel()">
+          <i class="km-icon-mask"
+             [ngClass]="isCancelTriggered ? 'km-icon-pending': 'km-icon-cancel'"
+             matButtonIcon></i>
+          <span>Cancel</span>
+        </button>
+        <button mat-flat-button
+                type="button"
+                (click)="onUpload()"
+                [disabled]="form.invalid || !selectedBackupFiles?.length || !selectedKopiaFiles?.length || isUploading">
+          <i class="km-icon-mask"
+             [ngClass]="isUploading ? 'km-icon-pending': 'km-icon-upload'"
+             matButtonIcon></i>
+          <span>Upload Backups</span>
+        </button>
+      </div>
+    </div>
   </mat-dialog-actions>
 </div>

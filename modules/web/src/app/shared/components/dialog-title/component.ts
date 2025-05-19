@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'km-dialog-title',
   templateUrl: './template.html',
   standalone: false,
 })
-export class DialogTitleComponent {}
+export class DialogTitleComponent {
+  @Input() disableClose: boolean = false;
+}

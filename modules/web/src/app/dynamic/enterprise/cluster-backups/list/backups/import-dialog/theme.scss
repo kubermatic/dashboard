@@ -22,11 +22,6 @@
 
 @mixin theme-import-backup-component($colors) {
   .import-backup-dialog-content {
-    .info-container {
-      background-color: rgba(map.get($colors, primary-dark), 15%);
-      border-color: map.get($colors, primary);
-    }
-
     .mat-tree {
       border-color: map.get($colors, tab-divider);
     }

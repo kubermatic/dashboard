@@ -32,25 +32,6 @@
     }
   }
 
-  .info-container {
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    margin: 10px 0;
-    padding: 5px 10px;
-
-    h4 {
-      font-size: variables.$font-size-subhead;
-      font-weight: normal;
-      margin: 0 0 10px;
-    }
-
-    p {
-      font-size: variables.$font-size-body;
-      margin: 0;
-    }
-  }
-
   .mat-tree {
     border-radius: 4px;
     border-style: solid;

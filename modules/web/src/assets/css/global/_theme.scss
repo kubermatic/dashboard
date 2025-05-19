@@ -364,4 +364,9 @@
   .km-pagination-page-size-select-container {
     color: map.get($colors, text-secondary);
   }
+
+  .km-info-container {
+    background-color: rgba(map.get($colors, primary-dark), 15%);
+    border-color: map.get($colors, primary);
+  }
 }
