@@ -105,7 +105,11 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
       case AdminPanelSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
       case AdminPanelSections.Users:
-        return this.checkUrl(AdminPanelView.Accounts) || this.checkUrl(AdminPanelView.Administrators) || this.checkUrl(AdminPanelView.GlobalViewers);
+        return (
+          this.checkUrl(AdminPanelView.Accounts) ||
+          this.checkUrl(AdminPanelView.Administrators) ||
+          this.checkUrl(AdminPanelView.GlobalViewers)
+        );
       default:
         return false;
     }

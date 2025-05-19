@@ -36,8 +36,10 @@ export class MemberUtils {
     const priority = [Group.Owner, Group.ProjectManager, Group.Editor, Group.Viewer];
 
     const groups = member.projects.filter(p => p.id === projectID).map(p => p.group);
-
-    return (priority.find(role => groups.includes(role))) ?? (member.isGlobalViewer ? Group.Viewer : '');
+    if (member.isGlobalViewer) {
+      groups.push(Group.Viewer);
+    }
+    return priority.find(role => groups.includes(role)) || '';
   }
 
   static getGroupDisplayName(groupInternalName: string): string {
