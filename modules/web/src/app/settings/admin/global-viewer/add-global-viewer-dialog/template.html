@@ -1,0 +1,29 @@
+<km-dialog-title>Add Global Viewer</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Email</mat-label>
+      <input matInput
+             required
+             formControlName="email"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial />
+      <mat-error *ngIf="form.controls.email.hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.controls.email.hasError('email')">
+        <strong>Invalid email</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <km-button icon="km-icon-add"
+             label="Add Global Viewer"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
+</mat-dialog-actions>
