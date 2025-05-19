@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS} from '@angular/material/button-toggle';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material/form-field';
 import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
@@ -27,7 +28,7 @@ import {environment} from '@environments/environment';
 import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor-v2';
-import {kmTooltipDefaultOptions} from '../app-config';
+import {kmButtonToggleDefaultOptions, kmTooltipDefaultOptions} from '../app-config';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
 import {DashboardComponent} from './dashboard/component';
@@ -81,6 +82,10 @@ const appearance: MatFormFieldDefaultOptions = {
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance,
+    },
+    {
+      provide: MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS,
+      useValue: kmButtonToggleDefaultOptions,
     },
     CookieService,
     ProjectService,
