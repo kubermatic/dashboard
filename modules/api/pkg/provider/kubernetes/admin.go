@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"strings"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 
@@ -64,11 +65,11 @@ func (a *AdminProvider) GetAdmins(ctx context.Context, userInfo *provider.UserIn
 }
 
 // SetAdmin set/clear admin rights.
-func (a *AdminProvider) SetAdmin(ctx context.Context, userInfo *provider.UserInfo, email string, isAdmin bool) (*kubermaticv1.User, error) {
+func (a *AdminProvider) SetAdmin(ctx context.Context, userInfo *provider.UserInfo, adminBody apiv1.Admin) (*kubermaticv1.User, error) {
 	if !userInfo.IsAdmin {
 		return nil, apierrors.NewForbidden(schema.GroupResource{}, userInfo.Email, fmt.Errorf("%q doesn't have admin rights", userInfo.Email))
 	}
-	if strings.EqualFold(userInfo.Email, email) {
+	if strings.EqualFold(userInfo.Email, adminBody.Email) {
 		return nil, apierrors.NewBadRequest("can not change own privileges")
 	}
 	userList := &kubermaticv1.UserList{}
@@ -76,14 +77,19 @@ func (a *AdminProvider) SetAdmin(ctx context.Context, userInfo *provider.UserInf
 		return nil, err
 	}
 	for _, user := range userList.Items {
-		if strings.EqualFold(user.Spec.Email, email) {
+		if strings.EqualFold(user.Spec.Email, adminBody.Email) {
 			userCopy := user.DeepCopy()
-			userCopy.Spec.IsAdmin = isAdmin
+			if adminBody.IsAdmin != nil {
+				userCopy.Spec.IsAdmin = *adminBody.IsAdmin
+			}
+			if adminBody.IsGlobalViewer != nil {
+				userCopy.Spec.IsGlobalViewer = *adminBody.IsGlobalViewer
+			}
 			if err := a.client.Update(ctx, userCopy); err != nil {
 				return nil, err
 			}
 			return userCopy, nil
 		}
 	}
-	return nil, fmt.Errorf("the given user %s was not found", email)
+	return nil, fmt.Errorf("the given user %s was not found", adminBody.Email)
 }

@@ -582,6 +582,9 @@ type User struct {
 	// IsAdmin indicates admin role
 	IsAdmin bool `json:"isAdmin,omitempty"`
 
+	// IsGlobalViewer indicates GlobalViewer role
+	IsGlobalViewer bool `json:"isGlobalViewer,omitempty"`
+
 	// Projects holds the list of project the user belongs to
 	// along with the group names
 	Projects []ProjectGroup `json:"projects,omitempty"`
@@ -626,6 +629,7 @@ func ConvertInternalUserToExternal(internalUser *kubermaticv1.User, includeSetti
 		Email:             internalUser.Spec.Email,
 		Groups:            internalUser.Spec.Groups,
 		IsAdmin:           internalUser.Spec.IsAdmin,
+		IsGlobalViewer:    internalUser.Spec.IsGlobalViewer,
 		Projects:          []ProjectGroup{},
 		ReadAnnouncements: internalUser.Spec.ReadAnnouncements,
 	}
@@ -686,7 +690,9 @@ type Admin struct {
 	// Name of the admin user
 	Name string `json:"name,omitempty"`
 	// IsAdmin indicates admin role
-	IsAdmin bool `json:"isAdmin"`
+	IsAdmin *bool `json:"isAdmin,omitempty"`
+	// IsGlobalViewer indicates GlobalViewer role
+	IsGlobalViewer *bool `json:"isGlobalViewer,omitempty"`
 }
 
 // ProjectGroup is a helper data structure that

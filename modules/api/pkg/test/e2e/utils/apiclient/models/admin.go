@@ -25,6 +25,9 @@ type Admin struct {
 
 	// Name of the admin user
 	Name string `json:"name,omitempty"`
+
+	// IsGlobalViewer indicates GlobalViewer role
+	IsGlobalViewer bool `json:"isGlobalViewer,omitempty"`
 }
 
 // Validate validates this admin
