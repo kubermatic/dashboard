@@ -114,7 +114,7 @@ func getMemberList(ctx context.Context, userInfoGetter provider.UserInfoGetter, 
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	if !userInfo.IsAdmin {
+	if !userInfo.IsAdmin && !userInfo.IsGlobalViewer {
 		userInfo, err = userInfoGetter(ctx, project.Name)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
