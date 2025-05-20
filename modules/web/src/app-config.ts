@@ -12,9 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {MatButtonToggleDefaultOptions} from '@angular/material/button-toggle';
 import {MatTooltipDefaultOptions} from '@angular/material/tooltip';
 export const kmTooltipDefaultOptions: MatTooltipDefaultOptions = {
   showDelay: 500,
   hideDelay: 100,
   touchendHideDelay: 100,
+};
+
+export const kmButtonToggleDefaultOptions: MatButtonToggleDefaultOptions = {
+  hideSingleSelectionIndicator: true,
+  hideMultipleSelectionIndicator: true,
 };
