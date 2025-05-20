@@ -21,7 +21,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {PolicyTemplate, PolicyTemplateSpec, PolicyTemplateTarget, Visibilities} from '@app/shared/entity/kyverno';
+import {PolicyTemplate, PolicyTemplateSpec, PolicyTemplateTarget, Scopes} from '@app/shared/entity/kyverno';
 import {DialogActionMode} from '@app/shared/types/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {Observable, Subject, take} from 'rxjs';
@@ -42,7 +42,8 @@ enum Controls {
   Title = 'title',
   Description = 'description',
   Category = 'category',
-  Visibility = 'visibility',
+  Severity = 'severity',
+  Scope = 'scope',
   Project = 'project',
   Default = 'default',
   Enforced = 'enforced',
@@ -59,8 +60,8 @@ enum Controls {
 export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
-  visibilities = Visibilities;
-  visibilitiesArray = Object.values(Visibilities);
+  scopes = Scopes;
+  scopesArray = Object.values(Scopes);
   form: FormGroup;
   policySpec = '';
   isYamlEditorValid = true;
@@ -95,16 +96,16 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
 
     if (!this._config.projectID) {
       this._projectService.projects.pipe(take(1)).subscribe((projects: Project[]) => (this.projects = projects));
-      this.form.get(Controls.Visibility).setValue(Visibilities.Global);
+      this.form.get(Controls.Scope).setValue(this._config?.template?.spec?.visibility ?? Scopes.Global);
     } else {
       this._projectService.selectedProject.pipe(take(1)).subscribe((project: Project) => {
         this.projects = [project];
       });
 
-      this.visibilitiesArray = this.visibilitiesArray.filter(visibility => visibility !== Visibilities.Global);
+      this.scopesArray = this.scopesArray.filter(scope => scope !== Scopes.Global);
       this.form.get(Controls.Project).setValue(this._config.projectID);
       this.form.get(Controls.Project).disable();
-      this.form.get(Controls.Visibility).setValue(Visibilities.Project);
+      this.form.get(Controls.Scope).setValue(Scopes.Project);
     }
   }
 
@@ -143,7 +144,8 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
         Validators.required
       ),
       [Controls.Category]: this._builder.control(this._config.template?.spec?.category ?? ''),
-      [Controls.Visibility]: this._builder.control(this._config.template?.spec?.visibility ?? '', Validators.required),
+      [Controls.Severity]: this._builder.control(this._config.template?.spec?.severity ?? ''),
+      [Controls.Scope]: this._builder.control(this._config.template?.spec?.visibility ?? '', Validators.required),
       [Controls.Project]: this._builder.control(this._config.template?.spec?.projectID ?? ''),
       [Controls.Default]: this._builder.control(this._config.template?.spec?.default ?? false),
       [Controls.Enforced]: this._builder.control(this._config.template?.spec?.enforced ?? false),
@@ -160,7 +162,8 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
         title: this.form.get(Controls.Title).value,
         description: this.form.get(Controls.Description).value,
         category: this.form.get(Controls.Category).value,
-        visibility: this.form.get(Controls.Visibility).value,
+        severity: this.form.get(Controls.Severity).value,
+        visibility: this.form.get(Controls.Scope).value,
         projectID: this.form.get(Controls.Project).value,
         default: this.form.get(Controls.Default).value,
         enforced: this.form.get(Controls.Enforced).value,
@@ -176,11 +179,11 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       } as PolicyTemplateSpec,
     } as PolicyTemplate;
 
-    if (this.form.get(Controls.Visibility).value === Visibilities.Project) {
+    if (this.form.get(Controls.Scope).value === Scopes.Project) {
       delete policyTemplate.spec.target.projectSelector;
     }
 
-    if (this.form.get(Controls.Visibility).value === Visibilities.Global) {
+    if (this.form.get(Controls.Scope).value === Scopes.Global) {
       policyTemplate.spec.projectID = '';
     }
 

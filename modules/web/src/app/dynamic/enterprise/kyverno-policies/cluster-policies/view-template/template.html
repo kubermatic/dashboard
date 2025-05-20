@@ -20,5 +20,19 @@
 END OF TERMS AND CONDITIONS
 -->
 
-
-<km-kyverno-policiy-template-list [projectID]="projectID"></km-kyverno-policiy-template-list>
+<km-dialog-title>{{templatName}} Policy Template</km-dialog-title>
+<mat-dialog-content>
+  <km-editor [model]="templateSpec"
+             [readonly]="true"
+             height="400px"
+             header="Manifest">
+  </km-editor>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close
+          mat-flat-button>
+    <i class="km-icon-mask km-icon-check i-24"
+       matButtonIcon></i>
+    <span>Got It</span>
+  </button>
+</mat-dialog-actions>

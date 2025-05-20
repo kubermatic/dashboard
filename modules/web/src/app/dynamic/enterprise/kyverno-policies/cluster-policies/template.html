@@ -21,16 +21,6 @@ END OF TERMS AND CONDITIONS
 -->
 
 <div class="header">
-  <div fxLayoutAlign="end">
-    <button mat-flat-button
-            [color]="projectID ? 'primary' : 'quaternary'"
-            (click)="openBindingDialog()"
-            [disabled]="!hasOwnerRole">
-      <i class="km-icon-mask km-icon-add"
-         matButtonIcon></i>
-      <span>Create Policy Binding</span>
-    </button>
-  </div>
 
   <table class="km-table"
          mat-table
@@ -38,40 +28,60 @@ END OF TERMS AND CONDITIONS
          [dataSource]="dataSource">
     <ng-container matColumnDef="name">
       <th mat-header-cell
-          *matHeaderCellDef>Name</th>
+          *matHeaderCellDef
+          class="km-header-cell">Name</th>
       <td mat-cell
           *matCellDef="let element">
         <span>{{element.name}}</span>
       </td>
     </ng-container>
-    <ng-container matColumnDef="template">
+    <ng-container matColumnDef="actions">
       <th mat-header-cell
-          *matHeaderCellDef>Template
+          *matHeaderCellDef
+          class="km-header-cell p-15">
+        Enable
+        <div class="km-icon-info km-pointer tooltip"
+             matTooltip="Enabling a policy template will create a policy binding"></div>
+      </th>
       <td mat-cell
           *matCellDef="let element">
-        <span>{{element.spec?.policyTemplateRef?.name}}</span>
+        <mat-slide-toggle [checked]="hasBinding(element.name)"
+                          [disabled]="canCreate(element) || element.spec.enforce"
+                          (change)="onEnforcedChange($event, element)">
+        </mat-slide-toggle>
       </td>
     </ng-container>
     <ng-container matColumnDef="namespace">
       <th mat-header-cell
-          *matHeaderCellDef>Namespace
+          *matHeaderCellDef
+          class="km-header-cell">Namespace
       <td mat-cell
           *matCellDef="let element">
-        <span>{{element.namespace}}</span>
+        <mat-form-field *ngIf="element.spec.namespacedPolicy">
+          <mat-label>Namespace</mat-label>
+          <mat-select [value]="policyBindings[element.name].namespace"
+                      (selectionChange)="onNamespaceChange($event.value, element.name)"
+                      [disabled]="hasBinding(element.name)">
+            <mat-option *ngFor="let ns of nameSpaces"
+                        [value]="ns">{{ns}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p *ngIf="!element.spec.namespacedPolicy">Not Namespaced Policy</p>
       </td>
     </ng-container>
-    <ng-container matColumnDef="actions">
+    <ng-container matColumnDef="view">
       <th mat-header-cell
-          *matHeaderCellDef></th>
+          *matHeaderCellDef
+          class="km-header-cell"></th>
       <td mat-cell
           *matCellDef="let element">
         <div fxLayoutAlign="end"
              class="km-table-actions">
           <button mat-icon-button
-                  matTooltip="delete binding"
-                  (click)="deleteBinding(element.name)"
-                  [disabled]="!hasOwnerRole">
-            <i class="km-icon-mask km-icon-delete"></i>
+                  matTooltip="view template"
+                  (click)="viewTemplateSpec(element)"
+                  [disabled]="!element?.spec?.policySpec">
+            <i class="km-icon-mask km-icon-show"></i>
           </button>
         </div>
       </td>
@@ -82,10 +92,10 @@ END OF TERMS AND CONDITIONS
         *matRowDef="let row; columns: columns;"></tr>
   </table>
   <div class="km-row km-empty-list-msg"
-       *ngIf="!policyBindings.length && !loadingBindings">No policy bindings are available.</div>
+       *ngIf="!policyTemplates.length && !loadingTemplates">No policy templates are available</div>
 
   <div class="km-row"
-       *ngIf="loadingBindings && !policyBindings.length">
+       *ngIf="loadingTemplates && policyTemplates.length">
     <mat-spinner color="accent"
                  class="km-spinner km-with-spacing"
                  [diameter]="25"></mat-spinner>

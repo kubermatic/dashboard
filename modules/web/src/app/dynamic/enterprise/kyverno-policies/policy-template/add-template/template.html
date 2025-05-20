@@ -20,7 +20,7 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<km-dialog-title>{{mode}} policy template</km-dialog-title>
+<km-dialog-title>{{mode}} Policy Template</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form">
     <mat-form-field>
@@ -28,12 +28,12 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="controls.Name"
              matInput
              required>
-      <mat-hint>the name of the created policy template.</mat-hint>
+      <mat-hint>The name of the created policy template</mat-hint>
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         <strong>Required</strong>
       </mat-error>
       <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
-        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash
       </mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -41,53 +41,61 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="controls.Title"
              matInput
              required>
-      <mat-hint>the title of the policy.</mat-hint>
+      <mat-hint>The title of the policy</mat-hint>
       <mat-error *ngIf="form.get(controls.Title).hasError('required')">
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <input [formControlName]="controls.Description"
-             matInput
-             required>
-      <mat-hint>the description of the policy.</mat-hint>
+      <textarea matInput
+                rows="3"
+                required
+                [formControlName]="controls.Description">
+      </textarea>
+      <mat-hint>The description of the policy</mat-hint>
       <mat-error *ngIf="form.get(controls.Description).hasError('required')">
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Severity</mat-label>
+      <input [formControlName]="controls.Severity"
+             matInput>
+      <mat-hint>Indicates the severity level of the policy</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Category</mat-label>
       <input [formControlName]="controls.Category"
              matInput>
-      <mat-hint>the category of the policy.</mat-hint>
+      <mat-hint>The category of the policy</mat-hint>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Visibility</mat-label>
-      <mat-select [formControlName]="controls.Visibility">
-        <mat-option *ngFor="let visibility of visibilitiesArray"
-                    [value]="visibility">{{visibility}}</mat-option>
+      <mat-label>Scopes</mat-label>
+      <mat-select [formControlName]="controls.Scope">
+        <mat-option *ngFor="let scope of scopesArray"
+                    [value]="scope">{{scope}}</mat-option>
       </mat-select>
-      <mat-hint>visibility specifies where the policy is visible.</mat-hint>
-      <mat-error *ngIf="form.get(controls.Visibility).hasError('required')">
+      <mat-hint>Scope specifies the scope of the policy</mat-hint>
+      <mat-error *ngIf="form.get(controls.Scope).hasError('required')">
         <strong>Required</strong>
       </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="form.get(controls.Visibility).value !== visibilities.Global">
+    <mat-form-field *ngIf="form.get(controls.Scope).value !== scopes.Global">
       <mat-label>Project</mat-label>
       <mat-select [formControlName]="controls.Project">
         <mat-option *ngFor="let project of projects"
                     [value]="project.id">{{project.name}}</mat-option>
       </mat-select>
-      <mat-hint>the project for which the policy template is created.</mat-hint>
+      <mat-hint>The project for which the policy template is created</mat-hint>
     </mat-form-field>
-    <mat-checkbox [formControlName]="controls.Default">Create policy binding.
+    <mat-checkbox [formControlName]="controls.Default">Create Policy Binding
     </mat-checkbox>
-    <mat-checkbox [formControlName]="controls.Enforced">Enforce enable binding.
+    <mat-checkbox [formControlName]="controls.Enforced">Enforce Enable Binding
     </mat-checkbox>
-    <mat-checkbox [formControlName]="controls.NamespacedPolicy">let the created resources from this template Namespaced.
+    <mat-checkbox [formControlName]="controls.NamespacedPolicy">Namespaced Policy
     </mat-checkbox>
-    <km-label-form *ngIf="form.get(controls.Visibility).value === visibilities.Global"
+    <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
                    title="Projects Labels Selector"
                    [(labels)]="projectsLabels"
                    noValidators="true"

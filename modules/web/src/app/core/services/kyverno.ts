@@ -63,9 +63,6 @@ export class KyvernoService {
 
   deletePolicyBinding(bindingName: string, projectID: string, clusterID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/policybindings/${bindingName}`;
-    if (projectID) {
-      return this._http.delete<void>(`${url}?project_id=${projectID}`);
-    }
     return this._http.delete<void>(url);
   }
 }

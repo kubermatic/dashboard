@@ -18,19 +18,20 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnInit} from '@angular/core';
-import {ParamsService} from '@app/core/services/params';
+.header {
+  padding: 0 20px;
+}
 
-@Component({
-  selector: 'km-kyverno-policies',
-  templateUrl: './template.html',
-  standalone: false,
-})
-export class KyvernoPoliciesComponent implements OnInit {
-  projectID: string;
-  constructor(private readonly _ParamsService: ParamsService) {
-    this.projectID = this._ParamsService.get('projectID');
-  }
+.mdc-button {
+  margin-right: 30PX;
+}
 
-  ngOnInit(): void {}
+.filter-field {
+  width: 300px;
+}
+
+.mat-mdc-form-field {
+  margin-bottom: 0 !important;
+  position: relative;
+  top: 13px;
 }

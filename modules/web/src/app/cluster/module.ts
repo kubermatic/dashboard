@@ -89,8 +89,7 @@ import {AddServiceAccountBindingDialogComponent} from './details/cluster/rbac/ad
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {RBACServiceAccountDetailsComponent} from './details/cluster/rbac/service-account/service-account-detail/component';
 import {RBACUsersOrGroupsComponent} from './details/cluster/rbac/users-or-groups/component';
-import {KyvernoPoliciyBindingListComponent} from '@app/dynamic/enterprise/kyverno-policies/policy-binding/component';
-import {AddPolicyBindingDialogComponent} from '@app/dynamic/enterprise/kyverno-policies/policy-binding/add-binding/component';
+import {KyvernoClusterPoliciesListComponent} from '@app/dynamic/enterprise/kyverno-policies/cluster-policies/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -159,8 +158,7 @@ const components: any[] = [
   RBACServiceAccountDetailsComponent,
   RBACUsersOrGroupsComponent,
   CopyJoiningScriptButtonComponent,
-  KyvernoPoliciyBindingListComponent,
-  AddPolicyBindingDialogComponent,
+  KyvernoClusterPoliciesListComponent,
 ];
 
 @NgModule({

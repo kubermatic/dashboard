@@ -19,23 +19,23 @@
 // END OF TERMS AND CONDITIONS
 
 import {RouterModule, Routes} from '@angular/router';
-import {KyvernoPoliciesComponent} from './component';
 import {AuthGuard, AuthzGuard} from '@app/core/services/auth/guard';
 import {NgModule} from '@angular/core';
 import {KyvernoPoliciyTemplateListComponent} from './policy-template/component';
 import {SharedModule} from '@app/shared/module';
 import {AddPolicyTemplateDialogComponent} from './policy-template/add-template/component';
+import {ViewTemplateDialogComponent} from './cluster-policies/view-template/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: KyvernoPoliciesComponent,
+    component: KyvernoPoliciyTemplateListComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
 ];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [KyvernoPoliciesComponent, KyvernoPoliciyTemplateListComponent, AddPolicyTemplateDialogComponent],
+  declarations: [KyvernoPoliciyTemplateListComponent, AddPolicyTemplateDialogComponent, ViewTemplateDialogComponent],
 })
 export class KyvernoPoliciesModule {}

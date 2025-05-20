@@ -18,11 +18,11 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {KyvernoService} from '@app/core/services/kyverno';
-import {PolicyTemplate} from '@app/shared/entity/kyverno';
+import {PolicyTemplate, Scopes} from '@app/shared/entity/kyverno';
 import {filter, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {AddPolicyTemplateDialogComponent, AddPolicyTemplateDialogConfig} from './add-template/component';
 import {DialogActionMode} from '@app/shared/types/common';
@@ -37,6 +37,7 @@ import {
 } from '@app/shared/components/confirmation-dialog/component';
 import {NotificationService} from '@app/core/services/notification';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {ParamsService} from '@app/core/services/params';
 
 @Component({
   selector: 'km-kyverno-policiy-template-list',
@@ -45,14 +46,14 @@ import {MatSlideToggleChange} from '@angular/material/slide-toggle';
   standalone: false,
 })
 export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
-  @Input() projectID: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  projectID: string;
   mode = DialogActionMode;
   private readonly _unsubscribe = new Subject<void>();
   dataSource = new MatTableDataSource<PolicyTemplate>();
   policyTemplates: PolicyTemplate[] = [];
-  columns = ['name', 'default', 'enforce', 'actions'];
+  columns = ['name', 'default', 'enforce', 'category', 'scope', 'actions'];
   loadingTemplates = false;
   hasOwnerRole = false;
 
@@ -60,10 +61,12 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     private _kyvernoService: KyvernoService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _ParamsService: ParamsService
   ) {}
 
   ngOnInit(): void {
+    this.projectID = this._ParamsService.get('projectID');
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.direction = 'asc';
@@ -90,7 +93,11 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  openTemplateDialog(mode: DialogActionMode, template?: PolicyTemplate): void {
+  isToggleDisabled(template: PolicyTemplate): boolean {
+    return !this.hasOwnerRole || (this.hasOwnerRole && template.spec.visibility === Scopes.Global && !!this.projectID);
+  }
+
+  addTemplate(mode: DialogActionMode, template?: PolicyTemplate): void {
     const config: MatDialogConfig = {
       data: {
         mode,
@@ -125,7 +132,6 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
         this._notificationService.success(`Deleting the ${name} policy template`);
       });
   }
-
   getPolicyTemplates(): void {
     this.loadingTemplates = true;
     this._kyvernoService
@@ -144,7 +150,10 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this._kyvernoService
       .patchPolicyTemplate(patchedTemplate)
       .pipe(take(1))
-      .subscribe(_ => this.getPolicyTemplates());
+      .subscribe(_ => {
+        this._notificationService.success(`Update the ${template.name} policy template`);
+        this.getPolicyTemplates();
+      });
   }
 
   onEnforcedChange(event: MatSlideToggleChange, template: PolicyTemplate): void {
@@ -153,6 +162,9 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this._kyvernoService
       .patchPolicyTemplate(patchedTemplate)
       .pipe(take(1))
-      .subscribe(_ => this.getPolicyTemplates());
+      .subscribe(_ => {
+        this._notificationService.success(`Update the ${template.name} policy template`);
+        this.getPolicyTemplates();
+      });
   }
 }

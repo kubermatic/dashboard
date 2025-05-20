@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Visibilities {
+export enum Scopes {
   Global = 'Global',
   Project = 'Project',
   Cluster = 'Cluster',
@@ -27,6 +27,7 @@ export class PolicyTemplateSpec {
   title: string;
   description: string;
   category?: string;
+  severity?: string;
   visibility: 'Global' | 'Project' | 'Cluster';
   projectID?: string;
   default?: boolean;
@@ -46,15 +47,16 @@ export class PolicyTemplateTarget {
 }
 export class PolicyBinding {
   name: string;
-  namespace: string;
   spec: PolicyBindingSpec;
-  projectID?: string;
   status?: object;
 }
 
 export class PolicyBindingSpec {
   policyTemplateRef: PolicyTemplateRef;
-  namespaceSelector: object;
+  kyvernoPolicyNamespace: KyvernoPolicyNamespace;
+}
+export class KyvernoPolicyNamespace {
+  name: string;
 }
 
 export class PolicyTemplateRef {

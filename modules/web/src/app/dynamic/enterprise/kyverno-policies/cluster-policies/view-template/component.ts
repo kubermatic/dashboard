@@ -18,14 +18,22 @@
 //
 // END OF TERMS AND CONDITIONS
 
-.header {
-  padding: 0 20px;
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import * as y from 'js-yaml';
+
+export interface ViewTemplateDialogConfig {
+  templatName: string;
+  templateSpec: object;
 }
 
-.mdc-button {
-  margin-right: 30PX;
-}
-
-.filter-field {
-  width: 300px;
+@Component({
+  selector: 'km-view-template-dialog',
+  templateUrl: './template.html',
+  standalone: false,
+})
+export class ViewTemplateDialogComponent {
+  templateSpec = y.dump(this._config.templateSpec);
+  templatName = this._config.templatName;
+  constructor(@Inject(MAT_DIALOG_DATA) private readonly _config: ViewTemplateDialogConfig) {}
 }
