@@ -227,20 +227,6 @@ limitations under the License.
         </a>
       </ng-container>
     </km-side-nav-field>
-    <!-- //
-    //
-    // add a new icon for kyverno on the side nav
-    //
-    // -->
-    <!-- //
-    //
-    // add a new icon for kyverno on the side nav
-    //
-    // --> <!-- //
-    //
-    // add a new icon for kyverno on the side nav
-    //
-    // -->
     <div *ngIf="isEnterpriseEdition"
          [matTooltip]="getTooltip(view.KyvernoPolicies)"
          [ngClass]="{'km-disabled': !isDisabledField(view.KyvernoPolicies)}"
@@ -250,7 +236,7 @@ limitations under the License.
          fxLayoutGap="20px"
          [routerLink]="getRouterLink(view.KyvernoPolicies)"
          [ngClass]="getLinkClass(view.KyvernoPolicies)">
-        <i class="km-icon-cluster-template"></i>
+        <i class="km-icon-kyverno"></i>
         <span *ngIf="!isSidenavCollapsed">{{ViewDisplayName.KyvernoPolicies}}</span>
       </a>
     </div>

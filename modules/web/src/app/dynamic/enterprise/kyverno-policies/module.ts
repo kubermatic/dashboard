@@ -24,7 +24,6 @@ import {NgModule} from '@angular/core';
 import {KyvernoPoliciyTemplateListComponent} from './policy-template/component';
 import {SharedModule} from '@app/shared/module';
 import {AddPolicyTemplateDialogComponent} from './policy-template/add-template/component';
-import {ViewTemplateDialogComponent} from './cluster-policies/view-template/component';
 
 const routes: Routes = [
   {
@@ -36,6 +35,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [KyvernoPoliciyTemplateListComponent, AddPolicyTemplateDialogComponent, ViewTemplateDialogComponent],
+  declarations: [KyvernoPoliciyTemplateListComponent, AddPolicyTemplateDialogComponent],
 })
 export class KyvernoPoliciesModule {}

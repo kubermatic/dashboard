@@ -232,6 +232,11 @@ limitations under the License.
                                  [value]="cluster.spec.opaIntegration?.enabled">
             </km-property-boolean>
 
+            <km-property-boolean *ngIf="cluster.spec.kyverno.enabled"
+                                 label="Kyverno Integration"
+                                 [value]="cluster.spec.kyverno.enabled">
+            </km-property-boolean>
+
             <km-property-boolean *ngIf="isMLAEnabled && cluster.spec.mla?.loggingEnabled"
                                  label="User Cluster Logging"
                                  [value]="cluster.spec.mla?.loggingEnabled">

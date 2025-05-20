@@ -90,6 +90,7 @@ import {ClusterServiceAccountService} from '@core/services/cluster-service-accou
 import {RBACServiceAccountDetailsComponent} from './details/cluster/rbac/service-account/service-account-detail/component';
 import {RBACUsersOrGroupsComponent} from './details/cluster/rbac/users-or-groups/component';
 import {KyvernoClusterPoliciesListComponent} from '@app/dynamic/enterprise/kyverno-policies/cluster-policies/component';
+import {ViewTemplateDialogComponent} from '@app/dynamic/enterprise/kyverno-policies/cluster-policies/view-template/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -159,6 +160,7 @@ const components: any[] = [
   RBACUsersOrGroupsComponent,
   CopyJoiningScriptButtonComponent,
   KyvernoClusterPoliciesListComponent,
+  ViewTemplateDialogComponent,
 ];
 
 @NgModule({

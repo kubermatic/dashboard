@@ -44,7 +44,6 @@ func NewPolicyBindingProvider(privilegedClient ctrlruntimeclient.Client) *Policy
 }
 
 func (p *PolicyBindingProvider) CreateUnsecured(ctx context.Context, policyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error) {
-
 	if err := p.privilegedClient.Create(ctx, policyBinding); err != nil {
 		return nil, err
 	}

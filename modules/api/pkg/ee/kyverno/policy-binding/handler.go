@@ -187,8 +187,6 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 		Spec:   policyBinding.Spec,
 		Status: policyBinding.Status,
 	}, nil
-
-	return nil, utilerrors.NewNotFound("policy binding not found", req.PolicyBindingName)
 }
 
 func DecodeGetPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {

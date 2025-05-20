@@ -229,7 +229,8 @@ limitations under the License.
            matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.KyvernoIntegration"
+      <mat-checkbox *ngIf="isEnterpriseEdition"
+                    [formControlName]="Controls.KyvernoIntegration"
                     kmValueChangedIndicator>
         Kyverno Integration
       </mat-checkbox>
