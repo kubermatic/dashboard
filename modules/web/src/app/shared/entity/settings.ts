@@ -60,6 +60,7 @@ export interface AdminSettings {
   annotations?: AdminSettingsAnnotations;
   // the Object type is used when we send the announcements to the API
   announcements?: Map<string, AdminAnnouncement> | Object;
+  clusterBackupOptions?: ClusterBackupOptions;
 }
 
 export interface AdminSettingsAnnotations {
@@ -72,6 +73,10 @@ export interface AdminAnnouncement {
   message: string;
   createdAt?: string;
   expires?: string;
+}
+
+export interface ClusterBackupOptions {
+  defaultChecksumAlgorithm: string;
 }
 
 export interface StaticLabel {

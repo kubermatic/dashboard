@@ -144,6 +144,14 @@ export enum BackupType {
 // This variable is temporary and will be removed after adding the functionality for multiple backup storage locations.
 export const BackupStorageLocationTempName = 'default-cluster-backup-bsl';
 
+export enum VeleroChecksumAlgorithm {
+  CRC32 = 'CRC32',
+  CRC32C = 'CRC32C',
+  SHA1 = 'SHA1',
+  SHA256 = 'SHA256',
+}
+export const DefaultVeleroChecksumAlgorithm = VeleroChecksumAlgorithm.CRC32;
+
 export class ClusterBackup {
   name: string;
   id?: string;
@@ -243,6 +251,7 @@ export class BackupStorageLocationStatus {
 export class BackupStorageLocationConfig {
   region?: string;
   s3Url?: string;
+  checksumAlgorithm?: VeleroChecksumAlgorithm;
 }
 
 export class BackupDownloadUrl {

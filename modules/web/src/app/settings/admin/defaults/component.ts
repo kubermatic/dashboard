@@ -19,6 +19,7 @@ import {OperatingSystem} from '@app/shared/model/NodeProviderConstants';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {VeleroChecksumAlgorithm} from '@shared/entity/backup';
 import {Member} from '@shared/entity/member';
 import {AdminSettings, AllowedOperatingSystems, StaticLabel} from '@shared/entity/settings';
 import {getEditionVersion, objectDiff} from '@shared/utils/common';
@@ -44,6 +45,7 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   readonly OperatingSystem = OperatingSystem;
   readonly ipAllocationModes = [VMwareCloudDirectorIPAllocationMode.POOL, VMwareCloudDirectorIPAllocationMode.DHCP];
+  readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -158,6 +160,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
 
   isKubernetesDashboardFeatureGatesEnabled(): boolean {
     return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
+  }
+
+  onVeleroChecksumAlgorithmChange(value: string) {
+    this.settings.clusterBackupOptions = {
+      ...(this.settings.clusterBackupOptions || {}),
+      defaultChecksumAlgorithm: value,
+    };
+    this.onSettingsChange();
   }
 
   onIPAllocationModeChange(val: string[]): void {
