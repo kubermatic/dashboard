@@ -60,6 +60,7 @@ type clusterBackupBody struct {
 
 const (
 	UserClusterBackupNamespace = "velero"
+	backupOrigin               = "kkp-controllers"
 )
 
 type clusterBackupUI struct {
@@ -93,6 +94,16 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
 	}
+
+	// These labels are added to the Backup CR to distinguish between backups created via the KKP controllers and those uploaded through the UI.
+	if clusterBackup.Spec.Labels == nil {
+		clusterBackup.Spec.Labels = getLabels(backupOrigin, req.ProjectID, req.ClusterID)
+	} else {
+		for k, v := range getLabels(backupOrigin, req.ProjectID, req.ClusterID) {
+			clusterBackup.Spec.Labels[k] = v
+		}
+	}
+
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
@@ -111,6 +122,14 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		Name: clusterBackup.Name,
 		Spec: *clusterBackup.Spec.DeepCopy(),
 	}, nil
+}
+
+func getLabels(backupOrigin, projectID, clusterID string) map[string]string {
+	labels := make(map[string]string)
+	labels["project-id"] = projectID
+	labels["cluster-id"] = clusterID
+	labels["backup-origin"] = backupOrigin
+	return labels
 }
 
 type createClusterBackupReq struct {
