@@ -17,7 +17,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
-import SwaggerUI from 'swagger-ui';
+import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
+import 'swagger-ui-dist/swagger-ui.css';
 
 @Component({
   selector: 'km-api-docs',
@@ -34,7 +35,7 @@ export class ApiDocsComponent implements OnInit {
 
   ngOnInit(): void {
     this._appConfigService.getSwaggerJson().subscribe(_ => {
-      SwaggerUI({
+      SwaggerUIBundle({
         domNode: this._document.getElementById('km-swagger-container'),
         deepLinking: true,
         displayRequestDuration: true,
