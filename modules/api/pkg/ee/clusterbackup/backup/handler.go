@@ -60,7 +60,11 @@ type clusterBackupBody struct {
 
 const (
 	UserClusterBackupNamespace = "velero"
-	backupOrigin               = "kkp-controllers"
+
+	projectIdKey    = "project-id"
+	clusterIdKey    = "cluster-id"
+	backupOriginKey = "backup-origin"
+	backupOrigin    = "kubermatic/kkp-controllers"
 )
 
 type clusterBackupUI struct {
@@ -126,9 +130,9 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 
 func getLabels(backupOrigin, projectID, clusterID string) map[string]string {
 	labels := make(map[string]string)
-	labels["project-id"] = projectID
-	labels["cluster-id"] = clusterID
-	labels["backup-origin"] = backupOrigin
+	labels[projectIdKey] = projectID
+	labels[clusterIdKey] = clusterID
+	labels[backupOriginKey] = backupOrigin
 	return labels
 }
 
