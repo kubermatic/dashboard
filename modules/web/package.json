@@ -130,7 +130,7 @@
     "jest": "29.7.0",
     "jest-canvas-mock": "^2.5.2",
     "jest-preset-angular": "14.5.3",
-    "js-beautify": "1.15.1",
+    "js-beautify": "1.15.4",
     "json-server": "0.17.4",
     "license-check-and-add": "4.0.5",
     "license-compliance": "3.0.1",
