@@ -8246,6 +8246,54 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusterbackupstoragelocation/{cbsl_name}/credentials": {
+      "get": {
+        "description": "Get credentials of a cluster backup storage location for a given project based on its name",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "getClusterBackupStorageLocationCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterBackupStorageLocationName",
+            "name": "cbsl_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "S3BackupCredentials",
+            "schema": {
+              "$ref": "#/definitions/S3BackupCredentials"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters": {
       "get": {
         "produces": [

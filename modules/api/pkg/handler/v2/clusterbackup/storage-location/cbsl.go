@@ -42,6 +42,12 @@ func ListCBSLBucketObjectsEndpoint(userInfoGetter provider.UserInfoGetter, provi
 	}
 }
 
+func GetCBSLCredentialsEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) endpoint.Endpoint {
+	return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return getCBSLCredentials(ctx, req, userInfoGetter, provider, projectProvider)
+	}
+}
+
 func CreateCBSLEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		return createCBSL(ctx, req, userInfoGetter, provider, projectProvider, settingsProvider)

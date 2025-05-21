@@ -24,6 +24,10 @@ import {
   ImportBackupDialogComponent,
   ImportBackupDialogConfig,
 } from '@dynamic/enterprise/cluster-backups/list/backups/import-dialog/component';
+import {
+  UploadBackupsDialogComponent,
+  UploadBackupDialogConfig,
+} from '@dynamic/enterprise/cluster-backups/list/backups/upload-dialog/component';
 import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
 import {UserService} from '@app/core/services/user';
 import {Observable, Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
@@ -235,6 +239,20 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     };
     this._matDialog
       .open(ImportBackupDialogComponent, config)
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => {});
+  }
+
+  uploadBackups(): void {
+    const config: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject?.id,
+      } as UploadBackupDialogConfig,
+    };
+    this._matDialog
+      .open(UploadBackupsDialogComponent, config)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))

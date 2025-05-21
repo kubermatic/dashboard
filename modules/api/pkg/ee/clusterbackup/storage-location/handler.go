@@ -64,6 +64,15 @@ type listCbslBucketObjectsReq struct {
 	ClusterBackupStorageLocationName string `json:"cbsl_name"`
 }
 
+// getCbslCredentialsReq defines HTTP request for getCbslCredentials
+// swagger:parameters getClusterBackupStorageLocationCredentials
+type getCbslCredentialsReq struct {
+	common.ProjectReq
+	// in: path
+	// required: true
+	ClusterBackupStorageLocationName string `json:"cbsl_name"`
+}
+
 // createCbslReq defines HTTP request for createCbsl
 // swagger:parameters createClusterBackupStorageLocation
 type createCbslReq struct {
@@ -138,7 +147,7 @@ func ListCBSL(ctx context.Context, request interface{}, userInfoGetter provider.
 	return resp, nil
 }
 
-func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
+func GetCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
 	req, ok := request.(getCbslReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -171,7 +180,7 @@ func GetCSBL(ctx context.Context, request interface{}, userInfoGetter provider.U
 	}, nil
 }
 
-func ListCSBLBucketObjects(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (apiv2.BackupStorageLocationBucketObjectList, error) {
+func ListCBSLBucketObjects(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (apiv2.BackupStorageLocationBucketObjectList, error) {
 	req, ok := request.(listCbslBucketObjectsReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -192,6 +201,29 @@ func ListCSBLBucketObjects(ctx context.Context, request interface{}, userInfoGet
 	}
 
 	return provider.ListBucketObjects(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
+}
+
+func GetCBSLCredentials(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.S3BackupCredentials, error) {
+	req, ok := request.(getCbslCredentialsReq)
+	if !ok {
+		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	if err := common.ValidateUserCanModifyProject(ctx, userInfoGetter, req.ProjectID); err != nil {
+		return nil, err
+	}
+
+	user, err := userInfoGetter(ctx, req.ProjectID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	labelSet := map[string]string{
+		kubermaticv1.ProjectIDLabelKey: req.ProjectID,
+	}
+
+	return provider.GetCredentials(ctx, user, req.ClusterBackupStorageLocationName, labelSet)
 }
 
 func CreateCBSL(
@@ -339,6 +371,23 @@ func DecodeGetCBSLReq(ctx context.Context, r *http.Request) (interface{}, error)
 
 func DecodeListCBSLBucketObjectsReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req listCbslBucketObjectsReq
+
+	pr, err := common.DecodeProjectRequest(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+
+	req.ProjectReq = pr.(common.ProjectReq)
+	req.ClusterBackupStorageLocationName = mux.Vars(r)["cbsl_name"]
+	if req.ClusterBackupStorageLocationName == "" {
+		return "", fmt.Errorf("'cbsl_name' parameter is required but was not provided")
+	}
+
+	return req, nil
+}
+
+func DecodeGetCBSLCredentialsReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	var req getCbslCredentialsReq
 
 	pr, err := common.DecodeProjectRequest(ctx, r)
 	if err != nil {

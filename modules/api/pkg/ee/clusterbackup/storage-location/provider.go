@@ -291,6 +291,39 @@ func (p *BackupStorageProvider) ListBucketObjects(ctx context.Context, userInfo 
 	return objectsList, nil
 }
 
+func (p *BackupStorageProvider) GetCredentials(ctx context.Context, userInfo *provider.UserInfo, name string, labelSet map[string]string) (*apiv2.S3BackupCredentials, error) {
+	if userInfo == nil {
+		return nil, errors.New("a user is missing but required")
+	}
+
+	client := p.privilegedClient
+	if !userInfo.IsAdmin {
+		var err error
+		client, err = p.getImpersonatedClient(userInfo)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	cbsl := &kubermaticv1.ClusterBackupStorageLocation{}
+	if err := client.Get(ctx, types.NamespacedName{Name: name, Namespace: resources.KubermaticNamespace}, cbsl); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	cbslCredentials, err := p.GetStorageLocationCreds(ctx, cbsl.Spec.Credential.Name)
+
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	s3Credentials := &apiv2.S3BackupCredentials{
+		AccessKeyID:     string(cbslCredentials[resources.AWSAccessKeyID]),
+		SecretAccessKey: string(cbslCredentials[resources.AWSSecretAccessKey]),
+	}
+
+	return s3Credentials, nil
+}
+
 func (p *BackupStorageProvider) patchCredentials(ctx context.Context, secretName string, credentials apiv2.S3BackupCredentials) error {
 	// if we get empty credentials than we don't need to update the secret
 	if credentials.AccessKeyID == "" || credentials.SecretAccessKey == "" {

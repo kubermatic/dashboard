@@ -32,11 +32,15 @@ func listCBSL(ctx context.Context, request interface{}, userInfoGetter provider.
 }
 
 func getCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.ClusterBackupStorageLocation, error) {
-	return storagelocation.GetCSBL(ctx, request, userInfoGetter, provider, projectProvider)
+	return storagelocation.GetCBSL(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
 func listCBSLBucketObjects(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (apiv2.BackupStorageLocationBucketObjectList, error) {
-	return storagelocation.ListCSBLBucketObjects(ctx, request, userInfoGetter, provider, projectProvider)
+	return storagelocation.ListCBSLBucketObjects(ctx, request, userInfoGetter, provider, projectProvider)
+}
+
+func getCBSLCredentials(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider) (*apiv2.S3BackupCredentials, error) {
+	return storagelocation.GetCBSLCredentials(ctx, request, userInfoGetter, provider, projectProvider)
 }
 
 func createCBSL(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.BackupStorageProvider, projectProvider provider.ProjectProvider, settingsProvider provider.SettingsProvider) (*apiv2.ClusterBackupStorageLocation, error) {
@@ -61,6 +65,10 @@ func DecodeGetCBSLReq(ctx context.Context, r *http.Request) (interface{}, error)
 
 func DecodeListCBSLBucketObjectsReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return storagelocation.DecodeListCBSLBucketObjectsReq(ctx, r)
+}
+
+func DecodeGetCBSLCredentialsReq(ctx context.Context, r *http.Request) (interface{}, error) {
+	return storagelocation.DecodeGetCBSLCredentialsReq(ctx, r)
 }
 
 func DecodeCreateCBSLReq(ctx context.Context, r *http.Request) (interface{}, error) {

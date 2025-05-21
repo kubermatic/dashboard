@@ -18,21 +18,45 @@
 //
 // END OF TERMS AND CONDITIONS
 
-@use 'sass:map';
+@use 'mixins';
+@use 'variables';
 
-@mixin theme-import-backup-component($colors) {
-  .import-backup-dialog-content {
-    .mat-tree {
-      border-color: map.get($colors, tab-divider);
-    }
+.upload-backup-dialog-content {
+  .km-icon-mask {
+    @include mixins.size(24px, $force: true);
+  }
 
-    .selected-node {
-      color: map.get($colors, sidenav-active);
+  .select-directory-button {
+    margin-left: 0;
+  }
 
-      i {
-        background-color: map.get($colors, sidenav-active);
-      }
+}
+
+.dialog-actions-container {
+  padding-left: 20px;
+  width: 100%;
+
+  .upload-progress {
+    width: 100%;
+
+    p {
+      font-size: variables.$font-size-body;
+      margin: 0;
+      word-break: break-all;
+      word-wrap: break-word;
     }
   }
 
+  .error-message {
+    font-size: variables.$font-size-body;
+    margin-top: 10px;
+
+    span {
+      word-wrap: break-word;
+    }
+  }
+
+  .mdc-button {
+    width: max-content;
+  }
 }
