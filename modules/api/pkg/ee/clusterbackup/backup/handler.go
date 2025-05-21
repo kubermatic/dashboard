@@ -78,7 +78,8 @@ type clusterBackupUISpec struct {
 	StorageLocation    string                `json:"storageLocation,omitempty"`
 	ClusterID          string                `json:"clusterid,omitempty"`
 	TTL                string                `json:"ttl,omitempty"`
-	Labels             *metav1.LabelSelector `json:"labelSelector,omitempty"`
+	Labels             map[string]string     `json:"labels,omitempty"`
+	LabelSelector      *metav1.LabelSelector `json:"labelSelector,omitempty"`
 	Status             string                `json:"status,omitempty"`
 	CreatedAt          apiv1.Time            `json:"createdAt,omitempty"`
 }
@@ -185,7 +186,8 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 				StorageLocation:    item.Spec.StorageLocation,
 				ClusterID:          req.ClusterID,
 				TTL:                item.Spec.TTL.Duration.String(),
-				Labels:             item.Spec.LabelSelector,
+				Labels:             item.Spec.Labels,
+				LabelSelector:      item.Spec.LabelSelector,
 				Status:             string(item.Status.Phase),
 				CreatedAt:          apiv1.Time(item.GetObjectMeta().GetCreationTimestamp()),
 			},

@@ -20,44 +20,49 @@
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ClusterService} from '@app/core/services/cluster';
+import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {NotificationService} from '@app/core/services/notification';
+import {UserService} from '@app/core/services/user';
+import {BackupDownloadUrl, BackupType, ClusterBackup} from '@app/shared/entity/backup';
+import {Cluster} from '@app/shared/entity/cluster';
+import {View} from '@app/shared/entity/common';
+import {Member} from '@app/shared/entity/member';
+import {
+  clusterBackupStatus,
+  getClusterBackupHealthStatus,
+  HealthStatus,
+  StatusIcon,
+} from '@app/shared/utils/health-status';
+import {MemberUtils, Permission} from '@app/shared/utils/member';
+import {ProjectService} from '@core/services/project';
 import {
   ImportBackupDialogComponent,
   ImportBackupDialogConfig,
 } from '@dynamic/enterprise/cluster-backups/list/backups/import-dialog/component';
 import {
-  UploadBackupsDialogComponent,
   UploadBackupDialogConfig,
+  UploadBackupsDialogComponent,
 } from '@dynamic/enterprise/cluster-backups/list/backups/upload-dialog/component';
-import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
-import {UserService} from '@app/core/services/user';
-import {Observable, Subject, filter, forkJoin, switchMap, take, takeUntil} from 'rxjs';
-import {MemberUtils, Permission} from '@app/shared/utils/member';
-import {Member} from '@app/shared/entity/member';
-import {GroupConfig} from '@shared/model/Config';
-import {ProjectService} from '@core/services/project';
 import {Project} from '@shared/entity/project';
-import {MatTableDataSource} from '@angular/material/table';
-import {BackupDownloadUrl, BackupType, ClusterBackup} from '@app/shared/entity/backup';
-import {DeleteBackupDialogComponent} from './delete-dialog/component';
+import {GroupConfig} from '@shared/model/Config';
+import {filter, forkJoin, Observable, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {AddRestoreDialogComponent, AddRestoreDialogConfig} from '../restore/add-dialog/component';
-import {ClusterBackupService} from '@app/core/services/cluster-backup';
-import {Cluster} from '@app/shared/entity/cluster';
-import {ClusterService} from '@app/core/services/cluster';
-import {View} from '@app/shared/entity/common';
-import {NotificationService} from '@app/core/services/notification';
-import {
-  HealthStatus,
-  StatusIcon,
-  clusterBackupStatus,
-  getClusterBackupHealthStatus,
-} from '@app/shared/utils/health-status';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {AddClustersBackupsDialogComponent, AddClustersBackupsDialogConfig} from './add-dialog/component';
+import {DeleteBackupDialogComponent} from './delete-dialog/component';
 
 enum ClusterState {
   Ready = 'Clusters',
   Loading = 'Loading...',
   Empty = 'No Clusters Available',
+}
+
+enum BackupSource {
+  Internal = 'Internal',
+  External = 'External',
 }
 
 @Component({
@@ -68,6 +73,8 @@ enum ClusterState {
 })
 export class ClustersBackupsListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _backupSourceLabelKey = 'system/backup-origin';
+  private readonly _backupSourceLabelValue = 'kkp-controllers';
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
@@ -91,6 +98,7 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
     'labels',
     'cluster',
     'destination',
+    'source',
     'TTL',
     'namespaces',
     'created',
@@ -171,6 +179,10 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
 
   onClusterChange(clusterID: string): void {
     this.selectedCluster = this.clusters.find(cluster => clusterID === cluster.id);
+    this.clusterBackups = [];
+    this.dataSource.data = [];
+    this.selectedBackups = [];
+    this.selectAll = false;
     this._getCbslName();
     this._getBackupsList(this._selectedProject.id);
   }
@@ -203,6 +215,12 @@ export class ClustersBackupsListComponent implements OnInit, OnDestroy {
       return true;
     }
     return false;
+  }
+
+  getBackupSource(backup: ClusterBackup): BackupSource {
+    return backup.spec.labels?.[this._backupSourceLabelKey] === this._backupSourceLabelValue
+      ? BackupSource.Internal
+      : BackupSource.External;
   }
 
   toggleBackupDetail(backupName: string): void {
