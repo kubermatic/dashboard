@@ -23,8 +23,17 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {NotificationService} from '@app/core/services/notification';
-import {BackupStorageLocation, CreateBackupStorageLocation, SupportedBSLProviders} from '@app/shared/entity/backup';
+import {
+  BackupStorageLocation,
+  BackupStorageLocationConfig,
+  BackupStorageLocationSpec,
+  CreateBackupStorageLocation,
+  DefaultVeleroChecksumAlgorithm,
+  SupportedBSLProviders,
+  VeleroChecksumAlgorithm,
+} from '@app/shared/entity/backup';
 import {CBSL_SYNC_PERIOD, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {SettingsService} from '@core/services/settings';
 import * as y from 'js-yaml';
 import {Observable, Subject, takeUntil} from 'rxjs';
 
@@ -43,6 +52,7 @@ enum Controls {
   BackupSyncPeriod = 'backupSyncPeriod',
   Region = 'region',
   Endpoints = 'endpoints',
+  ChecksumAlgorithm = 'checksumAlgorithm',
   AddCustomConfig = 'addCustomConfig',
 }
 
@@ -55,6 +65,7 @@ enum Controls {
 export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
+  readonly veleroChecksumAlgorithms = Object.values(VeleroChecksumAlgorithm);
   form: FormGroup;
   valuesConfig = '';
   isYamlEditorValid = true;
@@ -76,7 +87,8 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
     private readonly _builder: FormBuilder,
     private readonly _clusterBackupService: ClusterBackupService,
     private readonly _dialogRef: MatDialogRef<AddBackupStorageLocationDialogComponent>,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
   ngOnInit(): void {
     this.form = this._builder.group({
@@ -98,24 +110,36 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
       ),
       [Controls.Region]: this._builder.control(this._config.bslObject?.spec.config?.region ?? ''),
       [Controls.Endpoints]: this._builder.control(this._config.bslObject?.spec.config?.s3Url ?? ''),
+      [Controls.ChecksumAlgorithm]: this._builder.control(this._config.bslObject?.spec.config?.checksumAlgorithm ?? ''),
       [Controls.AddCustomConfig]: this._builder.control(false),
     });
 
     if (this._config.bslObject) {
       this.form.get(Controls.Name).disable();
+    } else {
+      this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+        if (settings.clusterBackupOptions) {
+          this.form
+            .get(Controls.ChecksumAlgorithm)
+            .setValue(settings.clusterBackupOptions.defaultChecksumAlgorithm ?? DefaultVeleroChecksumAlgorithm);
+        } else if (!this.form.get(Controls.ChecksumAlgorithm).value) {
+          this.form.get(Controls.ChecksumAlgorithm).setValue(DefaultVeleroChecksumAlgorithm);
+        }
+      });
     }
 
     this.form
       .get(Controls.AddCustomConfig)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((value: boolean) => {
-        let config: Record<string, string>;
+        let config: BackupStorageLocationConfig;
         if (this._config.bslObject?.name) {
-          config = this._config.bslObject.spec.config as Record<string, string>;
+          config = this._config.bslObject.spec.config;
         } else {
           config = {
             region: this.form.get(Controls.Region).value,
             s3Url: this.form.get(Controls.Endpoints).value?.trim(),
+            checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value,
           };
         }
         try {
@@ -172,9 +196,10 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
         config: {
           region: this.form.get(Controls.Region).value,
           s3Url: this.form.get(Controls.Endpoints).value,
+          checksumAlgorithm: this.form.get(Controls.ChecksumAlgorithm).value || '',
         },
         provider: SupportedBSLProviders.AWS,
-      },
+      } as BackupStorageLocationSpec,
       credentials: {
         accessKeyId: this.form.get(Controls.AccessKeyId).value,
         secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
