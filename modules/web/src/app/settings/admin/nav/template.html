@@ -272,6 +272,14 @@ limitations under the License.
           <span>{{adminPanelViewDisplayName.Administrators}}</span>
         </a>
       </div>
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-administrators"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.GlobalViewers)">
+          <span>{{adminPanelViewDisplayName.GlobalViewers}}</span>
+        </a>
+      </div>
     </ng-container>
     <ng-container *ngIf="isSidenavCollapsed">
       <a fxLayoutAlign=" center"
@@ -285,6 +293,12 @@ limitations under the License.
          [routerLink]="getRouterLink(adminPanelView.Administrators)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.Administrators}}</span>
+      </a>
+      <a fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.GlobalViewers)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.GlobalViewers}}</span>
       </a>
     </ng-container>
   </km-side-nav-field>

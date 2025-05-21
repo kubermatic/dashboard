@@ -20,6 +20,7 @@ export class Member {
   email: string;
   groups?: string[];
   isAdmin?: boolean;
+  isGlobalViewer?: boolean;
   id: string;
   name: string;
   userSettings?: UserSettings;
@@ -42,4 +43,5 @@ export class Admin {
   name?: string;
   email?: string;
   isAdmin?: boolean;
+  isGlobalViewer?: boolean;
 }

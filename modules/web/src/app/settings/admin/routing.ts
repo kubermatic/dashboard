@@ -38,6 +38,10 @@ const routes: Routes = [
         loadChildren: () => import('./admins/module').then(m => m.AdministratorsModule),
       },
       {
+        path: 'globalviewers',
+        loadChildren: () => import('./global-viewer/module').then(m => m.GlobalViewerModule),
+      },
+      {
         path: 'customization',
         loadChildren: () => import('./customization/module').then(m => m.AdminSettingsCustomizationModule),
       },

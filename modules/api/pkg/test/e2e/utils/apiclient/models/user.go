@@ -43,6 +43,9 @@ type User struct {
 	// IsAdmin indicates admin role
 	IsAdmin bool `json:"isAdmin,omitempty"`
 
+	// IsGlobalViewer indicates GlobalViewer role
+	IsGlobalViewer bool `json:"isGlobalViewer,omitempty"`
+
 	// LastSeen holds a time in UTC format when the user has been using the API last time
 	// Format: date-time
 	LastSeen strfmt.DateTime `json:"lastSeen,omitempty"`

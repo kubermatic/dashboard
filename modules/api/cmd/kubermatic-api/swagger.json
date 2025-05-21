@@ -27738,6 +27738,11 @@
           "type": "boolean",
           "x-go-name": "IsAdmin"
         },
+        "isGlobalViewer": {
+          "description": "IsGlobalViewer indicates GlobalViewer role",
+          "type": "boolean",
+          "x-go-name": "IsGlobalViewer"
+        },
         "name": {
           "description": "Name of the admin user",
           "type": "string",
@@ -40903,6 +40908,11 @@
           "description": "IsAdmin indicates admin role",
           "type": "boolean",
           "x-go-name": "IsAdmin"
+        },
+        "isGlobalViewer": {
+          "description": "IsGlobalViewer indicates GlobalViewer role",
+          "type": "boolean",
+          "x-go-name": "IsGlobalViewer"
         },
         "lastSeen": {
           "description": "LastSeen holds a time in UTC format when the user has been using the API last time",

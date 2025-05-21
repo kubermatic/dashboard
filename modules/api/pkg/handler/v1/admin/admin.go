@@ -44,7 +44,7 @@ func GetAdminEndpoint(userInfoGetter provider.UserInfoGetter, adminProvider prov
 
 		var resultList []apiv1.Admin
 		for _, admin := range admins {
-			resultList = append(resultList, apiv1.Admin{Email: admin.Spec.Email, IsAdmin: admin.Spec.IsAdmin, Name: admin.Spec.Name})
+			resultList = append(resultList, apiv1.Admin{Email: admin.Spec.Email, IsAdmin: &admin.Spec.IsAdmin, Name: admin.Spec.Name})
 		}
 
 		return resultList, nil
@@ -67,16 +67,23 @@ func SetAdminEndpoint(userInfoGetter provider.UserInfoGetter, adminProvider prov
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-
-		admin, err := adminProvider.SetAdmin(ctx, userInfo, req.Body.Email, req.Body.IsAdmin)
+		admin, err := adminProvider.SetAdmin(ctx, userInfo, req.Body)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if req.Body.IsGlobalViewer != nil {
+			return apiv1.Admin{
+				Email:          admin.Spec.Email,
+				Name:           admin.Spec.Name,
+				IsGlobalViewer: &admin.Spec.IsGlobalViewer,
+			}, nil
 		}
 
 		return apiv1.Admin{
 			Email:   admin.Spec.Email,
 			Name:    admin.Spec.Name,
-			IsAdmin: admin.Spec.IsAdmin,
+			IsAdmin: &admin.Spec.IsAdmin,
 		}, nil
 	}
 }
