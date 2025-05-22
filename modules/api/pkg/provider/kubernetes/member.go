@@ -287,7 +287,7 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 
 	roles := sets.New[string]()
 	if user.Spec.IsAdmin {
-		roles.Insert("owners")
+		roles.Insert(provider.OwnersRole)
 		return roles, nil
 	}
 
