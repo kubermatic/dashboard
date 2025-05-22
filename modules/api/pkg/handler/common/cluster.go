@@ -234,7 +234,7 @@ func GenerateCluster(
 
 	versionManager := version.NewFromConfiguration(config)
 
-	if errs := validation.ValidateNewClusterSpec(ctx, &partialCluster.Spec, dc, cloudProvider, versionManager, features, nil).ToAggregate(); errs != nil {
+	if errs := validation.ValidateNewClusterSpec(ctx, &partialCluster.Spec, dc, seed, cloudProvider, versionManager, features, nil).ToAggregate(); errs != nil {
 		return nil, utilerrors.NewBadRequest("cluster validation failed: %v", errs)
 	}
 
@@ -636,7 +636,7 @@ func PatchEndpoint(
 	}
 
 	// validate the new cluster
-	if errs := validation.ValidateClusterUpdate(ctx, newInternalCluster, oldInternalCluster, dc, cloudProvider, versionManager, features).ToAggregate(); errs != nil {
+	if errs := validation.ValidateClusterUpdate(ctx, newInternalCluster, oldInternalCluster, dc, seed, cloudProvider, versionManager, features).ToAggregate(); errs != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", errs)
 	}
 	if err = validation.ValidateUpdateWindow(newInternalCluster.Spec.UpdateWindow); err != nil {

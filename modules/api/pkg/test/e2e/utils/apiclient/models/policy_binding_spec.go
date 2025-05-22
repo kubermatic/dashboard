@@ -18,15 +18,8 @@ import (
 // swagger:model PolicyBindingSpec
 type PolicyBindingSpec struct {
 
-	// Enabled controls whether the policy defined by the template should be actively applied to the cluster.
-	//
-	// Relevant only if the referenced PolicyTemplate has spec.enforced=false.
-	//
-	// +optional
-	Enabled bool `json:"enabled,omitempty"`
-
-	// namespace selector
-	NamespaceSelector *LabelSelector `json:"namespaceSelector,omitempty"`
+	// kyverno policy namespace
+	KyvernoPolicyNamespace *KyvernoPolicyNamespace `json:"kyvernoPolicyNamespace,omitempty"`
 
 	// policy template ref
 	PolicyTemplateRef *ObjectReference `json:"policyTemplateRef,omitempty"`
@@ -36,7 +29,7 @@ type PolicyBindingSpec struct {
 func (m *PolicyBindingSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateNamespaceSelector(formats); err != nil {
+	if err := m.validateKyvernoPolicyNamespace(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -50,17 +43,17 @@ func (m *PolicyBindingSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *PolicyBindingSpec) validateNamespaceSelector(formats strfmt.Registry) error {
-	if swag.IsZero(m.NamespaceSelector) { // not required
+func (m *PolicyBindingSpec) validateKyvernoPolicyNamespace(formats strfmt.Registry) error {
+	if swag.IsZero(m.KyvernoPolicyNamespace) { // not required
 		return nil
 	}
 
-	if m.NamespaceSelector != nil {
-		if err := m.NamespaceSelector.Validate(formats); err != nil {
+	if m.KyvernoPolicyNamespace != nil {
+		if err := m.KyvernoPolicyNamespace.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("namespaceSelector")
+				return ve.ValidateName("kyvernoPolicyNamespace")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("namespaceSelector")
+				return ce.ValidateName("kyvernoPolicyNamespace")
 			}
 			return err
 		}
@@ -92,7 +85,7 @@ func (m *PolicyBindingSpec) validatePolicyTemplateRef(formats strfmt.Registry) e
 func (m *PolicyBindingSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateNamespaceSelector(ctx, formats); err != nil {
+	if err := m.contextValidateKyvernoPolicyNamespace(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -106,14 +99,14 @@ func (m *PolicyBindingSpec) ContextValidate(ctx context.Context, formats strfmt.
 	return nil
 }
 
-func (m *PolicyBindingSpec) contextValidateNamespaceSelector(ctx context.Context, formats strfmt.Registry) error {
+func (m *PolicyBindingSpec) contextValidateKyvernoPolicyNamespace(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.NamespaceSelector != nil {
-		if err := m.NamespaceSelector.ContextValidate(ctx, formats); err != nil {
+	if m.KyvernoPolicyNamespace != nil {
+		if err := m.KyvernoPolicyNamespace.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("namespaceSelector")
+				return ve.ValidateName("kyvernoPolicyNamespace")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("namespaceSelector")
+				return ce.ValidateName("kyvernoPolicyNamespace")
 			}
 			return err
 		}

@@ -112,3 +112,23 @@ presubmits:
           env:
             - name: KUBERMATIC_EDITION
               value: ee
+
+  - name: pre-dashboard-api-build-ce
+    run_if_changed: "modules/api"
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-goproxy: "true"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.24-node-20-3
+          command:
+            - make
+            - api-build
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 2
+          env:
+            - name: KUBERMATIC_EDITION
+              value: ce

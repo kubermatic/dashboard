@@ -164,6 +164,11 @@ export class SeedSettings {
   mla: MLA;
   metering: MeteringConfiguration;
   seedDNSOverwrite?: string;
+  kubelb?: KubeLBSeedSettings;
+}
+
+export class KubeLBSeedSettings {
+  enableForAllDatacenters: boolean;
 }
 
 export class MeteringConfiguration {

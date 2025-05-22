@@ -25,6 +25,9 @@ type KubeLB struct {
 	// Controls whether kubeLB is deployed or not.
 	Enabled bool `json:"enabled,omitempty"`
 
+	// ExtraArgs are additional arbitrary flags to pass to the kubeLB CCM for the user cluster.
+	ExtraArgs map[string]string `json:"extraArgs,omitempty"`
+
 	// UseLoadBalancerClass is used to configure the use of load balancer class `kubelb` for kubeLB. If false, kubeLB will manage all load balancers in the
 	// user cluster irrespective of the load balancer class.
 	UseLoadBalancerClass bool `json:"useLoadBalancerClass,omitempty"`

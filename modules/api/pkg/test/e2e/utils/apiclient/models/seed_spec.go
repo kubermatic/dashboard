@@ -46,7 +46,7 @@ type SeedSpec struct {
 	Kubeconfig *ObjectReference `json:"kubeconfig,omitempty"`
 
 	// kubelb
-	Kubelb *KubeLBSettings `json:"kubelb,omitempty"`
+	Kubelb *KubeLBSeedSettings `json:"kubelb,omitempty"`
 
 	// mla
 	Mla *SeedMLASettings `json:"mla,omitempty"`

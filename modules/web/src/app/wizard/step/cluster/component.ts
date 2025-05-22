@@ -25,6 +25,7 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {ApplicationService} from '@app/core/services/application';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
@@ -73,14 +74,13 @@ import {KmValidators} from '@shared/validators/validators';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {combineLatest, merge, Subscription} from 'rxjs';
-import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
 import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {FeatureGateService} from '@app/core/services/feature-gate';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -275,7 +275,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
-          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
           if (datacenter.spec.kubelb?.enableGatewayAPI) {
@@ -294,9 +293,22 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
       )
-      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
+      .pipe(
+        switchMap(datacenter =>
+          this._datacenterService
+            .seedSettings(datacenter.spec.seed)
+            .pipe(map(seedSettings => ({datacenter, seedSettings})))
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
+      .subscribe(({datacenter, seedSettings}) => {
+        this._seedSettings = seedSettings;
+        this.isKubeLBEnabled = !!(
+          datacenter.spec.kubelb?.enforced ||
+          datacenter.spec.kubelb?.enabled ||
+          seedSettings?.kubelb?.enableForAllDatacenters
+        );
+      });
 
     this._clusterSpecService.providerChanges
       .pipe(

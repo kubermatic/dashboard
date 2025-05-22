@@ -51,7 +51,7 @@ import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
-import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
@@ -240,29 +240,33 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
-      .pipe(tap(datacenter => (this.datacenter = datacenter)))
       .pipe(
-        tap((datacenter: Datacenter) => {
-          this.datacenter = datacenter;
-          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
-          this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
-          this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
-          this._provider = datacenter.spec.provider;
-          this.isAllowedIPRangeSupported = (NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS as string[]).includes(
-            this._provider
-          );
-          if (this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.length) {
-            this.form
-              .get(Controls.NodePortsAllowedIPRanges)
-              .setValue(this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks);
-          }
-          this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
-          this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
-        })
+        tap(datacenter => (this.datacenter = datacenter)),
+        switchMap(datacenter =>
+          this._datacenterService
+            .seedSettings(datacenter.spec.seed)
+            .pipe(map(seedSettings => ({datacenter, seedSettings})))
+        )
       )
-      .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(seedSettings => (this._seedSettings = seedSettings));
+      .subscribe(({datacenter, seedSettings}) => {
+        this._seedSettings = seedSettings;
+        this.isKubeLBEnabled = !!(
+          datacenter.spec.kubelb?.enforced ||
+          datacenter.spec.kubelb?.enabled ||
+          seedSettings?.kubelb?.enableForAllDatacenters
+        );
+        this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+        this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
+        this._provider = datacenter.spec.provider;
+        this.isAllowedIPRangeSupported = (NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS as string[]).includes(this._provider);
+        if (this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.length) {
+          this.form
+            .get(Controls.NodePortsAllowedIPRanges)
+            .setValue(this.cluster.spec.cloud?.[this._provider]?.nodePortsAllowedIPRanges?.cidrBlocks);
+        }
+        this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
+        this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
+      });
 
     this._clusterService
       .getAdmissionPlugins(this.cluster.spec.version)
