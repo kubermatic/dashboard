@@ -21,8 +21,8 @@ type SeedSettings struct {
 	// the Seed level seed dns overwrite
 	SeedDNSOverwrite string `json:"seedDNSOverwrite,omitempty"`
 
-	// kube l b
-	KubeLB *KubeLBSeedSettingsAPI `json:"kubeLB,omitempty"`
+	// kubelb
+	Kubelb *KubeLBSeedSettingsAPI `json:"kubelb,omitempty"`
 
 	// metering
 	Metering *MeteringConfiguration `json:"metering,omitempty"`
@@ -35,7 +35,7 @@ type SeedSettings struct {
 func (m *SeedSettings) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateKubeLB(formats); err != nil {
+	if err := m.validateKubelb(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -53,17 +53,17 @@ func (m *SeedSettings) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *SeedSettings) validateKubeLB(formats strfmt.Registry) error {
-	if swag.IsZero(m.KubeLB) { // not required
+func (m *SeedSettings) validateKubelb(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kubelb) { // not required
 		return nil
 	}
 
-	if m.KubeLB != nil {
-		if err := m.KubeLB.Validate(formats); err != nil {
+	if m.Kubelb != nil {
+		if err := m.Kubelb.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("kubeLB")
+				return ve.ValidateName("kubelb")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("kubeLB")
+				return ce.ValidateName("kubelb")
 			}
 			return err
 		}
@@ -114,7 +114,7 @@ func (m *SeedSettings) validateMla(formats strfmt.Registry) error {
 func (m *SeedSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateKubeLB(ctx, formats); err != nil {
+	if err := m.contextValidateKubelb(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -132,14 +132,14 @@ func (m *SeedSettings) ContextValidate(ctx context.Context, formats strfmt.Regis
 	return nil
 }
 
-func (m *SeedSettings) contextValidateKubeLB(ctx context.Context, formats strfmt.Registry) error {
+func (m *SeedSettings) contextValidateKubelb(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.KubeLB != nil {
-		if err := m.KubeLB.ContextValidate(ctx, formats); err != nil {
+	if m.Kubelb != nil {
+		if err := m.Kubelb.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("kubeLB")
+				return ve.ValidateName("kubelb")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("kubeLB")
+				return ce.ValidateName("kubelb")
 			}
 			return err
 		}

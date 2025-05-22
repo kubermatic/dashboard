@@ -74,7 +74,7 @@ import {KmValidators} from '@shared/validators/validators';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {combineLatest, merge, Subscription} from 'rxjs';
-import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
 import {
@@ -275,11 +275,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
-          this.isKubeLBEnabled = !!(
-            datacenter.spec.kubelb?.enforced ||
-            datacenter.spec.kubelb?.enabled ||
-            this._seedSettings?.kubelb?.enableForAllDatacenters
-          );
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
           if (datacenter.spec.kubelb?.enableGatewayAPI) {
@@ -298,9 +293,22 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._enforceAuditWebhookBackendSettings(this.enforcedAuditWebhookSettings);
         })
       )
-      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
+      .pipe(
+        switchMap(datacenter =>
+          this._datacenterService
+            .seedSettings(datacenter.spec.seed)
+            .pipe(map(seedSettings => ({datacenter, seedSettings})))
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
+      .subscribe(({datacenter, seedSettings}) => {
+        this._seedSettings = seedSettings;
+        this.isKubeLBEnabled = !!(
+          datacenter.spec.kubelb?.enforced ||
+          datacenter.spec.kubelb?.enabled ||
+          seedSettings?.kubelb?.enableForAllDatacenters
+        );
+      });
 
     this._clusterSpecService.providerChanges
       .pipe(

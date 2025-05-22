@@ -209,7 +209,7 @@ type SeedSettings struct {
 	// the Seed level seed dns overwrite
 	SeedDNSOverwrite string `json:"seedDNSOverwrite,omitempty"`
 	// KubeLB settings
-	KubeLB *KubeLBSeedSettingsAPI `json:"kubeLB,omitempty"`
+	KubeLB *KubeLBSeedSettingsAPI `json:"kubelb,omitempty"`
 }
 
 type KubeLBSeedSettingsAPI struct {

@@ -40415,7 +40415,7 @@
       "description": "SeedSettings represents settings for a Seed cluster",
       "type": "object",
       "properties": {
-        "kubeLB": {
+        "kubelb": {
           "$ref": "#/definitions/KubeLBSeedSettingsAPI"
         },
         "metering": {
