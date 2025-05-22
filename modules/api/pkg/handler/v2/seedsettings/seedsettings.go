@@ -85,5 +85,11 @@ func convertSeedToSeedSettings(seed *kubermaticv1.Seed) *apiv2.SeedSettings {
 		seedSettings.SeedDNSOverwrite = seed.Spec.SeedDNSOverwrite
 	}
 
+	if seed.Spec.KubeLB != nil {
+		seedSettings.KubeLB = &apiv2.KubeLBSeedSettingsAPI{
+			EnableForAllDatacenters: seed.Spec.KubeLB.EnableForAllDatacenters,
+		}
+	}
+
 	return seedSettings
 }

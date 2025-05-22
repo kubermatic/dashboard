@@ -208,6 +208,12 @@ type SeedSettings struct {
 	Metering kubermaticv1.MeteringConfiguration `json:"metering"`
 	// the Seed level seed dns overwrite
 	SeedDNSOverwrite string `json:"seedDNSOverwrite,omitempty"`
+	// KubeLB settings
+	KubeLB *KubeLBSeedSettingsAPI `json:"kubeLB,omitempty"`
+}
+
+type KubeLBSeedSettingsAPI struct {
+	EnableForAllDatacenters bool `json:"enableForAllDatacenters,omitempty"`
 }
 
 type MLA struct {

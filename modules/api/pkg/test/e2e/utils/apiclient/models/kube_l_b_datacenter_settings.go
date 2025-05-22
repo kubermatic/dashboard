@@ -33,6 +33,9 @@ type KubeLBDatacenterSettings struct {
 	// Enforced is used to enforce kubeLB installation for all the user clusters belonging to this datacenter. Setting enforced to false will not uninstall kubeLB from the user clusters and it needs to be disabled manually.
 	Enforced bool `json:"enforced,omitempty"`
 
+	// ExtraArgs are additional arbitrary flags to pass to the kubeLB CCM for the user cluster. These args are propagated to all the user clusters unless overridden at a cluster level.
+	ExtraArgs map[string]string `json:"extraArgs,omitempty"`
+
 	// NodeAddressType is used to configure the address type from node, used for load balancing.
 	// Optional: Defaults to ExternalIP.
 	// +kubebuilder:validation:Enum=InternalIP;ExternalIP

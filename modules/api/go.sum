@@ -1561,10 +1561,10 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 k8c.io/kubeone v1.7.2 h1:uLH19VEp1S5j4f3UwQP4CLHErJ23UiJM2MnbufNWDgI=
 k8c.io/kubeone v1.7.2/go.mod h1:9v2VFz/+l36cW65kd5YufEYHunbKlJ6P8SBakj05xgM=
-k8c.io/kubermatic/sdk/v2 v2.0.0-20250509182904-004e10a959a2 h1:rkSXYRw/En4w9wQxF4pcOskJKKPxIpJhAVc1YAFewkI=
-k8c.io/kubermatic/sdk/v2 v2.0.0-20250509182904-004e10a959a2/go.mod h1:l7qjgKo7qLvJmgfT3FDvAx6ShLNpjdW7ew67v07SyUg=
-k8c.io/kubermatic/v2 v2.27.1-0.20250508144759-54d4fe7fcadd h1:TAg35INvkBxPV7lXE97b7emSG7Adh+yXBlchYWeCyqE=
-k8c.io/kubermatic/v2 v2.27.1-0.20250508144759-54d4fe7fcadd/go.mod h1:poRJ1ScD6xUG7OkWK5Tr8euNVGBIqNgN+CUL6XaDdo4=
+k8c.io/kubermatic/sdk/v2 v2.28.0-alpha.1.0.20250521144601-db2274ceb0be h1:iFqiLQzWYqwG2s+cWMU6iToHoQZLnwsJnPlQCPEk+SI=
+k8c.io/kubermatic/sdk/v2 v2.28.0-alpha.1.0.20250521144601-db2274ceb0be/go.mod h1:l7qjgKo7qLvJmgfT3FDvAx6ShLNpjdW7ew67v07SyUg=
+k8c.io/kubermatic/v2 v2.28.0-alpha.1.0.20250521144601-db2274ceb0be h1:vGnRUJCBFchJxqNWE/q6V+MoYKDjy7jqLCSe0eScvu8=
+k8c.io/kubermatic/v2 v2.28.0-alpha.1.0.20250521144601-db2274ceb0be/go.mod h1:poRJ1ScD6xUG7OkWK5Tr8euNVGBIqNgN+CUL6XaDdo4=
 k8c.io/machine-controller v1.61.1 h1:Zy3kg9t0WrDN0Wo3y/pAJp7jdkThcJt070f0fAL9MVc=
 k8c.io/machine-controller v1.61.1/go.mod h1:ZGDFyUeEp66RHcNB5Ki/OJyFdZFgo9dkHJ9s6YJWPcg=
 k8c.io/machine-controller/sdk v0.0.0-20250408084312-a9dc4e656d96 h1:1QQJwPFzBNcvOSmSGA8naqs6NEvDDw/qgGsDbeNoqW8=

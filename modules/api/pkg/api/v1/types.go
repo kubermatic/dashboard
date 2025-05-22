@@ -3092,7 +3092,7 @@ type SeedSpec struct {
 	EtcdBackupRestore *kubermaticv1.EtcdBackupRestore `json:"etcdBackupRestore,omitempty"`
 	// KubeLB holds the configuration for the kubeLB at the Seed level. This component is responsible for managing load balancers.
 	// Only available in Enterprise Edition.
-	KubeLB *kubermaticv1.KubeLBSettings `json:"kubelb,omitempty"`
+	KubeLB *kubermaticv1.KubeLBSeedSettings `json:"kubelb,omitempty"`
 }
 
 // CreateSeedSpec is the structure that is used to create seed.

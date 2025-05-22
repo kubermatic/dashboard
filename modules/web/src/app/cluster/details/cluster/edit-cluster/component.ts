@@ -244,7 +244,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .pipe(
         tap((datacenter: Datacenter) => {
           this.datacenter = datacenter;
-          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+          this.isKubeLBEnabled = !!(
+            datacenter.spec.kubelb?.enforced ||
+            datacenter.spec.kubelb?.enabled ||
+            this._seedSettings?.kubelb?.enableForAllDatacenters
+          );
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this._provider = datacenter.spec.provider;

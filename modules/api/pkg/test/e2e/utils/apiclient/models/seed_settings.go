@@ -21,6 +21,9 @@ type SeedSettings struct {
 	// the Seed level seed dns overwrite
 	SeedDNSOverwrite string `json:"seedDNSOverwrite,omitempty"`
 
+	// kube l b
+	KubeLB *KubeLBSeedSettingsAPI `json:"kubeLB,omitempty"`
+
 	// metering
 	Metering *MeteringConfiguration `json:"metering,omitempty"`
 
@@ -31,6 +34,10 @@ type SeedSettings struct {
 // Validate validates this seed settings
 func (m *SeedSettings) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateKubeLB(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateMetering(formats); err != nil {
 		res = append(res, err)
@@ -43,6 +50,25 @@ func (m *SeedSettings) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SeedSettings) validateKubeLB(formats strfmt.Registry) error {
+	if swag.IsZero(m.KubeLB) { // not required
+		return nil
+	}
+
+	if m.KubeLB != nil {
+		if err := m.KubeLB.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubeLB")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubeLB")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -88,6 +114,10 @@ func (m *SeedSettings) validateMla(formats strfmt.Registry) error {
 func (m *SeedSettings) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateKubeLB(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateMetering(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -99,6 +129,22 @@ func (m *SeedSettings) ContextValidate(ctx context.Context, formats strfmt.Regis
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *SeedSettings) contextValidateKubeLB(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.KubeLB != nil {
+		if err := m.KubeLB.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubeLB")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubeLB")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

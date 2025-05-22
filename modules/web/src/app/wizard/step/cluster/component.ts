@@ -25,6 +25,7 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {ApplicationService} from '@app/core/services/application';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 import {ProjectService} from '@app/core/services/project';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
@@ -80,7 +81,6 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {FeatureGateService} from '@app/core/services/feature-gate';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -275,7 +275,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
-          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+          this.isKubeLBEnabled = !!(
+            datacenter.spec.kubelb?.enforced ||
+            datacenter.spec.kubelb?.enabled ||
+            this._seedSettings?.kubelb?.enableForAllDatacenters
+          );
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
           if (datacenter.spec.kubelb?.enableGatewayAPI) {
