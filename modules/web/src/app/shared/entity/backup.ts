@@ -168,6 +168,7 @@ export class ClusterBackupSpec {
   labelSelector?: {
     matchLabels?: Record<string, string>;
   };
+  labels?: Record<string, string>;
   status?: string;
   createdAt?: string;
 }
