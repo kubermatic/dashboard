@@ -292,7 +292,7 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 	}
 
 	if user.Spec.IsGlobalViewer {
-		roles.Insert("viewers")
+		roles.Insert(provider.ViewersRole)
 	}
 
 	for _, gpb := range groupProjectBindings.Items {
