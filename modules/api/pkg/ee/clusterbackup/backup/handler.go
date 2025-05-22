@@ -61,10 +61,10 @@ type clusterBackupBody struct {
 const (
 	UserClusterBackupNamespace = "velero"
 
-	projectIdKey    = "project-id"
-	clusterIdKey    = "cluster-id"
-	backupOriginKey = "backup-origin"
-	backupOrigin    = "kubermatic/kkp-controllers"
+	projectIdKey    = "system/project"
+	clusterIdKey    = "system/cluster"
+	backupOriginKey = "system/backup-origin"
+	backupOrigin    = "kkp-controllers"
 )
 
 type clusterBackupUI struct {
