@@ -22,7 +22,6 @@ import (
 	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/ee/group-project-binding/handler"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1/helper"
@@ -288,12 +287,12 @@ func (p *ProjectMemberProvider) MapUserToRoles(ctx context.Context, user *kuberm
 
 	roles := sets.New[string]()
 	if user.Spec.IsAdmin {
-		roles.Insert("owners")
+		roles.Insert(provider.OwnersRole)
 		return roles, nil
 	}
 
 	if user.Spec.IsGlobalViewer {
-		roles.Insert(handler.ViewersRole)
+		roles.Insert(provider.ViewersRole)
 	}
 
 	for _, gpb := range groupProjectBindings.Items {

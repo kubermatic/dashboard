@@ -44,12 +44,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
-const (
-	ViewersRole = "viewers"
-	EditorsRole = "editors"
-	OwnersRole  = "owners"
-)
-
 type groupProjectBindingBody struct {
 	Role  string `json:"role"`
 	Group string `json:"group"`
@@ -390,7 +384,7 @@ func decodeBindingName(_ context.Context, r *http.Request) (string, error) {
 }
 
 func validateRole(role string) error {
-	allowedRoles := sets.New(ViewersRole, EditorsRole, OwnersRole)
+	allowedRoles := sets.New(provider.ViewersRole, provider.EditorsRole, provider.OwnersRole)
 	if !allowedRoles.Has(role) {
 		return utilerrors.NewBadRequest("allowed roles are: %v", strings.Join(sets.List(allowedRoles), ", "))
 	}

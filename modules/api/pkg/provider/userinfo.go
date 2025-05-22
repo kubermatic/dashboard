@@ -26,6 +26,12 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
+const (
+	ViewersRole = "viewers"
+	EditorsRole = "editors"
+	OwnersRole  = "owners"
+)
+
 // UserInfoGetter is a function to retrieve a UserInfo.
 type UserInfoGetter = func(ctx context.Context, projectID string) (*UserInfo, error)
 
