@@ -18,13 +18,13 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {PolicyTemplate} from '@app/shared/entity/kyverno';
 import * as y from 'js-yaml';
 
 export interface ViewTemplateDialogConfig {
-  templatName: string;
-  templateSpec: object;
+  template: PolicyTemplate;
 }
 
 @Component({
@@ -32,8 +32,21 @@ export interface ViewTemplateDialogConfig {
   templateUrl: './template.html',
   standalone: false,
 })
-export class ViewTemplateDialogComponent {
-  templateSpec = y.dump(this._config.templateSpec);
-  templatName = this._config.templatName;
+export class ViewTemplateDialogComponent implements OnInit {
+  templateSpec: string = '';
+  templatName = this._config.template.name;
   constructor(@Inject(MAT_DIALOG_DATA) private readonly _config: ViewTemplateDialogConfig) {}
+
+  ngOnInit(): void {
+    const template = this._config.template;
+    this.templateSpec = y.dump({
+      name: template.name,
+      spec: {
+        title: template.spec.title,
+        description: template.spec.description,
+        category: template.spec.category,
+        policySpec: template.spec.policySpec,
+      },
+    });
+  }
 }

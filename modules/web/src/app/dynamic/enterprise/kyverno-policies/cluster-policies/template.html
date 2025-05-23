@@ -21,7 +21,16 @@ END OF TERMS AND CONDITIONS
 -->
 
 <div class="header">
-
+  <div fxLayoutAlign="end">
+    <button mat-flat-button
+            color="quaternary"
+            (click)="openAddPolicyDialog()"
+            [disabled]="!hasOwnerRole || !isClusterRunning">
+      <i class="km-icon-mask km-icon-add"
+         matButtonIcon></i>
+      <span>Add Policy</span>
+    </button>
+  </div>
   <table class="km-table"
          mat-table
          matSort
@@ -35,38 +44,30 @@ END OF TERMS AND CONDITIONS
         <span>{{element.name}}</span>
       </td>
     </ng-container>
-    <ng-container matColumnDef="actions">
+    <ng-container matColumnDef="category">
       <th mat-header-cell
           *matHeaderCellDef
-          class="km-header-cell p-15">
-        Enable
-        <div class="km-icon-info km-pointer tooltip"
-             matTooltip="Enabling a policy template will create a policy binding"></div>
-      </th>
+          class="km-header-cell">Category</th>
       <td mat-cell
           *matCellDef="let element">
-        <mat-slide-toggle [checked]="hasBinding(element.name)"
-                          [disabled]="canCreate(element) || element.spec.enforce"
-                          (change)="onEnforcedChange($event, element)">
-        </mat-slide-toggle>
+        <span>{{element.spec.category}}</span>
       </td>
     </ng-container>
     <ng-container matColumnDef="namespace">
       <th mat-header-cell
           *matHeaderCellDef
-          class="km-header-cell">Namespace
+          class="km-header-cell">
+        <div fxLayout="row"
+             fxLayoutGap="4px"
+             fxLayoutAlign=" center">
+          <div>Namespace</div>
+          <div class="km-icon-info km-pointer"
+               matTooltip="The namespace is where the Kyverno policy is deployed"></div>
+        </div>
       <td mat-cell
           *matCellDef="let element">
-        <mat-form-field *ngIf="element.spec.namespacedPolicy">
-          <mat-label>Namespace</mat-label>
-          <mat-select [value]="policyBindings[element.name].namespace"
-                      (selectionChange)="onNamespaceChange($event.value, element.name)"
-                      [disabled]="hasBinding(element.name)">
-            <mat-option *ngFor="let ns of nameSpaces"
-                        [value]="ns">{{ns}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <p *ngIf="!element.spec.namespacedPolicy">Not Namespaced Policy</p>
+        <span *ngIf="element.spec.namespacedPolicy">{{policyBindings[element.name]?.namespace}}</span>
+        <span *ngIf="!element.spec.namespacedPolicy">Not Namespaced Policy</span>
       </td>
     </ng-container>
     <ng-container matColumnDef="view">
@@ -79,9 +80,14 @@ END OF TERMS AND CONDITIONS
              class="km-table-actions">
           <button mat-icon-button
                   matTooltip="view template"
-                  (click)="viewTemplateSpec(element)"
-                  [disabled]="!element?.spec?.policySpec">
+                  (click)="viewTemplateSpec(element)">
             <i class="km-icon-mask km-icon-show"></i>
+          </button>
+          <button mat-icon-button
+                  matTooltip="delete policy"
+                  (click)="deletePolicyBinding(element.name)"
+                  [disabled]="!hasOwnerRole || element.spec.enforced">
+            <i class="km-icon-mask km-icon-delete"></i>
           </button>
         </div>
       </td>

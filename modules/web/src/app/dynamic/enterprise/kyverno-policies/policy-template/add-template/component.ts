@@ -122,7 +122,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   }
 
   onNext(template: PolicyTemplate): void {
-    this._dialogRef.close(template);
+    this._dialogRef.close();
     this._notificationService.success(
       `${this._config.mode === DialogActionMode.Edit ? 'Updated' : 'Created'} policy template ${template.name}`
     );

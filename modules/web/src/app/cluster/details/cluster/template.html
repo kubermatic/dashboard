@@ -554,7 +554,8 @@ limitations under the License.
     <km-tab label="Kyverno Policies"
             *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled">
       <km-kyverno-cluster-policies-list [projectID]="projectID"
-                                        [cluster]="cluster"></km-kyverno-cluster-policies-list>
+                                        [cluster]="cluster"
+                                        [isClusterRunning]="isClusterRunning"></km-kyverno-cluster-policies-list>
     </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">
