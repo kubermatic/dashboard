@@ -54,6 +54,7 @@
 @import '../../../app/node-data/basic/provider/kubevirt/topology-spread-constraint-form/theme';
 @import '../../../app/node-data/basic/provider/nutanix/theme';
 @import '../../../app/dynamic/enterprise/cluster-backups/list/backups/import-dialog/theme';
+@import '../../../app/dynamic/enterprise/kyverno-policies/policy-template/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -98,4 +99,5 @@
   @include theme-announcement-banner-component($colors);
   @include theme-announcements-dialog-component($colors);
   @include theme-import-backup-component($colors);
+  @include theme-kyverno-policiy-template-list-component($colors);
 }

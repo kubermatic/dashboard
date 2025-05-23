@@ -28,5 +28,8 @@ export namespace DynamicModule {
   export const ClusterBackups = import('./enterprise/cluster-backups/module').then(
     module => module.ClusterBackupsModule
   );
+  export const KyvernoPolicies = import('./enterprise/kyverno-policies/module').then(
+    module => module.KyvernoPoliciesModule
+  );
   export const isEnterpriseEdition = true;
 }

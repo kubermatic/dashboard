@@ -156,6 +156,19 @@ limitations under the License.
           <span>{{adminPanelViewDisplayName.OPA}}</span>
         </a>
       </div>
+
+      <div class="sub-menu-item"
+           *ngIf="isEnterpriseEdition"
+           routerLinkActive="active">
+        <div fxLayoutAlign="flex-start center">
+          <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
+             fxLayoutAlign=" center">
+            <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
+          </a>
+          <span class="km-label-primary"
+                matTooltip="You're not a member of this project.">Experimental</span>
+        </div>
+      </div>
     </ng-container>
 
     <ng-container *ngIf="isSidenavCollapsed">
@@ -206,6 +219,13 @@ limitations under the License.
          [routerLink]="getRouterLink(adminPanelView.OPA)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.OPA}}</span>
+      </a>
+
+      <a fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
       </a>
     </ng-container>
   </km-side-nav-field>

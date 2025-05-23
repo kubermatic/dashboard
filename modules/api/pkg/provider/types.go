@@ -1409,17 +1409,17 @@ type PolicyBindingProvider interface {
 	// GetUnsecured gets the policyBinding with the given name.
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
-	GetUnsecured(ctx context.Context, name string, namespace string) (*kubermaticv1.PolicyBinding, error)
+	GetUnsecured(ctx context.Context, name string, clusterID string) (*kubermaticv1.PolicyBinding, error)
 	// ListUnsecured gets a list of policyBindings.
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
-	ListUnsecured(ctx context.Context) (*kubermaticv1.PolicyBindingList, error)
+	ListUnsecured(ctx context.Context, clusterID string) (*kubermaticv1.PolicyBindingList, error)
 	// PatchUnsecured updates the policyBinding with the given name.
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
-	PatchUnsecured(ctx context.Context, userInfo *UserInfo, updatedpolicyBinding *kubermaticv1.PolicyBinding, projectID string) (*kubermaticv1.PolicyBinding, error)
+	PatchUnsecured(ctx context.Context, updatedpolicyBinding *kubermaticv1.PolicyBinding) (*kubermaticv1.PolicyBinding, error)
 	// DeleteUnsecured deletes the policyBinding with the given name.
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
-	DeleteUnsecured(ctx context.Context, userInfo *UserInfo, name string, namespace string, projectID string) error
+	DeleteUnsecured(ctx context.Context, name string, clusterID string) error
 }

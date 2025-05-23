@@ -70,6 +70,8 @@ type ClientService interface {
 
 	CreateNodeDeployment(params *CreateNodeDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateNodeDeploymentCreated, error)
 
+	CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyBindingOK, error)
+
 	CreateProject(params *CreateProjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateProjectCreated, error)
 
 	CreateRole(params *CreateRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateRoleCreated, error)
@@ -103,6 +105,8 @@ type ClientService interface {
 	DeleteMachineDeploymentNode(params *DeleteMachineDeploymentNodeParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteMachineDeploymentNodeOK, error)
 
 	DeleteNodeDeployment(params *DeleteNodeDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteNodeDeploymentOK, error)
+
+	DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyBindingOK, error)
 
 	DeleteProject(params *DeleteProjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteProjectOK, error)
 
@@ -188,6 +192,8 @@ type ClientService interface {
 
 	GetOidcClusterKubeconfigV2(params *GetOidcClusterKubeconfigV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetOidcClusterKubeconfigV2OK, error)
 
+	GetPolicyBinding(params *GetPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyBindingOK, error)
+
 	GetProject(params *GetProjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetProjectOK, error)
 
 	GetProjectQuota(params *GetProjectQuotaParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetProjectQuotaOK, error)
@@ -266,6 +272,8 @@ type ClientService interface {
 
 	ListNodesForCluster(params *ListNodesForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNodesForClusterOK, error)
 
+	ListPolicyBinding(params *ListPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyBindingOK, error)
+
 	ListProjectAWSSecurityGroups(params *ListProjectAWSSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAWSSecurityGroupsOK, error)
 
 	ListProjectAWSSizes(params *ListProjectAWSSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAWSSizesOK, error)
@@ -317,6 +325,8 @@ type ClientService interface {
 	PatchMachineDeployment(params *PatchMachineDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchMachineDeploymentOK, error)
 
 	PatchNodeDeployment(params *PatchNodeDeploymentParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchNodeDeploymentOK, error)
+
+	PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchPolicyBindingOK, error)
 
 	PatchRole(params *PatchRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchRoleOK, error)
 
@@ -1154,6 +1164,44 @@ func (a *Client) CreateNodeDeployment(params *CreateNodeDeploymentParams, authIn
 }
 
 /*
+CreatePolicyBinding Create policy binding, Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) CreatePolicyBinding(params *CreatePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreatePolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreatePolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "createPolicyBinding",
+		Method:             "POST",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreatePolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreatePolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreatePolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 CreateProject creates a brand new project
 
 Note that this endpoint can be consumed by every authenticated user.
@@ -1798,6 +1846,44 @@ func (a *Client) DeleteNodeDeployment(params *DeleteNodeDeploymentParams, authIn
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteNodeDeploymentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+DeletePolicyBinding Delete policy binding, Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) DeletePolicyBinding(params *DeletePolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeletePolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewDeletePolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "deletePolicyBinding",
+		Method:             "DELETE",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &DeletePolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*DeletePolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*DeletePolicyBindingDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
@@ -3398,6 +3484,44 @@ func (a *Client) GetOidcClusterKubeconfigV2(params *GetOidcClusterKubeconfigV2Pa
 }
 
 /*
+GetPolicyBinding Get policy binding, Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) GetPolicyBinding(params *GetPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getPolicyBinding",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetPolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 GetProject Gets the project with the given ID
 */
 func (a *Client) GetProject(params *GetProjectParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetProjectOK, error) {
@@ -4884,6 +5008,44 @@ func (a *Client) ListNodesForCluster(params *ListNodesForClusterParams, authInfo
 }
 
 /*
+ListPolicyBinding List all policy bindings, Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) ListPolicyBinding(params *ListPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listPolicyBinding",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListPolicyBindingDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ListProjectAWSSecurityGroups Lists available AWS security groups
 */
 func (a *Client) ListProjectAWSSecurityGroups(params *ListProjectAWSSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAWSSecurityGroupsOK, error) {
@@ -5878,6 +6040,44 @@ func (a *Client) PatchNodeDeployment(params *PatchNodeDeploymentParams, authInfo
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*PatchNodeDeploymentDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+PatchPolicyBinding Patch policy binding. Only available in Kubermatic Enterprise Edition
+*/
+func (a *Client) PatchPolicyBinding(params *PatchPolicyBindingParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PatchPolicyBindingOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchPolicyBindingParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "patchPolicyBinding",
+		Method:             "PATCH",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &PatchPolicyBindingReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*PatchPolicyBindingOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*PatchPolicyBindingDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

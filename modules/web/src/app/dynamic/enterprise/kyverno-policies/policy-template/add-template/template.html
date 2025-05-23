@@ -1,0 +1,123 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2025 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<km-dialog-title>{{mode}} Policy Template</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input [formControlName]="controls.Name"
+             matInput
+             required>
+      <mat-hint>The name of the created policy template</mat-hint>
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input [formControlName]="controls.Title"
+             matInput
+             required>
+      <mat-hint>The title of the policy</mat-hint>
+      <mat-error *ngIf="form.get(controls.Title).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput
+                rows="3"
+                required
+                [formControlName]="controls.Description">
+      </textarea>
+      <mat-hint>The description of the policy</mat-hint>
+      <mat-error *ngIf="form.get(controls.Description).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Severity</mat-label>
+      <input [formControlName]="controls.Severity"
+             matInput>
+      <mat-hint>Indicates the severity level of the policy</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <input [formControlName]="controls.Category"
+             matInput>
+      <mat-hint>The category of the policy</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Scopes</mat-label>
+      <mat-select [formControlName]="controls.Scope">
+        <mat-option *ngFor="let scope of scopesArray"
+                    [value]="scope">{{scope}}</mat-option>
+      </mat-select>
+      <mat-hint>Scope specifies the scope of the policy</mat-hint>
+      <mat-error *ngIf="form.get(controls.Scope).hasError('required')">
+        <strong>Required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="form.get(controls.Scope).value !== scopes.Global">
+      <mat-label>Project</mat-label>
+      <mat-select [formControlName]="controls.Project">
+        <mat-option *ngFor="let project of projects"
+                    [value]="project.id">{{project.name}}</mat-option>
+      </mat-select>
+      <mat-hint>The project for which the policy template is created</mat-hint>
+    </mat-form-field>
+    <mat-checkbox [formControlName]="controls.Default">Create Policy Binding
+    </mat-checkbox>
+    <mat-checkbox [formControlName]="controls.Enforced">Enforce Enable Binding
+    </mat-checkbox>
+    <mat-checkbox [formControlName]="controls.NamespacedPolicy">Namespaced Policy
+    </mat-checkbox>
+    <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
+                   title="Projects Labels Selector"
+                   [(labels)]="projectsLabels"
+                   noValidators="true"
+                   [formControlName]="controls.ProjectSelector"></km-label-form>
+    <km-label-form title="Clusters Labels Selector"
+                   [(labels)]="clustersLabels"
+                   noValidators="true"
+                   [formControlName]="controls.ClusterSelector"></km-label-form>
+    <km-editor [(model)]="policySpec"
+               height="370px"
+               header="values.yaml">
+    </km-editor>
+    <km-validate-json-or-yaml [data]="policySpec"
+                              [isOnlyYAML]="true"
+                              (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <km-button [icon]="icon"
+             [label]="label"
+             [disabled]="form.invalid || !isYamlEditorValid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
+</mat-dialog-actions>

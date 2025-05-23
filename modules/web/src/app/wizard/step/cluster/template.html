@@ -510,6 +510,11 @@ limitations under the License.
               </div>
             </div>
 
+            <mat-checkbox *ngIf="isEnterpriseEdition"
+                          [formControlName]="Controls.KyvernoIntegration">
+              Kyverno Integration
+            </mat-checkbox>
+
             <ng-container *ngIf="isMLAEnabled">
               <mat-checkbox [formControlName]="Controls.MLALogging">
                 User Cluster Logging

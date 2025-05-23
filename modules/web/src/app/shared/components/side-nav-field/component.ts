@@ -128,6 +128,8 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
       return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
     } else if (url === View.KubeOneClusters) {
       return urlExists || !!urlArray.find(x => x === View.KubeOneWizard);
+    } else if (url === View.KyvernoPolicies) {
+      return urlExists || !!urlArray.find(x => x === View.KyvernoPolicies);
     }
     return urlExists;
   }
@@ -149,7 +151,8 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
       this.checkUrl(AdminPanelView.ProjectQuotas) ||
       this.checkUrl(AdminPanelView.OPA) ||
       this.checkUrl(AdminPanelView.SeedConfiguration) ||
-      this.checkUrl(AdminPanelView.Applications)
+      this.checkUrl(AdminPanelView.Applications) ||
+      this.checkUrl(AdminPanelView.KyvernoPolicies)
     );
   }
 

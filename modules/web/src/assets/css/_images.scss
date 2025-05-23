@@ -652,6 +652,10 @@
   @include mixins.background-image('/assets/images/cni/cilium.svg', 80px);
 }
 
+.km-icon-kyverno {
+  @include mixins.mask-image('/assets/images/icons/kyverno.svg', 24px);
+}
+
 @for $i from 1 through 50 {
   $w: 2 * $i;
 

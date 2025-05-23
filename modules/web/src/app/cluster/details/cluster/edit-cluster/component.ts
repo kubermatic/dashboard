@@ -68,6 +68,7 @@ enum Controls {
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   EventRateLimitConfig = 'eventRateLimitConfig',
   OPAIntegration = 'opaIntegration',
+  KyvernoIntegration = 'kyvernoIntegration',
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
@@ -173,6 +174,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
+      [Controls.KyvernoIntegration]: new FormControl(!!this.cluster.spec.kyverno && this.cluster.spec.kyverno.enabled),
       [Controls.Konnectivity]: new FormControl({
         value: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
         disabled: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
@@ -472,6 +474,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         opaIntegration: {
           enabled: this.form.get(Controls.OPAIntegration).value,
+        },
+        kyverno: {
+          enabled: this.form.get(Controls.KyvernoIntegration).value,
         },
         clusterNetwork: {
           konnectivityEnabled: this.form.get(Controls.Konnectivity).value,

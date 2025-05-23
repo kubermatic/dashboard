@@ -81,6 +81,7 @@ import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterBackupService} from './services/cluster-backup';
 import {SSHKeyGuard} from './services/ssh-key/guard';
+import {KyvernoService} from './services/kyverno';
 
 const components = [
   SidenavComponent,
@@ -148,6 +149,7 @@ const services = [
   VSphereService,
   DialogModeService,
   BaremetalService,
+  KyvernoService,
 ];
 
 const interceptors = [

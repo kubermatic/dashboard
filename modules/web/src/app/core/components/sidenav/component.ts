@@ -19,7 +19,7 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {getViewDisplayName, ProjectSidenavSection, View} from '@shared/entity/common';
+import {getViewDisplayName, ProjectSidenavSection, View, ViewDisplayName} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {AdminSettings, CustomLink, UserSettings} from '@shared/entity/settings';
@@ -40,6 +40,7 @@ import {FeatureGateService} from '@app/core/services/feature-gate';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   readonly view = View;
+  readonly ViewDisplayName = ViewDisplayName;
   readonly projectSidenavSections = ProjectSidenavSection;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;

@@ -31,5 +31,10 @@
         background-color: map.get($colors, sidenav-background-hover);
       }
     }
+
+    .km-label-primary {
+      background-color: map.get($colors, primary);
+      color: map.get($colors, announcement-banner-text);
+    }
   }
 }

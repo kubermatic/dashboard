@@ -70,6 +70,10 @@ const routes: Routes = [
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
       {
+        path: 'kyvernoPolicies',
+        loadChildren: () => DynamicModule.KyvernoPolicies,
+      },
+      {
         path: 'backupdestinations',
         loadChildren: () => import('./bucket-settings/module').then(m => m.AdminSettingsBucketSettingsModule),
       },
