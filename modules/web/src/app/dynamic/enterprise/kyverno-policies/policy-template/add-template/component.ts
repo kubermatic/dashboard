@@ -76,7 +76,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
     private readonly _dialogRef: MatDialogRef<AddPolicyTemplateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddPolicyTemplateDialogConfig,
     private readonly _builder: FormBuilder,
-    private _kyvernoService: KyvernoService,
+    private readonly _kyvernoService: KyvernoService,
     private readonly _notificationService: NotificationService,
     private readonly _projectService: ProjectService
   ) {}

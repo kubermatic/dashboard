@@ -12104,12 +12104,12 @@
     },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings": {
       "get": {
-        "description": "List all policy bindings, If query parameter `project_id` is set then the endpoint will return only the policy bindings that are associated with the project. Only available in Kubermatic Enterprise Edition",
+        "description": "List all policy bindings, Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "admin"
+          "project"
         ],
         "operationId": "listPolicyBinding",
         "parameters": [
@@ -12161,7 +12161,7 @@
           "application/json"
         ],
         "tags": [
-          "admin"
+          "project"
         ],
         "operationId": "createPolicyBinding",
         "parameters": [
@@ -12212,12 +12212,12 @@
     },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/policybindings/{binding_name}": {
       "get": {
-        "description": "Get policy binding, If query parameter `project_id` is set then the endpoint will return only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition",
+        "description": "Get policy binding, Only available in Kubermatic Enterprise Edition",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "admin"
+          "project"
         ],
         "operationId": "getPolicyBinding",
         "parameters": [
@@ -12265,9 +12265,9 @@
         }
       },
       "delete": {
-        "description": "Delete policy binding, If query parameter `project_id` is set then the endpoint will delete only the policy binding that are associated with the project. Only available in Kubermatic Enterprise Edition",
+        "description": "Delete policy binding, Only available in Kubermatic Enterprise Edition",
         "tags": [
-          "admin"
+          "project"
         ],
         "operationId": "deletePolicyBinding",
         "parameters": [
@@ -12320,7 +12320,7 @@
           "application/json"
         ],
         "tags": [
-          "admin"
+          "project"
         ],
         "operationId": "patchPolicyBinding",
         "parameters": [

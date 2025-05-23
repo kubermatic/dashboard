@@ -185,7 +185,6 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
         this.policiesWithBinding = this.policyTemplates.filter(template => !!this.policyBindings[template.name]);
         this.dataSource.data = this.policiesWithBinding;
         this.loadingTemplates = false;
-        this.loadingTemplates = false;
       });
   }
 
