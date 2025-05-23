@@ -35,6 +35,7 @@ type PolicyTemplateSpec struct {
 	//
 	// If true, this policy is mandatory
 	// A PolicyBinding referencing it cannot disable it
+	// +optional
 	Enforced bool `json:"enforced,omitempty"`
 
 	// NamespacedPolicy dictates the type of Kyverno resource to be created in this User Cluster.
