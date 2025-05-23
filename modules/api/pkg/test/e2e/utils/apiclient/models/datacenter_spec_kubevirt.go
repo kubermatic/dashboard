@@ -19,6 +19,9 @@ import (
 // swagger:model DatacenterSpecKubevirt
 type DatacenterSpecKubevirt struct {
 
+	// Optional: indicates if the ccm should create and manage the clusters load balancers.
+	CCMLoadBalancerEnabled bool `json:"ccmLoadBalancerEnabled,omitempty"`
+
 	// Optional: indicates if region and zone labels from the cloud provider should be fetched.
 	CCMZoneAndRegionEnabled bool `json:"ccmZoneAndRegionEnabled,omitempty"`
 

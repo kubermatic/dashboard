@@ -19,7 +19,7 @@ import (
 // swagger:model KubeLB
 type KubeLB struct {
 
-	// EnableGatewayAPI is used to configure the use of gateway API for kubeLB.
+	// EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KKP installs the Gateway API CRDs for the user cluster.
 	EnableGatewayAPI bool `json:"enableGatewayAPI,omitempty"`
 
 	// Controls whether kubeLB is deployed or not.

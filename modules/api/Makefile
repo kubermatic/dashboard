@@ -118,6 +118,7 @@ verify:
 .PHONY: update-kkp
 update-kkp:
 	go get -v k8c.io/kubermatic/v2@main
+	go get -v k8c.io/kubermatic/sdk/v2@main
 	go mod tidy
 
 .PHONY: fmt

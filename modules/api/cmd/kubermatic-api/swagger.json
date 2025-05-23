@@ -31594,6 +31594,11 @@
       "type": "object",
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
+        "ccmLoadBalancerEnabled": {
+          "description": "Optional: indicates if the ccm should create and manage the clusters load balancers.",
+          "type": "boolean",
+          "x-go-name": "CCMLoadBalancerEnabled"
+        },
         "ccmZoneAndRegionEnabled": {
           "description": "Optional: indicates if region and zone labels from the cloud provider should be fetched.",
           "type": "boolean",
@@ -35175,7 +35180,7 @@
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.",
+          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KKP installs the Gateway API CRDs for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -35209,7 +35214,7 @@
           "x-go-name": "DisableIngressClass"
         },
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.",
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.\nWhen this option is enabled for the user cluster, KKP installs the Gateway API CRDs for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -38980,7 +38985,7 @@
           "x-go-name": "Description"
         },
         "enforced": {
-          "description": "Enforced indicates whether this policy is mandatory\n\nIf true, this policy is mandatory\nA PolicyBinding referencing it cannot disable it",
+          "description": "Enforced indicates whether this policy is mandatory\n\nIf true, this policy is mandatory\nA PolicyBinding referencing it cannot disable it\n+optional",
           "type": "boolean",
           "x-go-name": "Enforced"
         },
