@@ -118,7 +118,8 @@ verify:
 .PHONY: update-kkp
 update-kkp:
 	go get -v k8c.io/kubermatic/v2@main
-	go mod tidy
+	go get -v k8c.io/kubermatic/sdk/v2@main
+	$(MAKE) update-codegen
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
@@ -131,7 +132,10 @@ vet: ## Run go vet against code.
 go-mod-tidy:
 	go mod tidy
 
-update-codegen: go-mod-tidy fmt
+go-mod-vendor:
+	go mod vendor
+
+update-codegen: go-mod-tidy go-mod-vendor fmt
 	./hack/update-codegen.sh
 	./hack/gen-api-client.sh
 	./hack/update-swagger.sh
