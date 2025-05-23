@@ -36060,29 +36060,12 @@
     },
     "KyvernoSettings": {
       "type": "object",
-      "title": "KyvernoPolicyNamespace specifies the namespace to deploy the Kyverno Policy into.",
+      "title": "KyvernoSettings contains settings for the Kyverno component as part of the cluster control plane. This component is responsible for policy management.",
       "properties": {
-        "annotations": {
-          "description": "Annotations to apply to this namespace.\n\n+optional",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Annotations"
-        },
-        "labels": {
-          "description": "Labels to apply to this namespace.\n\n+optional",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "x-go-name": "Labels"
-        },
-        "name": {
-          "description": "Name is the name of the namespace to deploy the Kyverno Policy into.",
-          "type": "string",
-          "pattern": "=`^(|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)`",
-          "x-go-name": "Name"
+        "enabled": {
+          "description": "Controls whether Kyverno is deployed or not.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"

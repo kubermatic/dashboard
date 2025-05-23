@@ -5,7 +5,6 @@ import {KyvernoService} from '@app/core/services/kyverno';
 import {NotificationService} from '@app/core/services/notification';
 import {PolicyBinding, PolicyBindingSpec, PolicyTemplate} from '@app/shared/entity/kyverno';
 import {Observable, Subject, takeUntil} from 'rxjs';
-import {AddPolicyTemplateDialogComponent} from '../../policy-template/add-template/component';
 
 export interface AddPolicyDialogConfig {
   projectID: string;
@@ -35,7 +34,7 @@ export class AddPolicyDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddPolicyDialogConfig,
-    private readonly _dialogRef: MatDialogRef<AddPolicyTemplateDialogComponent>,
+    private readonly _dialogRef: MatDialogRef<AddPolicyDialogComponent>,
     private readonly _builder: FormBuilder,
     private readonly _kyvernoService: KyvernoService,
     private readonly _notificationService: NotificationService

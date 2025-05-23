@@ -158,11 +158,16 @@ limitations under the License.
       </div>
 
       <div class="sub-menu-item"
+           *ngIf="isEnterpriseEdition"
            routerLinkActive="active">
-        <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
-           fxLayoutAlign=" center">
-          <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
-        </a>
+        <div fxLayoutAlign="flex-start center">
+          <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
+             fxLayoutAlign=" center">
+            <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
+          </a>
+          <span class="km-label-primary"
+                matTooltip="You're not a member of this project.">Beta</span>
+        </div>
       </div>
     </ng-container>
 

@@ -23,7 +23,11 @@ END OF TERMS AND CONDITIONS
 <mat-card appearance="outlined"
           class="km-card">
   <mat-card-header>
-    <mat-card-title>Policy Templates</mat-card-title>
+    <mat-card-title>Policy Templates
+      <span class="km-label-primary"
+            *ngIf="!projectID"
+            matTooltip="You're not a member of this project.">Beta</span>
+    </mat-card-title>
     <button mat-flat-button
             [color]="projectID ?  'primary' : 'quaternary'"
             (click)="addTemplate(mode.Add)"
