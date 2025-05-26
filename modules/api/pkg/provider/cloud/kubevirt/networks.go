@@ -18,6 +18,7 @@ package kubevirt
 
 import (
 	"context"
+	"fmt"
 
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/providernetworks/kubeovn"
 
@@ -56,7 +57,8 @@ func GetProviderNetworkSubnets(ctx context.Context, client ctrlruntimeclient.Cli
 
 	subnets := make([]string, 0, len(subs))
 	for _, subnet := range subs {
-		subnets = append(subnets, subnet.Name)
+		subnetName := fmt.Sprintf("%v (%v)", subnet.Name, subnet.CIDRBlock)
+		subnets = append(subnets, subnetName)
 	}
 
 	return subnets, nil
