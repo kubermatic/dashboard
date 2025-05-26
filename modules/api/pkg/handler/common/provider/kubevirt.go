@@ -198,6 +198,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 								if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
 									kvSubnet := apiv2.KubeVirtSubnet{
 										Name: subnet.Name,
+										CIDR: subnet.CIDR,
 									}
 
 									kvSubnets = append(kvSubnets, kvSubnet)
@@ -207,6 +208,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 					} else {
 						kvSubnet := apiv2.KubeVirtSubnet{
 							Name: subnet.Name,
+							CIDR: subnet.CIDR,
 						}
 
 						kvSubnets = append(kvSubnets, kvSubnet)

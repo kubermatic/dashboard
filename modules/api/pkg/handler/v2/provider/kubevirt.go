@@ -348,6 +348,7 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 									if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
 										kvSubnet := apiv2.KubeVirtSubnet{
 											Name: subnet.Name,
+											CIDR: subnet.CIDR,
 										}
 
 										kvSubnets = append(kvSubnets, kvSubnet)
@@ -357,6 +358,7 @@ func KubeVirtSubnetsEndpoint(presetsProvider provider.PresetProvider, userInfoGe
 						} else {
 							kvSubnet := apiv2.KubeVirtSubnet{
 								Name: subnet.Name,
+								CIDR: subnet.CIDR,
 							}
 
 							kvSubnets = append(kvSubnets, kvSubnet)
