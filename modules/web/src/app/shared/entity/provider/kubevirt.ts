@@ -93,6 +93,7 @@ export class KubeVirtVPC {
 
 export class KubeVirtSubnet {
   name: string;
+  cidr: string;
 }
 
 export class KubeVirtTopologySpreadConstraint {

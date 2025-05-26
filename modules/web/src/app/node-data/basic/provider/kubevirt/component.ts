@@ -324,6 +324,10 @@ export class KubeVirtBasicNodeDataComponent
     return this._preferences?.preferences?.[group] || [];
   }
 
+  getSubnetOptionName(subnet: KubeVirtSubnet): string {
+    return subnet.name !== '' ? subnet.name + ' (' + subnet.cidr + ')' : subnet.name;
+  }
+
   preferenceDisplayName(preferenceId: string): string {
     if (preferenceId) {
       // only display name of selected preference

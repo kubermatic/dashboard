@@ -119,7 +119,7 @@ limitations under the License.
                (changed)="onSubnetChange($event)"
                inputLabel="Select Subnet..."
                filterBy="name">
-    <div *option="let subnet">{{subnet.name}}</div>
+    <div *option="let subnet">{{getSubnetOptionName(subnet)}}</div>
   </km-combobox>
 
   <mat-card-header class="km-no-padding">
