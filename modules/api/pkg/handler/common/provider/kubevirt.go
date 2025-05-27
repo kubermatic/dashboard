@@ -468,16 +468,7 @@ func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) 
 		return nil, err
 	}
 
-	subnets, err := kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
-	if err != nil {
-		return nil, err
-	}
-
-	var subnetAPIList apiv2.KubeVirtSubnetList
-	for _, subnet := range subnets {
-		subnetAPIList = append(subnetAPIList, apiv2.KubeVirtSubnet{Name: subnet})
-	}
-	return subnetAPIList, nil
+	return kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
 }
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {
