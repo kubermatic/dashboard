@@ -31,7 +31,12 @@ export enum Group {
 
 export class MemberUtils {
   static getGroupInProject(member: Member, projectID: string): string {
-    if (!member?.projects) return '';
+    if (!member?.projects) {
+      if (member.isGlobalViewer) {
+        return Group.Viewer;
+      }
+      return '';
+    }
 
     const priority = [Group.Owner, Group.ProjectManager, Group.Editor, Group.Viewer];
 
