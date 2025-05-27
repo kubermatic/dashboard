@@ -324,8 +324,18 @@ export class KubeVirtBasicNodeDataComponent
     return this._preferences?.preferences?.[group] || [];
   }
 
-  getSubnetOptionName(subnet: KubeVirtSubnet): string {
-    return subnet.name !== '' ? subnet.name + ' (' + subnet.cidr + ')' : subnet.name;
+  getSubnetOptionName(subnetName: string): string {
+    const subnet = this.subnets.find(subnet => subnet.name === subnetName);
+    if (!subnet) {
+      return subnetName;
+    }
+
+    let result = `${subnet.name}`;
+    if (subnet.cidr) {
+      result = `${result} (${subnet.cidr})`;
+    }
+
+    return `${result}`;
   }
 
   preferenceDisplayName(preferenceId: string): string {
