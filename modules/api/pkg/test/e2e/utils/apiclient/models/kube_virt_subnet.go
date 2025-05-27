@@ -17,6 +17,9 @@ import (
 // swagger:model KubeVirtSubnet
 type KubeVirtSubnet struct {
 
+	// c ID r
+	CIDR string `json:"cidr,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 }

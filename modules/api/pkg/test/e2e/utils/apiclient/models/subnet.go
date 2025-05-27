@@ -17,6 +17,9 @@ import (
 // swagger:model Subnet
 type Subnet struct {
 
+	// CIDR is the subnet IPV4 CIDR.
+	CIDR string `json:"cidr,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 
