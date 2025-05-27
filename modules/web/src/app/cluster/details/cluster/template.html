@@ -14,13 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card *ngIf="cluster?.spec?.opaIntegration?.enabled">
+<mat-card *ngIf="cluster?.spec?.opaIntegration?.enabled || nodeDc?.spec?.provider === nodeProvider.EQUINIX"
+          class="warning-card">
   <mat-card-content>
-    <div fxLayout="row"
-         fxLayoutAlign=" center"
-         class="warning-container">
+    <div *ngIf="cluster?.spec?.opaIntegration?.enabled"
+         fxLayout="row"
+         fxLayoutAlign=" center">
       <i class="km-icon-warning"></i>
-      <div>OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be removed in the future, Kyverno has replaced it as an Enterprise Edition feature for policy management.</div>
+      <div>OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be <strong>removed in the future</strong>, Kyverno has replaced it as an Enterprise Edition feature for policy management.</div>
+    </div>
+    <div *ngIf="nodeDc?.spec?.provider === nodeProvider.EQUINIX"
+         fxLayout="row"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>
+        Equinix Metal has been deprecated in KKP 2.28 and will be <strong>removed in KKP 2.29</strong>. Please plan your migration to a supported provider as soon as possible to ensure continued service. This change is due to Equinix's
+        announcement to discontinue Equinix Metal service by June 2026. For more information, please refer to the
+        <a href="https://deploy.equinix.com/blog/sunsetting-equinix-metal"
+           target="_blank"
+           rel="noopener noreferrer">official Equinix Metal Sunset Announcement</a>.
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

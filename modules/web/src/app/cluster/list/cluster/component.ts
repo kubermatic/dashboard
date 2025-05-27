@@ -48,6 +48,7 @@ import {EMPTY, Subject, combineLatest, iif, of, onErrorResumeNext} from 'rxjs';
 import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
+import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 
 enum Column {
   Status = 'status',
@@ -85,6 +86,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   health: Health[] = [];
   machinesCount: Record<string, MachineDeploymentStatus> = {};
   dataSource = new MatTableDataSource<Cluster>();
+  nodeProvider = NodeProvider;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
