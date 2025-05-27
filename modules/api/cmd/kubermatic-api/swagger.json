@@ -35745,6 +35745,10 @@
       "type": "object",
       "title": "KubeVirtSubnet represents a KubeVirt Subnet.",
       "properties": {
+        "cidr": {
+          "type": "string",
+          "x-go-name": "CIDR"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -40765,6 +40769,11 @@
       "type": "object",
       "title": "Subnet a smaller, segmented portion of a larger network, like a Virtual Private Cloud (VPC).",
       "properties": {
+        "cidr": {
+          "description": "CIDR is the subnet IPV4 CIDR.",
+          "type": "string",
+          "x-go-name": "CIDR"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
