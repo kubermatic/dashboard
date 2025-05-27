@@ -76,6 +76,11 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!globalViewers?.length && !isLoading">
+      No global viewers available.
+    </div>
+
     <ng-container *ngIf="isLoading">
       <div class="km-row">
         <mat-spinner color="accent"
