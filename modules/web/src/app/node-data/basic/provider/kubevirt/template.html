@@ -117,9 +117,10 @@ limitations under the License.
                hint="Use specific subnet for the machines. VPC needs to be selected first to use this option."
                [required]="isSubnetsRequired"
                (changed)="onSubnetChange($event)"
+               [valueFormatter]="getSubnetOptionName.bind(this)"
                inputLabel="Select Subnet..."
                filterBy="name">
-    <div *option="let subnet">{{subnet.name}}</div>
+    <div *option="let subnet">{{getSubnetOptionName(subnet.name)}}</div>
   </km-combobox>
 
   <mat-card-header class="km-no-padding">

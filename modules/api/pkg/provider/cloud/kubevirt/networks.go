@@ -19,6 +19,7 @@ package kubevirt
 import (
 	"context"
 
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/providernetworks/kubeovn"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -43,7 +44,7 @@ func GetProviderNetworkVPCs(ctx context.Context, client ctrlruntimeclient.Client
 	return vpcNames, nil
 }
 
-func GetProviderNetworkSubnets(ctx context.Context, client ctrlruntimeclient.Client, vpcName string) ([]string, error) {
+func GetProviderNetworkSubnets(ctx context.Context, client ctrlruntimeclient.Client, vpcName string) (apiv2.KubeVirtSubnetList, error) {
 	ovnProvider, err := kubeovn.New(client)
 	if err != nil {
 		return nil, nil
@@ -54,10 +55,10 @@ func GetProviderNetworkSubnets(ctx context.Context, client ctrlruntimeclient.Cli
 		return nil, err
 	}
 
-	subnets := make([]string, 0, len(subs))
+	var subnetAPIList apiv2.KubeVirtSubnetList
 	for _, subnet := range subs {
-		subnets = append(subnets, subnet.Name)
+		subnetAPIList = append(subnetAPIList, apiv2.KubeVirtSubnet{Name: subnet.Name, CIDR: subnet.CIDRBlock})
 	}
 
-	return subnets, nil
+	return subnetAPIList, nil
 }

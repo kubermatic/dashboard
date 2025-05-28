@@ -198,6 +198,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 								if scRegions.HasAll(subnet.Regions...) && scZones.HasAll(subnet.Zones...) {
 									kvSubnet := apiv2.KubeVirtSubnet{
 										Name: subnet.Name,
+										CIDR: subnet.CIDR,
 									}
 
 									kvSubnets = append(kvSubnets, kvSubnet)
@@ -207,6 +208,7 @@ func KubeVirtSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfo
 					} else {
 						kvSubnet := apiv2.KubeVirtSubnet{
 							Name: subnet.Name,
+							CIDR: subnet.CIDR,
 						}
 
 						kvSubnets = append(kvSubnets, kvSubnet)
@@ -466,16 +468,7 @@ func KubeVirtVPCSubnets(ctx context.Context, kubeconfig string, vpcName string) 
 		return nil, err
 	}
 
-	subnets, err := kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
-	if err != nil {
-		return nil, err
-	}
-
-	var subnetAPIList apiv2.KubeVirtSubnetList
-	for _, subnet := range subnets {
-		subnetAPIList = append(subnetAPIList, apiv2.KubeVirtSubnet{Name: subnet})
-	}
-	return subnetAPIList, nil
+	return kubevirt.GetProviderNetworkSubnets(ctx, client, vpcName)
 }
 
 func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {

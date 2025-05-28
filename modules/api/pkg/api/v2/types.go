@@ -1758,6 +1758,7 @@ type KubeVirtVPCList []KubeVirtVPC
 // swagger:model KubeVirtSubnet
 type KubeVirtSubnet struct {
 	Name string `json:"name"`
+	CIDR string `json:"cidr"`
 }
 
 // KubeVirtSubnetList represents an array of KubeVirt Subnets.
