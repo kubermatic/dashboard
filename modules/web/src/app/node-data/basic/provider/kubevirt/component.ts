@@ -304,7 +304,7 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   get isSubnetsRequired(): boolean {
-    return !!this._clusterSpecService.cluster?.spec?.cloud?.kubevirt?.vpcName;
+    return !!this._clusterSpecService.cluster?.spec?.cloud?.kubevirt?.vpcName || this.subnets?.length > 0;
   }
 
   getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
