@@ -603,7 +603,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: this._builder.control(clusterSpec?.auditLogging?.enabled ?? false),
       [Controls.AuditWebhookBackend]: this._builder.control(clusterSpec?.auditLogging?.webhookBackend || false),
       [Controls.AuditPolicyPreset]: this._builder.control(clusterSpec?.auditLogging?.policyPreset ?? ''),
-      [Controls.UserSSHKeyAgent]: this._builder.control(clusterSpec?.enableUserSSHKeyAgent ?? true),
+      [Controls.UserSSHKeyAgent]: this._builder.control(
+        this.isUserSshKeyEnabled ? (clusterSpec?.enableUserSSHKeyAgent ?? true) : false
+      ),
       [Controls.ClusterBackup]: this._builder.control(clusterSpec?.backupConfig || false),
       [Controls.OPAIntegration]: this._builder.control(clusterSpec?.opaIntegration?.enabled ?? false),
       [Controls.KyvernoIntegration]: this._builder.control(clusterSpec?.kyverno?.enabled ?? false),
@@ -704,7 +706,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.AuditPolicyPreset]:
             clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
           [Controls.AuditWebhookBackend]: !!clusterSpec?.auditLogging?.webhookBackend,
-          [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
+          [Controls.UserSSHKeyAgent]:
+            this.isUserSshKeyEnabled && clusterSpec?.enableUserSSHKeyAgent
+              ? true
+              : this.controlValue(Controls.UserSSHKeyAgent),
           [Controls.ClusterBackup]: clusterSpec.backupConfig || false,
           [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
           [Controls.KyvernoIntegration]:
