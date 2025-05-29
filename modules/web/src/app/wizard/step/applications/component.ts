@@ -156,6 +156,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     const applicationInstallation: Application = {
       name: appDef.name,
       namespace: this._applicationSettings?.defaultNamespace || appDef.name,
+      labels: appDef.labels ? {...appDef.labels} : {},
       spec: {
         applicationRef: {
           name: appDef.name,
@@ -184,6 +185,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
       annotations.set(ApplicationAnnotations.Enforce, 'true');
     }
     applicationInstallation.annotations = Object.fromEntries(annotations);
+
     return applicationInstallation;
   }
 
