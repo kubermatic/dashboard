@@ -62,6 +62,7 @@ export class GroupConfig {
   rbac?: RBAC;
   backups?: Backups;
   clusterbackups?: ClusterBackupsConfig;
+  kyvernoPolicies?: KyvernoPoliciesConfig;
 }
 
 export class Projects implements Viewable {
@@ -147,6 +148,12 @@ export class ClusterBackupsConfig implements Viewable {
   delete?: boolean;
 }
 
+export class KyvernoPoliciesConfig implements Viewable {
+  view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
 export enum OIDCProviders {
   Keycloak = 'keycloak',
 }

@@ -77,6 +77,12 @@
       "edit": true,
       "create": true,
       "delete": true
+    },
+    "kyvernoPolicies": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
     }
   },
   "editors": {
@@ -157,6 +163,12 @@
       "edit": true,
       "create": true,
       "delete": true
+    },
+    "kyvernoPolicies": {
+      "view": true,
+      "edit": false,
+      "create": false,
+      "delete": false
     }
   },
   "viewers": {
@@ -233,6 +245,12 @@
       "delete": false
     },
     "clusterbackups": {
+      "view": true,
+      "edit": false,
+      "create": false,
+      "delete": false
+    },
+    "kyvernoPolicies": {
       "view": true,
       "edit": false,
       "create": false,
