@@ -56,7 +56,7 @@ enum Controls {
 export class ProviderStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   providers: NodeProvider[] = [];
   datacenters: Datacenter[] = [];
-
+  nodeProvider = NodeProvider;
   readonly controls = Controls;
 
   constructor(

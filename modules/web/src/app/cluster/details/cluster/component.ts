@@ -79,6 +79,7 @@ import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {FeatureGateService} from '@app/core/services/feature-gate';
+import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 
 @Component({
   selector: 'km-cluster-details',
@@ -128,6 +129,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   onExpandChange$ = new EventEmitter<boolean>();
   isDualStackNetworkSelected: boolean;
   isUserSshKeyEnabled = false;
+  nodeProvider = NodeProvider;
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);

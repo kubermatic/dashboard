@@ -22,6 +22,7 @@ import {
   AddClusterFromTemplateDialogComponent,
   AddClusterFromTemplateDialogData,
 } from '@app/shared/components/add-cluster-from-template-dialog/component';
+import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {WizardMode} from '@app/wizard/types/wizard-mode';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
@@ -60,6 +61,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   projectViewOnlyToolTip =
     'You do not have permission to perform this action. Contact the project owner to change your membership role';
   clusterTemplateFragment = this._route.snapshot.fragment;
+  nodeProvider = NodeProvider;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

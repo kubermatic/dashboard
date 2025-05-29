@@ -36,7 +36,19 @@ limitations under the License.
       </mat-button-toggle>
     </mat-button-toggle-group>
   </ng-container>
-
+  <div *ngIf="form.get(controls.Provider).value === nodeProvider.EQUINIX"
+       class="warning-card"
+       fxLayout="row"
+       fxLayoutAlign=" center">
+    <i class="km-icon-warning"></i>
+    <div>
+      Equinix Metal has been deprecated in KKP 2.28 and will be <strong>removed in KKP 2.29</strong>. Please plan your migration to a supported provider as soon as possible to ensure continued service. This change is due to Equinix's
+      announcement to discontinue Equinix Metal service by June 2026. For more information, please refer to the
+      <a href="https://deploy.equinix.com/blog/sunsetting-equinix-metal"
+         target="_blank"
+         rel="noopener noreferrer">official Equinix Metal Sunset Announcement</a>.
+    </div>
+  </div>
   <ng-container *ngIf="datacenters.length > 0">
     <mat-card-header class="km-no-padding">
       <mat-card-title class="km-color-primary">Datacenter</mat-card-title>

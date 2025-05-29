@@ -13,6 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
+<mat-card *ngIf="equinixDeprecatedWarning"
+          class="warning-card">
+  <mat-card-content>
+    <div fxLayout="row"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>
+        Equinix Metal has been deprecated in KKP 2.28 and will be <strong>removed in KKP 2.29</strong>. Please plan your migration to a supported provider as soon as possible to ensure continued service. This change is due to Equinix's
+        announcement to discontinue Equinix Metal service by June 2026. For more information, please refer to the
+        <a href="https://deploy.equinix.com/blog/sunsetting-equinix-metal"
+           target="_blank"
+           rel="noopener noreferrer">official Equinix Metal Sunset Announcement</a>.
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 <ng-container *ngIf="isLoadingDetails">
   <mat-spinner color="accent"
                class="km-spinner km-with-spacing"
