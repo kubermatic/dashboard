@@ -173,7 +173,7 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(templates => {
         this.policyTemplates = templates.filter(template => {
-          if (_.isEmpty(template.spec.target.clusterSelector)) {
+          if (_.isEmpty(template.spec?.target?.clusterSelector)) {
             return true;
           }
           const labelKeys: string[] = Object.keys(template.spec.target.clusterSelector.matchLabels);

@@ -74,6 +74,7 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		APIServerAllowedIPRanges:             apiCluster.Spec.APIServerAllowedIPRanges,
 		KubeLB:                               apiCluster.Spec.KubeLB,
 		DisableCSIDriver:                     apiCluster.Spec.DisableCSIDriver,
+		Kyverno:                              apiCluster.Spec.Kyverno,
 	}
 
 	if apiCluster.Spec.ClusterNetwork != nil {
