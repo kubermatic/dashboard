@@ -15,7 +15,6 @@
 export enum Scopes {
   Global = 'Global',
   Project = 'Project',
-  Cluster = 'Cluster',
 }
 
 export class PolicyTemplate {
@@ -27,14 +26,21 @@ export class PolicyTemplateSpec {
   title: string;
   description: string;
   category?: string;
-  severity?: string;
-  visibility: 'Global' | 'Project' | 'Cluster';
+  severity?: PolicySeverity;
+  visibility: 'Global' | 'Project';
   projectID?: string;
   default?: boolean;
   enforced: boolean;
   namespacedPolicy?: boolean;
   target: PolicyTemplateTarget;
   policySpec: object;
+}
+
+export enum PolicySeverity {
+  Low = 'low',
+  Medium = 'medium',
+  High = 'high',
+  Critical = 'critical',
 }
 
 export class PolicyTemplateTarget {

@@ -21,7 +21,13 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {PolicyTemplate, PolicyTemplateSpec, PolicyTemplateTarget, Scopes} from '@app/shared/entity/kyverno';
+import {
+  PolicySeverity,
+  PolicyTemplate,
+  PolicyTemplateSpec,
+  PolicyTemplateTarget,
+  Scopes,
+} from '@app/shared/entity/kyverno';
 import {DialogActionMode} from '@app/shared/types/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {Observable, Subject, take} from 'rxjs';
@@ -62,6 +68,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   scopes = Scopes;
   scopesArray = Object.values(Scopes);
+  severityOptions = Object.values(PolicySeverity);
   form: FormGroup;
   policySpec = '';
   isYamlEditorValid = true;
@@ -106,6 +113,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       this.form.get(Controls.Project).setValue(this._config.projectID);
       this.form.get(Controls.Project).disable();
       this.form.get(Controls.Scope).setValue(Scopes.Project);
+      this.form.get(Controls.Scope).disable();
     }
   }
 
@@ -122,7 +130,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   }
 
   onNext(template: PolicyTemplate): void {
-    this._dialogRef.close();
+    this._dialogRef.close(template);
     this._notificationService.success(
       `${this._config.mode === DialogActionMode.Edit ? 'Updated' : 'Created'} policy template ${template.name}`
     );

@@ -232,7 +232,9 @@ limitations under the License.
       <mat-checkbox *ngIf="isEnterpriseEdition"
                     [formControlName]="Controls.KyvernoIntegration"
                     kmValueChangedIndicator>
-        Kyverno Integration
+        Kyverno Policy Management
+        <i class="km-icon-info km-pointer"
+           matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
       </mat-checkbox>
 
       <mat-checkbox [formControlName]="Controls.MLALogging"
