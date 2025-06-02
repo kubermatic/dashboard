@@ -121,5 +121,9 @@ td .km-application-logo {
       font-size: variables.$font-size-subhead;
       margin-top: 15px;
     }
+
+    .km-label-primary {
+      max-width: max-content;
+    }
   }
 }
