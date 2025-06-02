@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -74,7 +84,7 @@ enum Column {
   styleUrls: ['style.scss'],
   standalone: false,
 })
-export class ApplicationListComponent implements OnInit, OnDestroy {
+export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() applications: Application[] = [];
   @Input() cluster: Cluster;
   @Input() projectID: string;
@@ -187,6 +197,28 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
     return this.isEnforcedApplication(application) ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-edit';
   }
 
+  getApplicationType(application: Application): string {
+    if (this.isSystemApplication(application)) {
+      return 'System';
+    } else if (this.isDefaultedApplication(application)) {
+      return 'Default';
+    } else if (this.isEnforcedApplication(application)) {
+      return 'Enforced';
+    }
+    return '';
+  }
+
+  getApplicationTypeDescription(application: Application): string {
+    if (this.isSystemApplication(application)) {
+      return 'This is a system application managed by KKP.';
+    } else if (this.isDefaultedApplication(application)) {
+      return 'This application is automatically installed by default.';
+    } else if (this.isEnforcedApplication(application)) {
+      return 'This application is automatically installed and cannot be updated or deleted.';
+    }
+    return '';
+  }
+
   isSystemApplication(application: Application): boolean {
     return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
@@ -288,7 +320,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   private get _visibleApplications(): Application[] {
     let filteredApplications = this.applications || [];
-    if (!this.showSystemApplications) {
+    if (!this.showSystemApplications && this.view === ApplicationsListView.Default) {
       filteredApplications = filteredApplications.filter(application => !this.isSystemApplication(application));
     }
     return filteredApplications;

@@ -83,8 +83,6 @@ limitations under the License.
                           fxLayoutAlign=" center"
                           fxLayoutGap="5px">
             <span>{{getApplicationName(application.name)}}</span>
-            <span *ngIf="isSystemApplication(application)"
-                  class="km-label-primary">System</span>
           </mat-card-title>
           <div *ngIf="view !== ApplicationListView.Summary"
                fxFlex
@@ -134,20 +132,15 @@ limitations under the License.
                  matTooltip="Application Resources Namespace"></i>
               <span>{{application.spec.namespace.name}}</span>
             </div>
-            <div *ngIf="isDefaultedApplication(application) || isEnforcedApplication(application)"
+            <div *ngIf="getApplicationType(application) as applicationType"
                  fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
               <i class="km-icon-mask km-icon-default km-icon-warning-event"
                  matTooltip="Application Type"></i>
-              <span [matTooltip]="
-                  isEnforcedApplication(application)
-                    ? 'This application is automatically installed and cannot be updated or deleted.'
-                    : isDefaultedApplication(application)
-                    ? 'This application is automatically installed by default.'
-                    : ''">
-                {{ isEnforcedApplication(application) ? 'Enforced Application' : isDefaultedApplication(application) ?
-                'Default Application' : '' }}
+              <span class="km-label-primary"
+                    [matTooltip]="getApplicationTypeDescription(application)">
+                {{ applicationType }}
               </span>
             </div>
           </div>
@@ -194,8 +187,9 @@ limitations under the License.
             *matCellDef="let element"
             [attr.id]="'km-application-name-' + element.name">
           {{element.name}}
-          <span *ngIf="isSystemApplication(element)"
-                class="km-label-primary">System</span>
+          <span *ngIf="getApplicationType(element) as applicationType"
+                class="km-label-primary"
+                [matTooltip]="getApplicationTypeDescription(element)">{{applicationType}}</span>
         </td>
       </ng-container>
 

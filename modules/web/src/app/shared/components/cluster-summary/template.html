@@ -232,7 +232,7 @@ limitations under the License.
                                  [value]="cluster.spec.opaIntegration?.enabled">
             </km-property-boolean>
 
-            <km-property-boolean *ngIf="cluster.spec.kyverno.enabled"
+            <km-property-boolean *ngIf="cluster.spec.kyverno?.enabled"
                                  label="Kyverno Policy Management"
                                  [value]="cluster.spec.kyverno.enabled">
             </km-property-boolean>
