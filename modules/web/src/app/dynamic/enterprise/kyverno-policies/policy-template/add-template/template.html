@@ -60,15 +60,17 @@ END OF TERMS AND CONDITIONS
     </mat-form-field>
     <mat-form-field>
       <mat-label>Severity</mat-label>
-      <input [formControlName]="controls.Severity"
-             matInput>
+      <mat-select [formControlName]="controls.Severity">
+        <mat-option *ngFor="let severity of severityOptions"
+                    [value]="severity">{{severity}}</mat-option>
+      </mat-select>
       <mat-hint>Indicates the severity level of the policy</mat-hint>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Category</mat-label>
       <input [formControlName]="controls.Category"
              matInput>
-      <mat-hint>The category of the policy</mat-hint>
+      <mat-hint>Indicates the category this policy belongs to</mat-hint>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Scopes</mat-label>
@@ -76,7 +78,9 @@ END OF TERMS AND CONDITIONS
         <mat-option *ngFor="let scope of scopesArray"
                     [value]="scope">{{scope}}</mat-option>
       </mat-select>
-      <mat-hint>Scope specifies the scope of the policy</mat-hint>
+      <mat-hint>Defines who is allowed to manage the template<i class="km-icon-info km-pointer"
+           matTooltip="Global is managed by admins; project can be managed by admins and project owners."></i>
+      </mat-hint>
       <mat-error *ngIf="form.get(controls.Scope).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -89,10 +93,14 @@ END OF TERMS AND CONDITIONS
       </mat-select>
       <mat-hint>The project for which the policy template is created</mat-hint>
     </mat-form-field>
-    <mat-checkbox [formControlName]="controls.Default">Create Policy Binding
+    <mat-checkbox [formControlName]="controls.Default">Default Policy
     </mat-checkbox>
-    <mat-checkbox [formControlName]="controls.Enforced">Enforce Enable Binding
+    <i class="km-icon-info km-pointer"
+       matTooltip="Create a policy from this template upon creation."></i>
+    <mat-checkbox [formControlName]="controls.Enforced">Enforce Policy
     </mat-checkbox>
+    <i class="km-icon-info km-pointer"
+       matTooltip="Creates a policy from this template upon creation that users can't delete."></i>
     <mat-checkbox [formControlName]="controls.NamespacedPolicy">Namespaced Policy
     </mat-checkbox>
     <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
@@ -106,8 +114,10 @@ END OF TERMS AND CONDITIONS
                    [formControlName]="controls.ClusterSelector"></km-label-form>
     <km-editor [(model)]="policySpec"
                height="370px"
-               header="values.yaml">
+               header="policySpec*">
     </km-editor>
+    <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint><br />
+
     <km-validate-json-or-yaml [data]="policySpec"
                               [isOnlyYAML]="true"
                               (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>

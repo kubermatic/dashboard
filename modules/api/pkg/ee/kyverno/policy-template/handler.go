@@ -90,7 +90,6 @@ type deletePolicyTemplateReq struct {
 const (
 	globalVisibility  = "Global"
 	projectVisibility = "Project"
-	clusterVisibility = "Cluster"
 )
 
 func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, projectProvider provider.PrivilegedProjectProvider, provider provider.PolicyTemplateProvider) (interface{}, error) {

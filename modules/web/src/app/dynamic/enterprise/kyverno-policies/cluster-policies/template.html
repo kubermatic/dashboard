@@ -98,10 +98,10 @@ END OF TERMS AND CONDITIONS
         *matRowDef="let row; columns: columns;"></tr>
   </table>
   <div class="km-row km-empty-list-msg"
-       *ngIf="!policyTemplates.length && !loadingTemplates">No policy templates are available</div>
+       *ngIf="!policiesWithBinding.length && !loadingTemplates">No policy templates are available</div>
 
   <div class="km-row"
-       *ngIf="loadingTemplates && policyTemplates.length">
+       *ngIf="loadingTemplates && policiesWithBinding.length">
     <mat-spinner color="accent"
                  class="km-spinner km-with-spacing"
                  [diameter]="25"></mat-spinner>

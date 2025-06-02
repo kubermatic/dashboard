@@ -26,7 +26,7 @@ END OF TERMS AND CONDITIONS
     <mat-card-title>Policy Templates
       <span class="km-label-primary"
             *ngIf="!projectID"
-            matTooltip="You're not a member of this project.">Experimental</span>
+            matTooltip="Early access feature - still under development.">Experimental</span>
     </mat-card-title>
     <button mat-flat-button
             [color]="projectID ?  'primary' : 'quaternary'"
@@ -57,7 +57,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-15">
           Default
           <div class="km-icon-info km-pointer tooltip"
-               matTooltip="Default templates will create a policybinding"></div>
+               matTooltip="Create a policy from this template."></div>
         </th>
         <td mat-cell
             *matCellDef="let element">
@@ -73,7 +73,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-15">
           Enforce
           <div class="km-icon-info km-pointer tooltip"
-               matTooltip="if enforced, Policy Binding referencing it cannot disable it."></div>
+               matTooltip="Creates a policy from this template that users can't delete."></div>
         </th>
         <td mat-cell
             *matCellDef="let element">

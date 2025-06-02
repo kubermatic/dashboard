@@ -512,7 +512,9 @@ limitations under the License.
 
             <mat-checkbox *ngIf="isEnterpriseEdition"
                           [formControlName]="Controls.KyvernoIntegration">
-              Kyverno Integration
+              Kyverno Policy Management
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Enable to deploy Kyverno for this User Cluster"></i>
             </mat-checkbox>
 
             <ng-container *ngIf="isMLAEnabled">
