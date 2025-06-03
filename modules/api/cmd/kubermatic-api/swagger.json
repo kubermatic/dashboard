@@ -31019,6 +31019,11 @@
       "type": "object",
       "title": "DatacenterSpecKubevirt describes a kubevirt datacenter.",
       "properties": {
+        "ccmLoadBalancerEnabled": {
+          "description": "Optional: indicates if the ccm should create and manage the clusters load balancers.",
+          "type": "boolean",
+          "x-go-name": "CCMLoadBalancerEnabled"
+        },
         "ccmZoneAndRegionEnabled": {
           "description": "Optional: indicates if region and zone labels from the cloud provider should be fetched.",
           "type": "boolean",
