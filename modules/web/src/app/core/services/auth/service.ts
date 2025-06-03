@@ -190,10 +190,8 @@ export class Auth {
   }
 
   private _deleteToken(): void {
-    if (this._cookieService.check(this._cookie.token)) {
-      this._cookieService.delete(this._cookie.token);
-      return;
-    }
+    this._cookieService.delete(this._cookie.token, '/');
+    this._tokenService.token = null;
     let count = 1;
     let tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
     while (tokenPart) {
@@ -201,7 +199,6 @@ export class Auth {
       count++;
       tokenPart = this._cookieService.get(`${this._cookie.tokenPrefix}${count}`);
     }
-    this._tokenService.token = null;
   }
 
   private _getTokenFromQuery(): string {
