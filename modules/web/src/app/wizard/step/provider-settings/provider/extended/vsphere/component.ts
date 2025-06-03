@@ -283,9 +283,10 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   hasRequiredCredentials(): boolean {
     return (
-      (!!this._clusterSpecService.cluster.spec.cloud.vsphere &&
-        !!this._clusterSpecService.cluster.spec.cloud.vsphere.username &&
-        !!this._clusterSpecService.cluster.spec.cloud.vsphere.password) ||
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere?.username &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere?.password) ||
+      (!!this._clusterSpecService.cluster.spec.cloud.vsphere?.infraManagementUser?.username &&
+        !!this._clusterSpecService.cluster.spec.cloud.vsphere?.infraManagementUser?.password) ||
       (!!this._clusterSpecService.cluster.spec.cloud.vsphere && !!this._presets.preset)
     );
   }
@@ -297,8 +298,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   private _handleClusterChange(cluster: Cluster): void {
     let markAsChanged = false;
-    const username = cluster.spec.cloud.vsphere.username;
-    const password = cluster.spec.cloud.vsphere.password;
+    const username = cluster.spec.cloud.vsphere.infraManagementUser?.username || cluster.spec.cloud.vsphere.username;
+    const password = cluster.spec.cloud.vsphere.infraManagementUser?.password || cluster.spec.cloud.vsphere.password;
 
     if (username !== this._username) {
       this._username = username;
@@ -351,8 +352,14 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _networkListObservable(): Observable<VSphereNetwork[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
       .datacenter(this._clusterSpecService.datacenter)
       .networks(this._onNetworksLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
@@ -380,8 +387,14 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _folderListObservable(): Observable<VSphereFolder[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
       .datacenter(this._clusterSpecService.datacenter)
       .folders(this._onFoldersLoading.bind(this))
       .pipe(
@@ -395,8 +408,14 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _tagCategoryListObservable(): Observable<VSphereTagCategory[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
       .credential(this._presets.preset)
       .datacenter(this._clusterSpecService.datacenter)
       .tagCategories(this._onTagCategoryLoading.bind(this))
@@ -436,8 +455,14 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
   private _datastoresObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.VSPHERE)
-      .username(this._clusterSpecService.cluster.spec.cloud.vsphere.username)
-      .password(this._clusterSpecService.cluster.spec.cloud.vsphere.password)
+      .username(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.username ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.username
+      )
+      .password(
+        this._clusterSpecService.cluster.spec.cloud.vsphere.infraManagementUser?.password ||
+          this._clusterSpecService.cluster.spec.cloud.vsphere.password
+      )
       .datacenter(this._clusterSpecService.datacenter)
       .datastores(() => this._setIsLoadingDatastores(true))
       .pipe(

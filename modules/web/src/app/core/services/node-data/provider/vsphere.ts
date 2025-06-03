@@ -52,8 +52,12 @@ export class NodeDataVSphereProvider {
             switchMap(cluster =>
               this._presetService
                 .provider(NodeProvider.VSPHERE)
-                .username(cluster.spec.cloud.vsphere.username)
-                .password(cluster.spec.cloud.vsphere.password)
+                .username(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.username || cluster.spec.cloud.vsphere.username
+                )
+                .password(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.password || cluster.spec.cloud.vsphere.password
+                )
                 .credential(this._presetService.preset)
                 .datacenter(this._clusterSpecService.datacenter)
                 .tagCategories(onLoadingCb)
@@ -104,8 +108,12 @@ export class NodeDataVSphereProvider {
             switchMap(cluster =>
               this._presetService
                 .provider(NodeProvider.VSPHERE)
-                .username(cluster.spec.cloud.vsphere.username)
-                .password(cluster.spec.cloud.vsphere.password)
+                .username(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.username || cluster.spec.cloud.vsphere.username
+                )
+                .password(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.password || cluster.spec.cloud.vsphere.password
+                )
                 .credential(this._presetService.preset)
                 .datacenter(this._clusterSpecService.datacenter)
                 .tags(category, onLoadingCb)
@@ -153,8 +161,12 @@ export class NodeDataVSphereProvider {
             switchMap(cluster =>
               this._presetService
                 .provider(NodeProvider.VSPHERE)
-                .username(cluster.spec.cloud.vsphere.username)
-                .password(cluster.spec.cloud.vsphere.password)
+                .username(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.username || cluster.spec.cloud.vsphere.username
+                )
+                .password(
+                  cluster.spec.cloud.vsphere.infraManagementUser?.password || cluster.spec.cloud.vsphere.password
+                )
                 .credential(this._presetService.preset)
                 .datacenter(this._clusterSpecService.datacenter)
                 .vmGroups(onLoadingCb)
