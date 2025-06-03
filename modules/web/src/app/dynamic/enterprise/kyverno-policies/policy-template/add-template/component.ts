@@ -34,8 +34,8 @@ import {Observable, Subject, take} from 'rxjs';
 import * as y from 'js-yaml';
 import {KyvernoService} from '@app/core/services/kyverno';
 import {NotificationService} from '@app/core/services/notification';
-import {ProjectService} from '@app/core/services/project';
 import {Project} from '@app/shared/entity/project';
+import {ProjectService} from '@app/core/services/project';
 
 export interface AddPolicyTemplateDialogConfig {
   mode: DialogActionMode;
@@ -67,7 +67,6 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
   scopes = Scopes;
-  scopesArray = Object.values(Scopes);
   severityOptions = Object.values(PolicySeverity);
   form: FormGroup;
   policySpec = '';
@@ -75,7 +74,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   mode: DialogActionMode;
   icon: string = this._config.mode === DialogActionMode.Edit ? 'km-icon-save' : 'km-icon-add';
   label: string = this._config.mode === DialogActionMode.Edit ? 'Save Changes' : 'Create';
-  projects: Project[] = [];
+  project: Project;
   projectsLabels: Record<string, string>;
   clustersLabels: Record<string, string>;
 
@@ -102,15 +101,13 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
     }
 
     if (!this._config.projectID) {
-      this._projectService.projects.pipe(take(1)).subscribe((projects: Project[]) => (this.projects = projects));
-      this.form.get(Controls.Scope).setValue(this._config?.template?.spec?.visibility ?? Scopes.Global);
+      this.form.get(Controls.Scope).setValue(Scopes.Global);
+      this.form.get(Controls.Scope).disable();
     } else {
       this._projectService.selectedProject.pipe(take(1)).subscribe((project: Project) => {
-        this.projects = [project];
+        this.project = project;
       });
-
-      this.scopesArray = this.scopesArray.filter(scope => scope !== Scopes.Global);
-      this.form.get(Controls.Project).setValue(this._config.projectID);
+      this.form.get(Controls.Project).setValue(this.project?.name);
       this.form.get(Controls.Project).disable();
       this.form.get(Controls.Scope).setValue(Scopes.Project);
       this.form.get(Controls.Scope).disable();
@@ -154,7 +151,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       [Controls.Category]: this._builder.control(this._config.template?.spec?.category ?? ''),
       [Controls.Severity]: this._builder.control(this._config.template?.spec?.severity ?? ''),
       [Controls.Scope]: this._builder.control(this._config.template?.spec?.visibility ?? '', Validators.required),
-      [Controls.Project]: this._builder.control(this._config.template?.spec?.projectID ?? ''),
+      [Controls.Project]: this._builder.control(this.project?.name),
       [Controls.Default]: this._builder.control(this._config.template?.spec?.default ?? false),
       [Controls.Enforced]: this._builder.control(this._config.template?.spec?.enforced ?? false),
       [Controls.NamespacedPolicy]: this._builder.control(this._config.template?.spec?.namespacedPolicy ?? false),
@@ -164,6 +161,16 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getPolicyTemplateObject(): PolicyTemplate {
+    for (const key in this.projectsLabels) {
+      if (!this.projectsLabels[key]) {
+        delete this.projectsLabels[key];
+      }
+    }
+    for (const key in this.clustersLabels) {
+      if (!this.clustersLabels[key]) {
+        delete this.clustersLabels[key];
+      }
+    }
     const policyTemplate = {
       name: this.form.get(Controls.Name).value,
       spec: {
@@ -172,7 +179,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
         category: this.form.get(Controls.Category).value,
         severity: this.form.get(Controls.Severity).value,
         visibility: this.form.get(Controls.Scope).value,
-        projectID: this.form.get(Controls.Project).value,
+        projectID: this.project?.id ?? '',
         default: this.form.get(Controls.Default).value,
         enforced: this.form.get(Controls.Enforced).value,
         namespacedPolicy: this.form.get(Controls.NamespacedPolicy).value,

@@ -51,7 +51,7 @@ export class AddPolicyDialogComponent implements OnInit, OnDestroy {
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe((template: PolicyTemplate) => {
         this.selectedTemplate = template;
-        if (template.spec.namespacedPolicy) {
+        if (template.spec?.namespacedPolicy) {
           this.form.get(Controls.Namespace).addValidators(Validators.required);
         } else {
           this.form.get(Controls.Namespace).clearValidators();

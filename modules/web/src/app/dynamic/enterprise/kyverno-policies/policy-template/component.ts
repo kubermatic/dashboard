@@ -38,7 +38,12 @@ import {
 import {NotificationService} from '@app/core/services/notification';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {ParamsService} from '@app/core/services/params';
+import {HealthStatus, StatusIcon} from '@app/shared/utils/health-status';
 
+enum PolicyTemplateStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+}
 @Component({
   selector: 'km-kyverno-policiy-template-list',
   templateUrl: './template.html',
@@ -53,7 +58,7 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   dataSource = new MatTableDataSource<PolicyTemplate>();
   policyTemplates: PolicyTemplate[] = [];
-  columns = ['name', 'default', 'enforce', 'category', 'scope', 'actions'];
+  columns = ['status', 'name', 'default', 'enforce', 'category', 'scope', 'actions'];
   loadingTemplates = false;
   hasOwnerRole = false;
 
@@ -67,6 +72,9 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.projectID = this._ParamsService.get('projectID');
+    if (!this.projectID) {
+      this.columns.shift();
+    }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.direction = 'asc';
@@ -166,5 +174,12 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
         this._notificationService.success(`Update the ${template.name} policy template`);
         this.getPolicyTemplates();
       });
+  }
+
+  getStatusIcon(policyTemplate: PolicyTemplate): HealthStatus {
+    if (policyTemplate.spec.enforced || policyTemplate.spec.default) {
+      return new HealthStatus(PolicyTemplateStatus.Active, StatusIcon.Running);
+    }
+    return new HealthStatus(PolicyTemplateStatus.Inactive, StatusIcon.Stopped);
   }
 }
