@@ -283,6 +283,10 @@ limitations under the License.
             <km-property-health *ngIf="isEnterpriseEdition && cluster.spec.kubelb?.enabled"
                                 label="Kubermatic KubeLB"
                                 [healthState]="health?.kubelb"></km-property-health>
+            <km-property-health *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled"
+                                label="Kyverno"
+                                [healthState]="health?.kyverno"></km-property-health>
+
           </div>
 
           <div fxFlex="33"
@@ -580,7 +584,7 @@ limitations under the License.
             *ngIf="isEnterpriseEdition && cluster.spec.kyverno?.enabled">
       <km-kyverno-cluster-policies-list [projectID]="projectID"
                                         [cluster]="cluster"
-                                        [isClusterRunning]="isClusterRunning"></km-kyverno-cluster-policies-list>
+                                        [isClusterRunning]="isClusterRunning && isKyvernoHealthy"></km-kyverno-cluster-policies-list>
     </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">

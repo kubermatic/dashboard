@@ -30289,6 +30289,9 @@
         "kubernetesDashboard": {
           "$ref": "#/definitions/HealthStatus"
         },
+        "kyverno": {
+          "$ref": "#/definitions/HealthStatus"
+        },
         "logging": {
           "$ref": "#/definitions/HealthStatus"
         },

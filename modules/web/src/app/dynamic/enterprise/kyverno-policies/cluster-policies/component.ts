@@ -152,6 +152,10 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
     this._matDialog.open(ViewTemplateDialogComponent, config);
   }
 
+  canDeletePolicy(enforced: boolean): boolean {
+    return this.hasOwnerRole && !enforced && this.isClusterRunning;
+  }
+
   private _getPolicyBindings(): void {
     this._kyvernoService
       .listPolicyBindings(this.projectID, this.cluster.id)
