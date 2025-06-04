@@ -28,7 +28,6 @@ import {
   PolicyTemplateTarget,
   Scopes,
 } from '@app/shared/entity/kyverno';
-import {DialogActionMode} from '@app/shared/types/common';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {Observable, Subject, take} from 'rxjs';
 import * as y from 'js-yaml';
@@ -38,9 +37,15 @@ import {Project} from '@app/shared/entity/project';
 import {ProjectService} from '@app/core/services/project';
 
 export interface AddPolicyTemplateDialogConfig {
-  mode: DialogActionMode;
+  mode: PolicyTemplateDialogMode;
   projectID: string;
   template?: PolicyTemplate;
+}
+
+export enum PolicyTemplateDialogMode {
+  Add = 'Add',
+  Edit = 'Edit',
+  Copy = 'Copy',
 }
 
 enum Controls {
@@ -71,12 +76,39 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
   policySpec = '';
   isYamlEditorValid = true;
-  mode: DialogActionMode;
-  icon: string = this._config.mode === DialogActionMode.Edit ? 'km-icon-save' : 'km-icon-add';
-  label: string = this._config.mode === DialogActionMode.Edit ? 'Save Changes' : 'Create';
+  mode: PolicyTemplateDialogMode;
   project: Project;
   projectsLabels: Record<string, string>;
   clustersLabels: Record<string, string>;
+
+  get icon(): string {
+    switch (this._config.mode) {
+      case PolicyTemplateDialogMode.Add:
+      case PolicyTemplateDialogMode.Copy:
+        return 'km-icon-add';
+      case PolicyTemplateDialogMode.Edit:
+        return 'km-icon-save';
+    }
+  }
+
+  get label(): string {
+    switch (this._config.mode) {
+      case PolicyTemplateDialogMode.Add:
+      case PolicyTemplateDialogMode.Copy:
+        return 'Create Template';
+      case PolicyTemplateDialogMode.Edit:
+        return 'Edit Template';
+    }
+  }
+  get dialogTitle(): string {
+    switch (this._config.mode) {
+      case PolicyTemplateDialogMode.Add:
+      case PolicyTemplateDialogMode.Copy:
+        return 'Create Policy Template';
+      case PolicyTemplateDialogMode.Edit:
+        return 'Edit Policy Template';
+    }
+  }
 
   constructor(
     private readonly _dialogRef: MatDialogRef<AddPolicyTemplateDialogComponent>,
@@ -95,8 +127,13 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
 
     this._initForm();
     this.mode = this._config.mode;
-    if (this.mode === DialogActionMode.Edit) {
+    if (this.mode === PolicyTemplateDialogMode.Edit) {
       this.form.get(Controls.Name).disable();
+      this.policySpec = y.dump(this._config.template?.spec?.policySpec);
+    }
+
+    if (this.mode === PolicyTemplateDialogMode.Copy) {
+      this.form.get(Controls.Name).setValue('');
       this.policySpec = y.dump(this._config.template?.spec?.policySpec);
     }
 
@@ -107,9 +144,9 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
       this._projectService.selectedProject.pipe(take(1)).subscribe((project: Project) => {
         this.project = project;
       });
+      this.form.get(Controls.Scope).setValue(Scopes.Project);
       this.form.get(Controls.Project).setValue(this.project?.name);
       this.form.get(Controls.Project).disable();
-      this.form.get(Controls.Scope).setValue(Scopes.Project);
       this.form.get(Controls.Scope).disable();
     }
   }
@@ -120,7 +157,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   }
 
   getObservable(): Observable<PolicyTemplate> {
-    if (this._config.mode === DialogActionMode.Edit) {
+    if (this._config.mode === PolicyTemplateDialogMode.Edit) {
       return this._kyvernoService.patchPolicyTemplate(this._getPolicyTemplateObject());
     }
     return this._kyvernoService.createPolicyTemplate(this._getPolicyTemplateObject());
@@ -129,7 +166,7 @@ export class AddPolicyTemplateDialogComponent implements OnInit, OnDestroy {
   onNext(template: PolicyTemplate): void {
     this._dialogRef.close(template);
     this._notificationService.success(
-      `${this._config.mode === DialogActionMode.Edit ? 'Updated' : 'Created'} policy template ${template.name}`
+      `${this._config.mode === PolicyTemplateDialogMode.Edit ? 'Updated' : 'Created'} policy template ${template.name}`
     );
   }
 

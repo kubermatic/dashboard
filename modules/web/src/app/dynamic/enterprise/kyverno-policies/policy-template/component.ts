@@ -24,8 +24,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {KyvernoService} from '@app/core/services/kyverno';
 import {PolicyTemplate, Scopes} from '@app/shared/entity/kyverno';
 import {filter, Subject, switchMap, take, takeUntil} from 'rxjs';
-import {AddPolicyTemplateDialogComponent, AddPolicyTemplateDialogConfig} from './add-template/component';
-import {DialogActionMode} from '@app/shared/types/common';
+import {
+  AddPolicyTemplateDialogComponent,
+  AddPolicyTemplateDialogConfig,
+  PolicyTemplateDialogMode,
+} from './add-template/component';
 import {UserService} from '@app/core/services/user';
 import {Group} from '@app/shared/utils/member';
 import {MatSort} from '@angular/material/sort';
@@ -54,13 +57,14 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   projectID: string;
-  mode = DialogActionMode;
+  mode = PolicyTemplateDialogMode;
   private readonly _unsubscribe = new Subject<void>();
   dataSource = new MatTableDataSource<PolicyTemplate>();
   policyTemplates: PolicyTemplate[] = [];
   columns = ['status', 'name', 'default', 'enforce', 'category', 'scope', 'actions'];
   loadingTemplates = false;
   hasOwnerRole = false;
+  scopes = Scopes;
 
   constructor(
     private _kyvernoService: KyvernoService,
@@ -124,7 +128,7 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this.dataSource.filter = query;
   }
 
-  addTemplate(mode: DialogActionMode, template?: PolicyTemplate): void {
+  addTemplate(mode: PolicyTemplateDialogMode, template?: PolicyTemplate): void {
     const config: MatDialogConfig = {
       data: {
         mode,
