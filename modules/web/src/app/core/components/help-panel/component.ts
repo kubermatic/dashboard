@@ -109,7 +109,8 @@ export class HelpPanelComponent implements OnInit, OnDestroy {
     return (
       !this.adminSettings.disableChangelogPopup ||
       this.adminSettings.displayAPIDocs ||
-      this.adminSettings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel)
+      this.adminSettings.customLinks.some(link => link.location === CustomLinkLocation.HelpPanel) ||
+      !!this.adminSettings.announcements
     );
   }
 
