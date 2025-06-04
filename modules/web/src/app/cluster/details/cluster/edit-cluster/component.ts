@@ -597,6 +597,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
   }
 
+  isKubeLBEnabledForCluster(): boolean {
+    return !!this.cluster?.spec?.kubelb?.enabled;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
