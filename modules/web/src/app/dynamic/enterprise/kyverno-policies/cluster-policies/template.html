@@ -79,12 +79,10 @@ END OF TERMS AND CONDITIONS
         <div fxLayoutAlign="end"
              class="km-table-actions">
           <button mat-icon-button
-                  matTooltip="view template"
                   (click)="viewTemplateSpec(element)">
             <i class="km-icon-mask km-icon-show"></i>
           </button>
           <button mat-icon-button
-                  matTooltip="delete policy"
                   (click)="deletePolicyBinding(element.name)"
                   [disabled]="!hasOwnerRole || element.spec.enforced">
             <i class="km-icon-mask km-icon-delete"></i>

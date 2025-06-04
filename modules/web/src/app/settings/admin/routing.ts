@@ -70,7 +70,7 @@ const routes: Routes = [
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
       {
-        path: 'kyvernoPolicies',
+        path: 'kyvernopolicies',
         loadChildren: () => DynamicModule.KyvernoPolicies,
       },
       {

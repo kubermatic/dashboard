@@ -79,7 +79,22 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.sort.direction = 'asc';
     this.sort.active = 'name';
+
+    this.dataSource.sortingDataAccessor = (policyTemplate, property) => {
+      switch (property) {
+        case 'name':
+          return policyTemplate.name;
+        case 'category':
+          return policyTemplate.spec.category;
+        case 'scope':
+          return policyTemplate.spec.visibility;
+        default:
+          return policyTemplate[property];
+      }
+    };
+
     this.getPolicyTemplates();
+
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => {
       if (user.isAdmin) {
         this.hasOwnerRole = true;
@@ -103,6 +118,10 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
 
   isToggleDisabled(template: PolicyTemplate): boolean {
     return !this.hasOwnerRole || (this.hasOwnerRole && template.spec.visibility === Scopes.Global && !!this.projectID);
+  }
+
+  onSearch(query: string): void {
+    this.dataSource.filter = query;
   }
 
   addTemplate(mode: DialogActionMode, template?: PolicyTemplate): void {
@@ -155,25 +174,13 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
   onDefaultChange(event: MatSlideToggleChange, template: PolicyTemplate): void {
     const patchedTemplate = template;
     patchedTemplate.spec.default = event.checked;
-    this._kyvernoService
-      .patchPolicyTemplate(patchedTemplate)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success(`Update the ${template.name} policy template`);
-        this.getPolicyTemplates();
-      });
+    this._patchPolicyTemplate(patchedTemplate);
   }
 
   onEnforcedChange(event: MatSlideToggleChange, template: PolicyTemplate): void {
     const patchedTemplate = template;
     patchedTemplate.spec.enforced = event.checked;
-    this._kyvernoService
-      .patchPolicyTemplate(patchedTemplate)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success(`Update the ${template.name} policy template`);
-        this.getPolicyTemplates();
-      });
+    this._patchPolicyTemplate(patchedTemplate);
   }
 
   getStatusIcon(policyTemplate: PolicyTemplate): HealthStatus {
@@ -181,5 +188,15 @@ export class KyvernoPoliciyTemplateListComponent implements OnInit, OnDestroy {
       return new HealthStatus(PolicyTemplateStatus.Active, StatusIcon.Running);
     }
     return new HealthStatus(PolicyTemplateStatus.Inactive, StatusIcon.Stopped);
+  }
+
+  private _patchPolicyTemplate(patchedTemplate: PolicyTemplate): void {
+    this._kyvernoService
+      .patchPolicyTemplate(patchedTemplate)
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`Updated the ${patchedTemplate.name} policy template.`);
+        this.getPolicyTemplates();
+      });
   }
 }
