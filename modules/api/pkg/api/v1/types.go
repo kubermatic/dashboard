@@ -1465,6 +1465,7 @@ type ClusterHealth struct {
 	OperatingSystemManager       *kubermaticv1.HealthStatus `json:"operatingSystemManager,omitempty"`
 	KubernetesDashboard          *kubermaticv1.HealthStatus `json:"kubernetesDashboard,omitempty"`
 	KubeLB                       *kubermaticv1.HealthStatus `json:"kubelb,omitempty"`
+	Kyverno                      *kubermaticv1.HealthStatus `json:"kyverno,omitempty"`
 }
 
 // AccessibleAddons represents an array of addons that can be configured in the user clusters.

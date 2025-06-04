@@ -84,7 +84,7 @@ END OF TERMS AND CONDITIONS
           </button>
           <button mat-icon-button
                   (click)="deletePolicyBinding(element.name)"
-                  [disabled]="!hasOwnerRole || element.spec.enforced">
+                  [disabled]="!canDeletePolicy(element.spec.enforced)">
             <i class="km-icon-mask km-icon-delete"></i>
           </button>
         </div>

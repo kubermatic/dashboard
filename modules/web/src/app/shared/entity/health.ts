@@ -30,6 +30,7 @@ export class Health {
   monitoring?: HealthState;
   kubernetesDashboard?: HealthState;
   operatingSystemManager?: HealthState;
+  kyverno?: HealthState;
 
   static allHealthy(health: Health, provider: Provider): boolean {
     const supported = [

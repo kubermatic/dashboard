@@ -143,6 +143,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.spec?.kubernetesDashboard?.enabled && this.health?.kubernetesDashboard === HealthState.Up;
   }
 
+  get isKyvernoHealthy(): boolean {
+    return this.cluster?.spec?.kyverno.enabled && this.health?.kyverno === HealthState.Up;
+  }
+
   constructor(
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,

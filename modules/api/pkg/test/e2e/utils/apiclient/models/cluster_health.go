@@ -48,6 +48,9 @@ type ClusterHealth struct {
 	// kubernetes dashboard
 	KubernetesDashboard HealthStatus `json:"kubernetesDashboard,omitempty"`
 
+	// kyverno
+	Kyverno HealthStatus `json:"kyverno,omitempty"`
+
 	// logging
 	Logging HealthStatus `json:"logging,omitempty"`
 
@@ -111,6 +114,10 @@ func (m *ClusterHealth) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateKubernetesDashboard(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKyverno(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -318,6 +325,23 @@ func (m *ClusterHealth) validateKubernetesDashboard(formats strfmt.Registry) err
 	return nil
 }
 
+func (m *ClusterHealth) validateKyverno(formats strfmt.Registry) error {
+	if swag.IsZero(m.Kyverno) { // not required
+		return nil
+	}
+
+	if err := m.Kyverno.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kyverno")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kyverno")
+		}
+		return err
+	}
+
+	return nil
+}
+
 func (m *ClusterHealth) validateLogging(formats strfmt.Registry) error {
 	if swag.IsZero(m.Logging) { // not required
 		return nil
@@ -478,6 +502,10 @@ func (m *ClusterHealth) ContextValidate(ctx context.Context, formats strfmt.Regi
 	}
 
 	if err := m.contextValidateKubernetesDashboard(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateKyverno(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -648,6 +676,20 @@ func (m *ClusterHealth) contextValidateKubernetesDashboard(ctx context.Context, 
 			return ve.ValidateName("kubernetesDashboard")
 		} else if ce, ok := err.(*errors.CompositeError); ok {
 			return ce.ValidateName("kubernetesDashboard")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *ClusterHealth) contextValidateKyverno(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Kyverno.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("kyverno")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("kyverno")
 		}
 		return err
 	}
