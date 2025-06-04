@@ -129,6 +129,13 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
+            <button *ngIf="element.spec.visibility === scopes.Global && !!projectID"
+                    mat-icon-button
+                    (click)="addTemplate(mode.Copy, element)"
+                    [disabled]="!hasOwnerRole"
+                    matTooltip="Create a copy of this template in the current project">
+              <i class="km-icon-mask km-icon-copy"></i>
+            </button>
             <button mat-icon-button
                     (click)="addTemplate(mode.Edit, element)"
                     [disabled]="isToggleDisabled(element)">
