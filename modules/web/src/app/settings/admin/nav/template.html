@@ -164,9 +164,9 @@ limitations under the License.
           <a [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
              fxLayoutAlign=" center">
             <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
+            <span class="km-label-primary"
+                  matTooltip="Early access feature - still under development.">Experimental</span>
           </a>
-          <span class="km-label-primary"
-                matTooltip="Early access feature - still under development.">Experimental</span>
         </div>
       </div>
     </ng-container>
@@ -222,10 +222,13 @@ limitations under the License.
       </a>
 
       <a fxLayoutAlign=" center"
+         fxLayoutGap="5px"
          routerLinkActive="active"
          [routerLink]="getRouterLink(adminPanelView.KyvernoPolicies)"
          class="collapsed-sub-menu-item">
         <span>{{adminPanelViewDisplayName.KyvernoPolicies}}</span>
+        <span class="km-label-primary"
+              matTooltip="Early access feature - still under development.">Experimental</span>
       </a>
     </ng-container>
   </km-side-nav-field>
@@ -294,7 +297,7 @@ limitations under the License.
       </div>
       <div class="sub-menu-item"
            routerLinkActive="active">
-        <a id="km-nav-item-administrators"
+        <a id="km-nav-item-global-viewers"
            fxLayoutAlign=" center"
            [routerLink]="getRouterLink(adminPanelView.GlobalViewers)">
           <span>{{adminPanelViewDisplayName.GlobalViewers}}</span>

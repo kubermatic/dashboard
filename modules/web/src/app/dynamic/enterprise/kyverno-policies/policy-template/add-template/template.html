@@ -28,7 +28,6 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="controls.Name"
              matInput
              required>
-      <mat-hint>The name of the created policy template</mat-hint>
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -41,7 +40,6 @@ END OF TERMS AND CONDITIONS
       <input [formControlName]="controls.Title"
              matInput
              required>
-      <mat-hint>The title of the policy</mat-hint>
       <mat-error *ngIf="form.get(controls.Title).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -53,7 +51,6 @@ END OF TERMS AND CONDITIONS
                 required
                 [formControlName]="controls.Description">
       </textarea>
-      <mat-hint>The description of the policy</mat-hint>
       <mat-error *ngIf="form.get(controls.Description).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -70,31 +67,37 @@ END OF TERMS AND CONDITIONS
       <mat-label>Category</mat-label>
       <input [formControlName]="controls.Category"
              matInput>
-      <mat-hint>Indicates the category this policy belongs to</mat-hint>
+      <mat-hint>Indicates the category this policy belongs to.</mat-hint>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Scope</mat-label>
       <input [formControlName]="controls.Scope"
              matInput>
-      <mat-hint>Defines who is allowed to manage the template<i class="km-icon-info km-pointer"
-           matTooltip="Global is managed by admins; project can be managed by admins and project owners."></i>
+      <mat-hint>Defines who is allowed to manage the template. Global is managed by admins while Project can be managed by admins and project owners.
       </mat-hint>
     </mat-form-field>
     <mat-form-field *ngIf="form.get(controls.Scope).value === scopes.Project">
       <mat-label>Project</mat-label>
       <input [formControlName]="controls.Project"
              matInput>
-      <mat-hint>The project for which the policy template is created</mat-hint>
+      <mat-hint>The project for which the policy template is created.</mat-hint>
     </mat-form-field>
-    <mat-checkbox [formControlName]="controls.Default">Default Policy
-    </mat-checkbox>
-    <i class="km-icon-info km-pointer"
-       matTooltip="Default policies are automatically applied to new clusters. Users can delete them afterward."></i>
-    <mat-checkbox [formControlName]="controls.Enforced">Enforce Policy
-    </mat-checkbox>
-    <i class="km-icon-info km-pointer"
-       matTooltip="Enforced policies will be applied to all targeted clusters. Users can't delete them."></i>
-    <mat-checkbox [formControlName]="controls.NamespacedPolicy">Namespaced Policy
-    </mat-checkbox>
+
+    <div fxLayout="column">
+      <mat-checkbox [formControlName]="controls.Default">
+        Default Policy
+        <i class="km-icon-info km-pointer"
+           matTooltip="Default policies are automatically applied to new clusters. Users can delete them afterwards."></i>
+      </mat-checkbox>
+      <mat-checkbox [formControlName]="controls.Enforced">
+        Enforce Policy
+        <i class="km-icon-info km-pointer"
+           matTooltip="Enforced policies will be applied to all targeted clusters. Users can't delete them."></i>
+      </mat-checkbox>
+      <mat-checkbox [formControlName]="controls.NamespacedPolicy">
+        Namespaced Policy
+      </mat-checkbox>
+    </div>
     <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
                    title="Projects Labels Selector"
                    [(labels)]="projectsLabels"
@@ -108,8 +111,8 @@ END OF TERMS AND CONDITIONS
                height="370px"
                header="policySpec*">
     </km-editor>
-    <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint><br />
-
+    <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint>
+    <br />
     <km-validate-json-or-yaml [data]="policySpec"
                               [isOnlyYAML]="true"
                               (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>

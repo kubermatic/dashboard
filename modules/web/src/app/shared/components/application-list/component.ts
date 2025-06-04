@@ -200,10 +200,10 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   getApplicationType(application: Application): string {
     if (this.isSystemApplication(application)) {
       return 'System';
-    } else if (this.isDefaultedApplication(application)) {
-      return 'Default';
     } else if (this.isEnforcedApplication(application)) {
       return 'Enforced';
+    } else if (this.isDefaultedApplication(application)) {
+      return 'Default';
     }
     return '';
   }
@@ -211,10 +211,10 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   getApplicationTypeDescription(application: Application): string {
     if (this.isSystemApplication(application)) {
       return 'This is a system application managed by KKP.';
-    } else if (this.isDefaultedApplication(application)) {
-      return 'This application is automatically installed by default.';
     } else if (this.isEnforcedApplication(application)) {
       return 'This application is automatically installed and cannot be updated or deleted.';
+    } else if (this.isDefaultedApplication(application)) {
+      return 'This application is automatically installed by default.';
     }
     return '';
   }

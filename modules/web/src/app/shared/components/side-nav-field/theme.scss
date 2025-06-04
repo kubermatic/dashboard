@@ -71,7 +71,7 @@
         &:hover {
           background-color: map.get($colors, sidenav-background-hover);
 
-          span {
+          span:not(.km-label-primary) {
             color: map.get($colors, primary-dark);
           }
         }
@@ -82,7 +82,7 @@
       background-color: map.get($colors, side-nav-background-color);
 
       a {
-        span {
+        span:not(.km-label-primary) {
           color: map.get($colors, primary-dark);
         }
 

@@ -28,6 +28,11 @@ END OF TERMS AND CONDITIONS
             *ngIf="!projectID"
             matTooltip="Early access feature - still under development.">Experimental</span>
     </mat-card-title>
+  </mat-card-header>
+  <div fxLayoutAlign="space-between center"
+       class="header">
+    <km-search-field class="search"
+                     (queryChange)="onSearch($event)"></km-search-field>
     <button mat-flat-button
             [color]="projectID ?  'primary' : 'quaternary'"
             (click)="addTemplate(mode.Add)"
@@ -36,7 +41,7 @@ END OF TERMS AND CONDITIONS
          matButtonIcon></i>
       <span>Create Policy Template</span>
     </button>
-  </mat-card-header>
+  </div>
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -57,7 +62,8 @@ END OF TERMS AND CONDITIONS
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-25">Name</th>
+            class="km-header-cell p-25"
+            mat-sort-header>Name</th>
         <td mat-cell
             *matCellDef="let element">
           <span>{{element.name}}</span>
@@ -74,7 +80,7 @@ END OF TERMS AND CONDITIONS
         <td mat-cell
             *matCellDef="let element">
           <mat-slide-toggle [checked]="element.spec.default"
-                            [disabled]="isToggleDisabled(element)"
+                            [disabled]="isToggleDisabled(element) || !!element.spec.enforced"
                             (change)="onDefaultChange($event, element)">
           </mat-slide-toggle>
         </td>
@@ -98,7 +104,8 @@ END OF TERMS AND CONDITIONS
       <ng-container matColumnDef="category">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-25">Category</th>
+            class="km-header-cell p-25"
+            mat-sort-header>Category</th>
         <td mat-cell
             *matCellDef="let element">
           <span>{{element.spec.category}}</span>
@@ -107,7 +114,8 @@ END OF TERMS AND CONDITIONS
       <ng-container matColumnDef="scope">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-25">Scope</th>
+            class="km-header-cell p-10"
+            mat-sort-header>Scope</th>
         <td mat-cell
             *matCellDef="let element">
           <span>{{element.spec.visibility}}</span>
@@ -122,16 +130,14 @@ END OF TERMS AND CONDITIONS
           <div fxLayoutAlign="end"
                class="km-table-actions">
             <button mat-icon-button
-                    matTooltip="delete template"
-                    (click)="deleteTemplate(element.name)"
-                    [disabled]="isToggleDisabled(element)">
-              <i class="km-icon-mask km-icon-delete"></i>
-            </button>
-            <button mat-icon-button
-                    matTooltip="edit template"
                     (click)="addTemplate(mode.Edit, element)"
                     [disabled]="isToggleDisabled(element)">
               <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    (click)="deleteTemplate(element.name)"
+                    [disabled]="isToggleDisabled(element)">
+              <i class="km-icon-mask km-icon-delete"></i>
             </button>
           </div>
         </td>
