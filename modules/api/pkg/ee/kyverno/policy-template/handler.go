@@ -111,22 +111,30 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, err
 	}
 
-	project := &kubermaticv1.Project{}
-	if req.ProjectID != "" {
-		project, err = projectProvider.GetUnsecured(ctx, req.ProjectID, nil)
+	res := []*apiv2.PolicyTemplate{}
+	if req.ProjectID == "" {
+		for _, policyTemplate := range policyTemplateList.Items {
+			if policyTemplate.Spec.Visibility == globalVisibility {
+				res = append(res, &apiv2.PolicyTemplate{
+					Name: policyTemplate.Name,
+					Spec: *policyTemplate.Spec.DeepCopy(),
+				})
+			}
+		}
+	} else {
+		project, err := projectProvider.GetUnsecured(ctx, req.ProjectID, nil)
 
 		if err != nil {
 			return nil, err
 		}
-	}
 
-	res := []*apiv2.PolicyTemplate{}
-	for _, policyTemplate := range policyTemplateList.Items {
-		if req.ProjectID == "" || (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) || ((HasCommonLabel(policyTemplate.Spec.Target, project.Labels)) && policyTemplate.Spec.Visibility == globalVisibility) {
-			res = append(res, &apiv2.PolicyTemplate{
-				Name: policyTemplate.Name,
-				Spec: *policyTemplate.Spec.DeepCopy(),
-			})
+		for _, policyTemplate := range policyTemplateList.Items {
+			if (req.ProjectID == policyTemplate.Spec.ProjectID && policyTemplate.Spec.Visibility == projectVisibility) || ((HasCommonLabel(policyTemplate.Spec.Target, project.Labels)) && policyTemplate.Spec.Visibility == globalVisibility) {
+				res = append(res, &apiv2.PolicyTemplate{
+					Name: policyTemplate.Name,
+					Spec: *policyTemplate.Spec.DeepCopy(),
+				})
+			}
 		}
 	}
 

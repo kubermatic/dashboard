@@ -198,6 +198,9 @@ export class KyvernoClusterPoliciesListComponent implements OnInit, OnDestroy {
   }
 
   private _isMatchedLabel(key: string, value: string): boolean {
-    return this.cluster.labels[key] && this.cluster.labels[key] === value;
+    if (!this.cluster.labels) {
+      return false;
+    }
+    return !!this.cluster?.labels[key] && this.cluster?.labels[key] === value;
   }
 }

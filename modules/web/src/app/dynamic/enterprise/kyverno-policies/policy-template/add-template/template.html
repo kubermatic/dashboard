@@ -73,34 +73,26 @@ END OF TERMS AND CONDITIONS
       <mat-hint>Indicates the category this policy belongs to</mat-hint>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Scopes</mat-label>
-      <mat-select [formControlName]="controls.Scope">
-        <mat-option *ngFor="let scope of scopesArray"
-                    [value]="scope">{{scope}}</mat-option>
-      </mat-select>
+      <input [formControlName]="controls.Scope"
+             matInput>
       <mat-hint>Defines who is allowed to manage the template<i class="km-icon-info km-pointer"
            matTooltip="Global is managed by admins; project can be managed by admins and project owners."></i>
       </mat-hint>
-      <mat-error *ngIf="form.get(controls.Scope).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="form.get(controls.Scope).value !== scopes.Global">
+    <mat-form-field *ngIf="form.get(controls.Scope).value === scopes.Project">
       <mat-label>Project</mat-label>
-      <mat-select [formControlName]="controls.Project">
-        <mat-option *ngFor="let project of projects"
-                    [value]="project.id">{{project.name}}</mat-option>
-      </mat-select>
+      <input [formControlName]="controls.Project"
+             matInput>
       <mat-hint>The project for which the policy template is created</mat-hint>
     </mat-form-field>
     <mat-checkbox [formControlName]="controls.Default">Default Policy
     </mat-checkbox>
     <i class="km-icon-info km-pointer"
-       matTooltip="Create a policy from this template upon creation."></i>
+       matTooltip="Default policies are automatically applied to new clusters. Users can delete them afterward."></i>
     <mat-checkbox [formControlName]="controls.Enforced">Enforce Policy
     </mat-checkbox>
     <i class="km-icon-info km-pointer"
-       matTooltip="Creates a policy from this template upon creation that users can't delete."></i>
+       matTooltip="Enforced policies will be applied to all targeted clusters. Users can't delete them."></i>
     <mat-checkbox [formControlName]="controls.NamespacedPolicy">Namespaced Policy
     </mat-checkbox>
     <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
