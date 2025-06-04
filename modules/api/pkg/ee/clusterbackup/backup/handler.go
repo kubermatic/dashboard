@@ -64,7 +64,7 @@ const (
 	projectIdKey    = "system/project"
 	clusterIdKey    = "system/cluster"
 	backupOriginKey = "system/backup-origin"
-	backupOrigin    = "kkp-controllers"
+	BackupOrigin    = "kkp-controllers"
 )
 
 type clusterBackupUI struct {
@@ -102,9 +102,9 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 
 	// These labels are added to the Backup CR to distinguish between backups created via the KKP controllers and those uploaded through the UI.
 	if clusterBackup.Spec.Labels == nil {
-		clusterBackup.Spec.Labels = getLabels(backupOrigin, req.ProjectID, req.ClusterID)
+		clusterBackup.Spec.Labels = GetLabels(BackupOrigin, req.ProjectID, req.ClusterID)
 	} else {
-		for k, v := range getLabels(backupOrigin, req.ProjectID, req.ClusterID) {
+		for k, v := range GetLabels(BackupOrigin, req.ProjectID, req.ClusterID) {
 			clusterBackup.Spec.Labels[k] = v
 		}
 	}
@@ -129,7 +129,7 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 	}, nil
 }
 
-func getLabels(backupOrigin, projectID, clusterID string) map[string]string {
+func GetLabels(backupOrigin, projectID, clusterID string) map[string]string {
 	labels := make(map[string]string)
 	labels[projectIdKey] = projectID
 	labels[clusterIdKey] = clusterID

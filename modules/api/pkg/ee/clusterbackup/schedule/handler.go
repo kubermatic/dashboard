@@ -87,6 +87,14 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		},
 		Spec: *req.Body.Spec.DeepCopy(),
 	}
+	// These labels are added to the Backup CR to distinguish between backups created via the KKP controllers and those uploaded through the UI.
+	if backupSchedule.Spec.Template.Labels == nil {
+		backupSchedule.Spec.Template.Labels = clusterbackup.GetLabels(clusterbackup.BackupOrigin, req.ProjectID, req.ClusterID)
+	} else {
+		for k, v := range clusterbackup.GetLabels(clusterbackup.BackupOrigin, req.ProjectID, req.ClusterID) {
+			backupSchedule.Spec.Template.Labels[k] = v
+		}
+	}
 	client, err := handlercommon.GetClusterClientWithClusterID(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, req.ClusterID)
 	if err != nil {
 		return nil, err
