@@ -81,6 +81,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <mat-slide-toggle [checked]="element.spec.default"
                             [disabled]="isToggleDisabled(element) || !!element.spec.enforced"
+                            [matTooltip]="isToggleDisabled(element) ? 'You do not have permission to edit this policy' : element.spec.enforced ? 'Enforced policies cannot be set as default' : ''"
                             (change)="onDefaultChange($event, element)">
           </mat-slide-toggle>
         </td>
@@ -155,7 +156,9 @@ END OF TERMS AND CONDITIONS
           *matRowDef="let row; columns: columns;"></tr>
     </table>
     <div class="km-row km-empty-list-msg"
-         *ngIf="!policyTemplates.length && !loadingTemplates">No policy templates are available</div>
+         *ngIf="!policyTemplates.length && !loadingTemplates">
+      No policy templates are available
+    </div>
 
     <div class="km-row"
          *ngIf="loadingTemplates && !policyTemplates.length">

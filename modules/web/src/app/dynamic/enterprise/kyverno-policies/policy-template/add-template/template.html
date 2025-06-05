@@ -1,6 +1,6 @@
 <!--
                Kubermatic Enterprise Read-Only License
-                      Version 1.0 ("KERO-1.0”)
+                      Version 1.0 ("KERO-1.0")
                   Copyright © 2025 Kubermatic GmbH
 
 1. You may only view, read and display for studying purposes the source
@@ -9,7 +9,7 @@
 2. Any use of the software which exceeds the foregoing right, including,
    without limitation, its execution, compilation, copying, modification
    and distribution, is expressly prohibited.
-3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+3. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
@@ -27,7 +27,7 @@ END OF TERMS AND CONDITIONS
       <mat-label>Name</mat-label>
       <input [formControlName]="controls.Name"
              matInput
-             required>
+             required />
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -39,7 +39,7 @@ END OF TERMS AND CONDITIONS
       <mat-label>Title</mat-label>
       <input [formControlName]="controls.Title"
              matInput
-             required>
+             required />
       <mat-error *ngIf="form.get(controls.Title).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -49,8 +49,7 @@ END OF TERMS AND CONDITIONS
       <textarea matInput
                 rows="3"
                 required
-                [formControlName]="controls.Description">
-      </textarea>
+                [formControlName]="controls.Description"> </textarea>
       <mat-error *ngIf="form.get(controls.Description).hasError('required')">
         <strong>Required</strong>
       </mat-error>
@@ -61,25 +60,27 @@ END OF TERMS AND CONDITIONS
         <mat-option *ngFor="let severity of severityOptions"
                     [value]="severity">{{severity}}</mat-option>
       </mat-select>
-      <mat-hint>Indicates the severity level of the policy</mat-hint>
+      <mat-hint>Specify the severity level of the policy</mat-hint>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Category</mat-label>
       <input [formControlName]="controls.Category"
-             matInput>
-      <mat-hint>Indicates the category this policy belongs to.</mat-hint>
+             matInput />
+      <mat-hint>Specify a category to organize and group related policies (e.g., Security, Compliance, Best
+        Practices).</mat-hint>
     </mat-form-field>
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>Scope</mat-label>
       <input [formControlName]="controls.Scope"
-             matInput>
-      <mat-hint>Defines who is allowed to manage the template. Global is managed by admins while Project can be managed by admins and project owners.
+             matInput />
+      <mat-hint>Defines who is allowed to manage the template. Global is managed by admins while Project can be managed by
+        admins and project owners.
       </mat-hint>
     </mat-form-field>
     <mat-form-field *ngIf="form.get(controls.Scope).value === scopes.Project">
       <mat-label>Project</mat-label>
       <input [formControlName]="controls.Project"
-             matInput>
+             matInput />
       <mat-hint>The project for which the policy template is created.</mat-hint>
     </mat-form-field>
 
@@ -96,6 +97,7 @@ END OF TERMS AND CONDITIONS
       </mat-checkbox>
       <mat-checkbox [formControlName]="controls.NamespacedPolicy">
         Namespaced Policy
+        <mat-hint>Enable to scope the policy down to Namespace instead of the default i.e. Cluster scope.</mat-hint>
       </mat-checkbox>
     </div>
     <km-label-form *ngIf="form.get(controls.Scope).value === scopes.Global"
@@ -109,10 +111,8 @@ END OF TERMS AND CONDITIONS
                    [formControlName]="controls.ClusterSelector"></km-label-form>
     <km-editor [(model)]="policySpec"
                height="370px"
-               header="policySpec*">
-    </km-editor>
+               header="policySpec*" />
     <mat-hint>PolicySpec is the specification of the Kyverno policy that will apply to the user cluster.</mat-hint>
-    <br />
     <km-validate-json-or-yaml [data]="policySpec"
                               [isOnlyYAML]="true"
                               (dataValid)="isValidYaml($event)"></km-validate-json-or-yaml>

@@ -1,5 +1,5 @@
 //                Kubermatic Enterprise Read-Only License
-//                       Version 1.0 ("KERO-1.0”)
+//                       Version 1.0 ("KERO-1.0")
 //                   Copyright © 2025 Kubermatic GmbH
 //
 // 1. You may only view, read and display for studying purposes the source
@@ -8,7 +8,7 @@
 // 2. Any use of the software which exceeds the foregoing right, including,
 //    without limitation, its execution, compilation, copying, modification
 //    and distribution, is expressly prohibited.
-// 3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+// 3. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 //    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 //    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 //    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
@@ -21,6 +21,9 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {KyvernoService} from '@app/core/services/kyverno';
+import {NotificationService} from '@app/core/services/notification';
+import {ProjectService} from '@app/core/services/project';
 import {
   PolicySeverity,
   PolicyTemplate,
@@ -28,13 +31,10 @@ import {
   PolicyTemplateTarget,
   Scopes,
 } from '@app/shared/entity/kyverno';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {Observable, Subject, take} from 'rxjs';
-import * as y from 'js-yaml';
-import {KyvernoService} from '@app/core/services/kyverno';
-import {NotificationService} from '@app/core/services/notification';
 import {Project} from '@app/shared/entity/project';
-import {ProjectService} from '@app/core/services/project';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import * as y from 'js-yaml';
+import {Observable, Subject, take} from 'rxjs';
 
 export interface AddPolicyTemplateDialogConfig {
   mode: PolicyTemplateDialogMode;

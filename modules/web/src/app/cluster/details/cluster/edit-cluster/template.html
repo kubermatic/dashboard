@@ -267,7 +267,7 @@ limitations under the License.
                     kmValueChangedIndicator>
         Kubermatic KubeLB
         <i class="km-icon-info km-pointer"
-           [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB.'"></i>
+           [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
       </mat-checkbox>
 
       <ng-container *ngIf="form.get(Controls.KubeLB).value">

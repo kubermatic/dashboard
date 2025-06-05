@@ -40,6 +40,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() language = 'yaml';
   @Input() readonly = false;
   @Input() model: string;
+  // Placeholder removes all the whitespaces from the hint thus ruining the formatting of YAML.
+  @Input() placeholder = '';
   @Output() modelChange = new EventEmitter<string>();
   isFocused = false;
 
@@ -57,7 +59,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     scrollbar: {vertical: 'hidden'},
     hideCursorInOverviewRuler: true,
     renderLineHighlight: 'none',
-    wordWrap: 'on',
+    autoIndent: 'full',
+    automaticLayout: true,
+    padding: {
+      top: 8,
+    },
   };
 
   constructor(private readonly _themeInformerService: ThemeInformerService) {}
@@ -67,6 +73,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       ...this.options,
       language: this.language.toLowerCase(),
       readOnly: this.readonly,
+      placeholder: this.placeholder,
     };
 
     this._themeInformerService.isCurrentThemeDark$.pipe(takeUntil(this._unsubscribe)).subscribe(isDark => {
