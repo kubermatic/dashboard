@@ -47,30 +47,30 @@ export KUBERMATIC_LDAP_PASSWORD="foo"
 
 # Append Dex configuration with ldap connector
 cat << EOF >> hack/ci/testdata/dex_values.yaml
-  connectors:
-  - type: ldap
-    name: OpenLDAP
-    id: ldap
-    config:
-      host: openldap.${LDAP_NAMESPACE}.svc.cluster.local:389
-      insecureNoSSL: true
-      bindDN: cn=admin,dc=example,dc=org
-      bindPW: admin
-      usernamePrompt: Email Address
-      userSearch:
-        baseDN: ou=People,dc=example,dc=org
-        filter: "(objectClass=person)"
-        username: mail
-        idAttr: DN
-        emailAttr: mail
-        nameAttr: cn
-      groupSearch:
-        baseDN: ou=Groups,dc=example,dc=org
-        filter: "(objectClass=groupOfNames)"
-        userMatchers:
-          - userAttr: DN
-            groupAttr: member
-        nameAttr: cn
+    connectors:
+    - type: ldap
+      name: OpenLDAP
+      id: ldap
+      config:
+        host: openldap.${LDAP_NAMESPACE}.svc.cluster.local:389
+        insecureNoSSL: true
+        bindDN: cn=admin,dc=example,dc=org
+        bindPW: admin
+        usernamePrompt: Email Address
+        userSearch:
+          baseDN: ou=People,dc=example,dc=org
+          filter: "(objectClass=person)"
+          username: mail
+          idAttr: DN
+          emailAttr: mail
+          nameAttr: cn
+        groupSearch:
+          baseDN: ou=Groups,dc=example,dc=org
+          filter: "(objectClass=groupOfNames)"
+          userMatchers:
+            - userAttr: DN
+              groupAttr: member
+          nameAttr: cn
 EOF
 
 retry 2 kubectl create ns ${LDAP_NAMESPACE}
