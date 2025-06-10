@@ -283,9 +283,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         `PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckTimeout}`.toUpperCase()
       ).asSeconds();
 
+      const diskSize = this._nodeDataService.nodeData.spec.cloud.openstack.diskSize;
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
-      this.form.get(Controls.CustomDiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
+      this.form.get(Controls.CustomDiskSize).setValue(diskSize);
+      this.form.get(Controls.UseCustomDisk).setValue(!!diskSize);
       this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
       this.form.get(Controls.InstanceReadyCheckTimeout).setValue(instanceReadyCheckTimeout);
 
