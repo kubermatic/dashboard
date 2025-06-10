@@ -215,7 +215,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dex-nodeport
-  namespace: oauth
+  namespace: dex
 spec:
   type: NodePort
   ports:
