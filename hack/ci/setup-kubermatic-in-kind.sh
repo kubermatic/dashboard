@@ -60,7 +60,7 @@ export KUBERMATIC_YAML="${KUBERMATIC_YAML:-hack/ci/testdata/kubermatic.yaml}"
 export KUBERMATIC_API_ENDPOINT="http://localhost:8080"
 
 # Tell the Go tests what dummy account we configure for the e2e tests.
-export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/oauth_values.yaml)
+export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/dex_values.yaml)
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
 export KUBERMATIC_OIDC_PASSWORD="password"
 
@@ -147,7 +147,7 @@ telemetry:
 EOF
 
 # append custom Dex configuration
-cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+cat hack/ci/testdata/dex_values.yaml >> $HELM_VALUES_FILE
 
 # to potentially make use of the EE images, we need to authenticate to quay.io first
 retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io

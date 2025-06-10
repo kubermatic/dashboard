@@ -82,7 +82,7 @@ kubermaticOperator:
 EOF
 
 # append custom Dex configuration
-cat $WEB_MODULE_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
+cat $WEB_MODULE_ROOT/hack/e2e/fixtures/dex_values.yaml >> $HELM_VALUES_FILE
 
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
@@ -114,7 +114,7 @@ nginx:
 EOF
 
 # append custom Dex configuration
-cat $REPO_ROOT/hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+cat $REPO_ROOT/hack/ci/testdata/dex_values.yaml >> $HELM_VALUES_FILE
 
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
