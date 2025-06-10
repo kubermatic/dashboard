@@ -43,6 +43,7 @@ type DatacenterSpecKubevirt struct {
 
 	// Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.
 	// Defaults to false.
+	// Deprecated: Use .kubevirt.usePodResourcesCPU instead.
 	EnableDedicatedCPUs bool `json:"enableDedicatedCpus,omitempty"`
 
 	// Optional: EnableDefaultNetworkPolicies enables deployment of default network policies like cluster isolation.
@@ -59,6 +60,10 @@ type DatacenterSpecKubevirt struct {
 	// example, if the storage class has the region `eu` and zone was `central`, the subnet must be in the same region and zone.
 	// otherwise KKP will reject the creation of the machine deployment and eventually the cluster.
 	MatchSubnetAndStorageLocation bool `json:"matchSubnetAndStorageLocation,omitempty"`
+
+	// Optional: UsePodResourcesCPU enables CPU assignment via Kubernetes Pod resource requests/limits.
+	// When false (default), CPUs are assigned via KubeVirt's spec.domain.cpu.
+	UsePodResourcesCPU bool `json:"usePodResourcesCPU,omitempty"`
 
 	// csi driver operator
 	CsiDriverOperator *KubeVirtCSIDriverOperator `json:"csiDriverOperator,omitempty"`
