@@ -39,7 +39,7 @@ type helmValues struct {
 	} `yaml:"dex"`
 }
 
-// NewClientFromHelmValues is a helper for e2e tests, reading the hack/ci/testdata/oauth_values.yaml
+// NewClientFromHelmValues is a helper for e2e tests, reading the hack/ci/testdata/dex_values.yaml
 // to provide a matching OIDC client. We use this instead of spreading the client ID etc.
 // in tons of shell scripts and env vars.
 func NewClientFromHelmValues(valuesFile string, clientID string, log *zap.SugaredLogger) (*Client, error) {
