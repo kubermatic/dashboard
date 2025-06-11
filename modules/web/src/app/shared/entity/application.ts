@@ -158,6 +158,7 @@ export namespace ApplicationMethod {
 
 export enum ApplicationLabel {
   ManagedBy = 'apps.kubermatic.k8c.io/managed-by',
+  Type = 'apps.kubermatic.k8c.io/type',
 }
 
 export enum ApplicationAnnotations {
@@ -168,6 +169,7 @@ export enum ApplicationAnnotations {
 
 export enum ApplicationLabelValue {
   KKP = 'kkp',
+  CNI = 'cni',
 }
 
 export function getApplicationLogoData(applicationDefinition: ApplicationDefinition): string {
