@@ -82,7 +82,7 @@ kubermaticOperator:
 EOF
 
 # append custom Dex configuration
-cat $WEB_MODULE_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
+cat $WEB_MODULE_ROOT/hack/e2e/fixtures/dex_values.yaml >> $HELM_VALUES_FILE
 
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
@@ -114,20 +114,20 @@ nginx:
 EOF
 
 # append custom Dex configuration
-cat $REPO_ROOT/hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+cat $REPO_ROOT/hack/ci/testdata/dex_values.yaml >> $HELM_VALUES_FILE
 
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
 # find Dex anymore. As this script can be run multiple times in the same CI job,
 # we must make sure to only add the alias once.
-if ! grep oauth /etc/hosts > /dev/null; then
-  echodate "Setting dex.oauth alias in /etc/hosts"
+if ! grep dex /etc/hosts > /dev/null; then
+  echodate "Setting dex.dex alias in /etc/hosts"
   # The container runtime allows us to change the content but not to change the inode
   # which is what sed -i does, so write to a tempfile and write the tempfiles content back.
   temp_hosts="$(mktemp)"
-  sed 's/localhost/localhost dex.oauth/' /etc/hosts > $temp_hosts
+  sed 's/localhost/localhost dex.dex/' /etc/hosts > $temp_hosts
   cat $temp_hosts > /etc/hosts
-  echodate "Set dex.oauth alias in /etc/hosts"
+  echodate "Set dex.dex alias in /etc/hosts"
 fi
 
 # Build binaries and load the Docker images into the kind cluster
@@ -215,7 +215,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dex-nodeport
-  namespace: oauth
+  namespace: dex
 spec:
   type: NodePort
   ports:

@@ -42,7 +42,7 @@ nodes:
     # more stable than doing a long-lived
     # kubectl port-forward
     extraPortMappings:
-      # oauth/dex
+      # dex/dex
       - containerPort: 32000
         hostPort: 5556
         protocol: TCP
@@ -57,8 +57,7 @@ pushElapsed kind_cluster_create_duration_milliseconds $beforeKindCreate "node_ve
 # a NodePort service on the host
 echodate "Starting cluster exposer"
 
-CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
-/tmp/clusterexposer \
+clusterexposer \
   --kubeconfig-inner "$KUBECONFIG" \
   --kubeconfig-outer "/etc/kubeconfig/kubeconfig" \
   --build-id "$PROW_JOB_ID" &> /var/log/clusterexposer.log &
