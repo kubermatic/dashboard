@@ -149,7 +149,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
 
   private get _allowedApplicationDefinitions() {
     return this.applicationDefinitions?.filter(
-      appDef => !appDef.labels || appDef.labels[ApplicationLabel.ManagedBy] !== ApplicationLabelValue.KKP
+      appDef => !appDef.labels || appDef.labels[ApplicationLabel.Type] !== ApplicationLabelValue.CNI
     );
   }
 

@@ -118,7 +118,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   applicationsSourceMap: ApplicationSourceMap = {};
   applicationsStatusMap: ApplicationStatusMap = {};
   editionVersion: string = getEditionVersion();
-  showSystemApplications = false;
+  showSystemApplications = true;
 
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
 
@@ -320,7 +320,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
 
   private get _visibleApplications(): Application[] {
     let filteredApplications = this.applications || [];
-    if (!this.showSystemApplications && this.view === ApplicationsListView.Default) {
+    if (!this.showSystemApplications) {
       filteredApplications = filteredApplications.filter(application => !this.isSystemApplication(application));
     }
     return filteredApplications;
