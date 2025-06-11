@@ -422,9 +422,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
         const exposeStrategy = this.form.get(Controls.ExposeStrategy).value;
         const clusterNetwork = this._clusterSpecService.cluster.spec.clusterNetwork;
-        if (exposeStrategy === ExposeStrategy.tunneling) {
-          clusterNetwork.tunnelingAgentIP = clusterNetwork.tunnelingAgentIP || '100.64.30.10';
-        } else {
+        if (exposeStrategy !== ExposeStrategy.tunneling) {
           clusterNetwork.tunnelingAgentIP = null;
         }
       });
