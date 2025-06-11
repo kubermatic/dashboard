@@ -25,4 +25,8 @@
   &.collapse-sidenav {
     @include mixins.size(variables.$sidenav-width-collapsed, 100%);
   }
+
+  .km-label-primary {
+    margin-left: 5px;
+  }
 }
