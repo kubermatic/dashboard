@@ -24,7 +24,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {Cluster, CreateClusterModel, ExposeStrategy} from '@shared/entity/cluster';
+import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -287,9 +287,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       applications: applications,
     };
-    if (cluster.spec.exposeStrategy !== ExposeStrategy.tunneling) {
-      clusterModel.cluster.spec.clusterNetwork.tunnelingAgentIP = null;
-    }
     if (nodeData.operatingSystemProfile) {
       clusterModel.nodeDeployment.annotations = {
         ...clusterModel.nodeDeployment.annotations,
