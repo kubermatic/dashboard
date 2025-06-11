@@ -27,19 +27,31 @@ import (
 type helmValues struct {
 	Dex struct {
 		Ingress struct {
-			Scheme string `yaml:"scheme"`
-			Host   string `yaml:"host"`
-			Path   string `yaml:"path"`
+			Enabled bool `yaml:"enabled"`
+			Hosts   []struct {
+				Host  string `yaml:"host"`
+				Paths []struct {
+					Path     string `yaml:"path"`
+					PathType string `yaml:"pathType"`
+				} `yaml:"paths"`
+			} `yaml:"hosts"`
+			TLS []interface{} `yaml:"tls"`
 		} `yaml:"ingress"`
 
-		Clients []struct {
-			ID           string   `yaml:"id"`
-			RedirectURIs []string `yaml:"RedirectURIs"`
-		} `yaml:"clients"`
+		Config struct {
+			Issuer           string `yaml:"issuer"`
+			EnablePasswordDB bool   `yaml:"enablePasswordDB"`
+			StaticClients    []struct {
+				ID           string   `yaml:"id"`
+				Name         string   `yaml:"name"`
+				Secret       string   `yaml:"secret"`
+				RedirectURIs []string `yaml:"RedirectURIs"`
+			} `yaml:"staticClients"`
+		} `yaml:"config"`
 	} `yaml:"dex"`
 }
 
-// NewClientFromHelmValues is a helper for e2e tests, reading the hack/ci/testdata/oauth_values.yaml
+// NewClientFromHelmValues is a helper for e2e tests, reading the hack/ci/testdata/dex_values.yaml
 // to provide a matching OIDC client. We use this instead of spreading the client ID etc.
 // in tons of shell scripts and env vars.
 func NewClientFromHelmValues(valuesFile string, clientID string, log *zap.SugaredLogger) (*Client, error) {
@@ -57,7 +69,7 @@ func NewClientFromHelmValues(valuesFile string, clientID string, log *zap.Sugare
 
 	redirectURI := ""
 
-	for _, client := range values.Dex.Clients {
+	for _, client := range values.Dex.Config.StaticClients {
 		if client.ID == clientID {
 			// The actual redirect URI does not matter, as long as it's registered with
 			// Dex. We will intercept the redirect anyway.
@@ -69,12 +81,7 @@ func NewClientFromHelmValues(valuesFile string, clientID string, log *zap.Sugare
 		return nil, fmt.Errorf("could not find a client with ID %q", clientID)
 	}
 
-	scheme := values.Dex.Ingress.Scheme
-	if scheme == "" {
-		scheme = "https"
-	}
-
-	providerURI := fmt.Sprintf("%s://%s%s/auth", scheme, values.Dex.Ingress.Host, values.Dex.Ingress.Path)
-
+	// Use the issuer from config instead of constructing from ingress
+	providerURI := fmt.Sprintf("%s/auth", values.Dex.Config.Issuer)
 	return NewClient(clientID, redirectURI, providerURI, log)
 }

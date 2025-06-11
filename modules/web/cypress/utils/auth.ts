@@ -78,7 +78,7 @@ function mockAuthCookies(): void {
   const nonce = Math.random().toString(radix).slice(slice);
   const header = {alg: 'RS256', typ: 'JWT'};
   const payload = {
-    iss: 'http://dex.oauth:5556/dex/auth',
+    iss: 'http://dex.dex:5556/dex/auth',
     sub: window.btoa(Math.random().toString(radix).slice(slice)),
     aud: 'kubermatic',
     exp: Date.now() + day,

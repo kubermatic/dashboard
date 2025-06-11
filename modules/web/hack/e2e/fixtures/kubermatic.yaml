@@ -31,6 +31,6 @@ spec:
     replicas: 0
   # Dex integration
   auth:
-    tokenIssuer: "http://dex.oauth:5556/dex"
+    tokenIssuer: "http://dex.dex:5556/dex"
     issuerRedirectURL: "http://localhost:8000"
     serviceAccountKey: "__SERVICE_ACCOUNT_KEY__"
