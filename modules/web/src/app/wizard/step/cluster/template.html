@@ -493,22 +493,20 @@ limitations under the License.
                           *ngIf="isKubernetesDashboardEnabled">
               Kubernetes Dashboard
             </mat-checkbox>
-            <div fxLayout="row"
-                 fxLayoutAlign=" center">
-              <mat-checkbox [formControlName]="Controls.OPAIntegration"
-                            id="km-wizard-opa-integration-checkbox"
-                            [matTooltipDisabled]="!form.get(Controls.OPAIntegration).disabled">
-              </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.OPAIntegration"
+                          id="km-wizard-opa-integration-checkbox"
+                          [matTooltipDisabled]="!form.get(Controls.OPAIntegration).disabled">
               <div fxLayout="row"
                    fxLayoutAlign=" center">
-                OPA Integration
+                <span>OPA Integration</span>
                 <i *ngIf="isEnforced(Controls.OPAIntegration)"
                    class="km-icon-info km-pointer"
                    matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
                 <i class="km-icon-warning km-pointer"
                    matTooltip="OPA (Open Policy Agent) has been deprecated in KKP 2.28 and will be removed in the future, Kyverno has replaced it as an Enterprise Edition feature for policy management.."></i>
               </div>
-            </div>
+            </mat-checkbox>
 
             <mat-checkbox *ngIf="isEnterpriseEdition"
                           [formControlName]="Controls.KyvernoIntegration">
