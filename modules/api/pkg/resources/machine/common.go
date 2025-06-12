@@ -619,14 +619,23 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 		},
 	}
 
-	if dc.Spec.Kubevirt.EnableDedicatedCPUs {
+	// defaulting for both flags regarding virtual machine cpu assignment:
+	// - EnableDedicatedCPUs defaults (false) to .resources.requests/limits
+	// - UsePodResourcesCPU defaults (false) to .domain.cpu
+	// as long as we have the deprecated and new flag we need to take care about 4 cases
+	// 1) old flag is set to true and new flag is set to false => .domain.cpu will be used in kubevirt vm
+	// 2) old flag is set to true and new flag is set to true => .domain.cpu will be used in kubevirt vm
+	// 3) old flag is set to false and new flag is set to false => .domain.cpu will be used in kubevirt vm
+	// 4) old flag is set to false and new flag is set to true => .resources.requests/limits will be used
+	// in kubevirt vm
+	if !dc.Spec.Kubevirt.EnableDedicatedCPUs && dc.Spec.Kubevirt.UsePodResourcesCPU {
+		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
+	} else {
 		vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
 		if err != nil {
 			return nil, err
 		}
 		config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
-	} else {
-		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 	}
 
 	var subnet string

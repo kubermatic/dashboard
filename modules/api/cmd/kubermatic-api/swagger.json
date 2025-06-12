@@ -31675,7 +31675,7 @@
           "x-go-name": "DNSPolicy"
         },
         "enableDedicatedCpus": {
-          "description": "Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.\nDefaults to false.",
+          "description": "Optional: EnableDedicatedCPUs enables the assignment of dedicated cpus instead of resource requests and limits for a virtual machine.\nDefaults to false.\nDeprecated: Use .kubevirt.usePodResourcesCPU instead.",
           "type": "boolean",
           "x-go-name": "EnableDedicatedCPUs"
         },
@@ -31705,6 +31705,11 @@
         },
         "providerNetwork": {
           "$ref": "#/definitions/ProviderNetwork"
+        },
+        "usePodResourcesCPU": {
+          "description": "Optional: UsePodResourcesCPU enables CPU assignment via Kubernetes Pod resource requests/limits.\nWhen false (default), CPUs are assigned via KubeVirt's spec.domain.cpu.",
+          "type": "boolean",
+          "x-go-name": "UsePodResourcesCPU"
         },
         "vmEvictionStrategy": {
           "$ref": "#/definitions/EvictionStrategy"
