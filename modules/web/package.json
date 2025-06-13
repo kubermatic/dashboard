@@ -18,7 +18,7 @@
     "start:e2e": "npm run vi && ng s -c=e2e-\"${KUBERMATIC_EDITION:=ee}\"",
     "start:e2e:local": "npm run vi && ng s -c=e2e-local-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
     "start:e2e:mock": "concurrently \"npm run start:mock-server\" \"npm run vi && ng s -c=e2e-mock-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs\"",
-    "start:mock-server": "json-server --watch fixtures/db.json --routes fixtures/routes.json --port 8080 -q",
+    "start:mock-server": "json-server --watch cypress/fixtures/db.json --routes cypress/fixtures/routes.json --port 8080 -q",
     "build": "npm run vi && ng b -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",

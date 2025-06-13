@@ -45,10 +45,8 @@ export class Wizard extends PageOptions implements Page {
       throw new Error(`Preset has to be defined for the ${provider} provider.`);
     }
 
-    this.Buttons.provider(provider).click();
-    this.Buttons.datacenter(datacenter)
-      .click()
-      .then(_ => this._strategy?.onCreate(provider));
+    this.Buttons.provider(provider).click({force: true});
+    this.Buttons.datacenter(datacenter).click().then(_ => this._strategy?.onCreate(provider));
     this.Elements.clusterNameInput.type(name).should(Condition.HaveValue, name);
 
     if (sshKeyName) {
