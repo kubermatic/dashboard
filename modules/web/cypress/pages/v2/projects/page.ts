@@ -56,8 +56,9 @@ export class Projects extends PageOptions implements Page {
   }
 
   create(name: string): void {
-    this.Buttons.openDialog.click();
-    this.Elements.addDialogInput.type(name).then(_ => this._strategy?.onCreate());
+    this.Buttons.openDialog.click({force: true});
+    this.Elements.addDialogInput.should(Condition.BeVisible).should(Condition.NotBeDisabled);
+    this.Elements.addDialogInput.type(name, { force: true }).then(_ => this._strategy?.onCreate());
     this.Buttons.addDialogConfirm.click();
   }
 

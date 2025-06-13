@@ -15,12 +15,17 @@
 import {Intercept} from '@intercept';
 import {BringYourOwn, Condition, Provider, View} from '@kmtypes';
 import {Clusters, Pages, Projects, SSHKeys} from '@pages/v2';
+import {Mocks} from "@utils/mocks";
 
 describe('SSH Key Management Story', () => {
   const projectName = Projects.getName();
   const clusterName = Clusters.getName();
   const sshKeyName = SSHKeys.getName();
   const publicKey = SSHKeys.publicKey;
+
+  const shortTimeout = 100;
+  const longTimeout = 10000;
+  const timeout = Mocks.enabled() ? shortTimeout : longTimeout;
 
   beforeEach(() => Intercept.init());
 
@@ -59,7 +64,9 @@ describe('SSH Key Management Story', () => {
     Pages.expect(View.Clusters.Default);
   });
 
-  it('should create the cluster with ssh key', {retries: 3}, () => {
+  it('should create the cluster with ssh key', () => {
+    cy.reload(); // reload to ensure the page is fresh
+    cy.wait(timeout);
     Pages.Wizard.visit();
     Pages.Wizard.create(
       clusterName,
@@ -87,6 +94,7 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should delete the ssh key', () => {
+    Pages.Members.accessSideNavItem();
     Pages.SSHKeys.visit();
     Pages.expect(View.SSHKeys.Default);
     Pages.SSHKeys.delete(sshKeyName);
