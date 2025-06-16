@@ -23,10 +23,6 @@ describe('SSH Key Management Story', () => {
   const sshKeyName = SSHKeys.getName();
   const publicKey = SSHKeys.publicKey;
 
-  const shortTimeout = 100;
-  const longTimeout = 10000;
-  const timeout = Mocks.enabled() ? shortTimeout : longTimeout;
-
   beforeEach(() => Intercept.init());
 
   it('should login', () => {
@@ -65,9 +61,15 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should create the cluster with ssh key', () => {
-    cy.reload();
-    cy.wait(timeout);
+    Pages.Clusters.List.visit();
     Pages.Wizard.visit();
+
+    cy.get('.no-data-warning').then($warning => {
+      if ($warning.length > 0) {
+        cy.reload();
+      }
+    });
+
     Pages.Wizard.create(
       clusterName,
       Provider.kubeadm,
