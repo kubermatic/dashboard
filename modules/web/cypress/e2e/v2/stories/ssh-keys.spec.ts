@@ -15,7 +15,6 @@
 import {Intercept} from '@intercept';
 import {BringYourOwn, Condition, Provider, View} from '@kmtypes';
 import {Clusters, Pages, Projects, SSHKeys} from '@pages/v2';
-import {Mocks} from "@utils/mocks";
 
 describe('SSH Key Management Story', () => {
   const projectName = Projects.getName();
@@ -64,23 +63,29 @@ describe('SSH Key Management Story', () => {
     Pages.Clusters.List.visit();
     Pages.Wizard.visit();
 
-    cy.get('.no-data-warning').then($warning => {
-      if ($warning.length > 0) {
-        cy.reload();
-      }
-    });
+    // Check if providers are available, if not reload the page
+    cy.get('km-wizard-provider-step', {timeout: 20000})
+      .should(Condition.BeVisible)
+      .then($body => {
+        const $warning = $body.find('#km-wizard-seed-warning');
+        if ($warning.length > 0) {
+          cy.reload();
+        }
+      })
+      .then(() => {
+        Pages.Wizard.create(
+          clusterName,
+          Provider.kubeadm,
+          BringYourOwn.Frankfurt,
+          undefined,
+          undefined,
+          undefined,
+          sshKeyName
+        );
+      });
 
-    Pages.Wizard.create(
-      clusterName,
-      Provider.kubeadm,
-      BringYourOwn.Frankfurt,
-      undefined,
-      undefined,
-      undefined,
-      sshKeyName
-    );
     Pages.expect(View.Clusters.Default);
-    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
+    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist, {timeout: 10000});
   });
 
   it('should remove the ssh key from the cluster', () => {

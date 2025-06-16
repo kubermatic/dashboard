@@ -29,7 +29,7 @@ export class Wizard extends PageOptions implements Page {
   }
 
   visit(): void {
-    this.Buttons.open.click();
+    this.Buttons.open.should(Condition.Exist).click();
   }
 
   create(
@@ -45,9 +45,13 @@ export class Wizard extends PageOptions implements Page {
       throw new Error(`Preset has to be defined for the ${provider} provider.`);
     }
 
-    this.Buttons.provider(provider).click({force: true});
-    this.Buttons.datacenter(datacenter).click().then(_ => this._strategy?.onCreate(provider));
-    this.Elements.clusterNameInput.type(name).should(Condition.HaveValue, name);
+    this.Buttons.provider(provider).click();
+    this.Buttons.datacenter(datacenter)
+      .click()
+      .then(_ => this._strategy?.onCreate(provider));
+
+    const shortWait = 200;
+    this.Elements.clusterNameInput.type(name).should(Condition.HaveValue, name).blur().wait(shortWait);
 
     if (sshKeyName) {
       this.Buttons.sshKeysSelect.click();
@@ -66,20 +70,24 @@ export class Wizard extends PageOptions implements Page {
       return;
     }
 
-    this.Buttons.presetSelect.click();
+    // Preset selection is required for all providers except kubeadm
+    this.Buttons.presetSelect.click({force: true});
     this.Buttons.presetSelectOption(presetName!).click();
     this.Buttons.nextStep(WizardStep.ProviderSettings).click();
 
+    // Initial node settings
     if (mdName) {
       this.Elements.nodeNameInput.type(mdName).should(Condition.HaveValue, mdName);
     }
-
     if (replicas) {
       this.Elements.nodeCountInput.clear().type(replicas).should(Condition.HaveValue, replicas);
     }
-
     this.Buttons.nextStep(WizardStep.NodeSettings).click();
+
+    // Applications step
     this.Buttons.nextStep(WizardStep.Applications).click();
+
+    // Summary step
     this.Buttons.create.click({force: true});
   }
 }

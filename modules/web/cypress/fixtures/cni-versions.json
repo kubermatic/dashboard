@@ -1,0 +1,9 @@
+{
+  "cniPluginType": "canal",
+  "cniDefaultVersion": "v3.29",
+  "versions": [
+    "v3.27",
+    "v3.28",
+    "v3.29"
+  ]
+}
