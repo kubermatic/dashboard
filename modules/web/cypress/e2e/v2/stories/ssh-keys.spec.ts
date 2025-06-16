@@ -65,7 +65,7 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should create the cluster with ssh key', () => {
-    cy.reload(); // reload to ensure the page is fresh
+    cy.reload();
     cy.wait(timeout);
     Pages.Wizard.visit();
     Pages.Wizard.create(
