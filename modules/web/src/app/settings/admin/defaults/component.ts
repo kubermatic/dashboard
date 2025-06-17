@@ -202,9 +202,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  getDocumentationLink(feature: string): string {
+    return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/administration/admin-panel/interface/#${feature}`;
+  }
+
   private _checkLabels(staticLabels: StaticLabel[]): boolean {
     return staticLabels.every(label => label?.key && label.values?.length);
   }
+
   private _verifyEnableKubernetesDashboardRequirements() {
     // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
     if ((!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) && this.settings.enableDashboard) {
