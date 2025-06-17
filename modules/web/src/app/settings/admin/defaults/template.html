@@ -171,7 +171,8 @@ limitations under the License.
                         id="km-enable-kubernetes-dashboard-setting">
             <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
               <mat-hint>This feature is disabled. Visit the
-                <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+                <a [href]="getDocumentationLink('enable-kubernetes-dashboard')"
+                   class="km-clickable-link"
                    target="_blank"
                    rel="noopener noreferrer"
                    fxLayout="row inline"
@@ -198,7 +199,8 @@ limitations under the License.
                         (change)="onOIDCKubeconfigSettingsChange()"
                         id="km-enable-oidc-setting">
             <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a [href]="getDocumentationLink('enable-oidc-kubeconfig')"
+                 class="km-clickable-link"
                  target="_blank"
                  rel="noopener noreferrer"
                  fxLayout="row inline"
@@ -254,7 +256,8 @@ limitations under the License.
                         (change)="onSettingsChange()"
                         id="km-disabled-admin-kubeconfig-setting">
             <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a [href]="getDocumentationLink('disable-admin-kubeconfig-api-endpoints')"
+                 class="km-clickable-link"
                  target="_blank"
                  rel="noopener noreferrer"
                  fxLayout="row inline"
@@ -273,11 +276,22 @@ limitations under the License.
                class="entry-label">
             <span>Enable WebTerminal</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
+                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access through terminal.'></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enabled"
                         [disabled]="!settings.enableOIDCKubeconfig"
                         (change)="onSettingsChange()">
+            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+              <a [href]="getDocumentationLink('enable-web-terminal')"
+                 class="km-clickable-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center">
+                documentation <i class="km-icon-external-link i-18"></i>
+              </a>
+              to learn more.
+            </mat-hint>
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enabled, apiSettings.webTerminalOptions.enabled)"></km-spinner-with-confirmation>
         </div>
@@ -293,6 +307,17 @@ limitations under the License.
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enableInternetAccess"
                         [disabled]="!settings.enableOIDCKubeconfig"
                         (change)="onSettingsChange()">
+            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+              <a [href]="getDocumentationLink('enable-web-terminal-internet-access')"
+                 class="km-clickable-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center">
+                documentation <i class="km-icon-external-link i-18"></i>
+              </a>
+              to learn more.
+            </mat-hint>
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.webTerminalOptions.enableInternetAccess, apiSettings.webTerminalOptions.enableInternetAccess)"></km-spinner-with-confirmation>
         </div>
@@ -308,6 +333,17 @@ limitations under the License.
           <mat-checkbox [(ngModel)]="settings.enableShareCluster"
                         [disabled]="!settings.enableOIDCKubeconfig"
                         (change)="onSettingsChange()">
+            <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
+              <a [href]="getDocumentationLink('enable-share-cluster')"
+                 class="km-clickable-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 fxLayout="row inline"
+                 fxLayoutAlign=" center">
+                documentation <i class="km-icon-external-link i-18"></i>
+              </a>
+              to learn more.
+            </mat-hint>
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableShareCluster, apiSettings.enableShareCluster)"></km-spinner-with-confirmation>
         </div>
