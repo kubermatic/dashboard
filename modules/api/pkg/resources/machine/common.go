@@ -623,7 +623,7 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 	// - EnableDedicatedCPUs defaults (false) to .resources.requests/limits
 	// - UsePodResourcesCPU defaults (false) to .domain.cpu
 	// as long as we have the deprecated and new flag we need to account for 4 cases:
-	// 
+	//
 	// | Old Flag (EnableDedicatedCPUs) | New Flag (UsePodResourcesCPU) | Source for KubeVirt VM CPU |
 	// |---------|---------|---------|
 	// | true | false | .domain.cpu |
