@@ -172,10 +172,11 @@ limitations under the License.
                         [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
                         id="km-enable-kubernetes-dashboard-setting">
             <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
-              <mat-hint>This feature is disabled. Visit the
-                <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled. Visit the
+                <a [href]="getDocumentationLink()"
                    target="_blank"
                    rel="noopener noreferrer"
+                   class="km-clickable-link"
                    fxLayout="row inline"
                    fxLayoutAlign=" center">
                   documentation <i class="km-icon-external-link i-18"></i>
@@ -200,9 +201,10 @@ limitations under the License.
                         (change)="onOIDCKubeconfigSettingsChange()"
                         id="km-enable-oidc-setting">
             <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
+                 class="km-clickable-link"
                  fxLayout="row inline"
                  fxLayoutAlign=" center">
                 documentation <i class="km-icon-external-link i-18"></i>
@@ -241,9 +243,10 @@ limitations under the License.
                         (change)="onSettingsChange()"
                         id="km-disabled-admin-kubeconfig-setting">
             <mat-hint *ngIf="!settings.enableOIDCKubeconfig">This feature requires the OIDC kubeconfig feature to be enabled. Visit the
-              <a href="https://docs.kubermatic.com/kubermatic/{{editionVersion}}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/"
+              <a [href]="getDocumentationLink()"
                  target="_blank"
                  rel="noopener noreferrer"
+                 class="km-clickable-link"
                  fxLayout="row inline"
                  fxLayoutAlign=" center">
                 documentation <i class="km-icon-external-link i-18"></i>
@@ -260,7 +263,7 @@ limitations under the License.
                class="entry-label">
             <span>Enable WebTerminal</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access thorough terminal.'></div>
+                 matTooltip='Show/Hide "Web Terminal" button on cluster details and allow/block web terminal pod access through terminal.'></div>
           </div>
           <mat-checkbox [(ngModel)]="settings.webTerminalOptions.enabled"
                         [disabled]="!settings.enableOIDCKubeconfig"

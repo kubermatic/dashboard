@@ -202,9 +202,14 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  getDocumentationLink(): string {
+    return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/`;
+  }
+
   private _checkLabels(staticLabels: StaticLabel[]): boolean {
     return staticLabels.every(label => label?.key && label.values?.length);
   }
+
   private _verifyEnableKubernetesDashboardRequirements() {
     // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
     if ((!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) && this.settings.enableDashboard) {
