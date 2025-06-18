@@ -170,7 +170,7 @@ limitations under the License.
                         [disabled]="!isKubernetesDashboardFeatureGatesEnabled()"
                         id="km-enable-kubernetes-dashboard-setting">
             <ng-container *ngIf="!isKubernetesDashboardFeatureGatesEnabled()">
-              <mat-hint>This feature is disabled. Visit the
+              <mat-hint>This feature requires both OIDC Kubeconfig and OpenID Auth Plugin feature flags to be enabled. Visit the
                 <a [href]="getDocumentationLink()"
                    target="_blank"
                    rel="noopener noreferrer"
