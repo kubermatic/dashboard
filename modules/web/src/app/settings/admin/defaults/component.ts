@@ -202,8 +202,8 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  getDocumentationLink(feature: string): string {
-    return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/administration/admin-panel/interface/#${feature}`;
+  getDocumentationLink(): string {
+    return `https://docs.kubermatic.com/kubermatic/${this.editionVersion}/tutorials-howtos/oidc-provider-configuration/share-clusters-via-delegated-oidc-authentication/`;
   }
 
   private _checkLabels(staticLabels: StaticLabel[]): boolean {
