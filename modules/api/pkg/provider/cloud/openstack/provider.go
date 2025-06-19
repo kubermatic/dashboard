@@ -125,7 +125,7 @@ func GetNetworks(ctx context.Context, authURL, region string, credentials *resou
 		return nil, fmt.Errorf("couldn't get auth client: %w", err)
 	}
 
-	networks, err := getAllNetworks(authClient, osnetworks.ListOpts{TenantID: credentials.ProjectID})
+	networks, err := getAllNetworks(authClient, osnetworks.ListOpts{})
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get networks: %w", err)
 	}
