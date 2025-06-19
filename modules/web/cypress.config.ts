@@ -43,8 +43,7 @@ export default defineConfig({
       // TODO: Update once more tests are rewritten
       // const ignored: string[] = ['cypress/**/!(service-accounts|ssh-keys).spec.ts'];
       const ignored: string[] = [
-        // TODO: 'ssh-keys' has been ignored for now because it's flaky.
-        runnableTestsRegex('service-accounts', 'edition', 'members', 'defaults', 'dynamic-datacenters'),
+        runnableTestsRegex('service-accounts', 'edition', 'members', 'defaults', 'dynamic-datacenters', 'ssh-keys'),
       ];
 
       // if (isAPIMocked) {

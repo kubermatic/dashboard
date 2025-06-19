@@ -59,19 +59,33 @@ describe('SSH Key Management Story', () => {
     Pages.expect(View.Clusters.Default);
   });
 
-  it('should create the cluster with ssh key', {retries: 3}, () => {
+  it('should create the cluster with ssh key', () => {
+    Pages.Clusters.List.visit();
     Pages.Wizard.visit();
-    Pages.Wizard.create(
-      clusterName,
-      Provider.kubeadm,
-      BringYourOwn.Frankfurt,
-      undefined,
-      undefined,
-      undefined,
-      sshKeyName
-    );
+
+    // Check if providers are available, if not reload the page
+    cy.get('km-wizard-provider-step', {timeout: 20000})
+      .should(Condition.BeVisible)
+      .then($body => {
+        const $warning = $body.find('#km-wizard-seed-warning');
+        if ($warning.length > 0) {
+          cy.reload();
+        }
+      })
+      .then(() => {
+        Pages.Wizard.create(
+          clusterName,
+          Provider.kubeadm,
+          BringYourOwn.Frankfurt,
+          undefined,
+          undefined,
+          undefined,
+          sshKeyName
+        );
+      });
+
     Pages.expect(View.Clusters.Default);
-    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
+    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist, {timeout: 10000});
   });
 
   it('should remove the ssh key from the cluster', () => {
@@ -87,6 +101,7 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should delete the ssh key', () => {
+    Pages.Members.accessSideNavItem();
     Pages.SSHKeys.visit();
     Pages.expect(View.SSHKeys.Default);
     Pages.SSHKeys.delete(sshKeyName);

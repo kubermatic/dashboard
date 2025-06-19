@@ -49,15 +49,18 @@ describe('Admin Settings - Datacenters Story', () => {
     Pages.expect(View.AdminSettings.DynamicDatacenters);
   });
 
-  it('should create new datacenter', () => {
+  it('should successfully create and then delete a datacenter', () => {
     Pages.AdminSettings.DynamicDatacenters.create(datacenterName, provider, seedName, country, location);
-    Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName).should(Condition.Exist);
-  });
+    cy.wait('@createDatacenter');
+    Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName)
+      .should(Condition.Exist)
+      .and(Condition.BeVisible)
+      .and(Condition.BeEnabled);
 
-  it('should delete created datacenter', () => {
-    Pages.AdminSettings.DynamicDatacenters.create(datacenterName, provider, seedName, country, location);
-    Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName).should(Condition.Exist);
     Pages.AdminSettings.DynamicDatacenters.delete(datacenterName);
+    cy.wait('@deleteDatacenter');
+
+    cy.wait('@getDatacenters');
     Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName).should(Condition.NotExist);
   });
 
