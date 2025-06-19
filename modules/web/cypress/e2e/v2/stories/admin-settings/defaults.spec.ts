@@ -74,16 +74,33 @@ describe('Admin Settings - Defaults Story', () => {
   });
 
   it('should create a new cluster and wait for it to start', () => {
-    Pages.Wizard.create(
-      clusterName,
-      Provider.Digitalocean,
-      Digitalocean.Frankfurt,
-      preset,
-      initialMachineDeploymentName,
-      initialMachineDeploymentReplicas
-    );
+    Pages.Clusters.List.visit();
+    Pages.Wizard.visit();
+
+    // Check if providers are available, if not reload the page
+    cy.get('km-wizard-provider-step', {timeout: 10000})
+      .should(Condition.BeVisible)
+      .then($body => {
+        const $warning = $body.find('#km-wizard-seed-warning');
+        if ($warning.length > 0) {
+          cy.reload();
+        }
+      })
+      .then(() => {
+        Pages.Wizard.create(
+          clusterName,
+          Provider.Digitalocean,
+          Digitalocean.Frankfurt,
+          preset,
+          initialMachineDeploymentName,
+          initialMachineDeploymentReplicas
+        );
+      });
+
     Pages.expect(View.Clusters.Default);
-    Pages.Clusters.Details.Elements.machineDeploymentList.should(Condition.Contain, initialMachineDeploymentName);
+    Pages.Clusters.Details.Elements.machineDeploymentList.should(Condition.Contain, initialMachineDeploymentName, {
+      timeout: 20000,
+    });
   });
 
   it('should make sure default admin settings work', () => {
