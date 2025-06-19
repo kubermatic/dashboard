@@ -192,7 +192,7 @@ export class AddBackupStorageLocationDialogComponent implements OnInit, OnDestro
           prefix: this.form.get(Controls.Prefix).value,
           caCert: this.form.get(Controls.CaCert).value,
         },
-        backupSyncPeriod: this.form.get(Controls.BackupSyncPeriod).value,
+        backupSyncPeriod: this.form.get(Controls.BackupSyncPeriod).value === '' ? null : this.form.get(Controls.BackupSyncPeriod).value,
         config: {
           region: this.form.get(Controls.Region).value,
           s3Url: this.form.get(Controls.Endpoints).value,
