@@ -277,9 +277,13 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       case ClusterTemplateScope.Global:
         return this.isAdmin;
       case ClusterTemplateScope.User:
-        return this.isAdmin || this.currentUser.email === template.user;
+        return this.isAdmin || this._isTemplateOwner(template);
       case ClusterTemplateScope.Project:
         return this.can(permission);
     }
+  }
+
+  private _isTemplateOwner(template: ClusterTemplate): boolean {
+    return this.currentUser?.email === template.user;
   }
 }
