@@ -258,6 +258,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           seedSettings?.kubelb?.enableForAllDatacenters
         );
         this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
+
+        // If KubeLB is enforced, we need to enable the kubelb control
+        if (this.isKubeLBEnforced) {
+          this.form.get(Controls.KubeLB).setValue(true);
+        }
+
         this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
         this._provider = datacenter.spec.provider;
         this.isAllowedIPRangeSupported = (NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS as string[]).includes(this._provider);
