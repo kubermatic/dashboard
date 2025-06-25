@@ -81,7 +81,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -108,6 +108,7 @@ func getProviders(r Routing) watcher.Providers {
 		PrivilegedProjectProvider: r.privilegedProjectProvider,
 		UserInfoGetter:            r.userInfoGetter,
 		SeedsGetter:               r.seedsGetter,
+		SeedClientGetter:          r.seedsClientGetter,
 		ClusterProviderGetter:     r.clusterProviderGetter,
 	}
 }
@@ -278,6 +279,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		if err != nil {
 			return
 		}
+		seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
 
 		ws, err := upgrader.Upgrade(w, req, nil)
 		if err != nil {
@@ -312,7 +314,7 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions)
+		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions)
 	}
 }
 

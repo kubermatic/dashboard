@@ -295,7 +295,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
@@ -307,17 +307,17 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 			return err
 		}
 		// create NetworkPolicy, Pod and cleanup Job
-		if err := createOrUpdateResources(ctx, client, userEmailID, userAppName, cluster, options); err != nil {
+		if err := createOrUpdateResources(ctx, client, seedClient, userEmailID, userAppName, cluster, options); err != nil {
 			return err
 		}
 	}
 
 	// create or update ConfigMap to renew expiration time
-	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0)); err != nil {
+	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0, cluster.Name)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
-		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0))
+		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0, cluster.Name))
 		if err != nil {
 			return err
 		}
@@ -387,7 +387,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 	return nil
 }
 
-func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) error {
+func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) error {
 	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster, options)
 	if err != nil {
 		return err
@@ -408,7 +408,7 @@ func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Clien
 		}
 	}
 
-	if err := client.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID)); err != nil {
+	if err := seedClient.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID, cluster.Name)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
@@ -417,13 +417,13 @@ func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Clien
 	return nil
 }
 
-func genWebTerminalConfigMap(userAppName string, numberOfExpirationRefreshes int) *corev1.ConfigMap {
+func genWebTerminalConfigMap(userAppName string, numberOfExpirationRefreshes int clusterID string) *corev1.ConfigMap {
 	expirationTime := time.Now().Add(podLifetime)
 
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      userAppName,
-			Namespace: metav1.NamespaceSystem,
+			Namespace: fmt.Sprintf("cluster-%s", clusterID),
 			Labels: map[string]string{
 				resources.AppLabelKey: appName,
 			},
@@ -570,11 +570,12 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 	return pod
 }
 
-func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
+func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string) *batchv1.Job {
+	namespace := fmt.Sprintf("cluster-%s", clusterID)
 	return &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("cleanup-%s", userAppName),
-			Namespace: metav1.NamespaceSystem,
+			Namespace: namespace,
 			Labels: map[string]string{
 				resources.AppLabelKey: appName,
 			},
@@ -594,18 +595,23 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 							Image:   webTerminalImage,
 							Command: []string{"/bin/bash", "-c"},
 							Args: []string{`
-								EXP=$(<$EXPIRATION);
+
+								kubectl get secret -n $USER_CLUSTER_NAMESPACE admin-kubeconfig -o jsonpath='{.data.kubeconfig}' | base64 -d > /tmp/temp-kubeconfig.yaml
+								export KUBECONFIG=/tmp/temp-kubeconfig.yaml
+								EXP=$(kubectl get configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM -o jsonpath='{.data.ExpirationTimestamp}')
+								EXP_REFRESHES=$(kubectl get configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM -o jsonpath='{.data.ExpirationRefreshes}')
 								NOW=$(date +"%s");
 								REMAINING_TIME_SEC=$((EXP-NOW));
-								EXP_REFRESHES=$(<$EXPIRATION_REFRESHES);
 								if (( EXP_REFRESHES <= MAX_EXPIRATION_REFRESHES && REMAINING_TIME_SEC > 0 )); then
 									sleep $REMAINING_TIME_SEC;
+									rm -f /tmp/temp-kubeconfig.yaml;
 									exit 1; # exit as failed, so the job will be restarted to check if the expiration was updated
 								fi
 								# user web terminal is already expired, so delete its resources
 								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM;
 								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM;
-								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM;`,
+								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM;
+								rm -f /tmp/temp-kubeconfig.yaml;`,
 							},
 							Env: []corev1.EnvVar{
 								{
@@ -619,6 +625,10 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 								{
 									Name:  "NAMESPACE_SYSTEM",
 									Value: metav1.NamespaceSystem,
+								},
+								{
+									Name:  "USER_CLUSTER_NAMESPACE",
+									Value: namespace,
 								},
 								{
 									Name:  "EXPIRATION",
@@ -712,10 +722,11 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) {
 	if err := startProcess(
 		ctx,
 		client,
+		seedClient,
 		k8sClient,
 		cfg,
 		userEmailID,
