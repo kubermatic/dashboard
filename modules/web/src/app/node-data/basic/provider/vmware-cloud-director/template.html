@@ -100,6 +100,20 @@ limitations under the License.
     </mat-select>
   </mat-form-field>
 
+
+  <mat-form-field fxFlex *ngIf="networks.length > 1">
+    <mat-label>Addtional Networks</mat-label>
+    <mat-select [formControlName]="Controls.AdditionalNetworks"
+                (selectionChange)="onAdditionalNetworkChanged($event.value)"
+                disableOptionCentering
+                multiple
+                kmValueChangedIndicator>
+      <mat-option *ngFor="let network of networks"
+                  [value]="network"
+                  [disabled]="network == form.get(Controls.Network).value"> {{network}} </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <km-combobox #placementPolicyCombobox
                [selected]="selectedPlacementPolicy"
                [options]="placementPolicies"

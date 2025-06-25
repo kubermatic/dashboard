@@ -61,6 +61,7 @@ enum Controls {
   SizingPolicy = 'sizingPolicy',
   Template = 'template',
   Network = 'network',
+  AdditionalNetworks = 'additionalNetworks',
 }
 
 enum StorageProfileState {
@@ -201,7 +202,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.DiskSizeGB).valueChanges,
       this.form.get(Controls.DiskIOPs).valueChanges,
       this.form.get(Controls.IPAllocationMode).valueChanges,
-      this.form.get(Controls.Network).valueChanges
+      this.form.get(Controls.Network).valueChanges,
+      this.form.get(Controls.AdditionalNetworks).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -217,7 +219,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       this.form.get(Controls.Catalog).valueChanges,
       this.form.get(Controls.PlacementPolicy).valueChanges,
       this.form.get(Controls.SizingPolicy).valueChanges,
-      this.form.get(Controls.Network).valueChanges
+      this.form.get(Controls.Network).valueChanges,
+      this.form.get(Controls.AdditionalNetworks).valueChanges
     )
       .pipe(filter(_ => this.isEnterpriseEdition))
       .pipe(takeUntil(this._unsubscribe))
@@ -339,7 +342,18 @@ export class VMwareCloudDirectorBasicNodeDataComponent
   }
 
   onNetworkChanged(network: string): void {
+    const additionalNetworksControl = this.form.get(Controls.AdditionalNetworks);
+
+    if (additionalNetworksControl.value && additionalNetworksControl.value.includes(network)) {
+      additionalNetworksControl.setValue(additionalNetworksControl.value.filter(n => n !== network));
+    }
+
     this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.network = network;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onAdditionalNetworkChanged(networks: string[]): void {
+    this._nodeDataService.nodeData.spec.cloud.vmwareclouddirector.additionalNetworks = networks;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -351,6 +365,10 @@ export class VMwareCloudDirectorBasicNodeDataComponent
 
   updateSelectedNetwork(): void {
     const networkControl = this.form.get(Controls.Network);
+    const additionalNetworksControl = this.form.get(Controls.AdditionalNetworks);
+
+    additionalNetworksControl.setValue(additionalNetworksControl.value.filter(n => this.networks.includes(n)));
+
     if (networkControl.value && this.networks.includes(networkControl.value)) {
       return;
     }
@@ -381,9 +399,8 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.Catalog]: this._builder.control(values ? values.catalog : defaults.catalog, [Validators.required]),
       [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
       [Controls.SizingPolicy]: this._builder.control(values ? values.sizingPolicy : defaults.sizingPolicy),
-      [Controls.Network]: this._builder.control(values && values.network ? values.network : this.networks[0], [
-        Validators.required,
-      ]),
+      [Controls.Network]: this._builder.control(values?.network ?? this.networks[0], Validators.required),
+      [Controls.AdditionalNetworks]: this._builder.control(values?.additionalNetworks ?? []),
     });
   }
 
@@ -573,6 +590,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
             diskIOPS: this.form.get(Controls.DiskIOPs).value,
             ipAllocationMode: this.form.get(Controls.IPAllocationMode).value,
             network: this.form.get(Controls.Network).value,
+            additionalNetworks: this.form.get(Controls.AdditionalNetworks).value,
           } as VMwareCloudDirectorNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
@@ -595,6 +613,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
         [Controls.PlacementPolicy]: this.form.get(Controls.PlacementPolicy).value?.[ComboboxControls.Select],
         [Controls.SizingPolicy]: this.form.get(Controls.SizingPolicy).value?.[ComboboxControls.Select],
         [Controls.Network]: this.form.get(Controls.Network).value,
+        [Controls.AdditionalNetworks]: this.form.get(Controls.AdditionalNetworks).value,
       } as VMwareCloudDirectorNodeSpec,
     };
 
