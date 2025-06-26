@@ -261,16 +261,17 @@ limitations under the License.
         Kubernetes Dashboard
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.KubeLB"
-                    [disabled]="isKubeLBEnforced"
-                    *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster())"
-                    kmValueChangedIndicator>
-        Kubermatic KubeLB
+      <div fxLayout="row" fxLayoutAlign=" center" *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster())">
+        <mat-checkbox [formControlName]="Controls.KubeLB"
+                      [disabled]="isKubeLBEnforced"
+                      kmValueChangedIndicator>
+          Kubermatic KubeLB
+        </mat-checkbox>
         <i class="km-icon-info km-pointer"
            [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB for managing load balancers in your cluster. This allows automatic provisioning and management of load balancers for your services.'"></i>
-      </mat-checkbox>
+      </div>
 
-      <ng-container *ngIf="form.get(Controls.KubeLB).value">
+      <ng-container *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster()) && form.get(Controls.KubeLB).value">
         <div class="km-suboption">
           <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
             Use LoadBalancer Class
