@@ -464,15 +464,18 @@ limitations under the License.
                  [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.KubeLB"
-                          *ngIf="isEnterpriseEdition && isKubeLBEnabled"
-                          [disabled]="isKubeLBEnforced">
-              Kubermatic KubeLB
+            <div fxLayout="row"
+                 fxLayoutAlign=" center"
+                 *ngIf="isEnterpriseEdition && isKubeLBEnabled">
+              <mat-checkbox [formControlName]="Controls.KubeLB"
+                            [disabled]="isKubeLBEnforced">
+                Kubermatic KubeLB
+              </mat-checkbox>
               <i class="km-icon-info km-pointer"
                  [matTooltip]="isKubeLBEnforced ? 'Kubermatic KubeLB is enforced by your admin in the chosen datacenter.' : 'Enable to use Kubermatic KubeLB, responsible for provisioning and managing load balancers.'"></i>
-            </mat-checkbox>
+            </div>
 
-            <ng-container *ngIf="form.get(Controls.KubeLB).value">
+            <ng-container *ngIf="isEnterpriseEdition && isKubeLBEnabled && form.get(Controls.KubeLB).value">
               <div class="km-suboption">
                 <mat-checkbox [formControlName]="Controls.KubeLBUseLoadBalancerClass">
                   Use LoadBalancer Class
