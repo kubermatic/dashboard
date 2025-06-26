@@ -150,7 +150,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 7: viewer can't create cluster template in user scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com can't create or update cluster templates in scope user"}}`,
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
 			HTTPStatus:       http.StatusForbidden,
 			ProjectToSync:    test.GenDefaultProject().Name,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
@@ -164,7 +164,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 8: viewer can't create cluster template in project scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"project","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com can't create or update cluster templates in scope project"}}`,
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
 			HTTPStatus:       http.StatusForbidden,
 			ProjectToSync:    test.GenDefaultProject().Name,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
@@ -594,7 +594,7 @@ func TestDeleteClusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 6: viewer can't delete cluster template",
 			TemplateID:       "ctID6",
-			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com can't delete template ctID6"}}`,
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot delete cluster templates regardless of any scope"}}`,
 			HTTPStatus:       http.StatusForbidden,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -889,7 +889,7 @@ func TestImportClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 5: viewer can't import cluster template in user scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com can't create or update cluster templates in scope user"}}`,
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
 			HTTPStatus:       http.StatusForbidden,
 			ProjectToSync:    test.GenDefaultProject().Name,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
@@ -903,7 +903,7 @@ func TestImportClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 6: viewer can't import cluster template in project scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"project","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com can't create or update cluster templates in scope project"}}`,
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
 			HTTPStatus:       http.StatusForbidden,
 			ProjectToSync:    test.GenDefaultProject().Name,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
