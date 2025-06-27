@@ -261,7 +261,9 @@ limitations under the License.
         Kubernetes Dashboard
       </mat-checkbox>
 
-      <div fxLayout="row" fxLayoutAlign=" center" *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster())">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster())">
         <mat-checkbox [formControlName]="Controls.KubeLB"
                       [disabled]="isKubeLBEnforced"
                       kmValueChangedIndicator>
