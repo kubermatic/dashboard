@@ -274,15 +274,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           // If KubeLB is enforced, we need to enable the kubelb control
           if (this.isKubeLBEnforced) {
             this.form.get(Controls.KubeLB).setValue(true);
+          } else {
+            const kubeLBValue = datacenter.spec.kubelb?.enabled || false;
+            this.form.get(Controls.KubeLB).setValue(kubeLBValue);
           }
 
-          if (datacenter.spec.kubelb?.enableGatewayAPI) {
-            this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(true);
-          }
-
-          if (datacenter.spec.kubelb?.useLoadBalancerClass) {
-            this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(true);
-          }
+          this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(!!datacenter.spec.kubelb?.enableGatewayAPI);
+          this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(!!datacenter.spec.kubelb?.useLoadBalancerClass);
 
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
