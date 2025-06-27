@@ -280,16 +280,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
           // Set isKubeLBEnabled immediately based on datacenter settings to avoid UI flicker
           // This will be updated later with seed settings
-          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+          this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, this._seedSettings);
 
           // If KubeLB is enforced, we need to enable the kubelb control
-          if (this.isKubeLBEnforced) {
-            this.form.get(Controls.KubeLB).setValue(true);
-          } else {
-            const kubeLBValue = datacenter.spec.kubelb?.enabled || false;
-            this.form.get(Controls.KubeLB).setValue(kubeLBValue);
-          }
-
+          this.form.get(Controls.KubeLB).setValue(this.isKubeLBEnforced);
           this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(!!datacenter.spec.kubelb?.enableGatewayAPI);
           this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(!!datacenter.spec.kubelb?.useLoadBalancerClass);
 
@@ -312,11 +306,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(({datacenter, seedSettings}) => {
         this._seedSettings = seedSettings;
         // Update isKubeLBEnabled with seed settings
-        this.isKubeLBEnabled = !!(
-          datacenter.spec.kubelb?.enforced ||
-          datacenter.spec.kubelb?.enabled ||
-          seedSettings?.kubelb?.enableForAllDatacenters
-        );
+        this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, seedSettings);
       });
 
     this._clusterSpecService.providerChanges
@@ -1173,5 +1163,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       }
     }
     return '';
+  }
+
+  private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
+    return !!(
+      datacenter.spec.kubelb?.enforced ||
+      datacenter.spec.kubelb?.enabled ||
+      seedSettings?.kubelb?.enableForAllDatacenters
+    );
   }
 }

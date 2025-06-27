@@ -252,11 +252,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       )
       .subscribe(({datacenter, seedSettings}) => {
         this._seedSettings = seedSettings;
-        this.isKubeLBEnabled = !!(
-          datacenter.spec.kubelb?.enforced ||
-          datacenter.spec.kubelb?.enabled ||
-          seedSettings?.kubelb?.enableForAllDatacenters
-        );
+        this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, seedSettings);
         this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
         // If KubeLB is enforced, we need to enable the kubelb control
@@ -444,6 +440,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     } else {
       this.form.get(control).enable();
     }
+  }
+
+  private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
+    return !!(
+      datacenter.spec.kubelb?.enforced ||
+      datacenter.spec.kubelb?.enabled ||
+      seedSettings?.kubelb?.enableForAllDatacenters
+    );
   }
 
   private _getCBSL(projectID: string): void {
