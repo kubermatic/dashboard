@@ -278,18 +278,20 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
+          // Set isKubeLBEnabled immediately based on datacenter settings to avoid UI flicker
+          // This will be updated later with seed settings
+          this.isKubeLBEnabled = !!(datacenter.spec.kubelb?.enforced || datacenter.spec.kubelb?.enabled);
+
           // If KubeLB is enforced, we need to enable the kubelb control
           if (this.isKubeLBEnforced) {
             this.form.get(Controls.KubeLB).setValue(true);
+          } else {
+            const kubeLBValue = datacenter.spec.kubelb?.enabled || false;
+            this.form.get(Controls.KubeLB).setValue(kubeLBValue);
           }
 
-          if (datacenter.spec.kubelb?.enableGatewayAPI) {
-            this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(true);
-          }
-
-          if (datacenter.spec.kubelb?.useLoadBalancerClass) {
-            this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(true);
-          }
+          this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(!!datacenter.spec.kubelb?.enableGatewayAPI);
+          this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(!!datacenter.spec.kubelb?.useLoadBalancerClass);
 
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
@@ -309,6 +311,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(({datacenter, seedSettings}) => {
         this._seedSettings = seedSettings;
+        // Update isKubeLBEnabled with seed settings
         this.isKubeLBEnabled = !!(
           datacenter.spec.kubelb?.enforced ||
           datacenter.spec.kubelb?.enabled ||
