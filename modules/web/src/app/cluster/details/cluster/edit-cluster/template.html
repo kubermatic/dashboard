@@ -255,7 +255,7 @@ limitations under the License.
 
       <mat-checkbox [formControlName]="Controls.KubeLB"
                     [disabled]="isKubeLBEnforced"
-                    *ngIf="isEnterpriseEdition && isKubeLBEnabled"
+                    *ngIf="isEnterpriseEdition && (isKubeLBEnabled || isKubeLBEnabledForCluster())"
                     kmValueChangedIndicator>
         Kubermatic KubeLB
         <i class="km-icon-info km-pointer"
