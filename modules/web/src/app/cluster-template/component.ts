@@ -51,6 +51,8 @@ import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators
   standalone: false,
 })
 export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Permission = Permission;
+
   templates: ClusterTemplate[] = [];
   templateDatacenterMap: Map<string, Datacenter> = new Map<string, Datacenter>();
   isInitializing = true;
@@ -84,6 +86,9 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _notificationService: NotificationService
   ) {}
 
+  get isAdmin(): boolean {
+    return !!this.currentUser?.isAdmin;
+  }
   ngOnInit(): void {
     this._setupList();
     this._loadUser();
@@ -181,29 +186,12 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     return Cluster.getProvider(cluster);
   }
 
-  canCreate(): boolean {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._currentGroupConfig,
-      View.ClusterTemplates,
-      Permission.Create
+  can(permission: Permission): boolean {
+    return (
+      this.currentUser &&
+      this._currentGroupConfig &&
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.ClusterTemplates, permission)
     );
-  }
-
-  canEdit(template: ClusterTemplate): boolean {
-    switch (template.scope) {
-      case ClusterTemplateScope.Global:
-        return this.currentUser.isAdmin;
-      case ClusterTemplateScope.User:
-        return this.currentUser.isAdmin || this.currentUser.email === template.user;
-      case ClusterTemplateScope.Project:
-        return MemberUtils.hasPermission(
-          this.currentUser,
-          this._currentGroupConfig,
-          View.ClusterTemplates,
-          Permission.Edit
-        );
-    }
   }
 
   create(): void {
@@ -212,20 +200,12 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  canEdit(template: ClusterTemplate): boolean {
+    return this._canModify(template, Permission.Edit);
+  }
+
   canDelete(template: ClusterTemplate): boolean {
-    switch (template.scope) {
-      case ClusterTemplateScope.Global:
-        return this.currentUser.isAdmin;
-      case ClusterTemplateScope.User:
-        return this.currentUser.isAdmin || this.currentUser.email === template.user;
-      case ClusterTemplateScope.Project:
-        return MemberUtils.hasPermission(
-          this.currentUser,
-          this._currentGroupConfig,
-          View.ClusterTemplates,
-          Permission.Delete
-        );
-    }
+    return this._canModify(template, Permission.Delete);
   }
 
   delete(template: ClusterTemplate): void {
@@ -290,5 +270,20 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
       component.projectId = id;
     });
+  }
+
+  private _canModify(template: ClusterTemplate, permission: Permission): boolean {
+    switch (template.scope) {
+      case ClusterTemplateScope.Global:
+        return this.isAdmin;
+      case ClusterTemplateScope.User:
+        return this.isAdmin || this._isTemplateOwner(template);
+      case ClusterTemplateScope.Project:
+        return this.can(permission);
+    }
+  }
+
+  private _isTemplateOwner(template: ClusterTemplate): boolean {
+    return this.currentUser?.email === template.user;
   }
 }
