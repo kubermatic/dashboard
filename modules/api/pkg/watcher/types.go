@@ -32,6 +32,7 @@ type Providers struct {
 	PrivilegedProjectProvider provider.PrivilegedProjectProvider
 	UserInfoGetter            provider.UserInfoGetter
 	SeedsGetter               provider.SeedsGetter
+	SeedClientGetter          provider.SeedClientGetter
 	ClusterProviderGetter     provider.ClusterProviderGetter
 }
 
