@@ -430,9 +430,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange())
-      );
+      .subscribe(_ => {
+        this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
+
+        const exposeStrategy = this.form.get(Controls.ExposeStrategy).value;
+        const clusterNetwork = this._clusterSpecService.cluster.spec.clusterNetwork;
+        if (exposeStrategy !== ExposeStrategy.tunneling) {
+          clusterNetwork.tunnelingAgentIP = null;
+        }
+      });
 
     merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.CNIPluginVersion).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
