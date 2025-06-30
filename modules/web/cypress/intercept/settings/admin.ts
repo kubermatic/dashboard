@@ -20,16 +20,18 @@ export class AdminSettings {
   private static _dynamicDatacentersFixture = Fixtures.Settings.DatacenterList;
 
   constructor() {
-    cy.intercept(Endpoints.Administrator.Settings, req => req.reply({body: AdminSettings._adminSettingsFixture}));
+    cy.intercept(Endpoints.Administrator.Settings, req => req.reply({body: AdminSettings._adminSettingsFixture})).as(
+      'getAdminSettings'
+    );
     cy.intercept(RequestType.GET, Endpoints.Resource.Datacenter.List, req =>
       req.reply({fixture: AdminSettings._dynamicDatacentersFixture})
-    );
+    ).as('getDatacenters');
     cy.intercept(RequestType.POST, Endpoints.Resource.Datacenter.Create, req =>
       req.reply({fixture: Fixtures.Settings.Datacenter})
-    );
+    ).as('createDatacenter');
     cy.intercept(RequestType.DELETE, Endpoints.Resource.Datacenter.Delete, req =>
       req.reply({fixture: Fixtures.Settings.Datacenter})
-    );
+    ).as('deleteDatacenter');
   }
 
   onChange(settings: Partial<SettingsSpec>): void {

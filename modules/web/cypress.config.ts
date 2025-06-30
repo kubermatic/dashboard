@@ -13,11 +13,12 @@
 // limitations under the License.
 
 import {defineConfig} from 'cypress';
-import failFast from 'cypress-fail-fast/plugin';
+import failFast from 'cypress-fail-fast/plugin.js';
 import {deleteAsync} from 'del';
 
-function runnableTestsRegex(...fileName: string[]): string {
-  return `cypress/e2e/**/!(${fileName.reduce((prevName, name) => `${prevName}|${name}`)}).spec.ts`;
+function runnableTestsRegex(...fileName) {
+  const joinedNames = fileName.join('|');
+  return `cypress/e2e/**/!(${joinedNames}).spec.ts`;
 }
 
 export default defineConfig({
@@ -42,8 +43,8 @@ export default defineConfig({
       const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
       // TODO: Update once more tests are rewritten
       // const ignored: string[] = ['cypress/**/!(service-accounts|ssh-keys).spec.ts'];
-      const ignored: string[] = [
-        runnableTestsRegex('service-accounts', 'ssh-keys', 'edition', 'members', 'defaults', 'dynamic-datacenters'),
+      const ignored = [
+        runnableTestsRegex('service-accounts', 'edition', 'members', 'defaults', 'dynamic-datacenters', 'ssh-keys'),
       ];
 
       // if (isAPIMocked) {
