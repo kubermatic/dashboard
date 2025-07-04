@@ -170,4 +170,9 @@ export class PresetsService {
     const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
     return this._http.put<Preset>(url, preset);
   }
+
+  delete(presetName: string): Observable<void> {
+    const url = `${environment.newRestRoot}/presets/${presetName}`;
+    return this._http.delete<void>(url);
+  }
 }
