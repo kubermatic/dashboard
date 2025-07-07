@@ -335,7 +335,7 @@ func getClusterTemplate(ctx context.Context, projectProvider provider.ProjectPro
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -436,7 +436,7 @@ func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	adminUserInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -483,7 +483,7 @@ func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.
 
 	newClusterTemplate.Annotations[kubermaticv1.InitialMachineDeploymentRequestAnnotation] = partialCluster.Annotations[kubermaticv1.InitialMachineDeploymentRequestAnnotation]
 
-	newClusterTemplate.Annotations[kubermaticv1.ClusterTemplateUserAnnotationKey] = adminUserInfo.Email
+	newClusterTemplate.Annotations[kubermaticv1.ClusterTemplateUserAnnotationKey] = userInfo.Email
 	newClusterTemplate.Labels[kubermaticv1.ClusterTemplateProjectLabelKey] = project.Name
 	newClusterTemplate.Labels[kubermaticv1.ClusterTemplateScopeLabelKey] = scope
 	newClusterTemplate.Labels[kubermaticv1.ClusterTemplateHumanReadableNameLabelKey] = name
@@ -516,7 +516,7 @@ func createOrUpdateClusterTemplate(ctx context.Context, userInfoGetter provider.
 		}
 	}
 
-	ct, err := clusterTemplateProvider.CreateorUpdate(ctx, adminUserInfo, newClusterTemplate, scope, project.Name, isUpdateRequest)
+	ct, err := clusterTemplateProvider.CreateorUpdate(ctx, userInfo, newClusterTemplate, scope, project.Name, isUpdateRequest)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -536,7 +536,7 @@ func DeleteEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		userInfo, err := userInfoGetter(ctx, "")
+		userInfo, err := userInfoGetter(ctx, req.ProjectID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}

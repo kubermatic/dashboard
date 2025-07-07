@@ -30,7 +30,7 @@
       "create": true,
       "delete": true
     },
-    "clusterTemplates": {
+    "clustertemplates": {
       "view": true,
       "edit": true,
       "create": true,
@@ -110,7 +110,7 @@
       "create": true,
       "delete": true
     },
-    "clusterTemplates": {
+    "clustertemplates": {
       "view": true,
       "edit": true,
       "create": true,
@@ -190,7 +190,7 @@
       "create": false,
       "delete": false
     },
-    "clusterTemplates": {
+    "clustertemplates": {
       "view": true,
       "edit": false,
       "create": false,
