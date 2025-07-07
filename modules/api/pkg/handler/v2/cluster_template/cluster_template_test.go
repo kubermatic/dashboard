@@ -146,6 +146,48 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
+		// scenario 7
+		{
+			Name:             "scenario 7: viewer can't create cluster template in user scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
+			HTTPStatus:       http.StatusForbidden,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
+		// scenario 8
+		{
+			Name:             "scenario 8: viewer can't create cluster template in project scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"project","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
+			HTTPStatus:       http.StatusForbidden,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
+		// scenario 9
+		{
+			Name:             "scenario 9: viewer can't create cluster template in global scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"global","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":500,"message":"the global scope is reserved only for admins"}}`,
+			HTTPStatus:       http.StatusInternalServerError,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
 	}
 
 	dummyKubermaticConfiguration := kubermaticv1.KubermaticConfiguration{
@@ -548,6 +590,20 @@ func TestDeleteClusterTemplates(t *testing.T) {
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
+		// scenario 6
+		{
+			Name:             "scenario 6: viewer can't delete cluster template",
+			TemplateID:       "ctID6",
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot delete cluster templates regardless of any scope"}}`,
+			HTTPStatus:       http.StatusForbidden,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+				test.GenClusterTemplate("ct6", "ctID6", test.GenDefaultProject().Name, kubermaticv1.UserClusterTemplateScope, "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
 	}
 
 	for _, tc := range testcases {
@@ -828,6 +884,48 @@ func TestImportClusterTemplateEndpoint(t *testing.T) {
 				},
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
+		},
+		// scenario 5
+		{
+			Name:             "scenario 5: viewer can't import cluster template in user scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
+			HTTPStatus:       http.StatusForbidden,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
+		// scenario 6
+		{
+			Name:             "scenario 6: viewer can't import cluster template in project scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"project","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":403,"message":"user viewer@acme.com has viewer role and cannot create or update cluster templates regardless of any scope"}}`,
+			HTTPStatus:       http.StatusForbidden,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
+		},
+		// scenario 7
+		{
+			Name:             "scenario 7: viewer can't import cluster template in global scope",
+			Body:             fmt.Sprintf(`{"name":"test","scope":"global","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
+			ExpectedResponse: `{"error":{"code":500,"message":"the global scope is reserved only for admins"}}`,
+			HTTPStatus:       http.StatusInternalServerError,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenBinding("my-first-project-ID", "viewer@acme.com", "viewers"),
+				test.GenUser("", "Viewer", "viewer@acme.com"),
+			),
+			ExistingAPIUser: test.GenAPIUser("Viewer", "viewer@acme.com"),
 		},
 	}
 

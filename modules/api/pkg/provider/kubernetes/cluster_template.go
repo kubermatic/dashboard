@@ -67,8 +67,8 @@ func (p *ClusterTemplateProvider) CreateorUpdate(ctx context.Context, userInfo *
 		return nil, errors.New("the global scope is reserved only for admins")
 	}
 
-	if userInfo.Roles.Has("viewers") && userInfo.Roles.Len() == 1 && scope != kubermaticv1.UserClusterTemplateScope {
-		return nil, fmt.Errorf("viewer is not allowed to create cluster template for the %s scope", scope)
+	if userInfo.Roles.Has("viewers") && userInfo.Roles.Len() == 1 {
+		return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("user %s has viewer role and cannot create or update cluster templates regardless of any scope", userInfo.Email))
 	}
 
 	if scope == kubermaticv1.ProjectClusterTemplateScope && projectID == "" {
@@ -178,6 +178,10 @@ func (p *ClusterTemplateProvider) Delete(ctx context.Context, userInfo *provider
 	// only admin can delete global templates
 	if !userInfo.IsAdmin && result.Labels[kubermaticv1.ClusterTemplateScopeLabelKey] == kubermaticv1.GlobalClusterTemplateScope {
 		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("user %s can't delete template %s", userInfo.Email, templateID))
+	}
+
+	if userInfo.Roles.Has("viewers") && userInfo.Roles.Len() == 1 {
+		return utilerrors.New(http.StatusForbidden, fmt.Sprintf("user %s has viewer role and cannot delete cluster templates regardless of any scope", userInfo.Email))
 	}
 
 	return p.clientPrivileged.Delete(ctx, result)
