@@ -544,6 +544,11 @@ limitations under the License.
                  matTooltip="Enable to deploy User SSH Key Agent to the cluster. It cannot be changed once the cluster is created."></i>
             </mat-checkbox>
 
+            <mat-checkbox *ngIf="provider === NodeProvider.OPENSTACK"
+                          [formControlName]="Controls.RouterReconciliation">
+              Skip Router Reconciliation
+            </mat-checkbox>
+
             <km-label-form [title]="'Labels'"
                            [labels]="labels"
                            [asyncKeyValidators]="asyncLabelValidators"

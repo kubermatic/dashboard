@@ -56,6 +56,11 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.VMwareCloudDirector, 'VMware Cloud Director'],
 ]);
 
+// Internal annotation used by KKP for system-level configuration.
+export enum InternalClusterSpecAnnotations {
+  SkipRouterReconciliation = 'reconciliation.kubermatic.k8c.io/skip-router',
+}
+
 export function getProviderDisplayName(provider: Provider): string {
   return PROVIDER_DISPLAY_NAMES.get(provider);
 }
