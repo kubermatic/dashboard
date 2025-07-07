@@ -48,6 +48,7 @@ import {
   ClusterAnnotation,
   ClusterNetwork,
   ClusterSpec,
+  InternalClusterSpecAnnotations,
   CNIPlugin,
   ContainerRuntime,
   ExposeStrategy,
@@ -100,6 +101,7 @@ enum Controls {
   AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
   AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   UserSSHKeyAgent = 'userSSHKeyAgent',
+  RouterReconciliation = 'routerReconciliation',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
   Labels = 'labels',
@@ -320,6 +322,26 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           } else if (this.controlValue(Controls.CNIPlugin) === '') {
             this.control(Controls.CNIPlugin).setValue(CNIPlugin.Cilium);
           }
+
+          if (this.provider === NodeProvider.OPENSTACK) {
+            this.form.addControl(Controls.RouterReconciliation, this._builder.control(false));
+            this.form
+              .get(Controls.RouterReconciliation)
+              .valueChanges.pipe(takeUntil(this._unsubscribe))
+              .subscribe(value => {
+                this.annotations = {
+                  ...this.annotations,
+                  [InternalClusterSpecAnnotations.SkipRouterReconciliation]: value ? 'true' : 'false',
+                };
+                this.onAnnotationsChange(this.annotations);
+              });
+          } else {
+            if (this.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation]) {
+              delete this.annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation];
+            }
+            this.form.removeControl(Controls.RouterReconciliation);
+          }
+          this.onAnnotationsChange(this.annotations);
         })
       )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
@@ -511,6 +533,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   onAnnotationsChange(annotations: Record<string, string>): void {
+    if (
+      this.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] &&
+      !annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation]
+    ) {
+      annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation] =
+        this.annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation];
+    }
     this.annotations = annotations;
     this._clusterSpecService.annotations = annotations;
   }

@@ -18,7 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterBackupService} from '@app/core/services/cluster-backup';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {BackupStorageLocation} from '@app/shared/entity/backup';
-import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS} from '@app/shared/model/NodeProviderConstants';
+import {NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS, NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {BSLListState} from '@app/wizard/step/cluster/component';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -33,6 +33,7 @@ import {
   ContainerRuntime,
   EventRateLimitConfig,
   ExposeStrategy,
+  InternalClusterSpecAnnotations,
   NetworkRanges,
   ProviderSettingsPatch,
 } from '@shared/entity/cluster';
@@ -79,6 +80,7 @@ enum Controls {
   APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
   DisableCSIDriver = 'disableCSIDriver',
   ClusterBackup = 'clusterBackup',
+  RouterReconciliation = 'routerReconciliation',
   BackupStorageLocation = 'backupStorageLocation',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
 }
@@ -124,6 +126,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
+  readonly NodeProvider = NodeProvider;
   private readonly _nameMinLen = 3;
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -193,6 +196,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
       [Controls.DisableCSIDriver]: new FormControl(this.cluster.spec.disableCsiDriver),
       [Controls.ClusterBackup]: new FormControl(!!this.cluster.spec.backupConfig),
+      [Controls.RouterReconciliation]: new FormControl(
+        this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
+      ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
     });
 
@@ -539,6 +545,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         nodePortsAllowedIPRanges: {
           cidrBlocks: this.form.get(Controls.NodePortsAllowedIPRanges).value.tags,
         },
+      };
+    }
+
+    if (this.datacenter.spec.provider === NodeProvider.OPENSTACK) {
+      patch.annotations = {
+        ...patch.annotations,
+        [InternalClusterSpecAnnotations.SkipRouterReconciliation]: this.form.get(Controls.RouterReconciliation).value
+          ? 'true'
+          : 'false',
       };
     }
 

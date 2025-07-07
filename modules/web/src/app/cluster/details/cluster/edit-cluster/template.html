@@ -309,6 +309,11 @@ limitations under the License.
            matTooltip="Enable create backups from this cluster"></i>
       </mat-checkbox>
 
+      <mat-checkbox *ngIf="datacenter?.spec?.provider === NodeProvider.OPENSTACK"
+                    [formControlName]="Controls.RouterReconciliation">
+        Skip Router Reconciliation
+      </mat-checkbox>
+
       <mat-form-field *ngIf="!!form.get(Controls.ClusterBackup).value && isclusterBackupEnabled"
                       class="bsl-field">
         <mat-label>{{backupStorageLocationLabel}}</mat-label>
