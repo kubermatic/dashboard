@@ -619,25 +619,29 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 		},
 	}
 
-	// defaulting for both flags regarding virtual machine cpu assignment:
-	// - EnableDedicatedCPUs defaults (false) to .resources.requests/limits
-	// - UsePodResourcesCPU defaults (false) to .domain.cpu
-	// as long as we have the deprecated and new flag we need to account for 4 cases:
-	//
-	// | Old Flag (EnableDedicatedCPUs) | New Flag (UsePodResourcesCPU) | Source for KubeVirt VM CPU |
-	// |---------|---------|---------|
-	// | true | false | .domain.cpu |
-	// | true | true | .domain.cpu |
-	// | false | false | .domain.cpu |
-	// | false | true | .resources.requests/limits |
-	if !dc.Spec.Kubevirt.EnableDedicatedCPUs && dc.Spec.Kubevirt.UsePodResourcesCPU {
-		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
-	} else {
-		vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
-		if err != nil {
-			return nil, err
+	// if users have chosen to use an instance type instead of custom cpu value, we should skip setting the cpu value
+	// explicitly as the value will be ignored either ways and the instance type resources will be used instead.
+	if nodeSpec.Cloud.Kubevirt.Instancetype == nil {
+		// defaulting for both flags regarding virtual machine cpu assignment:
+		// - EnableDedicatedCPUs defaults (false) to .resources.requests/limits
+		// - UsePodResourcesCPU defaults (false) to .domain.cpu
+		// as long as we have the deprecated and new flag we need to account for 4 cases:
+		//
+		// | Old Flag (EnableDedicatedCPUs) | New Flag (UsePodResourcesCPU) | Source for KubeVirt VM CPU |
+		// |---------|---------|---------|
+		// | true | false | .domain.cpu |
+		// | true | true | .domain.cpu |
+		// | false | false | .domain.cpu |
+		// | false | true | .resources.requests/limits |
+		if !dc.Spec.Kubevirt.EnableDedicatedCPUs && dc.Spec.Kubevirt.UsePodResourcesCPU {
+			config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
+		} else {
+			vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
+			if err != nil {
+				return nil, err
+			}
+			config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
 		}
-		config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
 	}
 
 	var subnet string
