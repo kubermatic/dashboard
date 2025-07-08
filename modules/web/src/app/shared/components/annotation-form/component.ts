@@ -31,6 +31,7 @@ import {SettingsService} from '@core/services/settings';
 import _ from 'lodash';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
 import {LabelFormValidators} from '../../validators/label-form.validators';
+import {InternalClusterSpecAnnotations} from '@app/shared/entity/cluster';
 
 @Component({
   selector: 'km-annotation-form',
@@ -59,6 +60,7 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
   form: FormGroup;
   protectedAnnotations: Set<string> = new Set();
   hiddenAnnotations: Set<string> = new Set();
+  internalClusterSpecAnnotations: string[] = Object.values(InternalClusterSpecAnnotations);
   removedAnnotations: {key: string; value: string}[] = [];
   initialAnnotations: Record<string, string>;
 
@@ -199,7 +201,7 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
 
     if (!_.isEmpty(this.annotations)) {
       Object.entries(this.annotations).forEach(([key, value]) => {
-        if (!this.hiddenAnnotations.has(key)) {
+        if (!this.hiddenAnnotations.has(key) && !this.internalClusterSpecAnnotations.includes(key)) {
           this.addAnnotation(key, value, this.protectedAnnotations.has(key));
         }
       });
@@ -209,7 +211,11 @@ export class AnnotationFormComponent implements OnInit, ControlValueAccessor, As
 
   private keyValidator(control: AbstractControl): ValidationErrors | null {
     const key = control.value;
-    if (this.protectedAnnotations.has(key) || this.hiddenAnnotations.has(key)) {
+    if (
+      this.protectedAnnotations.has(key) ||
+      this.hiddenAnnotations.has(key) ||
+      this.internalClusterSpecAnnotations.includes(key)
+    ) {
       return {forbiddenKey: true};
     }
     return null;
