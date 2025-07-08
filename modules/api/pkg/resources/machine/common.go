@@ -619,14 +619,18 @@ func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.Nod
 		},
 	}
 
-	if dc.Spec.Kubevirt.EnableDedicatedCPUs {
-		vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
-		if err != nil {
-			return nil, err
+	// if users have chosen to use an instance type instead of custom cpu value, we should skip setting the cpu value
+	// explicitly as the value will be ignored either ways and the instance type resources will be used instead.
+	if nodeSpec.Cloud.Kubevirt.Instancetype == nil {
+		if dc.Spec.Kubevirt.EnableDedicatedCPUs {
+			vcpus, err := strconv.ParseInt(nodeSpec.Cloud.Kubevirt.CPUs, 0, 64)
+			if err != nil {
+				return nil, err
+			}
+			config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
+		} else {
+			config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 		}
-		config.VirtualMachine.Template.VCPUs.Cores = int(vcpus)
-	} else {
-		config.VirtualMachine.Template.CPUs = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Kubevirt.CPUs}
 	}
 
 	var subnet string
