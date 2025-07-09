@@ -320,7 +320,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
 
   private get _visibleApplications(): Application[] {
     let filteredApplications = this.applications || [];
-    if (!this.showSystemApplications) {
+    if (!this.showSystemApplications || this.view !== ApplicationsListView.Default) {
       filteredApplications = filteredApplications.filter(application => !this.isSystemApplication(application));
     }
     return filteredApplications;
