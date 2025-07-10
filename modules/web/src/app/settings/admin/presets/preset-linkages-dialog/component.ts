@@ -23,6 +23,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {ClusterAssociation, ClusterTemplateAssociation, PresetLinkages} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {ITEMS_PER_PAGE_OPTIONS} from "@shared/components/pagination-page-size/component";
 
 export interface PresetLinkagesDialogData {
   presetName: string;
@@ -52,7 +53,7 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
   readonly ClusterColumn = ClusterColumn;
   readonly TemplateColumn = TemplateColumn;
   readonly defaultPageSize = 5;
-  readonly pageSizeOptions: number[] = [5, 10, 25, 50];
+  readonly pageSizeOptions: number[] = ITEMS_PER_PAGE_OPTIONS;
   readonly clusterDisplayedColumns: string[] = Object.values(ClusterColumn);
   readonly templateDisplayedColumns: string[] = Object.values(TemplateColumn);
 
@@ -67,7 +68,7 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
   @ViewChild('clustersSort', {static: true}) clustersSort: MatSort;
   @ViewChild('templatesSort', {static: true}) templatesSort: MatSort;
 
-  private readonly _unsubscribe = new Subject<void>();
+  private readonly _unsubscribe = new Subject<boolean>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: PresetLinkagesDialogData,
@@ -76,8 +77,7 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
     private readonly _notificationService: NotificationService,
     private readonly _cdr: ChangeDetectorRef,
     private readonly _router: Router
-  ) {
-  }
+  ) {}
 
   get presetName(): string {
     return this.data.presetName;
@@ -100,7 +100,7 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
   }
 
   ngOnDestroy(): void {
-    this._unsubscribe.next();
+    this._unsubscribe.next(true);
     this._unsubscribe.complete();
   }
 

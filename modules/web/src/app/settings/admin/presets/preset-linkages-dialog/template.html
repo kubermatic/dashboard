@@ -4,8 +4,10 @@
 
 <mat-dialog-content>
   <!-- Loading Spinner -->
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner color="accent" [diameter]="30"></mat-spinner>
+  <div *ngIf="isLoading"
+       class="loading-container">
+    <mat-spinner color="accent"
+                 [diameter]="25"></mat-spinner>
     <p>Loading Preset Linkages...</p>
   </div>
 
@@ -13,15 +15,18 @@
   <div [hidden]="isLoading">
     <!-- Clusters Section -->
     <div class="section">
-      <h3 class="section-title" [hidden]="!presetLinkages">
+      <h3 class="section-title"
+          [hidden]="!presetLinkages">
         Linked Clusters ({{clustersCount}})
       </h3>
 
-      <div [hidden]="!presetLinkages || clustersCount > 0" class="km-row km-empty-list-msg">
+      <div [hidden]="!presetLinkages || clustersCount > 0"
+           class="km-row km-empty-list-msg">
         No clusters are linked to this preset.
       </div>
 
-      <div class="table-container" [hidden]="!presetLinkages || clustersCount === 0">
+      <div class="table-container"
+           [hidden]="!presetLinkages || clustersCount === 0">
         <table class="km-table"
                mat-table
                matSort
@@ -35,14 +40,14 @@
                 mat-sort-header
                 class="km-header-cell p-25">Cluster Name
             </th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell
+                *matCellDef="let element">
               <a class="km-cluster-link"
                  (click)="navigateToCluster(element); $event.preventDefault()"
                  href="#"
                  rel="noopener noreferrer"
                  target="_blank"
-                 role="button"
-                 >
+                 role="button">
                 {{element.clusterName}}
               </a>
             </td>
@@ -54,7 +59,8 @@
                 mat-sort-header
                 class="km-header-cell p-25">Project
             </th>
-            <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+            <td mat-cell
+                *matCellDef="let element">{{element.projectName}}</td>
           </ng-container>
 
           <ng-container [matColumnDef]="ClusterColumn.Provider">
@@ -76,7 +82,8 @@
                 mat-sort-header
                 class="km-header-cell p-25">Datacenter
             </th>
-            <td mat-cell *matCellDef="let element">{{element.datacenter}}</td>
+            <td mat-cell
+                *matCellDef="let element">{{element.datacenter}}</td>
           </ng-container>
 
           <tr mat-header-row
@@ -101,15 +108,18 @@
 
     <!-- Cluster Templates Section -->
     <div class="section">
-      <h3 class="section-title" [hidden]="!presetLinkages">
+      <h3 class="section-title"
+          [hidden]="!presetLinkages">
         Linked Cluster Templates ({{templatesCount}})
       </h3>
 
-      <div [hidden]="!presetLinkages || templatesCount > 0" class="km-row km-empty-list-msg">
+      <div [hidden]="!presetLinkages || templatesCount > 0"
+           class="km-row km-empty-list-msg">
         No cluster templates are linked to this preset.
       </div>
 
-      <div class="table-container" [hidden]="!presetLinkages || templatesCount === 0">
+      <div class="table-container"
+           [hidden]="!presetLinkages || templatesCount === 0">
         <table class="km-table"
                mat-table
                matSort
@@ -123,7 +133,8 @@
                 mat-sort-header
                 class="km-header-cell p-25">Template Name
             </th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell
+                *matCellDef="let element">
               <a class="km-template-link"
                  (click)="navigateToClusterTemplates(element); $event.preventDefault()"
                  href="#"
@@ -141,7 +152,8 @@
                 mat-sort-header
                 class="km-header-cell p-25">Project
             </th>
-            <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+            <td mat-cell
+                *matCellDef="let element">{{element.projectName}}</td>
           </ng-container>
 
           <ng-container [matColumnDef]="TemplateColumn.Provider">
@@ -163,7 +175,8 @@
                 mat-sort-header
                 class="km-header-cell p-25">Datacenter
             </th>
-            <td mat-cell *matCellDef="let element">{{element.datacenter}}</td>
+            <td mat-cell
+                *matCellDef="let element">{{element.datacenter}}</td>
           </ng-container>
 
           <tr mat-header-row
@@ -189,7 +202,9 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-flat-button color="primary" (click)="_dialogRef.close()">
+  <button mat-flat-button
+          color="primary"
+          (click)="_dialogRef.close()">
     <i class="km-icon-mask km-icon-cancel"
        matButtonIcon></i>
     Close

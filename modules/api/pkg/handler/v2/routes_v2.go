@@ -5873,7 +5873,7 @@ func (r Routing) getPresetStats() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(preset.GetPresetStats(r.presetProvider, r.userInfoGetter, r.clusterProviderGetter, r.seedsGetter, r.clusterTemplateProvider, r.privilegedProjectProvider)),
+		)(preset.GetPresetStats(r.presetProvider, r.userInfoGetter, r.clusterProviderGetter, r.seedsGetter, r.clusterTemplateProvider)),
 		preset.DecodeGetPresetStats,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6429,7 +6429,7 @@ func (r Routing) listProjectKubeVirtPreferences() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses kubevirt listProjectKubevirtStorageClasses
+// swagger:route GET /api/v2/projects/{project_id}/providers/kubevirt/storageclasses kubevirt listProjectKubeVirtStorageClasses
 //
 // Lists available K8s StorageClasses in the Kubevirt cluster.
 //
@@ -9668,7 +9668,7 @@ func (r Routing) listKubeVirtPreferences() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubevirtStorageClasses
+// swagger:route GET /api/v2/providers/kubevirt/storageclasses kubevirt listKubeVirtStorageClasses
 //
 // Lists available K8s StorageClasses in the Kubevirt cluster.
 //
