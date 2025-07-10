@@ -181,11 +181,40 @@ type OpenStackAPIPreset struct {
 	SubnetID       string `json:"subnetID,omitempty"`
 }
 
-// PresetStats represents a preset statistics
-// swagger:model PresetStats
+// PresetStats represents the statistics for a preset
 type PresetStats struct {
 	AssociatedClusters         int `json:"associatedClusters"`
 	AssociatedClusterTemplates int `json:"associatedClusterTemplates"`
+}
+
+// PresetLinkages represents detailed linkage information for a preset
+// swagger:model PresetLinkages
+type PresetLinkages struct {
+	PresetName       string                        `json:"presetName"`
+	Clusters         []ClusterAssociation          `json:"clusters"`
+	ClusterTemplates []ClusterTemplateAssociation  `json:"clusterTemplates"`
+}
+
+// ClusterAssociation represents a cluster association with simplified details
+// swagger:model ClusterAssociation
+type ClusterAssociation struct {
+	ClusterID         string     `json:"clusterId"`
+	ClusterName       string     `json:"clusterName"`
+	ProjectID         string     `json:"projectId"`
+	ProjectName       string     `json:"projectName"`
+	Provider          string     `json:"provider"`
+	Datacenter        string     `json:"datacenter,omitempty"`
+}
+
+// ClusterTemplateAssociation represents a cluster template association with simplified details
+// swagger:model ClusterTemplateAssociation
+type ClusterTemplateAssociation struct {
+	TemplateID        string     `json:"templateId"`
+	TemplateName      string     `json:"templateName"`
+	ProjectID         string     `json:"projectId"`
+	ProjectName       string     `json:"projectName"`
+	Provider          string     `json:"provider"`
+	Datacenter        string     `json:"datacenter,omitempty"`
 }
 
 // Alertmanager represents an Alertmanager Configuration

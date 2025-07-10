@@ -7658,6 +7658,50 @@
         }
       }
     },
+    "/api/v2/presets/{preset_name}/linkages": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "preset"
+        ],
+        "summary": "Gets preset linkages information for UI display",
+        "operationId": "getPresetLinkages",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PresetName",
+            "name": "preset_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PresetLinkages",
+            "schema": {
+              "$ref": "#/definitions/PresetLinkages"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "404": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/presets/{preset_name}/status": {
       "put": {
         "consumes": [
@@ -30223,6 +30267,37 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ClusterAssociation": {
+      "description": "ClusterAssociation represents a cluster association with simplified details",
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "x-go-name": "ClusterID"
+        },
+        "clusterName": {
+          "type": "string",
+          "x-go-name": "ClusterName"
+        },
+        "datacenter": {
+          "type": "string",
+          "x-go-name": "Datacenter"
+        },
+        "projectId": {
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "projectName": {
+          "type": "string",
+          "x-go-name": "ProjectName"
+        },
+        "provider": {
+          "type": "string",
+          "x-go-name": "Provider"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ClusterBackupOptions": {
       "type": "object",
       "properties": {
@@ -30852,6 +30927,62 @@
         "name": {
           "type": "string",
           "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "ClusterTemplateAssociation": {
+      "description": "ClusterTemplateAssociation represents a cluster template association with simplified details",
+      "type": "object",
+      "properties": {
+        "datacenter": {
+          "type": "string",
+          "x-go-name": "Datacenter"
+        },
+        "projectId": {
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "projectName": {
+          "type": "string",
+          "x-go-name": "ProjectName"
+        },
+        "provider": {
+          "type": "string",
+          "x-go-name": "Provider"
+        },
+        "templateId": {
+          "type": "string",
+          "x-go-name": "TemplateID"
+        },
+        "templateName": {
+          "type": "string",
+          "x-go-name": "TemplateName"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "PresetLinkages": {
+      "description": "PresetLinkages represents detailed linkage information for a preset",
+      "type": "object",
+      "properties": {
+        "clusterTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterTemplateAssociation"
+          },
+          "x-go-name": "ClusterTemplates"
+        },
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterAssociation"
+          },
+          "x-go-name": "Clusters"
+        },
+        "presetName": {
+          "type": "string",
+          "x-go-name": "PresetName"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -39330,7 +39461,7 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PresetStats": {
-      "description": "PresetStats represents a preset statistics",
+      "description": "PresetStats represents the statistics for a preset",
       "type": "object",
       "properties": {
         "associatedClusterTemplates": {
