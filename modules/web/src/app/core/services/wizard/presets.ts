@@ -19,7 +19,14 @@ import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
 import {Nutanix} from '@core/services/wizard/provider/nutanix';
 import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-director';
 import {environment} from '@environments/environment';
-import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {
+  Preset,
+  PresetList,
+  PresetModel,
+  PresetStat,
+  PresetLinkages,
+  UpdatePresetStatusReq,
+} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -145,6 +152,11 @@ export class PresetsService {
   getPresetStatsBy(presetName: string): Observable<PresetStat> {
     const url = `${environment.newRestRoot}/presets/${presetName}/stats`;
     return this._http.get<PresetStat>(url);
+  }
+
+  getPresetLinkages(presetName: string): Observable<PresetLinkages> {
+    const url = `${environment.newRestRoot}/presets/${presetName}/linkages`;
+    return this._http.get<PresetLinkages>(url);
   }
 
   getPresetByName(projectID: string, presetName: string): Observable<Preset> {

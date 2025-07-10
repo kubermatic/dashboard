@@ -1,0 +1,197 @@
+<km-dialog-title>
+  Preset Linkages: {{presetName}}
+</km-dialog-title>
+
+<mat-dialog-content>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner color="accent" [diameter]="30"></mat-spinner>
+    <p>Loading Preset Linkages...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div [hidden]="isLoading">
+    <!-- Clusters Section -->
+    <div class="section">
+      <h3 class="section-title" [hidden]="!presetLinkages">
+        Linked Clusters ({{clustersCount}})
+      </h3>
+
+      <div [hidden]="!presetLinkages || clustersCount > 0" class="km-row km-empty-list-msg">
+        No clusters are linked to this preset.
+      </div>
+
+      <div class="table-container" [hidden]="!presetLinkages || clustersCount === 0">
+        <table class="km-table"
+               mat-table
+               matSort
+               #clustersSort="matSort"
+               matSortActive="clusterName"
+               matSortDirection="asc"
+               [dataSource]="clustersDataSource">
+          <ng-container [matColumnDef]="ClusterColumn.ClusterName">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Cluster Name
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <a class="km-cluster-link"
+                 (click)="navigateToCluster(element); $event.preventDefault()"
+                 href="#"
+                 rel="noopener noreferrer"
+                 target="_blank"
+                 role="button"
+                 >
+                {{element.clusterName}}
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="ClusterColumn.ProjectName">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Project
+            </th>
+            <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="ClusterColumn.Provider">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Provider
+            </th>
+            <td mat-cell
+                *matCellDef="let element"
+                fxLayoutAlign=" center">
+              <span class="km-provider-logo km-provider-logo-{{element.provider}}"></span>
+            </td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="ClusterColumn.Datacenter">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Datacenter
+            </th>
+            <td mat-cell *matCellDef="let element">{{element.datacenter}}</td>
+          </ng-container>
+
+          <tr mat-header-row
+              class="km-header-row"
+              *matHeaderRowDef="clusterDisplayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: clusterDisplayedColumns"
+              class="km-mat-row"></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Clusters Paginator - Always in DOM but hidden when no data -->
+    <div [hidden]="!presetLinkages || clustersCount === 0">
+      <mat-paginator #clustersPaginator
+                     [length]="clustersCount"
+                     [pageSizeOptions]="pageSizeOptions"
+                     [pageSize]="defaultPageSize"
+                     [hidePageSize]="false"
+                     showFirstLastButtons></mat-paginator>
+    </div>
+
+    <!-- Cluster Templates Section -->
+    <div class="section">
+      <h3 class="section-title" [hidden]="!presetLinkages">
+        Linked Cluster Templates ({{templatesCount}})
+      </h3>
+
+      <div [hidden]="!presetLinkages || templatesCount > 0" class="km-row km-empty-list-msg">
+        No cluster templates are linked to this preset.
+      </div>
+
+      <div class="table-container" [hidden]="!presetLinkages || templatesCount === 0">
+        <table class="km-table"
+               mat-table
+               matSort
+               #templatesSort="matSort"
+               matSortActive="templateName"
+               matSortDirection="asc"
+               [dataSource]="templatesDataSource">
+          <ng-container [matColumnDef]="TemplateColumn.TemplateName">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Template Name
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <a class="km-template-link"
+                 (click)="navigateToClusterTemplates(element); $event.preventDefault()"
+                 href="#"
+                 rel="noopener noreferrer"
+                 target="_blank"
+                 role="button">
+                {{element.templateName}}
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="TemplateColumn.ProjectName">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Project
+            </th>
+            <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="TemplateColumn.Provider">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Provider
+            </th>
+            <td mat-cell
+                *matCellDef="let element"
+                fxLayoutAlign=" center">
+              <span class="km-provider-logo km-provider-logo-{{element.provider}}"></span>
+            </td>
+          </ng-container>
+
+          <ng-container [matColumnDef]="TemplateColumn.Datacenter">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="km-header-cell p-25">Datacenter
+            </th>
+            <td mat-cell *matCellDef="let element">{{element.datacenter}}</td>
+          </ng-container>
+
+          <tr mat-header-row
+              class="km-header-row"
+              *matHeaderRowDef="templateDisplayedColumns"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: templateDisplayedColumns"
+              class="km-mat-row"></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Templates Paginator - Always in DOM but hidden when no data -->
+    <div [hidden]="!presetLinkages || templatesCount === 0">
+      <mat-paginator #templatesPaginator
+                     [length]="templatesCount"
+                     [pageSizeOptions]="pageSizeOptions"
+                     [pageSize]="defaultPageSize"
+                     [hidePageSize]="false"
+                     showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" (click)="_dialogRef.close()">
+    <i class="km-icon-mask km-icon-cancel"
+       matButtonIcon></i>
+    Close
+  </button>
+</mat-dialog-actions>

@@ -20,6 +20,7 @@ import {DialogModeService} from '@app/core/services/dialog-mode';
 import {Mode, PresetDialogComponent, PresetDialogData} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
+
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
@@ -36,6 +37,7 @@ import {
 import _ from 'lodash';
 import {Observable, Subject, forkJoin, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {PresetLinkagesDialogComponent} from 'app/settings/admin/presets/preset-linkages-dialog/component';
 
 enum Column {
   Name = 'name',
@@ -258,6 +260,17 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       });
   }
 
+  viewLinkages(preset: Preset): void {
+    const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-preset-linkages-dialog',
+      data: {
+        presetName: preset.name,
+      },
+    };
+
+    this._matDialog.open(PresetLinkagesDialogComponent, dialogConfig);
+  }
+
   deletePreset(preset: Preset): void {
     const hasAssociations = preset.associatedClusters > 0 || preset.associatedClusterTemplates > 0;
     let message: string;
@@ -265,7 +278,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
     if (hasAssociations) {
       message = `Delete <b>${_.escape(preset.name)}</b> preset permanently?`;
-      warning = `This preset is linked to <b>${preset.associatedClusters} cluster(s)</b> and <b>${preset.associatedClusterTemplates} cluster template(s)</b>. Are you sure you want to continue?`;
+      warning = `This preset is linked to <b>${preset.associatedClusters} cluster(s)</b> and <b>${preset.associatedClusterTemplates} cluster template(s)</b>. Use <b>"View Linkages"</b> from the actions menu to see details. Are you sure you want to continue?`;
     } else {
       message = `Delete <b>${_.escape(preset.name)}</b> preset permanently?`;
     }
