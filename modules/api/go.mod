@@ -70,7 +70,7 @@ require (
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.27.6-0.20250708191423-b2ed9845b758
+	k8c.io/kubermatic/v2 v2.27.6-0.20250709121724-073944c20a13
 	k8c.io/machine-controller v1.61.3
 	k8c.io/operating-system-manager v1.6.7
 	k8c.io/reconciler v0.5.0
