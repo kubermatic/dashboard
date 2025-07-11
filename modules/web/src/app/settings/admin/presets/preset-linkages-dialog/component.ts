@@ -23,7 +23,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {ClusterAssociation, ClusterTemplateAssociation, PresetLinkages} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {ITEMS_PER_PAGE_OPTIONS} from "@shared/components/pagination-page-size/component";
+import {ITEMS_PER_PAGE_OPTIONS} from '@shared/components/pagination-page-size/component';
 
 export interface PresetLinkagesDialogData {
   presetName: string;
