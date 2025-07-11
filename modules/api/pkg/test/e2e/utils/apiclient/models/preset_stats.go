@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// PresetStats PresetStats represents a preset statistics
+// PresetStats PresetStats represents the statistics for a preset.
 //
 // swagger:model PresetStats
 type PresetStats struct {

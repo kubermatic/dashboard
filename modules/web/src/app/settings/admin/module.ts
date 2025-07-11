@@ -37,6 +37,7 @@ import {OpenstackSettingsComponent} from '@app/settings/admin/presets/dialog/ste
 import {VMwareCloudDirectorSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vmware-cloud-director/component';
 import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
+import {PresetLinkagesDialogComponent} from 'app/settings/admin/presets/preset-linkages-dialog/component';
 import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
@@ -51,6 +52,7 @@ import {AdminAnnouncementDialogComponent} from './announcements/announcement-dia
     DatacenterDataDialogComponent,
     PresetDialogComponent,
     EditPresetDialogComponent,
+    PresetLinkagesDialogComponent,
     PresetStepComponent,
     PresetProviderStepComponent,
     PresetSettingsStepComponent,

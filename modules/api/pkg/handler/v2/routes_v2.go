@@ -1240,6 +1240,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/presets/{preset_name}/stats").
 		Handler(r.getPresetStats())
 
+	mux.Methods(http.MethodGet).
+		Path("/presets/{preset_name}/linkages").
+		Handler(r.getPresetLinkages())
+
 	mux.Methods(http.MethodPut).
 		Path("/presets/{preset_name}/status").
 		Handler(r.updatePresetStatus())
@@ -5871,6 +5875,31 @@ func (r Routing) getPresetStats() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(preset.GetPresetStats(r.presetProvider, r.userInfoGetter, r.clusterProviderGetter, r.seedsGetter, r.clusterTemplateProvider)),
 		preset.DecodeGetPresetStats,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/presets/{preset_name}/linkages preset getPresetLinkages
+//
+//	Gets preset linkages information for UI display
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: PresetLinkages
+//	  401: empty
+//	  403: empty
+//	  404: empty
+func (r Routing) getPresetLinkages() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(preset.GetPresetLinkages(r.presetProvider, r.userInfoGetter, r.clusterProviderGetter, r.seedsGetter, r.clusterTemplateProvider, r.privilegedProjectProvider)),
+		preset.DecodeGetPresetLinkages,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
