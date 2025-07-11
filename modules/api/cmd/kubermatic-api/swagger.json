@@ -7679,7 +7679,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/responses/PresetStats"
+            "description": "PresetStats",
+            "schema": {
+              "$ref": "#/definitions/PresetStats"
+            }
           },
           "401": {
             "$ref": "#/responses/empty"
@@ -39456,6 +39459,23 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "PresetStats": {
+      "type": "object",
+      "title": "PresetStats represents the statistics for a preset.",
+      "properties": {
+        "associatedClusterTemplates": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AssociatedClusterTemplates"
+        },
+        "associatedClusters": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AssociatedClusters"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "Project": {
       "description": "Project is a top-level container for a set of resources",
