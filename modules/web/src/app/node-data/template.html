@@ -249,14 +249,25 @@ limitations under the License.
         </mat-card-title>
       </mat-card-header>
 
-      <div fxLayoutAlign=" center"
+      <div fxLayoutAlign="space-between center"
            *ngIf="!isDialogView()">
-        <mat-checkbox [name]="Controls.EnableClusterAutoscalingApp"
-                      [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
-        </mat-checkbox>
-        <i class="km-icon-info km-pointer"
-           [matTooltip]="autoscalingTooltipText"></i>
+        <div>
+          <mat-checkbox [name]="Controls.EnableClusterAutoscalingApp"
+                        [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+          </mat-checkbox>
+          <i class="km-icon-info km-pointer"
+             [matTooltip]="autoscalingTooltipText"></i>
+        </div>
+        <button *ngIf="form.get(Controls.EnableClusterAutoscalingApp).value"
+                mat-flat-button
+                color="quaternary"
+                (click)="onEditAutoScalerApp()">
+          <i class="km-icon-mask km-icon-edit"
+             matButtonIcon></i>
+          <span>Edit Cluster Autoscaler App</span>
+        </button>
       </div>
+
 
       <km-number-stepper label="Min Replicas"
                          mode="all"
