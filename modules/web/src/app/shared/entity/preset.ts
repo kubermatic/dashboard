@@ -45,7 +45,6 @@ export class ClusterAssociation {
   projectId: string;
   projectName: string;
   provider: string;
-  datacenter: string;
 }
 
 export class ClusterTemplateAssociation {
@@ -54,7 +53,6 @@ export class ClusterTemplateAssociation {
   projectId: string;
   projectName: string;
   provider: string;
-  datacenter: string;
 }
 
 export class Preset {

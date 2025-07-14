@@ -835,8 +835,8 @@ func DecodeGetPresetStats(_ context.Context, r *http.Request) (interface{}, erro
 	return req, nil
 }
 
-// GetPresetStats gets preset stats with detailed cluster and template information.
-func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, clusterTemplateProvider provider.ClusterTemplateProvider, projectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+// GetPresetStats gets preset stats.
+func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, clusterTemplateProvider provider.ClusterTemplateProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(getPresetSatsReq)
 		if !ok {
@@ -880,28 +880,18 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 				continue
 			}
 
-			// Get the cluster provider for this specific seed
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
-				// If we can't get a cluster provider for a seed, log the error but continue
-				// processing other seeds to provide partial results rather than failing entirely
+				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
 				log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 				continue
 			}
-			
-			// Handle regular clusters
-			// List all clusters that have the credential preset label set to "true"
-			// This filters clusters to only those that use credential presets
 			clusters, err := clusterProvider.ListAll(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 			if err != nil {
-				log.Logger.Warnw("failed to list regular clusters", "seed", seedName, "error", err)
-				continue
+				return nil, v1common.KubernetesErrorToHTTPError(err)
 			}
-			
-			// Check each cluster to see if it's associated with our specific preset
 			for _, cluster := range clusters.Items {
 				if cluster.Annotations != nil {
-					// Look for the preset name annotation and compare it to our preset
 					if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
 						stats.AssociatedClusters++
 					}
@@ -909,14 +899,13 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			}
 		}
 
-		// Handle cluster templates
 		templates, err := clusterTemplateProvider.ListALL(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 		if err != nil {
 			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 		for _, template := range templates {
 			if template.Annotations != nil {
-				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name { 
+				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
 					stats.AssociatedClusterTemplates++
 				}
 			}
@@ -947,7 +936,7 @@ func DecodeGetPresetLinkages(_ context.Context, r *http.Request) (interface{}, e
 	}, nil
 }
 
-// GetPresetLinkages returns detailed linkage information for a preset
+// GetPresetLinkages returns detailed linkage information for a preset.
 func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, clusterTemplateProvider provider.ClusterTemplateProvider, projectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(getPresetLinkagesReq)
@@ -988,7 +977,6 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
-		// Iterate through all seeds to find clusters associated with this preset
 		for seedName, seed := range seeds {
 			// Skip seeds that are in an invalid phase as they cannot be processed
 			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
@@ -999,21 +987,17 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 			// Get the cluster provider for this specific seed
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
-				// If we can't get a cluster provider for a seed, log the error but continue
-				// processing other seeds to provide partial results rather than failing entirely
+				// Skip seed on cluster provider error, continue with other seeds
 				log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
 				continue
 			}
-			
-			// List all clusters that have the credential preset label set to "true"
-			// This filters clusters to only those that use credential presets
+
 			clusters, err := clusterProvider.ListAll(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 			if err != nil {
 				log.Logger.Warnw("failed to list clusters", "seed", seedName, "error", err)
 				continue
 			}
-			
-			// Check each cluster to see if it's associated with our specific preset
+
 			for _, cluster := range clusters.Items {
 				if cluster.Annotations != nil {
 					if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
@@ -1030,16 +1014,11 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 						}
 
 						clusterAssociation := apiv2.ClusterAssociation{
-							ClusterID:         cluster.Name,
-							ClusterName:       cluster.Spec.HumanReadableName,
-							ProjectID:         project.Name,
-							ProjectName:       project.Spec.Name,
-							Provider:          provider,
-						}
-
-						// Set datacenter if available
-						if cluster.Spec.Cloud.DatacenterName != "" {
-							clusterAssociation.Datacenter = cluster.Spec.Cloud.DatacenterName
+							ClusterID:   cluster.Name,
+							ClusterName: cluster.Spec.HumanReadableName,
+							ProjectID:   project.Name,
+							ProjectName: project.Spec.Name,
+							Provider:    provider,
 						}
 
 						linkages.Clusters = append(linkages.Clusters, clusterAssociation)
@@ -1048,15 +1027,13 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 			}
 		}
 
-		// Handle cluster templates
 		templates, err := clusterTemplateProvider.ListALL(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 		if err != nil {
 			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 		for _, template := range templates {
 			if template.Annotations != nil {
-				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name { 
-					// Get project information if template is project-scoped
+				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
 					var project *kubermaticv1.Project
 					var projectName string
 					if template.Labels != nil {
@@ -1064,30 +1041,24 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 							project, err = projectProvider.GetUnsecured(ctx, projectID, nil)
 							if err != nil {
 								log.Logger.Warnw("failed to get project for cluster template", "template", template.Name, "project", projectID, "error", err)
-								projectName = projectID // fallback to project ID
+								projectName = projectID
 							} else {
 								projectName = project.Spec.Name
 							}
 						}
 					}
 
-					// Determine provider name
 					provider, err := kubermaticv1helper.ClusterCloudProviderName(template.Spec.Cloud)
 					if err != nil {
 						provider = "unknown"
 					}
 
 					templateAssociation := apiv2.ClusterTemplateAssociation{
-						TemplateID:        template.Name,
-						TemplateName:      template.Spec.HumanReadableName,
-						ProjectID:         template.Labels[kubermaticv1.ProjectIDLabelKey],
-						ProjectName:       projectName,
-						Provider:          provider,
-					}
-
-					// Set datacenter if available
-					if template.Spec.Cloud.DatacenterName != "" {
-						templateAssociation.Datacenter = template.Spec.Cloud.DatacenterName
+						TemplateID:   template.Name,
+						TemplateName: template.Labels[kubermaticv1.ClusterTemplateHumanReadableNameLabelKey],
+						ProjectID:    template.Labels[kubermaticv1.ProjectIDLabelKey],
+						ProjectName:  projectName,
+						Provider:     provider,
 					}
 
 					linkages.ClusterTemplates = append(linkages.ClusterTemplates, templateAssociation)
