@@ -19,11 +19,11 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {ClusterAssociation, ClusterTemplateAssociation, PresetLinkages} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
-import {ITEMS_PER_PAGE_OPTIONS} from '@shared/components/pagination-page-size/component';
 
 export interface PresetLinkagesDialogData {
   presetName: string;
@@ -50,8 +50,7 @@ enum TemplateColumn {
 export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly ClusterColumn = ClusterColumn;
   readonly TemplateColumn = TemplateColumn;
-  readonly defaultPageSize = 5;
-  readonly pageSizeOptions: number[] = ITEMS_PER_PAGE_OPTIONS;
+
   readonly clusterDisplayedColumns: string[] = Object.values(ClusterColumn);
   readonly templateDisplayedColumns: string[] = Object.values(TemplateColumn);
 
@@ -74,7 +73,8 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
     private readonly _presetsService: PresetsService,
     private readonly _notificationService: NotificationService,
     private readonly _cdr: ChangeDetectorRef,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _userService: UserService
   ) {}
 
   get presetName(): string {
@@ -91,6 +91,18 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
 
   ngOnInit(): void {
     this._loadLinkages();
+
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (this.clustersPaginator) {
+        this.clustersPaginator.pageSize = settings.itemsPerPage;
+        this.clustersDataSource.paginator = this.clustersPaginator;
+      }
+
+      if (this.templatesPaginator) {
+        this.templatesPaginator.pageSize = settings.itemsPerPage;
+        this.templatesDataSource.paginator = this.templatesPaginator;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -100,6 +112,24 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
   ngOnDestroy(): void {
     this._unsubscribe.next(true);
     this._unsubscribe.complete();
+  }
+
+  isClustersPaginatorVisible(): boolean {
+    return (
+      this.presetLinkages &&
+      this.clustersCount > 0 &&
+      this.clustersPaginator &&
+      this.clustersCount > this.clustersPaginator.pageSize
+    );
+  }
+
+  isTemplatesPaginatorVisible(): boolean {
+    return (
+      this.presetLinkages &&
+      this.templatesCount > 0 &&
+      this.templatesPaginator &&
+      this.templatesCount > this.templatesPaginator.pageSize
+    );
   }
 
   navigateToCluster(cluster: ClusterAssociation): void {
@@ -118,14 +148,10 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
 
   private _setupTableControls(): void {
     if (this.clustersPaginator) {
-      this.clustersPaginator.pageSize = this.defaultPageSize;
-      this.clustersPaginator.pageSizeOptions = this.pageSizeOptions;
       this.clustersDataSource.paginator = this.clustersPaginator;
     }
 
     if (this.templatesPaginator) {
-      this.templatesPaginator.pageSize = this.defaultPageSize;
-      this.templatesPaginator.pageSizeOptions = this.pageSizeOptions;
       this.templatesDataSource.paginator = this.templatesPaginator;
     }
 

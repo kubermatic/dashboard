@@ -20,18 +20,20 @@ limitations under the License.
 
 <mat-dialog-content>
   <!-- Loading Spinner -->
-  <div *ngIf="isLoading"
-       class="loading-container">
+  <div class="km-row"
+       *ngIf="isLoading">
     <mat-spinner color="accent"
+                 class="km-spinner km-with-spacing"
                  [diameter]="25"></mat-spinner>
-    <p>Loading Preset Linkages...</p>
   </div>
-
   <!-- Main Content -->
   <div [hidden]="isLoading">
+    <p class="km-dialog-context-description">Displays usage details and associations of the selected preset with
+      clusters and cluster templates.</p>
+
     <!-- Clusters Section -->
-    <div class="section">
-      <h3 class="section-title"
+    <div>
+      <h3 class="title"
           [hidden]="!presetLinkages">
         Linked Clusters ({{clustersCount}})
       </h3>
@@ -102,19 +104,20 @@ limitations under the License.
       </div>
     </div>
 
-    <!-- Clusters Paginator - Always in DOM but hidden when no data -->
-    <div [hidden]="!presetLinkages || clustersCount === 0">
-      <mat-paginator #clustersPaginator
-                     [length]="clustersCount"
-                     [pageSizeOptions]="pageSizeOptions"
-                     [pageSize]="defaultPageSize"
-                     [hidePageSize]="false"
-                     showFirstLastButtons></mat-paginator>
+    <!-- Clusters Paginator -->
+    <div [hidden]="!isClustersPaginatorVisible()"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator #clustersPaginator
+                       showFirstLastButtons></mat-paginator>
+      </div>
     </div>
 
     <!-- Cluster Templates Section -->
-    <div class="section">
-      <h3 class="section-title"
+    <div>
+      <h3 class="title"
           [hidden]="!presetLinkages">
         Linked Cluster Templates ({{templatesCount}})
       </h3>
@@ -185,24 +188,15 @@ limitations under the License.
       </div>
     </div>
 
-    <!-- Templates Paginator - Always in DOM but hidden when no data -->
-    <div [hidden]="!presetLinkages || templatesCount === 0">
-      <mat-paginator #templatesPaginator
-                     [length]="templatesCount"
-                     [pageSizeOptions]="pageSizeOptions"
-                     [pageSize]="defaultPageSize"
-                     [hidePageSize]="false"
-                     showFirstLastButtons></mat-paginator>
+    <!-- Templates Paginator -->
+    <div [hidden]="!isTemplatesPaginatorVisible()"
+         class="km-paginator-container">
+      <div fxLayout="row"
+           fxLayoutAlign="flex-end center">
+        <km-pagination-page-size></km-pagination-page-size>
+        <mat-paginator #templatesPaginator
+                       showFirstLastButtons></mat-paginator>
+      </div>
     </div>
   </div>
 </mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-flat-button
-          color="primary"
-          (click)="_dialogRef.close()">
-    <i class="km-icon-mask km-icon-cancel"
-       matButtonIcon></i>
-    Close
-  </button>
-</mat-dialog-actions>

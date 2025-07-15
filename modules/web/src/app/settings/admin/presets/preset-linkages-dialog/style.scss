@@ -15,16 +15,9 @@
 @use 'mixins';
 @use 'variables';
 
-.section {
-  margin-bottom: 16px;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.section-title {
-  font-size: variables.$font-size-subhead;
+.title {
+  font-size: variables.$font-size-body;
   font-weight: variables.$font-weight-medium;
   margin-bottom: 16px;
 }
