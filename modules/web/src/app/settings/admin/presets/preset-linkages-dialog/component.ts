@@ -29,16 +29,29 @@ export interface PresetLinkagesDialogData {
   presetName: string;
 }
 
-enum ClusterColumn {
-  ClusterName = 'clusterName',
+enum Column {
+  Name = 'name',
+  Type = 'type',
   ProjectName = 'projectName',
   Provider = 'provider',
 }
 
-enum TemplateColumn {
-  TemplateName = 'templateName',
-  ProjectName = 'projectName',
-  Provider = 'provider',
+enum ResourceType {
+  Cluster = 'Cluster',
+  Template = 'Template',
+}
+
+/**
+ * Combines clusters and templates into a single table view with type distinction
+ */
+export interface PresetResource {
+  type: ResourceType;
+  name: string;
+  projectName: string;
+  projectId: string;
+  provider: string;
+  clusterId?: string;
+  templateName?: string;
 }
 
 @Component({
@@ -48,22 +61,16 @@ enum TemplateColumn {
   standalone: false,
 })
 export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnDestroy {
-  readonly ClusterColumn = ClusterColumn;
-  readonly TemplateColumn = TemplateColumn;
-
-  readonly clusterDisplayedColumns: string[] = Object.values(ClusterColumn);
-  readonly templateDisplayedColumns: string[] = Object.values(TemplateColumn);
+  readonly Column = Column;
+  readonly ResourceType = ResourceType;
+  readonly displayedColumns: string[] = Object.values(Column);
 
   isLoading = false;
   presetLinkages: PresetLinkages;
-  clustersDataSource = new MatTableDataSource<ClusterAssociation>();
-  templatesDataSource = new MatTableDataSource<ClusterTemplateAssociation>();
+  dataSource = new MatTableDataSource<PresetResource>();
 
-  @ViewChild('clustersPaginator', {static: true}) clustersPaginator: MatPaginator;
-  @ViewChild('templatesPaginator', {static: true}) templatesPaginator: MatPaginator;
-
-  @ViewChild('clustersSort', {static: true}) clustersSort: MatSort;
-  @ViewChild('templatesSort', {static: true}) templatesSort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   private readonly _unsubscribe = new Subject<boolean>();
 
@@ -81,26 +88,19 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
     return this.data.presetName;
   }
 
-  get clustersCount(): number {
-    return this.presetLinkages?.clusters?.length || 0;
-  }
-
-  get templatesCount(): number {
-    return this.presetLinkages?.clusterTemplates?.length || 0;
+  get totalCount(): number {
+    return this.presetLinkages
+      ? (this.presetLinkages.clusters?.length || 0) + (this.presetLinkages.clusterTemplates?.length || 0)
+      : 0;
   }
 
   ngOnInit(): void {
     this._loadLinkages();
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      if (this.clustersPaginator) {
-        this.clustersPaginator.pageSize = settings.itemsPerPage;
-        this.clustersDataSource.paginator = this.clustersPaginator;
-      }
-
-      if (this.templatesPaginator) {
-        this.templatesPaginator.pageSize = settings.itemsPerPage;
-        this.templatesDataSource.paginator = this.templatesPaginator;
+      if (this.paginator) {
+        this.paginator.pageSize = settings.itemsPerPage;
+        this.dataSource.paginator = this.paginator;
       }
     });
   }
@@ -114,55 +114,47 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
     this._unsubscribe.complete();
   }
 
-  isClustersPaginatorVisible(): boolean {
-    return (
-      this.presetLinkages &&
-      this.clustersCount > 0 &&
-      this.clustersPaginator &&
-      this.clustersCount > this.clustersPaginator.pageSize
-    );
+  isPaginatorVisible(): boolean {
+    return this.presetLinkages && this.totalCount > 0 && this.paginator && this.totalCount > this.paginator.pageSize;
   }
 
-  isTemplatesPaginatorVisible(): boolean {
-    return (
-      this.presetLinkages &&
-      this.templatesCount > 0 &&
-      this.templatesPaginator &&
-      this.templatesCount > this.templatesPaginator.pageSize
-    );
-  }
-
-  navigateToCluster(cluster: ClusterAssociation): void {
-    const url = this._router.serializeUrl(
-      this._router.createUrlTree([`/projects/${cluster.projectId}/clusters/${cluster.clusterId}`])
-    );
-    window.open(url, '_blank');
-  }
-
-  navigateToClusterTemplates(template: ClusterTemplateAssociation): void {
-    const url = this._router.serializeUrl(
-      this._router.createUrlTree([`/projects/${template.projectId}/clustertemplates`])
-    );
-    window.open(url, '_blank');
+  navigateToResource(resource: PresetResource): void {
+    if (resource.type === ResourceType.Cluster) {
+      const url = this._router.serializeUrl(
+        this._router.createUrlTree([`/projects/${resource.projectId}/clusters/${resource.clusterId}`])
+      );
+      window.open(url, '_blank');
+    } else {
+      const url = this._router.serializeUrl(
+        this._router.createUrlTree([`/projects/${resource.projectId}/clustertemplates`])
+      );
+      window.open(url, '_blank');
+    }
   }
 
   private _setupTableControls(): void {
-    if (this.clustersPaginator) {
-      this.clustersDataSource.paginator = this.clustersPaginator;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
     }
 
-    if (this.templatesPaginator) {
-      this.templatesDataSource.paginator = this.templatesPaginator;
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
     }
 
-    // Set up sorting
-    if (this.clustersSort) {
-      this.clustersDataSource.sort = this.clustersSort;
-    }
-
-    if (this.templatesSort) {
-      this.templatesDataSource.sort = this.templatesSort;
-    }
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case Column.Type:
+          return item.type;
+        case Column.Name:
+          return item.name;
+        case Column.ProjectName:
+          return item.projectName;
+        case Column.Provider:
+          return item.provider;
+        default:
+          return item[property];
+      }
+    };
 
     this._cdr.detectChanges();
   }
@@ -178,13 +170,36 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
       .subscribe({
         next: (linkages: PresetLinkages) => {
           this.presetLinkages = linkages;
-          this.clustersDataSource.data = linkages.clusters || [];
-          this.templatesDataSource.data = linkages.clusterTemplates || [];
+          this._mergeDataSources(linkages);
           this._cdr.detectChanges();
         },
         error: () => {
           this._notificationService.error(`Failed to load linkages for preset ${this.presetName}`);
         },
       });
+  }
+
+  private _mergeDataSources(linkages: PresetLinkages): void {
+    const clusters =
+      linkages.clusters?.map((cluster: ClusterAssociation) => ({
+        type: ResourceType.Cluster,
+        name: cluster.clusterName,
+        projectName: cluster.projectName,
+        projectId: cluster.projectId,
+        provider: cluster.provider,
+        clusterId: cluster.clusterId,
+      })) || [];
+
+    const templates =
+      linkages.clusterTemplates?.map((template: ClusterTemplateAssociation) => ({
+        type: ResourceType.Template,
+        name: template.templateName,
+        projectName: template.projectName,
+        projectId: template.projectId,
+        provider: template.provider,
+        templateName: template.templateName,
+      })) || [];
+
+    this.dataSource.data = [...clusters, ...templates];
   }
 }

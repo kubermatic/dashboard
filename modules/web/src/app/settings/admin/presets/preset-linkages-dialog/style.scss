@@ -22,6 +22,15 @@
   margin-bottom: 16px;
 }
 
+.km-item-link {
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .table-container {
   .km-table {
     width: 100%;
