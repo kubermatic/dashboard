@@ -345,7 +345,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getPresetStatus(provider: string): void {
-    const presetAnnotations: Record<string, string> = this.cluster?.annotations;
+    const presetAnnotations: Record<string, string> = this.cluster?.annotations || {};
     if (presetAnnotations.presetInvalidated) {
       this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
     } else {
@@ -363,9 +363,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this.presetStatus = new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
             }
           },
-          error: () => {
-            // TODO: Backend does not return `presetInvalidated` annotation when cluster is created via template and preset no longer exists.
-            this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
+          error: error => {
+            const errorCodeNotFound = 404;
+            if (error.status === errorCodeNotFound) {
+              this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
+            }
           },
         });
     }

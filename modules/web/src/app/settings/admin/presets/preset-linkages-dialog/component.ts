@@ -46,12 +46,11 @@ enum ResourceType {
  */
 export interface PresetResource {
   type: ResourceType;
+  id: string;
   name: string;
-  projectName: string;
   projectId: string;
+  projectName: string;
   provider: string;
-  clusterId?: string;
-  templateName?: string;
 }
 
 @Component({
@@ -121,7 +120,7 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
   navigateToResource(resource: PresetResource): void {
     if (resource.type === ResourceType.Cluster) {
       const url = this._router.serializeUrl(
-        this._router.createUrlTree([`/projects/${resource.projectId}/clusters/${resource.clusterId}`])
+        this._router.createUrlTree([`/projects/${resource.projectId}/clusters/${resource.id}`])
       );
       window.open(url, '_blank');
     } else {
@@ -183,21 +182,21 @@ export class PresetLinkagesDialogComponent implements OnInit, AfterViewInit, OnD
     const clusters =
       linkages.clusters?.map((cluster: ClusterAssociation) => ({
         type: ResourceType.Cluster,
+        id: cluster.clusterId,
         name: cluster.clusterName,
-        projectName: cluster.projectName,
         projectId: cluster.projectId,
+        projectName: cluster.projectName,
         provider: cluster.provider,
-        clusterId: cluster.clusterId,
       })) || [];
 
     const templates =
       linkages.clusterTemplates?.map((template: ClusterTemplateAssociation) => ({
         type: ResourceType.Template,
+        id: template.templateId,
         name: template.templateName,
-        projectName: template.projectName,
         projectId: template.projectId,
+        projectName: template.projectName,
         provider: template.provider,
-        templateName: template.templateName,
       })) || [];
 
     this.dataSource.data = [...clusters, ...templates];

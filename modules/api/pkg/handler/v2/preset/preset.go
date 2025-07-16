@@ -134,7 +134,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 		if req.Name != "" {
 			preset, err := presetProvider.GetPreset(ctx, userInfo, &req.ProjectID, req.Name)
 			if err != nil {
-				return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+				return nil, v1common.KubernetesErrorToHTTPError(err)
 			}
 			if !preset.Spec.IsEnabled() && !req.Disabled {
 				return nil, nil
@@ -144,7 +144,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
 		presets, err := presetProvider.GetPresets(ctx, userInfo, &req.ProjectID)
 		if err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		for _, preset := range presets {
@@ -225,7 +225,7 @@ func UpdatePresetStatus(presetProvider provider.PresetProvider, userInfoGetter p
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.PresetName)
 		if err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if len(req.Provider) == 0 {
@@ -566,7 +566,7 @@ func UpdatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.Body.Name)
 		if err != nil {
-			return nil, err
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		preset = mergePresets(preset, convertAPIToInternalPreset(req.Body), kubermaticv1.ProviderType(req.ProviderName))
@@ -936,6 +936,13 @@ func DecodeGetPresetLinkages(_ context.Context, r *http.Request) (interface{}, e
 	}, nil
 }
 
+func getProjectName(project *kubermaticv1.Project, err error) string {
+	if err != nil || project == nil {
+		return ""
+	}
+	return project.Spec.Name
+}
+
 // GetPresetLinkages returns detailed linkage information for a preset.
 func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, clusterTemplateProvider provider.ClusterTemplateProvider, projectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
@@ -952,6 +959,10 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 		userInfo, err := userInfoGetter(ctx, "")
 		if err != nil {
 			return nil, v1common.KubernetesErrorToHTTPError(err)
+		}
+
+		if !userInfo.IsAdmin {
+			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
 		}
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.PresetName)
@@ -1001,23 +1012,30 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 			for _, cluster := range clusters.Items {
 				if cluster.Annotations != nil {
 					if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
-						project, err := projectProvider.GetUnsecured(ctx, cluster.Labels[kubermaticv1.ProjectIDLabelKey], nil)
-						if err != nil {
-							log.Logger.Warnw("failed to get project for cluster", "cluster", cluster.Name, "project", cluster.Labels[kubermaticv1.ProjectIDLabelKey], "error", err)
-							continue
+						var projectName string
+
+						if cluster.Labels != nil {
+							if projectID := cluster.Labels[kubermaticv1.ProjectIDLabelKey]; projectID != "" {
+								project, err := projectProvider.GetUnsecured(ctx, projectID, nil)
+								if err != nil {
+									log.Logger.Warnw("failed to get project for cluster", "cluster", cluster.Name, "project", projectID, "error", err)
+								}
+								projectName = getProjectName(project, err)
+							}
 						}
 
 						// Determine provider name
 						provider, err := kubermaticv1helper.ClusterCloudProviderName(cluster.Spec.Cloud)
 						if err != nil {
+							log.Logger.Warnw("failed to get provider for cluster", "cluster", cluster.Name, "error", err)
 							provider = "unknown"
 						}
 
 						clusterAssociation := apiv2.ClusterAssociation{
 							ClusterID:   cluster.Name,
 							ClusterName: cluster.Spec.HumanReadableName,
-							ProjectID:   project.Name,
-							ProjectName: project.Spec.Name,
+							ProjectID:   cluster.Labels[kubermaticv1.ProjectIDLabelKey],
+							ProjectName: projectName,
 							Provider:    provider,
 						}
 
@@ -1036,20 +1054,20 @@ func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter pr
 				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
 					var project *kubermaticv1.Project
 					var projectName string
+
 					if template.Labels != nil {
 						if projectID := template.Labels[kubermaticv1.ProjectIDLabelKey]; projectID != "" {
 							project, err = projectProvider.GetUnsecured(ctx, projectID, nil)
 							if err != nil {
 								log.Logger.Warnw("failed to get project for cluster template", "template", template.Name, "project", projectID, "error", err)
-								projectName = projectID
-							} else {
-								projectName = project.Spec.Name
 							}
+							projectName = getProjectName(project, err)
 						}
 					}
 
 					provider, err := kubermaticv1helper.ClusterCloudProviderName(template.Spec.Cloud)
 					if err != nil {
+						log.Logger.Warnw("failed to get provider for cluster template", "template", template.Name, "error", err)
 						provider = "unknown"
 					}
 

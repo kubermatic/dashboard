@@ -63,12 +63,11 @@ limitations under the License.
           </th>
           <td mat-cell
               *matCellDef="let element">
-            <a class="km-item-link"
-               (click)="navigateToResource(element); $event.preventDefault()"
-               href="#"
+            <a href="#"
                rel="noopener noreferrer"
                target="_blank"
-               role="button">
+               role="button"
+               (click)="navigateToResource(element); $event.preventDefault()">
               {{element.name}}
             </a>
           </td>
