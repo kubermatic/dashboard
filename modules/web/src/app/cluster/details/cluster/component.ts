@@ -80,6 +80,7 @@ import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
+import {Preset} from '@shared/entity/preset';
 
 @Component({
   selector: 'km-cluster-details',
@@ -344,22 +345,30 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getPresetStatus(provider: string): void {
-    const presetAnnotations = this.cluster?.annotations;
+    const presetAnnotations: Record<string, string> = this.cluster?.annotations || {};
     if (presetAnnotations.presetInvalidated) {
       this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
     } else {
       this._presetService
         .getPresetByName(this.projectID, presetAnnotations.presetName)
         .pipe(take(1))
-        .subscribe(preset => {
-          if (preset?.enabled) {
-            const usedProvider = preset.providers.find(p => p.name === this.getProvider(provider));
-            this.presetStatus = usedProvider.enabled
-              ? new HealthStatus(StatusMassage.Active, StatusIcon.Running)
-              : new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
-          } else {
-            this.presetStatus = new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
-          }
+        .subscribe({
+          next: (preset: Preset) => {
+            if (preset?.enabled) {
+              const usedProvider = preset.providers.find(p => p.name === this.getProvider(provider));
+              this.presetStatus = usedProvider.enabled
+                ? new HealthStatus(StatusMassage.Active, StatusIcon.Running)
+                : new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
+            } else {
+              this.presetStatus = new HealthStatus(StatusMassage.Disabled, StatusIcon.Disabled);
+            }
+          },
+          error: error => {
+            const errorCodeNotFound = 404;
+            if (error.status === errorCodeNotFound) {
+              this.presetStatus = new HealthStatus(StatusMassage.Deleted, StatusIcon.Error);
+            }
+          },
         });
     }
   }

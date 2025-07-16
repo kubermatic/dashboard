@@ -36,6 +36,8 @@ type ClientService interface {
 
 	DeleteProviderPreset(params *DeleteProviderPresetParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteProviderPresetOK, error)
 
+	GetPresetLinkages(params *GetPresetLinkagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPresetLinkagesOK, error)
+
 	GetPresetStats(params *GetPresetStatsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPresetStatsOK, error)
 
 	ListPresets(params *ListPresetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPresetsOK, error)
@@ -204,6 +206,44 @@ func (a *Client) DeleteProviderPreset(params *DeleteProviderPresetParams, authIn
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*DeleteProviderPresetDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetPresetLinkages Gets preset linkages information for UI display
+*/
+func (a *Client) GetPresetLinkages(params *GetPresetLinkagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetPresetLinkagesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetPresetLinkagesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getPresetLinkages",
+		Method:             "GET",
+		PathPattern:        "/api/v2/presets/{preset_name}/linkages",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetPresetLinkagesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetPresetLinkagesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetPresetLinkagesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

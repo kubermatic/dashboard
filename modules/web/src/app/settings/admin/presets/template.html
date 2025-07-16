@@ -215,6 +215,17 @@ limitations under the License.
                       (click)="editProvider(element)">
                 <span>Edit Provider</span>
               </button>
+
+              <button mat-menu-item
+                      [disabled]="element.associatedClusters === 0 && element.associatedClusterTemplates === 0"
+                      (click)="viewLinkages(element)">
+                <span>View Linkages</span>
+              </button>
+
+              <button mat-menu-item
+                      (click)="deletePreset(element)">
+                <span>Delete Preset</span>
+              </button>
             </mat-menu>
           </div>
         </td>

@@ -19,7 +19,14 @@ import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
 import {Nutanix} from '@core/services/wizard/provider/nutanix';
 import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-director';
 import {environment} from '@environments/environment';
-import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {
+  Preset,
+  PresetList,
+  PresetModel,
+  PresetStat,
+  PresetLinkages,
+  UpdatePresetStatusReq,
+} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -147,6 +154,11 @@ export class PresetsService {
     return this._http.get<PresetStat>(url);
   }
 
+  getPresetLinkages(presetName: string): Observable<PresetLinkages> {
+    const url = `${environment.newRestRoot}/presets/${presetName}/linkages`;
+    return this._http.get<PresetLinkages>(url);
+  }
+
   getPresetByName(projectID: string, presetName: string): Observable<Preset> {
     const url = `${environment.newRestRoot}/projects/${projectID}/presets?name=${presetName}`;
     return this._http.get<Preset>(url);
@@ -169,5 +181,10 @@ export class PresetsService {
   update(preset: PresetModel): Observable<Preset> {
     const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
     return this._http.put<Preset>(url, preset);
+  }
+
+  delete(presetName: string): Observable<void> {
+    const url = `${environment.newRestRoot}/presets/${presetName}`;
+    return this._http.delete<void>(url);
   }
 }
