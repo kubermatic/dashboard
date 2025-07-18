@@ -105,6 +105,13 @@ export class ApplicationService {
           }
           return item;
         });
+      }),
+      catchError(error => {
+        const errorNotFound = 404;
+        if (error.status === errorNotFound) {
+          return of({} as ApplicationDefinition);
+        }
+        throw error;
       })
     );
   }

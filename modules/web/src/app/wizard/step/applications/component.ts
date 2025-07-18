@@ -18,21 +18,11 @@ import {ClusterSpecService} from '@app/core/services/cluster-spec';
 import {StepRegistry} from '@app/wizard/config';
 import {StepBase} from '@app/wizard/step/base';
 import {ApplicationService} from '@core/services/application';
-import {NodeDataService} from '@core/services/node-data/service';
 import {WizardService} from '@core/services/wizard/wizard';
 import {ApplicationsListView} from '@shared/components/application-list/component';
-import {
-  Application,
-  ApplicationAnnotations,
-  ApplicationDefinition,
-  getApplicationVersion,
-  CLUSTER_AUTOSCALING_APP_DEF_NAME,
-  ApplicationSettings,
-} from '@shared/entity/application';
-import * as y from 'js-yaml';
+import {Application, ApplicationSettings, createApplicationInstallation} from '@shared/entity/application';
 import _, {merge} from 'lodash';
-import {forkJoin, of, takeUntil} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {forkJoin, takeUntil} from 'rxjs';
 
 enum Controls {
   Applications = 'applications',
@@ -66,8 +56,7 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     wizard: WizardService,
     private readonly _builder: FormBuilder,
     private readonly _applicationService: ApplicationService,
-    private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super(wizard, StepRegistry.Applications);
   }
@@ -98,32 +87,6 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
       .subscribe(_ => {
         this.loadDefaultAndEnforcedApplications();
       });
-
-    this._nodeDataService.nodeDataChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(nodeData => {
-          const clusterAutoscalingApp = this.applications.find(
-            application => application.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
-          );
-          if (clusterAutoscalingApp) {
-            if (!nodeData.enableClusterAutoscalingApp) {
-              this.onApplicationDeleted(clusterAutoscalingApp);
-            }
-          } else if (nodeData.enableClusterAutoscalingApp) {
-            return this._applicationService.getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME);
-          }
-          return of(null);
-        })
-      )
-      .subscribe(appDef => {
-        if (appDef) {
-          const application = this.createApplicationInstallation(appDef);
-          this.onApplicationAdded(application);
-        }
-      });
-
-    this._onApplicationsChanged();
   }
 
   private loadDefaultAndEnforcedApplications() {
@@ -146,47 +109,13 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
           appDef.spec.default = true;
         }
 
-        const applicationInstallation = this.createApplicationInstallation(appDef);
+        const applicationInstallation = createApplicationInstallation(
+          appDef,
+          this._applicationSettings?.defaultNamespace
+        );
         this.onApplicationAdded(applicationInstallation);
       });
     });
-  }
-
-  private createApplicationInstallation(appDef: ApplicationDefinition): Application {
-    const applicationInstallation: Application = {
-      name: appDef.name,
-      namespace: this._applicationSettings?.defaultNamespace || appDef.name,
-      labels: appDef.labels ? {...appDef.labels} : {},
-      spec: {
-        applicationRef: {
-          name: appDef.name,
-          version: getApplicationVersion(appDef),
-        },
-        namespace: appDef.spec.defaultNamespace || {
-          name: appDef.name,
-          create: true,
-        },
-      },
-    };
-
-    if (!_.isEmpty(appDef.spec.defaultValuesBlock)) {
-      applicationInstallation.spec.valuesBlock = appDef.spec.defaultValuesBlock;
-    } else if (!_.isEmpty(appDef.spec.defaultValues)) {
-      applicationInstallation.spec.valuesBlock = y.dump(appDef.spec.defaultValues);
-    } else {
-      applicationInstallation.spec.valuesBlock = '';
-    }
-
-    const annotations = new Map<string, string>();
-    if (appDef.spec.default) {
-      annotations.set(ApplicationAnnotations.Default, 'true');
-    }
-    if (appDef.spec.enforced) {
-      annotations.set(ApplicationAnnotations.Enforce, 'true');
-    }
-    applicationInstallation.annotations = Object.fromEntries(annotations);
-
-    return applicationInstallation;
   }
 
   onApplicationAdded(application: Application): void {

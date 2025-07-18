@@ -22,7 +22,6 @@ export class NodeData {
   count?: number;
   valid?: boolean;
   dynamicConfig?: boolean;
-  enableClusterAutoscalingApp?: boolean; // This field is used in the UI only
   maxReplicas?: number;
   minReplicas?: number;
   creationTimestamp?: Date;

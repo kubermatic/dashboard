@@ -36,8 +36,7 @@ import {
   Application,
   ApplicationAnnotations,
   ApplicationDefinition,
-  ApplicationLabel,
-  ApplicationLabelValue,
+  isSystemApplication,
 } from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {getEditionVersion} from '@shared/utils/common';
@@ -118,6 +117,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   applicationsSourceMap: ApplicationSourceMap = {};
   applicationsStatusMap: ApplicationStatusMap = {};
   editionVersion: string = getEditionVersion();
+  isSystemApplication = isSystemApplication;
   showSystemApplications = true;
 
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
@@ -198,7 +198,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getApplicationType(application: Application): string {
-    if (this.isSystemApplication(application)) {
+    if (isSystemApplication(application.labels)) {
       return 'System';
     } else if (this.isEnforcedApplication(application)) {
       return 'Enforced';
@@ -209,7 +209,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getApplicationTypeDescription(application: Application): string {
-    if (this.isSystemApplication(application)) {
+    if (isSystemApplication(application.labels)) {
       return 'This is a system application managed by KKP.';
     } else if (this.isEnforcedApplication(application)) {
       return 'This application is automatically installed and cannot be updated or deleted.';
@@ -217,10 +217,6 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
       return 'This application is automatically installed by default.';
     }
     return '';
-  }
-
-  isSystemApplication(application: Application): boolean {
-    return application.labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
   }
 
   isEnforcedApplication(application: Application): boolean {
@@ -247,7 +243,13 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
     if (this.canAdd()) {
       const dialog = this._matDialog.open(AddApplicationDialogComponent);
       dialog.componentInstance.installedApplications = this.applications;
-      dialog.componentInstance.applicationDefinitions = this.applicationDefinitions;
+      if (this.view === ApplicationsListView.Wizard) {
+        dialog.componentInstance.applicationDefinitions = this.applicationDefinitions.filter(
+          appdef => !isSystemApplication(appdef.labels)
+        );
+      } else {
+        dialog.componentInstance.applicationDefinitions = this.applicationDefinitions;
+      }
       dialog.componentInstance.applicationDefinitionsMap = this.applicationDefinitionsMap;
       dialog
         .afterClosed()
@@ -295,7 +297,7 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDeleteApplication(application: Application): void {
-    if (!this.isSystemApplication(application)) {
+    if (!isSystemApplication(application.labels)) {
       const config: MatDialogConfig = {
         data: {
           title: 'Delete Application',
@@ -320,8 +322,8 @@ export class ApplicationListComponent implements OnInit, OnChanges, OnDestroy {
 
   private get _visibleApplications(): Application[] {
     let filteredApplications = this.applications || [];
-    if (!this.showSystemApplications) {
-      filteredApplications = filteredApplications.filter(application => !this.isSystemApplication(application));
+    if (!this.showSystemApplications || this.view !== ApplicationsListView.Default) {
+      filteredApplications = filteredApplications.filter(application => !isSystemApplication(application.labels));
     }
     return filteredApplications;
   }

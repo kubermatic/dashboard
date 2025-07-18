@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import {SafeUrl} from '@angular/platform-browser';
+import _ from 'lodash';
+import * as y from 'js-yaml';
 import semver from 'semver';
 
 export const CLUSTER_AUTOSCALING_APP_DEF_NAME = 'cluster-autoscaler';
@@ -189,9 +191,50 @@ export function getApplicationVersion(applicationDefinition: ApplicationDefiniti
   }
 
   // Find the highest semver version from the versions array
-  const versions = applicationDefinition.spec.versions.filter(version => version.version);
+  const versions = applicationDefinition.spec.versions?.filter(version => version.version) ?? [];
   const sortedVersions = versions.sort((a, b) => {
     return semver.compare(a.version, b.version);
   });
   return sortedVersions[sortedVersions.length - 1].version;
+}
+
+export function createApplicationInstallation(appDef: ApplicationDefinition, defaultNamespace?: string): Application {
+  const applicationInstallation: Application = {
+    name: appDef.name,
+    namespace: defaultNamespace || appDef.name,
+    labels: appDef.labels ? {...appDef.labels} : {},
+    spec: {
+      applicationRef: {
+        name: appDef.name,
+        version: getApplicationVersion(appDef),
+      },
+      namespace: appDef.spec.defaultNamespace || {
+        name: appDef.name,
+        create: true,
+      },
+    },
+  };
+
+  if (!_.isEmpty(appDef.spec.defaultValuesBlock)) {
+    applicationInstallation.spec.valuesBlock = appDef.spec.defaultValuesBlock;
+  } else if (!_.isEmpty(appDef.spec.defaultValues)) {
+    applicationInstallation.spec.valuesBlock = y.dump(appDef.spec.defaultValues);
+  } else {
+    applicationInstallation.spec.valuesBlock = '';
+  }
+
+  const annotations = new Map<string, string>();
+  if (appDef.spec.default) {
+    annotations.set(ApplicationAnnotations.Default, 'true');
+  }
+  if (appDef.spec.enforced) {
+    annotations.set(ApplicationAnnotations.Enforce, 'true');
+  }
+  applicationInstallation.annotations = Object.fromEntries(annotations);
+
+  return applicationInstallation;
+}
+
+export function isSystemApplication(labels: Record<string, string>): boolean {
+  return labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
 }
