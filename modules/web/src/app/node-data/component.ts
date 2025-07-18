@@ -371,9 +371,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .get(Controls.EnableClusterAutoscalingApp)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(enable => {
-        this._applicationService.applications = this._applicationService.applications.filter(
-          app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME
-        );
+        this._filterOutAutoscalerApp();
         if (enable) {
           this._applicationService.applications = [
             ...this._applicationService.applications,
@@ -487,12 +485,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     dialog
       .afterClosed()
       .pipe(take(1))
-      .subscribe(app => {
+      .subscribe((app: Application) => {
         if (app) {
-          const apps = this._applicationService.applications.filter(
-            app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME
-          );
-          this._applicationService.applications = [...apps, app];
+          this._filterOutAutoscalerApp();
+          this._applicationService.applications = [...this._applicationService.applications, app];
           this.autoscalerApplication = app;
         }
       });
@@ -731,5 +727,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       ...this._quotaCalculationService.quotaPayload,
       replicas: this._nodeDataService.nodeData.count,
     };
+  }
+
+  private _filterOutAutoscalerApp(): void {
+    this._applicationService.applications = this._applicationService.applications.filter(
+      app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME
+    );
   }
 }
