@@ -391,6 +391,7 @@ func GetOpenstackProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec
 		InstanceReadyCheckTimeout: providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.InstanceReadyCheckTimeout},
 		TrustDevicePath:           providerconfig.ConfigVarBool{Value: ptr.To(false)},
 		ServerGroup:               providerconfig.ConfigVarString{Value: nodeSpec.Cloud.Openstack.ServerGroup},
+		ConfigDrive:               providerconfig.ConfigVarBool{Value: ptr.To(nodeSpec.Cloud.Openstack.ConfigDrive)},
 	}
 
 	config.SecurityGroups = []providerconfig.ConfigVarString{}

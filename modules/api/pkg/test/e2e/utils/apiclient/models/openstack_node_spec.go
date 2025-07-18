@@ -22,6 +22,9 @@ type OpenstackNodeSpec struct {
 	// if not set, the default AZ from the Datacenter spec will be used
 	AvailabilityZone string `json:"availabilityZone,omitempty"`
 
+	// ConfigDrive enables a configuration drive that will be attached to the instance when it boots.
+	ConfigDrive bool `json:"configDrive,omitempty"`
+
 	// instance flavor
 	// Required: true
 	Flavor *string `json:"flavor"`
