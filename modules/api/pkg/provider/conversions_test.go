@@ -92,9 +92,11 @@ func TestReconcileBinding(t *testing.T) {
 					ProxySettings: kubermaticv1.ProxySettings{
 						HTTPProxy: kubermaticv1.NewProxyValue("HTTPProxy"),
 					},
-					InsecureRegistries: []string{"incsecure-registry"},
-					RegistryMirrors:    []string{"http://127.0.0.1:5001"},
-					PauseImage:         "pause-image",
+					ContainerRuntimeOpts: kubermaticv1.ContainerRuntimeOpts{
+						InsecureRegistries: []string{"incsecure-registry"},
+						RegistryMirrors:    []string{"http://127.0.0.1:5001"},
+						PauseImage:         "pause-image",
+					},
 				},
 			},
 		},
@@ -137,7 +139,9 @@ func genTestUSCentalSeed() *kubermaticv1.Seed {
 						EnforcePodSecurityPolicy: true,
 					},
 					Node: &kubermaticv1.NodeSettings{
-						PauseImage: "image-pause",
+						ContainerRuntimeOpts: kubermaticv1.ContainerRuntimeOpts{
+							PauseImage: "image-pause",
+						},
 					},
 				},
 				"regular-do1": {
@@ -212,9 +216,11 @@ func genTestEuropeWestSeed() *kubermaticv1.Seed {
 						ProxySettings: kubermaticv1.ProxySettings{
 							HTTPProxy: kubermaticv1.NewProxyValue("HTTPProxy"),
 						},
-						InsecureRegistries: []string{"incsecure-registry"},
-						RegistryMirrors:    []string{"http://127.0.0.1:5001"},
-						PauseImage:         "pause-image",
+						ContainerRuntimeOpts: kubermaticv1.ContainerRuntimeOpts{
+							InsecureRegistries: []string{"incsecure-registry"},
+							RegistryMirrors:    []string{"http://127.0.0.1:5001"},
+							PauseImage:         "pause-image",
+						},
 					},
 				},
 			},

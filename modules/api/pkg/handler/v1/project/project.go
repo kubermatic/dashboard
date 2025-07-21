@@ -195,6 +195,16 @@ func checkProjectDeletionRestriction(user *kubermaticv1.User, settings *kubermat
 	return nil
 }
 
+func checkProjectModificationRestriction(user *kubermaticv1.User, settings *kubermaticv1.KubermaticSetting) error {
+	if user.Spec.IsAdmin {
+		return nil
+	}
+	if settings.Spec.RestrictProjectModification {
+		return utilerrors.New(http.StatusForbidden, "project modification is restricted")
+	}
+	return nil
+}
+
 func validateUserProjectsLimit(ctx context.Context, user *kubermaticv1.User, settings *kubermaticv1.KubermaticSetting, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, memberMapper provider.ProjectMemberMapper, memberProvider provider.ProjectMemberProvider, userProvider provider.UserProvider) error {
 	if user.Spec.IsAdmin {
 		return nil
@@ -431,7 +441,7 @@ func deleteProjectByRegularUser(ctx context.Context, userInfoGetter provider.Use
 
 // UpdateEndpoint defines an HTTP endpoint that updates an existing project in the system
 // in the current implementation only project renaming is supported.
-func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, memberProvider provider.ProjectMemberProvider, userProvider provider.UserProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, settingsProvider provider.SettingsProvider, memberProvider provider.ProjectMemberProvider, userProvider provider.UserProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(updateRq)
 		if !ok {
@@ -440,6 +450,17 @@ func UpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectP
 		err := req.validate()
 		if err != nil {
 			return nil, utilerrors.NewBadRequest("%v", err)
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		user := ctx.Value(middleware.UserCRContextKey).(*kubermaticv1.User)
+
+		if err := checkProjectModificationRestriction(user, settings); err != nil {
+			return nil, err
 		}
 
 		kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)

@@ -77,6 +77,9 @@ type GlobalSettings struct {
 	// restrict project deletion
 	RestrictProjectDeletion bool `json:"restrictProjectDeletion,omitempty"`
 
+	// restrict project modification
+	RestrictProjectModification bool `json:"restrictProjectModification,omitempty"`
+
 	// StaticLabels are a list of labels that can be used for the clusters.
 	StaticLabels []*StaticLabel `json:"staticLabels"`
 

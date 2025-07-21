@@ -29,7 +29,36 @@ limitations under the License.
       <div fxFlex
            fxLayout="column"
            fxLayoutGap="10px">
-
+                <div fxLayout="row"
+             fxLayoutAlign=" baseline">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               fxLayoutGap="5px"
+               class="entry-label">
+            <span>Project Restrictions</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Control which project operations are restricted to administrators only. When enabled, regular users will not be able to perform these actions."></div>
+          </div>
+          <div fxLayout="row">
+            <div fxLayout="row wrap"
+                 fxLayoutGap="8px">
+              <mat-checkbox id="km-project-admin-only-setting"
+                            [(ngModel)]="settings.restrictProjectCreation"
+                            (change)="onSettingsChange()">Restrict Creation to Administrators
+              </mat-checkbox>
+              <mat-checkbox [(ngModel)]="settings.restrictProjectModification"
+                            (change)="onSettingsChange()">Restrict Modification to Administrators
+              </mat-checkbox>
+              <mat-checkbox [(ngModel)]="settings.restrictProjectDeletion"
+                            (change)="onSettingsChange()">Restrict Deletion to Administrators
+              </mat-checkbox>
+            </div>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation) && 
+                                                      isEqual(settings.restrictProjectDeletion, apiSettings.restrictProjectDeletion) && 
+                                                      isEqual(settings.restrictProjectModification, apiSettings.restrictProjectModification)"></km-spinner-with-confirmation>
+          </div>
+        </div>
+        
         <div fxLayout="row"
              fxLayoutAlign=" baseline">
           <div fxFlex="16%"
@@ -44,23 +73,15 @@ limitations under the License.
             <div fxLayout="row wrap"
                  fxLayoutAlign=" baseline"
                  fxLayoutGap="16px">
-              <km-number-stepper [disabled]="settings.restrictProjectCreation"
-                                 [(ngModel)]="settings.userProjectsLimit"
+              <km-number-stepper [(ngModel)]="settings.userProjectsLimit"
                                  (ngModelChange)="onSettingsChange()"
                                  id="km-project-limit-setting"
                                  label="User Projects Limit"
                                  min="0"
                                  required>
               </km-number-stepper>
-              <mat-checkbox id="km-project-admin-only-setting"
-                            [(ngModel)]="settings.restrictProjectCreation"
-                            (change)="onSettingsChange()">Restrict Project Creation to Administrators
-              </mat-checkbox>
-              <mat-checkbox [(ngModel)]="settings.restrictProjectDeletion"
-                            (change)="onSettingsChange()">Restrict Project Deletion to Administrators
-              </mat-checkbox>
             </div>
-            <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)"></km-spinner-with-confirmation>
           </div>
         </div>
 

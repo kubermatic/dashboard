@@ -94,6 +94,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private readonly _refreshTime = 15;
   isUserSshKeyEnabled = false;
+  restrictProjectModification = false;
 
   constructor(
     private readonly _userService: UserService,
@@ -141,6 +142,9 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
+    if (this.restrictProjectModification) {
+      return this.currentUser.isAdmin;
+    }
     return (
       this.project &&
       MemberUtils.hasPermission(
@@ -226,6 +230,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       this.etcdBackupEnabled = settings.enableEtcdBackup;
       this.externalClustersEnabled = settings.enableExternalClusterImport;
       this.allowedOperatingSystems = settings.allowedOperatingSystems;
+      this.restrictProjectModification = settings.restrictProjectModification;
       if (this.etcdBackupEnabled) {
         this._loadBackups();
       }

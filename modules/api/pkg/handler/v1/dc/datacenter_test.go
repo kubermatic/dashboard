@@ -581,7 +581,9 @@ func TestDatacenterUpdateEndpoint(t *testing.T) {
 					Region: "EU",
 				},
 				Node: kubermaticv1.NodeSettings{
-					PauseImage: "pause-image",
+					ContainerRuntimeOpts: kubermaticv1.ContainerRuntimeOpts{
+						PauseImage: "pause-image",
+					},
 				},
 				EnforceAuditLogging:      true,
 				EnforcePodSecurityPolicy: false,
@@ -604,7 +606,9 @@ func TestDatacenterUpdateEndpoint(t *testing.T) {
 					Region: "EU",
 				},
 				Node: kubermaticv1.NodeSettings{
-					PauseImage: "pause-image",
+					ContainerRuntimeOpts: kubermaticv1.ContainerRuntimeOpts{
+						PauseImage: "pause-image",
+					},
 				},
 				EnforceAuditLogging:      true,
 				EnforcePodSecurityPolicy: false,
