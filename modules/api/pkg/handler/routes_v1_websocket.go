@@ -81,7 +81,7 @@ var upgrader = websocket.Upgrader{
 
 type WebsocketSettingsWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn)
 type WebsocketUserWriter func(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string)
-type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions)
+type WebsocketTerminalWriter func(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, kubeconfigSecret *corev1.Secret, tokenExpirationTime time.Time)
 
 const (
 	maxNumberOfTerminalActiveConnectionsPerUser = 5
@@ -298,8 +298,8 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 		connectionsPerUser.increaseActiveConnections(userProjectClusterUniqueKey)
 		defer connectionsPerUser.decreaseActiveConnections(userProjectClusterUniqueKey)
 
+		kubeconfigSecret := &corev1.Secret{}
 		if !wsh.WaitFor(ctx, 5*time.Second, waitForKubeconfigSecretTimeout, func(ctx context.Context) bool {
-			kubeconfigSecret := &corev1.Secret{}
 			if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 				Namespace: metav1.NamespaceSystem,
 				Name:      handlercommon.KubeconfigSecretName(userEmailID),
@@ -314,7 +314,19 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 			return
 		}
 
-		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions)
+		token, err := wsh.ExtractIDToken(kubeconfigSecret.Data["kubeconfig"])
+		if err != nil {
+			log.Logger.Error(err)
+			return
+		}
+
+		tokenExpirationTime, err := wsh.GetTokenExpiration(token)
+		if err != nil {
+			log.Logger.Error(err)
+			return
+		}
+
+		writer(ctx, ws, client, seedClient, k8sClient, cfg, userEmailID, cluster, settings.Spec.WebTerminalOptions, kubeconfigSecret, tokenExpirationTime)
 	}
 }
 

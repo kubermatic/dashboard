@@ -19,6 +19,7 @@ package websocket
 import (
 	"context"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -26,6 +27,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -44,6 +46,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/remotecommand"
 	"k8s.io/kubectl/pkg/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -73,6 +76,7 @@ type TerminalConnStatus string
 
 const (
 	KubeconfigSecretMissing TerminalConnStatus = "KUBECONFIG_SECRET_MISSING"
+	WebTerminalTokenExpired TerminalConnStatus = "WEBTERMINAL_TOKEN_EXPIRED"
 	WebterminalPodPending   TerminalConnStatus = "WEBTERMINAL_POD_PENDING"
 	WebterminalPodFailed    TerminalConnStatus = "WEBTERMINAL_POD_FAILED"
 	ConnectionPoolExceeded  TerminalConnStatus = "CONNECTION_POOL_EXCEEDED"
@@ -267,9 +271,15 @@ func pingRoutine(websocketConn *websocket.Conn) {
 	}
 }
 
-func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn) {
+func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn, userAppName string, kubeconfigSecret *corev1.Secret, tokenExpirationTime time.Time) {
 	for {
 		time.Sleep(expirationCheckInterval)
+		if time.Now().After(tokenExpirationTime) {
+			if err := clusterClient.Delete(ctx, kubeconfigSecret); err != nil {
+				log.Logger.Debug(err)
+			}
+			_ = SendMessage(websocketConn, string(WebTerminalTokenExpired))
+		}
 
 		expirationTime, numberOfRefreshes, err := getWebTerminalExpirationValues(ctx, clusterClient, userEmailID)
 		if err != nil {
@@ -295,7 +305,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, kubeconfigSecret *corev1.Secret, tokenExpirationTime time.Time, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
@@ -352,7 +362,7 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 
 	go pingRoutine(websocketConn)
 
-	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn)
+	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn, userAppName, kubeconfigSecret, tokenExpirationTime)
 
 	req := k8sClient.CoreV1().RESTClient().Post().
 		Resource("pods").
@@ -730,7 +740,7 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, kubeconfigSecret *corev1.Secret, tokenExpirationTime time.Time) {
 	if err := startProcess(
 		ctx,
 		client,
@@ -740,6 +750,8 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 		userEmailID,
 		cluster,
 		options,
+		kubeconfigSecret,
+		tokenExpirationTime,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,
@@ -775,4 +787,40 @@ func SendMessage(wsConn *websocket.Conn, message string) error {
 		Op:   "msg",
 		Data: message,
 	})
+}
+
+func ExtractIDToken(rawKubeconfig []byte) (string, error) {
+	cfg, err := clientcmd.Load(rawKubeconfig)
+	if err != nil {
+		return "", fmt.Errorf("failed to load kubeconfig: %w", err)
+	}
+
+	for _, user := range cfg.AuthInfos {
+		if token, ok := user.AuthProvider.Config["id-token"]; ok {
+			return token, nil
+		}
+	}
+
+	return "", fmt.Errorf("id-token not found in kubeconfig")
+}
+
+func GetTokenExpiration(token string) (time.Time, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) < 2 {
+		return time.Time{}, fmt.Errorf("invalid token format")
+	}
+
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return time.Time{}, fmt.Errorf("failed to decode token: %w", err)
+	}
+
+	var claims map[string]interface{}
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return time.Time{}, fmt.Errorf("failed to unmarshal claims: %w", err)
+	}
+
+	expFloat := claims["exp"].(float64)
+
+	return time.Unix(int64(expFloat), 0), nil
 }
