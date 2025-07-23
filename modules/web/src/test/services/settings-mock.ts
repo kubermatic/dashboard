@@ -40,6 +40,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   userProjectsLimit: 0,
   restrictProjectCreation: false,
   restrictProjectDeletion: false,
+  restrictProjectModification: false,
   enableExternalClusterImport: true,
   machineDeploymentVMResourceQuota: {
     minRAM: 0,

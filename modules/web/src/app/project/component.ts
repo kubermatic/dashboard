@@ -75,6 +75,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   settings: UserSettings;
   restrictProjectCreation = false;
   restrictProjectDeletion = false;
+  restrictProjectModification = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   hasQuota: boolean;
   isProjectsLoading: boolean;
@@ -187,6 +188,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.restrictProjectCreation = settings.restrictProjectCreation;
       this.restrictProjectDeletion = settings.restrictProjectDeletion;
+      this.restrictProjectModification = settings.restrictProjectModification;
       this.allowedOperatingSystems = settings.allowedOperatingSystems;
     });
 
@@ -510,6 +512,9 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEditEnabled(project: Project): boolean {
+    if (this.restrictProjectModification) {
+      return this.currentUser.isAdmin;
+    }
     return (
       MemberUtils.hasPermission(
         this.currentUser,
