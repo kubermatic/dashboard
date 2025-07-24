@@ -62,6 +62,7 @@ enum Operations {
 
 enum ErrorOperations {
   KubeConfigSecretMissing = 'KUBECONFIG_SECRET_MISSING',
+  WebTerminalTokenExpired = 'WEBTERMINAL_TOKEN_EXPIRED',
   WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
@@ -284,6 +285,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
           this.isDexAuthenticationPageOpened = true;
         }
         this.message = 'Please wait, authenticate in order to access web terminal...';
+      } else if (frame.Data === ErrorOperations.WebTerminalTokenExpired) {
+        this._webTerminalSocketService.close();
+        this.isConnectionLost = true;
       } else if (frame.Data === ErrorOperations.WebTerminalPodPending) {
         this.message = 'Please wait, provisioning your Web Terminal pod...';
       } else if (frame.Data === ErrorOperations.ConnectionPoolExceeded) {
