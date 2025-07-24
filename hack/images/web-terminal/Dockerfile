@@ -19,14 +19,20 @@ ARG TARGETARCH
 
 LABEL maintainer="support@kubermatic.com"
 
-# Source: https://dl.k8s.io/release/stable-1.31.txt
-ENV KUBECTL_VERSION=v1.31.8
+# Source: https://dl.k8s.io/release/stable-1.32.txt
+ENV KUBECTL_VERSION=v1.32.7
 
 # Source: https://github.com/helm/helm/releases
-ENV HELM_VERSION=v3.17.3
+ENV HELM_VERSION=v3.17.4
 
 # Source: https://github.com/k8sgpt-ai/k8sgpt/releases
-ENV K8SGPT_VERSION=v0.4.15
+ENV K8SGPT_VERSION=v0.4.22
+
+# Source: https://github.com/derailed/k9s/releases
+ENV K9S_VERSION=v0.50.9
+
+# Source: https://github.com/kubernetes-sigs/krew/releases
+ENV KREW_VERSION=v0.4.5
 
 ENV USER=webshell
 ENV GROUP=webshell
@@ -52,15 +58,43 @@ RUN apk add --no-cache -U \
   openssh-client \
   unzip \
   tar \
-  wget
+  wget \
+  ncurses
 
+# Install kubectl
 RUN curl -Lo /usr/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
   chmod +x /usr/bin/kubectl && \
   kubectl version --client
 
+# Install helm
 RUN curl --fail -L https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz | tar -xzO linux-${TARGETARCH}/helm > /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm && \
   helm version --short
+
+# Install k9s
+RUN curl -LO https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_${TARGETARCH}.tar.gz && \
+  tar -xzf k9s_Linux_${TARGETARCH}.tar.gz && \
+  mv k9s /usr/local/bin/k9s && \
+  chmod +x /usr/local/bin/k9s && \
+  k9s version
+
+# Install krew
+RUN curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/krew-linux_${TARGETARCH}.tar.gz" && \
+  tar -xzf krew-linux_${TARGETARCH}.tar.gz && \
+  ./krew-linux_${TARGETARCH} install krew && \
+  echo "export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH" >> /root/.bashrc
+
+ENV PATH="/root/.krew/bin:$PATH"
+
+# Krew plugins
+RUN PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" && \
+  kubectl krew update && \
+  kubectl krew install oidc-login && \
+  kubectl krew install ctx && \
+  kubectl krew install ns
+
+RUN mkdir -p /home/webshell/.local/state && \
+    chown -R webshell:webshell /home/webshell/.local
 
 USER ${USER}
 
