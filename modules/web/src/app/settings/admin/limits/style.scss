@@ -29,3 +29,19 @@
     margin-left: 4px;
   }
 }
+
+@include mixins.breakpoint('medium') {
+  .admin-settings {
+    padding-left: 15px;
+
+    .entry-label {
+      min-width: 100px;
+      font-size: variables.$font-size-body;
+
+      .km-icon-info {
+        margin-left: 0;
+        margin-top: 0;
+      }
+    }
+  }
+}
