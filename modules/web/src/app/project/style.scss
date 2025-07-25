@@ -143,6 +143,12 @@ $project-card-width: 330px;
   }
 }
 
+@include mixins.breakpoint('large') {
+  .project-cards-view {
+    gap: 10px;
+  }
+}
+
 .all-projects-toggle {
   float: right;
   padding-right: 16px;
