@@ -41,10 +41,12 @@ limitations under the License.
                [formControlName]="Controls.Network"
                (changed)="onNetworkChange($event)"
                [label]="networksLabel"
+               [valueFormatter]="networkDisplayName.bind(this)"
                inputLabel="Select network..."
-               filterBy="name">
+               filterBy="name"
+               selectBy="id">
     <div *option="let network">
-      {{network.name}}
+      {{network.name || network.id}}
     </div>
   </km-combobox>
 

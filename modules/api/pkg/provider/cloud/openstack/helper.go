@@ -160,18 +160,39 @@ func getTenants(authClient *gophercloud.ProviderClient, region string) ([]osproj
 }
 
 func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName string) ([]ossubnets.Subnet, error) {
-	var allSubnets []ossubnets.Subnet
-
-	networks, err := getAllNetworks(netClient, osnetworks.ListOpts{Name: networkIDOrName})
-	if err != nil {
-		return nil, fmt.Errorf("failed to list networks: %w", err)
+	findNetwork := func(opts osnetworks.ListOpts, searchBy string) (string, error) {
+		networks, err := getAllNetworks(netClient, opts)
+		if err != nil {
+			return "", fmt.Errorf("failed to list networks by %s: %w", searchBy, err)
+		}
+		if len(networks) == 1 {
+			return networks[0].ID, nil
+		}
+		if len(networks) > 1 {
+			return "", fmt.Errorf("got %d networks for %s '%s', expected one at most", len(networks), searchBy, networkIDOrName)
+		}
+		return "", nil
 	}
 
-	networkID := networkIDOrName
-	if len(networks) == 1 {
-		networkID = networks[0].ID
-	} else if len(networks) > 1 {
-		return nil, fmt.Errorf("got %d networks for idOrName '%s', expected one at most", len(networks), networkIDOrName)
+	const (
+		searchByName = "name"
+		searchByID   = "id"
+	)
+
+	// Try by name first
+	networkID, err := findNetwork(osnetworks.ListOpts{Name: networkIDOrName}, searchByName)
+	if err != nil {
+		return nil, err
+	}
+	if networkID == "" {
+		// Fallback to ID
+		networkID, err = findNetwork(osnetworks.ListOpts{ID: networkIDOrName}, searchByID)
+		if err != nil {
+			return nil, err
+		}
+		if networkID == "" {
+			return nil, fmt.Errorf("network with id or name '%s' not found", networkIDOrName)
+		}
 	}
 
 	allPages, err := ossubnets.List(netClient, ossubnets.ListOpts{NetworkID: networkID}).AllPages()
@@ -179,7 +200,8 @@ func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName s
 		return nil, err
 	}
 
-	if allSubnets, err = ossubnets.ExtractSubnets(allPages); err != nil {
+	allSubnets, err := ossubnets.ExtractSubnets(allPages)
+	if err != nil {
 		return nil, err
 	}
 

@@ -36,8 +36,8 @@ import {
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {CredentialsType, OpenstackCredentialsTypeService} from '../service';
 import {IPVersion} from '../shared/types/ip-version';
 import {
@@ -89,6 +89,7 @@ export class OpenstackProviderExtendedCredentialsComponent
   @ViewChild('ipv6SubnetPoolCombobox')
   private readonly _ipv6SubnetPoolCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
+  private readonly _networkChangeSubject = new Subject<string>();
   readonly Controls = Controls;
   isPresetSelected = false;
   securityGroups: OpenstackSecurityGroup[] = [];
@@ -111,6 +112,7 @@ export class OpenstackProviderExtendedCredentialsComponent
   private _applicationCredentialID = '';
   private _applicationCredentialSecret = '';
   private _preset = '';
+  private _currentNetworkId = '';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -120,6 +122,14 @@ export class OpenstackProviderExtendedCredentialsComponent
     private readonly _credentialsTypeService: OpenstackCredentialsTypeService
   ) {
     super('Openstack Provider Extended');
+  }
+
+  get openstackNetwork(): string {
+    return this._clusterSpecService.cluster.spec.cloud.openstack?.network || '';
+  }
+
+  set openstackNetwork(value: string) {
+    this._clusterSpecService.cluster.spec.cloud.openstack.network = value;
   }
 
   ngOnInit(): void {
@@ -229,10 +239,9 @@ export class OpenstackProviderExtendedCredentialsComponent
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {});
 
-    this.form
-      .get(Controls.Network)
-      .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+    this._networkChangeSubject
       .pipe(debounceTime(this._debounceTime))
+      .pipe(distinctUntilChanged())
       .pipe(tap(_ => (!this._canLoadSubnet() ? this._clearSubnetID() : null)))
       .pipe(filter(_ => this._canLoadSubnet()))
       .pipe(switchMap(_ => this._subnetIDListObservable()))
@@ -244,8 +253,16 @@ export class OpenstackProviderExtendedCredentialsComponent
     this._clusterSpecService.cluster.spec.cloud.openstack.securityGroups = securityGroup;
   }
 
-  onNetworkChange(network: string): void {
-    this._clusterSpecService.cluster.spec.cloud.openstack.network = network;
+  onNetworkChange(networkId: string): void {
+    this._currentNetworkId = networkId;
+    const network: OpenstackNetwork = this.networks.find((n: OpenstackNetwork) => n.id === networkId);
+    if (network) {
+      this.openstackNetwork = network.name || network.id;
+    } else {
+      this.openstackNetwork = networkId;
+    }
+
+    this._networkChangeSubject.next(networkId);
   }
 
   onIPv4SubnetIDChange(subnetID: string): void {
@@ -275,6 +292,12 @@ export class OpenstackProviderExtendedCredentialsComponent
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._networkChangeSubject.complete();
+  }
+
+  networkDisplayName(id: string): string {
+    const network: OpenstackNetwork = this.networks.find(network => network.id === id);
+    return network ? network.name || network.id : '';
   }
 
   ipv4SubnetIDDisplayName(id: string): string {
@@ -299,9 +322,14 @@ export class OpenstackProviderExtendedCredentialsComponent
 
   private _loadNetworks(networks: OpenstackNetwork[]): void {
     this.networks = networks.filter(network => !network.external);
-    const selectedNetwork = this._clusterSpecService.cluster.spec.cloud.openstack.network;
-    if (selectedNetwork && !networks.find(network => network.name === selectedNetwork)) {
+    const selectedNetwork = this.openstackNetwork;
+    const network = this.networks.find(n => n.name === selectedNetwork || n.id === selectedNetwork);
+
+    if (selectedNetwork && !network) {
       this._networkCombobox.reset();
+      this._currentNetworkId = '';
+    } else if (!this._currentNetworkId) {
+      this._currentNetworkId = network.id;
     }
     this.networksLabel = !_.isEmpty(this.networks) ? NetworkState.Ready : NetworkState.Empty;
     this._cdr.detectChanges();
@@ -435,7 +463,7 @@ export class OpenstackProviderExtendedCredentialsComponent
   private _canLoadSubnet(): boolean {
     return (
       (this._hasUserCredentials() || this._hasApplicationCredentials() || this.isPresetSelected) &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.network
+      !!this.openstackNetwork
     );
   }
 
@@ -499,6 +527,7 @@ export class OpenstackProviderExtendedCredentialsComponent
     this.networks = [];
     this._networkCombobox.reset();
     this.networksLabel = NetworkState.Empty;
+    this._currentNetworkId = '';
     this._cdr.detectChanges();
   }
 
@@ -519,7 +548,7 @@ export class OpenstackProviderExtendedCredentialsComponent
       .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
       .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
-      .subnets(this._clusterSpecService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
+      .subnets(this.openstackNetwork, this._onSubnetIDLoading.bind(this))
       .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))
       .pipe(
         catchError(() => {
