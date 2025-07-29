@@ -1,4 +1,4 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2025 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,33 +15,20 @@
 @use 'mixins';
 @use 'variables';
 
-.admin-settings {
-  font-size: variables.$font-size-subhead;
-  padding-left: 30px;
 
-  mat-checkbox {
-    margin-right: 48px;
-  }
+.title {
+  font-size: variables.$font-size-body;
+  font-weight: variables.$font-weight-medium;
+  margin-bottom: 16px;
+}
 
-  .km-pointer {
-    @include mixins.size(16);
-
-    margin-left: 4px;
+.table-container {
+  .km-table {
+    width: 100%;
   }
 }
 
-@include mixins.breakpoint('medium') {
-  .admin-settings {
-    padding-left: 15px;
-
-    .entry-label {
-      font-size: variables.$font-size-body;
-      min-width: 100px;
-
-      .km-icon-info {
-        margin-left: 0;
-        margin-top: 0;
-      }
-    }
-  }
+.km-provider-logo {
+  background-position: left;
+  margin: 8px 8px 0 0;
 }

@@ -45,7 +45,12 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 import {QuotaCalculationService} from '@dynamic/enterprise/quotas/services/quota-calculation';
 import {DynamicModule} from '@dynamic/module-registry';
 import {AutocompleteControls} from '@shared/components/autocomplete/component';
-import {ApplicationDefinition, CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@shared/entity/application';
+import {
+  Application,
+  ApplicationDefinition,
+  CLUSTER_AUTOSCALING_APP_DEF_NAME,
+  createApplicationInstallation,
+} from '@shared/entity/application';
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeNetworkSpec, OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
@@ -57,6 +62,8 @@ import {EMPTY, forkJoin, merge, of} from 'rxjs';
 import {debounceTime, filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
 import {ParamsService, PathParam} from '@app/core/services/params';
+import {EditApplicationDialogComponent} from '@app/shared/components/application-list/edit-application-dialog/component';
+import {MatDialog} from '@angular/material/dialog';
 
 enum Controls {
   Name = 'name',
@@ -128,6 +135,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   DNSServers: string[] = [];
   autoscalingTooltipText =
     'Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application.';
+  clusterAutoscalerAppDefinition: ApplicationDefinition;
+  autoscalerApplication: Application;
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -156,7 +165,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _quotaCalculationService: QuotaCalculationService,
     private readonly _applicationService: ApplicationService,
     private readonly _params: ParamsService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _matDialog: MatDialog
   ) {
     super();
   }
@@ -188,6 +198,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
 
+    this.autoscalerApplication = this._applicationService.applications.find(
+      app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+    );
+
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
@@ -214,11 +228,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
-      [Controls.EnableClusterAutoscalingApp]: this._builder.control(
-        this._applicationService.applications?.find(
-          app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
-        )
-      ),
+      [Controls.EnableClusterAutoscalingApp]: this._builder.control(!!this.autoscalerApplication),
       [Controls.MaxReplicas]: this._builder.control(
         this._nodeDataService.nodeData.maxReplicas,
         Validators.max(this.MaxReplicasCount)
@@ -241,10 +251,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
 
     this._applicationService
-      .listApplicationDefinitions()
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(apps => {
-        if (!this._isClusterAutoscalingAppExist(apps)) {
+      .getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME)
+      .pipe(take(1))
+      .subscribe(appdef => {
+        if (appdef.name) {
+          this.clusterAutoscalerAppDefinition = appdef;
+          this.autoscalerApplication = this.autoscalerApplication ?? createApplicationInstallation(appdef);
+        } else {
           this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
           this.form.get(Controls.EnableClusterAutoscalingApp).disable();
           this.autoscalingTooltipText =
@@ -353,6 +366,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           this._quotaCalculationService.refreshQuotaCalculations(payload);
         }
       });
+
+    this.form
+      .get(Controls.EnableClusterAutoscalingApp)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(enable => {
+        this._filterOutAutoscalerApp();
+        if (enable) {
+          this._applicationService.applications = [
+            ...this._applicationService.applications,
+            this.autoscalerApplication,
+          ];
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -448,6 +474,24 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   onDNSServerChange(ips: string[]): void {
     this.DNSServers = ips;
+  }
+
+  onEditAutoScalerApp(): void {
+    const dialog = this._matDialog.open(EditApplicationDialogComponent);
+    dialog.componentInstance.application = this.autoscalerApplication;
+    dialog.componentInstance.applicationDefinition = this.clusterAutoscalerAppDefinition;
+    dialog.componentInstance.cluster = this._clusterSpecService.cluster;
+    dialog.componentInstance.projectID = this.projectId;
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((app: Application) => {
+        if (app) {
+          this._filterOutAutoscalerApp();
+          this._applicationService.applications = [...this._applicationService.applications, app];
+          this.autoscalerApplication = app;
+        }
+      });
   }
 
   private _init(): void {
@@ -633,12 +677,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
         minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       };
-      if (!this.isDialogView()) {
-        data = {
-          ...data,
-          enableClusterAutoscalingApp: this.form.get(Controls.EnableClusterAutoscalingApp).value,
-        };
-      }
     }
 
     return data;
@@ -691,7 +729,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     };
   }
 
-  private _isClusterAutoscalingAppExist(apps: ApplicationDefinition[]): boolean {
-    return !!apps.find(app => app.name === CLUSTER_AUTOSCALING_APP_DEF_NAME);
+  private _filterOutAutoscalerApp(): void {
+    this._applicationService.applications = this._applicationService.applications.filter(
+      app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME
+    );
   }
 }

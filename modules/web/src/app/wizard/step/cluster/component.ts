@@ -48,6 +48,7 @@ import {
   ClusterAnnotation,
   ClusterNetwork,
   ClusterSpec,
+  InternalClusterSpecAnnotations,
   CNIPlugin,
   ContainerRuntime,
   ExposeStrategy,
@@ -100,6 +101,7 @@ enum Controls {
   AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
   AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   UserSSHKeyAgent = 'userSSHKeyAgent',
+  RouterReconciliation = 'routerReconciliation',
   ClusterBackup = 'clusterBackup',
   BackupStorageLocation = 'backupStorageLocation',
   Labels = 'labels',
@@ -278,13 +280,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this.isKubeLBEnforced = !!datacenter.spec.kubelb?.enforced;
 
-          if (datacenter.spec.kubelb?.enableGatewayAPI) {
-            this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(true);
-          }
+          // Set isKubeLBEnabled immediately based on datacenter settings to avoid UI flicker
+          // This will be updated later with seed settings
+          this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, this._seedSettings);
 
-          if (datacenter.spec.kubelb?.useLoadBalancerClass) {
-            this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(true);
-          }
+          // If KubeLB is enforced, we need to enable the kubelb control
+          this.form.get(Controls.KubeLB).setValue(this.isKubeLBEnforced);
+          this.form.get(Controls.KubeLBEnableGatewayAPI).setValue(!!datacenter.spec.kubelb?.enableGatewayAPI);
+          this.form.get(Controls.KubeLBUseLoadBalancerClass).setValue(!!datacenter.spec.kubelb?.useLoadBalancerClass);
 
           this.isCSIDriverDisabled = datacenter.spec.disableCsiDriver;
           this.enforcedAuditWebhookSettings = datacenter.spec.enforcedAuditWebhookSettings;
@@ -304,11 +307,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(({datacenter, seedSettings}) => {
         this._seedSettings = seedSettings;
-        this.isKubeLBEnabled = !!(
-          datacenter.spec.kubelb?.enforced ||
-          datacenter.spec.kubelb?.enabled ||
-          seedSettings?.kubelb?.enableForAllDatacenters
-        );
+        // Update isKubeLBEnabled with seed settings
+        this.isKubeLBEnabled = this._isKubeLBEnabled(datacenter, seedSettings);
       });
 
     this._clusterSpecService.providerChanges
@@ -322,6 +322,26 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           } else if (this.controlValue(Controls.CNIPlugin) === '') {
             this.control(Controls.CNIPlugin).setValue(CNIPlugin.Cilium);
           }
+
+          if (this.provider === NodeProvider.OPENSTACK) {
+            this.form.addControl(Controls.RouterReconciliation, this._builder.control(false));
+            this.form
+              .get(Controls.RouterReconciliation)
+              .valueChanges.pipe(takeUntil(this._unsubscribe))
+              .subscribe(value => {
+                this.annotations = {
+                  ...this.annotations,
+                  [InternalClusterSpecAnnotations.SkipRouterReconciliation]: value ? 'true' : 'false',
+                };
+                this.onAnnotationsChange(this.annotations);
+              });
+          } else {
+            if (this.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation]) {
+              delete this.annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation];
+            }
+            this.form.removeControl(Controls.RouterReconciliation);
+          }
+          this.onAnnotationsChange(this.annotations);
         })
       )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
@@ -432,9 +452,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ => (this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange())
-      );
+      .subscribe(_ => {
+        this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
+
+        const exposeStrategy = this.form.get(Controls.ExposeStrategy).value;
+        const clusterNetwork = this._clusterSpecService.cluster.spec.clusterNetwork;
+        if (exposeStrategy !== ExposeStrategy.tunneling) {
+          clusterNetwork.tunnelingAgentIP = null;
+        }
+      });
 
     merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.CNIPluginVersion).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -507,6 +533,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   onAnnotationsChange(annotations: Record<string, string>): void {
+    if (
+      this.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] &&
+      !annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation]
+    ) {
+      annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation] =
+        this.annotations[InternalClusterSpecAnnotations.SkipRouterReconciliation];
+    }
     this.annotations = annotations;
     this._clusterSpecService.annotations = annotations;
   }
@@ -1165,5 +1198,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       }
     }
     return '';
+  }
+
+  private _isKubeLBEnabled(datacenter: Datacenter, seedSettings: SeedSettings): boolean {
+    return !!(
+      datacenter.spec.kubelb?.enforced ||
+      datacenter.spec.kubelb?.enabled ||
+      seedSettings?.kubelb?.enableForAllDatacenters
+    );
   }
 }

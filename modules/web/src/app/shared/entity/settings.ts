@@ -41,6 +41,7 @@ export interface AdminSettings {
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
   restrictProjectDeletion: boolean;
+  restrictProjectModification: boolean;
   enableExternalClusterImport: boolean;
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
   opaOptions: OpaOptions;
@@ -239,6 +240,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   enableEtcdBackup: false,
   restrictProjectCreation: false,
   restrictProjectDeletion: false,
+  restrictProjectModification: false,
   enableExternalClusterImport: true,
   machineDeploymentVMResourceQuota: {
     minRAM: 0,

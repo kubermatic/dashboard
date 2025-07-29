@@ -20,12 +20,14 @@ import {DialogModeService} from '@app/core/services/dialog-mode';
 import {Mode, PresetDialogComponent, PresetDialogData} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
+
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Preset, PresetList, PresetStat} from '@shared/entity/preset';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {
   EXTERNAL_NODE_PROVIDERS,
   NODE_PROVIDERS,
@@ -34,7 +36,8 @@ import {
 } from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
 import {Observable, Subject, forkJoin, merge, of} from 'rxjs';
-import {finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {PresetLinkagesDialogComponent} from 'app/settings/admin/presets/preset-linkages-dialog/component';
 
 enum Column {
   Name = 'name',
@@ -56,7 +59,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   readonly displayedProviders = 5;
 
   presets: Preset[] = [];
-  dataSource = new MatTableDataSource<Preset>();
+  dataSource: MatTableDataSource<Preset> = new MatTableDataSource<Preset>();
   displayedColumns: string[] = Object.values(Column);
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
@@ -125,8 +128,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
         }),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(
-        (stats: PresetStat[]) => {
+      .subscribe({
+        next: (stats: PresetStat[]) => {
           this.presets.forEach((preset: Preset, idx: number) => {
             preset.associatedClusters = stats[idx].associatedClusters;
             preset.associatedClusterTemplates = stats[idx].associatedClusterTemplates;
@@ -134,11 +137,11 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
           this.dataSource.data = this.presets;
           this.isBusyCounter--;
         },
-        _ => {
+        error: _ => {
           this._notificationService.error('Could not fetch Presets data');
           this.isBusyCounter--;
-        }
-      );
+        },
+      });
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       this.datacenters = datacenters;
@@ -254,6 +257,53 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       )
       .subscribe(created => {
         created === true ? this._presetsChanged.next() : null;
+      });
+  }
+
+  viewLinkages(preset: Preset): void {
+    const dialogConfig: MatDialogConfig = {
+      panelClass: 'km-preset-linkages-dialog',
+      data: {
+        presetName: preset.name,
+      },
+    };
+
+    this._matDialog.open(PresetLinkagesDialogComponent, dialogConfig);
+  }
+
+  deletePreset(preset: Preset): void {
+    const hasAssociations = preset.associatedClusters > 0 || preset.associatedClusterTemplates > 0;
+    let message: string;
+    let warning: string | undefined;
+
+    if (hasAssociations) {
+      message = `Delete <b>${_.escape(preset.name)}</b> preset permanently?`;
+      warning = `This preset is linked to <b>${preset.associatedClusters} cluster(s)</b> and <b>${preset.associatedClusterTemplates} cluster template(s)</b>. Use <b>"View Linkages"</b> from the actions menu to see details. Are you sure you want to continue?`;
+    } else {
+      message = `Delete <b>${_.escape(preset.name)}</b> preset permanently?`;
+    }
+
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Preset',
+        message: message,
+        warning: warning,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._presetService.delete(preset.name)))
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._notificationService.success(`Deleted the ${preset.name} preset`);
+          this._presetsChanged.next();
+        },
+        error: () => this._notificationService.error(`Failed to delete the ${preset.name} preset`),
       });
   }
 

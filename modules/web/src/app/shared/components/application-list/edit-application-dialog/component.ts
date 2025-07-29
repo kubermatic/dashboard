@@ -20,8 +20,6 @@ import {
   Application,
   ApplicationAnnotations,
   ApplicationDefinition,
-  ApplicationLabel,
-  ApplicationLabelValue,
   ApplicationNamespace,
   ApplicationSpec,
   ApplicationVersion,
@@ -32,6 +30,7 @@ import * as y from 'js-yaml';
 import _ from 'lodash';
 import {forkJoin, of, Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {isSystemApplication} from '@shared/entity/application';
 
 enum Controls {
   Version = 'version',
@@ -63,6 +62,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   selectedVersionSource: string;
   isValuesConfigValid = true;
   isLoadingDetails: boolean;
+  isSystemApplication = isSystemApplication;
 
   private readonly _unsubscribe = new Subject<void>();
 
@@ -106,10 +106,6 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
     return this.application?.annotations?.[ApplicationAnnotations.Enforce] === 'true';
   }
 
-  isSystemApplication(labels: Record<string, string>): boolean {
-    return labels?.[ApplicationLabel.ManagedBy] === ApplicationLabelValue.KKP;
-  }
-
   private _loadApplicationDetails() {
     this.isLoadingDetails = true;
     forkJoin([
@@ -142,7 +138,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       [Controls.Version]: this._builder.control(
         {
           value: this.application.spec.applicationRef?.version,
-          disabled: this.isEnforcedApplication() ? true : this.isSystemApplication(this.application?.labels),
+          disabled: this.isEnforcedApplication() ? true : isSystemApplication(this.application?.labels),
         },
         Validators.required
       ),
@@ -158,7 +154,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
         this._builder.control(
           {
             value: this.application.namespace,
-            disabled: this.isEnforcedApplication(),
+            disabled: this.isEnforcedApplication() ? true : isSystemApplication(this.application?.labels),
           },
           [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
         )
@@ -168,7 +164,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
         this._builder.control(
           {
             value: this.application.spec.namespace?.name,
-            disabled: this.isEnforcedApplication(),
+            disabled: this.isEnforcedApplication() ? true : isSystemApplication(this.application?.labels),
           },
           [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
         )
@@ -178,7 +174,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
         this._builder.control(
           {
             value: this.application.name,
-            disabled: this.isEnforcedApplication(),
+            disabled: this.isEnforcedApplication() ? true : isSystemApplication(this.application?.labels),
           },
           [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, this._duplicateNameValidator()]
         )

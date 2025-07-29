@@ -12,7 +12,7 @@
   "info": {
     "description": "This OpenAPI 2.0 specification describes the REST APIs used by the Kubermatic Kubernetes Platform Dashboard.",
     "title": "Kubermatic Kubernetes Platform API",
-    "version": "2.27"
+    "version": "2.28"
   },
   "paths": {
     "/api/projects/{project_id}/clusters/{cluster_id}/sshkeys/{key_id}": {
@@ -7563,6 +7563,50 @@
         }
       }
     },
+    "/api/v2/presets/{preset_name}/linkages": {
+      "get": {
+        "description": "Gets preset linkages information for UI display",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "preset"
+        ],
+        "operationId": "getPresetLinkages",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "PresetName",
+            "name": "preset_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PresetLinkages",
+            "schema": {
+              "$ref": "#/definitions/PresetLinkages"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "404": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/presets/{preset_name}/provider/{provider_name}": {
       "delete": {
         "consumes": [
@@ -12657,13 +12701,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12675,6 +12712,13 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13317,12 +13361,6 @@
         "parameters": [
           {
             "type": "string",
-            "x-go-name": "StorageClassName",
-            "name": "storageClassName",
-            "in": "query"
-          },
-          {
-            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -13334,6 +13372,12 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "StorageClassName",
+            "name": "storageClassName",
+            "in": "query"
           }
         ],
         "responses": {
@@ -30223,6 +30267,33 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
+    "ClusterAssociation": {
+      "description": "ClusterAssociation shows cluster details using a preset",
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "x-go-name": "ClusterID"
+        },
+        "clusterName": {
+          "type": "string",
+          "x-go-name": "ClusterName"
+        },
+        "projectId": {
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "projectName": {
+          "type": "string",
+          "x-go-name": "ProjectName"
+        },
+        "provider": {
+          "type": "string",
+          "x-go-name": "Provider"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ClusterBackupOptions": {
       "type": "object",
       "properties": {
@@ -30743,6 +30814,33 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ClusterTemplateAssociation": {
+      "description": "ClusterTemplateAssociation shows cluster template details using a preset",
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "x-go-name": "ProjectID"
+        },
+        "projectName": {
+          "type": "string",
+          "x-go-name": "ProjectName"
+        },
+        "provider": {
+          "type": "string",
+          "x-go-name": "Provider"
+        },
+        "templateId": {
+          "type": "string",
+          "x-go-name": "TemplateID"
+        },
+        "templateName": {
+          "type": "string",
+          "x-go-name": "TemplateName"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ClusterTemplateInfo": {
       "type": "object",
       "title": "ClusterTemplateInfo represents a ClusterTemplateInfo object.",
@@ -31117,6 +31215,37 @@
             "$ref": "#/definitions/ContainerdRegistry"
           },
           "x-go-name": "Registries"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "ContainerRuntimeOpts": {
+      "type": "object",
+      "title": "ContainerRuntimeOpts represents a set of options to configure container-runtime binary used in nodes.",
+      "properties": {
+        "containerdRegistryMirrors": {
+          "$ref": "#/definitions/ContainerRuntimeContainerd"
+        },
+        "insecureRegistries": {
+          "description": "Optional: These image registries will be configured as insecure\non the container runtime.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "InsecureRegistries"
+        },
+        "pauseImage": {
+          "description": "Optional: Translates to --pod-infra-container-image on the kubelet.\nIf not set, the kubelet will default it.",
+          "type": "string",
+          "x-go-name": "PauseImage"
+        },
+        "registryMirrors": {
+          "description": "Optional: These image registries will be configured as registry mirrors\non the container runtime.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "RegistryMirrors"
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -34499,6 +34628,10 @@
         "restrictProjectDeletion": {
           "type": "boolean",
           "x-go-name": "RestrictProjectDeletion"
+        },
+        "restrictProjectModification": {
+          "type": "boolean",
+          "x-go-name": "RestrictProjectModification"
         },
         "staticLabels": {
           "description": "StaticLabels are a list of labels that can be used for the clusters.",
@@ -39209,6 +39342,31 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "PresetLinkages": {
+      "description": "PresetLinkages represents detailed linkage information for a preset",
+      "type": "object",
+      "properties": {
+        "clusterTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterTemplateAssociation"
+          },
+          "x-go-name": "ClusterTemplates"
+        },
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterAssociation"
+          },
+          "x-go-name": "Clusters"
+        },
+        "presetName": {
+          "type": "string",
+          "x-go-name": "PresetName"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "PresetList": {
       "description": "PresetList represents a list of presets",
       "type": "object",
@@ -39330,8 +39488,8 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PresetStats": {
-      "description": "PresetStats represents a preset statistics",
       "type": "object",
+      "title": "PresetStats represents the statistics for a preset.",
       "properties": {
         "associatedClusterTemplates": {
           "type": "integer",

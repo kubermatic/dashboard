@@ -31,6 +31,7 @@ import (
 	v1common "k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+	kubermaticv1helper "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -133,7 +134,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 		if req.Name != "" {
 			preset, err := presetProvider.GetPreset(ctx, userInfo, &req.ProjectID, req.Name)
 			if err != nil {
-				return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+				return nil, v1common.KubernetesErrorToHTTPError(err)
 			}
 			if !preset.Spec.IsEnabled() && !req.Disabled {
 				return nil, nil
@@ -143,7 +144,7 @@ func ListProjectPresets(presetProvider provider.PresetProvider, userInfoGetter p
 		presetList := &apiv2.PresetList{Items: make([]apiv2.Preset, 0)}
 		presets, err := presetProvider.GetPresets(ctx, userInfo, &req.ProjectID)
 		if err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		for _, preset := range presets {
@@ -224,7 +225,7 @@ func UpdatePresetStatus(presetProvider provider.PresetProvider, userInfoGetter p
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.PresetName)
 		if err != nil {
-			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		if len(req.Provider) == 0 {
@@ -565,7 +566,7 @@ func UpdatePreset(presetProvider provider.PresetProvider, userInfoGetter provide
 
 		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.Body.Name)
 		if err != nil {
-			return nil, err
+			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
 		preset = mergePresets(preset, convertAPIToInternalPreset(req.Body), kubermaticv1.ProviderType(req.ProviderName))
@@ -871,7 +872,9 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			return nil, v1common.KubernetesErrorToHTTPError(err)
 		}
 
+		// Iterate through all seeds to find clusters associated with this preset
 		for seedName, seed := range seeds {
+			// Skip seeds that are in an invalid phase as they cannot be processed
 			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
 				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
 				continue
@@ -908,7 +911,180 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			}
 		}
 
-		return stats, err
+		return stats, nil
+	}
+}
+
+// getPresetLinkagesReq represents a request for preset linkages
+// swagger:parameters getPresetLinkages
+type getPresetLinkagesReq struct {
+	// in: path
+	// required: true
+	PresetName string `json:"preset_name"`
+}
+
+func (r getPresetLinkagesReq) Validate() error {
+	if len(r.PresetName) == 0 {
+		return fmt.Errorf("the preset name cannot be empty")
+	}
+	return nil
+}
+
+func DecodeGetPresetLinkages(_ context.Context, r *http.Request) (interface{}, error) {
+	return getPresetLinkagesReq{
+		PresetName: mux.Vars(r)["preset_name"],
+	}, nil
+}
+
+func getProjectName(project *kubermaticv1.Project, err error) string {
+	if err != nil || project == nil {
+		return ""
+	}
+	return project.Spec.Name
+}
+
+// GetPresetLinkages returns detailed linkage information for a preset.
+func GetPresetLinkages(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, clusterProviderGetter provider.ClusterProviderGetter, seedsGetter provider.SeedsGetter, clusterTemplateProvider provider.ClusterTemplateProvider, projectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(getPresetLinkagesReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		err := req.Validate()
+		if err != nil {
+			return nil, utilerrors.NewBadRequest("%v", err)
+		}
+
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, v1common.KubernetesErrorToHTTPError(err)
+		}
+
+		if !userInfo.IsAdmin {
+			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
+		}
+
+		preset, err := presetProvider.GetPreset(ctx, userInfo, nil, req.PresetName)
+		if err != nil {
+			if apierrors.IsNotFound(err) {
+				return nil, utilerrors.NewBadRequest("preset was not found.")
+			}
+			return nil, v1common.KubernetesErrorToHTTPError(err)
+		}
+
+		linkages := apiv2.PresetLinkages{
+			PresetName:       preset.Name,
+			Clusters:         []apiv2.ClusterAssociation{},
+			ClusterTemplates: []apiv2.ClusterTemplateAssociation{},
+		}
+
+		seeds, err := seedsGetter()
+		if err != nil {
+			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
+		}
+		presetLabelRequirement, err := labels.NewRequirement(kubermaticv1.IsCredentialPresetLabelKey, selection.Equals, []string{"true"})
+		if err != nil {
+			return nil, v1common.KubernetesErrorToHTTPError(err)
+		}
+
+		for seedName, seed := range seeds {
+			// Skip seeds that are in an invalid phase as they cannot be processed
+			if seed.Status.Phase == kubermaticv1.SeedInvalidPhase {
+				log.Logger.Warnf("skipping seed %s as it is in an invalid phase", seedName)
+				continue
+			}
+
+			// Get the cluster provider for this specific seed
+			clusterProvider, err := clusterProviderGetter(seed)
+			if err != nil {
+				// Skip seed on cluster provider error, continue with other seeds
+				log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+				continue
+			}
+
+			clusters, err := clusterProvider.ListAll(ctx, labels.NewSelector().Add(*presetLabelRequirement))
+			if err != nil {
+				log.Logger.Warnw("failed to list clusters", "seed", seedName, "error", err)
+				continue
+			}
+
+			for _, cluster := range clusters.Items {
+				if cluster.Annotations != nil {
+					if presetName := cluster.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
+						var projectName string
+
+						if cluster.Labels != nil {
+							if projectID := cluster.Labels[kubermaticv1.ProjectIDLabelKey]; projectID != "" {
+								project, err := projectProvider.GetUnsecured(ctx, projectID, nil)
+								if err != nil {
+									log.Logger.Warnw("failed to get project for cluster", "cluster", cluster.Name, "project", projectID, "error", err)
+								}
+								projectName = getProjectName(project, err)
+							}
+						}
+
+						// Determine provider name
+						provider, err := kubermaticv1helper.ClusterCloudProviderName(cluster.Spec.Cloud)
+						if err != nil {
+							log.Logger.Warnw("failed to get provider for cluster", "cluster", cluster.Name, "error", err)
+							provider = "unknown"
+						}
+
+						clusterAssociation := apiv2.ClusterAssociation{
+							ClusterID:   cluster.Name,
+							ClusterName: cluster.Spec.HumanReadableName,
+							ProjectID:   cluster.Labels[kubermaticv1.ProjectIDLabelKey],
+							ProjectName: projectName,
+							Provider:    provider,
+						}
+
+						linkages.Clusters = append(linkages.Clusters, clusterAssociation)
+					}
+				}
+			}
+		}
+
+		templates, err := clusterTemplateProvider.ListALL(ctx, labels.NewSelector().Add(*presetLabelRequirement))
+		if err != nil {
+			return nil, v1common.KubernetesErrorToHTTPError(err)
+		}
+		for _, template := range templates {
+			if template.Annotations != nil {
+				if presetName := template.Annotations[kubermaticv1.PresetNameAnnotation]; presetName == preset.Name {
+					var project *kubermaticv1.Project
+					var projectName string
+
+					if template.Labels != nil {
+						if projectID := template.Labels[kubermaticv1.ProjectIDLabelKey]; projectID != "" {
+							project, err = projectProvider.GetUnsecured(ctx, projectID, nil)
+							if err != nil {
+								log.Logger.Warnw("failed to get project for cluster template", "template", template.Name, "project", projectID, "error", err)
+							}
+							projectName = getProjectName(project, err)
+						}
+					}
+
+					provider, err := kubermaticv1helper.ClusterCloudProviderName(template.Spec.Cloud)
+					if err != nil {
+						log.Logger.Warnw("failed to get provider for cluster template", "template", template.Name, "error", err)
+						provider = "unknown"
+					}
+
+					templateAssociation := apiv2.ClusterTemplateAssociation{
+						TemplateID:   template.Name,
+						TemplateName: template.Labels[kubermaticv1.ClusterTemplateHumanReadableNameLabelKey],
+						ProjectID:    template.Labels[kubermaticv1.ProjectIDLabelKey],
+						ProjectName:  projectName,
+						Provider:     provider,
+					}
+
+					linkages.ClusterTemplates = append(linkages.ClusterTemplates, templateAssociation)
+				}
+			}
+		}
+
+		return linkages, nil
 	}
 }
 

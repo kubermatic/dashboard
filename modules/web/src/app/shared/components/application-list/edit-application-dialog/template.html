@@ -129,7 +129,7 @@ limitations under the License.
                  fxLayoutGap="30px">
               <div fxFlex="100%"
                    class="version-dropdown">
-                <mat-form-field>
+                <mat-form-field subscriptSizing="dynamic">
                   <mat-label>Version</mat-label>
                   <mat-select [formControlName]="Controls.Version"
                               (selectionChange)="onVersionChanged($event.value)"

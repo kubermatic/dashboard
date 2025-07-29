@@ -24,7 +24,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {Cluster, CreateClusterModel, ExposeStrategy} from '@shared/entity/cluster';
+import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -36,7 +36,12 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {PathParam} from '@core/services/params';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {ApplicationService} from '@core/services/application';
-import {Application} from '@shared/entity/application';
+import {
+  Application,
+  ApplicationLabel,
+  ApplicationLabelValue,
+  CLUSTER_AUTOSCALING_APP_DEF_NAME,
+} from '@shared/entity/application';
 import {WizardMode} from './types/wizard-mode';
 import {QuotaCalculationService} from '@app/dynamic/enterprise/quotas/services/quota-calculation';
 
@@ -76,7 +81,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute,
     private readonly _clusterTemplateService: ClusterTemplateService,
     private readonly _nameGenerator: NameGeneratorService,
-    private readonly applicationService: ApplicationService,
+    private readonly _applicationService: ApplicationService,
     private readonly _quotaCalculationService: QuotaCalculationService
   ) {}
 
@@ -153,7 +158,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const createCluster = this._getCreateClusterModel(
       this._clusterSpecService.cluster,
       this._nodeDataService.nodeData,
-      this.applicationService.applications
+      this._applicationService.applications
     );
 
     return this._clusterService
@@ -188,7 +193,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         nodeData: this._nodeDataService.nodeData,
         sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
-        applications: this.applicationService.applications,
+        applications: this._applicationService.applications,
       },
     };
 
@@ -287,9 +292,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       applications: applications,
     };
-    if (cluster.spec.exposeStrategy !== ExposeStrategy.tunneling) {
-      clusterModel.cluster.spec.clusterNetwork.tunnelingAgentIP = null;
-    }
     if (nodeData.operatingSystemProfile) {
       clusterModel.nodeDeployment.annotations = {
         ...clusterModel.nodeDeployment.annotations,
@@ -353,7 +355,12 @@ export class WizardComponent implements OnInit, OnDestroy {
         template.nodeDeployment.name = namePrefix;
         this._clusterSpecService.initializeClusterFromClusterTemplate(template);
         this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
-        this.applicationService.applications = template.applications;
+        template.applications.forEach(app => {
+          if (app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME) {
+            (app.labels ??= {})[ApplicationLabel.ManagedBy] = ApplicationLabelValue.KKP;
+          }
+        });
+        this._applicationService.applications = template.applications;
         this.clusterTemplate = template;
 
         // Re-initialize the form.

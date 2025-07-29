@@ -33,6 +33,28 @@ export class PresetStat {
   associatedClusterTemplates: number;
 }
 
+export class PresetLinkages {
+  presetName: string;
+  clusters: ClusterAssociation[];
+  clusterTemplates: ClusterTemplateAssociation[];
+}
+
+export class ClusterAssociation {
+  clusterId: string;
+  clusterName: string;
+  projectId: string;
+  projectName: string;
+  provider: string;
+}
+
+export class ClusterTemplateAssociation {
+  templateId: string;
+  templateName: string;
+  projectId: string;
+  projectName: string;
+  provider: string;
+}
+
 export class Preset {
   name: string;
   enabled: boolean;

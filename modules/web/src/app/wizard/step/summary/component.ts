@@ -17,7 +17,7 @@ import {ApplicationService} from '@core/services/application';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {Application} from '@shared/entity/application';
+import {Application, isSystemApplication} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
@@ -41,7 +41,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _datacenterService: DatacenterService,
-    private readonly applicationService: ApplicationService
+    private readonly _applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +69,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   }
 
   get applications(): Application[] {
-    return this.applicationService.applications;
+    return this._applicationService.applications.filter(app => !isSystemApplication(app.labels));
   }
 
   get machineDeployment(): MachineDeployment {
