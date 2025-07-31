@@ -134,6 +134,7 @@ export class OpenStackDatacenterSpec {
   region: string;
   images: DatacenterOperatingSystemOptions;
   enforceFloatingIP: boolean;
+  enableConfigDrive?: boolean;
 }
 
 export class EquinixDatacenterSpec {
