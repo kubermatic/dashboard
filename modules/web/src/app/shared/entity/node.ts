@@ -263,6 +263,7 @@ export class OpenstackNodeSpec {
   availabilityZone?: string;
   instanceReadyCheckPeriod: string;
   instanceReadyCheckTimeout: string;
+  configDrive?: boolean;
 }
 
 export class EquinixNodeSpec {
