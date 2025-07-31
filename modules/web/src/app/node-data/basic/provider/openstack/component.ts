@@ -33,7 +33,7 @@ import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
+import {Datacenter, DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
 import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -53,6 +53,7 @@ enum Controls {
   InstanceReadyCheckPeriod = 'instanceReadyCheckPeriod',
   InstanceReadyCheckTimeout = 'instanceReadyCheckTimeout',
   ServerGroup = 'serverGroup',
+  EnableConfigDrive = 'enableConfigDrive',
 }
 
 enum FlavorState {
@@ -118,6 +119,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   selectedServerGroupID = '';
   serverGroupLabel = ServerGroupState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  isInWizardMode: boolean;
 
   private _quotaCalculationService: QuotaCalculationService;
 
@@ -169,7 +171,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       [Controls.InstanceReadyCheckPeriod]: this._builder.control(this._instanceReadyCheckPeriodDefault),
       [Controls.InstanceReadyCheckTimeout]: this._builder.control(this._instanceReadyCheckTimeoutDefault),
       [Controls.ServerGroup]: this._builder.control(''),
+      [Controls.EnableConfigDrive]: this._builder.control(false),
     });
+
+    this.isInWizardMode = this._nodeDataService.isInWizardMode();
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
@@ -180,7 +185,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.form.get(Controls.Image).valueChanges,
       this.form.get(Controls.UseFloatingIP).valueChanges,
       this.form.get(Controls.InstanceReadyCheckPeriod).valueChanges,
-      this.form.get(Controls.InstanceReadyCheckTimeout).valueChanges
+      this.form.get(Controls.InstanceReadyCheckTimeout).valueChanges,
+      this.form.get(Controls.EnableConfigDrive).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -195,6 +201,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .subscribe(dc => {
         this._setDefaultImage(OperatingSystem.Ubuntu);
         this._enforceFloatingIP(dc.spec.openstack.enforceFloatingIP);
+        this._enforceConfigDrive(dc);
       });
 
     this._nodeDataService.operatingSystemChanges
@@ -244,6 +251,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     return this.form.get(Controls.UseFloatingIP).disabled;
   }
 
+  isConfigDriveEnforced(): boolean {
+    return this.form.get(Controls.EnableConfigDrive).disabled;
+  }
+
   isDiskSizeRequired(): boolean {
     return this.form.get(Controls.CustomDiskSize).hasValidator(Validators.required);
   }
@@ -290,6 +301,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.form.get(Controls.UseCustomDisk).setValue(!!diskSize);
       this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
       this.form.get(Controls.InstanceReadyCheckTimeout).setValue(instanceReadyCheckTimeout);
+      this.form
+        .get(Controls.EnableConfigDrive)
+        .setValue(this._nodeDataService.nodeData.spec.cloud.openstack?.configDrive ?? false);
 
       this._defaultOS = this._nodeDataService.operatingSystem;
       this._defaultImage = this._nodeDataService.nodeData.spec.cloud.openstack.image;
@@ -416,12 +430,16 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       return;
     }
 
-    if (
-      !this._nodeDataService.isInWizardMode() &&
-      !this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool
-    ) {
+    if (!this.isInWizardMode && !this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool) {
       this.form.get(Controls.UseFloatingIP).setValue(false);
       this.form.get(Controls.UseFloatingIP).disable();
+    }
+  }
+
+  private _enforceConfigDrive(dc: Datacenter): void {
+    if (dc.spec.openstack.enableConfigDrive) {
+      this.form.get(Controls.EnableConfigDrive).setValue(true);
+      this.form.get(Controls.EnableConfigDrive).disable();
     }
   }
 
@@ -436,6 +454,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
             instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
             serverGroup: this.selectedServerGroupID,
+            configDrive: this.form.get(Controls.EnableConfigDrive)?.value ?? false,
           } as OpenstackNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
@@ -459,7 +478,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     };
 
     if (
-      !this._nodeDataService.isInWizardMode() &&
+      !this.isInWizardMode &&
       !this._initialQuotaCalculationPayload &&
       !!this._nodeDataService.nodeData.creationTimestamp
     ) {

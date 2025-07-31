@@ -17,7 +17,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
-import {AuditLoggingWebhookBackend} from '@shared/entity/cluster';
+import {AuditLoggingWebhookBackend, Provider} from '@shared/entity/cluster';
 import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
 import {DialogActionMode} from '@shared/types/common';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
@@ -52,6 +52,7 @@ export enum Controls {
   AuditWebhookBackendSecretName = 'auditWebhookBackendSecretName',
   AuditWebhookBackendSecretNamespace = 'auditWebhookBackendSecretNamespace',
   MachineFlavorFilter = 'machineFlavorFilter',
+  EnableConfigDrive = 'enableConfigDrive',
 }
 
 enum Title {
@@ -68,6 +69,7 @@ enum Title {
 export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
   readonly controls = Controls;
+  readonly Provider = Provider;
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers = INTERNAL_NODE_PROVIDERS;
@@ -131,9 +133,31 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     this._initRequiredEmailsInput();
     this._initProviderConfigEditor();
 
+    if (this.form.get(Controls.Provider).value === Provider.OpenStack) {
+      this.form.addControl(
+        Controls.EnableConfigDrive,
+        new FormControl(this.data.isEditing ? this.data.datacenter.spec.openstack.enableConfigDrive : false)
+      );
+    }
+
     if (this.form.get(Controls.EnforceAuditWebhookBackend).value) {
       this._initAuditWebhookBackendControls(this.data.datacenter.spec.enforcedAuditWebhookSettings);
     }
+
+    this.form
+      .get(Controls.Provider)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe((provider: Provider) => {
+        if (provider === Provider.OpenStack) {
+          this.form.addControl(
+            Controls.EnableConfigDrive,
+            new FormControl(this.data.isEditing ? this.data.datacenter.spec.openstack.enableConfigDrive : false)
+          );
+        } else {
+          this.form.removeControl(Controls.EnableConfigDrive);
+        }
+        this.form.updateValueAndValidity();
+      });
 
     this.form
       .get(Controls.EnforceAuditLogging)
@@ -209,6 +233,9 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     };
 
     datacenter.spec[datacenter.spec.provider] = this._getProviderConfig();
+    if (datacenter.spec.provider === Provider.OpenStack) {
+      datacenter.spec[datacenter.spec.provider].enableConfigDrive = this.form.get(Controls.EnableConfigDrive)?.value;
+    }
 
     // Nullify old provider value (it is needed to make edit work as it uses JSON Merge Patch).
     if (this.data.isEditing && datacenter.spec.provider !== this.data.datacenter.spec.provider) {
