@@ -751,8 +751,8 @@ github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0 h1:j3YK74myEQRxR
 github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0/go.mod h1:FlyYFe32mPxKEPaRXKNxfX576d1AoCzstYDoOOnyMA4=
 github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0SNc=
 github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
-github.com/kyverno/kyverno v1.14.1 h1:ab9UKNhAZzGAbrimRzBp/6R5JKr4X6LQccrCZht7yfA=
-github.com/kyverno/kyverno v1.14.1/go.mod h1:Q6pJ+/dXQgdH4yodVA0YOcwCHOFLn5Iwg0NnE+72YR8=
+github.com/kyverno/kyverno v1.14.2 h1:cqf0VXf+V4uOYsOA3Rb0OJ295Mr3v8+rrKJmGaIckhY=
+github.com/kyverno/kyverno v1.14.2/go.mod h1:PafDxUyqreC8l6+YQ9tOQcdDbx6ZtbJQF/CLqmT2I8g=
 github.com/kyverno/kyverno-json v0.0.4-0.20240730143747-aade3d42fc0e h1:gh9iMuJS8yloxo3JIzvgLWZWwy5iRjEkA8/U7rK3iu8=
 github.com/kyverno/kyverno-json v0.0.4-0.20240730143747-aade3d42fc0e/go.mod h1:3LgZogzltja+Sx0o5CIa7d7+991v8sWXHskU0fWSOsQ=
 github.com/ledongthuc/pdf v0.0.0-20220302134840-0c2507a12d80/go.mod h1:imJHygn/1yfhB7XSJJKlFZKl/J+dCPAknuiaGOshXAs=
