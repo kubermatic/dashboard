@@ -46,7 +46,7 @@ limitations under the License.
                filterBy="name"
                selectBy="id">
     <div *option="let network">
-      {{network.name || network.id}}
+      {{networkDisplayName(network.id)}}
     </div>
   </km-combobox>
 

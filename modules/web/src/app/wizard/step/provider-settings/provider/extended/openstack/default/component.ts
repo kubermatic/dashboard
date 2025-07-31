@@ -112,7 +112,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   private _applicationCredentialID = '';
   private _applicationCredentialSecret = '';
   private _preset = '';
-  private _currentNetworkId = '';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -254,7 +253,6 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   onNetworkChange(networkId: string): void {
-    this._currentNetworkId = networkId;
     const network: OpenstackNetwork = this.networks.find((n: OpenstackNetwork) => n.id === networkId);
     if (network) {
       this.openstackNetwork = network.name || network.id;
@@ -296,8 +294,11 @@ export class OpenstackProviderExtendedCredentialsComponent
   }
 
   networkDisplayName(id: string): string {
-    const network: OpenstackNetwork = this.networks.find(network => network.id === id);
-    return network ? network.name || network.id : '';
+    if (!id) {
+      return '';
+    }
+    const network: OpenstackNetwork = this.networks.find((network: OpenstackNetwork) => network.id === id);
+    return network ? network.name || `(ID: ${network.id})` : '';
   }
 
   ipv4SubnetIDDisplayName(id: string): string {
@@ -327,9 +328,6 @@ export class OpenstackProviderExtendedCredentialsComponent
 
     if (selectedNetwork && !network) {
       this._networkCombobox.reset();
-      this._currentNetworkId = '';
-    } else if (!this._currentNetworkId) {
-      this._currentNetworkId = network.id;
     }
     this.networksLabel = !_.isEmpty(this.networks) ? NetworkState.Ready : NetworkState.Empty;
     this._cdr.detectChanges();
@@ -527,7 +525,6 @@ export class OpenstackProviderExtendedCredentialsComponent
     this.networks = [];
     this._networkCombobox.reset();
     this.networksLabel = NetworkState.Empty;
-    this._currentNetworkId = '';
     this._cdr.detectChanges();
   }
 
