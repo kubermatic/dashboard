@@ -767,12 +767,25 @@ func outputMachine(machine *clusterv1alpha1.Machine, node *corev1.Node, hideInit
 			Versions: apiv1.NodeVersionInfo{
 				Kubelet: machine.Spec.Versions.Kubelet,
 			},
+			Labels:          gpuLabels(node.Labels),
 			OperatingSystem: *operatingSystemSpec,
 			Cloud:           *cloudSpec,
 			SSHUserName:     sshUserName,
 		},
 		Status: nodeStatus,
 	}, nil
+}
+
+func gpuLabels(labels map[string]string) map[string]string {
+	nvidiaLabels := make(map[string]string)
+
+	for k, v := range labels {
+		if strings.Contains(k, "nvidia.com") {
+			nvidiaLabels[k] = v
+		}
+	}
+
+	return nvidiaLabels
 }
 
 func parseNodeConditions(node *corev1.Node) (reason string, message string) {
