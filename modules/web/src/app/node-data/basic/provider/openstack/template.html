@@ -96,15 +96,23 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <mat-checkbox class="use-floating-ip-checkbox"
-                [formControlName]="Controls.UseFloatingIP"
-                fxFlex
-                kmValueChangedIndicator>
-    Allocate Floating IP
+  <div>
+    <mat-checkbox [formControlName]="Controls.UseFloatingIP"
+                  kmValueChangedIndicator>
+      Allocate Floating IP
+    </mat-checkbox>
     <i *ngIf="isFloatingIPEnforced()"
        class="km-icon-info icon-info km-pointer"
        matTooltip="Floating IP usage is enforced by selected datacenter"></i>
-  </mat-checkbox>
+  </div>
+  <div>
+    <mat-checkbox [formControlName]="Controls.EnableConfigDrive">
+      Enable Config Drive
+    </mat-checkbox>
+    <i *ngIf="isConfigDriveEnforced()"
+       class="km-icon-info icon-info km-pointer"
+       matTooltip="Config Drive usage is enforced by selected datacenter"></i>
+  </div>
 
   <km-number-stepper [formControlName]="Controls.InstanceReadyCheckPeriod"
                      mode="errors"
