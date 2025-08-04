@@ -187,9 +187,21 @@ limitations under the License.
     <km-machine-flavor-filter class="km-machine-flavor-filter"
                               [formControl]="form.get(controls.MachineFlavorFilter)"
                               [machineFlavorFilter]="machineFlavorFilter"></km-machine-flavor-filter>
-  </form>
+    <mat-card-title class="property-name">Provider Configuration</mat-card-title>
+    <ng-container *ngIf="form.get(controls.Provider).value === Provider.OpenStack">
+      <mat-checkbox [formControlName]="controls.EnableConfigDrive">
 
-  <div class="property-name">Provider Configuration</div>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="4px">
+          <span>Enable Config Drive</span>
+          <i class="km-icon-info km-pointer"
+             matTooltip="Enabling Config Drive will enforce it for all newly created machine deployments using this datacenter.">
+          </i>
+        </div>
+      </mat-checkbox>
+    </ng-container>
+  </form>
   <km-editor [(model)]="providerConfig"
              header="YAML"></km-editor>
   <mat-hint>If not specified default configuration will be used.</mat-hint>
