@@ -348,15 +348,22 @@ func CreateOIDCKubeconfigEndpoint(
 
 			// create auth entry
 			clientCmdAuth := clientcmdapi.NewAuthInfo()
-			clientCmdAuthProvider := &clientcmdapi.AuthProviderConfig{Config: map[string]string{}}
-			clientCmdAuthProvider.Name = oidc
-			clientCmdAuthProvider.Config["id-token"] = oidcTokens.IDToken
-			clientCmdAuthProvider.Config["refresh-token"] = oidcTokens.RefreshToken
-			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcIssuerVerifier.OIDCConfig().URL
-			clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
-			clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
-			clientCmdAuth.AuthProvider = clientCmdAuthProvider
-			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
+			execConfig := &clientcmdapi.ExecConfig{
+				APIVersion: "client.authentication.k8s.io/v1beta1",
+				Command:    "kubectl",
+				Args: []string{
+					"oidc-login",
+					"get-token",
+					"--oidc-issuer-url=" + oidcIssuerVerifier.OIDCConfig().URL,
+					"--oidc-client-id=" + oidcIssuerVerifier.OIDCConfig().ClientID,
+					"--oidc-client-secret=" + oidcIssuerVerifier.OIDCConfig().ClientSecret,
+					"--oidc-extra-scope=email",
+				},
+				InteractiveMode:    clientcmdapi.NeverExecInteractiveMode,
+				ProvideClusterInfo: false,
+			}
+
+			clientCmdAuth.Exec = execConfig
 
 			// create default ctx
 			clientCmdCtx := clientcmdapi.NewContext()
@@ -791,7 +798,7 @@ func setCookie(w http.ResponseWriter, nonce string, secureMode bool, maxAge int,
 		Value:    encoded,
 		MaxAge:   maxAge,
 		HttpOnly: true,
-		Secure:   secureMode,
+		Secure:   false,
 		SameSite: http.SameSiteLaxMode,
 	}
 
