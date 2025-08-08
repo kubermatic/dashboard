@@ -1154,6 +1154,8 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 			Kyverno:                              internalCluster.Spec.Kyverno,
+			EncryptionConfiguration:             internalCluster.Spec.EncryptionConfiguration,
+			Features:                             internalCluster.Spec.Features,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,
