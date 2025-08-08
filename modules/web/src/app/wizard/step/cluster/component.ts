@@ -82,6 +82,7 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
+import {getPrefixedYearMonth} from "@shared/functions/utils";
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -135,6 +136,8 @@ enum Controls {
   KubeLBEnableGatewayAPI = 'kubelbEnableGatewayAPI',
   DisableCSIDriver = 'disableCSIDriver',
   CiliumIngress = 'ciliumIngress',
+  EncryptionAtRest = 'encryptionAtRest',
+  EncryptionAtRestKey = 'encryptionAtRestKey',
 }
 
 @Component({
@@ -497,10 +500,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.KubeLB).valueChanges,
       this.form.get(Controls.KubeLBUseLoadBalancerClass).valueChanges,
       this.form.get(Controls.KubeLBEnableGatewayAPI).valueChanges,
-      this.form.get(Controls.DisableCSIDriver).valueChanges
+      this.form.get(Controls.DisableCSIDriver).valueChanges,
+      this.form.get(Controls.EncryptionAtRest).valueChanges,
+      this.form.get(Controls.EncryptionAtRestKey).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+      .subscribe(_ => {
+        this._clusterSpecService.cluster = this._getClusterEntity();
+        const cluster = this._clusterSpecService.cluster;
+        console.log('ClusterSpec:', cluster);
+      });
 
     if (!this.cniApplicationValues) {
       this._applicationService
@@ -525,6 +534,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  generateEncryptionKey(): void {
+    this.control(Controls.EncryptionAtRestKey).setValue(this._nameGenerator.generateEncryptionKey());
   }
 
   onLabelsChange(labels: Record<string, string>): void {
@@ -697,6 +710,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
         [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
       ),
+      [Controls.EncryptionAtRest]: this._builder.control(clusterSpec?.encryptionConfiguration?.enabled ?? false),
+      [Controls.EncryptionAtRestKey]: this._builder.control(clusterSpec?.encryptionConfiguration?.secretbox?.keys[0]?.name ?? ''),
     });
 
     this.control(Controls.Konnectivity).disable();
@@ -793,6 +808,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.KubeLBEnableGatewayAPI]:
             clusterSpec?.kubelb?.enableGatewayAPI ?? this.controlValue(Controls.KubeLBEnableGatewayAPI),
           [Controls.DisableCSIDriver]: clusterSpec?.disableCsiDriver ?? this.controlValue(Controls.DisableCSIDriver),
+          [Controls.EncryptionAtRest]: clusterSpec?.encryptionConfiguration?.enabled ?? this.controlValue(Controls.EncryptionAtRest),
+          [Controls.EncryptionAtRestKey]: clusterSpec?.encryptionConfiguration?.secretbox?.keys[0]?.name ?? this.controlValue(Controls.EncryptionAtRestKey),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
@@ -1109,6 +1126,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       };
     }
 
+    // Handle encryption at rest annotations
+    if (this.controlValue(Controls.EncryptionAtRest)) {
+      const encryptionKey = this.controlValue(Controls.EncryptionAtRestKey);
+      annotations = {
+        ...(annotations || {}),
+        [ClusterAnnotation.EncryptionAtRest]: 'true',
+        [ClusterAnnotation.EncryptionKey]: encryptionKey ? encryptionKey : 'generate',
+      };
+    } else {
+      if (annotations) {
+        delete annotations[ClusterAnnotation.EncryptionAtRest];
+        delete annotations[ClusterAnnotation.EncryptionKey];
+      }
+    }
+
     if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
       if (ipv4Pods && ipv6Pods) {
@@ -1158,7 +1190,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterNetwork,
         cniPlugin: cniPlugin,
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
-      } as ClusterSpec,
+        features: this.controlValue(Controls.EncryptionAtRest) ? {
+          encryptionAtRest: this.controlValue(Controls.EncryptionAtRest),
+        } : {},
+        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest) ? {
+          enabled: this.controlValue(Controls.EncryptionAtRest),
+          resources: ['secrets'],
+          secretbox: {
+            keys: [
+              {
+                name: getPrefixedYearMonth('encryption-key'),
+                secretRef: {
+                  name: getPrefixedYearMonth('encryption-key'),
+                  key: 'encryption-key'
+                }
+              }
+            ]
+          }
+        } : null,
+      } as ClusterSpec, // Use 'unknown' cast to satisfy TS
     } as Cluster;
 
     if (this.controlValue(Controls.ClusterBackup)) {

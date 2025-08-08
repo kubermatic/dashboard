@@ -348,6 +348,7 @@ export class ClusterSpec {
   opaIntegration?: OPAIntegration;
   kyverno?: KyvernoIntegration;
   kubernetesDashboard?: KubernetesDashboard;
+  features?: Record<string, boolean>;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
@@ -365,6 +366,30 @@ export class ClusterSpec {
   exposeStrategy?: ExposeStrategy;
   kubelb?: KubeLB;
   disableCsiDriver?: boolean;
+  encryptionConfiguration?: EncryptionConfiguration;
+}
+
+
+export class EncryptionConfiguration {
+  enabled: boolean;
+  resources: string[];
+  secretbox?: SecretboxEncryptionConfiguration;
+}
+
+export class SecretboxEncryptionConfiguration {
+  keys: SecretboxKey[];
+}
+
+export class SecretboxKey {
+  name: string;
+  value?: string;
+  secretRef?: SecretKeySelector;
+}
+
+export class SecretKeySelector {
+  name: string;
+  key: string;
+  optional?: boolean;
 }
 
 export class KubeLB {
@@ -420,6 +445,8 @@ export class CNIPluginVersions {
 
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
+  EncryptionAtRest = 'kubermatic.k8c.io/encryption-at-rest',
+  EncryptionKey = 'kubermatic.k8c.io/encryption-key',
 }
 
 export enum ProxyMode {
