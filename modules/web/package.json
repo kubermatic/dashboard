@@ -141,7 +141,7 @@
     "stream": "0.0.3",
     "stylelint": "16.19.1",
     "stylelint-config-standard-scss": "14.0.0",
-    "stylelint-no-unsupported-browser-features": "8.0.2",
+    "stylelint-no-unsupported-browser-features": "8.0.4",
     "stylelint-order": "6.0.4",
     "ts-jest": "29.1.2",
     "ts-node": "10.9.2",
