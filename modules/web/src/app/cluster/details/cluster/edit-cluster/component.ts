@@ -572,11 +572,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     const wasEnabled = !!this.cluster.spec.encryptionConfiguration?.enabled;
 
     if (wasEnabled && !isEnabled) {
-      patch.annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation] = 'false';
+      delete patch.annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation];
     } else if (!wasEnabled && isEnabled) {
       patch.annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation] = 'true';
-
-      // Setting Annotation for KKP Controller to generate new key (Key Rotation)
+      // Generate a new encryption key if encryption is enabled from KKP Controller side
       patch.annotations[ClusterAnnotation.EncryptionKeyGenerateAnnotation] = 'true';
     }
 

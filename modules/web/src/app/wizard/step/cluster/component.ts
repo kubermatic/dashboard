@@ -1146,15 +1146,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         ...(annotations || {}),
         [ClusterAnnotation.EncryptionKeyEnabledAnnotation]: 'true',
       };
-
-      if (this.controlValue(Controls.EncryptionAtRestKey)) {
-        annotations[ClusterAnnotation.EncryptionKeyAnnotation] = this.controlValue(Controls.EncryptionAtRestKey);
-      }
+      // Store encryption key in ClusterSpecService instead of annotations
+      this._clusterSpecService.encryptionAtRestKey = this.controlValue(Controls.EncryptionAtRestKey);
     } else {
       if (annotations) {
         delete annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation];
-        delete annotations[ClusterAnnotation.EncryptionKeyAnnotation];
       }
+      // Clear encryption key from ClusterSpecService
+      this._clusterSpecService.encryptionAtRestKey = null;
     }
 
     if (this.isDualStackIPFamilySelected()) {
@@ -1207,11 +1206,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         cniPlugin: cniPlugin,
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
         encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest)
-          ? {
-              enabled: true,
-            }
-          : undefined,
-      } as ClusterSpec, // Use 'unknown' cast to satisfy TS
+          ? {enabled: true,}
+          : null,
+      } as ClusterSpec,
     } as Cluster;
 
     if (this.controlValue(Controls.ClusterBackup)) {
