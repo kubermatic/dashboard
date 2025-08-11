@@ -92,9 +92,6 @@ export class ClusterSpecService {
     } as Cluster;
     this.cluster.spec.cloud[provider] = {};
 
-    // Remove EAR annotations when provider changes
-    this._cleanupEncryptionAnnotations();
-
     if (provider) {
       this.providerChanges.next(provider);
     }
@@ -112,9 +109,6 @@ export class ClusterSpecService {
         } as CloudSpec,
       },
     } as Cluster;
-
-    // Remove EAR annotations when datacenter changes
-    this._cleanupEncryptionAnnotations();
 
     if (datacenter) {
       this.datacenterChanges.next(datacenter);
@@ -190,15 +184,5 @@ export class ClusterSpecService {
       .filter(p => p !== undefined);
 
     return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
-  }
-
-  /**
-   * Removes encryption at rest annotations when provider or datacenter changes
-   */
-  private _cleanupEncryptionAnnotations(): void {
-    if (this._cluster.annotations) {
-      delete this._cluster.annotations[ClusterAnnotation.EncryptionAtRest];
-      delete this._cluster.annotations[ClusterAnnotation.EncryptionKey];
-    }
   }
 }

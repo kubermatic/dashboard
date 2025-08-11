@@ -925,9 +925,16 @@ type MasterVersion struct {
 // CreateClusterSpec is the structure that is used to create cluster with its initial node deployment
 // swagger:model CreateClusterSpec
 type CreateClusterSpec struct {
-	Cluster        Cluster         `json:"cluster"`
-	NodeDeployment *NodeDeployment `json:"nodeDeployment,omitempty"`
-	Applications   []Application   `json:"applications,omitempty"`
+	Cluster        Cluster               `json:"cluster"`
+	NodeDeployment *NodeDeployment       `json:"nodeDeployment,omitempty"`
+	Applications   []Application         `json:"applications,omitempty"`
+	EncryptionAtRest *EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
+}
+
+// EncryptionAtRestSpec contains the encryption key for encryption at rest
+// swagger:model EncryptionAtRestSpec
+type EncryptionAtRestSpec struct {
+	Key string `json:"key"`
 }
 
 const (

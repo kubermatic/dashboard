@@ -485,7 +485,10 @@ limitations under the License.
                       (click)="generateEncryptionKey()">
                 <i class="km-icon-randomize"></i>
               </button>
-              <mat-hint>Leave empty to request automatic key generation or provide a base64-encoded 32-byte key.</mat-hint>
+              <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('required')">
+                <strong>Required</strong>
+              </mat-error>
+              <mat-hint>Provide a base64-encoded 32-byte encryption key or use the generate button.</mat-hint>
             </mat-form-field>
 
             <ng-container *ngIf="isEnterpriseEdition">
