@@ -751,14 +751,6 @@ export class NameGeneratorService {
     );
   }
 
-  generateEncryptionKey(): string {
-    // Generate 32 random bytes and encode as base64 for encryption key
-    const bytes = new Uint8Array(32);
-    (window.crypto || (window as any).msCrypto).getRandomValues(bytes);
-    // Convert to base64
-    return btoa(String.fromCharCode(...bytes));
-  }
-
   private randomNumberInsideInterval(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
