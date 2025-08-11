@@ -584,7 +584,13 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
 	newInternalCluster.Spec.DisableCSIDriver = patchedCluster.Spec.DisableCSIDriver
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
-	newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
+
+	// Handle encryption configuration clean up when disabled
+	if patchedCluster.Spec.EncryptionConfiguration != nil && !patchedCluster.Spec.EncryptionConfiguration.Enabled {
+		newInternalCluster.Spec.EncryptionConfiguration = nil
+	} else {
+		newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
+	}
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
@@ -1328,7 +1334,6 @@ func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInf
 	return false
 }
 
-// handleEncryptionAtRest processes encryption at rest configuration based on the new API structure
 func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provider.PrivilegedClusterProvider, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
 	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
 		return nil
