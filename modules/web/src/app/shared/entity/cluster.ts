@@ -370,27 +370,6 @@ export class ClusterSpec {
 }
 
 
-export class EncryptionConfiguration {
-  enabled: boolean;
-  resources: string[];
-  secretbox?: SecretboxEncryptionConfiguration;
-}
-
-export class SecretboxEncryptionConfiguration {
-  keys: SecretboxKey[];
-}
-
-export class SecretboxKey {
-  name: string;
-  value?: string;
-  secretRef?: SecretKeySelector;
-}
-
-export class SecretKeySelector {
-  name: string;
-  key: string;
-  optional?: boolean;
-}
 
 export class KubeLB {
   enabled: boolean;
@@ -445,8 +424,9 @@ export class CNIPluginVersions {
 
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
-  EncryptionAtRest = 'kubermatic.k8c.io/encryption-at-rest',
-  EncryptionKey = 'kubermatic.k8c.io/encryption-key',
+  EncryptionKeyEnabledAnnotation = 'kubermatic.io/encryption-key-enabled',
+  EncryptionKeyAnnotation = 'kubermatic.io/encryption-key',
+  EncryptionKeyGenerateAnnotation = 'kubermatic.io/encryption-key-generate',
 }
 
 export enum ProxyMode {
@@ -498,6 +478,13 @@ export class AuditLoggingWebhookSecretRef {
 export class KubernetesDashboard {
   enabled?: boolean;
 }
+
+export class EncryptionConfiguration {
+  enabled?: boolean;
+  resources?: string[];
+}
+
+
 
 export class OPAIntegration {
   enabled: boolean;
@@ -590,6 +577,7 @@ export class ClusterSpecPatch {
   containerRuntime?: ContainerRuntime;
   cniPlugin?: CNIPluginConfigPatch;
   apiServerAllowedIPRanges?: NetworkRanges;
+  encryptionConfiguration?: EncryptionConfiguration;
 }
 
 export class CNIPluginConfigPatch {
@@ -704,10 +692,15 @@ export class ProviderSettingsPatch {
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
 
+export interface EncryptionAtRestConfig {
+  key: string;
+}
+
 export class CreateClusterModel {
   cluster: ClusterModel;
   nodeDeployment?: MachineDeployment;
   applications?: Application[];
+  encryptionAtRest?: EncryptionAtRestConfig;
 }
 
 class ClusterModel {

@@ -36,6 +36,7 @@ import {
   InternalClusterSpecAnnotations,
   NetworkRanges,
   ProviderSettingsPatch,
+  ClusterAnnotation,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -83,6 +84,7 @@ enum Controls {
   RouterReconciliation = 'routerReconciliation',
   BackupStorageLocation = 'backupStorageLocation',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
+  EncryptionAtRest = 'encryptionAtRest',
 }
 
 @Component({
@@ -200,6 +202,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
+      [Controls.EncryptionAtRest]: new FormControl(!!this.cluster.spec.encryptionConfiguration?.enabled),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -419,6 +422,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
 
+  isEncryptionEnabled(): boolean {
+    return this.form.get(Controls.EncryptionAtRest).value;
+  }
+
   isMLAEnabled(): boolean {
     return this._seedSettings?.mla?.user_cluster_mla_enabled;
   }
@@ -510,6 +517,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           loggingEnabled: this.form.get(Controls.MLALogging).value,
           monitoringEnabled: this.form.get(Controls.MLAMonitoring).value,
         },
+        encryptionConfiguration: {
+          enabled: this.isEncryptionEnabled(),
+        },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
         useEventRateLimitAdmissionPlugin: null,
@@ -555,6 +565,19 @@ export class EditClusterComponent implements OnInit, OnDestroy {
           ? 'true'
           : 'false',
       };
+    }
+
+    // Handle encryption configuration
+    const isEnabled = this.isEncryptionEnabled();
+    const wasEnabled = !!this.cluster.spec.encryptionConfiguration?.enabled;
+
+    if (wasEnabled && !isEnabled) {
+      patch.annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation] = 'false';
+    } else if (!wasEnabled && isEnabled) {
+      patch.annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation] = 'true';
+
+      // Setting Annotation for KKP Controller to generate new key (Key Rotation)
+      patch.annotations[ClusterAnnotation.EncryptionKeyGenerateAnnotation] = 'true';
     }
 
     return this._clusterService.patch(this.projectID, this.cluster.id, patch, true).pipe(take(1));

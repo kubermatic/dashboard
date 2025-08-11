@@ -24,7 +24,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
+import {Cluster, ClusterAnnotation, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -298,6 +298,16 @@ export class WizardComponent implements OnInit, OnDestroy {
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }
+
+    const encryptionEnabled = cluster.spec?.encryptionConfiguration?.enabled;
+    const encryptionKey = cluster.annotations?.[ClusterAnnotation.EncryptionKeyAnnotation];
+
+    if (encryptionEnabled && encryptionKey) {
+      clusterModel.encryptionAtRest = {
+        key: encryptionKey,
+      };
+    }
+
     return clusterModel;
   }
 

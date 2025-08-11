@@ -82,7 +82,6 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {getPrefixedYearMonth} from "@shared/functions/utils";
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -505,11 +504,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.EncryptionAtRestKey).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._clusterSpecService.cluster = this._getClusterEntity();
-        const cluster = this._clusterSpecService.cluster;
-        console.log('ClusterSpec:', cluster);
-      });
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     if (!this.cniApplicationValues) {
       this._applicationService
@@ -527,6 +522,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._clusterSpecService.cluster = this._getClusterEntity();
       });
 
+    // Handle encryption at rest validation
+    this.form
+      .get(Controls.EncryptionAtRest)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this.form.get(Controls.EncryptionAtRestKey).setValidators([Validators.required]);
+          this.form.get(Controls.EncryptionAtRestKey).updateValueAndValidity();
+        } else {
+          this.form.get(Controls.EncryptionAtRestKey).clearValidators();
+          this.form.get(Controls.EncryptionAtRestKey).setValue('');
+          this.form.get(Controls.EncryptionAtRestKey).updateValueAndValidity();
+        }
+      });
+
     this._handleClusterSpecChanges();
     this._handleCNIPluginChanges();
     this._updateAvailableProxyModes();
@@ -537,7 +547,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   generateEncryptionKey(): void {
-    this.control(Controls.EncryptionAtRestKey).setValue(this._nameGenerator.generateEncryptionKey());
+    const EncryptionKeyLength = 32;
+    const keyBytes = new Uint8Array(EncryptionKeyLength);
+    crypto.getRandomValues(keyBytes);
+    const base64Key = btoa(String.fromCharCode(...keyBytes));
+    this.control(Controls.EncryptionAtRestKey).setValue(base64Key);
   }
 
   onLabelsChange(labels: Record<string, string>): void {
@@ -662,6 +676,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubeLBUseLoadBalancerClass]: this._builder.control(clusterSpec?.kubelb?.useLoadBalancerClass ?? false),
       [Controls.KubeLBEnableGatewayAPI]: this._builder.control(clusterSpec?.kubelb?.enableGatewayAPI ?? false),
       [Controls.DisableCSIDriver]: this._builder.control(clusterSpec?.disableCsiDriver ?? false),
+      [Controls.EncryptionAtRest]: this._builder.control(clusterSpec?.encryptionConfiguration?.enabled ?? false),
+      [Controls.EncryptionAtRestKey]: this._builder.control(''),
       [Controls.CiliumIngress]: this._builder.control(false),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
@@ -710,8 +726,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
         [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
       ),
-      [Controls.EncryptionAtRest]: this._builder.control(clusterSpec?.encryptionConfiguration?.enabled ?? false),
-      [Controls.EncryptionAtRestKey]: this._builder.control(clusterSpec?.encryptionConfiguration?.secretbox?.keys[0]?.name ?? ''),
     });
 
     this.control(Controls.Konnectivity).disable();
@@ -808,8 +822,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           [Controls.KubeLBEnableGatewayAPI]:
             clusterSpec?.kubelb?.enableGatewayAPI ?? this.controlValue(Controls.KubeLBEnableGatewayAPI),
           [Controls.DisableCSIDriver]: clusterSpec?.disableCsiDriver ?? this.controlValue(Controls.DisableCSIDriver),
-          [Controls.EncryptionAtRest]: clusterSpec?.encryptionConfiguration?.enabled ?? this.controlValue(Controls.EncryptionAtRest),
-          [Controls.EncryptionAtRestKey]: clusterSpec?.encryptionConfiguration?.secretbox?.keys[0]?.name ?? this.controlValue(Controls.EncryptionAtRestKey),
+          [Controls.EncryptionAtRest]:
+            clusterSpec?.encryptionConfiguration?.enabled ?? this.controlValue(Controls.EncryptionAtRest),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
@@ -1128,16 +1142,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     // Handle encryption at rest annotations
     if (this.controlValue(Controls.EncryptionAtRest)) {
-      const encryptionKey = this.controlValue(Controls.EncryptionAtRestKey);
       annotations = {
         ...(annotations || {}),
-        [ClusterAnnotation.EncryptionAtRest]: 'true',
-        [ClusterAnnotation.EncryptionKey]: encryptionKey ? encryptionKey : 'generate',
+        [ClusterAnnotation.EncryptionKeyEnabledAnnotation]: 'true',
       };
+
+      if (this.controlValue(Controls.EncryptionAtRestKey)) {
+        annotations[ClusterAnnotation.EncryptionKeyAnnotation] = this.controlValue(Controls.EncryptionAtRestKey);
+      }
     } else {
       if (annotations) {
-        delete annotations[ClusterAnnotation.EncryptionAtRest];
-        delete annotations[ClusterAnnotation.EncryptionKey];
+        delete annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation];
+        delete annotations[ClusterAnnotation.EncryptionKeyAnnotation];
       }
     }
 
@@ -1190,24 +1206,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterNetwork,
         cniPlugin: cniPlugin,
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
-        features: this.controlValue(Controls.EncryptionAtRest) ? {
-          encryptionAtRest: this.controlValue(Controls.EncryptionAtRest),
-        } : {},
-        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest) ? {
-          enabled: this.controlValue(Controls.EncryptionAtRest),
-          resources: ['secrets'],
-          secretbox: {
-            keys: [
-              {
-                name: getPrefixedYearMonth('encryption-key'),
-                secretRef: {
-                  name: getPrefixedYearMonth('encryption-key'),
-                  key: 'encryption-key'
-                }
-              }
-            ]
-          }
-        } : null,
+        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest)
+          ? {
+              enabled: true,
+            }
+          : undefined,
       } as ClusterSpec, // Use 'unknown' cast to satisfy TS
     } as Cluster;
 
