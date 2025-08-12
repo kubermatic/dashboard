@@ -74,9 +74,9 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.10.0
 	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250710100928-c3a24952efd9
-	k8c.io/kubermatic/v2 v2.28.1-0.20250710100928-c3a24952efd9
+	k8c.io/kubermatic/v2 v2.28.2-0.20250811200852-12b14405cbd2
 	k8c.io/machine-controller/sdk v1.62.0
-	k8c.io/operating-system-manager v1.7.4
+	k8c.io/operating-system-manager v1.7.5
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.33.0
 	k8s.io/apiextensions-apiserver v0.33.0
