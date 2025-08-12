@@ -70,19 +70,19 @@ require (
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.27.6-0.20250709121724-073944c20a13
+	k8c.io/kubermatic/v2 v2.27.7-0.20250812061752-3d4b047f0499
 	k8c.io/machine-controller v1.61.3
-	k8c.io/operating-system-manager v1.6.7
+	k8c.io/operating-system-manager v1.6.8
 	k8c.io/reconciler v0.5.0
-	k8s.io/api v0.31.3
-	k8s.io/apiextensions-apiserver v0.31.3
-	k8s.io/apimachinery v0.31.3
-	k8s.io/apiserver v0.31.3
+	k8s.io/api v0.32.2
+	k8s.io/apiextensions-apiserver v0.32.2
+	k8s.io/apimachinery v0.32.2
+	k8s.io/apiserver v0.32.2
 	k8s.io/client-go v1.5.2
-	k8s.io/code-generator v0.31.3
+	k8s.io/code-generator v0.32.2
 	k8s.io/klog/v2 v2.130.1
-	k8s.io/kubectl v0.31.3
-	k8s.io/metrics v0.31.3
+	k8s.io/kubectl v0.32.2
+	k8s.io/metrics v0.32.2
 	k8s.io/utils v0.0.0-20241104163129-6fe5fd82f078
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.61.0
@@ -99,12 +99,13 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
-replace k8s.io/client-go => k8s.io/client-go v0.31.1
+replace k8s.io/client-go => k8s.io/client-go v0.32.2
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
 
 require (
+	cel.dev/expr v0.19.0 // indirect
 	cloud.google.com/go/auth v0.11.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.6 // indirect
 	cloud.google.com/go/compute/metadata v0.5.2 // indirect
@@ -177,7 +178,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/cel-go v0.21.0 // indirect
+	github.com/google/cel-go v0.22.0 // indirect
 	github.com/google/gnostic-models v0.6.9-0.20230804172637-c7be7c783f49 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.1-0.20210504230335-f78f29fc09ea // indirect
@@ -193,7 +194,6 @@ require (
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
-	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jhump/protoreflect v1.16.0 // indirect
@@ -283,12 +283,12 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	helm.sh/helm/v3 v3.16.3 // indirect
+	helm.sh/helm/v3 v3.17.4 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.2.1 // indirect
-	k8s.io/component-base v0.31.3 // indirect
-	k8s.io/gengo/v2 v2.0.0-20240826214909-a7b603a56eb7 // indirect
+	k8s.io/component-base v0.32.2 // indirect
+	k8s.io/gengo/v2 v2.0.0-20240911193312-2b36238f13e9 // indirect
 	k8s.io/klog v1.0.0 // indirect
-	k8s.io/kube-aggregator v0.31.3 // indirect
+	k8s.io/kube-aggregator v0.32.2 // indirect
 	k8s.io/kube-openapi v0.31.2 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
