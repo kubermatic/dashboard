@@ -433,7 +433,6 @@ export class CNIPluginVersions {
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
   EncryptionKeyEnabledAnnotation = 'kubermatic.io/encryption-key-enabled',
-  EncryptionKeyAnnotation = 'kubermatic.io/encryption-key',
   EncryptionKeyGenerateAnnotation = 'kubermatic.io/encryption-key-generate',
 }
 
