@@ -925,9 +925,9 @@ type MasterVersion struct {
 // CreateClusterSpec is the structure that is used to create cluster with its initial node deployment
 // swagger:model CreateClusterSpec
 type CreateClusterSpec struct {
-	Cluster        Cluster               `json:"cluster"`
-	NodeDeployment *NodeDeployment       `json:"nodeDeployment,omitempty"`
-	Applications   []Application         `json:"applications,omitempty"`
+	Cluster          Cluster               `json:"cluster"`
+	NodeDeployment   *NodeDeployment       `json:"nodeDeployment,omitempty"`
+	Applications     []Application         `json:"applications,omitempty"`
 	EncryptionAtRest *EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
 }
 
@@ -1098,7 +1098,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 		DisableCSIDriver                     bool                                   `json:"disableCsiDriver,omitempty"`
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
-		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration  `json:"encryptionConfiguration,omitempty"`
 		Features                             map[string]bool                        `json:"features,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
