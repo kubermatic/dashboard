@@ -1167,7 +1167,6 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 			Kyverno:                              internalCluster.Spec.Kyverno,
 			EncryptionConfiguration:              getEncryptionConfigurationOrDefault(internalCluster.Spec.EncryptionConfiguration, internalCluster.Spec.Features),
-			Features:                             internalCluster.Spec.Features,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,
@@ -1389,12 +1388,21 @@ func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provi
 }
 
 func getEncryptionConfigurationOrDefault(config *kubermaticv1.EncryptionConfiguration, features map[string]bool) *kubermaticv1.EncryptionConfiguration {
-	if config == nil {
-		return &kubermaticv1.EncryptionConfiguration{
-			Enabled: features != nil && features["encryptionAtRest"],
-		}
+	enabled := false
+	if config != nil {
+		enabled = config.Enabled
+	} else if features != nil {
+		enabled = features["encryptionAtRest"]
 	}
+
+	// Return nil if encryption is not enabled
+	if !enabled {
+		return nil
+	}
+
+	// Return minimal config when enabled
 	return &kubermaticv1.EncryptionConfiguration{
-		Enabled: config.Enabled,
+		Enabled:   true,
+		Resources: []string{"secrets"},
 	}
 }
