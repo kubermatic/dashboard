@@ -12910,51 +12910,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "equinixmetal"
-        ],
-        "summary": "Lists sizes from Equinix Metal.",
-        "operationId": "listEquinixMetalSizesNoCredentialsV2",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
-              }
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/disktypes": {
       "get": {
         "description": "Lists disk types from GCP",
@@ -13881,51 +13836,6 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackTenant"
-              }
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "packet"
-        ],
-        "summary": "Lists sizes from packet (use Equinix Metal API endpoints instead).",
-        "operationId": "listPacketSizesNoCredentialsV2",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
               }
             }
           },
@@ -20145,64 +20055,6 @@
             "description": "EKSVPCList",
             "schema": {
               "$ref": "#/definitions/EKSVPCList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/projects/{project_id}/providers/equinixmetal/sizes": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "equinixmetal"
-        ],
-        "summary": "Lists sizes from Equinix Metal.",
-        "operationId": "listProjectEquinixMetalSizes",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "APIKey",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "EquinixProjectID",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "PacketSizeList",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PacketSizeList"
-              }
             }
           },
           "default": {

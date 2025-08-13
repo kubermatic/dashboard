@@ -27,7 +27,7 @@ export enum NodeProvider {
   GKE = 'gke',
   HETZNER = 'hetzner',
   OPENSTACK = 'openstack',
-  EQUINIX = 'packet',
+  EQUINIX = 'packet', // @deprecated - Only kept for preset backward compatibility. Not available for new clusters.
   KUBEVIRT = 'kubevirt',
   NUTANIX = 'nutanix',
   VSPHERE = 'vsphere',
@@ -42,13 +42,18 @@ export const NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS = [
   NodeProvider.GCP,
   NodeProvider.OPENSTACK,
 ];
+export const DEPRECATED_PROVIDERS = [NodeProvider.EQUINIX];
 export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
-
 export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
   provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider)
 );
-
 export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
+
+// Providers available for creating new clusters (excludes deprecated providers)
+// Todo: This will be removed once the deprecated providers are removed from presets.
+export const CLUSTER_NODE_PROVIDERS = NODE_PROVIDERS.filter(
+  (provider: NodeProvider) => !DEPRECATED_PROVIDERS.includes(provider)
+);
 
 export enum OperatingSystem {
   AmazonLinux2 = 'amzn2',
@@ -110,7 +115,7 @@ export namespace NodeProviderConstants {
       NodeProvider.AWS,
       NodeProvider.AZURE,
       NodeProvider.DIGITALOCEAN,
-      NodeProvider.EQUINIX,
+
       NodeProvider.GCP,
       NodeProvider.OPENSTACK,
       NodeProvider.VSPHERE,

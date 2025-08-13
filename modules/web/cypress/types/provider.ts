@@ -22,7 +22,6 @@ export enum Provider {
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
   OpenStack = 'openstack',
-  Equinix = 'packet',
   VSphere = 'vsphere',
   Nutanix = 'nutanix',
   kubeadm = 'bringyourown',

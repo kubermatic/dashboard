@@ -39,7 +39,7 @@ import {AWSBasicNodeDataComponent} from './basic/provider/aws/component';
 import {AzureBasicNodeDataComponent} from './basic/provider/azure/component';
 import {BasicNodeDataComponent} from './basic/provider/component';
 import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/component';
-import {EquinixBasicNodeDataComponent} from './basic/provider/equinix/component';
+
 import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
@@ -53,7 +53,7 @@ import {AlibabaExtendedNodeDataComponent} from './extended/provider/alibaba/comp
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {AzureExtendedNodeDataComponent} from './extended/provider/azure/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
-import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/component';
+
 import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/component';
@@ -69,8 +69,7 @@ const components = [
   VSphereBasicNodeDataComponent,
   KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
-  EquinixBasicNodeDataComponent,
-  EquinixExtendedNodeDataComponent,
+
   AzureBasicNodeDataComponent,
   AzureExtendedNodeDataComponent,
   VSphereExtendedNodeDataComponent,

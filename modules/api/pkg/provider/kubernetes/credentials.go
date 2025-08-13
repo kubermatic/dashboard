@@ -88,9 +88,6 @@ func createOrUpdateCredentialSecretForCluster(ctx context.Context, seedClient ct
 	if cluster.Spec.Cloud.Openstack != nil {
 		return createOrUpdateOpenstackSecret(ctx, seedClient, cluster, validate)
 	}
-	if cluster.Spec.Cloud.Packet != nil {
-		return createOrUpdatePacketSecret(ctx, seedClient, cluster, validate)
-	}
 	if cluster.Spec.Cloud.Kubevirt != nil {
 		return createOrUpdateKubevirtSecret(ctx, seedClient, cluster)
 	}
@@ -383,39 +380,6 @@ func createOrUpdateOpenstackSecret(ctx context.Context, seedClient ctrlruntimecl
 	cluster.Spec.Cloud.Openstack.ApplicationCredentialSecret = ""
 	cluster.Spec.Cloud.Openstack.ApplicationCredentialID = ""
 	cluster.Spec.Cloud.Openstack.UseToken = false
-
-	return true, nil
-}
-
-func createOrUpdatePacketSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, validate *ValidateCredentials) (bool, error) {
-	spec := cluster.Spec.Cloud.Packet
-
-	// already migrated
-	if spec.APIKey == "" && spec.ProjectID == "" {
-		return false, nil
-	}
-
-	if validate != nil {
-		if err := packet.ValidateCredentials(spec.APIKey, spec.ProjectID); err != nil {
-			return false, fmt.Errorf("invalid Equinixmetal credentials: %w", err)
-		}
-	}
-
-	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialSecret(ctx, seedClient, cluster, map[string][]byte{
-		resources.PacketAPIKey:    []byte(spec.APIKey),
-		resources.PacketProjectID: []byte(spec.ProjectID),
-	})
-	if err != nil {
-		return false, err
-	}
-
-	// add secret key selectors to cluster object
-	cluster.Spec.Cloud.Packet.CredentialsReference = credentialRef
-
-	// clean old inline credentials
-	cluster.Spec.Cloud.Packet.APIKey = ""
-	cluster.Spec.Cloud.Packet.ProjectID = ""
 
 	return true, nil
 }

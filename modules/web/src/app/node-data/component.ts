@@ -407,7 +407,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.ANEXIA,
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.EQUINIX,
+
           NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
@@ -421,7 +421,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.AWS,
           NodeProvider.AZURE,
           NodeProvider.DIGITALOCEAN,
-          NodeProvider.EQUINIX,
+
           NodeProvider.HETZNER,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
@@ -684,10 +684,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private getSupportedOperatingSystemProfiles(): string[] {
     let cloudProvider = this.provider.toString();
-    if (this.provider === NodeProvider.EQUINIX) {
-      // Packet was renamed to EquinixMetal for the machines.
-      cloudProvider = 'equinixmetal';
-    } else if (this.provider === NodeProvider.GCP) {
+    if (this.provider === NodeProvider.GCP) {
       // For machines, GCP needs to be replaced with gce.
       cloudProvider = 'gce';
     } else if (this.provider === NodeProvider.VMWARECLOUDDIRECTOR) {

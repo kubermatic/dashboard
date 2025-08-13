@@ -24,7 +24,7 @@ export enum ProviderPreset {
   Hetzner = 'e2e-hetzner',
   KubeVirt = 'e2e-kubevirt',
   OpenStack = 'e2e-openstack',
-  Equinix = 'e2e-equinix',
+
   VSphere = 'e2e-vsphere',
   Nutanix = 'e2e-nutanix',
   Mock = 'test',

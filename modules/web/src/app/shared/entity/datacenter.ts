@@ -15,7 +15,7 @@
 import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 import {AuditLoggingWebhookBackend} from '@shared/entity/cluster';
 import {StatusIcon} from '@shared/utils/health-status';
-import {NodeProvider} from '../model/NodeProviderConstants';
+import {CLUSTER_NODE_PROVIDERS, NodeProvider} from '../model/NodeProviderConstants';
 import {Metadata} from './common';
 
 export class CreateDatacenterModel {
@@ -43,7 +43,7 @@ export class DatacenterSpec {
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;
-  packet?: EquinixDatacenterSpec;
+
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
@@ -135,10 +135,6 @@ export class OpenStackDatacenterSpec {
   images: DatacenterOperatingSystemOptions;
   enforceFloatingIP: boolean;
   enableConfigDrive?: boolean;
-}
-
-export class EquinixDatacenterSpec {
-  facilities: string[];
 }
 
 export class VSphereDatacenterSpec {
@@ -296,5 +292,7 @@ export class BackupDestination {
 }
 
 export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {
-  return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
+  return (
+    Object.values(CLUSTER_NODE_PROVIDERS).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE
+  );
 }
