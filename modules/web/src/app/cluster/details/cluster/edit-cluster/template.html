@@ -301,13 +301,6 @@ limitations under the License.
            [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.EncryptionAtRest"
-                    kmValueChangedIndicator>
-        Encryption at Rest
-        <i class="km-icon-info km-pointer"
-           matTooltip="Enable to encrypt secrets at rest using a generated key"></i>
-      </mat-checkbox>
-
       <mat-checkbox [formControlName]="Controls.ClusterBackup"
                     *ngIf="isclusterBackupEnabled"
                     kmValueChangedIndicator>

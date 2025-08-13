@@ -1132,15 +1132,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       konnectivityEnabled: konnectivity,
     } as ClusterNetwork;
 
+    // Handle annotations
     let annotations = this._clusterSpecService.cluster.annotations;
-    if (this.cniApplicationValues) {
-      annotations = {
-        ...(annotations || {}),
-        [ClusterAnnotation.InitialCNIValuesRequest]: this.canEditCNIValues ? this.cniApplicationValues : null,
-      };
-    }
-
-    // Handle encryption at rest annotations
+    annotations = this._handleCNIAnnotations(annotations);
     annotations = this._handleEncryptionAtRestConfig(annotations);
 
     if (this.isDualStackIPFamilySelected()) {
@@ -1208,6 +1202,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return clusterObject;
   }
 
+  private _handleCNIAnnotations(annotations: any): any {
+    if (this.cniApplicationValues) {
+      return {
+        ...(annotations || {}),
+        [ClusterAnnotation.InitialCNIValuesRequest]: this.canEditCNIValues ? this.cniApplicationValues : null,
+      };
+    }
+    return annotations;
+  }
   private _handleEncryptionAtRestConfig(annotations: any): any {
     if (this.controlValue(Controls.EncryptionAtRest)) {
       annotations = {
