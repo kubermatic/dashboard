@@ -196,20 +196,9 @@ func GenerateCluster(
 		partialCluster.Annotations = body.Cluster.Annotations
 	}
 
-	credentialName := body.Cluster.Credential
-	if len(credentialName) > 0 {
-		cloudSpec, err := credentialManager.SetCloudCredentials(ctx, adminUserInfo, projectID, credentialName, body.Cluster.Spec.Cloud, dc)
-		if err != nil {
-			return nil, utilerrors.NewBadRequest("invalid credentials: %v", err)
-		}
-
-		if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
-			body.Cluster.Credential = ""
-		} else {
-			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
-			partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
-		}
-		body.Cluster.Spec.Cloud = *cloudSpec
+	// Handle credentials configuration
+	if err := handleCredentials(ctx, body, partialCluster, adminUserInfo, projectID, credentialManager, dc); err != nil {
+		return nil, err
 	}
 
 	// Fetch the defaulting ClusterTemplate.
@@ -1009,6 +998,37 @@ func UpdateClusterSSHKey(ctx context.Context, userInfoGetter provider.UserInfoGe
 	if _, err = sshKeyProvider.Update(ctx, userInfo, clusterSSHKey); err != nil {
 		return common.KubernetesErrorToHTTPError(err)
 	}
+	return nil
+}
+
+// handleCredentials handles the credentials configuration for cluster creation.
+func handleCredentials(
+	ctx context.Context,
+	body apiv1.CreateClusterSpec,
+	partialCluster *kubermaticv1.Cluster,
+	adminUserInfo *provider.UserInfo,
+	projectID string,
+	credentialManager provider.PresetProvider,
+	dc *kubermaticv1.Datacenter,
+) error {
+	credentialName := body.Cluster.Credential
+	if len(credentialName) == 0 {
+		return nil
+	}
+
+	cloudSpec, err := credentialManager.SetCloudCredentials(ctx, adminUserInfo, projectID, credentialName, body.Cluster.Spec.Cloud, dc)
+	if err != nil {
+		return utilerrors.NewBadRequest("invalid credentials: %v", err)
+	}
+
+	if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
+		body.Cluster.Credential = ""
+	} else {
+		partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
+		partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
+	}
+	body.Cluster.Spec.Cloud = *cloudSpec
+
 	return nil
 }
 
