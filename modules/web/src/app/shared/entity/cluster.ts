@@ -369,8 +369,6 @@ export class ClusterSpec {
   encryptionConfiguration?: EncryptionConfiguration;
 }
 
-
-
 export class KubeLB {
   enabled: boolean;
   useLoadBalancerClass?: boolean;
@@ -424,8 +422,7 @@ export class CNIPluginVersions {
 
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
-  EncryptionKeyEnabledAnnotation = 'kubermatic.io/encryption-key-enabled',
-  EncryptionKeyGenerateAnnotation = 'kubermatic.io/encryption-key-generate',
+  EncryptionAtRestEnabled = 'kubermatic.io/encryption-at-rest-enabled',
 }
 
 export enum ProxyMode {
@@ -482,8 +479,6 @@ export class EncryptionConfiguration {
   enabled?: boolean;
   resources?: string[];
 }
-
-
 
 export class OPAIntegration {
   enabled: boolean;

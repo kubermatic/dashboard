@@ -1141,20 +1141,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
 
     // Handle encryption at rest annotations
-    if (this.controlValue(Controls.EncryptionAtRest)) {
-      annotations = {
-        ...(annotations || {}),
-        [ClusterAnnotation.EncryptionKeyEnabledAnnotation]: 'true',
-      };
-      // Store encryption key in ClusterSpecService instead of annotations
-      this._clusterSpecService.encryptionAtRestKey = this.controlValue(Controls.EncryptionAtRestKey);
-    } else {
-      if (annotations) {
-        delete annotations[ClusterAnnotation.EncryptionKeyEnabledAnnotation];
-      }
-      // Clear encryption key from ClusterSpecService
-      this._clusterSpecService.encryptionAtRestKey = null;
-    }
+    annotations = this._handleEncryptionAtRestConfig(annotations);
 
     if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
@@ -1205,9 +1192,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterNetwork,
         cniPlugin: cniPlugin,
         apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
-        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest)
-          ? {enabled: true,}
-          : null,
+        encryptionConfiguration: this.controlValue(Controls.EncryptionAtRest) ? {enabled: true} : null,
       } as ClusterSpec,
     } as Cluster;
 
@@ -1221,6 +1206,24 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       clusterObject.spec.backupConfig = null;
     }
     return clusterObject;
+  }
+
+  private _handleEncryptionAtRestConfig(annotations: any): any {
+    if (this.controlValue(Controls.EncryptionAtRest)) {
+      annotations = {
+        ...(annotations || {}),
+        [ClusterAnnotation.EncryptionAtRestEnabled]: 'true',
+      };
+      // Store encryption key in ClusterSpecService instead of annotations
+      this._clusterSpecService.encryptionAtRestKey = this.controlValue(Controls.EncryptionAtRestKey);
+    } else {
+      if (annotations) {
+        delete annotations[ClusterAnnotation.EncryptionAtRestEnabled];
+      }
+      // Clear encryption key from ClusterSpecService
+      this._clusterSpecService.encryptionAtRestKey = null;
+    }
+    return annotations;
   }
 
   private _getAuditWebhookBackendConfig(): AuditLoggingWebhookBackend {
