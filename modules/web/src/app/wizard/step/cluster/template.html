@@ -464,6 +464,33 @@ limitations under the License.
                  [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
             </mat-checkbox>
 
+            <mat-checkbox [formControlName]="Controls.EncryptionAtRest">
+              Encryption at Rest
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Enable encryption at rest for cluster secrets and etcd data using a secretbox encryption key."></i>
+            </mat-checkbox>
+
+            <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest)">
+              <mat-label>Encryption Key</mat-label>
+              <input matInput
+                     [formControlName]="Controls.EncryptionAtRestKey"
+                     kmInputPassword
+                     placeholder="Base64-encoded 32-byte encryption key"
+                     autocomplete="off" />
+              <button mat-icon-button
+                      type="button"
+                      matSuffix
+                      class="km-randomize-btn"
+                      matTooltip="Generate encryption key"
+                      (click)="generateEncryptionKey()">
+                <i class="km-icon-randomize"></i>
+              </button>
+              <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('required')">
+                <strong>Required</strong>
+              </mat-error>
+              <mat-hint>Provide a base64-encoded 32-byte encryption key or use the generate button.</mat-hint>
+            </mat-form-field>
+
             <ng-container *ngIf="isEnterpriseEdition">
               <div fxLayout="row"
                    fxLayoutAlign=" center"

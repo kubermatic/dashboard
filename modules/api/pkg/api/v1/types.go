@@ -954,9 +954,16 @@ type MasterVersion struct {
 // CreateClusterSpec is the structure that is used to create cluster with its initial node deployment
 // swagger:model CreateClusterSpec
 type CreateClusterSpec struct {
-	Cluster        Cluster         `json:"cluster"`
-	NodeDeployment *NodeDeployment `json:"nodeDeployment,omitempty"`
-	Applications   []Application   `json:"applications,omitempty"`
+	Cluster          Cluster               `json:"cluster"`
+	NodeDeployment   *NodeDeployment       `json:"nodeDeployment,omitempty"`
+	Applications     []Application         `json:"applications,omitempty"`
+	EncryptionAtRest *EncryptionAtRestSpec `json:"encryptionAtRest,omitempty"`
+}
+
+// EncryptionAtRestSpec contains the encryption key for encryption at rest
+// swagger:model EncryptionAtRestSpec
+type EncryptionAtRestSpec struct {
+	Key string `json:"key"`
 }
 
 const (
@@ -1082,6 +1089,12 @@ type ClusterSpec struct {
 
 	// Kyverno holds the configuration for the Kyverno policy management component.
 	Kyverno *kubermaticv1.KyvernoSettings `json:"kyverno,omitempty"`
+
+	// EncryptionConfiguration defines the encryption configuration for the cluster.
+	EncryptionConfiguration *kubermaticv1.EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+
+	// Features is a map that controls specific features on cluster level.
+	Features map[string]bool `json:"features,omitempty"`
 }
 
 // MarshalJSON marshals ClusterSpec object into JSON. It is overwritten to control data
@@ -1114,6 +1127,8 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 		DisableCSIDriver                     bool                                   `json:"disableCsiDriver,omitempty"`
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
+		EncryptionConfiguration              *kubermaticv1.EncryptionConfiguration  `json:"encryptionConfiguration,omitempty"`
+		Features                             map[string]bool                        `json:"features,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1160,6 +1175,8 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		APIServerAllowedIPRanges:             cs.APIServerAllowedIPRanges,
 		DisableCSIDriver:                     cs.DisableCSIDriver,
 		Kyverno:                              cs.Kyverno,
+		EncryptionConfiguration:              cs.EncryptionConfiguration,
+		Features:                             cs.Features,
 	})
 
 	return ret, err
