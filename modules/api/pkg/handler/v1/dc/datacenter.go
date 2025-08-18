@@ -632,7 +632,6 @@ func ConvertInternalDCToExternalSpec(dc *kubermaticv1.Datacenter, seedName strin
 		Baremetal:                      dc.Spec.Baremetal,
 		Azure:                          dc.Spec.Azure,
 		Edge:                           dc.Spec.Edge,
-		Packet:                         dc.Spec.Packet,
 		GCP:                            dc.Spec.GCP,
 		Kubevirt:                       dc.Spec.Kubevirt,
 		Alibaba:                        dc.Spec.Alibaba,
@@ -664,7 +663,6 @@ func convertExternalDCToInternal(datacenter *apiv1.DatacenterSpec) kubermaticv1.
 			Azure:                        datacenter.Azure,
 			Edge:                         datacenter.Edge,
 			Openstack:                    datacenter.Openstack,
-			Packet:                       datacenter.Packet,
 			Hetzner:                      datacenter.Hetzner,
 			VSphere:                      datacenter.VSphere,
 			GCP:                          datacenter.GCP,
@@ -935,9 +933,6 @@ func GetProviderName(dcSpec *apiv1.DatacenterSpec) (kubermaticv1.ProviderType, e
 	}
 	if dcSpec.Openstack != nil {
 		providerNames = append(providerNames, kubermaticv1.OpenstackCloudProvider)
-	}
-	if dcSpec.Packet != nil {
-		providerNames = append(providerNames, kubermaticv1.PacketCloudProvider)
 	}
 	if dcSpec.Hetzner != nil {
 		providerNames = append(providerNames, kubermaticv1.HetznerCloudProvider)

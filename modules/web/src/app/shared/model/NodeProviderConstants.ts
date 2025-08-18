@@ -75,7 +75,6 @@ export namespace NodeProviderConstants {
     [NodeProvider.HETZNER, 'Hetzner'],
     [NodeProvider.KUBEVIRT, 'KubeVirt'],
     [NodeProvider.OPENSTACK, 'Openstack'],
-    [NodeProvider.EQUINIX, 'Equinix Metal'],
     [NodeProvider.VSPHERE, 'VSphere'],
     [NodeProvider.NUTANIX, 'Nutanix'],
     [NodeProvider.VMWARECLOUDDIRECTOR, 'VMware Cloud Director'],

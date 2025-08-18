@@ -35,7 +35,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
-	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/vmwareclouddirector"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/vsphere"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
@@ -64,9 +63,7 @@ func Provider(
 	if datacenter.Spec.Openstack != nil {
 		return openstack.NewCloudProvider(datacenter, secretKeyGetter, caBundle)
 	}
-	if datacenter.Spec.Packet != nil {
-		return packet.NewCloudProvider(secretKeyGetter), nil
-	}
+
 	if datacenter.Spec.Hetzner != nil {
 		return hetzner.NewCloudProvider(secretKeyGetter), nil
 	}

@@ -403,8 +403,6 @@ func getKubeOneProviderName(kubeOneCluster *kubeonev1beta2.KubeOneCluster, clust
 		return resources.KubeOneNutanix, nil
 	case kubeOneCluster.CloudProvider.Openstack != nil:
 		return resources.KubeOneOpenStack, nil
-	case kubeOneCluster.CloudProvider.EquinixMetal != nil:
-		return resources.KubeOneEquinix, nil
 	case kubeOneCluster.CloudProvider.Vsphere != nil:
 		return resources.KubeOneVSphere, nil
 	case kubeOneCluster.CloudProvider.VMwareCloudDirector != nil:

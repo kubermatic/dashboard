@@ -33,7 +33,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/hetzner"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
-	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/alibaba"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/anexia"
@@ -812,33 +811,6 @@ func createOrUpdateKubeOneVSphereSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
-
-	return nil
-}
-
-func createOrUpdateKubeOneEquinixSecret(ctx context.Context, cloud apiv2.KubeOneCloudSpec, masterClient ctrlruntimeclient.Client, secretName, kubermaticNamespace string, externalCluster *kubermaticv1.ExternalCluster) error {
-	apiKey := cloud.Equinix.APIKey
-	projectID := cloud.Equinix.ProjectID
-
-	if apiKey == "" || projectID == "" {
-		return utilerrors.NewBadRequest("kubeone Packet credentials missing")
-	}
-
-	if err := packet.ValidateCredentials(apiKey, projectID); err != nil {
-		return fmt.Errorf("invalid Packet credentials: %w", err)
-	}
-
-	// move credentials into dedicated Secret
-	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
-		resources.PacketAPIKey:    []byte(apiKey),
-		resources.PacketProjectID: []byte(projectID),
-	})
-	if err != nil {
-		return err
-	}
-
-	// add secret key selectors to cluster object
 	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil

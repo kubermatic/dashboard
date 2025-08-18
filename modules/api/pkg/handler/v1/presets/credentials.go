@@ -39,10 +39,9 @@ var providerNames = []string{
 	"hetzner",
 	"azure",
 	"vsphere",
-	"baremeatl",
+	"baremetal",
 	"aws",
 	"openstack",
-	"packet",
 	"gcp",
 	"kubevirt",
 	"alibaba",
@@ -97,7 +96,6 @@ func CredentialEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 			// 	Baremetal			Baremetal
 			//	AWS          		AWS
 			//	Openstack    		Openstack
-			//	Packet       		Packet
 			//	GCP          		GCP
 			//	Kubevirt     		Kubevirt
 			//	Alibaba      		Alibaba

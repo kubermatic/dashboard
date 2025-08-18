@@ -305,31 +305,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			httpStatus:       http.StatusOK,
 			expectedResponse: `{"names":["first"]}`,
 		},
-		{
-			name:             "test no credentials for Packet",
-			provider:         "packet",
-			httpStatus:       http.StatusOK,
-			expectedResponse: "{}",
-		},
-		{
-			name:     "test list of credential names for Packet",
-			provider: "packet",
-			credentials: []ctrlruntimeclient.Object{
-				&kubermaticv1.Preset{
-					ObjectMeta: metav1.ObjectMeta{
-						Name: "first",
-					},
-					Spec: kubermaticv1.PresetSpec{
-						RequiredEmails: []string{test.RequiredEmailDomain},
-						Packet: &kubermaticv1.Packet{
-							APIKey: "key",
-						},
-					},
-				},
-			},
-			httpStatus:       http.StatusOK,
-			expectedResponse: `{"names":["first"]}`,
-		},
+
 		{
 			name:             "test no credentials for Vsphere",
 			provider:         "vsphere",

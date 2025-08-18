@@ -47,7 +47,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/openstack"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/operatingsystemprofile"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/operations"
-	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/packet"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/preset"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/project"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/resource_quota"
@@ -144,7 +143,6 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Kubermatic
 	cli.Openstack = openstack.New(transport, formats)
 	cli.Operatingsystemprofile = operatingsystemprofile.New(transport, formats)
 	cli.Operations = operations.New(transport, formats)
-	cli.Packet = packet.New(transport, formats)
 	cli.Preset = preset.New(transport, formats)
 	cli.Project = project.New(transport, formats)
 	cli.ResourceQuota = resource_quota.New(transport, formats)
@@ -278,8 +276,6 @@ type KubermaticKubernetesPlatformAPI struct {
 
 	Operations operations.ClientService
 
-	Packet packet.ClientService
-
 	Preset preset.ClientService
 
 	Project project.ClientService
@@ -353,7 +349,6 @@ func (c *KubermaticKubernetesPlatformAPI) SetTransport(transport runtime.ClientT
 	c.Openstack.SetTransport(transport)
 	c.Operatingsystemprofile.SetTransport(transport)
 	c.Operations.SetTransport(transport)
-	c.Packet.SetTransport(transport)
 	c.Preset.SetTransport(transport)
 	c.Project.SetTransport(transport)
 	c.ResourceQuota.SetTransport(transport)

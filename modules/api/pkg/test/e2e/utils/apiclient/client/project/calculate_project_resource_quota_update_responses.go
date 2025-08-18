@@ -320,9 +320,6 @@ type CalculateProjectResourceQuotaUpdateBody struct {
 	// do size
 	DoSize *models.DigitaloceanSize `json:"doSize,omitempty"`
 
-	// equinix size
-	EquinixSize *models.PacketSize `json:"equinixSize,omitempty"`
-
 	// gcp size
 	GcpSize *models.GCPMachineSize `json:"gcpSize,omitempty"`
 
@@ -369,10 +366,6 @@ func (o *CalculateProjectResourceQuotaUpdateBody) Validate(formats strfmt.Regist
 	}
 
 	if err := o.validateDoSize(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := o.validateEquinixSize(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -501,25 +494,6 @@ func (o *CalculateProjectResourceQuotaUpdateBody) validateDoSize(formats strfmt.
 				return ve.ValidateName("Body" + "." + "doSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("Body" + "." + "doSize")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (o *CalculateProjectResourceQuotaUpdateBody) validateEquinixSize(formats strfmt.Registry) error {
-	if swag.IsZero(o.EquinixSize) { // not required
-		return nil
-	}
-
-	if o.EquinixSize != nil {
-		if err := o.EquinixSize.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("Body" + "." + "equinixSize")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("Body" + "." + "equinixSize")
 			}
 			return err
 		}
@@ -704,10 +678,6 @@ func (o *CalculateProjectResourceQuotaUpdateBody) ContextValidate(ctx context.Co
 		res = append(res, err)
 	}
 
-	if err := o.contextValidateEquinixSize(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := o.contextValidateGcpSize(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -818,22 +788,6 @@ func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateDoSize(ctx cont
 				return ve.ValidateName("Body" + "." + "doSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("Body" + "." + "doSize")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (o *CalculateProjectResourceQuotaUpdateBody) contextValidateEquinixSize(ctx context.Context, formats strfmt.Registry) error {
-
-	if o.EquinixSize != nil {
-		if err := o.EquinixSize.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("Body" + "." + "equinixSize")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("Body" + "." + "equinixSize")
 			}
 			return err
 		}

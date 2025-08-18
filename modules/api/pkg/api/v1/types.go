@@ -70,15 +70,15 @@ type DatacenterSpec struct {
 	Location string `json:"location,omitempty"`
 	// Name of the datacenter provider. Extracted based on which provider is defined in the spec.
 	// It is used for informational purposes.
-	Provider            string                                          `json:"provider,omitempty"`
-	Digitalocean        *kubermaticv1.DatacenterSpecDigitalocean        `json:"digitalocean,omitempty"`
-	BringYourOwn        *kubermaticv1.DatacenterSpecBringYourOwn        `json:"bringyourown,omitempty"`
-	Baremetal           *kubermaticv1.DatacenterSpecBaremetal           `json:"baremetal,omitempty"`
-	AWS                 *kubermaticv1.DatacenterSpecAWS                 `json:"aws,omitempty"`
-	Azure               *kubermaticv1.DatacenterSpecAzure               `json:"azure,omitempty"`
-	Edge                *kubermaticv1.DatacenterSpecEdge                `json:"edge,omitempty"`
-	Openstack           *kubermaticv1.DatacenterSpecOpenstack           `json:"openstack,omitempty"`
-	Packet              *kubermaticv1.DatacenterSpecPacket              `json:"packet,omitempty"`
+	Provider     string                                   `json:"provider,omitempty"`
+	Digitalocean *kubermaticv1.DatacenterSpecDigitalocean `json:"digitalocean,omitempty"`
+	BringYourOwn *kubermaticv1.DatacenterSpecBringYourOwn `json:"bringyourown,omitempty"`
+	Baremetal    *kubermaticv1.DatacenterSpecBaremetal    `json:"baremetal,omitempty"`
+	AWS          *kubermaticv1.DatacenterSpecAWS          `json:"aws,omitempty"`
+	Azure        *kubermaticv1.DatacenterSpecAzure        `json:"azure,omitempty"`
+	Edge         *kubermaticv1.DatacenterSpecEdge         `json:"edge,omitempty"`
+	Openstack    *kubermaticv1.DatacenterSpecOpenstack    `json:"openstack,omitempty"`
+
 	GCP                 *kubermaticv1.DatacenterSpecGCP                 `json:"gcp,omitempty"`
 	Hetzner             *kubermaticv1.DatacenterSpecHetzner             `json:"hetzner,omitempty"`
 	VSphere             *kubermaticv1.DatacenterSpecVSphere             `json:"vsphere,omitempty"`
@@ -422,34 +422,6 @@ type HetznerSize struct {
 	Cores       int     `json:"cores"`
 	Memory      float32 `json:"memory"`
 	Disk        int     `json:"disk"`
-}
-
-// PacketSizeList represents an array of Packet VM sizes.
-// swagger:model PacketSizeList
-type PacketSizeList []PacketSize
-
-// PacketSize is the object representing Packet VM sizes.
-// swagger:model PacketSize
-type PacketSize struct {
-	Name   string        `json:"name,omitempty"`
-	CPUs   []PacketCPU   `json:"cpus,omitempty"`
-	Memory string        `json:"memory,omitempty"`
-	Drives []PacketDrive `json:"drives,omitempty"`
-}
-
-// PacketCPU represents an array of Packet CPUs. It is a part of PacketSize.
-// swagger:model PacketCPU
-type PacketCPU struct {
-	Count int    `json:"count,omitempty"`
-	Type  string `json:"type,omitempty"`
-}
-
-// PacketDrive represents an array of Packet drives. It is a part of PacketSize.
-// swagger:model PacketDrive
-type PacketDrive struct {
-	Count int    `json:"count,omitempty"`
-	Size  string `json:"size,omitempty"`
-	Type  string `json:"type,omitempty"`
 }
 
 // NutanixCluster represents a Nutanix cluster.
@@ -1116,15 +1088,15 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
-			DatacenterName:      cs.Cloud.DatacenterName,
-			Fake:                newPublicFakeCloudSpec(cs.Cloud.Fake),
-			Digitalocean:        newPublicDigitaloceanCloudSpec(cs.Cloud.Digitalocean),
-			BringYourOwn:        newPublicBringYourOwnCloudSpec(cs.Cloud.BringYourOwn),
-			Edge:                newPublicEdgeCloudSpec(cs.Cloud.Edge),
-			AWS:                 newPublicAWSCloudSpec(cs.Cloud.AWS),
-			Azure:               newPublicAzureCloudSpec(cs.Cloud.Azure),
-			Openstack:           newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
-			Packet:              newPublicPacketCloudSpec(cs.Cloud.Packet),
+			DatacenterName: cs.Cloud.DatacenterName,
+			Fake:           newPublicFakeCloudSpec(cs.Cloud.Fake),
+			Digitalocean:   newPublicDigitaloceanCloudSpec(cs.Cloud.Digitalocean),
+			BringYourOwn:   newPublicBringYourOwnCloudSpec(cs.Cloud.BringYourOwn),
+			Edge:           newPublicEdgeCloudSpec(cs.Cloud.Edge),
+			AWS:            newPublicAWSCloudSpec(cs.Cloud.AWS),
+			Azure:          newPublicAzureCloudSpec(cs.Cloud.Azure),
+			Openstack:      newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
+
 			Hetzner:             newPublicHetznerCloudSpec(cs.Cloud.Hetzner),
 			VSphere:             newPublicVSphereCloudSpec(cs.Cloud.VSphere),
 			Baremetal:           newPublicBaremetalCloudSpec(cs.Cloud.Baremetal),
@@ -1168,15 +1140,15 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 // PublicCloudSpec is a public counterpart of apiv1.CloudSpec.
 // swagger:model PublicCloudSpec
 type PublicCloudSpec struct {
-	DatacenterName      string                              `json:"dc"`
-	Fake                *PublicFakeCloudSpec                `json:"fake,omitempty"`
-	Digitalocean        *PublicDigitaloceanCloudSpec        `json:"digitalocean,omitempty"`
-	BringYourOwn        *PublicBringYourOwnCloudSpec        `json:"bringyourown,omitempty"`
-	Edge                *PublicEdgeCloudSpec                `json:"edge,omitempty"`
-	AWS                 *PublicAWSCloudSpec                 `json:"aws,omitempty"`
-	Azure               *PublicAzureCloudSpec               `json:"azure,omitempty"`
-	Openstack           *PublicOpenstackCloudSpec           `json:"openstack,omitempty"`
-	Packet              *PublicPacketCloudSpec              `json:"packet,omitempty"`
+	DatacenterName string                       `json:"dc"`
+	Fake           *PublicFakeCloudSpec         `json:"fake,omitempty"`
+	Digitalocean   *PublicDigitaloceanCloudSpec `json:"digitalocean,omitempty"`
+	BringYourOwn   *PublicBringYourOwnCloudSpec `json:"bringyourown,omitempty"`
+	Edge           *PublicEdgeCloudSpec         `json:"edge,omitempty"`
+	AWS            *PublicAWSCloudSpec          `json:"aws,omitempty"`
+	Azure          *PublicAzureCloudSpec        `json:"azure,omitempty"`
+	Openstack      *PublicOpenstackCloudSpec    `json:"openstack,omitempty"`
+
 	Hetzner             *PublicHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *PublicVSphereCloudSpec             `json:"vsphere,omitempty"`
 	Baremetal           *PublicBaremetalCloudSpec           `json:"baremetal,omitempty"`
@@ -1327,17 +1299,6 @@ func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (pub
 		SubnetID:                 internal.SubnetID,
 		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
 	}
-}
-
-// PublicPacketCloudSpec is a public counterpart of apiv1.PacketCloudSpec.
-type PublicPacketCloudSpec struct{}
-
-func newPublicPacketCloudSpec(internal *kubermaticv1.PacketCloudSpec) (public *PublicPacketCloudSpec) {
-	if internal == nil {
-		return nil
-	}
-
-	return &PublicPacketCloudSpec{}
 }
 
 // PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.
@@ -1514,11 +1475,11 @@ type Node struct {
 // NodeCloudSpec represents the collection of cloud provider specific settings. Only one must be set at a time.
 // swagger:model NodeCloudSpec
 type NodeCloudSpec struct {
-	Digitalocean        *DigitaloceanNodeSpec        `json:"digitalocean,omitempty"`
-	AWS                 *AWSNodeSpec                 `json:"aws,omitempty"`
-	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
-	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
-	Packet              *PacketNodeSpec              `json:"packet,omitempty"`
+	Digitalocean *DigitaloceanNodeSpec `json:"digitalocean,omitempty"`
+	AWS          *AWSNodeSpec          `json:"aws,omitempty"`
+	Azure        *AzureNodeSpec        `json:"azure,omitempty"`
+	Openstack    *OpenstackNodeSpec    `json:"openstack,omitempty"`
+
 	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
@@ -2086,39 +2047,6 @@ func (spec *AWSNodeSpec) MarshalJSON() ([]byte, error) {
 		SpotInstancePersistentRequest:    spec.SpotInstancePersistentRequest,
 		SpotInstanceInterruptionBehavior: spec.SpotInstanceInterruptionBehavior,
 		EBSVolumeEncrypted:               spec.EBSVolumeEncrypted,
-	}
-
-	return json.Marshal(&res)
-}
-
-// PacketNodeSpec specifies packet specific node settings
-// swagger:model PacketNodeSpec
-type PacketNodeSpec struct {
-	// InstanceType denotes the plan to which the device will be provisioned.
-	// required: true
-	InstanceType string `json:"instanceType"`
-	// additional instance tags
-	// required: false
-	Tags []string `json:"tags"`
-}
-
-func (spec *PacketNodeSpec) MarshalJSON() ([]byte, error) {
-	missing := make([]string, 0)
-
-	if len(spec.InstanceType) == 0 {
-		missing = append(missing, "instanceType")
-	}
-
-	if len(missing) > 0 {
-		return []byte{}, fmt.Errorf("missing or invalid required parameter(s): %s", strings.Join(missing, ", "))
-	}
-
-	res := struct {
-		InstanceType string   `json:"instanceType"`
-		Tags         []string `json:"tags"`
-	}{
-		InstanceType: spec.InstanceType,
-		Tags:         spec.Tags,
 	}
 
 	return json.Marshal(&res)
