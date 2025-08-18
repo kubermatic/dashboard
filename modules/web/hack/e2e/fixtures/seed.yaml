@@ -102,7 +102,13 @@ spec:
           region: europe-west3
           zoneSuffixes:
             - c
-
+    packet-ewr1:
+      location: "Packet EWR1 (New York)"
+      country: US
+      spec:
+        packet:
+          facilities:
+            - ewr1
     do-ams3:
       location: Amsterdam
       country: NL

@@ -12701,6 +12701,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -12712,13 +12719,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -13316,6 +13316,12 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "StorageClassName",
+            "name": "storageClassName",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -13327,12 +13333,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "StorageClassName",
-            "name": "storageClassName",
-            "in": "query"
           }
         ],
         "responses": {
@@ -13836,6 +13836,35 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/OpenstackTenant"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "packet"
+        ],
+        "summary": "Lists sizes from packet (use Equinix Metal API endpoints instead).",
+        "operationId": "listPacketSizesNoCredentialsV2",
+        "responses": {
+          "200": {
+            "description": "PacketSizeList",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PacketSizeList"
               }
             }
           },

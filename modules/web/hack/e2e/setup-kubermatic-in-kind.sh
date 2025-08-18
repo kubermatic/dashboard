@@ -356,6 +356,20 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
+echodate "Creating UI Equinix Metal preset..."
+cat << EOF > preset-equinix.yaml
+apiVersion: kubermatic.k8c.io/v1
+kind: Preset
+metadata:
+  name: e2e-equinix
+  namespace: kubermatic
+spec:
+  packet:
+    apiKey: ${PACKET_API_KEY}
+    projectID: ${PACKET_PROJECT_ID}
+EOF
+retry 2 kubectl apply -f preset-equinix.yaml
+
 echodate "Creating UI Anexia preset..."
 cat << EOF > preset-anexia.yaml
 apiVersion: kubermatic.k8c.io/v1
