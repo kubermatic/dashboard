@@ -20,7 +20,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {AuditLoggingWebhookBackend, Provider} from '@shared/entity/cluster';
 import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
 import {DialogActionMode} from '@shared/types/common';
-import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
+import {DEPRECATED_PROVIDERS, INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
 import {NON_SPECIAL_CHARACTERS_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -72,7 +72,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly Provider = Provider;
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
-  readonly providers = INTERNAL_NODE_PROVIDERS;
+  readonly providers = INTERNAL_NODE_PROVIDERS.filter(provider => !DEPRECATED_PROVIDERS.includes(provider));
   seeds: string[] = [];
   form: FormGroup;
   requiredEmails: string[] = [];

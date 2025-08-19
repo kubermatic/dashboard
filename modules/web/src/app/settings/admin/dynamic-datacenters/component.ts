@@ -23,7 +23,7 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Datacenter} from '@shared/entity/datacenter';
-import {INTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
+import {DEPRECATED_PROVIDERS, INTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -84,7 +84,8 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       .pipe(tap(datacenters => this._setCountries(datacenters)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(datacenters => {
-        this.datacenters = datacenters;
+        // Filter out datacenters with deprecated providers
+        this.datacenters = datacenters.filter(dc => !DEPRECATED_PROVIDERS.includes(dc.spec.provider));
         this.filter();
       });
 
@@ -115,7 +116,9 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
   }
 
   private _setCountries(datacenters: Datacenter[]) {
-    const uniqueCountries = Array.from(new Set(datacenters.map(datacenter => datacenter.spec.country)));
+    // Only include countries from datacenters with non-deprecated providers
+    const filteredDatacenters = datacenters.filter(dc => !DEPRECATED_PROVIDERS.includes(dc.spec.provider));
+    const uniqueCountries = Array.from(new Set(filteredDatacenters.map(datacenter => datacenter.spec.country)));
     this.countries = _.sortBy(uniqueCountries, c => c.toLowerCase());
   }
 

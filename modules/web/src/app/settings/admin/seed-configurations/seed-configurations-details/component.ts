@@ -21,6 +21,7 @@ import {
   ProviderDetail,
   SeedOverviewDatasource,
 } from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {DEPRECATED_PROVIDERS} from '@app/shared/model/NodeProviderConstants';
 import {DatacenterService} from '@core/services/datacenter';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
@@ -113,8 +114,11 @@ export class SeedConfigurationDetailsComponent implements OnInit {
   }
 
   private _mapProviderDetailToArray(seedOverview: SeedOverview): ProviderDetail[] {
-    const providers = Object.keys(seedOverview.providers);
-
+    // Hide Deprecated Providers from Seed Overview
+    const providers = Object.keys(seedOverview.providers).filter(p => !DEPRECATED_PROVIDERS.includes(p));
+    if (!providers.length) {
+      return [];
+    }
     return providers.map(provider => {
       const providerObj = seedOverview.providers[provider];
       const datacenters = Object.keys(providerObj);

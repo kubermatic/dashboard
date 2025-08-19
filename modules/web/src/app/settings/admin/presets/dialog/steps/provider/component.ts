@@ -18,7 +18,12 @@ import {Mode} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetProvider} from '@shared/entity/preset';
-import {EXTERNAL_NODE_PROVIDERS, NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {
+  DEPRECATED_PROVIDERS,
+  EXTERNAL_NODE_PROVIDERS,
+  NodeProvider,
+  NodeProviderConstants,
+} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {takeUntil} from 'rxjs/operators';
@@ -80,7 +85,9 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
           ...EXTERNAL_NODE_PROVIDERS,
         ];
         const existingProviders = this.existingProviders.map(e => e.name);
-        this.providers = providers.filter(p => !existingProviders.includes(p) && !UNSUPPORTED_PROVIDERS.includes(p));
+        this.providers = providers.filter(
+          p => !existingProviders.includes(p) && !UNSUPPORTED_PROVIDERS.includes(p) && !DEPRECATED_PROVIDERS.includes(p)
+        );
       });
     }
 
