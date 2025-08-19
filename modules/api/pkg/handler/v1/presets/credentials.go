@@ -20,7 +20,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/go-kit/kit/endpoint"
 	"github.com/gorilla/mux"
@@ -33,7 +32,8 @@ import (
 	"k8s.io/utils/ptr"
 )
 
-// providerNames holds a list of providers. This is the list of fields in the kubermaticv1/Preset struct and It must stay in this order.
+// providerNames holds a list of supported providers. Used for validation only.
+// Field access is done using explicit switch cases for each provider.
 var providerNames = []string{
 	"digitalocean",
 	"hetzner",
@@ -80,62 +80,93 @@ func CredentialEndpoint(presetProvider provider.PresetProvider, userInfoGetter p
 		credentials := apiv1.CredentialList{}
 		names := make([]string, 0)
 
-		providerN := parseProvider(req.ProviderName)
 		presets, err := presetProvider.GetPresets(ctx, userInfo, ptr.To(""))
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, err.Error())
 		}
 
 		for _, preset := range presets {
-			// get specific provider by name from the Preset spec struct:
-			// type PresetSpec struct {
-			//	Digitalocean		Digitalocean
-			//	Hetzner      		Hetzner
-			//	Azure        		Azure
-			//	VSphere      		VSphere
-			// 	Baremetal			Baremetal
-			//	AWS          		AWS
-			//	Openstack    		Openstack
-			//	GCP          		GCP
-			//	Kubevirt     		Kubevirt
-			//	Alibaba      		Alibaba
-			//  Anexia       		Anexia
-			//  Nutanix      		Nutanix
-			//  VMwareCloudDirector VMwareCloudDirector
-			// }
-			providersRaw := reflect.ValueOf(preset.Spec)
-			if providersRaw.Kind() == reflect.Struct {
-				providers := reflect.Indirect(providersRaw)
-				providerItem := providers.Field(providerN)
+			var hasProvider bool
+			var datacenterValue string
 
-				// append preset name if specific provider is not empty:
-				if !providerItem.IsNil() {
-					var datacenterValue string
-					item := reflect.Indirect(providerItem)
-					datacenter := item.FieldByName("Datacenter")
-
-					if datacenter.Kind() == reflect.String {
-						datacenterValue = datacenter.String()
-					}
-					if datacenterValue == req.Datacenter || datacenterValue == "" {
-						names = append(names, preset.Name)
-					}
+			// check if preset has the requested provider and get datacenter value
+			switch req.ProviderName {
+			case "digitalocean":
+				if preset.Spec.Digitalocean != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Digitalocean.Datacenter
 				}
+			case "hetzner":
+				if preset.Spec.Hetzner != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Hetzner.Datacenter
+				}
+			case "azure":
+				if preset.Spec.Azure != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Azure.Datacenter
+				}
+			case "vsphere":
+				if preset.Spec.VSphere != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.VSphere.Datacenter
+				}
+			case "baremetal":
+				if preset.Spec.Baremetal != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Baremetal.Datacenter
+				}
+			case "aws":
+				if preset.Spec.AWS != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.AWS.Datacenter
+				}
+			case "openstack":
+				if preset.Spec.Openstack != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Openstack.Datacenter
+				}
+			case "gcp":
+				if preset.Spec.GCP != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.GCP.Datacenter
+				}
+			case "kubevirt":
+				if preset.Spec.Kubevirt != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Kubevirt.Datacenter
+				}
+			case "alibaba":
+				if preset.Spec.Alibaba != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Alibaba.Datacenter
+				}
+			case "anexia":
+				if preset.Spec.Anexia != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Anexia.Datacenter
+				}
+			case "nutanix":
+				if preset.Spec.Nutanix != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.Nutanix.Datacenter
+				}
+			case "vmwareclouddirector":
+				if preset.Spec.VMwareCloudDirector != nil {
+					hasProvider = true
+					datacenterValue = preset.Spec.VMwareCloudDirector.Datacenter
+				}
+			}
+
+			// append preset name if specific provider exists and datacenter matches
+			if hasProvider && (datacenterValue == req.Datacenter || datacenterValue == "") {
+				names = append(names, preset.Name)
 			}
 		}
 
 		credentials.Names = names
 		return credentials, nil
 	}
-}
-
-func parseProvider(p string) int {
-	elementMap := make(map[string]int)
-	for i, s := range providerNames {
-		elementMap[s] = i
-	}
-
-	return elementMap[p]
 }
 
 func DecodeProviderReq(c context.Context, r *http.Request) (interface{}, error) {
