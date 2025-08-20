@@ -50,12 +50,6 @@ export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
 );
 export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
 
-// Providers available for creating new clusters (excludes deprecated providers)
-// Todo: This will be removed once the deprecated providers are removed from presets.
-export const CLUSTER_NODE_PROVIDERS = NODE_PROVIDERS.filter(
-  (provider: NodeProvider) => !DEPRECATED_PROVIDERS.includes(provider)
-);
-
 export enum OperatingSystem {
   AmazonLinux2 = 'amzn2',
   Flatcar = 'flatcar',
