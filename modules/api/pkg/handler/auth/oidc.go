@@ -174,6 +174,38 @@ func (o *OpenIDClient) Exchange(ctx context.Context, code, overwriteRedirectURI 
 	return oidcToken, nil
 }
 
+func (o *OpenIDClient) RefreshAccessToken(ctx context.Context, refreshToken string) (authtypes.OIDCToken, error) {
+	tok := &oauth2.Token{RefreshToken: refreshToken}
+	tokenSource := o.oauth2Config("", "email").
+		TokenSource(ctx, tok)
+
+	tokens, err := tokenSource.Token()
+	if err != nil {
+		fmt.Println("token refresh failed: %w", err)
+		return authtypes.OIDCToken{}, fmt.Errorf("token refresh failed: %w", err)
+	}
+
+	rt := tokens.RefreshToken
+	if rt == "" {
+		rt = refreshToken
+	}
+
+	oidcToken := authtypes.OIDCToken{
+		AccessToken:  tokens.AccessToken,
+		RefreshToken: rt,
+		Expiry:       tokens.Expiry,
+	}
+
+	if rawIDToken, ok := tokens.Extra("id_token").(string); ok {
+		oidcToken.IDToken = rawIDToken
+	}
+
+	if oidcToken.IDToken == "" {
+		return authtypes.OIDCToken{}, fmt.Errorf("token refresh failed: id_token not found in the response")
+	}
+	return oidcToken, nil
+}
+
 func (o *OpenIDClient) GetRedirectURI(path string) (string, error) {
 	u, err := url.Parse(o.redirectURI)
 	if err != nil {
