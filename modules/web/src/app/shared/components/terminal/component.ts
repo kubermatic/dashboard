@@ -62,6 +62,7 @@ enum Operations {
 
 enum ErrorOperations {
   KubeConfigSecretMissing = 'KUBECONFIG_SECRET_MISSING',
+  WebTerminalTokenExpired = 'WEBTERMINAL_TOKEN_EXPIRED',
   WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
   RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
@@ -70,6 +71,7 @@ enum ErrorOperations {
 enum MessageTypes {
   Ping = 'PING',
   Pong = 'PONG',
+  WebTerminalTokenValid = 'WEBTERMINAL_TOKEN_VALID',
 }
 @Component({
   selector: 'km-terminal',
@@ -90,6 +92,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   terminal: Terminal;
   isConnectionLost: boolean;
   isSessionExpiring: boolean;
+  isTokenExpired: boolean;
   isLoadingTerminal = true;
   isDexAuthenticationPageOpened = false;
   showCloseButtonOnToolbar: boolean;
@@ -246,6 +249,11 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     this.isSessionExpiring = false;
   }
 
+  onTokenExpired(): void {
+    const url = this._getWebTerminalProxyURL();
+    window.open(url, '_blank');
+  }
+
   private _getWebTerminalProxyURL(): string {
     const userId = this._user?.id;
     return this._clusterService.getWebTerminalProxyURL(this.projectId, this.cluster.id, userId);
@@ -286,6 +294,10 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         this.message = 'Please wait, authenticate in order to access web terminal...';
       } else if (frame.Data === ErrorOperations.WebTerminalPodPending) {
         this.message = 'Please wait, provisioning your Web Terminal pod...';
+      } else if (frame.Data === ErrorOperations.WebTerminalTokenExpired) {
+        this.isTokenExpired = true;
+      } else if (frame.Data === MessageTypes.WebTerminalTokenValid) {
+        this.isTokenExpired = false;
       } else if (frame.Data === ErrorOperations.ConnectionPoolExceeded) {
         const message = `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions`;
         if (this.terminal) {
