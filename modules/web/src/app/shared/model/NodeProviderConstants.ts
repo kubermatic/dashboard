@@ -41,13 +41,12 @@ export const NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS = [
   NodeProvider.GCP,
   NodeProvider.OPENSTACK,
 ];
-
-// Todo: Needs to remove from Seed and Datacenter level
-export const DEPRECATED_PROVIDERS = ['packet'];
 export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
+
 export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
-  provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider) && !DEPRECATED_PROVIDERS.includes(provider)
+  provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider)
 );
+
 export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
 
 export enum OperatingSystem {
