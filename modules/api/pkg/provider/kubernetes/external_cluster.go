@@ -570,10 +570,6 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx cont
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
 		return createOrUpdateKubeOneHetznerSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
-	if cloud.Equinix != nil {
-		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneEquinixSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
-	}
 	if cloud.OpenStack != nil {
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
 		return createOrUpdateKubeOneOpenstackSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)

@@ -33,7 +33,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/hetzner"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
-	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/alibaba"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/anexia"
@@ -87,9 +86,6 @@ func createOrUpdateCredentialSecretForCluster(ctx context.Context, seedClient ct
 	}
 	if cluster.Spec.Cloud.Openstack != nil {
 		return createOrUpdateOpenstackSecret(ctx, seedClient, cluster, validate)
-	}
-	if cluster.Spec.Cloud.Packet != nil {
-		return createOrUpdatePacketSecret(ctx, seedClient, cluster, validate)
 	}
 	if cluster.Spec.Cloud.Kubevirt != nil {
 		return createOrUpdateKubevirtSecret(ctx, seedClient, cluster)
@@ -383,39 +379,6 @@ func createOrUpdateOpenstackSecret(ctx context.Context, seedClient ctrlruntimecl
 	cluster.Spec.Cloud.Openstack.ApplicationCredentialSecret = ""
 	cluster.Spec.Cloud.Openstack.ApplicationCredentialID = ""
 	cluster.Spec.Cloud.Openstack.UseToken = false
-
-	return true, nil
-}
-
-func createOrUpdatePacketSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, validate *ValidateCredentials) (bool, error) {
-	spec := cluster.Spec.Cloud.Packet
-
-	// already migrated
-	if spec.APIKey == "" && spec.ProjectID == "" {
-		return false, nil
-	}
-
-	if validate != nil {
-		if err := packet.ValidateCredentials(spec.APIKey, spec.ProjectID); err != nil {
-			return false, fmt.Errorf("invalid Equinixmetal credentials: %w", err)
-		}
-	}
-
-	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialSecret(ctx, seedClient, cluster, map[string][]byte{
-		resources.PacketAPIKey:    []byte(spec.APIKey),
-		resources.PacketProjectID: []byte(spec.ProjectID),
-	})
-	if err != nil {
-		return false, err
-	}
-
-	// add secret key selectors to cluster object
-	cluster.Spec.Cloud.Packet.CredentialsReference = credentialRef
-
-	// clean old inline credentials
-	cluster.Spec.Cloud.Packet.APIKey = ""
-	cluster.Spec.Cloud.Packet.ProjectID = ""
 
 	return true, nil
 }
@@ -848,33 +811,6 @@ func createOrUpdateKubeOneVSphereSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// add secret key selectors to externalCluster object
-	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
-
-	return nil
-}
-
-func createOrUpdateKubeOneEquinixSecret(ctx context.Context, cloud apiv2.KubeOneCloudSpec, masterClient ctrlruntimeclient.Client, secretName, kubermaticNamespace string, externalCluster *kubermaticv1.ExternalCluster) error {
-	apiKey := cloud.Equinix.APIKey
-	projectID := cloud.Equinix.ProjectID
-
-	if apiKey == "" || projectID == "" {
-		return utilerrors.NewBadRequest("kubeone Packet credentials missing")
-	}
-
-	if err := packet.ValidateCredentials(apiKey, projectID); err != nil {
-		return fmt.Errorf("invalid Packet credentials: %w", err)
-	}
-
-	// move credentials into dedicated Secret
-	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
-		resources.PacketAPIKey:    []byte(apiKey),
-		resources.PacketProjectID: []byte(projectID),
-	})
-	if err != nil {
-		return err
-	}
-
-	// add secret key selectors to cluster object
 	externalCluster.Spec.CloudSpec.KubeOne.CredentialsReference = credentialRef
 
 	return nil

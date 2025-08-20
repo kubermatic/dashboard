@@ -572,9 +572,7 @@
   @include mixins.provider-image('/assets/images/clouds/openstack.svg', 95px, 30px);
 }
 
-.km-provider-logo-packet {
-  @include mixins.provider-image('/assets/images/clouds/equinix.svg', 95px, 24px);
-}
+
 
 .km-provider-logo-kubevirt {
   @include mixins.provider-image('/assets/images/clouds/kubevirt.svg', 95px, 30px);

@@ -39,9 +39,6 @@ type ReplacedResources struct {
 	// do size
 	DoSize *DigitaloceanSize `json:"doSize,omitempty"`
 
-	// equinix size
-	EquinixSize *PacketSize `json:"equinixSize,omitempty"`
-
 	// gcp size
 	GcpSize *GCPMachineSize `json:"gcpSize,omitempty"`
 
@@ -85,10 +82,6 @@ func (m *ReplacedResources) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDoSize(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateEquinixSize(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -213,25 +206,6 @@ func (m *ReplacedResources) validateDoSize(formats strfmt.Registry) error {
 				return ve.ValidateName("doSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("doSize")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ReplacedResources) validateEquinixSize(formats strfmt.Registry) error {
-	if swag.IsZero(m.EquinixSize) { // not required
-		return nil
-	}
-
-	if m.EquinixSize != nil {
-		if err := m.EquinixSize.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("equinixSize")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("equinixSize")
 			}
 			return err
 		}
@@ -397,10 +371,6 @@ func (m *ReplacedResources) ContextValidate(ctx context.Context, formats strfmt.
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateEquinixSize(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateGcpSize(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -507,22 +477,6 @@ func (m *ReplacedResources) contextValidateDoSize(ctx context.Context, formats s
 				return ve.ValidateName("doSize")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("doSize")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ReplacedResources) contextValidateEquinixSize(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.EquinixSize != nil {
-		if err := m.EquinixSize.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("equinixSize")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("equinixSize")
 			}
 			return err
 		}

@@ -36,8 +36,7 @@ limitations under the License.
   <km-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
                               [formControl]="form.get(Control.ProviderBasic)">
   </km-hetzner-basic-node-data>
-  <km-equinix-basic-node-data *ngSwitchCase="Provider.EQUINIX"
-                              [formControl]="form.get(Control.ProviderBasic)"></km-equinix-basic-node-data>
+
   <km-azure-basic-node-data *ngSwitchCase="Provider.AZURE"
                             [formControl]="form.get(Control.ProviderBasic)"></km-azure-basic-node-data>
   <km-gcp-basic-node-data *ngSwitchCase="Provider.GCP"

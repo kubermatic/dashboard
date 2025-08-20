@@ -30,8 +30,6 @@ limitations under the License.
     <km-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></km-openstack-provider-settings>
     <km-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></km-vsphere-provider-settings>
     <km-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></km-azure-provider-settings>
-    <km-equinix-provider-settings *ngIf="!!cluster.spec.cloud.packet"
-                                  [billingCycle]="cluster.spec.cloud.packet.billingCycle"></km-equinix-provider-settings>
     <km-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></km-gcp-provider-settings>
     <km-nutanix-provider-settings *ngIf="!!cluster.spec.cloud.nutanix"></km-nutanix-provider-settings>
     <km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>

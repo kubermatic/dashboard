@@ -246,12 +246,7 @@ func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *ku
 		if err != nil {
 			return nil, err
 		}
-	case nd.Spec.Template.Cloud.Packet != nil && dc.Spec.Packet != nil:
-		config.CloudProvider = providerconfig.CloudProviderPacket
-		cloudExt, err = getPacketProviderSpec(c, nd.Spec.Template, dc)
-		if err != nil {
-			return nil, err
-		}
+
 	case nd.Spec.Template.Cloud.Edge != nil && dc.Spec.Edge != nil:
 		config.CloudProvider = providerconfig.CloudProviderEdge
 		cloudExt = &runtime.RawExtension{}
@@ -401,7 +396,6 @@ func Validate(nd *apiv1.NodeDeployment, controlPlaneVersion *semverlib.Version) 
 		nd.Spec.Template.Cloud.VSphere == nil &&
 		nd.Spec.Template.Cloud.Baremetal == nil &&
 		nd.Spec.Template.Cloud.Azure == nil &&
-		nd.Spec.Template.Cloud.Packet == nil &&
 		nd.Spec.Template.Cloud.GCP == nil &&
 		nd.Spec.Template.Cloud.Kubevirt == nil &&
 		nd.Spec.Template.Cloud.Alibaba == nil &&

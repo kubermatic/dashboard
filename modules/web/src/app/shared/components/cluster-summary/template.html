@@ -461,17 +461,7 @@ limitations under the License.
             </km-property>
           </ng-container>
 
-          <!-- Equinix -->
-          <ng-container *ngIf="cluster.spec.cloud?.packet">
-            <km-property>
-              <div key>Project ID</div>
-              <div value>{{cluster.spec.cloud?.packet.projectID}}</div>
-            </km-property>
-            <km-property>
-              <div key>Billing Cycle</div>
-              <div value>{{cluster.spec.cloud?.packet.billingCycle}}</div>
-            </km-property>
-          </ng-container>
+
 
           <!-- Nutanix -->
           <ng-container *ngIf="cluster.spec.cloud?.nutanix">
@@ -993,13 +983,7 @@ limitations under the License.
               </km-property>
             </ng-container>
 
-            <!-- Equinix Nodes -->
-            <ng-container *ngIf="machineDeployment.spec.template.cloud?.packet">
-              <km-property>
-                <div key>Instance Type</div>
-                <div value>{{machineDeployment.spec.template.cloud?.packet?.instanceType}}</div>
-              </km-property>
-            </ng-container>
+
 
             <!-- VSphere Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.vsphere">
@@ -1231,13 +1215,7 @@ limitations under the License.
               </div>
             </km-property>
 
-            <!-- Packet Tags -->
-            <km-property *ngIf="machineDeployment.spec.template.cloud?.packet?.tags?.length > 0">
-              <div key>Provider Tags</div>
-              <div value>
-                <km-labels [labels]="machineDeployment.spec.template.cloud?.packet.tags"></km-labels>
-              </div>
-            </km-property>
+
 
             <!-- Alibaba Labels -->
             <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud?.alibaba?.labels)">

@@ -72,7 +72,7 @@ export class NodeCloudSpec {
   digitalocean?: DigitaloceanNodeSpec;
   aws?: AWSNodeSpec;
   openstack?: OpenstackNodeSpec;
-  packet?: EquinixNodeSpec;
+
   hetzner?: HetznerNodeSpec;
   vsphere?: VSphereNodeSpec;
   azure?: AzureNodeSpec;
@@ -268,11 +268,6 @@ export class OpenstackNodeSpec {
   configDrive?: boolean;
 }
 
-export class EquinixNodeSpec {
-  instanceType: string;
-  tags: string[];
-}
-
 export class NutanixNodeSpec {
   subnetName: string;
   imageName: string;
@@ -379,11 +374,6 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         assignPublicIP: false,
         tags: {},
       } as AzureNodeSpec;
-    case NodeProvider.EQUINIX:
-      return {
-        instanceType: '',
-        tags: [],
-      } as EquinixNodeSpec;
     case NodeProvider.GCP:
       return {
         diskSize: 25,

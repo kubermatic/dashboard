@@ -197,10 +197,7 @@ limitations under the License.
               <div key>Node Size</div>
               <div value>{{element.spec.cloud.openstack.flavor}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.packet">
-              <div key>Instance Type</div>
-              <div value>{{element.spec.cloud.packet.instanceType}}</div>
-            </km-property>
+
             <km-property *ngIf="element.spec.cloud.alibaba">
               <div key>Instance Type</div>
               <div value>{{element.spec.cloud.alibaba.instanceType}}</div>
@@ -467,13 +464,7 @@ limitations under the License.
                            emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.packet && element.spec.cloud.packet.tags.length > 0">
-              <div key>Tags</div>
-              <div value>
-                <km-labels [labels]="element.spec.cloud.packet.tags"
-                           emptyMessage="No assigned tags"></km-labels>
-              </div>
-            </km-property>
+
             <km-property *ngIf="element.spec.cloud.openstack && hasTags(element.spec.cloud.openstack.tags)">
               <div key>Tags</div>
               <div value>

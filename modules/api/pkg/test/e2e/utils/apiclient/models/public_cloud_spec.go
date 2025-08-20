@@ -63,9 +63,6 @@ type PublicCloudSpec struct {
 	// openstack
 	Openstack *PublicOpenstackCloudSpec `json:"openstack,omitempty"`
 
-	// packet
-	Packet PublicPacketCloudSpec `json:"packet,omitempty"`
-
 	// vmwareclouddirector
 	Vmwareclouddirector *PublicVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
 

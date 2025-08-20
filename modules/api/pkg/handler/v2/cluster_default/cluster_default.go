@@ -275,8 +275,6 @@ func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType) 
 		cloudSpec.Hetzner = &kubermaticv1.HetznerCloudSpec{}
 	case kubermaticv1.OpenstackCloudProvider:
 		cloudSpec.Openstack = &kubermaticv1.OpenstackCloudSpec{}
-	case kubermaticv1.PacketCloudProvider:
-		cloudSpec.Packet = &kubermaticv1.PacketCloudSpec{}
 	case kubermaticv1.KubevirtCloudProvider:
 		cloudSpec.Kubevirt = &kubermaticv1.KubevirtCloudSpec{}
 	case kubermaticv1.VSphereCloudProvider:

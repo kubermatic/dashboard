@@ -58,7 +58,6 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20250429231206-7a3c70aae2a1 // v0.9.0+
 	github.com/open-policy-agent/gatekeeper/v3 v3.19.1
-	github.com/packethost/packngo v0.31.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1

@@ -475,42 +475,6 @@ func TestAWSNodeSpec_MarshalJSON(t *testing.T) {
 	}
 }
 
-func TestPacketNodeSpec_MarshalJSON(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name     string
-		spec     *apiv1.PacketNodeSpec
-		expected string
-	}{
-		{
-			"case 1: should fail when instance type is not provided",
-			&apiv1.PacketNodeSpec{},
-			"missing or invalid required parameter(s): instanceType",
-		},
-		{
-			"case 2: should marshal when instance type is provided",
-			&apiv1.PacketNodeSpec{
-				InstanceType: "test-instance",
-			},
-			"{\"instanceType\":\"test-instance\",\"tags\":null}",
-		},
-	}
-
-	for _, c := range cases {
-		t.Run(c.name, func(t *testing.T) {
-			marshalledBytes, err := json.Marshal(c.spec)
-			if err != nil && !strings.Contains(err.Error(), c.expected) {
-				t.Errorf("expected: %v,\nbut got: %v", c.expected, err.Error())
-			}
-
-			if len(marshalledBytes) > 0 && string(marshalledBytes) != c.expected {
-				t.Errorf("expected: %v,\nbut got: %v", c.expected, string(marshalledBytes))
-			}
-		})
-	}
-}
-
 func TestGCPNodeSpec_MarshalJSON(t *testing.T) {
 	t.Parallel()
 

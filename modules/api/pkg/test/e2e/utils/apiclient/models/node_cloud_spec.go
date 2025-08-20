@@ -57,9 +57,6 @@ type NodeCloudSpec struct {
 	// openstack
 	Openstack *OpenstackNodeSpec `json:"openstack,omitempty"`
 
-	// packet
-	Packet *PacketNodeSpec `json:"packet,omitempty"`
-
 	// vmwareclouddirector
 	Vmwareclouddirector *VMwareCloudDirectorNodeSpec `json:"vmwareclouddirector,omitempty"`
 
@@ -116,10 +113,6 @@ func (m *NodeCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOpenstack(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePacket(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -365,25 +358,6 @@ func (m *NodeCloudSpec) validateOpenstack(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *NodeCloudSpec) validatePacket(formats strfmt.Registry) error {
-	if swag.IsZero(m.Packet) { // not required
-		return nil
-	}
-
-	if m.Packet != nil {
-		if err := m.Packet.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("packet")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("packet")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *NodeCloudSpec) validateVmwareclouddirector(formats strfmt.Registry) error {
 	if swag.IsZero(m.Vmwareclouddirector) { // not required
 		return nil
@@ -471,10 +445,6 @@ func (m *NodeCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Regi
 	}
 
 	if err := m.contextValidateOpenstack(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidatePacket(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -676,22 +646,6 @@ func (m *NodeCloudSpec) contextValidateOpenstack(ctx context.Context, formats st
 				return ve.ValidateName("openstack")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("openstack")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *NodeCloudSpec) contextValidatePacket(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Packet != nil {
-		if err := m.Packet.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("packet")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("packet")
 			}
 			return err
 		}

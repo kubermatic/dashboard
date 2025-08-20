@@ -24,7 +24,6 @@ export enum Provider {
   KubeVirt = 'kubevirt',
   Nutanix = 'nutanix',
   OpenStack = 'openstack',
-  Equinix = 'packet',
   VSphere = 'vsphere',
   Baremetal = 'baremetal',
 }
@@ -74,10 +73,6 @@ export enum Openstack {
   Syseleven = 'dbl1',
 }
 
-export enum Equinix {
-  NewYork = 'New York',
-}
-
 export enum VSphere {
   Hamburg = 'Hamburg',
 }
@@ -94,5 +89,4 @@ export type Datacenter =
   | KubeVirt
   | Nutanix
   | Openstack
-  | Equinix
   | VSphere;

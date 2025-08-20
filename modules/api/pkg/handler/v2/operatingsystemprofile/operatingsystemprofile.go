@@ -49,22 +49,22 @@ var defaultOperatingSystemProfiles = []apiv2.OperatingSystemProfile{
 	{
 		Name:                    "osp-flatcar",
 		OperatingSystem:         "flatcar",
-		SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "gce", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
+		SupportedCloudProviders: []string{"aws", "azure", "gce", "kubevirt", "openstack", "vsphere", "vmware-cloud-director"},
 	},
 	{
 		Name:                    "osp-rhel",
 		OperatingSystem:         "rhel",
-		SupportedCloudProviders: []string{"aws", "azure", "equinixmetal", "kubevirt", "openstack", "vsphere"},
+		SupportedCloudProviders: []string{"aws", "azure", "kubevirt", "openstack", "vsphere"},
 	},
 	{
 		Name:                    "osp-rockylinux",
 		OperatingSystem:         "rockylinux",
-		SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "equinixmetal", "hetzner", "kubevirt", "openstack", "vsphere"},
+		SupportedCloudProviders: []string{"aws", "azure", "digitalocean", "hetzner", "kubevirt", "openstack", "vsphere"},
 	},
 	{
 		Name:                    "osp-ubuntu",
 		OperatingSystem:         "ubuntu",
-		SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "edge", "equinixmetal", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
+		SupportedCloudProviders: []string{"alibaba", "aws", "azure", "baremetal", "digitalocean", "edge", "gce", "hetzner", "kubevirt", "nutanix", "openstack", "vmware-cloud-director", "vsphere"},
 	},
 }
 

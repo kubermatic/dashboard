@@ -25,7 +25,7 @@ import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
 import {EditProviderSettingsComponent} from '../component';
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
-import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/component';
+
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
@@ -47,7 +47,7 @@ describe('HetznerProviderSettingsComponent', () => {
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
         AzureProviderSettingsComponent,
-        EquinixProviderSettingsComponent,
+
         GCPProviderSettingsComponent,
         KubevirtProviderSettingsComponent,
         AlibabaProviderSettingsComponent,

@@ -27,7 +27,7 @@ import {AzureSettingsComponent} from '@app/settings/admin/presets/dialog/steps/s
 import {BaremetalSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/baremetal/component';
 import {DigitaloceanSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/digitalocean/component';
 import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
-import {EquinixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/equinix/component';
+
 import {GCPSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gcp/component';
 import {GKESettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gke/component';
 import {HetznerSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/hetzner/component';
@@ -68,7 +68,7 @@ import {AdminAnnouncementDialogComponent} from './announcements/announcement-dia
     HetznerSettingsComponent,
     KubevirtSettingsComponent,
     OpenstackSettingsComponent,
-    EquinixSettingsComponent,
+
     VSphereSettingsComponent,
     NutanixSettingsComponent,
     VMwareCloudDirectorSettingsComponent,

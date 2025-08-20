@@ -18,7 +18,6 @@ import {
   fakeAzureCluster,
   fakeBringyourownCluster,
   fakeDigitaloceanCluster,
-  fakeEquinixCluster,
   fakeHetznerCluster,
   fakeOpenstackCluster,
   fakeVSphereCluster,
@@ -35,7 +34,6 @@ describe('ClusterEntity', () => {
     expect(Cluster.getProvider(fakeHetznerCluster())).toBe(Provider.Hetzner);
     expect(Cluster.getProvider(fakeVSphereCluster())).toBe(Provider.VSphere);
     expect(Cluster.getProvider(fakeAzureCluster())).toBe(Provider.Azure);
-    expect(Cluster.getProvider(fakeEquinixCluster())).toBe(Provider.Equinix);
     expect(Cluster.getProvider(fakeAlibabaCluster())).toBe(Provider.Alibaba);
   });
 });

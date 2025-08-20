@@ -47,34 +47,6 @@ export function fakeDigitaloceanCluster(): Cluster {
   };
 }
 
-export function fakeEquinixCluster(): Cluster {
-  return {
-    creationTimestamp: new Date(),
-    id: '4k6txp5sq',
-    name: 'nifty-haibt',
-    spec: {
-      cloud: {
-        dc: 'equinix-ams',
-        packet: {
-          apiKey: '123',
-          projectID: '1',
-          billingCycle: 'hourly',
-        },
-        providerName: 'packet',
-      },
-      version: '1.8.5',
-      apiServerAllowedIPRanges: {
-        cidrBlocks: ['10.0.0.0/8'],
-      },
-    },
-    status: {
-      url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5',
-      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
-    },
-  };
-}
-
 export function fakeHetznerCluster(): Cluster {
   return {
     creationTimestamp: new Date(),

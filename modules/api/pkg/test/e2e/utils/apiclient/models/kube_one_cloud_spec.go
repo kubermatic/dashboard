@@ -27,9 +27,6 @@ type KubeOneCloudSpec struct {
 	// digitalocean
 	Digitalocean *KubeOneDigitalOceanCloudSpec `json:"digitalocean,omitempty"`
 
-	// equinix
-	Equinix *KubeOneEquinixCloudSpec `json:"equinix,omitempty"`
-
 	// gcp
 	Gcp *KubeOneGCPCloudSpec `json:"gcp,omitempty"`
 
@@ -62,10 +59,6 @@ func (m *KubeOneCloudSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateDigitalocean(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateEquinix(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -148,25 +141,6 @@ func (m *KubeOneCloudSpec) validateDigitalocean(formats strfmt.Registry) error {
 				return ve.ValidateName("digitalocean")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("digitalocean")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *KubeOneCloudSpec) validateEquinix(formats strfmt.Registry) error {
-	if swag.IsZero(m.Equinix) { // not required
-		return nil
-	}
-
-	if m.Equinix != nil {
-		if err := m.Equinix.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("equinix")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("equinix")
 			}
 			return err
 		}
@@ -305,10 +279,6 @@ func (m *KubeOneCloudSpec) ContextValidate(ctx context.Context, formats strfmt.R
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateEquinix(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateGcp(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -379,22 +349,6 @@ func (m *KubeOneCloudSpec) contextValidateDigitalocean(ctx context.Context, form
 				return ve.ValidateName("digitalocean")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("digitalocean")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *KubeOneCloudSpec) contextValidateEquinix(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.Equinix != nil {
-		if err := m.Equinix.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("equinix")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("equinix")
 			}
 			return err
 		}

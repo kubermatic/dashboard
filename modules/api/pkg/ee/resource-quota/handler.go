@@ -84,7 +84,6 @@ type ProviderNodeTemplate struct {
 	AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
 	AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
 	DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
-	EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
 	GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
 	HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
 	KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
@@ -403,10 +402,6 @@ func MapProviderNodeTmplToResourceDetails(provider ProviderNodeTemplate, replica
 		if err = getDOResourceDetails(provider, nc); err != nil {
 			return nil, err
 		}
-	case provider.EquinixSize != nil:
-		if err = getEquinixResourceDetails(provider, nc); err != nil {
-			return nil, err
-		}
 	case provider.GCPSize != nil:
 		if err = getGCPResourceDetails(provider, nc); err != nil {
 			return nil, err
@@ -520,43 +515,6 @@ func getDOResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.
 	if err := nc.WithStorage(provider.DOSize.Disk, "G"); err != nil {
 		return err
 	}
-	return nil
-}
-
-func getEquinixResourceDetails(provider ProviderNodeTemplate, nc *kubermaticprovider.NodeCapacity) error {
-	cpuCount := 0
-	for _, c := range provider.EquinixSize.CPUs {
-		cpuCount += c.Count
-	}
-	nc.WithCPUCount(cpuCount)
-
-	// trimming "B" as quantities must match the regular expression '^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$'.
-	memory, err := resource.ParseQuantity(strings.TrimSuffix(provider.EquinixSize.Memory, "B"))
-	if err != nil {
-		return err
-	}
-	nc.Memory = &memory
-
-	allDrivesStorage := resource.Quantity{}
-	for _, drive := range provider.EquinixSize.Drives {
-		if drive.Size == "" || drive.Count == 0 {
-			continue
-		}
-
-		storage, err := resource.ParseQuantity(strings.TrimSuffix(drive.Size, "B"))
-		if err != nil {
-			return err
-		}
-
-		// total storage for each type = drive count *drive Size.
-		strDrive := strconv.FormatInt(storage.Value()*int64(drive.Count), 10)
-		totalStorage, err := resource.ParseQuantity(strDrive)
-		if err != nil {
-			return err
-		}
-		allDrivesStorage.Add(totalStorage)
-	}
-	nc.Storage = &allDrivesStorage
 	return nil
 }
 

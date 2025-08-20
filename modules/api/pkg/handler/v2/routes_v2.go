@@ -914,11 +914,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/projects/{project_id}/providers/openstack/servergroups").
 		Handler(r.listProjectOpenstackServerGroups())
 
-	// Equinix Metal (Packet) endpoints
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/providers/equinixmetal/sizes").
-		Handler(r.listProjectEquinixMetalSizes())
-
 	// Hetzner endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/hetzner/sizes").
@@ -1060,14 +1055,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/vswitches").
 		Handler(r.listAlibabaVSwitchesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes").
-		Handler(r.listPacketSizesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes").
-		Handler(r.listEquinixMetalSizesNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/anexia/vlans").
@@ -4802,54 +4789,6 @@ func (r Routing) listAlibabaVSwitchesNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/packet/sizes packet listPacketSizesNoCredentialsV2
-//
-// Lists sizes from packet (use Equinix Metal API endpoints instead).
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listPacketSizesNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.EquinixMetalSizesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalSizesNoCredentialsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/equinixmetal/sizes equinixmetal listEquinixMetalSizesNoCredentialsV2
-//
-// Lists sizes from Equinix Metal.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listEquinixMetalSizesNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.EquinixMetalSizesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalSizesNoCredentialsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/anexia/vlans anexia listAnexiaVlansNoCredentialsV2
 //
 // Lists vlans from Anexia
@@ -7128,28 +7067,6 @@ func (r Routing) listProjectVMwareCloudDirectorTemplates() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.VMwareCloudDirectorTemplatesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeVMwareCloudDirectorProjectListTemplatesReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
-// swagger:route GET /api/v2/projects/{project_id}/providers/equinixmetal/sizes equinixmetal listProjectEquinixMetalSizes
-//
-// Lists sizes from Equinix Metal.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: []PacketSizeList
-func (r Routing) listProjectEquinixMetalSizes() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-		)(provider.EquinixMetalProjectSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeEquinixMetalProjectSizesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

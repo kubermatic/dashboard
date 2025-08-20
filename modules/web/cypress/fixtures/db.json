@@ -177,25 +177,7 @@
         "enforcePodSecurityPolicy": false
       }
     },
-    {
-      "metadata": {
-        "name": "test-equinix-dc"
-      },
-      "spec": {
-        "seed": "test-seed",
-        "country": "US",
-        "location": "Packet EWR1 (New York)",
-        "provider": "packet",
-        "packet": {
-          "facilities": [
-            "ewr1"
-          ]
-        },
-        "node": {},
-        "enforceAuditLogging": false,
-        "enforcePodSecurityPolicy": false
-      }
-    },
+
     {
       "metadata": {
         "name": "test-openstack-dc"

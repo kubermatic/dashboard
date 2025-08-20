@@ -46,11 +46,6 @@ export namespace Endpoint {
     Sizes = '**/api/**/gcp/sizes',
     Zones = '**/api/**/gcp/*/zones',
   }
-
-  export enum Equinix {
-    Sizes = '**/api/**/equinixmetal/sizes',
-  }
-
   export enum Hetzner {
     Sizes = '**/api/**/hetzner/sizes',
   }
