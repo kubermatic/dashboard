@@ -2623,19 +2623,20 @@ func (spec *OpenNebulaNodeSpec) MarshalJSON() ([]byte, error) {
 // VMwareCloudDirectorNodeSpec VMware Cloud Director node settings
 // swagger:model VMwareCloudDirectorNodeSpec
 type VMwareCloudDirectorNodeSpec struct {
-	CPUs             int                                  `json:"cpus"`
-	CPUCores         int                                  `json:"cpuCores"`
-	MemoryMB         int                                  `json:"memoryMB"`
-	DiskSizeGB       *int64                               `json:"diskSizeGB,omitempty"`
-	DiskIOPS         *int64                               `json:"diskIOPS,omitempty"`
-	Template         string                               `json:"template"`
-	Catalog          string                               `json:"catalog"`
-	StorageProfile   string                               `json:"storageProfile"`
-	IPAllocationMode vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
-	VApp             string                               `json:"vapp,omitempty"`
-	Network          string                               `json:"network,omitempty"`
-	PlacementPolicy  *string                              `json:"placementPolicy,omitempty"`
-	SizingPolicy     *string                              `json:"sizingPolicy,omitempty"`
+	CPUs               int                                  `json:"cpus"`
+	CPUCores           int                                  `json:"cpuCores"`
+	MemoryMB           int                                  `json:"memoryMB"`
+	DiskSizeGB         *int64                               `json:"diskSizeGB,omitempty"`
+	DiskIOPS           *int64                               `json:"diskIOPS,omitempty"`
+	Template           string                               `json:"template"`
+	Catalog            string                               `json:"catalog"`
+	StorageProfile     string                               `json:"storageProfile"`
+	IPAllocationMode   vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
+	VApp               string                               `json:"vapp,omitempty"`
+	Network            string                               `json:"network,omitempty"`
+	AdditionalNetworks []string                             `json:"additionalNetworks,omitempty"`
+	PlacementPolicy    *string                              `json:"placementPolicy,omitempty"`
+	SizingPolicy       *string                              `json:"sizingPolicy,omitempty"`
 	// Additional metadata to set
 	// required: false
 	Metadata map[string]string `json:"metadata,omitempty"`
@@ -2677,35 +2678,37 @@ func (spec *VMwareCloudDirectorNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		CPUs             int                                  `json:"cpus"`
-		CPUCores         int                                  `json:"cpuCores"`
-		MemoryMB         int                                  `json:"memoryMB"`
-		DiskSizeGB       *int64                               `json:"diskSizeGB,omitempty"`
-		DiskIOPS         *int64                               `json:"diskIOPS,omitempty"`
-		Catalog          string                               `json:"catalog"`
-		Template         string                               `json:"template"`
-		StorageProfile   string                               `json:"storageProfile,omitempty"`
-		IPAllocationMode vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
-		VApp             string                               `json:"vapp,omitempty"`
-		Network          string                               `json:"network,omitempty"`
-		Metadata         map[string]string                    `json:"metadata,omitempty"`
-		PlacementPolicy  *string                              `json:"placementPolicy,omitempty"`
-		SizingPolicy     *string                              `json:"sizingPolicy,omitempty"`
+		CPUs               int                                  `json:"cpus"`
+		CPUCores           int                                  `json:"cpuCores"`
+		MemoryMB           int                                  `json:"memoryMB"`
+		DiskSizeGB         *int64                               `json:"diskSizeGB,omitempty"`
+		DiskIOPS           *int64                               `json:"diskIOPS,omitempty"`
+		Catalog            string                               `json:"catalog"`
+		Template           string                               `json:"template"`
+		StorageProfile     string                               `json:"storageProfile,omitempty"`
+		IPAllocationMode   vmwareclouddirector.IPAllocationMode `json:"ipAllocationMode,omitempty"`
+		VApp               string                               `json:"vapp,omitempty"`
+		Network            string                               `json:"network,omitempty"`
+		AdditionalNetworks []string                             `json:"additionalNetworks,omitempty"`
+		Metadata           map[string]string                    `json:"metadata,omitempty"`
+		PlacementPolicy    *string                              `json:"placementPolicy,omitempty"`
+		SizingPolicy       *string                              `json:"sizingPolicy,omitempty"`
 	}{
-		CPUs:             spec.CPUs,
-		CPUCores:         spec.CPUCores,
-		MemoryMB:         spec.MemoryMB,
-		DiskSizeGB:       spec.DiskSizeGB,
-		DiskIOPS:         spec.DiskIOPS,
-		Catalog:          spec.Catalog,
-		Template:         spec.Template,
-		StorageProfile:   spec.StorageProfile,
-		IPAllocationMode: spec.IPAllocationMode,
-		VApp:             spec.VApp,
-		Network:          spec.Network,
-		Metadata:         spec.Metadata,
-		PlacementPolicy:  spec.PlacementPolicy,
-		SizingPolicy:     spec.SizingPolicy,
+		CPUs:               spec.CPUs,
+		CPUCores:           spec.CPUCores,
+		MemoryMB:           spec.MemoryMB,
+		DiskSizeGB:         spec.DiskSizeGB,
+		DiskIOPS:           spec.DiskIOPS,
+		Catalog:            spec.Catalog,
+		Template:           spec.Template,
+		StorageProfile:     spec.StorageProfile,
+		IPAllocationMode:   spec.IPAllocationMode,
+		VApp:               spec.VApp,
+		Network:            spec.Network,
+		AdditionalNetworks: spec.AdditionalNetworks,
+		Metadata:           spec.Metadata,
+		PlacementPolicy:    spec.PlacementPolicy,
+		SizingPolicy:       spec.SizingPolicy,
 	}
 
 	return json.Marshal(&res)
