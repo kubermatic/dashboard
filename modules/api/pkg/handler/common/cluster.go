@@ -196,20 +196,9 @@ func GenerateCluster(
 		partialCluster.Annotations = body.Cluster.Annotations
 	}
 
-	credentialName := body.Cluster.Credential
-	if len(credentialName) > 0 {
-		cloudSpec, err := credentialManager.SetCloudCredentials(ctx, adminUserInfo, projectID, credentialName, body.Cluster.Spec.Cloud, dc)
-		if err != nil {
-			return nil, utilerrors.NewBadRequest("invalid credentials: %v", err)
-		}
-
-		if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
-			body.Cluster.Credential = ""
-		} else {
-			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
-			partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
-		}
-		body.Cluster.Spec.Cloud = *cloudSpec
+	// Handle credentials configuration
+	if err := handleCredentials(ctx, body, partialCluster, adminUserInfo, projectID, credentialManager, dc); err != nil {
+		return nil, err
 	}
 
 	// Fetch the defaulting ClusterTemplate.
@@ -228,6 +217,14 @@ func GenerateCluster(
 
 	partialCluster.Spec = *spec
 
+	// Generate the name here so that it can be used below.
+	partialCluster.Name = utilcluster.MakeClusterName()
+
+	// Handle encryption at rest configuration after cluster spec is created
+	if err := handleEncryptionAtRest(ctx, privilegedClusterProvider, partialCluster, body.EncryptionAtRest); err != nil {
+		return nil, utilerrors.NewBadRequest("invalid encryption configuration: %v", err)
+	}
+
 	if err := clustermutation.MutateCreate(partialCluster, config, seed, cloudProvider); err != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
 	}
@@ -241,9 +238,6 @@ func GenerateCluster(
 	if err = validation.ValidateUpdateWindow(partialCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-
-	// Generate the name here so that it can be used below.
-	partialCluster.Name = utilcluster.MakeClusterName()
 
 	// Serialize initial machine deployment request into annotation if it is in the body and provider different than
 	// BringYourOwn was selected. The request will be transformed into machine deployment by the controller once cluster
@@ -578,6 +572,13 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
 	newInternalCluster.Spec.DisableCSIDriver = patchedCluster.Spec.DisableCSIDriver
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
+
+	// Handle encryption configuration clean up when disabled
+	if patchedCluster.Spec.EncryptionConfiguration != nil && !patchedCluster.Spec.EncryptionConfiguration.Enabled {
+		newInternalCluster.Spec.EncryptionConfiguration = nil
+	} else {
+		newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
+	}
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
@@ -1000,6 +1001,37 @@ func UpdateClusterSSHKey(ctx context.Context, userInfoGetter provider.UserInfoGe
 	return nil
 }
 
+// handleCredentials handles the credentials configuration for cluster creation.
+func handleCredentials(
+	ctx context.Context,
+	body apiv1.CreateClusterSpec,
+	partialCluster *kubermaticv1.Cluster,
+	adminUserInfo *provider.UserInfo,
+	projectID string,
+	credentialManager provider.PresetProvider,
+	dc *kubermaticv1.Datacenter,
+) error {
+	credentialName := body.Cluster.Credential
+	if len(credentialName) == 0 {
+		return nil
+	}
+
+	cloudSpec, err := credentialManager.SetCloudCredentials(ctx, adminUserInfo, projectID, credentialName, body.Cluster.Spec.Cloud, dc)
+	if err != nil {
+		return utilerrors.NewBadRequest("invalid credentials: %v", err)
+	}
+
+	if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
+		body.Cluster.Credential = ""
+	} else {
+		partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
+		partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
+	}
+	body.Cluster.Spec.Cloud = *cloudSpec
+
+	return nil
+}
+
 func updateCluster(ctx context.Context, userInfoGetter provider.UserInfoGetter, clusterProvider provider.ClusterProvider, privilegedClusterProvider provider.PrivilegedClusterProvider, project *kubermaticv1.Project, cluster *kubermaticv1.Cluster) (*kubermaticv1.Cluster, error) {
 	adminUserInfo, err := userInfoGetter(ctx, "")
 	if err != nil {
@@ -1154,6 +1186,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 			Kyverno:                              internalCluster.Spec.Kyverno,
+			EncryptionConfiguration:              getEncryptionConfigurationOrDefault(internalCluster.Spec.EncryptionConfiguration, internalCluster.Spec.Features),
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,
@@ -1317,4 +1350,79 @@ func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInf
 	// TODO: Add all other providers
 
 	return false
+}
+
+func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provider.PrivilegedClusterProvider, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
+	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
+		return nil
+	}
+
+	if encryptionAtRest == nil || encryptionAtRest.Key == "" {
+		return fmt.Errorf("encryption key is required when encryption at rest is enabled")
+	}
+
+	// Set static resources for encryption configuration
+	if cluster.Spec.EncryptionConfiguration.Resources == nil {
+		cluster.Spec.EncryptionConfiguration.Resources = []string{"secrets"}
+	}
+
+	// set secretbox configuration with secret reference
+	if cluster.Spec.EncryptionConfiguration.Secretbox == nil {
+		cluster.Spec.EncryptionConfiguration.Secretbox = &kubermaticv1.SecretboxEncryptionConfiguration{}
+	}
+
+	// Create the encryption secret name based on cluster name
+	secretName := fmt.Sprintf("encryption-key-cluster-%s", cluster.Name)
+
+	cluster.Spec.EncryptionConfiguration.Secretbox.Keys = []kubermaticv1.SecretboxKey{{
+		Name: secretName,
+		SecretRef: &corev1.SecretKeySelector{
+			LocalObjectReference: corev1.LocalObjectReference{
+				Name: secretName,
+			},
+			Key: "key",
+		},
+	}}
+
+	// Create the secret in Kubermatic namespace at seed level
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: resources.KubermaticNamespace,
+			Annotations: map[string]string{
+				"kubermatic.io/cluster-name": cluster.Name, // KKP will use cluster name to copy secret to user cluster namespace
+			},
+		},
+		Data: map[string][]byte{
+			"key": []byte(encryptionAtRest.Key),
+		},
+		Type: corev1.SecretTypeOpaque,
+	}
+
+	if err := seedClient.Create(ctx, secret); err != nil {
+		return fmt.Errorf("failed to create encryption secret: %w", err)
+	}
+
+	return nil
+}
+
+func getEncryptionConfigurationOrDefault(config *kubermaticv1.EncryptionConfiguration, features map[string]bool) *kubermaticv1.EncryptionConfiguration {
+	enabled := false
+	if config != nil {
+		enabled = config.Enabled
+	} else if features != nil {
+		enabled = features["encryptionAtRest"]
+	}
+
+	// Return nil if encryption is not enabled
+	if !enabled {
+		return nil
+	}
+
+	// Return minimal config when enabled
+	return &kubermaticv1.EncryptionConfiguration{
+		Enabled:   true,
+		Resources: []string{"secrets"},
+	}
 }
