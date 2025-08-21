@@ -52,6 +52,9 @@ type OIDCIssuer interface {
 	// Exchange converts an authorization code into a token.
 	Exchange(ctx context.Context, code, overwriteRedirectURI string) (OIDCToken, error)
 
+	// RefreshAccessToken uses a refresh token to obtain a new OIDC token.
+	RefreshAccessToken(ctx context.Context, refreshToken string) (OIDCToken, error)
+
 	// OIDCConfig returns the issuers OIDC config
 	OIDCConfig() *OIDCConfiguration
 }

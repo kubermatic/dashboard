@@ -21,23 +21,37 @@ limitations under the License.
     <div>
       <i class="km-icon-warning"></i>
     </div>
-    <div>
+    <div [ngSwitch]="sessionState">
+      <p *ngSwitchCase="'expired'">
+        Session expired. Authenticate again and wait a few seconds for the new kubeconfig to mount.
+      </p>
 
-      <ng-container *ngIf="isConnectionLost; else sessionExpiration">
-        <p>The connection to your Web Terminal was lost.</p>
-      </ng-container>
+      <p *ngSwitchCase="'connectionLost'">
+        The connection to your Web Terminal was lost.
+      </p>
 
-      <ng-template #sessionExpiration>
-        <p>The web session will expire soon.</p>
-      </ng-template>
+      <p *ngSwitchCase="'expiring'">
+        The web session will expire soon.
+      </p>
     </div>
   </div>
 
-  <div fxFlex
+  <div [ngSwitch]="sessionState"
+       fxFlex
        fxLayout="row"
        fxLayoutAlign="end center"
        fxLayoutGap="10px">
-    <button *ngIf="isConnectionLost"
+    <button *ngSwitchCase="'expired'"
+            mat-flat-button
+            class="button-border-box"
+            matTooltip="Authenticate again to regain access"
+            (click)="onTokenExpired()">
+      <i class="km-icon-mask km-icon-reconnect"
+         matButtonIcon></i>
+      <span>Authenticate</span>
+    </button>
+
+    <button *ngSwitchCase="'connectionLost'"
             mat-flat-button
             class="button-border-box"
             matTooltip="Gain lost connection to terminal"
@@ -47,7 +61,7 @@ limitations under the License.
       <span>Reconnect</span>
     </button>
 
-    <button *ngIf="isSessionExpiring"
+    <button *ngSwitchCase="'expiring'"
             mat-flat-button
             class="button-border-box"
             matTooltip="Retain current session to terminal"
