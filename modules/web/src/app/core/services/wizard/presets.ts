@@ -85,7 +85,6 @@ export class PresetsService {
   provider(provider: NodeProvider.HETZNER): Hetzner;
   provider(provider: NodeProvider.KUBEVIRT): KubeVirt;
   provider(provider: NodeProvider.OPENSTACK): Openstack;
-
   provider(provider: NodeProvider.VSPHERE): VSphere;
   provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider.ANEXIA): Anexia;
@@ -107,7 +106,6 @@ export class PresetsService {
         return new KubeVirt(this._http, this._projectService.selectedProjectID, NodeProvider.KUBEVIRT);
       case NodeProvider.OPENSTACK:
         return new Openstack(this._http, this._projectService.selectedProjectID, NodeProvider.OPENSTACK);
-
       case NodeProvider.VSPHERE:
         return new VSphere(this._http, this._projectService.selectedProjectID, NodeProvider.VSPHERE);
       case NodeProvider.ALIBABA:

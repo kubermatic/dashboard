@@ -114,9 +114,6 @@ export class SeedConfigurationDetailsComponent implements OnInit {
 
   private _mapProviderDetailToArray(seedOverview: SeedOverview): ProviderDetail[] {
     const providers: string[] = Object.keys(seedOverview.providers);
-    if (!providers.length) {
-      return [];
-    }
 
     return providers.map(provider => {
       const providerObj = seedOverview.providers[provider];

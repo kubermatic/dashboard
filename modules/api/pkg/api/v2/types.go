@@ -624,7 +624,6 @@ type KubeOneCloudSpec struct {
 	Azure        *KubeOneAzureCloudSpec        `json:"azure,omitempty"`
 	DigitalOcean *KubeOneDigitalOceanCloudSpec `json:"digitalocean,omitempty"`
 	OpenStack    *KubeOneOpenStackCloudSpec    `json:"openstack,omitempty"`
-
 	Hetzner             *KubeOneHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *KubeOneVSphereCloudSpec             `json:"vsphere,omitempty"`
 	VMwareCloudDirector *KubeOneVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`

@@ -51,7 +51,6 @@ import {GCPProviderSettingsComponent} from './details/cluster/edit-provider-sett
 import {HetznerProviderSettingsComponent} from './details/cluster/edit-provider-settings/hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from './details/cluster/edit-provider-settings/kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from './details/cluster/edit-provider-settings/openstack-provider-settings/component';
-
 import {VSphereProviderSettingsComponent} from './details/cluster/edit-provider-settings/vsphere-provider-settings/component';
 import {EditSSHKeysComponent} from './details/cluster/edit-sshkeys/component';
 import {GatekeeperConfigComponent} from './details/cluster/gatekeeper-config/component';
@@ -121,7 +120,6 @@ const components: any[] = [
   OpenstackProviderSettingsComponent,
   VSphereProviderSettingsComponent,
   AzureProviderSettingsComponent,
-
   KubevirtProviderSettingsComponent,
   AlibabaProviderSettingsComponent,
   VMwareCloudDirectorProviderSettingsComponent,

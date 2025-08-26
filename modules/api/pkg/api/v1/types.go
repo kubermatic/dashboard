@@ -78,7 +78,6 @@ type DatacenterSpec struct {
 	Azure        *kubermaticv1.DatacenterSpecAzure        `json:"azure,omitempty"`
 	Edge         *kubermaticv1.DatacenterSpecEdge         `json:"edge,omitempty"`
 	Openstack    *kubermaticv1.DatacenterSpecOpenstack    `json:"openstack,omitempty"`
-
 	GCP                 *kubermaticv1.DatacenterSpecGCP                 `json:"gcp,omitempty"`
 	Hetzner             *kubermaticv1.DatacenterSpecHetzner             `json:"hetzner,omitempty"`
 	VSphere             *kubermaticv1.DatacenterSpecVSphere             `json:"vsphere,omitempty"`
@@ -1096,7 +1095,6 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 			AWS:            newPublicAWSCloudSpec(cs.Cloud.AWS),
 			Azure:          newPublicAzureCloudSpec(cs.Cloud.Azure),
 			Openstack:      newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
-
 			Hetzner:             newPublicHetznerCloudSpec(cs.Cloud.Hetzner),
 			VSphere:             newPublicVSphereCloudSpec(cs.Cloud.VSphere),
 			Baremetal:           newPublicBaremetalCloudSpec(cs.Cloud.Baremetal),
@@ -1479,7 +1477,6 @@ type NodeCloudSpec struct {
 	AWS          *AWSNodeSpec          `json:"aws,omitempty"`
 	Azure        *AzureNodeSpec        `json:"azure,omitempty"`
 	Openstack    *OpenstackNodeSpec    `json:"openstack,omitempty"`
-
 	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
