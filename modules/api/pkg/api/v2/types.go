@@ -619,11 +619,11 @@ type KubeOneSSHKey struct {
 }
 
 type KubeOneCloudSpec struct {
-	AWS          *KubeOneAWSCloudSpec          `json:"aws,omitempty"`
-	GCP          *KubeOneGCPCloudSpec          `json:"gcp,omitempty"`
-	Azure        *KubeOneAzureCloudSpec        `json:"azure,omitempty"`
-	DigitalOcean *KubeOneDigitalOceanCloudSpec `json:"digitalocean,omitempty"`
-	OpenStack    *KubeOneOpenStackCloudSpec    `json:"openstack,omitempty"`
+	AWS                 *KubeOneAWSCloudSpec                 `json:"aws,omitempty"`
+	GCP                 *KubeOneGCPCloudSpec                 `json:"gcp,omitempty"`
+	Azure               *KubeOneAzureCloudSpec               `json:"azure,omitempty"`
+	DigitalOcean        *KubeOneDigitalOceanCloudSpec        `json:"digitalocean,omitempty"`
+	OpenStack           *KubeOneOpenStackCloudSpec           `json:"openstack,omitempty"`
 	Hetzner             *KubeOneHetznerCloudSpec             `json:"hetzner,omitempty"`
 	VSphere             *KubeOneVSphereCloudSpec             `json:"vsphere,omitempty"`
 	VMwareCloudDirector *KubeOneVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`

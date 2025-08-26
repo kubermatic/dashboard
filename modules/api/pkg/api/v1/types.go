@@ -70,14 +70,14 @@ type DatacenterSpec struct {
 	Location string `json:"location,omitempty"`
 	// Name of the datacenter provider. Extracted based on which provider is defined in the spec.
 	// It is used for informational purposes.
-	Provider     string                                   `json:"provider,omitempty"`
-	Digitalocean *kubermaticv1.DatacenterSpecDigitalocean `json:"digitalocean,omitempty"`
-	BringYourOwn *kubermaticv1.DatacenterSpecBringYourOwn `json:"bringyourown,omitempty"`
-	Baremetal    *kubermaticv1.DatacenterSpecBaremetal    `json:"baremetal,omitempty"`
-	AWS          *kubermaticv1.DatacenterSpecAWS          `json:"aws,omitempty"`
-	Azure        *kubermaticv1.DatacenterSpecAzure        `json:"azure,omitempty"`
-	Edge         *kubermaticv1.DatacenterSpecEdge         `json:"edge,omitempty"`
-	Openstack    *kubermaticv1.DatacenterSpecOpenstack    `json:"openstack,omitempty"`
+	Provider            string                                          `json:"provider,omitempty"`
+	Digitalocean        *kubermaticv1.DatacenterSpecDigitalocean        `json:"digitalocean,omitempty"`
+	BringYourOwn        *kubermaticv1.DatacenterSpecBringYourOwn        `json:"bringyourown,omitempty"`
+	Baremetal           *kubermaticv1.DatacenterSpecBaremetal           `json:"baremetal,omitempty"`
+	AWS                 *kubermaticv1.DatacenterSpecAWS                 `json:"aws,omitempty"`
+	Azure               *kubermaticv1.DatacenterSpecAzure               `json:"azure,omitempty"`
+	Edge                *kubermaticv1.DatacenterSpecEdge                `json:"edge,omitempty"`
+	Openstack           *kubermaticv1.DatacenterSpecOpenstack           `json:"openstack,omitempty"`
 	GCP                 *kubermaticv1.DatacenterSpecGCP                 `json:"gcp,omitempty"`
 	Hetzner             *kubermaticv1.DatacenterSpecHetzner             `json:"hetzner,omitempty"`
 	VSphere             *kubermaticv1.DatacenterSpecVSphere             `json:"vsphere,omitempty"`
@@ -1087,14 +1087,14 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		Kyverno                              *kubermaticv1.KyvernoSettings          `json:"kyverno,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
-			DatacenterName: cs.Cloud.DatacenterName,
-			Fake:           newPublicFakeCloudSpec(cs.Cloud.Fake),
-			Digitalocean:   newPublicDigitaloceanCloudSpec(cs.Cloud.Digitalocean),
-			BringYourOwn:   newPublicBringYourOwnCloudSpec(cs.Cloud.BringYourOwn),
-			Edge:           newPublicEdgeCloudSpec(cs.Cloud.Edge),
-			AWS:            newPublicAWSCloudSpec(cs.Cloud.AWS),
-			Azure:          newPublicAzureCloudSpec(cs.Cloud.Azure),
-			Openstack:      newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
+			DatacenterName:      cs.Cloud.DatacenterName,
+			Fake:                newPublicFakeCloudSpec(cs.Cloud.Fake),
+			Digitalocean:        newPublicDigitaloceanCloudSpec(cs.Cloud.Digitalocean),
+			BringYourOwn:        newPublicBringYourOwnCloudSpec(cs.Cloud.BringYourOwn),
+			Edge:                newPublicEdgeCloudSpec(cs.Cloud.Edge),
+			AWS:                 newPublicAWSCloudSpec(cs.Cloud.AWS),
+			Azure:               newPublicAzureCloudSpec(cs.Cloud.Azure),
+			Openstack:           newPublicOpenstackCloudSpec(cs.Cloud.Openstack),
 			Hetzner:             newPublicHetznerCloudSpec(cs.Cloud.Hetzner),
 			VSphere:             newPublicVSphereCloudSpec(cs.Cloud.VSphere),
 			Baremetal:           newPublicBaremetalCloudSpec(cs.Cloud.Baremetal),
@@ -1473,10 +1473,10 @@ type Node struct {
 // NodeCloudSpec represents the collection of cloud provider specific settings. Only one must be set at a time.
 // swagger:model NodeCloudSpec
 type NodeCloudSpec struct {
-	Digitalocean *DigitaloceanNodeSpec `json:"digitalocean,omitempty"`
-	AWS          *AWSNodeSpec          `json:"aws,omitempty"`
-	Azure        *AzureNodeSpec        `json:"azure,omitempty"`
-	Openstack    *OpenstackNodeSpec    `json:"openstack,omitempty"`
+	Digitalocean        *DigitaloceanNodeSpec        `json:"digitalocean,omitempty"`
+	AWS                 *AWSNodeSpec                 `json:"aws,omitempty"`
+	Azure               *AzureNodeSpec               `json:"azure,omitempty"`
+	Openstack           *OpenstackNodeSpec           `json:"openstack,omitempty"`
 	Baremetal           *BaremetalNodeSpec           `json:"baremetal,omitempty"`
 	Edge                *EdgeNodeSpec                `json:"edge,omitempty"`
 	Hetzner             *HetznerNodeSpec             `json:"hetzner,omitempty"`
