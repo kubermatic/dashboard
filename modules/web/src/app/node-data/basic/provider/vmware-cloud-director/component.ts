@@ -400,7 +400,7 @@ export class VMwareCloudDirectorBasicNodeDataComponent
       [Controls.PlacementPolicy]: this._builder.control(values ? values.placementPolicy : defaults.placementPolicy),
       [Controls.SizingPolicy]: this._builder.control(values ? values.sizingPolicy : defaults.sizingPolicy),
       [Controls.Network]: this._builder.control(values?.network ?? this.networks[0], Validators.required),
-      [Controls.AdditionalNetworks]: this._builder.control(values?.additionalNetworks ?? []),
+      [Controls.AdditionalNetworks]: this._builder.control(values?.additionalNetworks ?? defaults.additionalNetworks),
     });
   }
 
