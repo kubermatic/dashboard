@@ -212,9 +212,6 @@ func (m *PresetProvider) SetCloudCredentials(ctx context.Context, userInfo *prov
 	if cloud.Digitalocean != nil {
 		return m.setDigitalOceanCredentials(preset, cloud)
 	}
-	if cloud.Packet != nil {
-		return m.setPacketCredentials(preset, cloud)
-	}
 	if cloud.Hetzner != nil {
 		return m.setHetznerCredentials(preset, cloud)
 	}
@@ -314,23 +311,6 @@ func (m *PresetProvider) setHetznerCredentials(preset *kubermaticv1.Preset, clou
 
 	cloud.Hetzner.Token = preset.Spec.Hetzner.Token
 	cloud.Hetzner.Network = preset.Spec.Hetzner.Network
-
-	return &cloud, nil
-}
-
-func (m *PresetProvider) setPacketCredentials(preset *kubermaticv1.Preset, cloud kubermaticv1.CloudSpec) (*kubermaticv1.CloudSpec, error) {
-	if preset.Spec.Packet == nil {
-		return nil, emptyCredentialError(preset.Name, "Packet")
-	}
-
-	credentials := preset.Spec.Packet
-	cloud.Packet.ProjectID = credentials.ProjectID
-	cloud.Packet.APIKey = credentials.APIKey
-
-	cloud.Packet.BillingCycle = credentials.BillingCycle
-	if len(credentials.BillingCycle) == 0 {
-		cloud.Packet.BillingCycle = "hourly"
-	}
 
 	return &cloud, nil
 }
