@@ -34,6 +34,7 @@ type Providers struct {
 	SeedsGetter               provider.SeedsGetter
 	SeedClientGetter          provider.SeedClientGetter
 	ClusterProviderGetter     provider.ClusterProviderGetter
+	OIDCIssuerVerifierGetter  provider.OIDCIssuerVerifierGetter
 }
 
 type SettingsWatcher interface {
