@@ -554,26 +554,6 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				build(),
 		},
 		{
-			Name:      "should process equinix request successfully",
-			ProjectID: test.GenDefaultProject().Name,
-			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
-				newRQBuilder().
-					withQuota("12", "10G", "30G").
-					withGlobalUsage("2", "3G", "5G").
-					build()),
-			ExistingAPIUser: test.GenDefaultAPIUser(),
-			RequestBody: newCalcReq().
-				withReplicas(2).
-				withEquinix(2, "3GB", "10GB").
-				encode(t),
-			ExpectedHTTPStatusCode: http.StatusOK,
-			ExpectedResponse: newRQUpdateCalculationBuilder().
-				withQuota(genAPIQuota(12, 10, 30)).
-				withGlobalUsage(genAPIQuota(2, 3, 5)).
-				withCalculatedQuota(genAPIQuota(6, 9, 25)).
-				build(),
-		},
-		{
 			Name:      "should process gcp request successfully",
 			ProjectID: test.GenDefaultProject().Name,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
@@ -889,15 +869,6 @@ func (c *calcReq) withDO(cpu, memory, storage int) *calcReq {
 		VCPUs:  cpu,
 		Memory: memory,
 		Disk:   storage,
-	}
-	return c
-}
-
-func (c *calcReq) withEquinix(cpu int, memory, storage string) *calcReq {
-	c.EquinixSize = &apiv1.PacketSize{
-		CPUs:   []apiv1.PacketCPU{{Count: cpu}},
-		Memory: memory,
-		Drives: []apiv1.PacketDrive{{Size: storage, Count: 1}},
 	}
 	return c
 }

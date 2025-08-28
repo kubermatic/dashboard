@@ -23,7 +23,7 @@ type KubeOneSpec struct {
 
 	// ProviderName is the name of the cloud provider used, one of
 	// "aws", "azure", "digitalocean", "gcp",
-	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers.
+	// "hetzner", "nutanix", "openstack", "vsphere" KubeOne natively-supported providers.
 	// + readOnly
 	ProviderName string `json:"providerName,omitempty"`
 

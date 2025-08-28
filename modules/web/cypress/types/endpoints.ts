@@ -36,10 +36,6 @@ enum Digitalocean {
   Sizes = '**/api/**/digitalocean/sizes',
 }
 
-enum Equinix {
-  Sizes = '**/api/**/equinixmetal/sizes',
-}
-
 enum GCP {
   DiskTypes = '**/api/**/gcp/disktypes',
   Sizes = '**/api/**/gcp/sizes',
@@ -59,7 +55,7 @@ enum OpenStack {
   Sizes = '**/api/**/openstack/sizes',
 }
 
-const Provider = {Alibaba, Anexia, AWS, Azure, Digitalocean, Equinix, GCP, Hetzner, Nutanix, OpenStack};
+const Provider = {Alibaba, Anexia, AWS, Azure, Digitalocean, GCP, Hetzner, Nutanix, OpenStack};
 type Provider = typeof Provider;
 
 enum Cluster {

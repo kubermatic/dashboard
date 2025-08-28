@@ -60,13 +60,6 @@ enum Digitalocean {
   Sizes = 'digitalocean/sizes.json',
 }
 
-enum Equinix {
-  ClusterList = 'equinix/clusters.json',
-  Cluster = 'equinixcluster.json',
-  MachineDeploymentList = 'equinix/machinedeployments.json',
-  MachineDeployment = 'equinix/machinedeployment.json',
-}
-
 enum GCP {
   ClusterList = 'gcp/clusters.json',
   Cluster = 'gcp/cluster.json',
@@ -95,7 +88,7 @@ enum OpenStack {
   MachineDeployment = 'openstack/machinedeployment.json',
 }
 
-const Provider = {Alibaba, Anexia, AWS, Azure, BringYourOwn, Digitalocean, Equinix, GCP, Hetzner, Nutanix, OpenStack};
+const Provider = {Alibaba, Anexia, AWS, Azure, BringYourOwn, Digitalocean, GCP, Hetzner, Nutanix, OpenStack};
 type Provider = typeof Provider;
 
 enum SSHKey {

@@ -51,7 +51,6 @@ import {AWSService} from '@core/services/provider/aws';
 import {AzureService} from '@core/services/provider/azure';
 import {BaremetalService} from '@core/services/provider/baremetal';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
-import {EquinixService} from '@core/services/provider/equinix';
 import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
@@ -133,7 +132,6 @@ const services = [
   AzureService,
   DigitalOceanService,
   KubeVirtService,
-  EquinixService,
   GCPService,
   HetznerService,
   OpenStackService,

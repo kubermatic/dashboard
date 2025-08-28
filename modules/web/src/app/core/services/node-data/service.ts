@@ -27,7 +27,7 @@ import {AWSService} from '@core/services/provider/aws';
 import {AzureService} from '@core/services/provider/azure';
 import {BaremetalService} from '@core/services/provider/baremetal';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
-import {EquinixService} from '@core/services/provider/equinix';
+
 import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
@@ -47,7 +47,7 @@ import {NodeDataAnexiaProvider} from './provider/anexia';
 import {NodeDataAWSProvider} from './provider/aws';
 import {NodeDataAzureProvider} from './provider/azure';
 import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
-import {NodeDataEquinixProvider} from './provider/equinix';
+
 import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
 import {NodeDataNutanixProvider} from './provider/nutanix';
@@ -72,7 +72,7 @@ export class NodeDataService {
     private readonly _azureService: AzureService,
     private readonly _digitalOceanService: DigitalOceanService,
     private readonly _kubeVirtService: KubeVirtService,
-    private readonly _equinixService: EquinixService,
+
     private readonly _gcpService: GCPService,
     private readonly _hetznerService: HetznerService,
     private readonly _nutanixService: NutanixService,
@@ -227,13 +227,7 @@ export class NodeDataService {
     this._nutanixService,
     this._projectService
   );
-  readonly equinix = new NodeDataEquinixProvider(
-    this,
-    this._clusterSpecService,
-    this._presetService,
-    this._equinixService,
-    this._projectService
-  );
+
   readonly gcp = new NodeDataGCPProvider(
     this,
     this._clusterSpecService,
