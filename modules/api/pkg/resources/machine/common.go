@@ -355,14 +355,29 @@ func GetVMwareCloudDirectorProviderConfig(c *kubermaticv1.Cluster, nodeSpec apiv
 		config.PlacementPolicy = nodeSpec.Cloud.VMwareCloudDirector.PlacementPolicy
 	}
 
+	var networks []providerconfig.ConfigVarString
+
 	switch {
 	case nodeSpec.Cloud.VMwareCloudDirector.Network != "":
-		config.Network = providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VMwareCloudDirector.Network}
+		networks = append(networks, providerconfig.ConfigVarString{Value: nodeSpec.Cloud.VMwareCloudDirector.Network})
 	case c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork != "":
-		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork}
+		networks = append(networks, providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetwork})
 	case len(c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks) > 0:
-		config.Network = providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks[0]}
+		networks = append(networks, providerconfig.ConfigVarString{Value: c.Spec.Cloud.VMwareCloudDirector.OVDCNetworks[0]})
 	}
+
+networkLoop:
+	for _, network := range nodeSpec.Cloud.VMwareCloudDirector.AdditionalNetworks {
+		// Check if network is already registered in the slice
+		for _, registered := range networks {
+			if registered.Value == network {
+				continue networkLoop
+			}
+		}
+		networks = append(networks, providerconfig.ConfigVarString{Value: network})
+	}
+
+	config.Networks = networks
 
 	return config, nil
 }
