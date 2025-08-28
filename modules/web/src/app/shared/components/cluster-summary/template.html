@@ -260,6 +260,11 @@ limitations under the License.
                                  label="Cluster Backup"
                                  [value]="!!cluster.spec.backupConfig">
             </km-property-boolean>
+
+            <km-property-boolean *ngIf="cluster.spec.encryptionConfiguration?.enabled"
+                                 label="Encryption at Rest"
+                                 [value]="cluster.spec.encryptionConfiguration?.enabled">
+            </km-property-boolean>
           </div>
           <div fxLayout="row wrap">
             <ng-container *ngIf="cluster.spec.auditLogging?.webhookBackend as webhookBackend">

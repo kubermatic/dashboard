@@ -298,6 +298,16 @@ export class WizardComponent implements OnInit, OnDestroy {
         [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }
+
+    const encryptionEnabled = cluster.spec?.encryptionConfiguration?.enabled;
+    const encryptionKey = this._clusterSpecService.encryptionAtRestKey;
+
+    if (encryptionEnabled && encryptionKey) {
+      clusterModel.encryptionAtRest = {
+        key: encryptionKey,
+      };
+    }
+
     return clusterModel;
   }
 
