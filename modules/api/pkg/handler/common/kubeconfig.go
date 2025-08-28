@@ -348,16 +348,35 @@ func CreateOIDCKubeconfigEndpoint(
 
 			// create auth entry
 			clientCmdAuth := clientcmdapi.NewAuthInfo()
-			clientCmdAuthProvider := &clientcmdapi.AuthProviderConfig{Config: map[string]string{}}
-			clientCmdAuthProvider.Name = oidc
-			clientCmdAuthProvider.Config["id-token"] = oidcTokens.IDToken
-			clientCmdAuthProvider.Config["refresh-token"] = oidcTokens.RefreshToken
-			clientCmdAuthProvider.Config["idp-issuer-url"] = oidcIssuerVerifier.OIDCConfig().URL
-			clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
-			clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
-			clientCmdAuth.AuthProvider = clientCmdAuthProvider
-			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
 
+			if req.OIDCKubeLoginEnabled {
+				execConfig := &clientcmdapi.ExecConfig{
+					APIVersion: "client.authentication.k8s.io/v1",
+					Command:    "kubectl",
+					Args: []string{
+						"oidc-login",
+						"get-token",
+						"--oidc-issuer-url=" + oidcIssuerVerifier.OIDCConfig().URL,
+						"--oidc-client-id=" + oidcIssuerVerifier.OIDCConfig().ClientID,
+						"--oidc-client-secret=" + oidcIssuerVerifier.OIDCConfig().ClientSecret,
+						"--oidc-extra-scope=email",
+					},
+					InteractiveMode:    clientcmdapi.NeverExecInteractiveMode,
+					ProvideClusterInfo: false,
+				}
+				clientCmdAuth.Exec = execConfig
+			} else {
+				clientCmdAuthProvider := &clientcmdapi.AuthProviderConfig{Config: map[string]string{}}
+				clientCmdAuthProvider.Name = oidc
+				clientCmdAuthProvider.Config["id-token"] = oidcTokens.IDToken
+				clientCmdAuthProvider.Config["refresh-token"] = oidcTokens.RefreshToken
+				clientCmdAuthProvider.Config["idp-issuer-url"] = oidcIssuerVerifier.OIDCConfig().URL
+				clientCmdAuthProvider.Config["client-id"] = oidcIssuerVerifier.OIDCConfig().ClientID
+				clientCmdAuthProvider.Config["client-secret"] = oidcIssuerVerifier.OIDCConfig().ClientSecret
+				clientCmdAuth.AuthProvider = clientCmdAuthProvider
+			}
+
+			oidcKubeCfg.AuthInfos[claims.Email] = clientCmdAuth
 			// create default ctx
 			clientCmdCtx := clientcmdapi.NewContext()
 			clientCmdCtx.Cluster = req.ClusterID
@@ -606,9 +625,10 @@ func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, em
 // swagger:parameters createOIDCKubeconfig
 type CreateOIDCKubeconfigReq struct {
 	// in: query
-	ClusterID string `json:"cluster_id,omitempty"`
-	ProjectID string `json:"project_id,omitempty"`
-	UserID    string `json:"user_id,omitempty"`
+	ClusterID            string `json:"cluster_id,omitempty"`
+	ProjectID            string `json:"project_id,omitempty"`
+	UserID               string `json:"user_id,omitempty"`
+	OIDCKubeLoginEnabled bool   `json:"oidc_kubelogin_enabled,omitempty"`
 
 	// not exported so that they don't leak to swagger spec.
 	// Embed the original request
@@ -747,6 +767,7 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 	req.ClusterID = r.URL.Query().Get("cluster_id")
 	req.ProjectID = r.URL.Query().Get("project_id")
 	req.UserID = r.URL.Query().Get("user_id")
+	req.OIDCKubeLoginEnabled = r.URL.Query().Get("oidc_kubelogin_enabled") == "true"
 	if len(req.ClusterID) == 0 || len(req.ProjectID) == 0 || len(req.UserID) == 0 {
 		return nil, errors.New("the following query parameters cluster_id, project_id, user_id are mandatory, please make sure that all are set")
 	}

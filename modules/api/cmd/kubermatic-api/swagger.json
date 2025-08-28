@@ -1353,6 +1353,12 @@
             "x-go-name": "UserID",
             "name": "user_id",
             "in": "query"
+          },
+          {
+            "type": "boolean",
+            "x-go-name": "OIDCKubeLoginEnabled",
+            "name": "oidc_kubelogin_enabled",
+            "in": "query"
           }
         ],
         "responses": {
