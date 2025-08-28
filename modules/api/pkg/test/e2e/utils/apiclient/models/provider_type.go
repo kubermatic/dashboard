@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// ProviderType +kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;packet;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector
+// ProviderType +kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector
 //
 // swagger:model ProviderType
 type ProviderType string

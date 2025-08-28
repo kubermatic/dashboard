@@ -18,6 +18,9 @@ import (
 // swagger:model NodeSettings
 type NodeSettings struct {
 
+	// Optional: EnableNonRootDeviceOwnership enables the non-root device ownership feature in the container runtime.
+	EnableNonRootDeviceOwnership bool `json:"enableNonRootDeviceOwnership,omitempty"`
+
 	// Optional: These image registries will be configured as insecure
 	// on the container runtime.
 	InsecureRegistries []string `json:"insecureRegistries"`
