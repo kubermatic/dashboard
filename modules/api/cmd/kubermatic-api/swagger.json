@@ -31075,6 +31075,11 @@
         "containerdRegistryMirrors": {
           "$ref": "#/definitions/ContainerRuntimeContainerd"
         },
+        "enableNonRootDeviceOwnership": {
+          "description": "Optional: EnableNonRootDeviceOwnership enables the non-root device ownership feature in the container runtime.",
+          "type": "boolean",
+          "x-go-name": "EnableNonRootDeviceOwnership"
+        },
         "insecureRegistries": {
           "description": "Optional: These image registries will be configured as insecure\non the container runtime.",
           "type": "array",
@@ -37224,6 +37229,11 @@
         "containerdRegistryMirrors": {
           "$ref": "#/definitions/ContainerRuntimeContainerd"
         },
+        "enableNonRootDeviceOwnership": {
+          "description": "Optional: EnableNonRootDeviceOwnership enables the non-root device ownership feature in the container runtime.",
+          "type": "boolean",
+          "x-go-name": "EnableNonRootDeviceOwnership"
+        },
         "httpProxy": {
           "$ref": "#/definitions/ProxyValue"
         },
@@ -38613,7 +38623,7 @@
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "Packet": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.",
+      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nNOOP.",
       "type": "object",
       "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
       "properties": {
@@ -38648,9 +38658,8 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "PacketCloudSpec": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nPacketCloudSpec specifies access data to a Packet cloud.",
       "type": "object",
-      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
+      "title": "NOOP.",
       "properties": {
         "apiKey": {
           "type": "string",
@@ -39396,7 +39405,7 @@
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "ProviderType": {
-      "description": "+kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;packet;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector",
+      "description": "+kubebuilder:validation:Enum=digitalocean;hetzner;azure;vsphere;aws;openstack;gcp;kubevirt;nutanix;alibaba;anexia;fake;vmwareclouddirector",
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
