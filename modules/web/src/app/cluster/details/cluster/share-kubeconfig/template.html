@@ -39,7 +39,7 @@ limitations under the License.
     <mat-radio-button [value]="false"
                       class="km-radio-button">
       <div class="km-radio-button-title">
-        OIDC via auth-provider
+        OIDC via KKP API
       </div>
       <div class="km-radio-button-description">
         Stores the token directly in the kubeconfig file.
@@ -48,7 +48,7 @@ limitations under the License.
     <mat-radio-button [value]="true"
                       class="km-radio-button">
       <div class="km-radio-button-title">
-        OIDC via exec plugin
+        OIDC via oidc-login plugin
       </div>
       <div class="km-radio-button-description">
         Uses the kubectl oidc-login plugin to fetch tokens dynamically.
@@ -58,41 +58,55 @@ limitations under the License.
   <ng-container *ngIf="isOIDCKubeLoginEnabled">
     <div class="km-plugin-instructions">
       <label>
-        <b>To use this option, install the kubelogin plugin:</b> <br>
+        <i class="km-icon-info"></i>
+        <b>To use this option, install the kubelogin plugin:</b>
       </label>
-
-      <p>
-        # On Linux / macOS
-      </p>
-      <div class="terminal-command">
-        <p>
-          {{brewInstallCommand}}
-        </p>
-        <button mat-icon-button
-                ngxClipboard
-                [cbContent]="brewInstallCommand"
-                matTooltip="Click to copy">
-          <i class="km-icon-mask km-icon-copy"></i>
-        </button>
-      </div>
-      <p>
-        # On Windows (Chocolatey)
-      </p>
-      <div class="terminal-command">
-        <p>
-          {{chocoInstallCommand}}
-        </p>
-        <button mat-icon-button
-                ngxClipboard
-                [cbContent]="chocoInstallCommand"
-                matTooltip="Click to copy">
-          <i class="km-icon-mask km-icon-copy"></i>
-        </button>
-      </div>
-      <p>
-        Once installed, <code>kubectl oidc-login</code> will fetch tokens dynamically.
-      </p>
-
+      <ul>
+        <li>
+          On Linux / macOS
+          <div class="terminal-command">
+            <p>
+              {{brewInstallCommand}}
+            </p>
+            <button mat-icon-button
+                    ngxClipboard
+                    [cbContent]="brewInstallCommand"
+                    matTooltip="Click to copy">
+              <i class="km-icon-mask km-icon-copy"></i>
+            </button>
+          </div>
+        </li>
+        <li>
+          On Windows (Chocolatey)
+          <div class="terminal-command">
+            <p>
+              {{chocoInstallCommand}}
+            </p>
+            <button mat-icon-button
+                    ngxClipboard
+                    [cbContent]="chocoInstallCommand"
+                    matTooltip="Click to copy">
+              <i class="km-icon-mask km-icon-copy"></i>
+            </button>
+          </div>
+        </li>
+        <li>
+          Krew kubectl plugin manager.<a href="https://krew.sigs.k8s.io/docs/user-guide/setup/install/"
+             target="_blank"
+             rel="noopener">docs <i class="km-icon-external-link i-18"></i></a>
+          <div class="terminal-command">
+            <p>
+              {{krewInstallCommand}}
+            </p>
+            <button mat-icon-button
+                    ngxClipboard
+                    [cbContent]="krewInstallCommand"
+                    matTooltip="Click to copy">
+              <i class="km-icon-mask km-icon-copy"></i>
+            </button>
+          </div>
+        </li>
+      </ul>
     </div>
   </ng-container>
   <div *ngIf="dialogTitle === shareKubeconfigDialogTitle.Share"

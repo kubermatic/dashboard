@@ -15,6 +15,12 @@
 @use 'sass:map';
 
 @mixin theme-share-kubeconfig-component($colors) {
+  .km-plugin-instructions{
+    border: solid 1px map.get($colors, secondary);
+    border-radius: 25px;
+
+  }
+
   .terminal-command {
     background-color: map.get($colors, option-background-hover);
 

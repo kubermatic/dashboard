@@ -40,6 +40,7 @@ export class ShareKubeconfigComponent implements OnInit {
   readonly shareKubeconfigDialogTitle = ShareKubeconfigDialogTitle;
   readonly brewInstallCommand = 'brew install kubelogin';
   readonly chocoInstallCommand = 'choco install kubelogin';
+  readonly krewInstallCommand = 'kubectl krew install oidc-login';
   kubeconfigLink: string;
   editionVersion: string = getEditionVersion();
   isOIDCKubeLoginEnabled = false;
@@ -67,7 +68,6 @@ export class ShareKubeconfigComponent implements OnInit {
   getDownloadLink(): void {
     this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
       this.projectID,
-      this.seed,
       this.cluster.id,
       this._userID,
       this.isOIDCKubeLoginEnabled

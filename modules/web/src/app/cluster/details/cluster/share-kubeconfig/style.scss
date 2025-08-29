@@ -23,12 +23,8 @@
 }
 
 .km-plugin-instructions {
-  margin: 25px 75px;
-
-  label {
-    position: relative;
-    right: 75px;
-  }
+  margin: 25px;
+  padding: 10px;
 
   p {
      margin-top: 10px;
@@ -39,8 +35,8 @@
   display: flex;
   font-size: 14px;
   justify-content: space-between;
-  margin-bottom: 10px ;
-  width: 80%;
+  margin: 0 25px 10px ;
+
 
   .mdc-icon-button {
     border: none;
