@@ -19,7 +19,12 @@ import {Cluster} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
 import {getEditionVersion} from '@shared/utils/common';
+import {MatDialogRef} from '@angular/material/dialog';
 
+export enum ShareKubeconfigDialogTitle {
+  Share = 'Share',
+  Download = 'Download',
+}
 @Component({
   selector: 'km-share-kubeconfig',
   templateUrl: './template.html',
@@ -30,27 +35,49 @@ export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;
   @Input() seed: string;
   @Input() projectID: string;
-  private userID: string;
+  @Input() dialogTitle: ShareKubeconfigDialogTitle;
+  private _userID: string;
+  readonly shareKubeconfigDialogTitle = ShareKubeconfigDialogTitle;
+  readonly brewInstallCommand = 'brew install kubelogin';
+  readonly chocoInstallCommand = 'choco install kubelogin';
   kubeconfigLink: string;
   editionVersion: string = getEditionVersion();
+  isOIDCKubeLoginEnabled = false;
+  buttonIcon: string;
+  buttonLabel: string;
 
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _auth: Auth,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _matDialogRef: MatDialogRef<ShareKubeconfigComponent>
   ) {}
 
   ngOnInit(): void {
+    this.buttonIcon = this.dialogTitle === ShareKubeconfigDialogTitle.Share ? 'km-icon-share' : 'km-icon-download';
+    this.buttonLabel = this.dialogTitle === ShareKubeconfigDialogTitle.Share ? 'Share Cluster' : 'Get Kubeconfig';
     if (this._auth.authenticated()) {
       this._userService.currentUser.pipe(take(1)).subscribe(user => {
-        this.userID = user.id;
-        this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
-          this.projectID,
-          this.seed,
-          this.cluster.id,
-          this.userID
-        );
+        this._userID = user.id;
+        this.getDownloadLink();
       });
     }
+  }
+
+  getDownloadLink(): void {
+    this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
+      this.projectID,
+      this.seed,
+      this.cluster.id,
+      this._userID,
+      this.isOIDCKubeLoginEnabled
+    );
+  }
+
+  onClick(): void {
+    if (this.dialogTitle === ShareKubeconfigDialogTitle.Download) {
+      window.open(this.kubeconfigLink, '_blank');
+    }
+    this._matDialogRef.close();
   }
 }
