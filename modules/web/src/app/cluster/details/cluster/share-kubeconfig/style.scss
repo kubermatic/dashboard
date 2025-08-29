@@ -15,3 +15,51 @@
 .km-code-block {
   word-break: break-all;
 }
+
+.km-radio-button {
+  left: 25px;
+  position: relative;
+  top: 10px;
+}
+
+.km-plugin-instructions {
+  margin: 25px 75px;
+
+  label {
+    position: relative;
+    right: 75px;
+  }
+
+  p {
+     margin-top: 10px;
+  }
+}
+
+.terminal-command {
+  display: flex;
+  font-size: 14px;
+  justify-content: space-between;
+  margin-bottom: 10px ;
+  width: 80%;
+
+  .mdc-icon-button {
+    border: none;
+    height: 30px;
+    margin-top: 10px;
+    opacity: 0%;
+  }
+
+  &:hover .mdc-icon-button {
+    opacity: 40%;
+  }
+
+  p {
+    margin-left: 15px;
+  }
+}
+
+.mat-mdc-dialog-actions {
+  .mdc-button {
+    margin-right: 10px;
+  }
+}
