@@ -67,7 +67,6 @@ export class ShareKubeconfigComponent implements OnInit {
   getDownloadLink(): void {
     this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
       this.projectID,
-      this.seed,
       this.cluster.id,
       this._userID,
       this.isOIDCKubeLoginEnabled
