@@ -22,15 +22,15 @@ limitations under the License.
       <i class="km-icon-warning"></i>
     </div>
     <div [ngSwitch]="sessionState">
-      <p *ngSwitchCase="'expired'">
+      <p *ngSwitchCase="terminalState.Expired">
         Session expired. Authenticate again and wait a few seconds for the new kubeconfig to mount.
       </p>
 
-      <p *ngSwitchCase="'connectionLost'">
+      <p *ngSwitchCase="terminalState.ConnectionLost">
         The connection to your Web Terminal was lost.
       </p>
 
-      <p *ngSwitchCase="'expiring'">
+      <p *ngSwitchCase="terminalState.Expiring">
         The web session will expire soon.
       </p>
     </div>

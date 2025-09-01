@@ -14,7 +14,11 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-type SessionState = 'expired' | 'connectionLost' | 'expiring';
+enum TerminalState {
+  Expired = 'expired',
+  ConnectionLost = 'connectionLost',
+  Expiring = 'expiring',
+}
 
 @Component({
   selector: 'km-terminal-status-bar',
@@ -29,11 +33,12 @@ export class TerminalStatusBarComponent {
   @Output() reconnect = new EventEmitter<void>();
   @Output() extendSession = new EventEmitter<void>();
   @Output() tokenExpired = new EventEmitter<void>();
+  terminalState = TerminalState;
 
-  get sessionState(): SessionState {
-    if (this.isTokenExpired) return 'expired';
-    if (this.isConnectionLost) return 'connectionLost';
-    return 'expiring';
+  get sessionState(): TerminalState {
+    if (this.isTokenExpired) return TerminalState.Expired;
+    if (this.isConnectionLost) return TerminalState.ConnectionLost;
+    return TerminalState.Expiring;
   }
 
   onExtendSession(): void {

@@ -79,6 +79,7 @@ type TerminalConnStatus string
 
 const (
 	KubeconfigSecretMissing TerminalConnStatus = "KUBECONFIG_SECRET_MISSING"
+	KubeconfigSecretInvalid TerminalConnStatus = "KUBECONFIG_SECRET_INVALID"
 	WebTerminalTokenExpired TerminalConnStatus = "WEBTERMINAL_TOKEN_EXPIRED"
 	WebTerminalTokenValid   TerminalConnStatus = "WEBTERMINAL_TOKEN_VALID"
 	WebterminalPodPending   TerminalConnStatus = "WEBTERMINAL_POD_PENDING"
@@ -283,24 +284,31 @@ func checkTokenAndRefreshIfNeeded(ctx context.Context, clusterClient ctrlruntime
 			Name:      kubeconfigSecret.Name,
 		}, kubeconfigSecret); err != nil {
 			log.Logger.Debug(err)
-			return
+			_ = SendMessage(websocketConn, string(KubeconfigSecretMissing))
+			time.Sleep(5 * time.Second)
+			continue
 		}
 		cfg, err := clientcmd.Load(kubeconfigSecret.Data["kubeconfig"])
 		if err != nil {
 			log.Logger.Debug(err)
-			return
+			_ = SendMessage(websocketConn, string(KubeconfigSecretInvalid))
+			time.Sleep(5 * time.Second)
+			continue
 		}
 
 		user, err := getFirstUser(cfg.AuthInfos)
 		if err != nil {
 			log.Logger.Debug(err)
-			return
+			_ = SendMessage(websocketConn, string(KubeconfigSecretInvalid))
+			time.Sleep(5 * time.Second)
+			continue
 		}
 
 		tokenExpirationTime, err := GetTokenExpiration(user.AuthProvider.Config["id-token"])
 		if err != nil {
 			log.Logger.Debug(err)
-			return
+			onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+			continue
 		}
 
 		// Only refresh the token when it’s close to expiring.
@@ -310,7 +318,7 @@ func checkTokenAndRefreshIfNeeded(ctx context.Context, clusterClient ctrlruntime
 			newToken, err := oidcIssuerVerifier.RefreshAccessToken(ctx, refreshToken)
 			if err != nil {
 				log.Logger.Debug(err)
-				onFailedUpdatingToken(ctx, websocketConn, tokenExpirationTime)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
 				continue
 			}
 
@@ -319,19 +327,20 @@ func checkTokenAndRefreshIfNeeded(ctx context.Context, clusterClient ctrlruntime
 			updatedKubeconfig, err := clientcmd.Write(*cfg)
 			if err != nil {
 				log.Logger.Debug(err)
-				onFailedUpdatingToken(ctx, websocketConn, tokenExpirationTime)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
 				continue
 			}
 			kubeconfigSecret.Data["kubeconfig"] = updatedKubeconfig
 			if err := clusterClient.Update(ctx, kubeconfigSecret); err != nil {
 				log.Logger.Debug(err)
-				onFailedUpdatingToken(ctx, websocketConn, tokenExpirationTime)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
 				continue
 			}
 			tokenExpirationTime, err = GetTokenExpiration(user.AuthProvider.Config["id-token"])
 			if err != nil {
 				log.Logger.Debug(err)
-				return
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+				continue
 			}
 		}
 
@@ -884,12 +893,15 @@ func GetTokenExpiration(token string) (time.Time, error) {
 		return time.Time{}, fmt.Errorf("failed to unmarshal claims: %w", err)
 	}
 
-	expFloat := claims["exp"].(float64)
+	expFloat, ok := claims["exp"].(float64)
+	if !ok {
+		return time.Time{}, fmt.Errorf("exp claim missing")
+	}
 
 	return time.Unix(int64(expFloat), 0), nil
 }
 
-func onFailedUpdatingToken(ctx context.Context, websocketConn *websocket.Conn, tokenExpirationTime time.Time) {
+func onFailedUpdatingToken(websocketConn *websocket.Conn, tokenExpirationTime time.Time) {
 	// If the token is already expired, send a message to the client and check every 5 seconds if the user authenticates again (update the kubeconfig secret).
 	if time.Until(tokenExpirationTime) <= 0 {
 		log.Logger.Debug("Token is already expired, and cannot be refreshed")
