@@ -26,32 +26,14 @@
   margin: 25px;
   padding: 10px;
 
+  li {
+    padding-top: 10px;
+  }
+
   p {
      margin-top: 10px;
   }
-}
 
-.terminal-command {
-  display: flex;
-  font-size: 14px;
-  justify-content: space-between;
-  margin: 0 25px 10px ;
-
-
-  .mdc-icon-button {
-    border: none;
-    height: 30px;
-    margin-top: 10px;
-    opacity: 0%;
-  }
-
-  &:hover .mdc-icon-button {
-    opacity: 40%;
-  }
-
-  p {
-    margin-left: 15px;
-  }
 }
 
 .mat-mdc-dialog-actions {

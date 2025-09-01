@@ -77,7 +77,7 @@ import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
-import {ShareKubeconfigComponent, ShareKubeconfigDialogTitle} from './share-kubeconfig/component';
+import {ShareKubeconfigComponent, ShareKubeconfigDialogMode} from './share-kubeconfig/component';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {Preset} from '@shared/entity/preset';
@@ -131,7 +131,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isDualStackNetworkSelected: boolean;
   isUserSshKeyEnabled = false;
   nodeProvider = NodeProvider;
-  shareKubeConfigDialogTitle = ShareKubeconfigDialogTitle;
+  shareKubeconfigDialogMode = ShareKubeconfigDialogMode;
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -397,12 +397,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return getVisibleAnnotations(annotations, this.adminSettings);
   }
 
-  shareConfigDialog(title: ShareKubeconfigDialogTitle): void {
+  shareConfigDialog(title: ShareKubeconfigDialogMode): void {
     const modal = this._matDialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
     modal.componentInstance.dialogTitle = title;
+  }
+
+  onGetKubeconfig(): void {
+    if (this.adminSettings.enableOIDCKubeconfig) {
+      this.shareConfigDialog(ShareKubeconfigDialogMode.Download);
+    } else {
+      const kubeconfigLink = this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id);
+      window.open(kubeconfigLink, '_blank');
+    }
   }
 
   getProxyURL(): string {

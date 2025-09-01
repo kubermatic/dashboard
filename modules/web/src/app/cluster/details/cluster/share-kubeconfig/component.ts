@@ -21,9 +21,15 @@ import {ClusterService} from '@core/services/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {MatDialogRef} from '@angular/material/dialog';
 
-export enum ShareKubeconfigDialogTitle {
+export enum ShareKubeconfigDialogMode {
   Share = 'Share',
   Download = 'Download',
+}
+
+enum InstallCommands {
+  brewInstallCommand = 'brew install kubelogin',
+  chocoInstallCommand = 'choco install kubelogin',
+  krewInstallCommand = 'kubectl krew install oidc-login',
 }
 @Component({
   selector: 'km-share-kubeconfig',
@@ -33,14 +39,12 @@ export enum ShareKubeconfigDialogTitle {
 })
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
-  @Input() dialogTitle: ShareKubeconfigDialogTitle;
+  @Input() dialogTitle: ShareKubeconfigDialogMode;
   private _userID: string;
-  readonly shareKubeconfigDialogTitle = ShareKubeconfigDialogTitle;
-  readonly brewInstallCommand = 'brew install kubelogin';
-  readonly chocoInstallCommand = 'choco install kubelogin';
-  readonly krewInstallCommand = 'kubectl krew install oidc-login';
+  readonly installCommands = InstallCommands;
+  readonly shareKubeConfigDialogMode = ShareKubeconfigDialogMode;
+
   kubeconfigLink: string;
   editionVersion: string = getEditionVersion();
   isOIDCKubeLoginEnabled = false;
@@ -55,8 +59,8 @@ export class ShareKubeconfigComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.buttonIcon = this.dialogTitle === ShareKubeconfigDialogTitle.Share ? 'km-icon-share' : 'km-icon-download';
-    this.buttonLabel = this.dialogTitle === ShareKubeconfigDialogTitle.Share ? 'Share Cluster' : 'Get Kubeconfig';
+    this.buttonIcon = this.dialogTitle === ShareKubeconfigDialogMode.Share ? 'km-icon-check' : 'km-icon-download';
+    this.buttonLabel = this.dialogTitle === ShareKubeconfigDialogMode.Share ? 'Got It' : 'Get Kubeconfig';
     if (this._auth.authenticated()) {
       this._userService.currentUser.pipe(take(1)).subscribe(user => {
         this._userID = user.id;
@@ -75,7 +79,7 @@ export class ShareKubeconfigComponent implements OnInit {
   }
 
   onClick(): void {
-    if (this.dialogTitle === ShareKubeconfigDialogTitle.Download) {
+    if (this.dialogTitle === ShareKubeconfigDialogMode.Download) {
       window.open(this.kubeconfigLink, '_blank');
     }
     this._matDialogRef.close();

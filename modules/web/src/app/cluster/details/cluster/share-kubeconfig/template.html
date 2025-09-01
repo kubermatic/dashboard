@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>{{dialogTitle}} Kubeconfig</km-dialog-title>
 <mat-dialog-content>
-  <ng-container *ngIf="dialogTitle === shareKubeconfigDialogTitle.Share">
+  <ng-container *ngIf="dialogTitle === shareKubeConfigDialogMode.Share">
     <p>
       Share <b>{{cluster.name}}</b> cluster with other users by giving them the following link that can be used to authenticate with an OIDC provider and then generate a kubeconfig file.
     </p>
@@ -64,52 +64,41 @@ limitations under the License.
       <ul>
         <li>
           On Linux / macOS
-          <div class="terminal-command">
-            <p>
-              {{brewInstallCommand}}
-            </p>
-            <button mat-icon-button
-                    ngxClipboard
-                    [cbContent]="brewInstallCommand"
-                    matTooltip="Click to copy">
-              <i class="km-icon-mask km-icon-copy"></i>
-            </button>
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.linuxInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.brewInstallCommand}}
           </div>
         </li>
         <li>
           On Windows (Chocolatey)
-          <div class="terminal-command">
-            <p>
-              {{chocoInstallCommand}}
-            </p>
-            <button mat-icon-button
-                    ngxClipboard
-                    [cbContent]="chocoInstallCommand"
-                    matTooltip="Click to copy">
-              <i class="km-icon-mask km-icon-copy"></i>
-            </button>
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.chocoInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.chocoInstallCommand}}
           </div>
         </li>
         <li>
-          Krew kubectl plugin manager.<a href="https://krew.sigs.k8s.io/docs/user-guide/setup/install/"
-             target="_blank"
-             rel="noopener">docs <i class="km-icon-external-link i-18"></i></a>
-          <div class="terminal-command">
-            <p>
-              {{krewInstallCommand}}
-            </p>
-            <button mat-icon-button
-                    ngxClipboard
-                    [cbContent]="krewInstallCommand"
-                    matTooltip="Click to copy">
-              <i class="km-icon-mask km-icon-copy"></i>
-            </button>
+          Krew (kubectl plugin manager)
+          <P>
+            Krew needs to be installed first. Check
+            <a href="https://krew.sigs.k8s.io/docs/user-guide/setup/install/"
+               target="_blank"
+               rel="noopener">installation docs <i class="km-icon-external-link i-18"></i></a>.
+          </P>
+          <div class="km-code-block km-copy"
+               ngxClipboard
+               [cbContent]="installCommands.krewInstallCommand"
+               matTooltip="Click to copy">
+            {{installCommands.krewInstallCommand}}
           </div>
         </li>
       </ul>
     </div>
   </ng-container>
-  <div *ngIf="dialogTitle === shareKubeconfigDialogTitle.Share"
+  <div *ngIf="dialogTitle === shareKubeConfigDialogMode.Share"
        class="km-code-block km-copy"
        matTooltip="Click to copy"
        ngxClipboard

@@ -62,7 +62,7 @@ limitations under the License.
               color="alternative"
               [disabled]="isDeletingState"
               [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
-              (click)="shareConfigDialog(shareKubeConfigDialogTitle.Download)">
+              (click)="onGetKubeconfig()">
         <i class="km-icon-mask km-icon-download"
            matButtonIcon></i>
         <span>Get Kubeconfig</span>
@@ -140,7 +140,7 @@ limitations under the License.
           <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableShareCluster"
                   mat-menu-item
                   id="km-share-kubeconfig-btn"
-                  (click)="shareConfigDialog(shareKubeConfigDialogTitle.Share)">
+                  (click)="shareConfigDialog(shareKubeconfigDialogMode.Share)">
             <span>Share Cluster</span>
           </button>
           <mat-divider></mat-divider>

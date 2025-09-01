@@ -767,7 +767,7 @@ func DecodeCreateOIDCKubeconfig(ctx context.Context, r *http.Request) (interface
 	req.ClusterID = r.URL.Query().Get("cluster_id")
 	req.ProjectID = r.URL.Query().Get("project_id")
 	req.UserID = r.URL.Query().Get("user_id")
-	req.OIDCKubeLoginEnabled = r.URL.Query().Get("oidc_kubelogin_enabled") == "true"
+	req.OIDCKubeLoginEnabled = r.URL.Query().Get("oidc_kubelogin_enabled") == trueFlag
 	if len(req.ClusterID) == 0 || len(req.ProjectID) == 0 || len(req.UserID) == 0 {
 		return nil, errors.New("the following query parameters cluster_id, project_id, user_id are mandatory, please make sure that all are set")
 	}
