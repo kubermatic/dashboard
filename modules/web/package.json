@@ -92,7 +92,7 @@
     "moment": "2.30.1",
     "monaco-editor": "0.52.2",
     "ngx-clipboard": "16.0.0",
-    "ngx-cookie-service": "19.1.0",
+    "ngx-cookie-service": "20.1.0",
     "ngx-monaco-editor-v2": "^19.0.2",
     "react": "^19.1.0",
     "react-dom": "^18.3.1",
