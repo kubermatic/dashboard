@@ -1031,7 +1031,7 @@ func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIss
 		return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 			seedCluster := request.(seedClusterGetter).GetSeedCluster()
 
-			oidcIssuerVerifier, err := getOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.ClusterID)
+			oidcIssuerVerifier, err := GetOIDCIssuerVerifier(ctx, clusterProviderGetter, oidcIssuerVerifierGetter, seedsGetter, seedCluster.ClusterID)
 			if err != nil {
 				return nil, err
 			}
@@ -1041,7 +1041,7 @@ func OIDCProviders(clusterProviderGetter provider.ClusterProviderGetter, oidcIss
 	}
 }
 
-func getOIDCIssuerVerifier(
+func GetOIDCIssuerVerifier(
 	ctx context.Context,
 	clusterProviderGetter provider.ClusterProviderGetter,
 	oidcIssuerVerifierGetter provider.OIDCIssuerVerifierGetter,

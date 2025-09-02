@@ -19,6 +19,7 @@ package websocket
 import (
 	"context"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -26,11 +27,13 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
 
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	authtypes "k8c.io/dashboard/v2/pkg/provider/auth/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -44,6 +47,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 	"k8s.io/client-go/tools/remotecommand"
 	"k8s.io/kubectl/pkg/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -59,6 +64,7 @@ const (
 	maxNumberOfExpirationRefreshes    = 48              // it means maximum 24h for a pod lifetime of 30 minutes
 	remainingExpirationTimeForWarning = 5 * time.Minute // should be lesser than "podLifetime"
 	expirationCheckInterval           = 1 * time.Minute // should be lesser than "remainingExpirationTimeForWarning"
+	remainingTokenExpirationTime      = 5 * time.Minute
 	expirationTimestampKey            = "ExpirationTimestamp"
 	expirationRefreshesKey            = "ExpirationRefreshes"
 	pingInterval                      = 30 * time.Second
@@ -73,6 +79,9 @@ type TerminalConnStatus string
 
 const (
 	KubeconfigSecretMissing TerminalConnStatus = "KUBECONFIG_SECRET_MISSING"
+	KubeconfigSecretInvalid TerminalConnStatus = "KUBECONFIG_SECRET_INVALID"
+	WebTerminalTokenExpired TerminalConnStatus = "WEBTERMINAL_TOKEN_EXPIRED"
+	WebTerminalTokenValid   TerminalConnStatus = "WEBTERMINAL_TOKEN_VALID"
 	WebterminalPodPending   TerminalConnStatus = "WEBTERMINAL_POD_PENDING"
 	WebterminalPodFailed    TerminalConnStatus = "WEBTERMINAL_POD_FAILED"
 	ConnectionPoolExceeded  TerminalConnStatus = "CONNECTION_POOL_EXCEEDED"
@@ -267,6 +276,85 @@ func pingRoutine(websocketConn *websocket.Conn) {
 	}
 }
 
+func checkTokenAndRefreshIfNeeded(ctx context.Context, clusterClient ctrlruntimeclient.Client, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, websocketConn *websocket.Conn) {
+	for {
+		// Update the kubeconfig secret in case it gets recreated.
+		if err := clusterClient.Get(ctx, ctrlruntimeclient.ObjectKey{
+			Namespace: metav1.NamespaceSystem,
+			Name:      kubeconfigSecret.Name,
+		}, kubeconfigSecret); err != nil {
+			log.Logger.Debug(err)
+			_ = SendMessage(websocketConn, string(KubeconfigSecretMissing))
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		cfg, err := clientcmd.Load(kubeconfigSecret.Data["kubeconfig"])
+		if err != nil {
+			log.Logger.Debug(err)
+			_ = SendMessage(websocketConn, string(KubeconfigSecretInvalid))
+			time.Sleep(5 * time.Second)
+			continue
+		}
+
+		user, err := getFirstUser(cfg.AuthInfos)
+		if err != nil {
+			log.Logger.Debug(err)
+			_ = SendMessage(websocketConn, string(KubeconfigSecretInvalid))
+			time.Sleep(5 * time.Second)
+			continue
+		}
+
+		tokenExpirationTime, err := GetTokenExpiration(user.AuthProvider.Config["id-token"])
+		if err != nil {
+			log.Logger.Debug(err)
+			onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+			continue
+		}
+
+		// Only refresh the token when it’s close to expiring.
+		if time.Until(tokenExpirationTime) <= remainingTokenExpirationTime {
+			refreshToken := user.AuthProvider.Config["refresh-token"]
+
+			newToken, err := oidcIssuerVerifier.RefreshAccessToken(ctx, refreshToken)
+			if err != nil {
+				log.Logger.Debug(err)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+				continue
+			}
+
+			user.AuthProvider.Config["id-token"] = newToken.IDToken
+			user.AuthProvider.Config["refresh-token"] = newToken.RefreshToken
+			updatedKubeconfig, err := clientcmd.Write(*cfg)
+			if err != nil {
+				log.Logger.Debug(err)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+				continue
+			}
+			kubeconfigSecret.Data["kubeconfig"] = updatedKubeconfig
+			if err := clusterClient.Update(ctx, kubeconfigSecret); err != nil {
+				log.Logger.Debug(err)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+				continue
+			}
+			tokenExpirationTime, err = GetTokenExpiration(user.AuthProvider.Config["id-token"])
+			if err != nil {
+				log.Logger.Debug(err)
+				onFailedUpdatingToken(websocketConn, tokenExpirationTime)
+				continue
+			}
+		}
+
+		// check again 5 min before the token expiration or at the token expiration time
+		_ = SendMessage(websocketConn, string(WebTerminalTokenValid))
+		sleepDuration := time.Until(tokenExpirationTime) - remainingTokenExpirationTime
+		if sleepDuration > 0 {
+			time.Sleep(sleepDuration)
+		} else {
+			time.Sleep(time.Until(tokenExpirationTime))
+		}
+	}
+}
+
 func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn) {
 	for {
 		time.Sleep(expirationCheckInterval)
@@ -295,7 +383,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
@@ -353,6 +441,8 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 	go pingRoutine(websocketConn)
 
 	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn)
+
+	go checkTokenAndRefreshIfNeeded(ctx, client, oidcIssuerVerifier, kubeconfigSecret, websocketConn)
 
 	req := k8sClient.CoreV1().RESTClient().Post().
 		Resource("pods").
@@ -730,7 +820,7 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret) {
 	if err := startProcess(
 		ctx,
 		client,
@@ -740,6 +830,8 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 		userEmailID,
 		cluster,
 		options,
+		oidcIssuerVerifier,
+		kubeconfigSecret,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,
@@ -775,4 +867,51 @@ func SendMessage(wsConn *websocket.Conn, message string) error {
 		Op:   "msg",
 		Data: message,
 	})
+}
+
+// The kubeconfig secret must contain a single user, so we return the first one.
+func getFirstUser(authInfos map[string]*clientcmdapi.AuthInfo) (*clientcmdapi.AuthInfo, error) {
+	for _, u := range authInfos {
+		return u, nil
+	}
+	return nil, fmt.Errorf("no user found in kubeconfig")
+}
+
+func GetTokenExpiration(token string) (time.Time, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) < 2 {
+		return time.Time{}, fmt.Errorf("invalid token format")
+	}
+
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return time.Time{}, fmt.Errorf("failed to decode token: %w", err)
+	}
+
+	var claims map[string]interface{}
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return time.Time{}, fmt.Errorf("failed to unmarshal claims: %w", err)
+	}
+
+	expFloat, ok := claims["exp"].(float64)
+	if !ok {
+		return time.Time{}, fmt.Errorf("exp claim missing")
+	}
+
+	return time.Unix(int64(expFloat), 0), nil
+}
+
+func onFailedUpdatingToken(websocketConn *websocket.Conn, tokenExpirationTime time.Time) {
+	// If the token is already expired, send a message to the client and check every 5 seconds if the user authenticates again (update the kubeconfig secret).
+	if time.Until(tokenExpirationTime) <= 0 {
+		log.Logger.Debug("Token is already expired, and cannot be refreshed")
+		_ = SendMessage(websocketConn, string(WebTerminalTokenExpired))
+		time.Sleep(5 * time.Second)
+	} else {
+		// If the token is still valid but can't be refreshed, try again after 1 minute.
+		if time.Until(tokenExpirationTime) <= 1*time.Minute {
+			time.Sleep(time.Until(tokenExpirationTime)) // wait until the token is expired
+		}
+		time.Sleep(1 * time.Minute)
+	}
 }

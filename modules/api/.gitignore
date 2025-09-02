@@ -29,6 +29,7 @@
 .settings/
 .vscode/*
 .nvmrc
+.history
 
 # Misc.
 /.sass-cache
