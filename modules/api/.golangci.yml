@@ -127,6 +127,7 @@ linters:
       # TODO (#sig-api): Fix the following lint issues
       - path: (.+)\.go$
         text: The Packet / Equinix Metal provider is 
+      # TODO (#sig-api): Should be fixed via https://github.com/kubermatic/dashboard/issues/7544
       - path: (.+)\.go$
         text: net/http\.NewRequest must not be called\. use net/http\.NewRequestWithContext
     paths:
