@@ -124,8 +124,11 @@ linters:
         text: cyclomatic complexity [0-9]+ of func `CredentialEndpoint` is high
       - path: (.+)\.go$
         text: loop variable tc captured by func literal
+      # TODO (#sig-api): Fix the following lint issues
       - path: (.+)\.go$
-        text: The Packet / Equinix Metal provider is deprecated
+        text: The Packet / Equinix Metal provider is 
+      - path: (.+)\.go$
+        text: net/http\.NewRequest must not be called\. use net/http\.NewRequestWithContext
     paths:
       - modules/api/pkg/provider/cloud/eks/authenticator
       - third_party$
