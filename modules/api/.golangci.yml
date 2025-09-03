@@ -126,10 +126,7 @@ linters:
         text: loop variable tc captured by func literal
       # TODO (#sig-api): Fix the following lint issues
       - path: (.+)\.go$
-        text: The Packet / Equinix Metal provider is 
-      # TODO (#sig-api): Should be fixed via https://github.com/kubermatic/dashboard/issues/7544
-      - path: (.+)\.go$
-        text: net/http\.NewRequest must not be called\. use net/http\.NewRequestWithContext
+        text: The Packet / Equinix Metal provider is deprecated
     paths:
       - modules/api/pkg/provider/cloud/eks/authenticator
       - third_party$
