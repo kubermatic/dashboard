@@ -21,7 +21,7 @@ source hack/lib.sh
 
 API=modules/api
 
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.24-node-22-1 containerize ./$API/hack/update-swagger.sh
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.24-node-20-8 containerize ./$API/hack/update-swagger.sh
 
 echodate "Generating swagger spec"
 cd $API/cmd/kubermatic-api/
