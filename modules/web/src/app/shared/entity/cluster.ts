@@ -675,7 +675,7 @@ export class ProviderSettingsPatch {
   isValid: boolean;
 }
 
-export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
+export const AZURE_LOADBALANCER_SKUS = ['standard'];
 
 export class CreateClusterModel {
   cluster: ClusterModel;
