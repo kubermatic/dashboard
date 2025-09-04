@@ -2,6 +2,8 @@ module k8c.io/dashboard/v2
 
 go 1.23.3
 
+toolchain go1.23.12
+
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20241004173325-747df57058b2
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible
