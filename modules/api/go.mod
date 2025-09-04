@@ -2,7 +2,7 @@ module k8c.io/dashboard/v2
 
 go 1.23.0
 
-toolchain go1.23.7
+toolchain go1.23.12
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20231211165245-0e22ad1266d6
