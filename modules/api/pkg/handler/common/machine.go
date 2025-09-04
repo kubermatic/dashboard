@@ -779,11 +779,15 @@ func outputMachine(machine *clusterv1alpha1.Machine, node *corev1.Node, hideInit
 	}, nil
 }
 
+const (
+	labelGPUNvidia = "nvidia.com"
+)
+
 func gpuLabels(labels map[string]string) map[string]string {
 	nvidiaLabels := make(map[string]string)
 
 	for k, v := range labels {
-		if strings.Contains(k, "nvidia.com") {
+		if strings.Contains(k, labelGPUNvidia) {
 			nvidiaLabels[k] = v
 		}
 	}
