@@ -139,6 +139,18 @@ func (o *IssuerVerifier) Exchange(ctx context.Context, code, overwriteRedirectUR
 	}, nil
 }
 
+// RefreshAccessToken simulates refreshing an access token.
+func (o *IssuerVerifier) RefreshAccessToken(ctx context.Context, refToken string) (authtypes.OIDCToken, error) {
+	if refToken != refreshToken {
+		return authtypes.OIDCToken{}, errors.New("invalid refresh token")
+	}
+
+	return authtypes.OIDCToken{
+		IDToken:      IDToken,
+		RefreshToken: refreshToken,
+	}, nil
+}
+
 // Verify parses a raw ID Token, verifies it's been signed by the provider, performs
 // any additional checks depending on the Config, and returns the payload as TokenClaims.
 func (o *IssuerVerifier) Verify(ctx context.Context, token string) (authtypes.TokenClaims, error) {
