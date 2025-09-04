@@ -307,6 +307,7 @@ export class VMwareCloudDirectorNodeSpec {
   vapp?: string;
   catalog: string;
   network?: string;
+  additionalNetworks: string[];
   template: string;
   placementPolicy?: string;
   sizingPolicy?: string;
