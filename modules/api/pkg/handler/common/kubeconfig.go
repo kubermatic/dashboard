@@ -582,15 +582,10 @@ func createKubeconfigSecret(ctx context.Context, client ctrlruntimeclient.Client
 		resources.KubeconfigSecretKey: kubeconfig,
 	}
 
-	// return if already exists
-	if existingSecret.Name != "" {
-		return nil
-	}
-
-	return createSecret(ctx, client, kubeconfigSecretName, email, secretData)
+	return createSecret(ctx, client, kubeconfigSecretName, email, secretData, existingSecret.Name)
 }
 
-func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, email string, secretData map[string][]byte) error {
+func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, email string, secretData map[string][]byte, existingSecretName string) error {
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        name,
@@ -599,6 +594,10 @@ func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, em
 		},
 		Type: corev1.SecretTypeOpaque,
 		Data: secretData,
+	}
+
+	if existingSecretName != "" {
+		return client.Update(ctx, secret)
 	}
 	return client.Create(ctx, secret)
 }
