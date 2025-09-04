@@ -70,14 +70,14 @@ import {
 } from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {Observable, Subject, combineLatest, iif, of} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject, combineLatest, of} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare} from 'semver';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
-import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {ShareKubeconfigComponent, ShareKubeconfigDialogMode} from './share-kubeconfig/component';
 import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NodeProvider} from '@app/shared/model/NodeProviderConstants';
 import {Preset} from '@shared/entity/preset';
@@ -131,6 +131,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isDualStackNetworkSelected: boolean;
   isUserSshKeyEnabled = false;
   nodeProvider = NodeProvider;
+  shareKubeconfigDialogMode = ShareKubeconfigDialogMode;
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -396,35 +397,20 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return getVisibleAnnotations(annotations, this.adminSettings);
   }
 
-  shareConfigDialog(): void {
+  shareConfigDialog(title: ShareKubeconfigDialogMode): void {
     const modal = this._matDialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.seed = this.seed;
     modal.componentInstance.projectID = this.projectID;
+    modal.componentInstance.dialogTitle = title;
   }
 
-  getObservable(): Observable<string> {
-    return this.getDownloadURL().pipe(take(1));
-  }
-
-  onNext(url: string) {
-    window.open(url, '_blank');
-  }
-
-  getDownloadURL(): Observable<string> {
-    return this.settingsService.adminSettings.pipe(
-      switchMap(settings =>
-        iif(
-          () => settings.enableOIDCKubeconfig,
-          this._userService.currentUser.pipe(
-            map((user: Member) =>
-              this._clusterService.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id)
-            )
-          ),
-          of(this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id))
-        )
-      )
-    );
+  onGetKubeconfig(): void {
+    if (this.adminSettings.enableOIDCKubeconfig) {
+      this.shareConfigDialog(ShareKubeconfigDialogMode.Download);
+    } else {
+      const kubeconfigLink = this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id);
+      window.open(kubeconfigLink, '_blank');
+    }
   }
 
   getProxyURL(): string {

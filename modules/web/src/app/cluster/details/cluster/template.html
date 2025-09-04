@@ -57,14 +57,16 @@ limitations under the License.
 
       <div fxFlex></div>
 
-      <km-button color="alternative"
-                 icon="km-icon-download"
-                 label="Get Kubeconfig"
-                 [disabled]="isDeletingState"
-                 [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
-                 [observable]="getObservable()"
-                 (next)="onNext($event)">
-      </km-button>
+      <button mat-flat-button
+              type="button"
+              color="alternative"
+              [disabled]="isDeletingState"
+              [matTooltip]="isDeletingState ? clusterDeletionTooltip : ''"
+              (click)="onGetKubeconfig()">
+        <i class="km-icon-mask km-icon-download"
+           matButtonIcon></i>
+        <span>Get Kubeconfig</span>
+      </button>
 
       <a class="km-open-kubernetes-dashboard-btn"
          id="km-open-kubernetes-dashboard-btn"
@@ -138,7 +140,7 @@ limitations under the License.
           <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableShareCluster"
                   mat-menu-item
                   id="km-share-kubeconfig-btn"
-                  (click)="shareConfigDialog()">
+                  (click)="shareConfigDialog(shareKubeconfigDialogMode.Share)">
             <span>Share Cluster</span>
           </button>
           <mat-divider></mat-divider>

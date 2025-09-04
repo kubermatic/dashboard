@@ -15,3 +15,29 @@
 .km-code-block {
   word-break: break-all;
 }
+
+.km-radio-button {
+  left: 25px;
+  position: relative;
+  top: 10px;
+}
+
+.km-plugin-instructions {
+  margin: 25px;
+  padding: 10px;
+
+  li {
+    padding-top: 10px;
+  }
+
+  p {
+     margin-top: 10px;
+  }
+
+}
+
+.mat-mdc-dialog-actions {
+  .mdc-button {
+    margin-right: 10px;
+  }
+}

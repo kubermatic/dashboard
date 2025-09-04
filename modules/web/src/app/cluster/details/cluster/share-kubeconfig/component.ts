@@ -19,7 +19,18 @@ import {Cluster} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
 import {getEditionVersion} from '@shared/utils/common';
+import {MatDialogRef} from '@angular/material/dialog';
 
+export enum ShareKubeconfigDialogMode {
+  Share = 'Share',
+  Download = 'Download',
+}
+
+enum InstallCommands {
+  brewInstallCommand = 'brew install kubelogin',
+  chocoInstallCommand = 'choco install kubelogin',
+  krewInstallCommand = 'kubectl krew install oidc-login',
+}
 @Component({
   selector: 'km-share-kubeconfig',
   templateUrl: './template.html',
@@ -28,29 +39,49 @@ import {getEditionVersion} from '@shared/utils/common';
 })
 export class ShareKubeconfigComponent implements OnInit {
   @Input() cluster: Cluster;
-  @Input() seed: string;
   @Input() projectID: string;
-  private userID: string;
+  @Input() dialogTitle: ShareKubeconfigDialogMode;
+  private _userID: string;
+  readonly installCommands = InstallCommands;
+  readonly shareKubeConfigDialogMode = ShareKubeconfigDialogMode;
+
   kubeconfigLink: string;
   editionVersion: string = getEditionVersion();
+  isOIDCKubeLoginEnabled = false;
+  buttonIcon: string;
+  buttonLabel: string;
 
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _auth: Auth,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _matDialogRef: MatDialogRef<ShareKubeconfigComponent>
   ) {}
 
   ngOnInit(): void {
+    this.buttonIcon = this.dialogTitle === ShareKubeconfigDialogMode.Share ? 'km-icon-check' : 'km-icon-download';
+    this.buttonLabel = this.dialogTitle === ShareKubeconfigDialogMode.Share ? 'Got It' : 'Get Kubeconfig';
     if (this._auth.authenticated()) {
       this._userService.currentUser.pipe(take(1)).subscribe(user => {
-        this.userID = user.id;
-        this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
-          this.projectID,
-          this.seed,
-          this.cluster.id,
-          this.userID
-        );
+        this._userID = user.id;
+        this.getDownloadLink();
       });
     }
+  }
+
+  getDownloadLink(): void {
+    this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
+      this.projectID,
+      this.cluster.id,
+      this._userID,
+      this.isOIDCKubeLoginEnabled
+    );
+  }
+
+  onClick(): void {
+    if (this.dialogTitle === ShareKubeconfigDialogMode.Download) {
+      window.open(this.kubeconfigLink, '_blank');
+    }
+    this._matDialogRef.close();
   }
 }

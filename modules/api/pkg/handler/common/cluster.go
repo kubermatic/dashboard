@@ -206,7 +206,7 @@ func GenerateCluster(
 		if checkIfPresetCustomized(ctx, projectID, *adminUserInfo, body.Cluster.Spec.Cloud, credentialManager, credentialName) {
 			body.Cluster.Credential = ""
 		} else {
-			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = "true"
+			partialCluster.Labels[kubermaticv1.IsCredentialPresetLabelKey] = trueFlag
 			partialCluster.Annotations[kubermaticv1.PresetNameAnnotation] = credentialName
 		}
 		body.Cluster.Spec.Cloud = *cloudSpec
@@ -294,7 +294,7 @@ func GenerateCluster(
 		// Remove enforced applications since they are automatically installed by the controllers.
 		apps := []apiv1.Application{}
 		for _, app := range body.Applications {
-			if value, ok := app.Annotations[appskubermaticv1.ApplicationEnforcedAnnotation]; !ok || value != "true" {
+			if value, ok := app.Annotations[appskubermaticv1.ApplicationEnforcedAnnotation]; !ok || value != trueFlag {
 				apps = append(apps, app)
 			}
 		}
