@@ -28,10 +28,7 @@
           "name": "openstack",
           "enabled": true
         },
-        {
-          "name": "packet",
-          "enabled": true
-        },
+
         {
           "name": "gcp",
           "enabled": true

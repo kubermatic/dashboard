@@ -32,7 +32,6 @@ export enum Provider {
   KubeVirt = 'kubevirt',
   Nutanix = 'nutanix',
   OpenStack = 'openstack',
-  Equinix = 'packet',
   VSphere = 'vsphere',
   VMwareCloudDirector = 'vmwareclouddirector',
 }
@@ -51,7 +50,6 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.KubeVirt, 'KubeVirt'],
   [Provider.Nutanix, 'Nutanix'],
   [Provider.OpenStack, 'Openstack'],
-  [Provider.Equinix, 'Equinix Metal'],
   [Provider.VSphere, 'VSphere'],
   [Provider.VMwareCloudDirector, 'VMware Cloud Director'],
 ]);
@@ -118,7 +116,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
-  packet?: EquinixCloudSpec;
+
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
@@ -282,12 +280,6 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   private static getKeysToCompare(spec: ExtraCloudSpecOptions): string[] {
     return Object.keys(spec).filter(key => key !== 'enableIngressHostname' && key !== 'ingressHostnameSuffix');
   }
-}
-
-export class EquinixCloudSpec {
-  apiKey: string;
-  projectID: string;
-  billingCycle: string;
 }
 
 export class VSphereCloudSpec {
@@ -583,7 +575,7 @@ export class CloudSpecPatch {
   nutanix?: NutanixCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
-  packet?: EquinixCloudSpecPatch;
+
   vsphere?: VSphereCloudSpecPatch;
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
@@ -614,12 +606,6 @@ export class OpenstackCloudSpecPatch {
   applicationCredentialID?: string;
   applicationCredentialSecret?: string;
   domain?: string;
-}
-
-export class EquinixCloudSpecPatch {
-  apiKey?: string;
-  projectID?: string;
-  billingCycle?: string;
 }
 
 export class NutanixCloudSpecPatch {
@@ -688,8 +674,6 @@ export class ProviderSettingsPatch {
   cloudSpecPatch: CloudSpecPatch;
   isValid: boolean;
 }
-
-export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
 

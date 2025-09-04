@@ -182,7 +182,6 @@ export class Mocks {
     // {m: RequestType.GET, p: Endpoint.GCP.DiskTypes, r: {fixture: 'gcp/disktypes.json'}},
     // {m: RequestType.GET, p: Endpoint.GCP.Sizes, r: {fixture: 'gcp/sizes.json'}},
     // {m: RequestType.GET, p: Endpoint.GCP.Zones, r: {fixture: 'gcp/zones.json'}},
-    // {m: RequestType.GET, p: Endpoint.Equinix.Sizes, r: {fixture: 'packet/sizes.json'}},
     // {m: RequestType.GET, p: Endpoint.Hetzner.Sizes, r: {fixture: 'hetzner/sizes.json'}},
     // {m: RequestType.GET, p: Endpoint.OpenStack.AvailabilityZones, r: {fixture: 'openstack/availabilityzones.json'}},
     // {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},

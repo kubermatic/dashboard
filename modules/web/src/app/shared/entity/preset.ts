@@ -114,7 +114,6 @@ export class CreatePresetSpec {
   kubevirt?: KubevirtPresetSpec;
   nutanix?: NutanixPresetSpec;
   openstack?: OpenstackPresetSpec;
-  packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
   vmwareclouddirector?: VMwareCloudDirectorPresetSpec;
   baremetal?: BaremetalPresetSpec;
@@ -239,14 +238,6 @@ export class OpenstackPresetSpec extends PresetProviderSpec {
   routerID?: string;
   subnetID?: string;
 }
-
-export class EquinixPresetSpec extends PresetProviderSpec {
-  apiKey: string;
-  projectID: string;
-
-  billingCycle?: string;
-}
-
 export class VSpherePresetSpec extends PresetProviderSpec {
   username: string;
   password: string;

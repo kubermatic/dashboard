@@ -778,28 +778,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Hetzner: &kubermaticv1.HetznerCloudSpec{Token: "secret", Network: "test"}},
 		},
 		{
-			name:       "test 5: set credentials for Packet provider",
-			presetName: "test",
-			userInfo:   provider.UserInfo{Email: "test@example.com"},
-			projectID:  "fake-project",
-			presets: []ctrlruntimeclient.Object{
-				&kubermaticv1.Preset{
-					ObjectMeta: metav1.ObjectMeta{
-						Name: "test",
-					},
-					Spec: kubermaticv1.PresetSpec{
-						RequiredEmails: []string{"example.com"},
-						Packet: &kubermaticv1.Packet{
-							APIKey: "secret", ProjectID: "project",
-						},
-					},
-				},
-			},
-			cloudSpec:         kubermaticv1.CloudSpec{Packet: &kubermaticv1.PacketCloudSpec{}},
-			expectedCloudSpec: &kubermaticv1.CloudSpec{Packet: &kubermaticv1.PacketCloudSpec{APIKey: "secret", ProjectID: "project", BillingCycle: "hourly"}},
-		},
-		{
-			name:       "test 6: set credentials for DigitalOcean provider",
+			name:       "test 5: set credentials for DigitalOcean provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -831,7 +810,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Digitalocean: &kubermaticv1.DigitaloceanCloudSpec{Token: "abcd"}},
 		},
 		{
-			name:       "test 7: set credentials for OpenStack provider",
+			name:       "test 6: set credentials for OpenStack provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -853,7 +832,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Openstack: &kubermaticv1.OpenstackCloudSpec{Project: "a", Domain: "b", Password: "c", Username: "d"}},
 		},
 		{
-			name:       "test 8: set credentials for Vsphere provider",
+			name:       "test 7: set credentials for Vsphere provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -875,7 +854,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{VSphere: &kubermaticv1.VSphereCloudSpec{Password: "secret", Username: "bob", StoragePolicy: "fake_storage_policy"}},
 		},
 		{
-			name:       "test 9: set credentials for Azure provider",
+			name:       "test 8: set credentials for Azure provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -896,7 +875,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Azure: &kubermaticv1.AzureCloudSpec{SubscriptionID: "a", ClientID: "b", ClientSecret: "c", TenantID: "d"}},
 		},
 		{
-			name:       "test 10: no credentials for Azure provider",
+			name:       "test 9: no credentials for Azure provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -914,7 +893,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedError: "the preset test doesn't contain credential for Azure provider",
 		},
 		{
-			name:       "test 11: cloud provider spec is empty",
+			name:       "test 10: cloud provider spec is empty",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -935,7 +914,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedError: "can not find provider to set credentials",
 		},
 		{
-			name:       "test 12: set credentials for Kubevirt provider",
+			name:       "test 11: set credentials for Kubevirt provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -956,7 +935,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Kubevirt: &kubermaticv1.KubevirtCloudSpec{Kubeconfig: "test"}},
 		},
 		{
-			name:       "test 13: credential with wrong email domain returns error",
+			name:       "test 12: credential with wrong email domain returns error",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -978,7 +957,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedError: "preset.kubermatic.k8c.io \"test\" not found",
 		},
 		{
-			name:       "test 14: set credentials for Alibaba provider",
+			name:       "test 13: set credentials for Alibaba provider",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -1000,7 +979,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Alibaba: &kubermaticv1.AlibabaCloudSpec{AccessKeyID: "key", AccessKeySecret: "secret"}},
 		},
 		{
-			name:       "test 15: set credentials for Fake provider with project-scoped preset",
+			name:       "test 14: set credentials for Fake provider with project-scoped preset",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",
@@ -1023,7 +1002,7 @@ func TestCredentialEndpoint(t *testing.T) {
 			expectedCloudSpec: &kubermaticv1.CloudSpec{Fake: &kubermaticv1.FakeCloudSpec{Token: "abc"}},
 		},
 		{
-			name:       "test 16: set credentials for Fake provider with out of scope preset",
+			name:       "test 15: set credentials for Fake provider with out of scope preset",
 			presetName: "test",
 			userInfo:   provider.UserInfo{Email: "test@example.com"},
 			projectID:  "fake-project",

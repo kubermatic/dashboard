@@ -30,7 +30,6 @@ import (
 	baremetal "k8c.io/machine-controller/sdk/cloudprovider/baremetal"
 	plugins "k8c.io/machine-controller/sdk/cloudprovider/baremetal/plugins"
 	digitalocean "k8c.io/machine-controller/sdk/cloudprovider/digitalocean"
-	equinixmetal "k8c.io/machine-controller/sdk/cloudprovider/equinixmetal"
 	gce "k8c.io/machine-controller/sdk/cloudprovider/gce"
 	hetzner "k8c.io/machine-controller/sdk/cloudprovider/hetzner"
 	kubevirt "k8c.io/machine-controller/sdk/cloudprovider/kubevirt"
@@ -287,17 +286,6 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			cloudSpec.VMwareCloudDirector.PlacementPolicy = config.PlacementPolicy
 		}
 
-	case providerconfig.CloudProviderEquinixMetal, providerconfig.CloudProviderPacket:
-		config := &equinixmetal.RawConfig{}
-		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
-			return nil, fmt.Errorf("failed to parse equinixmetal config: %w", err)
-		}
-		cloudSpec.Packet = &apiv1.PacketNodeSpec{
-			InstanceType: config.InstanceType.Value,
-		}
-		for _, v := range config.Tags {
-			cloudSpec.Packet.Tags = append(cloudSpec.Packet.Tags, v.Value)
-		}
 	case providerconfig.CloudProviderEdge:
 		cloudSpec.Edge = &apiv1.EdgeNodeSpec{}
 	case providerconfig.CloudProviderExternal:

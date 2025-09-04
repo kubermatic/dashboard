@@ -2,7 +2,7 @@ module k8c.io/dashboard/v2
 
 go 1.24.0
 
-toolchain go1.24.3
+toolchain go1.24.6
 
 require (
 	code.cloudfoundry.org/go-pubsub v0.0.0-20250325104231-893079a7322c
@@ -58,7 +58,6 @@ require (
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20250429231206-7a3c70aae2a1 // v0.9.0+
 	github.com/open-policy-agent/gatekeeper/v3 v3.19.1
-	github.com/packethost/packngo v0.31.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/cobra v1.9.1
@@ -73,10 +72,10 @@ require (
 	google.golang.org/api v0.232.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.10.0
-	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250722105622-a3d08e558a27
-	k8c.io/kubermatic/v2 v2.28.1-0.20250722105622-a3d08e558a27
-	k8c.io/machine-controller/sdk v1.62.0
-	k8c.io/operating-system-manager v1.7.2
+	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250828081822-827add7a526f
+	k8c.io/kubermatic/v2 v2.28.1-0.20250828081822-827add7a526f
+	k8c.io/machine-controller/sdk v1.63.0
+	k8c.io/operating-system-manager v1.7.5
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.33.0
 	k8s.io/apiextensions-apiserver v0.33.0
@@ -205,7 +204,6 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.2 // indirect
 	github.com/emicklei/proto v1.14.1 // indirect
-	github.com/equinix/equinix-sdk-go v0.51.1 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -226,7 +224,7 @@ require (
 	github.com/go-openapi/loads v0.22.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-piv/piv-go/v2 v2.3.0 // indirect
-	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/gobuffalo/flect v1.0.3 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
@@ -388,8 +386,8 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
-	gopkg.in/validator.v2 v2.0.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	k8c.io/kubelb v1.1.2 // indirect
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.33.0 // indirect
 	k8s.io/gengo/v2 v2.0.0-20250207200755-1244d31929d7 // indirect
