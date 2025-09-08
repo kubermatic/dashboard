@@ -14,6 +14,7 @@ import (
 	"github.com/go-openapi/runtime"
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewCreateOIDCKubeconfigParams creates a new CreateOIDCKubeconfigParams object,
@@ -63,6 +64,9 @@ type CreateOIDCKubeconfigParams struct {
 
 	// ClusterID.
 	ClusterID *string
+
+	// OidcKubeloginEnabled.
+	OIDCKubeLoginEnabled *bool
 
 	// ProjectID.
 	ProjectID *string
@@ -134,6 +138,17 @@ func (o *CreateOIDCKubeconfigParams) SetClusterID(clusterID *string) {
 	o.ClusterID = clusterID
 }
 
+// WithOIDCKubeLoginEnabled adds the oidcKubeloginEnabled to the create o ID c kubeconfig params
+func (o *CreateOIDCKubeconfigParams) WithOIDCKubeLoginEnabled(oidcKubeloginEnabled *bool) *CreateOIDCKubeconfigParams {
+	o.SetOIDCKubeLoginEnabled(oidcKubeloginEnabled)
+	return o
+}
+
+// SetOIDCKubeLoginEnabled adds the oidcKubeloginEnabled to the create o ID c kubeconfig params
+func (o *CreateOIDCKubeconfigParams) SetOIDCKubeLoginEnabled(oidcKubeloginEnabled *bool) {
+	o.OIDCKubeLoginEnabled = oidcKubeloginEnabled
+}
+
 // WithProjectID adds the projectID to the create o ID c kubeconfig params
 func (o *CreateOIDCKubeconfigParams) WithProjectID(projectID *string) *CreateOIDCKubeconfigParams {
 	o.SetProjectID(projectID)
@@ -176,6 +191,23 @@ func (o *CreateOIDCKubeconfigParams) WriteToRequest(r runtime.ClientRequest, reg
 		if qClusterID != "" {
 
 			if err := r.SetQueryParam("cluster_id", qClusterID); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.OIDCKubeLoginEnabled != nil {
+
+		// query param oidc_kubelogin_enabled
+		var qrOidcKubeloginEnabled bool
+
+		if o.OIDCKubeLoginEnabled != nil {
+			qrOidcKubeloginEnabled = *o.OIDCKubeLoginEnabled
+		}
+		qOidcKubeloginEnabled := swag.FormatBool(qrOidcKubeloginEnabled)
+		if qOidcKubeloginEnabled != "" {
+
+			if err := r.SetQueryParam("oidc_kubelogin_enabled", qOidcKubeloginEnabled); err != nil {
 				return err
 			}
 		}
