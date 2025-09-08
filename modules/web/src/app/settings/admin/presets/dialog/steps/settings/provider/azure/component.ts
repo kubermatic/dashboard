@@ -38,6 +38,7 @@ export enum Controls {
 @Component({
   selector: 'km-azure-settings',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -55,6 +56,17 @@ export enum Controls {
 export class AzureSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
   loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
+
+  get selectedLoadBalancerSKU(): string {
+    return this.form.get(Controls.LoadBalancerSKU).value;
+  }
+
+  set selectedLoadBalancerSKU(sku: string) {
+    this.form.get(Controls.LoadBalancerSKU).setValue(sku);
+    if (!sku) {
+      this.form.get(Controls.LoadBalancerSKU).reset();
+    }
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -92,6 +104,10 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
     this._unsubscribe.next();
     this._unsubscribe.complete();
     delete this._presetDialogService.preset.spec.azure;
+  }
+
+  clearLoadBalancerSKU(): void {
+    this.selectedLoadBalancerSKU = '';
   }
 
   private _update(): void {

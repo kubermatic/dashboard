@@ -40,6 +40,7 @@ enum Controls {
 @Component({
   selector: 'km-wizard-azure-provider-extended',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -68,6 +69,17 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   subnets: string[] = [];
   isLoadingSubnets = false;
   loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
+
+  get selectedLoadBalancerSKU(): string {
+    return this.form.get(Controls.LoadBalancerSKU).value;
+  }
+
+  set selectedLoadBalancerSKU(sku: string) {
+    this.form.get(Controls.LoadBalancerSKU).setValue(sku);
+    if (!sku) {
+      this.form.get(Controls.LoadBalancerSKU).reset();
+    }
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -253,6 +265,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   getValueFromInternalForm(control: Controls): string {
     const internalFormValue = this.form.get(control).value;
     return internalFormValue ? internalFormValue[AutocompleteControls.Main] : '';
+  }
+
+  clearLoadBalancerSKU(): void {
+    this.selectedLoadBalancerSKU = '';
   }
 
   private _getResourceGroup(): string {
