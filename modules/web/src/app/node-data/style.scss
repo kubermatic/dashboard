@@ -91,3 +91,11 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .quota-widget {
   margin-bottom: 22px !important;
 }
+
+.km-icon-warning {
+  margin-bottom: 10px;
+}
+
+button:has(.km-icon-edit) {
+  width: 220px;
+}

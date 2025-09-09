@@ -44,7 +44,11 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   ];
 
   // Array of endpoints that should be silenced in the UI.
-  private readonly _silencedEndpoints = ['providers/gke/validatecredentials', 'presets?name='];
+  private readonly _silencedEndpoints = [
+    'providers/gke/validatecredentials',
+    'presets?name=',
+    'CLUSTER_AUTOSCALING_APP_DEF_NAME',
+  ];
 
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', Errors.InvalidCredentials],

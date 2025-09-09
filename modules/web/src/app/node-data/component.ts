@@ -86,6 +86,11 @@ enum Controls {
   StaticNetworkCIDR = 'CIDR',
 }
 
+enum ClusterAutoscalingWarning {
+  WizardView = 'To enable autoscaling, the Cluster Autoscaler application need to be added to the catalog.',
+  DialogView = 'To enable autoscaling, the Cluster Autoscaler application need to be installed.',
+}
+
 @Component({
   selector: 'km-node-data',
   templateUrl: './template.html',
@@ -133,10 +138,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   currentNodeOS: OperatingSystem;
   allowedOperatingSystems = DEFAULT_ADMIN_SETTINGS.allowedOperatingSystems;
   DNSServers: string[] = [];
-  autoscalingTooltipText =
-    'Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application.';
   clusterAutoscalerAppDefinition: ApplicationDefinition;
   autoscalerApplication: Application;
+  clusterAutoscalerWarningMessage: string;
 
   private isCusterTemplateEditMode = false;
   private quotaWidgetComponentRef: QuotaWidgetComponent;
@@ -243,27 +247,37 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.addControl(Controls.Kubelet, this._builder.control(''));
       this.dialogEditMode = !!this._nodeDataService.nodeData.name;
 
+      this._applicationService.list(this.projectId, this._clusterSpecService.cluster.id).subscribe(apps => {
+        this.autoscalerApplication = apps.find(
+          app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+        );
+        if (!this.autoscalerApplication?.name) {
+          this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.DialogView;
+          this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+          this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+        }
+      });
+
       if (this.dialogEditMode) {
         this.form.get(Controls.Name).disable();
       } else {
         this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
       }
+    } else {
+      this._applicationService
+        .getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME)
+        .pipe(take(1))
+        .subscribe(appdef => {
+          if (appdef.name) {
+            this.clusterAutoscalerAppDefinition = appdef;
+            this.autoscalerApplication = this.autoscalerApplication ?? createApplicationInstallation(appdef);
+          } else {
+            this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
+            this.form.get(Controls.EnableClusterAutoscalingApp).disable();
+            this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.WizardView;
+          }
+        });
     }
-
-    this._applicationService
-      .getApplicationDefinition(CLUSTER_AUTOSCALING_APP_DEF_NAME)
-      .pipe(take(1))
-      .subscribe(appdef => {
-        if (appdef.name) {
-          this.clusterAutoscalerAppDefinition = appdef;
-          this.autoscalerApplication = this.autoscalerApplication ?? createApplicationInstallation(appdef);
-        } else {
-          this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
-          this.form.get(Controls.EnableClusterAutoscalingApp).disable();
-          this.autoscalingTooltipText =
-            'To enable autoscaling, the Cluster Autoscaler application must be added to the applications catalog.';
-        }
-      });
 
     this.currentNodeOS = (this.dialogEditMode || this.wizardMode) && this._nodeDataService.operatingSystem;
 
@@ -377,6 +391,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             ...this._applicationService.applications,
             this.autoscalerApplication,
           ];
+        } else {
+          this.form.get(Controls.MaxReplicas).setValue(null);
+          this.form.get(Controls.MinReplicas).setValue(null);
         }
       });
   }
@@ -490,6 +507,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           this.autoscalerApplication = app;
         }
       });
+  }
+
+  isClusterAutoscalingEnabled(): boolean {
+    return !!this.clusterAutoscalerAppDefinition || (this.isDialogView() && !!this.autoscalerApplication);
   }
 
   private _init(): void {

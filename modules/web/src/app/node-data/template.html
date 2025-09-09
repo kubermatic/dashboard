@@ -243,20 +243,30 @@ limitations under the License.
                         fxLayoutAlign="start center"
                         fxLayoutGap="5px">
           <div>Cluster Autoscaling</div>
-          <i *ngIf="isDialogView()"
+          <i *ngIf="isClusterAutoscalingEnabled()"
              class="km-icon-info km-pointer"
              matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. NOTE: The addon for cluster-autoscaler has been deprecated in favor of the Application, please make sure to remove the addon from the cluster before enabling this option."></i>
         </mat-card-title>
       </mat-card-header>
 
-      <div fxLayoutAlign="space-between center"
-           *ngIf="!isDialogView()">
+      <div fxLayoutAlign="space-between center">
         <div>
+
+          <div *ngIf="!isClusterAutoscalingEnabled()"
+               class="km-selector-warning"
+               fxLayout="row"
+               fxLayoutAlign="start center">
+            <i class="km-icon-warning km-warning km-pointer"></i>
+            <p fxFlex="95">
+              {{clusterAutoscalerWarningMessage}}
+            </p>
+          </div>
           <mat-checkbox [name]="Controls.EnableClusterAutoscalingApp"
                         [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
           </mat-checkbox>
-          <i class="km-icon-info km-pointer"
-             [matTooltip]="autoscalingTooltipText"></i>
+          <i *ngIf="isClusterAutoscalingEnabled()"
+             class="km-icon-info km-pointer"
+             matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
         </div>
         <button *ngIf="form.get(Controls.EnableClusterAutoscalingApp).value"
                 mat-flat-button
@@ -274,6 +284,8 @@ limitations under the License.
                          hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
                          [min]="MinReplicasCount"
                          [max]="form.get(Controls.MaxReplicas).value  || MaxReplicasCount"
+                         [required]="form.get(Controls.MaxReplicas).value"
+                         [disabled]="!isClusterAutoscalingEnabled()"
                          [formControlName]="Controls.MinReplicas">
       </km-number-stepper>
 
@@ -282,6 +294,8 @@ limitations under the License.
                          hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
                          [min]="form.get(Controls.MinReplicas).value || MinReplicasCount"
                          [max]="MaxReplicasCount"
+                         [required]="form.get(Controls.MinReplicas).value"
+                         [disabled]="!isClusterAutoscalingEnabled()"
                          [formControlName]="Controls.MaxReplicas">
       </km-number-stepper>
     </ng-container>
