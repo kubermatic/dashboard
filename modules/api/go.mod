@@ -84,13 +84,13 @@ require (
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/code-generator v0.33.4
 	k8s.io/klog/v2 v2.130.1
-	k8s.io/kubectl v0.33.0
-	k8s.io/metrics v0.33.0
+	k8s.io/kubectl v0.33.4
+	k8s.io/metrics v0.33.4
 	k8s.io/utils v0.0.0-20250820121507-0af2bda4dd1d
 	kubevirt.io/api v1.4.0
 	kubevirt.io/containerized-data-importer-api v1.62.0
 	sigs.k8s.io/controller-runtime v0.21.0
-	sigs.k8s.io/controller-tools v0.17.3
+	sigs.k8s.io/controller-tools v0.18.0
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -102,7 +102,7 @@ replace github.com/nutanix-cloud-native/prism-go-client => github.com/nutanix-cl
 
 replace k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20240903163716-9e1beecbcb38
 
-replace k8s.io/client-go => k8s.io/client-go v0.32.1
+replace k8s.io/client-go => k8s.io/client-go v0.33.4
 
 // Needs to be the same as https://github.com/kubermatic/kubermatic/blob/main/pkg/resources/resources.go#L643
 replace k8c.io/kubeone => k8c.io/kubeone v1.7.2
