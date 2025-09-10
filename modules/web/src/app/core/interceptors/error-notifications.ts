@@ -19,6 +19,7 @@ import {Observable} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {SettingsService} from '@core/services/settings';
 import {AdminSettings} from '@shared/entity/settings';
+import {CLUSTER_AUTOSCALING_APP_DEF_NAME} from '@app/shared/entity/application';
 
 export interface APIError {
   error: Error;
@@ -47,7 +48,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _silencedEndpoints = [
     'providers/gke/validatecredentials',
     'presets?name=',
-    'CLUSTER_AUTOSCALING_APP_DEF_NAME',
+    `applicationdefinitions/${CLUSTER_AUTOSCALING_APP_DEF_NAME}`,
   ];
 
   private readonly _errorMap = new Map<string, string>([

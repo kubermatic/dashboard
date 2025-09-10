@@ -87,8 +87,8 @@ enum Controls {
 }
 
 enum ClusterAutoscalingWarning {
-  WizardView = 'To enable autoscaling, the Cluster Autoscaler application need to be added to the catalog.',
-  DialogView = 'To enable autoscaling, the Cluster Autoscaler application need to be installed.',
+  NotInCatalog = 'To configure autoscaling, the Cluster Autoscaler application must be present in the applications catalog.',
+  NotInstalled = 'To configure autoscaling, the Cluster Autoscaler application needs to be installed on the cluster',
 }
 
 @Component({
@@ -116,7 +116,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-  readonly MinReplicasCount = 0;
+  readonly MinReplicasCount = 1;
   readonly MaxReplicasCount = 1000;
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
@@ -252,7 +252,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
         );
         if (!this.autoscalerApplication?.name) {
-          this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.DialogView;
+          this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.NotInstalled;
           this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
           this.form.get(Controls.EnableClusterAutoscalingApp).disable();
         }
@@ -274,7 +274,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           } else {
             this.form.get(Controls.EnableClusterAutoscalingApp).setValue(false);
             this.form.get(Controls.EnableClusterAutoscalingApp).disable();
-            this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.WizardView;
+            this.clusterAutoscalerWarningMessage = ClusterAutoscalingWarning.NotInCatalog;
           }
         });
     }
