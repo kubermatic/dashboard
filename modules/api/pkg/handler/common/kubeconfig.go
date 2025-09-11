@@ -349,7 +349,7 @@ func CreateOIDCKubeconfigEndpoint(
 			// create auth entry
 			clientCmdAuth := clientcmdapi.NewAuthInfo()
 
-			if req.OIDCKubeLoginEnabled {
+			if req.decodedState.OIDCKubeLoginEnabled {
 				execConfig := &clientcmdapi.ExecConfig{
 					APIVersion: "client.authentication.k8s.io/v1",
 					Command:    "kubectl",
@@ -413,10 +413,11 @@ func CreateOIDCKubeconfigEndpoint(
 	rsp.secureCookie = oidcIssuerVerifier.OIDCConfig().SecureCookie
 
 	oidcState := OIDCState{
-		Nonce:     nonce,
-		ClusterID: req.ClusterID,
-		ProjectID: req.ProjectID,
-		UserID:    req.UserID,
+		Nonce:                nonce,
+		ClusterID:            req.ClusterID,
+		ProjectID:            req.ProjectID,
+		UserID:               req.UserID,
+		OIDCKubeLoginEnabled: req.OIDCKubeLoginEnabled,
 	}
 	rawState, err := json.Marshal(oidcState)
 	if err != nil {
@@ -648,7 +649,8 @@ type OIDCState struct {
 	ClusterID string `json:"cluster_id"`
 	ProjectID string `json:"project_id"`
 	// UserID holds the ID of the user on behalf of which the request is being handled.
-	UserID string `json:"user_id"`
+	UserID               string `json:"user_id"`
+	OIDCKubeLoginEnabled bool   `json:"oidc_kubelogin_enabled"`
 }
 
 type createOIDCKubeconfigRsp struct {
