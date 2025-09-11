@@ -466,6 +466,11 @@ limitations under the License.
                                  [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
             </km-property-boolean>
 
+            <km-property *ngIf="cluster?.status?.encryption?.phase">
+              <div key>Encryption at Rest</div>
+              <div value>{{cluster.status.encryption.phase}}</div>
+            </km-property>
+
             <km-property-boolean label="CSI Storage Driver"
                                  [value]="!cluster.spec.disableCsiDriver"
                                  *ngIf="cluster.spec.disableCsiDriver">

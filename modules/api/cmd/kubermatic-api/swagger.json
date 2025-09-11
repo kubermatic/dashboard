@@ -30603,6 +30603,9 @@
       "type": "object",
       "title": "ClusterStatus defines the cluster status.",
       "properties": {
+        "encryption": {
+          "$ref": "#/definitions/EncryptionStatus"
+        },
         "externalCCMMigration": {
           "$ref": "#/definitions/ExternalCCMMigrationStatus"
         },
@@ -32641,6 +32644,18 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "EncryptionStatus": {
+      "type": "object",
+      "title": "EncryptionStatus defines the encryption at rest status.",
+      "properties": {
+        "phase": {
+          "description": "Phase represents the current state of encryption at rest",
+          "type": "string",
+          "x-go-name": "Phase"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "EnvVar": {
       "type": "object",

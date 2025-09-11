@@ -29,7 +29,7 @@ export class ClusterSpecService {
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
   private isCusterTemplateEditMode = false;
-  private _encryptionAtRestKey: string | null = null;
+  private _encryptionAtRestKey: string;
 
   get cluster(): Cluster {
     return this._cluster;

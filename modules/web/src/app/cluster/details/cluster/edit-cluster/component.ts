@@ -28,6 +28,7 @@ import {
   AuditLoggingWebhookBackend,
   AuditPolicyPreset,
   Cluster,
+  ClusterAnnotation,
   ClusterPatch,
   ClusterSpecPatch,
   ContainerRuntime,
@@ -83,6 +84,7 @@ enum Controls {
   RouterReconciliation = 'routerReconciliation',
   BackupStorageLocation = 'backupStorageLocation',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
+  EncryptionAtRest = 'encryptionAtRest',
 }
 
 @Component({
@@ -200,6 +202,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
+      [Controls.EncryptionAtRest]: new FormControl({
+        value: !!this.cluster.spec.encryptionConfiguration?.enabled,
+        disabled: !this.cluster.spec.encryptionConfiguration?.enabled,
+      }),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -538,6 +544,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     } else {
       patch.spec.backupConfig = null;
+    }
+
+    if (this.cluster.spec.encryptionConfiguration?.enabled && !this.form.get(Controls.EncryptionAtRest).value) {
+      patch.spec.encryptionConfiguration = {
+        enabled: false,
+      };
+      patch.annotations = {
+        ...patch.annotations,
+        [ClusterAnnotation.EncryptionAtRestEnabled]: 'false',
+      };
     }
 
     if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {

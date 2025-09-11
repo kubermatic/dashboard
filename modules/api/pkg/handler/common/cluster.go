@@ -232,7 +232,7 @@ func GenerateCluster(
 	partialCluster.Name = utilcluster.MakeClusterName()
 
 	// Handle encryption at rest configuration after cluster spec is created
-	if err := handleEncryptionAtRest(ctx, privilegedClusterProvider, partialCluster, body.EncryptionAtRest); err != nil {
+	if err := handleEncryptionAtRest(ctx, seedClient, partialCluster, body.EncryptionAtRest); err != nil {
 		return nil, utilerrors.NewBadRequest("invalid encryption configuration: %v", err)
 	}
 
@@ -586,6 +586,12 @@ func PatchEndpoint(
 
 	// Handle encryption configuration clean up when disabled
 	if patchedCluster.Spec.EncryptionConfiguration != nil && !patchedCluster.Spec.EncryptionConfiguration.Enabled {
+		// Clean up encryption secret when encryption is disabled
+		if oldInternalCluster.Spec.EncryptionConfiguration != nil && oldInternalCluster.Spec.EncryptionConfiguration.Enabled {
+			if err := cleanupEncryptionSecret(ctx, privilegedClusterProvider, oldInternalCluster); err != nil {
+				kubermaticlog.Logger.Errorw("Failed to cleanup encryption secret", "cluster", oldInternalCluster.Name, "error", err)
+			}
+		}
 		newInternalCluster.Spec.EncryptionConfiguration = nil
 	} else {
 		newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
@@ -1166,12 +1172,13 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 			Kyverno:                              internalCluster.Spec.Kyverno,
-			EncryptionConfiguration:              getEncryptionConfigurationOrDefault(internalCluster.Spec.EncryptionConfiguration, internalCluster.Spec.Features),
+			EncryptionConfiguration:              internalCluster.Spec.EncryptionConfiguration,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,
 			URL:                  internalCluster.Status.Address.URL,
 			ExternalCCMMigration: convertInternalCCMStatusToExternal(internalCluster, datacenter, incompatibilities...),
+			Encryption:           buildEncryptionStatus(internalCluster),
 		},
 		Type: apiv1.KubernetesClusterType,
 	}
@@ -1332,7 +1339,7 @@ func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInf
 	return false
 }
 
-func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provider.PrivilegedClusterProvider, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
+func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
 	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
 		return nil
 	}
@@ -1365,7 +1372,6 @@ func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provi
 	}}
 
 	// Create the secret in Kubermatic namespace at seed level
-	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      secretName,
@@ -1387,22 +1393,31 @@ func handleEncryptionAtRest(ctx context.Context, privilegedClusterProvider provi
 	return nil
 }
 
-func getEncryptionConfigurationOrDefault(config *kubermaticv1.EncryptionConfiguration, features map[string]bool) *kubermaticv1.EncryptionConfiguration {
-	enabled := false
-	if config != nil {
-		enabled = config.Enabled
-	} else if features != nil {
-		enabled = features["encryptionAtRest"]
+func cleanupEncryptionSecret(ctx context.Context, privilegedClusterProvider provider.PrivilegedClusterProvider, cluster *kubermaticv1.Cluster) error {
+	secretName := fmt.Sprintf("encryption-key-cluster-%s", cluster.Name)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: resources.KubermaticNamespace,
+		},
 	}
 
-	// Return nil if encryption is not enabled
-	if !enabled {
-		return nil
+	if err := seedClient.Delete(ctx, secret); err != nil {
+		if !apierrors.IsNotFound(err) {
+			return fmt.Errorf("failed to delete encryption secret: %w", err)
+		}
 	}
 
-	// Return minimal config when enabled
-	return &kubermaticv1.EncryptionConfiguration{
-		Enabled:   true,
-		Resources: []string{"secrets"},
+	return nil
+}
+
+func buildEncryptionStatus(cluster *kubermaticv1.Cluster) *apiv1.EncryptionStatus {
+	if cluster.Spec.EncryptionConfiguration != nil && cluster.Spec.EncryptionConfiguration.Enabled {
+		return &apiv1.EncryptionStatus{
+			Phase: "Active",
+		}
 	}
+	return nil
 }

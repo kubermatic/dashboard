@@ -47,9 +47,10 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		kubernetesDashboardEnabled = apiCluster.Spec.KubernetesDashboard.Enabled
 	}
 
-	// Set encryptionAtRest feature flag if encryption is enabled
 	if apiCluster.Spec.EncryptionConfiguration != nil && apiCluster.Spec.EncryptionConfiguration.Enabled {
 		features["encryptionAtRest"] = true
+	} else {
+		delete(features, "encryptionAtRest")
 	}
 
 	spec := &kubermaticv1.ClusterSpec{

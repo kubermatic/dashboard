@@ -464,13 +464,25 @@ limitations under the License.
                  [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.EncryptionAtRest">
+            <mat-checkbox *ngIf="!clusterTemplateEditMode"
+                          [formControlName]="Controls.EncryptionAtRest">
               Encryption at Rest
               <i class="km-icon-info km-pointer"
                  matTooltip="Enable encryption at rest for cluster secrets and etcd data using a secretbox encryption key."></i>
             </mat-checkbox>
 
-            <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest)">
+            <div *ngIf="!!controlValue(Controls.EncryptionAtRest) && !clusterTemplateEditMode"
+                 class="km-encryption-at-rest-warning"
+                 fxLayout="row"
+                 fxLayoutAlign=" center"
+                 fxLayoutGap="8px">
+              <i class="km-icon-warning km-warning km-pointer"></i>
+              <p fxFlex="95">
+                Encryption at Rest is currently in beta. Some limitations may apply and the feature may undergo changes before reaching stable release.
+              </p>
+            </div>
+
+            <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest) && !clusterTemplateEditMode">
               <mat-label>Encryption Key</mat-label>
               <input matInput
                      [formControlName]="Controls.EncryptionAtRestKey"
