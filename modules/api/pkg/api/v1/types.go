@@ -1398,6 +1398,12 @@ func newPublicVMwareCloudDirectorCloudSpec(internal *kubermaticv1.VMwareCloudDir
 	}
 }
 
+// EncryptionStatus defines the encryption at rest status.
+type EncryptionStatus struct {
+	// Phase represents the current state of encryption at rest
+	Phase string `json:"phase"`
+}
+
 // ClusterStatus defines the cluster status.
 type ClusterStatus struct {
 	// Version actual version of the kubernetes master components
@@ -1406,6 +1412,8 @@ type ClusterStatus struct {
 	URL string `json:"url"`
 	// ExternalCCMMigration represents the migration status to the external CCM
 	ExternalCCMMigration ExternalCCMMigrationStatus `json:"externalCCMMigration"`
+	// Encryption represents the encryption at rest status
+	Encryption *EncryptionStatus `json:"encryption,omitempty"`
 }
 
 type ExternalCCMMigrationStatus string

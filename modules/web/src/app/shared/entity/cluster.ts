@@ -504,10 +504,15 @@ export class BackupConfig {
   };
 }
 
+export interface EncryptionStatus {
+  phase: string;
+}
+
 export class Status {
   url: string;
   version: string;
   externalCCMMigration: ExternalCCMMigrationStatus;
+  encryption?: EncryptionStatus;
 }
 
 export enum ExternalCCMMigrationStatus {
