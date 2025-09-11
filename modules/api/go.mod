@@ -72,8 +72,8 @@ require (
 	google.golang.org/api v0.232.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.10.0
-	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250910082321-447b447edb49
-	k8c.io/kubermatic/v2 v2.28.1-0.20250910082321-447b447edb49
+	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250911202254-fe67c6f4bca1
+	k8c.io/kubermatic/v2 v2.28.1-0.20250911202254-fe67c6f4bca1
 	k8c.io/machine-controller/sdk v1.63.0
 	k8c.io/operating-system-manager v1.7.5
 	k8c.io/reconciler v0.5.0
@@ -392,7 +392,7 @@ require (
 	k8s.io/autoscaler/vertical-pod-autoscaler v1.3.1 // indirect
 	k8s.io/component-base v0.33.4 // indirect
 	k8s.io/gengo/v2 v2.0.0-20250207200755-1244d31929d7 // indirect
-	k8s.io/kube-aggregator v0.33.0 // indirect
+	k8s.io/kube-aggregator v0.33.4 // indirect
 	k8s.io/kube-openapi v0.31.8 // indirect
 	k8s.io/pod-security-admission v0.33.0 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
