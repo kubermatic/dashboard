@@ -533,6 +533,16 @@ limitations under the License.
             </km-property-boolean>
             <!-- End of boolean properties. -->
 
+            <!-- Provider labels -->
+            <km-property *ngIf="element.spec.labels">
+              <div key>Labels</div>
+              <div value>
+                <km-labels [labels]="element.spec.labels"
+                           emptyMessage="No assigned labels"></km-labels>
+              </div>
+            </km-property>
+            <!-- End of provider labels -->
+
             <div *ngIf="getMetrics(element.name)"
                  fxLayout="row">
               <km-property-usage name="Nodes CPU Usage"
