@@ -348,7 +348,6 @@ export class ClusterSpec {
   opaIntegration?: OPAIntegration;
   kyverno?: KyvernoIntegration;
   kubernetesDashboard?: KubernetesDashboard;
-  features?: Record<string, boolean>;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
