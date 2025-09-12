@@ -80,6 +80,10 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
     return this.form.get(Control.Scope).value !== ClusterTemplateScope.Project && !_.isEmpty(this.data.sshKeys);
   }
 
+  get showEncryptionWarning(): boolean {
+    return !!this.data.cluster?.spec?.encryptionConfiguration?.enabled;
+  }
+
   getObservable(): Observable<ClusterTemplate> {
     if (this.data.clusterTemplateID) {
       return this._clusterTemplateService
@@ -102,10 +106,16 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
       };
     }
 
+    // Create a copy of the cluster and remove encryption at rest for template saving
+    const clusterForTemplate = _.cloneDeep(this.data.cluster);
+    if (clusterForTemplate.spec?.encryptionConfiguration) {
+      delete clusterForTemplate.spec.encryptionConfiguration;
+    }
+
     return {
       name: this.form.get(Control.Name).value,
       scope: this.form.get(Control.Scope).value,
-      cluster: this.data.cluster,
+      cluster: clusterForTemplate,
       nodeDeployment: {
         name: this.data.nodeData.name,
         annotations: annotations,

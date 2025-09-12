@@ -47,6 +47,12 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		kubernetesDashboardEnabled = apiCluster.Spec.KubernetesDashboard.Enabled
 	}
 
+	if apiCluster.Spec.EncryptionConfiguration != nil && apiCluster.Spec.EncryptionConfiguration.Enabled {
+		features["encryptionAtRest"] = true
+	} else {
+		delete(features, "encryptionAtRest")
+	}
+
 	spec := &kubermaticv1.ClusterSpec{
 		HumanReadableName:                   apiCluster.Name,
 		Cloud:                               apiCluster.Spec.Cloud,
@@ -75,6 +81,8 @@ func Spec(ctx context.Context, apiCluster apiv1.Cluster, template *kubermaticv1.
 		KubeLB:                               apiCluster.Spec.KubeLB,
 		DisableCSIDriver:                     apiCluster.Spec.DisableCSIDriver,
 		Kyverno:                              apiCluster.Spec.Kyverno,
+		EncryptionConfiguration:              apiCluster.Spec.EncryptionConfiguration,
+		Features:                             features,
 	}
 
 	if apiCluster.Spec.ClusterNetwork != nil {

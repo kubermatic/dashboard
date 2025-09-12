@@ -365,6 +365,7 @@ export class ClusterSpec {
   exposeStrategy?: ExposeStrategy;
   kubelb?: KubeLB;
   disableCsiDriver?: boolean;
+  encryptionConfiguration?: EncryptionConfiguration;
 }
 
 export class KubeLB {
@@ -420,6 +421,7 @@ export class CNIPluginVersions {
 
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
+  EncryptionAtRestEnabled = 'kubermatic.io/encryption-at-rest-enabled',
 }
 
 export enum ProxyMode {
@@ -472,6 +474,11 @@ export class KubernetesDashboard {
   enabled?: boolean;
 }
 
+export class EncryptionConfiguration {
+  enabled?: boolean;
+  resources?: string[];
+}
+
 export class OPAIntegration {
   enabled: boolean;
 }
@@ -496,10 +503,15 @@ export class BackupConfig {
   };
 }
 
+export interface EncryptionStatus {
+  phase: string;
+}
+
 export class Status {
   url: string;
   version: string;
   externalCCMMigration: ExternalCCMMigrationStatus;
+  encryption?: EncryptionStatus;
 }
 
 export enum ExternalCCMMigrationStatus {
@@ -563,6 +575,7 @@ export class ClusterSpecPatch {
   containerRuntime?: ContainerRuntime;
   cniPlugin?: CNIPluginConfigPatch;
   apiServerAllowedIPRanges?: NetworkRanges;
+  encryptionConfiguration?: EncryptionConfiguration;
 }
 
 export class CNIPluginConfigPatch {
@@ -677,10 +690,15 @@ export class ProviderSettingsPatch {
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
 
+export interface EncryptionAtRestConfig {
+  key: string;
+}
+
 export class CreateClusterModel {
   cluster: ClusterModel;
   nodeDeployment?: MachineDeployment;
   applications?: Application[];
+  encryptionAtRest?: EncryptionAtRestConfig;
 }
 
 class ClusterModel {
