@@ -542,10 +542,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       patch.spec.backupConfig = null;
     }
 
-    if (this.cluster.spec.encryptionConfiguration?.enabled && !this.form.get(Controls.EncryptionAtRest).value) {
-      patch.spec.encryptionConfiguration = {
-        enabled: false,
-      };
+    if (this.cluster.spec.encryptionConfiguration) {
+      if (this.cluster.spec.encryptionConfiguration.enabled && !this.form.get(Controls.EncryptionAtRest).value) {
+        patch.spec.encryptionConfiguration = {
+          enabled: false,
+        };
+      } else {
+        patch.spec.encryptionConfiguration = this.cluster.spec.encryptionConfiguration;
+      }
     }
 
     if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {

@@ -583,19 +583,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
 	newInternalCluster.Spec.DisableCSIDriver = patchedCluster.Spec.DisableCSIDriver
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
-
-	// Handle encryption configuration clean up when disabled
-	if patchedCluster.Spec.EncryptionConfiguration != nil && !patchedCluster.Spec.EncryptionConfiguration.Enabled {
-		// Clean up encryption secret when encryption is disabled
-		if oldInternalCluster.Spec.EncryptionConfiguration != nil && oldInternalCluster.Spec.EncryptionConfiguration.Enabled {
-			if err := cleanupEncryptionSecret(ctx, privilegedClusterProvider, oldInternalCluster); err != nil {
-				kubermaticlog.Logger.Errorw("Failed to cleanup encryption secret", "cluster", oldInternalCluster.Name, "error", err)
-			}
-		}
-		newInternalCluster.Spec.EncryptionConfiguration = nil
-	} else {
-		newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
-	}
+	newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
@@ -1388,26 +1376,6 @@ func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Cl
 
 	if err := seedClient.Create(ctx, secret); err != nil {
 		return fmt.Errorf("failed to create encryption secret: %w", err)
-	}
-
-	return nil
-}
-
-func cleanupEncryptionSecret(ctx context.Context, privilegedClusterProvider provider.PrivilegedClusterProvider, cluster *kubermaticv1.Cluster) error {
-	secretName := fmt.Sprintf("encryption-key-cluster-%s", cluster.Name)
-	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
-
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretName,
-			Namespace: resources.KubermaticNamespace,
-		},
-	}
-
-	if err := seedClient.Delete(ctx, secret); err != nil {
-		if !apierrors.IsNotFound(err) {
-			return fmt.Errorf("failed to delete encryption secret: %w", err)
-		}
 	}
 
 	return nil
