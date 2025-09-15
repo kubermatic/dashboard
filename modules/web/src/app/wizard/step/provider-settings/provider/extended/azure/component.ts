@@ -40,7 +40,6 @@ enum Controls {
 @Component({
   selector: 'km-wizard-azure-provider-extended',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

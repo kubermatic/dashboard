@@ -38,7 +38,6 @@ export enum Controls {
 @Component({
   selector: 'km-azure-settings',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
