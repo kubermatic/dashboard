@@ -72,9 +72,9 @@ require (
 	google.golang.org/api v0.209.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.7.3
-	k8c.io/kubermatic/v2 v2.27.7-0.20250812141153-bbd4cbc83ed5
-	k8c.io/machine-controller v1.61.3
-	k8c.io/operating-system-manager v1.6.8
+	k8c.io/kubermatic/v2 v2.27.8-0.20250915172803-b8e92fc1cbdf
+	k8c.io/machine-controller v1.61.4
+	k8c.io/operating-system-manager v1.6.9
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.32.2
 	k8s.io/apiextensions-apiserver v0.32.2
@@ -193,6 +193,8 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
+	github.com/hashicorp/golang-lru/arc/v2 v2.0.7 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
