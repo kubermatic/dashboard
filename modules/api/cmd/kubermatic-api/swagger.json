@@ -35195,7 +35195,7 @@
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KKP installs the Gateway API CRDs for the user cluster.",
+          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KubeLB installs the Gateway API CRDs in the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -35229,7 +35229,7 @@
           "x-go-name": "DisableIngressClass"
         },
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.\nWhen this option is enabled for the user cluster, KKP installs the Gateway API CRDs for the user cluster.",
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB. Once enabled, Gateway API CRDs are installed for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
