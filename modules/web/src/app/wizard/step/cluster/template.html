@@ -464,25 +464,31 @@ limitations under the License.
                  [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
             </mat-checkbox>
 
-            <mat-checkbox *ngIf="!clusterTemplateEditMode"
+            <mat-checkbox *ngIf="isEncryptionAtRestVisible()"
                           [formControlName]="Controls.EncryptionAtRest">
-              Encryption at Rest
-              <i class="km-icon-info km-pointer"
-                 matTooltip="Enable encryption at rest for cluster secrets and etcd data using a secretbox encryption key."></i>
+              <div fxLayout="row"
+                   fxLayoutAlign=" center"
+                   fxLayoutGap="8px">
+                <span>Encryption at Rest</span>
+                <span class="km-label-primary"
+                      matTooltip="Beta feature - still under development.">Beta</span>
+                <i class="km-icon-info km-pointer"
+                   matTooltip="Enable encryption at rest for cluster secrets for this user cluster."></i>
+              </div>
             </mat-checkbox>
 
-            <div *ngIf="!!controlValue(Controls.EncryptionAtRest) && !clusterTemplateEditMode"
+            <div *ngIf="!!controlValue(Controls.EncryptionAtRest) && isEncryptionAtRestVisible()"
                  class="km-encryption-at-rest-warning"
                  fxLayout="row"
                  fxLayoutAlign=" center"
                  fxLayoutGap="8px">
               <i class="km-icon-warning km-warning km-pointer"></i>
               <p fxFlex="95">
-                Encryption at Rest is currently in beta and not recommended for production due to possible data loss.
+                Encryption at rest is currently in beta and not recommended for production due to possible data loss.
               </p>
             </div>
 
-            <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest) && !clusterTemplateEditMode">
+            <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest) && isEncryptionAtRestVisible()">
               <mat-label>Encryption Key</mat-label>
               <input matInput
                      [formControlName]="Controls.EncryptionAtRestKey"

@@ -421,7 +421,6 @@ export class CNIPluginVersions {
 
 export enum ClusterAnnotation {
   InitialCNIValuesRequest = 'kubermatic.io/initial-cni-values-request',
-  EncryptionAtRestEnabled = 'kubermatic.io/encryption-at-rest-enabled',
 }
 
 export enum ProxyMode {

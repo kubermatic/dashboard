@@ -1414,9 +1414,9 @@ func cleanupEncryptionSecret(ctx context.Context, privilegedClusterProvider prov
 }
 
 func buildEncryptionStatus(cluster *kubermaticv1.Cluster) *apiv1.EncryptionStatus {
-	if cluster.Spec.EncryptionConfiguration != nil && cluster.Spec.EncryptionConfiguration.Enabled {
+	if cluster.Status.Encryption != nil {
 		return &apiv1.EncryptionStatus{
-			Phase: "Active",
+			Phase: string(cluster.Status.Encryption.Phase),
 		}
 	}
 	return nil

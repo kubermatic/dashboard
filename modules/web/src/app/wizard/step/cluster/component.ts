@@ -82,6 +82,7 @@ import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
+import {WizardMode} from '../../types/wizard-mode';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -188,6 +189,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   provider: NodeProvider;
   enforcedAuditWebhookSettings: AuditLoggingWebhookBackend;
   isUserSshKeyEnabled = false;
+  wizardMode: WizardMode;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
@@ -235,6 +237,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   ngOnInit(): void {
     this.provider = this._clusterSpecService.provider;
+    this.wizardMode = window.history.state?.mode;
     this._featureGatesService.featureGates.pipe(take(1)).subscribe(featureGates => {
       this.isUserSshKeyEnabled = !featureGates?.disableUserSSHKey;
     });
@@ -620,6 +623,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isAllowedIPRangeSupported(): boolean {
     return NODEPORTS_IPRANGES_SUPPORTED_PROVIDERS.includes(this._clusterSpecService.provider);
+  }
+
+  isEncryptionAtRestVisible(): boolean {
+    return (
+      !this.clusterTemplateEditMode &&
+      this.wizardMode !== WizardMode.CreateClusterTemplate &&
+      this.wizardMode !== WizardMode.EditClusterTemplate &&
+      this.wizardMode !== WizardMode.CustomizeClusterTemplate
+    );
   }
 
   isExposeStrategyLoadBalancer(): boolean {
@@ -1135,7 +1147,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     // Handle annotations
     let annotations = this._clusterSpecService.cluster.annotations;
     annotations = this._handleCNIAnnotations(annotations);
-    annotations = this._handleEncryptionAtRestConfig(annotations);
+
+    // Handle encryption at rest key storage
+    this._handleEncryptionAtRestKey();
 
     if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
@@ -1211,22 +1225,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
     return annotations;
   }
-  private _handleEncryptionAtRestConfig(annotations: any): any {
+  private _handleEncryptionAtRestKey(): void {
     if (this.controlValue(Controls.EncryptionAtRest)) {
-      annotations = {
-        ...(annotations || {}),
-        [ClusterAnnotation.EncryptionAtRestEnabled]: 'true',
-      };
-      // Store encryption key in ClusterSpecService instead of annotations
+      // Store encryption key in ClusterSpecService for CreateClusterModel
       this._clusterSpecService.encryptionAtRestKey = this.controlValue(Controls.EncryptionAtRestKey);
     } else {
-      if (annotations) {
-        delete annotations[ClusterAnnotation.EncryptionAtRestEnabled];
-      }
       // Clear encryption key from ClusterSpecService
       this._clusterSpecService.encryptionAtRestKey = null;
     }
-    return annotations;
   }
 
   private _getAuditWebhookBackendConfig(): AuditLoggingWebhookBackend {
