@@ -228,6 +228,14 @@ func GenerateCluster(
 
 	partialCluster.Spec = *spec
 
+	// Generate the name here so that it can be used below.
+	partialCluster.Name = utilcluster.MakeClusterName()
+
+	// Handle encryption at rest configuration after cluster spec is created
+	if err := handleEncryptionAtRest(ctx, seedClient, partialCluster, body.EncryptionAtRest); err != nil {
+		return nil, utilerrors.NewBadRequest("invalid encryption configuration: %v", err)
+	}
+
 	if err := clustermutation.MutateCreate(partialCluster, config, seed, cloudProvider); err != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
 	}
@@ -241,9 +249,6 @@ func GenerateCluster(
 	if err = validation.ValidateUpdateWindow(partialCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-
-	// Generate the name here so that it can be used below.
-	partialCluster.Name = utilcluster.MakeClusterName()
 
 	// Serialize initial machine deployment request into annotation if it is in the body and provider different than
 	// BringYourOwn was selected. The request will be transformed into machine deployment by the controller once cluster
@@ -578,6 +583,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.KubeLB = patchedCluster.Spec.KubeLB
 	newInternalCluster.Spec.DisableCSIDriver = patchedCluster.Spec.DisableCSIDriver
 	newInternalCluster.Spec.Kyverno = patchedCluster.Spec.Kyverno
+	newInternalCluster.Spec.EncryptionConfiguration = patchedCluster.Spec.EncryptionConfiguration
 
 	// Checking kubelet versions on user cluster machines requires network connection between kubermatic-api and user cluster api-server.
 	// In case where the connection is blocked, we still want to be able to send a patch request. This can be achieved with an additional
@@ -1154,11 +1160,13 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 			DisableCSIDriver:                     internalCluster.Spec.DisableCSIDriver,
 			Kyverno:                              internalCluster.Spec.Kyverno,
+			EncryptionConfiguration:              internalCluster.Spec.EncryptionConfiguration,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,
 			URL:                  internalCluster.Status.Address.URL,
 			ExternalCCMMigration: convertInternalCCMStatusToExternal(internalCluster, datacenter, incompatibilities...),
+			Encryption:           buildEncryptionStatus(internalCluster),
 		},
 		Type: apiv1.KubernetesClusterType,
 	}
@@ -1317,4 +1325,67 @@ func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInf
 	// TODO: Add all other providers
 
 	return false
+}
+
+func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
+	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
+		return nil
+	}
+
+	if encryptionAtRest == nil || encryptionAtRest.Key == "" {
+		return fmt.Errorf("encryption key is required when encryption at rest is enabled")
+	}
+
+	// Set static resources for encryption configuration
+	if cluster.Spec.EncryptionConfiguration.Resources == nil {
+		cluster.Spec.EncryptionConfiguration.Resources = []string{"secrets"}
+	}
+
+	// set secretbox configuration with secret reference
+	if cluster.Spec.EncryptionConfiguration.Secretbox == nil {
+		cluster.Spec.EncryptionConfiguration.Secretbox = &kubermaticv1.SecretboxEncryptionConfiguration{}
+	}
+
+	// Create the encryption secret name based on cluster name
+	secretName := fmt.Sprintf("encryption-key-cluster-%s", cluster.Name)
+
+	cluster.Spec.EncryptionConfiguration.Secretbox.Keys = []kubermaticv1.SecretboxKey{{
+		Name: secretName,
+		SecretRef: &corev1.SecretKeySelector{
+			LocalObjectReference: corev1.LocalObjectReference{
+				Name: secretName,
+			},
+			Key: "key",
+		},
+	}}
+
+	// Create the secret in Kubermatic namespace at seed level
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: resources.KubermaticNamespace,
+			Annotations: map[string]string{
+				"kubermatic.io/cluster-name": cluster.Name, // KKP will use cluster name to copy secret to user cluster namespace
+			},
+		},
+		Data: map[string][]byte{
+			"key": []byte(encryptionAtRest.Key),
+		},
+		Type: corev1.SecretTypeOpaque,
+	}
+
+	if err := seedClient.Create(ctx, secret); err != nil {
+		return fmt.Errorf("failed to create encryption secret: %w", err)
+	}
+
+	return nil
+}
+
+func buildEncryptionStatus(cluster *kubermaticv1.Cluster) *apiv1.EncryptionStatus {
+	if cluster.Status.Encryption != nil {
+		return &apiv1.EncryptionStatus{
+			Phase: string(cluster.Status.Encryption.Phase),
+		}
+	}
+	return nil
 }

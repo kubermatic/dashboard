@@ -47,6 +47,14 @@ export const clusterBackupStatus = {
   pending: ['WaitingForPluginOperations', 'FinalizingafterPluginOperations', 'InProgress'],
 };
 
+export enum EncryptionAtRestStatus {
+  Active = 'Active',
+  Pending = 'Pending',
+  Failed = 'Failed',
+  EncryptionNeeded = 'EncryptionNeeded',
+  Unknown = 'Unknown',
+}
+
 export class HealthStatus {
   message: string;
   icon: StatusIcon;
@@ -126,4 +134,17 @@ export function getClusterBackupHealthStatus(phase: string): HealthStatus {
     return new HealthStatus(phase, StatusIcon.Warning);
   }
   return new HealthStatus('Unknown', StatusIcon.Unknown);
+}
+
+export function getEncryptionAtRestHealthStatus(phase: string): HealthStatus {
+  if (phase === EncryptionAtRestStatus.Active) {
+    return new HealthStatus(EncryptionAtRestStatus.Active, StatusIcon.Running);
+  } else if (phase === EncryptionAtRestStatus.Pending) {
+    return new HealthStatus(EncryptionAtRestStatus.Pending, StatusIcon.Pending);
+  } else if (phase === EncryptionAtRestStatus.Failed) {
+    return new HealthStatus(EncryptionAtRestStatus.Failed, StatusIcon.Error);
+  } else if (phase === EncryptionAtRestStatus.EncryptionNeeded) {
+    return new HealthStatus(EncryptionAtRestStatus.EncryptionNeeded, StatusIcon.Warning);
+  }
+  return new HealthStatus(EncryptionAtRestStatus.Unknown, StatusIcon.Unknown);
 }

@@ -212,6 +212,18 @@ limitations under the License.
             </div>
           </div>
         </km-property>
+        <km-property *ngIf="cluster?.status?.encryption?.phase">
+          <div key>Encryption at Rest</div>
+          <div value>
+            <div fxLayoutAlign=" center">
+              <i *ngIf="encryptionStatus"
+                 [matTooltip]="encryptionStatus?.message"
+                 [ngClass]="encryptionStatus?.icon"
+                 class="km-vertical-center"></i>
+              {{cluster.status.encryption.phase}}
+            </div>
+          </div>
+        </km-property>
         <km-property *ngIf="cluster.spec.containerRuntime">
           <div key>Container Runtime</div>
           <div value>{{cluster.spec.containerRuntime}}</div>

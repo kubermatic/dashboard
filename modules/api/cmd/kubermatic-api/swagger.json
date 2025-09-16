@@ -15450,6 +15450,9 @@
                 "cluster": {
                   "$ref": "#/definitions/Cluster"
                 },
+                "encryptionAtRest": {
+                  "$ref": "#/definitions/EncryptionAtRestSpec"
+                },
                 "name": {
                   "type": "string",
                   "x-go-name": "Name"
@@ -15694,6 +15697,9 @@
                 },
                 "cluster": {
                   "$ref": "#/definitions/Cluster"
+                },
+                "encryptionAtRest": {
+                  "$ref": "#/definitions/EncryptionAtRestSpec"
                 },
                 "name": {
                   "type": "string",
@@ -30515,11 +30521,22 @@
           "type": "boolean",
           "x-go-name": "EnableUserSSHKeyAgent"
         },
+        "encryptionConfiguration": {
+          "$ref": "#/definitions/EncryptionConfiguration"
+        },
         "eventRateLimitConfig": {
           "$ref": "#/definitions/EventRateLimitConfig"
         },
         "exposeStrategy": {
           "$ref": "#/definitions/ExposeStrategy"
+        },
+        "features": {
+          "description": "Features is a map that controls specific features on cluster level.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "x-go-name": "Features"
         },
         "kubelb": {
           "$ref": "#/definitions/KubeLB"
@@ -30586,6 +30603,9 @@
       "type": "object",
       "title": "ClusterStatus defines the cluster status.",
       "properties": {
+        "encryption": {
+          "$ref": "#/definitions/EncryptionStatus"
+        },
         "externalCCMMigration": {
           "$ref": "#/definitions/ExternalCCMMigrationStatus"
         },
@@ -31176,6 +31196,9 @@
         },
         "cluster": {
           "$ref": "#/definitions/Cluster"
+        },
+        "encryptionAtRest": {
+          "$ref": "#/definitions/EncryptionAtRestSpec"
         },
         "nodeDeployment": {
           "$ref": "#/definitions/NodeDeployment"
@@ -32586,6 +32609,52 @@
     "EdgeNodeSpec": {
       "description": "EdgeNodeSpec specifies edge specific node settings",
       "type": "object",
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "EncryptionAtRestSpec": {
+      "description": "EncryptionAtRestSpec contains the encryption key for encryption at rest",
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "x-go-name": "Key"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "EncryptionConfiguration": {
+      "type": "object",
+      "title": "EncryptionConfiguration configures encryption-at-rest for Kubernetes API data.",
+      "properties": {
+        "enabled": {
+          "description": "Enables encryption-at-rest on this cluster.",
+          "type": "boolean",
+          "x-go-name": "Enabled"
+        },
+        "resources": {
+          "description": "List of resources that will be stored encrypted in etcd.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Resources"
+        },
+        "secretbox": {
+          "$ref": "#/definitions/SecretboxEncryptionConfiguration"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "EncryptionStatus": {
+      "type": "object",
+      "title": "EncryptionStatus defines the encryption at rest status.",
+      "properties": {
+        "phase": {
+          "description": "Phase represents the current state of encryption at rest",
+          "type": "string",
+          "x-go-name": "Phase"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "EnvVar": {
@@ -40249,6 +40318,41 @@
         }
       },
       "x-go-package": "k8s.io/api/core/v1"
+    },
+    "SecretboxEncryptionConfiguration": {
+      "type": "object",
+      "title": "SecretboxEncryptionConfiguration defines static key encryption based on the 'secretbox' solution for Kubernetes.",
+      "properties": {
+        "keys": {
+          "description": "List of 'secretbox' encryption keys. The first element of this list is considered\nthe \"primary\" key which will be used for encrypting data while writing it. Additional\nkeys will be used for decrypting data while reading it, if keys higher in the list\ndid not succeed in decrypting it.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SecretboxKey"
+          },
+          "x-go-name": "Keys"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
+    },
+    "SecretboxKey": {
+      "type": "object",
+      "title": "SecretboxKey stores a key or key reference for encrypting Kubernetes API data at rest with a static key.",
+      "properties": {
+        "name": {
+          "description": "Identifier of a key, used in various places to refer to the key.",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "secretRef": {
+          "$ref": "#/definitions/SecretKeySelector"
+        },
+        "value": {
+          "description": "Value contains a 32-byte random key that is base64 encoded. This is the key used\nfor encryption. Can be generated via `head -c 32 /dev/urandom | base64`, for example.",
+          "type": "string",
+          "x-go-name": "Value"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "Seed": {
       "description": "Seed represents a seed object",

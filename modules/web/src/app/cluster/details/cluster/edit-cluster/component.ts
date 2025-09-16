@@ -83,6 +83,7 @@ enum Controls {
   RouterReconciliation = 'routerReconciliation',
   BackupStorageLocation = 'backupStorageLocation',
   NodePortsAllowedIPRanges = 'nodePortsAllowedIPRanges',
+  EncryptionAtRest = 'encryptionAtRest',
 }
 
 @Component({
@@ -200,6 +201,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this.cluster.annotations?.[InternalClusterSpecAnnotations.SkipRouterReconciliation] === 'true'
       ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
+      [Controls.EncryptionAtRest]: new FormControl(!!this.cluster.spec.encryptionConfiguration?.enabled),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -538,6 +540,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     } else {
       patch.spec.backupConfig = null;
+    }
+
+    if (this.cluster.spec.encryptionConfiguration) {
+      if (this.cluster.spec.encryptionConfiguration.enabled && !this.form.get(Controls.EncryptionAtRest).value) {
+        patch.spec.encryptionConfiguration = {
+          enabled: false,
+        };
+      } else {
+        patch.spec.encryptionConfiguration = this.cluster.spec.encryptionConfiguration;
+      }
     }
 
     if (this.form.get(Controls.NodePortsAllowedIPRanges)?.value) {

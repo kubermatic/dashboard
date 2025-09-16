@@ -21,6 +21,9 @@ type ClusterStatus struct {
 	// URL specifies the address at which the cluster is available
 	URL string `json:"url,omitempty"`
 
+	// encryption
+	Encryption *EncryptionStatus `json:"encryption,omitempty"`
+
 	// external c c m migration
 	ExternalCCMMigration ExternalCCMMigrationStatus `json:"externalCCMMigration,omitempty"`
 
@@ -31,6 +34,10 @@ type ClusterStatus struct {
 // Validate validates this cluster status
 func (m *ClusterStatus) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateEncryption(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateExternalCCMMigration(formats); err != nil {
 		res = append(res, err)
@@ -43,6 +50,25 @@ func (m *ClusterStatus) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ClusterStatus) validateEncryption(formats strfmt.Registry) error {
+	if swag.IsZero(m.Encryption) { // not required
+		return nil
+	}
+
+	if m.Encryption != nil {
+		if err := m.Encryption.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryption")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryption")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -84,6 +110,10 @@ func (m *ClusterStatus) validateVersion(formats strfmt.Registry) error {
 func (m *ClusterStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateEncryption(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateExternalCCMMigration(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -95,6 +125,22 @@ func (m *ClusterStatus) ContextValidate(ctx context.Context, formats strfmt.Regi
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ClusterStatus) contextValidateEncryption(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Encryption != nil {
+		if err := m.Encryption.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryption")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryption")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

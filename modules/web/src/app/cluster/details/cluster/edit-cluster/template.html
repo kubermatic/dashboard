@@ -301,6 +301,30 @@ limitations under the License.
            [matTooltip]="isCSIDriverDisabled ? 'CSI Driver is disabled by your admin in the chosen datacenter.' : 'Disable default CSI storage driver, if available.'"></i>
       </mat-checkbox>
 
+      <mat-checkbox *ngIf="cluster?.spec?.encryptionConfiguration?.enabled"
+                    [formControlName]="Controls.EncryptionAtRest"
+                    kmValueChangedIndicator>
+        <div fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="8px">
+          <span>Encryption at Rest</span>
+          <span class="km-label-primary"
+                matTooltip="Beta feature - still under development.">Beta</span>
+          <i class="km-icon-info km-pointer"
+             matTooltip="Disable encryption at rest for cluster secrets."></i>
+        </div>
+      </mat-checkbox>
+
+      <div *ngIf="cluster?.spec?.encryptionConfiguration?.enabled && !form.get(Controls.EncryptionAtRest).value"
+           fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="8px">
+        <i class="km-icon-warning km-pointer"></i>
+        <p fxFlex="95">
+          Once encryption at rest is disabled, it cannot be re-enabled for this cluster.
+        </p>
+      </div>
+
       <mat-checkbox [formControlName]="Controls.ClusterBackup"
                     *ngIf="isclusterBackupEnabled"
                     kmValueChangedIndicator>

@@ -811,6 +811,19 @@ func TestCreateClusterEndpoint(t *testing.T) {
 			ProjectToSync:   test.GenDefaultProject().Name,
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 		},
+		// scenario 15: create a cluster with encryption enabled
+		{
+			Name:             "scenario 15: create a cluster with encryption enabled",
+			Body:             fmt.Sprintf(`{"cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"},"exposeStrategy":"NodePort","encryptionConfiguration":{"enabled":true}}},"encryptionAtRest":{"key":"test-encryption-key"}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"id":"%%[1]s","name":"keen-snyder","annotations":{"kubermatic.io/initial-application-installations-request":"[]"},"creationTimestamp":"0001-01-01T00:00:00Z","type":"kubernetes","spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true,"konnectivityEnabled":true},"cniPlugin":{"type":"cilium","version":"1.16.9"},"exposeStrategy":"NodePort","encryptionConfiguration":{"enabled":true,"resources":["secrets"],"secretbox":{"keys":[{"name":"encryption-key-cluster-%%[1]s","secretRef":{"name":"encryption-key-cluster-%%[1]s","key":"key"}}]}}},"status":{"version":"","url":"","externalCCMMigration":"Unsupported"}}`, version),
+			RewriteClusterID: true,
+			HTTPStatus:       http.StatusCreated,
+			ProjectToSync:    test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+			),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+		},
 	}
 
 	dummyKubermaticConfiguration := kubermaticv1.KubermaticConfiguration{

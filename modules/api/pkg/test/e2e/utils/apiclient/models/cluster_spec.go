@@ -36,6 +36,9 @@ type ClusterSpec struct {
 	// it cannot be changed after the cluster is being created.
 	EnableUserSSHKeyAgent bool `json:"enableUserSSHKeyAgent,omitempty"`
 
+	// Features is a map that controls specific features on cluster level.
+	Features map[string]bool `json:"features,omitempty"`
+
 	// MachineNetworks optionally specifies the parameters for IPAM.
 	MachineNetworks []*MachineNetworkingConfig `json:"machineNetworks"`
 
@@ -75,6 +78,9 @@ type ClusterSpec struct {
 
 	// cni plugin
 	CniPlugin *CNIPluginSettings `json:"cniPlugin,omitempty"`
+
+	// encryption configuration
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
 
 	// event rate limit config
 	EventRateLimitConfig *EventRateLimitConfig `json:"eventRateLimitConfig,omitempty"`
@@ -139,6 +145,10 @@ func (m *ClusterSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCniPlugin(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEncryptionConfiguration(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -324,6 +334,25 @@ func (m *ClusterSpec) validateCniPlugin(formats strfmt.Registry) error {
 				return ve.ValidateName("cniPlugin")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cniPlugin")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) validateEncryptionConfiguration(formats strfmt.Registry) error {
+	if swag.IsZero(m.EncryptionConfiguration) { // not required
+		return nil
+	}
+
+	if m.EncryptionConfiguration != nil {
+		if err := m.EncryptionConfiguration.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryptionConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryptionConfiguration")
 			}
 			return err
 		}
@@ -569,6 +598,10 @@ func (m *ClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateEncryptionConfiguration(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateEventRateLimitConfig(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -727,6 +760,22 @@ func (m *ClusterSpec) contextValidateCniPlugin(ctx context.Context, formats strf
 				return ve.ValidateName("cniPlugin")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("cniPlugin")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ClusterSpec) contextValidateEncryptionConfiguration(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.EncryptionConfiguration != nil {
+		if err := m.EncryptionConfiguration.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("encryptionConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("encryptionConfiguration")
 			}
 			return err
 		}

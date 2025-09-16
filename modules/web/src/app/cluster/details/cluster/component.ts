@@ -64,6 +64,7 @@ import {
   StatusIcon,
   StatusMassage,
   getClusterHealthStatus,
+  getEncryptionAtRestHealthStatus,
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
@@ -102,6 +103,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   adminSettings: AdminSettings;
   presetStatus: HealthStatus;
+  encryptionStatus: HealthStatus;
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
@@ -192,6 +194,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         switchMap(cluster => {
           this.cluster = cluster;
           this.isDualStackNetworkSelected = Cluster.isDualStackNetworkSelected(cluster);
+          if (cluster?.status?.encryption?.phase) {
+            this.encryptionStatus = getEncryptionAtRestHealthStatus(cluster.status.encryption.phase);
+          }
           return this._datacenterService.getDatacenter(cluster.spec.cloud.dc);
         })
       )
