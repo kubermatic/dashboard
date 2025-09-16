@@ -60,13 +60,6 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
     return this.form.get(Controls.LoadBalancerSKU).value;
   }
 
-  set selectedLoadBalancerSKU(sku: string) {
-    this.form.get(Controls.LoadBalancerSKU).setValue(sku);
-    if (!sku) {
-      this.form.get(Controls.LoadBalancerSKU).reset();
-    }
-  }
-
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presetDialogService: PresetDialogService
@@ -106,7 +99,7 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
   }
 
   clearLoadBalancerSKU(): void {
-    this.selectedLoadBalancerSKU = '';
+    this.form.get(Controls.LoadBalancerSKU).reset();
   }
 
   private _update(): void {

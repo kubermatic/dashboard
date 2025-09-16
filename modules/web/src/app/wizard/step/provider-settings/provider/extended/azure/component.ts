@@ -73,13 +73,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     return this.form.get(Controls.LoadBalancerSKU).value;
   }
 
-  set selectedLoadBalancerSKU(sku: string) {
-    this.form.get(Controls.LoadBalancerSKU).setValue(sku);
-    if (!sku) {
-      this.form.get(Controls.LoadBalancerSKU).reset();
-    }
-  }
-
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _cdr: ChangeDetectorRef,
@@ -267,7 +260,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   }
 
   clearLoadBalancerSKU(): void {
-    this.selectedLoadBalancerSKU = '';
+    this.form.get(Controls.LoadBalancerSKU).reset();
   }
 
   private _getResourceGroup(): string {
