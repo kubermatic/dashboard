@@ -72,10 +72,10 @@ require (
 	google.golang.org/api v0.232.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.10.0
-	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250911202254-fe67c6f4bca1
-	k8c.io/kubermatic/v2 v2.28.1-0.20250911202254-fe67c6f4bca1
-	k8c.io/machine-controller/sdk v1.63.0
-	k8c.io/operating-system-manager v1.7.5
+	k8c.io/kubermatic/sdk/v2 v2.28.1-0.20250915173103-700fc886a564
+	k8c.io/kubermatic/v2 v2.28.1-0.20250915173103-700fc886a564
+	k8c.io/machine-controller/sdk v1.63.1
+	k8c.io/operating-system-manager v1.7.6
 	k8c.io/reconciler v0.5.0
 	k8s.io/api v0.33.4
 	k8s.io/apiextensions-apiserver v0.33.4
@@ -249,6 +249,8 @@ require (
 	github.com/hashicorp/go-plugin v1.6.3 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
 	github.com/hashicorp/go-version v1.7.0 // indirect
+	github.com/hashicorp/golang-lru/arc/v2 v2.0.7 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-7 // indirect
 	github.com/hashicorp/yamux v0.1.2 // indirect
 	github.com/hetznercloud/hcloud-go/v2 v2.21.0 // indirect

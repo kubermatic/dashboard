@@ -43,7 +43,10 @@ exceptions:
   - github.com/hashicorp/go-plugin/internal/plugin # MPL-2.0
   - github.com/hashicorp/go-plugin/runner # MPL-2.0
   - github.com/hashicorp/golang-lru # MPL-2.0
+  - github.com/hashicorp/golang-lru/arc/v2 # MPL-2.0
   - github.com/hashicorp/golang-lru/simplelru # MPL-2.0
+  - github.com/hashicorp/golang-lru/v2/internal # MPL-2.0
+  - github.com/hashicorp/golang-lru/v2/simplelru # MPL-2.0
   - github.com/hashicorp/hcl # MPL-2.0
   - github.com/hashicorp/hcl/hcl/ast # MPL-2.0
   - github.com/hashicorp/hcl/hcl/parser # MPL-2.0
