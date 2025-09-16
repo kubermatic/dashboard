@@ -56,6 +56,10 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
   readonly Controls = Controls;
   loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
 
+  get selectedLoadBalancerSKU(): string {
+    return this.form.get(Controls.LoadBalancerSKU).value;
+  }
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presetDialogService: PresetDialogService
@@ -92,6 +96,10 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
     this._unsubscribe.next();
     this._unsubscribe.complete();
     delete this._presetDialogService.preset.spec.azure;
+  }
+
+  clearLoadBalancerSKU(): void {
+    this.form.get(Controls.LoadBalancerSKU).reset();
   }
 
   private _update(): void {
