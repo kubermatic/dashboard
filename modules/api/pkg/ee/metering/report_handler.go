@@ -239,7 +239,7 @@ func getS3DataFromSeed(ctx context.Context, seed *kubermaticv1.Seed, seedClient 
 	s3accessKeyID := string(s3secret.Data[AccessKey])
 	s3secretAccessKey := string(s3secret.Data[SecretKey])
 
-	mc, err := s3.NewClient(s3endpoint, s3accessKeyID, s3secretAccessKey, caBundle.CertPool())
+	mc, err := s3.NewClient(s3endpoint, s3accessKeyID, s3secretAccessKey, caBundle.String())
 	if err != nil {
 		return nil, "", err
 	}
