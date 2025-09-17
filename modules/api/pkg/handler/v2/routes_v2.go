@@ -1197,6 +1197,11 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Path("/providers/openstack/servergroups").
 		Handler(r.listOpenstackServerGroups())
 
+	// Keys for OpenStack LoadBalancerClass configuration (for UI key/value helper)
+	mux.Methods(http.MethodGet).
+		Path("/providers/openstack/lbclasskeys").
+		Handler(r.listOpenstackLBClassKeys())
+
 	// Endpoints for VMware Cloud Director
 	mux.Methods(http.MethodGet).
 		Path("/providers/vmwareclouddirector/{dc}/networks").
@@ -4472,6 +4477,28 @@ func (r Routing) listOpenstackServerGroups() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, false)),
 		provider.DecodeOpenstackReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/providers/openstack/lbclasskeys openstack listOpenstackLBClassKeys
+//
+// Lists supported keys for OpenStack LoadBalancerClass configuration
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []string
+func (r Routing) listOpenstackLBClassKeys() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackLBClassKeysEndpoint()),
+		common.DecodeEmptyReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

@@ -376,6 +376,22 @@ func OpenstackSubnetPoolEndpoint(seedsGetter provider.SeedsGetter, presetProvide
 	}
 }
 
+// OpenstackLBClassKeysEndpoint returns the list of supported keys for the OpenStack LoadBalancerClass configuration.
+func OpenstackLBClassKeysEndpoint() endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		keys := []string{
+			"floating-network-id",
+			"floating-subnet-id",
+			"floating-subnet",
+			"floating-subnet-tags",
+			"network-id",
+			"subnet-id",
+			"member-subnet-id",
+		}
+		return keys, nil
+	}
+}
+
 // openstackNoCredentialsReq represent a request for openstack
 // swagger:parameters listOpenstackSizesNoCredentialsV2 listOpenstackTenantsNoCredentialsV2 listOpenstackNetworksNoCredentialsV2 listOpenstackSecurityGroupsNoCredentialsV2 listOpenstackAvailabilityZonesNoCredentialsV2 listOpenstackServerGroupsNoCredentials
 type openstackNoCredentialsReq struct {
