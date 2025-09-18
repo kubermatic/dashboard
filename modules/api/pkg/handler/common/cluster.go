@@ -66,6 +66,8 @@ import (
 )
 
 // ClusterTypes holds a list of supported cluster types.
+const EncryptionKeyAnnotation = "kubermatic.io/encryption-key"
+
 var ClusterTypes = sets.New(apiv1.KubernetesClusterType)
 
 // patchClusterSpec is equivalent of ClusterSpec but it uses default JSON marshalling method instead of custom
@@ -648,6 +650,18 @@ func PatchEndpoint(
 	}
 	if err = validation.ValidateUpdateWindow(newInternalCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	var encryptionAtRest *apiv1.EncryptionAtRestSpec
+	if newInternalCluster.Annotations != nil {
+		if key, exists := newInternalCluster.Annotations[EncryptionKeyAnnotation]; exists {
+			encryptionAtRest = &apiv1.EncryptionAtRestSpec{Key: key}
+			delete(newInternalCluster.Annotations, EncryptionKeyAnnotation)
+		}
+	}
+
+	if err := handleEncryptionAtRestUpdate(ctx, seedClient, oldInternalCluster, newInternalCluster, encryptionAtRest); err != nil {
+		return nil, utilerrors.NewBadRequest("invalid encryption configuration: %v", err)
 	}
 
 	// update the Cluster resource
@@ -1327,28 +1341,54 @@ func checkIfPresetCustomized(ctx context.Context, projectID string, adminUserInf
 	return false
 }
 
-func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
-	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
-		return nil
+// createEncryptionSecret creates an encryption secret for the cluster
+func createEncryptionSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, encryptionKey string) error {
+	if encryptionKey == "" {
+		return fmt.Errorf("encryption key is required")
 	}
 
-	if encryptionAtRest == nil || encryptionAtRest.Key == "" {
-		return fmt.Errorf("encryption key is required when encryption at rest is enabled")
+	secretName := getEncryptionSecretName(cluster.Name)
+
+	// Create the secret in Kubermatic namespace at seed level
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      secretName,
+			Namespace: resources.KubermaticNamespace,
+			Annotations: map[string]string{
+				"kubermatic.io/cluster-name": cluster.Name,
+			},
+		},
+		Data: map[string][]byte{
+			"key": []byte(encryptionKey),
+		},
+		Type: corev1.SecretTypeOpaque,
 	}
 
-	// Set static resources for encryption configuration
+	if err := seedClient.Create(ctx, secret); err != nil && !apierrors.IsAlreadyExists(err) {
+		return fmt.Errorf("failed to create encryption secret: %w", err)
+	}
+
+	return nil
+}
+
+// setupEncryptionSpec initializes the encryption configuration for the cluster
+func setupEncryptionSpec(cluster *kubermaticv1.Cluster) error {
+	if cluster.Spec.EncryptionConfiguration == nil {
+		return fmt.Errorf("encryption configuration is nil")
+	}
+
+	// Set default resources if not specified
 	if cluster.Spec.EncryptionConfiguration.Resources == nil {
 		cluster.Spec.EncryptionConfiguration.Resources = []string{"secrets"}
 	}
 
-	// set secretbox configuration with secret reference
+	// Initialize secretbox configuration if not present
 	if cluster.Spec.EncryptionConfiguration.Secretbox == nil {
 		cluster.Spec.EncryptionConfiguration.Secretbox = &kubermaticv1.SecretboxEncryptionConfiguration{}
 	}
 
-	// Create the encryption secret name based on cluster name
-	secretName := fmt.Sprintf("encryption-key-cluster-%s", cluster.Name)
-
+	// Configure secretbox keys to reference the encryption secret
+	secretName := getEncryptionSecretName(cluster.Name)
 	cluster.Spec.EncryptionConfiguration.Secretbox.Keys = []kubermaticv1.SecretboxKey{{
 		Name: secretName,
 		SecretRef: &corev1.SecretKeySelector{
@@ -1359,23 +1399,51 @@ func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Cl
 		},
 	}}
 
-	// Create the secret in Kubermatic namespace at seed level
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretName,
-			Namespace: resources.KubermaticNamespace,
-			Annotations: map[string]string{
-				"kubermatic.io/cluster-name": cluster.Name, // KKP will use cluster name to copy secret to user cluster namespace
-			},
-		},
-		Data: map[string][]byte{
-			"key": []byte(encryptionAtRest.Key),
-		},
-		Type: corev1.SecretTypeOpaque,
+	return nil
+}
+
+// getEncryptionSecretName generates a consistent secret name for cluster encryption
+func getEncryptionSecretName(clusterName string) string {
+	return fmt.Sprintf("encryption-key-cluster-%s", clusterName)
+}
+
+func handleEncryptionAtRest(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
+	if cluster.Spec.EncryptionConfiguration == nil || !cluster.Spec.EncryptionConfiguration.Enabled {
+		return nil
 	}
 
-	if err := seedClient.Create(ctx, secret); err != nil {
-		return fmt.Errorf("failed to create encryption secret: %w", err)
+	if encryptionAtRest == nil || encryptionAtRest.Key == "" {
+		return fmt.Errorf("encryption key is required when encryption at rest is enabled")
+	}
+
+	// Setup encryption specification
+	if err := setupEncryptionSpec(cluster); err != nil {
+		return fmt.Errorf("failed to setup encryption spec: %w", err)
+	}
+
+	// Create or update the encryption secret
+	return createEncryptionSecret(ctx, seedClient, cluster, encryptionAtRest.Key)
+}
+
+// handleEncryptionAtRestUpdate handles encryption configuration updates for existing clusters
+func handleEncryptionAtRestUpdate(ctx context.Context, seedClient ctrlruntimeclient.Client, existingCluster, updatedCluster *kubermaticv1.Cluster, encryptionAtRest *apiv1.EncryptionAtRestSpec) error {
+	wasEnabled := existingCluster.Spec.EncryptionConfiguration != nil && existingCluster.Spec.EncryptionConfiguration.Enabled
+	willBeEnabled := updatedCluster.Spec.EncryptionConfiguration != nil && updatedCluster.Spec.EncryptionConfiguration.Enabled
+
+	// Enabling encryption (first time or re-enabling after disable)
+	if !wasEnabled && willBeEnabled {
+		if encryptionAtRest == nil || encryptionAtRest.Key == "" {
+			return fmt.Errorf("encryption key is required when enabling encryption at rest")
+		}
+		if err := setupEncryptionSpec(updatedCluster); err != nil {
+			return fmt.Errorf("failed to setup encryption spec: %w", err)
+		}
+		return createEncryptionSecret(ctx, seedClient, updatedCluster, encryptionAtRest.Key)
+	}
+
+	// Already enabled - preserve existing configuration
+	if wasEnabled && willBeEnabled {
+		updatedCluster.Spec.EncryptionConfiguration = existingCluster.Spec.EncryptionConfiguration
 	}
 
 	return nil
