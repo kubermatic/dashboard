@@ -38,3 +38,10 @@ export function getClusterMachinesCount(machineDeployments: MachineDeployment[])
 
   return mdStatus;
 }
+
+export function generateEncryptionKey(): string {
+  const ENCRYPTION_KEY_BYTES = 32;
+  const keyBytes = new Uint8Array(ENCRYPTION_KEY_BYTES);
+  crypto.getRandomValues(keyBytes);
+  return btoa(String.fromCharCode(...keyBytes));
+}
