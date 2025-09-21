@@ -18,8 +18,8 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {DOCUMENT} from '@angular/common';
-import {Inject, Injectable} from '@angular/core';
+
+import {Inject, Injectable, DOCUMENT} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {UserService} from '@core/services/user';

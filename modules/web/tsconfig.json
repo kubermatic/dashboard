@@ -6,16 +6,32 @@
     "outDir": "dist/out-tsc/app",
     "baseUrl": "src",
     "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@shared/*": ["app/shared/*"],
-      "@dynamic/*": ["app/dynamic/*"],
-      "@assets/*": ["assets/*"],
-      "@environments/*": ["environments/*"],
-      "@test/*": ["test/*"],
-      "app/*": ["app/*"]
+      "@app/*": [
+        "app/*"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@dynamic/*": [
+        "app/dynamic/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@environments/*": [
+        "environments/*"
+      ],
+      "@test/*": [
+        "test/*"
+      ],
+      "app/*": [
+        "app/*"
+      ]
     },
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "module": "ES2020",
     "target": "ES2022",
     "strict": false,
@@ -29,7 +45,10 @@
     "noUnusedParameters": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "lib": ["ES2020", "dom"],
+    "lib": [
+      "ES2020",
+      "dom"
+    ],
     "useDefineForClassFields": false
   }
 }

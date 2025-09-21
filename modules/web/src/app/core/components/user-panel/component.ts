@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {DOCUMENT} from '@angular/common';
-import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
+
+import {Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, DOCUMENT} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';

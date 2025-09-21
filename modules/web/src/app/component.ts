@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {DOCUMENT} from '@angular/common';
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+
+import {Component, Inject, OnDestroy, OnInit, ViewChild, DOCUMENT} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {NavigationEnd, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
