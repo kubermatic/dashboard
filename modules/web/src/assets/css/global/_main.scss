@@ -439,8 +439,7 @@ km-dashboard {
   }
 }
 
-.km-admission-plugin-warning,
-.km-encryption-at-rest-warning {
+.km-admission-plugin-warning {
   margin-bottom: 24px;
 
   i.km-icon-warning {
@@ -450,6 +449,14 @@ km-dashboard {
   p {
     font-size: variables.$font-size-body;
     margin: 0;
+  }
+}
+
+km-edit-cluster {
+  .encryption-at-rest-field {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
   }
 }
 
