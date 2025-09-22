@@ -14,7 +14,7 @@
       "@environments/*": ["environments/*"],
       "@test/*": ["test/*"]
     },
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "module": "ES2020",
     "target": "ES2022",
     "strict": false,
