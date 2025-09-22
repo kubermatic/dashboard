@@ -197,7 +197,7 @@ $theme-dark: map.merge(
   --mat-stepper-container-color: #{map.get($background, card)};
   --mat-button-toggle-background-color: #{map.get($background, card)};
 
-  --mdc-dialog-container-color: #{map.get($background, dialog)};
+  --mat-dialog-container-color: #{map.get($background, dialog)};
 }
 
 // Make icons and logos white with 85% opacity.

@@ -22,24 +22,20 @@
     --mdc-snackbar-supporting-text-color: #{map.get($colors, text)};
     --mat-snack-bar-button-color: #{map.get($colors, primary)};
 
-    // Dialog component CSS custom properties for dialogs containing notifications
-    --mdc-dialog-container-color: #{map.get($colors, background-dialog)};
-    --mdc-dialog-supporting-text-color: #{map.get($colors, text)};
-
     .mat-mdc-snackbar-surface,
     .mdc-snackbar__surface {
-      background-color: var(--mdc-snackbar-container-color) !important;
-      color: var(--mdc-snackbar-supporting-text-color) !important;
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     .mat-mdc-snack-bar-label {
-      color: var(--mdc-snackbar-supporting-text-color) !important;
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     // Ensure our km-notification component also gets the colors
     km-notification {
-      background-color: var(--mdc-snackbar-container-color) !important;
-      color: var(--mdc-snackbar-supporting-text-color) !important;
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
 
 
       .notification-container {
