@@ -470,23 +470,10 @@ limitations under the License.
                    fxLayoutAlign=" center"
                    fxLayoutGap="8px">
                 <span>Encryption at Rest</span>
-                <span class="km-label-primary"
-                      matTooltip="Beta feature - still under development.">Beta</span>
                 <i class="km-icon-info km-pointer"
                    matTooltip="Enable encryption at rest for cluster secrets for this user cluster."></i>
               </div>
             </mat-checkbox>
-
-            <div *ngIf="!!controlValue(Controls.EncryptionAtRest) && isEncryptionAtRestVisible()"
-                 class="km-encryption-at-rest-warning"
-                 fxLayout="row"
-                 fxLayoutAlign=" center"
-                 fxLayoutGap="8px">
-              <i class="km-icon-warning km-warning km-pointer"></i>
-              <p fxFlex="95">
-                Encryption at rest is currently in beta and not recommended for production due to possible data loss.
-              </p>
-            </div>
 
             <mat-form-field *ngIf="!!controlValue(Controls.EncryptionAtRest) && isEncryptionAtRestVisible()">
               <mat-label>Encryption Key</mat-label>

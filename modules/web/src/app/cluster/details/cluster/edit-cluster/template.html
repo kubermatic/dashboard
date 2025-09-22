@@ -307,14 +307,13 @@ limitations under the License.
              fxLayoutAlign=" center"
              fxLayoutGap="8px">
           <span>Encryption at Rest</span>
-          <span class="km-label-primary"
-                matTooltip="Beta feature - still under development.">Beta</span>
           <i class="km-icon-info km-pointer"
              [matTooltip]="isEncryptionActive() ? 'Enable or disable encryption at rest for cluster secrets.' : 'Enable encryption at rest for cluster secrets for this user cluster.'"></i>
         </div>
       </mat-checkbox>
 
-      <mat-form-field *ngIf="!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()">
+      <mat-form-field *ngIf="!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()"
+                      class="encryption-at-rest-field">
         <mat-label>Encryption Key</mat-label>
         <input matInput
                [formControlName]="Controls.EncryptionAtRestKey"
