@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, DOCUMENT} from '@angular/core';
 import {MatSnackBarRef} from '@angular/material/snack-bar';
 import {EMPTY, fromEvent, interval, merge, Subject, takeWhile} from 'rxjs';

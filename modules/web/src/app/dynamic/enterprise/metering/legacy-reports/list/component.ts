@@ -18,7 +18,6 @@
 //
 // END OF TERMS AND CONDITIONS
 
-
 import {Component, Inject, Input, OnDestroy, OnInit, ViewChild, DOCUMENT} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
