@@ -301,25 +301,13 @@
       "prefix": "km",
       "type": "directive"
     },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
+    "@schematics/angular:guard": {},
     "@schematics/angular:interface": {},
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
-    }
+    "@schematics/angular:module": {},
+    "@schematics/angular:pipe": {},
+    "@schematics/angular:service": {},
+    "@schematics/angular:interceptor": {},
+    "@schematics/angular:resolver": {}
   },
   "cli": {
     "analytics": false
