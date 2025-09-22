@@ -68,6 +68,7 @@ import {
   CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
   CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
   CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+  generateEncryptionKey,
 } from '@shared/utils/cluster';
 import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
@@ -550,11 +551,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   generateEncryptionKey(): void {
-    const EncryptionKeyLength = 32;
-    const keyBytes = new Uint8Array(EncryptionKeyLength);
-    crypto.getRandomValues(keyBytes);
-    const base64Key = btoa(String.fromCharCode(...keyBytes));
-    this.control(Controls.EncryptionAtRestKey).setValue(base64Key);
+    const key = generateEncryptionKey();
+    this.control(Controls.EncryptionAtRestKey).setValue(key);
   }
 
   onLabelsChange(labels: Record<string, string>): void {
