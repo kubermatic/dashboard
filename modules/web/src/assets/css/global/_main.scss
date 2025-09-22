@@ -452,14 +452,6 @@ km-dashboard {
   }
 }
 
-km-edit-cluster {
-  .encryption-at-rest-field {
-    .mat-mdc-form-field-subscript-wrapper {
-      display: none;
-    }
-  }
-}
-
 .km-wizard-summary {
   km-property-boolean {
     km-property {

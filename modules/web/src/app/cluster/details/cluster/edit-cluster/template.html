@@ -313,7 +313,7 @@ limitations under the License.
       </mat-checkbox>
 
       <mat-form-field *ngIf="!!form.get(Controls.EncryptionAtRest).value && !isEncryptionActive()"
-                      class="encryption-at-rest-field">
+                      subscriptSizing="dynamic">
         <mat-label>Encryption Key</mat-label>
         <input matInput
                [formControlName]="Controls.EncryptionAtRestKey"
