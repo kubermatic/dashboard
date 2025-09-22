@@ -91,7 +91,25 @@ $background: map.merge(
 $background: map.merge(
   $background,
   (
+    hover: #f5f5f5,
+  )
+);
+$background: map.merge(
+  $background,
+  (
     app-bar: #fff,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    card: #fff,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    dialog: #fff,
   )
 );
 $theme-light: map.merge(
@@ -164,3 +182,17 @@ $theme-light: map.merge(
 
 @include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);
+
+
+// Override Angular Material v20 CSS custom properties for components
+:root {
+  --mat-card-outlined-container-color: #{map.get($background, card)};
+  --mat-card-elevated-container-color: #{map.get($background, card)};
+  --mat-card-filled-container-color: #{map.get($background, card)};
+
+  --mat-table-background-color: #{map.get($background, card)};
+  --mat-stepper-container-color: #{map.get($background, card)};
+  --mat-button-toggle-background-color: #{map.get($background, card)};
+
+  --mdc-dialog-container-color: #{map.get($background, dialog)};
+}

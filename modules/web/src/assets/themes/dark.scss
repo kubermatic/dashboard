@@ -187,6 +187,19 @@ $theme-dark: map.merge(
 @include mat.all-component-themes($theme-dark);
 @include main.theme($theme-dark, $colors-dark);
 
+// Override Angular Material v20 CSS custom properties for components
+:root {
+  --mat-card-outlined-container-color: #{map.get($background, card)};
+  --mat-card-elevated-container-color: #{map.get($background, card)};
+  --mat-card-filled-container-color: #{map.get($background, card)};
+ 
+  --mat-table-background-color: #{map.get($background, card)};
+  --mat-stepper-container-color: #{map.get($background, card)};
+  --mat-button-toggle-background-color: #{map.get($background, card)};
+
+  --mdc-dialog-container-color: #{map.get($background, dialog)};
+}
+
 // Make icons and logos white with 85% opacity.
 .km-header-logo,
 .km-provider-logo,
