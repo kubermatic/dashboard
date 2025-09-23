@@ -647,20 +647,33 @@ func PatchEndpoint(
 		return nil, utilerrors.NewBadRequest("failed to mutate cluster: %v", err)
 	}
 
+	var encryptionAtRest *apiv1.EncryptionAtRestSpec
+	if newInternalCluster.Annotations != nil {
+		if key, exists := newInternalCluster.Annotations[EncryptionKeyAnnotation]; exists {
+			encryptionAtRest = &apiv1.EncryptionAtRestSpec{Key: key}
+
+			if newInternalCluster.Spec.Features == nil {
+				newInternalCluster.Spec.Features = make(map[string]bool)
+			}
+			newInternalCluster.Spec.Features[kubermaticv1.ClusterFeatureEncryptionAtRest] = true
+
+			// Setup encryption specification (required for validation)
+			if newInternalCluster.Spec.EncryptionConfiguration != nil && newInternalCluster.Spec.EncryptionConfiguration.Enabled {
+				if err := setupEncryptionSpec(newInternalCluster); err != nil {
+					return nil, utilerrors.NewBadRequest("failed to setup encryption spec: %v", err)
+				}
+			}
+			// Clean up the annotation
+			delete(newInternalCluster.Annotations, EncryptionKeyAnnotation)
+		}
+	}
+
 	// validate the new cluster
 	if errs := validation.ValidateClusterUpdate(ctx, newInternalCluster, oldInternalCluster, dc, seed, cloudProvider, versionManager, features).ToAggregate(); errs != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", errs)
 	}
 	if err = validation.ValidateUpdateWindow(newInternalCluster.Spec.UpdateWindow); err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-
-	var encryptionAtRest *apiv1.EncryptionAtRestSpec
-	if newInternalCluster.Annotations != nil {
-		if key, exists := newInternalCluster.Annotations[EncryptionKeyAnnotation]; exists {
-			encryptionAtRest = &apiv1.EncryptionAtRestSpec{Key: key}
-			delete(newInternalCluster.Annotations, EncryptionKeyAnnotation)
-		}
 	}
 
 	if err := handleEncryptionAtRestUpdate(ctx, seedClient, oldInternalCluster, newInternalCluster, encryptionAtRest); err != nil {
@@ -1434,9 +1447,6 @@ func handleEncryptionAtRestUpdate(ctx context.Context, seedClient ctrlruntimecli
 	if !wasEnabled && willBeEnabled {
 		if encryptionAtRest == nil || encryptionAtRest.Key == "" {
 			return fmt.Errorf("encryption key is required when enabling encryption at rest")
-		}
-		if err := setupEncryptionSpec(updatedCluster); err != nil {
-			return fmt.Errorf("failed to setup encryption spec: %w", err)
 		}
 		return createEncryptionSecret(ctx, seedClient, updatedCluster, encryptionAtRest.Key)
 	}
