@@ -70,6 +70,7 @@ $colors-dark: (
   slide-toggle-handle-color: #bdbdbd,
   hint-color: #b8b8b8b3,
   announcement-banner-text: #edeff0,
+  tab-inactive-text: rgba(184, 184, 184, .6),
 );
 $colors-dark-palette: mat.$m2-blue-palette;
 $colors-dark-palette: map.merge(
@@ -192,11 +193,12 @@ $theme-dark: map.merge(
   --mat-card-outlined-container-color: #{map.get($background, card)};
   --mat-card-elevated-container-color: #{map.get($background, card)};
   --mat-card-filled-container-color: #{map.get($background, card)};
- 
   --mat-table-background-color: #{map.get($background, card)};
+  --mat-table-row-item-label-text-color: #{map.get($foreground, text)};
+  --mat-sort-arrow-color: #{map.get($foreground, secondary-text)};
+  --mat-tab-inactive-label-text-color: #{map.get($colors-dark, tab-inactive-text)};
   --mat-stepper-container-color: #{map.get($background, card)};
   --mat-button-toggle-background-color: #{map.get($background, card)};
-
   --mdc-dialog-container-color: #{map.get($background, dialog)};
 
   // Paginator variables to fix background color issues
