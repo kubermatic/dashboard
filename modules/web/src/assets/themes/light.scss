@@ -195,4 +195,11 @@ $theme-light: map.merge(
   --mat-button-toggle-background-color: #{map.get($background, card)};
 
   --mdc-dialog-container-color: #{map.get($background, dialog)};
+
+  // Paginator variables to fix background color issues
+  --mat-paginator-container-background-color: #{map.get($background, card)};
+  --mat-paginator-container-text-color: #{map.get($foreground, text)};
+
+  // Sidenav content background
+  --mat-sidenav-content-background-color: #{map.get($background, background)};
 }
