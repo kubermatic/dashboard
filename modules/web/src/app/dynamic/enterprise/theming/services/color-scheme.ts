@@ -18,10 +18,10 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Inject, Injectable} from '@angular/core';
+import {Inject, Injectable, DOCUMENT} from '@angular/core';
 import {ThemeService} from './theme';
 import {Theme} from '@shared/model/Config';
-import {DOCUMENT} from '@angular/common';
+
 import {BehaviorSubject} from 'rxjs';
 
 export enum ColorScheme {

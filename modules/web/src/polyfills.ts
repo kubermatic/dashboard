@@ -33,4 +33,3 @@ import 'zone.js';
 
 (window as any).global = window;
 (window as any).process = {browser: true, env: {}};
-(window as any).Buffer = (window as any).Buffer || require('buffer').Buffer;

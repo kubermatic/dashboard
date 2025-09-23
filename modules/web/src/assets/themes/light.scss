@@ -74,11 +74,13 @@ $colors-light-palette: map.merge(
     500: #00517d,
   )
 );
-$theme-light: mat.m2-define-light-theme(
-  mat.m2-define-palette($colors-light-palette),
-  mat.m2-define-palette(mat.$m2-light-blue-palette),
-  mat.m2-define-palette(mat.$m2-pink-palette)
-);
+$theme-light: mat.m2-define-light-theme((
+  color: (
+    primary: mat.m2-define-palette($colors-light-palette),
+    accent: mat.m2-define-palette(mat.$m2-light-blue-palette),
+    warn: mat.m2-define-palette(mat.$m2-pink-palette)
+  )
+));
 $background: map.get($theme-light, background);
 $background: map.merge(
   $background,
@@ -89,7 +91,25 @@ $background: map.merge(
 $background: map.merge(
   $background,
   (
+    hover: #f5f5f5,
+  )
+);
+$background: map.merge(
+  $background,
+  (
     app-bar: #fff,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    card: #fff,
+  )
+);
+$background: map.merge(
+  $background,
+  (
+    dialog: #fff,
   )
 );
 $theme-light: map.merge(
@@ -162,3 +182,24 @@ $theme-light: map.merge(
 
 @include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);
+
+
+// Override Angular Material v20 CSS custom properties for components
+:root {
+  --mat-card-outlined-container-color: #{map.get($background, card)};
+  --mat-card-elevated-container-color: #{map.get($background, card)};
+  --mat-card-filled-container-color: #{map.get($background, card)};
+
+  --mat-table-background-color: #{map.get($background, card)};
+  --mat-stepper-container-color: #{map.get($background, card)};
+  --mat-button-toggle-background-color: #{map.get($background, card)};
+
+  --mdc-dialog-container-color: #{map.get($background, dialog)};
+
+  // Paginator variables to fix background color issues
+  --mat-paginator-container-background-color: #{map.get($background, card)};
+  --mat-paginator-container-text-color: #{map.get($foreground, text)};
+
+  // Sidenav content background
+  --mat-sidenav-content-background-color: #{map.get($background, background)};
+}

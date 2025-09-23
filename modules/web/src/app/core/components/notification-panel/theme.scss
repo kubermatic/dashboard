@@ -26,7 +26,7 @@
   }
 
   .notification-badge {
-    border: 1px solid map.get($colors, background-app-bar);
+    border: 1px solid map.get($colors, background-card);
     color: #fff;
   }
 }

@@ -15,13 +15,33 @@
 @use 'sass:map';
 
 @mixin theme-notification-component($colors) {
-  km-notification {
-    background: map.get($colors, background-app-bar);
-    color: map.get($colors, text);
+  .mat-mdc-snack-bar-container km-notification,
+  .cdk-overlay-pane:has(km-notification) .mat-mdc-snack-bar-container {
+    // Override Material Design CSS custom properties with theme colors
+    --mdc-snackbar-container-color: #{map.get($colors, background-card)};
+    --mdc-snackbar-supporting-text-color: #{map.get($colors, text)};
+    --mat-snack-bar-button-color: #{map.get($colors, primary)};
 
-    .notification-container {
-      &.show-message-section > :nth-child(-n + 3) {
-        border-bottom: 1px solid map.get($colors, divider);
+    .mat-mdc-snackbar-surface,
+    .mdc-snackbar__surface {
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
+    }
+
+    .mat-mdc-snack-bar-label {
+      color: var(--mdc-snackbar-supporting-text-color);
+    }
+
+    // Ensure our km-notification component also gets the colors
+    km-notification {
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
+
+
+      .notification-container {
+        &.show-message-section > :nth-child(-n + 3) {
+          border-bottom: 1px solid map.get($colors, divider);
+        }
       }
     }
   }

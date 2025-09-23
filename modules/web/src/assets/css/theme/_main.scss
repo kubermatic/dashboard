@@ -31,11 +31,11 @@ $my-typography: mat.m2-define-typography-config(
   $palette-background: map.get($theme, background);
   $palette-foreground: map.get($theme, foreground);
   $theme-colors: (
-    background-app-bar: mat.m2-get-color-from-palette($palette-background, app-bar),
-    background-card: mat.m2-get-color-from-palette($palette-background, card),
-    background-dialog: mat.m2-get-color-from-palette($palette-background, dialog),
+    background-app-bar: map.get($palette-background, app-bar),
+    background-card: map.get($palette-background, card),
+    background-dialog: map.get($palette-background, dialog),
     background-disabled-button: mat.m2-get-color-from-palette($palette-background, disabled-button),
-    background-hover: mat.m2-get-color-from-palette($palette-background, hover),
+    background-hover: map.get($palette-background, hover),
     background: mat.m2-get-color-from-palette($palette-background, background),
     checkbox-disabled: mat.m2-get-color-from-palette($palette-foreground, disabled-checkbox),
     checkbox-disabled-checked: mat.m2-get-color-from-palette($palette-foreground, disabled-checkbox-checked),

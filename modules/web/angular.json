@@ -294,16 +294,20 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "km"
+      "prefix": "km",
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "km"
+      "prefix": "km",
+      "type": "directive"
     },
     "@schematics/angular:guard": {},
     "@schematics/angular:interface": {},
     "@schematics/angular:module": {},
     "@schematics/angular:pipe": {},
-    "@schematics/angular:service": {}
+    "@schematics/angular:service": {},
+    "@schematics/angular:interceptor": {},
+    "@schematics/angular:resolver": {}
   },
   "cli": {
     "analytics": false

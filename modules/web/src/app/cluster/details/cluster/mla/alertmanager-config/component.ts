@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import {Component, Inject, Input, OnDestroy, OnInit, DOCUMENT} from '@angular/core';
+
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
