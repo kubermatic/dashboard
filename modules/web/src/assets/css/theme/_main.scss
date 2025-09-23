@@ -60,4 +60,49 @@ $my-typography: mat.m2-define-typography-config(
 
   // Register component-level themes.
   @include theme-components($merged-colors);
+
+  // Override Angular Material v20 CSS custom properties for components
+  :root {
+    --mat-card-outlined-container-color: #{map.get($merged-colors, background-card)};
+    --mat-card-elevated-container-color: #{map.get($merged-colors, background-card)};
+    --mat-card-filled-container-color: #{map.get($merged-colors, background-card)};
+
+    --mat-table-background-color: #{map.get($merged-colors, background-card)};
+    --mat-table-row-item-label-text-color: #{map.get($merged-colors, text)};
+    --mat-sort-arrow-color: #{map.get($merged-colors, text-secondary)};
+    --mat-tab-disabled-ripple-color: #{map.get($merged-colors, tab-disabled-ripple)};
+    --mat-tab-pagination-icon-color: #{map.get($merged-colors, tab-pagination-icon)};
+  
+    --mat-tab-inactive-ripple-color: #{map.get($merged-colors, tab-inactive-ripple)};
+    
+    --mat-tab-inactive-label-text-color: #{map.get($merged-colors, tab-inactive-text)};
+    --mat-tab-inactive-focus-label-text-color: #{map.get($merged-colors, tab-inactive-text)};
+    --mat-tab-inactive-hover-label-text-color: #{map.get($merged-colors, tab-inactive-text)};
+
+    // Slide toggle disabled unselected handle color
+    --mat-slide-toggle-disabled-unselected-handle-color: #{map.get($merged-colors, slide-toggle-unselected-handle)};
+
+    // Tooltip text color
+    --mat-tooltip-supporting-text-color: #{map.get($merged-colors, tooltip-text)};
+  
+    // --mat-tab-active-label-text-color: #{map.get($merged-colors, tab-active-text)};
+    // --mat-tab-active-ripple-color: #{map.get($merged-colors, tab-active-ripple)};  
+    // --mat-tab-active-focus-label-text-color: #{map.get($merged-colors, tab-active-text)};
+    // --mat-tab-active-hover-label-text-color: #{map.get($merged-colors, tab-active-text)};
+    // --mat-tab-active-focus-indicator-color: #{map.get($merged-colors, tab-active-indicator)};
+    // --mat-tab-active-hover-indicator-color: #{map.get($merged-colors, )};
+    // --mat-tab-active-indicator-color: #{map.get($merged-colors, tab-active-indicator)};
+    
+    --mat-stepper-container-color: #{map.get($merged-colors, background-card)};
+    --mat-button-toggle-background-color: #{map.get($merged-colors, background-card)};
+
+    --mdc-dialog-container-color: #{map.get($merged-colors, background-dialog)};
+
+    // Paginator variables to fix background color issues
+    --mat-paginator-container-background-color: #{map.get($merged-colors, background-card)};
+    --mat-paginator-container-text-color: #{map.get($merged-colors, text)};
+
+    // Sidenav content background
+    --mat-sidenav-content-background-color: #{if(map.get($merged-colors, sidenav-content-background), map.get($merged-colors, sidenav-content-background), map.get($merged-colors, background))};
+  }
 }
