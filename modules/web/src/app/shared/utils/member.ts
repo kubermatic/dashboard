@@ -32,7 +32,7 @@ export enum Group {
 export class MemberUtils {
   static getGroupInProject(member: Member, projectID: string): string {
     if (!member?.projects) {
-      if (member.isGlobalViewer) {
+      if (member?.isGlobalViewer) {
         return Group.Viewer;
       }
       return '';
@@ -41,7 +41,7 @@ export class MemberUtils {
     const priority = [Group.Owner, Group.ProjectManager, Group.Editor, Group.Viewer];
 
     const groups = member.projects.filter(p => p.id === projectID).map(p => p.group);
-    if (member.isGlobalViewer) {
+    if (member?.isGlobalViewer) {
       groups.push(Group.Viewer);
     }
     return priority.find(role => groups.includes(role)) || '';
