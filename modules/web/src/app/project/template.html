@@ -374,7 +374,7 @@ limitations under the License.
 </ng-template>
 
 <ng-template #allProjectToggle>
-  <mat-slide-toggle *ngIf="isAdmin || currentUser.isGlobalViewer"
+  <mat-slide-toggle *ngIf="isAdmin || currentUser?.isGlobalViewer"
                     class="all-projects-toggle"
                     [disabled]="isProjectsLoading"
                     labelPosition="before"
