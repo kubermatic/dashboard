@@ -895,6 +895,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 		Handler(r.listProjectOpenstackNetworks())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/floatingnetworks").
+		Handler(r.listProjectOpenstackFloatingNetworks())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/openstack/securitygroups").
 		Handler(r.listProjectOpenstackSecurityGroups())
 
@@ -913,6 +917,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool) {
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/openstack/servergroups").
 		Handler(r.listProjectOpenstackServerGroups())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/openstack/membersubnets").
+		Handler(r.listProjectOpenstackMemberSubnets())
 
 	// Hetzner endpoints
 	mux.Methods(http.MethodGet).
@@ -7314,6 +7322,28 @@ func (r Routing) listProjectOpenstackNetworks() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/floatingnetworks openstack listProjectOpenstackFloatingNetworks
+//
+// Lists floating networks from openstack (router:external=true)
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackNetwork
+func (r Routing) listProjectOpenstackFloatingNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackFloatingNetworksEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/openstack/subnets openstack listProjectOpenstackSubnets
 //
 // Lists subnets from openstack
@@ -7419,6 +7449,28 @@ func (r Routing) listProjectOpenstackServerGroups() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle, true)),
 		provider.DecodeOpenstackProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/openstack/membersubnets openstack listProjectOpenstackMemberSubnets
+//
+// Lists load balancer member subnets from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenStackLoadBalancerPoolMember
+func (r Routing) listProjectOpenstackMemberSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackMemberSubnetsEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackProjectSubnetReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

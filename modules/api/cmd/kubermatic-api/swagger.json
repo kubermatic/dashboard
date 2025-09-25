@@ -21448,6 +21448,208 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/openstack/floatingnetworks": {
+      "get": {
+        "description": "Lists floating networks from openstack (router:external=true)",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackFloatingNetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackNetwork",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackNetwork"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/openstack/membersubnets": {
+      "get": {
+        "description": "Lists load balancer member subnets from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listProjectOpenstackMemberSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackTenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProject",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "OpenstackProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "NetworkID",
+            "name": "network_id",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenStackLoadBalancerPoolMember",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenStackLoadBalancerPoolMember"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/openstack/networks": {
       "get": {
         "description": "Lists networks from openstack",
@@ -35261,7 +35463,7 @@
       "title": "KubeLB contains settings for the kubeLB component as part of the cluster control plane. This component is responsible for managing load balancers.",
       "properties": {
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KubeLB installs the Gateway API CRDs in the user cluster.",
+          "description": "EnableGatewayAPI is used to enable Gateway API for KubeLB. Once enabled, KKP installs the Gateway API CRDs for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -35295,7 +35497,7 @@
           "x-go-name": "DisableIngressClass"
         },
         "enableGatewayAPI": {
-          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB. Once enabled, Gateway API CRDs are installed for the user cluster.",
+          "description": "EnableGatewayAPI is used to configure the use of gateway API for kubeLB.\nWhen this option is enabled for the user cluster, KKP installs the Gateway API CRDs for the user cluster.",
           "type": "boolean",
           "x-go-name": "EnableGatewayAPI"
         },
@@ -38177,6 +38379,20 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "OpenStackLoadBalancerPoolMember": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "Openstack": {
       "type": "object",
       "properties": {
@@ -38325,6 +38541,14 @@
           "description": "IPv6SubnetPool holds the name of the subnet pool used for creating new IPv6 subnets.\nIf not provided, the default IPv6 subnet pool will be used.\n+optional",
           "type": "string",
           "x-go-name": "IPv6SubnetPool"
+        },
+        "loadBalancerClasses": {
+          "description": "List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadBalancerClass"
+          },
+          "x-go-name": "LoadBalancerClasses"
         },
         "network": {
           "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.\n\nNote that the network is internal if the \"External\" field is set to false",
@@ -38601,6 +38825,14 @@
           "description": "Name is human-readable name for the subnet",
           "type": "string",
           "x-go-name": "Name"
+        },
+        "tags": {
+          "description": "Tags are Neutron subnet tags (if supported by the deployment)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Tags"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"

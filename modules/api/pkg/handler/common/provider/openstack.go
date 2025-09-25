@@ -19,6 +19,7 @@ package provider
 import (
 	"context"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -243,6 +244,7 @@ func GetOpenstackSubnets(ctx context.Context, userInfo *provider.UserInfo, seeds
 			ID:        subnet.ID,
 			Name:      subnet.Name,
 			IPVersion: subnet.IPVersion,
+			Tags:      subnet.Tags,
 		})
 	}
 
@@ -269,6 +271,33 @@ func GetOpenstackNetworks(ctx context.Context, userInfo *provider.UserInfo, seed
 		}
 
 		apiNetworks = append(apiNetworks, apiNetwork)
+	}
+
+	return apiNetworks, nil
+}
+
+func GetOpenstackFloatingNetworks(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName string, caBundle *x509.CertPool) ([]apiv1.OpenstackNetwork, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	networks, err := openstack.GetNetworks(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiNetworks := []apiv1.OpenstackNetwork{}
+	for _, network := range networks {
+		if network.External {
+			apiNetwork := apiv1.OpenstackNetwork{
+				Name:     network.Name,
+				ID:       network.ID,
+				External: network.External,
+			}
+
+			apiNetworks = append(apiNetworks, apiNetwork)
+		}
 	}
 
 	return apiNetworks, nil
@@ -490,4 +519,51 @@ func getCredentials(ctx context.Context, cloudSpec kubermaticv1.CloudSpec) (*res
 		return nil, err
 	}
 	return credentials, nil
+}
+
+func GetOpenstackLoadBalancers(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName, vipNetworkID string, caBundle *x509.CertPool) ([]apiv2.OpenStackLoadBalancer, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	loadBalancers, err := openstack.GetLoadBalancers(ctx, authURL, region, vipNetworkID, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiLoadBalancers := []apiv2.OpenStackLoadBalancer{}
+	b, err := json.Marshal(loadBalancers)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(b, &apiLoadBalancers); err != nil {
+		return nil, err
+	}
+
+	return apiLoadBalancers, nil
+}
+
+func GetOpenstackLoadBalancerPoolMembers(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName, poolID string, caBundle *x509.CertPool) ([]apiv2.OpenStackLoadBalancerPoolMember, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	members, err := openstack.GetLoadBalancerPoolMembers(ctx, authURL, region, poolID, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiMembers := []apiv2.OpenStackLoadBalancerPoolMember{}
+	for _, member := range members {
+		apiMember := apiv2.OpenStackLoadBalancerPoolMember{
+			ID:   member.ID,
+			Name: member.Name,
+		}
+
+		apiMembers = append(apiMembers, apiMember)
+	}
+
+	return apiMembers, nil
 }

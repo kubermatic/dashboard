@@ -25,6 +25,9 @@ type OpenstackSubnet struct {
 
 	// Name is human-readable name for the subnet
 	Name string `json:"name,omitempty"`
+
+	// Tags are Neutron subnet tags (if supported by the deployment)
+	Tags []string `json:"tags"`
 }
 
 // Validate validates this openstack subnet

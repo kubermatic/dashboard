@@ -768,6 +768,8 @@ type OpenstackSubnet struct {
 	Name string `json:"name"`
 	// IPversion is the IP protocol version (4 or 6)
 	IPVersion int `json:"ipVersion"`
+	// Tags are Neutron subnet tags (if supported by the deployment)
+	Tags []string `json:"tags,omitempty"`
 }
 
 // OpenstackTenant is the object representing a openstack tenant.
