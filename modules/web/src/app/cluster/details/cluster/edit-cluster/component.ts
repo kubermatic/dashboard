@@ -604,9 +604,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private _handleEncryptionConfigurationChanges(patch: ClusterPatch): void {
-    const encryptionEnabled = this.form.get(Controls.EncryptionAtRest).value;
+    const encryptionEnabled = !!this.form.get(Controls.EncryptionAtRest).value;
     const encryptionKey = this.form.get(Controls.EncryptionAtRestKey).value;
-    const wasEnabled = this.cluster.spec.encryptionConfiguration?.enabled;
+    const wasEnabled = !!this.cluster.spec.encryptionConfiguration?.enabled;
 
     if (encryptionEnabled !== wasEnabled || (encryptionEnabled && encryptionKey)) {
       patch.spec.encryptionConfiguration = {
@@ -619,7 +619,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         }
         patch.annotations[this.ENCRYPTION_KEY_ANNOTATION] = encryptionKey;
       }
-    } else if (this.cluster.spec.encryptionConfiguration) {
+    } else if (wasEnabled) {
       patch.spec.encryptionConfiguration = this.cluster.spec.encryptionConfiguration;
     }
   }
