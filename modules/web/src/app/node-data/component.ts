@@ -385,16 +385,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .get(Controls.EnableClusterAutoscalingApp)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(enable => {
-        this._filterOutAutoscalerApp();
-        if (enable) {
-          this._applicationService.applications = [
-            ...this._applicationService.applications,
-            this.autoscalerApplication,
-          ];
-        } else {
-          this.form.get(Controls.MaxReplicas).setValue(null);
-          this.form.get(Controls.MinReplicas).setValue(null);
-        }
+        this._updateAutoscalerApplication(enable);
       });
   }
 
@@ -745,6 +736,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     };
   }
 
+  private _updateAutoscalerApplication(enable: boolean): void {
+    const hasAutoscalerApp = this._applicationService.applications.some(
+      app => app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME
+    );
+
+    if (enable && !hasAutoscalerApp && this.autoscalerApplication) {
+      this._applicationService.applications = [...this._applicationService.applications, this.autoscalerApplication];
+    } else if (!enable && hasAutoscalerApp) {
+      this._filterOutAutoscalerApp();
+      this.form.get(Controls.MaxReplicas).setValue(null);
+      this.form.get(Controls.MinReplicas).setValue(null);
+    }
+  }
   private _filterOutAutoscalerApp(): void {
     this._applicationService.applications = this._applicationService.applications.filter(
       app => app.spec.applicationRef.name !== CLUSTER_AUTOSCALING_APP_DEF_NAME

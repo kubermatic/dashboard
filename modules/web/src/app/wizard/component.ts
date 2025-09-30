@@ -365,12 +365,12 @@ export class WizardComponent implements OnInit, OnDestroy {
         template.nodeDeployment.name = namePrefix;
         this._clusterSpecService.initializeClusterFromClusterTemplate(template);
         this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
-        template.applications.forEach(app => {
+        template.applications?.forEach(app => {
           if (app.spec.applicationRef.name === CLUSTER_AUTOSCALING_APP_DEF_NAME) {
             (app.labels ??= {})[ApplicationLabel.ManagedBy] = ApplicationLabelValue.KKP;
           }
         });
-        this._applicationService.applications = template.applications;
+        this._applicationService.applications = template.applications || [];
         this.clusterTemplate = template;
 
         // Re-initialize the form.
