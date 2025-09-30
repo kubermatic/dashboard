@@ -30039,9 +30039,6 @@
         "openstack": {
           "$ref": "#/definitions/OpenstackCloudSpec"
         },
-        "packet": {
-          "$ref": "#/definitions/PacketCloudSpec"
-        },
         "providerName": {
           "description": "ProviderName is the name of the cloud provider used for this cluster.\nThis must match the given provider spec (e.g. if the providerName is\n\"aws\", then the `aws` field must be set).",
           "type": "string",
@@ -38314,6 +38311,11 @@
           "type": "string",
           "x-go-name": "IngressHostnameSuffix"
         },
+        "ipv6SubnetCidr": {
+          "description": "IPv6SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec\ndidn't specify a subnet id for the IPv6 networking.\n+optional",
+          "type": "string",
+          "x-go-name": "IPv6SubnetCIDR"
+        },
         "ipv6SubnetID": {
           "description": "IPv6SubnetID holds the ID of the subnet used for IPv6 networking.\nIf not provided, a new subnet will be created if IPv6 is enabled.\n+optional",
           "type": "string",
@@ -38359,6 +38361,16 @@
           "description": "SecurityGroups is the name of the security group (only supports a singular security group) that will be used for Machines in the cluster.\nIf this field is left empty, a default security group will be created and used.",
           "type": "string",
           "x-go-name": "SecurityGroups"
+        },
+        "subnetAllocationPool": {
+          "description": "SubnetAllocationPool represents a pool of usable IPs that can be assigned to resources via the DHCP. The format is\nfirst usable ip and last usable ip separated by a dash(e.g: 10.10.0.1-10.10.0.254)\n+optional",
+          "type": "string",
+          "x-go-name": "SubnetAllocationPool"
+        },
+        "subnetCidr": {
+          "description": "SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec\ndidn't specify a subnet id.\n+optional",
+          "type": "string",
+          "x-go-name": "SubnetCIDR"
         },
         "subnetID": {
           "type": "string",
@@ -38696,63 +38708,6 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
-    },
-    "Packet": {
-      "description": "This provider is no longer supported. Migrate your configurations away from \"packet\" immediately.\nNOOP.",
-      "type": "object",
-      "title": "Deprecated: The Packet / Equinix Metal provider is deprecated and will be REMOVED IN VERSION 2.29.",
-      "properties": {
-        "apiKey": {
-          "type": "string",
-          "x-go-name": "APIKey"
-        },
-        "billingCycle": {
-          "type": "string",
-          "x-go-name": "BillingCycle"
-        },
-        "datacenter": {
-          "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
-          "type": "string",
-          "x-go-name": "Datacenter"
-        },
-        "enabled": {
-          "description": "Only enabled presets will be available in the KKP dashboard.",
-          "type": "boolean",
-          "x-go-name": "Enabled"
-        },
-        "isCustomizable": {
-          "description": "IsCustomizable marks a preset as editable on the KKP UI; Customizable presets still have the credentials obscured on the UI, but other fields that are not considered private are displayed during cluster creation. Users can then update those fields, if required.\nNOTE: This is only supported for OpenStack Cloud Provider in KKP 2.26. Support for other providers will be added later on.",
-          "type": "boolean",
-          "x-go-name": "IsCustomizable"
-        },
-        "projectID": {
-          "type": "string",
-          "x-go-name": "ProjectID"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
-    },
-    "PacketCloudSpec": {
-      "type": "object",
-      "title": "NOOP.",
-      "properties": {
-        "apiKey": {
-          "type": "string",
-          "x-go-name": "APIKey"
-        },
-        "billingCycle": {
-          "type": "string",
-          "x-go-name": "BillingCycle"
-        },
-        "credentialsReference": {
-          "$ref": "#/definitions/GlobalSecretKeySelector"
-        },
-        "projectID": {
-          "type": "string",
-          "x-go-name": "ProjectID"
-        }
-      },
-      "x-go-package": "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
     },
     "Parameters": {
       "type": "object",
@@ -39250,9 +39205,6 @@
         },
         "openstack": {
           "$ref": "#/definitions/Openstack"
-        },
-        "packet": {
-          "$ref": "#/definitions/Packet"
         },
         "projects": {
           "description": "Projects is a list of project IDs that this preset is limited to.",
