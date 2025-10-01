@@ -27,6 +27,8 @@ import (
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
 	ostokens "github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	osusers "github.com/gophercloud/gophercloud/openstack/identity/v3/users"
+	osloadbalancer "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/loadbalancers"
+	oslbpools "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/pools"
 	osextnetwork "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/external"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/subnetpools"
@@ -227,4 +229,40 @@ func getAvailabilityZones(computeClient *gophercloud.ServiceClient) ([]osavailab
 	}
 
 	return availabilityZones, nil
+}
+
+func getLoadBalancers(lbClient *gophercloud.ServiceClient, vipNetworkID string) ([]osloadbalancer.LoadBalancer, error) {
+	allPages, err := osloadbalancer.List(lbClient, osloadbalancer.ListOpts{VipNetworkID: vipNetworkID}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancers: %w", err)
+	}
+	loadBalancers, err := osloadbalancer.ExtractLoadBalancers(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancers: %w", err)
+	}
+	return loadBalancers, nil
+}
+
+func getAllLoadBalancerPools(lbClient *gophercloud.ServiceClient) ([]oslbpools.Pool, error) {
+	allPages, err := oslbpools.List(lbClient, oslbpools.ListOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancer pools: %w", err)
+	}
+	pools, err := oslbpools.ExtractPools(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancer pools: %w", err)
+	}
+	return pools, nil
+}
+
+func getLoadBalancerPoolMembers(lbClient *gophercloud.ServiceClient, poolID string) ([]oslbpools.Member, error) {
+	allPages, err := oslbpools.ListMembers(lbClient, poolID, oslbpools.ListMembersOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list load balancer pool members: %w", err)
+	}
+	members, err := oslbpools.ExtractMembers(allPages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract load balancer pool members: %w", err)
+	}
+	return members, nil
 }

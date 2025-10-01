@@ -94,6 +94,8 @@ require (
 	sigs.k8s.io/yaml v1.6.0
 )
 
+replace k8c.io/kubermatic/sdk/v2 => github.com/sheryarbutt/kubermatic/sdk/v2 v2.0.0-20250917065702-dc80ba0ba801
+
 // follow repository deprecation
 replace github.com/ajeddeloh/go-json => github.com/coreos/go-json v0.0.0-20220810161552-7cce03887f34
 
