@@ -47,6 +47,11 @@ type OpenstackCloudSpec struct {
 	// Note that the network is external if the "External" field is set to true
 	FloatingIPPool string `json:"floatingIPPool,omitempty"`
 
+	// IPv6SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec
+	// didn't specify a subnet id for the IPv6 networking.
+	// +optional
+	IPV6SubnetCIDR string `json:"ipv6SubnetCidr,omitempty"`
+
 	// IPv6SubnetID holds the ID of the subnet used for IPv6 networking.
 	// If not provided, a new subnet will be created if IPv6 is enabled.
 	// +optional
@@ -88,6 +93,16 @@ type OpenstackCloudSpec struct {
 	// SecurityGroups is the name of the security group (only supports a singular security group) that will be used for Machines in the cluster.
 	// If this field is left empty, a default security group will be created and used.
 	SecurityGroups string `json:"securityGroups,omitempty"`
+
+	// SubnetAllocationPool represents a pool of usable IPs that can be assigned to resources via the DHCP. The format is
+	// first usable ip and last usable ip separated by a dash(e.g: 10.10.0.1-10.10.0.254)
+	// +optional
+	SubnetAllocationPool string `json:"subnetAllocationPool,omitempty"`
+
+	// SubnetCIDR is the CIDR that will be assigned to the subnet that is created for the cluster if the cluster spec
+	// didn't specify a subnet id.
+	// +optional
+	SubnetCIDR string `json:"subnetCidr,omitempty"`
 
 	// subnet ID
 	SubnetID string `json:"subnetID,omitempty"`
