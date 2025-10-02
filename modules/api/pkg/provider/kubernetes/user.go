@@ -85,10 +85,10 @@ func (p *UserProvider) UserByEmail(ctx context.Context, email string) (*kubermat
 // CreateUser creates a new user. If no user is found at all the created user is elected as the first admin.
 //
 // Note that:
-// The name of the newly created resource will be unique and it is derived from the user's email address (sha256(email)
+// The name of the newly created resource will be unique and it is derived from the user's email address (sha256(email))
 // This prevents creating multiple resources for the same user with the same email address.
 //
-// In the beginning I was considering to hex-encode the email address as it will produce a unique output because the email address in unique.
+// In the beginning I was considering to hex-encode the email address as it will produce a unique output because the email address is unique.
 // The only issue I have found with this approach is that the length can get quite long quite fast.
 // Thus decided to use sha256 as it produces fixed output and the hash collisions are very, very, very, very rare.
 
@@ -103,11 +103,11 @@ func (p *UserProvider) CreateUser(ctx context.Context, name, email string, group
 
 	user := &kubermaticv1.User{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: fmt.Sprintf("%x", sha256.Sum256([]byte(email))),
+			Name: fmt.Sprintf("%x", sha256.Sum256([]byte(strings.ToLower(email)))),
 		},
 		Spec: kubermaticv1.UserSpec{
 			Name:   name,
-			Email:  email,
+			Email:  strings.ToLower(email),
 			Groups: groups,
 		},
 	}
