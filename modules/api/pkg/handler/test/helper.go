@@ -877,7 +877,7 @@ func CompareWithResult(t *testing.T, res *httptest.ResponseRecorder, response st
 func GenUser(id, name, email string) *kubermaticv1.User {
 	if len(id) == 0 {
 		// the name of the object is derived from the email address and encoded as sha256
-		id = fmt.Sprintf("%x", sha256.Sum256([]byte(email)))
+		id = fmt.Sprintf("%x", sha256.Sum256([]byte(strings.ToLower(email))))
 	}
 
 	h := sha512.New512_224()
@@ -893,7 +893,7 @@ func GenUser(id, name, email string) *kubermaticv1.User {
 		},
 		Spec: kubermaticv1.UserSpec{
 			Name:  name,
-			Email: email,
+			Email: strings.ToLower(email),
 		},
 		Status: kubermaticv1.UserStatus{
 			LastSeen: metav1.NewTime(UserLastSeen),
