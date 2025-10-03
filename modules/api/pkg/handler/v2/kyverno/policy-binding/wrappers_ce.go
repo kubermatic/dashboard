@@ -25,7 +25,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func listEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) (interface{}, error) {
+func listEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter) (interface{}, error) {
 	return nil, nil
 }
 
@@ -33,7 +33,7 @@ func DecodeListPolicyBindingReq(_ context.Context, _ *http.Request) (interface{}
 	return nil, nil
 }
 
-func getEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) (interface{}, error) {
+func getEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter) (interface{}, error) {
 	return "ce_GettEndpoint", nil
 }
 
@@ -41,7 +41,7 @@ func DecodeGetPolicyBindingReq(_ context.Context, _ *http.Request) (interface{},
 	return nil, nil
 }
 
-func createEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) (interface{}, error) {
+func createEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter) (interface{}, error) {
 	return nil, nil
 }
 
@@ -49,7 +49,7 @@ func DecodeCreatePolicyBindingReq(_ context.Context, _ *http.Request) (interface
 	return nil, nil
 }
 
-func patchEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) (interface{}, error) {
+func patchEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter) (interface{}, error) {
 	return nil, nil
 }
 
@@ -57,7 +57,7 @@ func DecodePatchPolicyBindingReq(_ context.Context, _ *http.Request) (interface{
 	return nil, nil
 }
 
-func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter, _ provider.PolicyBindingProvider) error {
+func deleteEndpoint(_ context.Context, _ interface{}, _ provider.UserInfoGetter) error {
 	return nil
 }
 

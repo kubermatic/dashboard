@@ -26,40 +26,40 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func listEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
-	return policybinding.ListEndpoint(ctx, request, userInfoGetter, provider)
+func listEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
+	return policybinding.ListEndpoint(ctx, request, userInfoGetter)
 }
 
 func DecodeListPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return policybinding.DecodeListPolicyBindingReq(ctx, r)
 }
 
-func getEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
-	return policybinding.GetEndpoint(ctx, request, userInfoGetter, provider)
+func getEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
+	return policybinding.GetEndpoint(ctx, request, userInfoGetter)
 }
 
 func DecodeGetPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return policybinding.DecodeGetPolicyBindingReq(ctx, r)
 }
 
-func createEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
-	return policybinding.CreateEndpoint(ctx, request, userInfoGetter, provider)
+func createEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
+	return policybinding.CreateEndpoint(ctx, request, userInfoGetter)
 }
 
 func DecodeCreatePolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return policybinding.DecodeCreatePolicyBindingReq(ctx, r)
 }
 
-func patchEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
-	return policybinding.PatchEndpoint(ctx, request, userInfoGetter, provider)
+func patchEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
+	return policybinding.PatchEndpoint(ctx, request, userInfoGetter)
 }
 
 func DecodePatchPolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {
 	return policybinding.DecodePatchPolicyBindingReq(ctx, r)
 }
 
-func deleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) error {
-	return policybinding.DeleteEndpoint(ctx, request, userInfoGetter, provider)
+func deleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) error {
+	return policybinding.DeleteEndpoint(ctx, request, userInfoGetter)
 }
 
 func DecodeDeletePolicyBindingReq(ctx context.Context, r *http.Request) (interface{}, error) {

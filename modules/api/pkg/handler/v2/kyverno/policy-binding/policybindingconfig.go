@@ -24,32 +24,32 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 )
 
-func ListEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
+func ListEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return listEndpoint(ctx, request, userInfoGetter, provider)
+		return listEndpoint(ctx, request, userInfoGetter)
 	}
 }
 
-func GetEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
+func GetEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return getEndpoint(ctx, request, userInfoGetter, provider)
+		return getEndpoint(ctx, request, userInfoGetter)
 	}
 }
 
-func CreateEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
+func CreateEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return createEndpoint(ctx, request, userInfoGetter, provider)
+		return createEndpoint(ctx, request, userInfoGetter)
 	}
 }
 
-func PatchEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
+func PatchEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return patchEndpoint(ctx, request, userInfoGetter, provider)
+		return patchEndpoint(ctx, request, userInfoGetter)
 	}
 }
 
-func DeleteEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) endpoint.Endpoint {
+func DeleteEndpoint(userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return nil, deleteEndpoint(ctx, request, userInfoGetter, provider)
+		return nil, deleteEndpoint(ctx, request, userInfoGetter)
 	}
 }
