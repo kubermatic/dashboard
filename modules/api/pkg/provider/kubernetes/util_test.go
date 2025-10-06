@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/go-jose/go-jose/v4/jwt"
@@ -98,7 +99,7 @@ func sortTokenByName(tokens []*corev1.Secret) {
 func genUser(id, name, email string) *kubermaticv1.User {
 	if len(id) == 0 {
 		// the name of the object is derived from the email address and encoded as sha256
-		id = fmt.Sprintf("%x", sha256.Sum256([]byte(email)))
+		id = fmt.Sprintf("%x", sha256.Sum256([]byte(strings.ToLower(email))))
 	}
 
 	h := sha512.New512_224()
@@ -114,7 +115,7 @@ func genUser(id, name, email string) *kubermaticv1.User {
 		},
 		Spec: kubermaticv1.UserSpec{
 			Name:  name,
-			Email: email,
+			Email: strings.ToLower(email),
 		},
 	}
 }
