@@ -30,6 +30,8 @@ import (
 	ossservergroups "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/servergroups"
 	osflavors "github.com/gophercloud/gophercloud/openstack/compute/v2/flavors"
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
+	osloadbalancer "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/loadbalancers"
+	oslbpools "github.com/gophercloud/gophercloud/openstack/loadbalancer/v2/pools"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
 	osecuritygrouprules "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/rules"
 	ossubnetpools "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/subnetpools"
@@ -297,6 +299,79 @@ func GetSubnets(ctx context.Context, authURL, region, networkID string, credenti
 	}
 
 	return subnets, nil
+}
+
+func GetLoadBalancers(ctx context.Context, authURL, region, vipNetworkID string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]osloadbalancer.LoadBalancer, error) {
+	serviceClient, err := getLoadBalancerClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get load balancer client: %w", err)
+	}
+
+	loadBalancers, err := getLoadBalancers(serviceClient, vipNetworkID)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't list load balancers: %w", err)
+	}
+
+	return loadBalancers, nil
+}
+
+func GetLoadBalancerPools(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]oslbpools.Pool, error) {
+	serviceClient, err := getLoadBalancerClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get load balancer client: %w", err)
+	}
+
+	loadBalancerPools, err := getAllLoadBalancerPools(serviceClient)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't list load balancer pools: %w", err)
+	}
+
+	return loadBalancerPools, nil
+}
+
+func GetLoadBalancerPoolMembers(ctx context.Context, authURL, region, poolID string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]oslbpools.Member, error) {
+	serviceClient, err := getLoadBalancerClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get load balancer client: %w", err)
+	}
+
+	members, err := getLoadBalancerPoolMembers(serviceClient, poolID)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't list load balancer pool members: %w", err)
+	}
+
+	return members, nil
+}
+
+func getLoadBalancerClient(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) (*gophercloud.ServiceClient, error) {
+	authClient, err := getAuthClient(authURL, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	// Set ProjectID when project's name is provided for later use in ListOpts.
+	if credentials.ProjectID == "" && credentials.Project != "" {
+		project, err := getProjectByName(authClient, credentials.Project, region)
+		if err != nil {
+			return nil, err
+		}
+		credentials.ProjectID = project.ID
+	}
+
+	serviceClient, err := goopenstack.NewLoadBalancerV2(authClient, gophercloud.EndpointOpts{Region: region})
+	if err != nil {
+		// this is special case for services that span only one region.
+		if isEndpointNotFoundErr(err) {
+			serviceClient, err = goopenstack.NewLoadBalancerV2(authClient, gophercloud.EndpointOpts{})
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
+	}
+	serviceClient.Context = ctx
+	return serviceClient, err
 }
 
 func (os *Provider) AddICMPRulesIfRequired(ctx context.Context, cluster *kubermaticv1.Cluster) error {

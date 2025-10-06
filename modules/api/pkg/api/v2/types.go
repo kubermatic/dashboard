@@ -1852,6 +1852,24 @@ type OpenstackSubnetPool struct {
 	Prefixes []string `json:"prefixes"`
 }
 
+type OpenStackLoadBalancer struct {
+	ID    string                      `json:"id"`
+	Name  string                      `json:"name"`
+	Pools []OpenStackLoadBalancerPool `json:"pools"`
+}
+
+type OpenStackLoadBalancerPool struct {
+	Name    string                            `json:"name"`
+	ID      string                            `json:"id"`
+	Members []OpenStackLoadBalancerPoolMember `json:"members"`
+}
+
+// swagger:model OpenStackLoadBalancerPoolMember
+type OpenStackLoadBalancerPoolMember struct {
+	Name string `json:"name"`
+	ID   string `json:"id"`
+}
+
 // OpenstackServerGroup is the object representing a openstack server group.
 // swagger:model OpenstackServerGroup
 type OpenstackServerGroup struct {

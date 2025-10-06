@@ -19,6 +19,7 @@ package provider
 import (
 	"context"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -243,6 +244,7 @@ func GetOpenstackSubnets(ctx context.Context, userInfo *provider.UserInfo, seeds
 			ID:        subnet.ID,
 			Name:      subnet.Name,
 			IPVersion: subnet.IPVersion,
+			Tags:      subnet.Tags,
 		})
 	}
 
@@ -447,6 +449,53 @@ func GetOpenstackServerGroups(ctx context.Context, userInfo *provider.UserInfo, 
 	}
 
 	return apiServerGroups, nil
+}
+
+func GetOpenstackLoadBalancers(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName, vipNetworkID string, caBundle *x509.CertPool) ([]apiv2.OpenStackLoadBalancer, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	loadBalancers, err := openstack.GetLoadBalancers(ctx, authURL, region, vipNetworkID, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiLoadBalancers := []apiv2.OpenStackLoadBalancer{}
+	b, err := json.Marshal(loadBalancers)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(b, &apiLoadBalancers); err != nil {
+		return nil, err
+	}
+
+	return apiLoadBalancers, nil
+}
+
+func GetOpenstackLoadBalancerPoolMembers(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName, poolID string, caBundle *x509.CertPool) ([]apiv2.OpenStackLoadBalancerPoolMember, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	members, err := openstack.GetLoadBalancerPoolMembers(ctx, authURL, region, poolID, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiMembers := []apiv2.OpenStackLoadBalancerPoolMember{}
+	for _, member := range members {
+		apiMember := apiv2.OpenStackLoadBalancerPoolMember{
+			ID:   member.ID,
+			Name: member.Name,
+		}
+
+		apiMembers = append(apiMembers, apiMember)
+	}
+
+	return apiMembers, nil
 }
 
 func getClusterForOpenstack(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string) (*kubermaticv1.Cluster, error) {
