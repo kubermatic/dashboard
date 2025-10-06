@@ -38326,6 +38326,14 @@
           "type": "string",
           "x-go-name": "IPv6SubnetPool"
         },
+        "loadBalancerClasses": {
+          "description": "List of LoadBalancerClass configurations to be used for the OpenStack cloud provider.\n+optional",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadBalancerClass"
+          },
+          "x-go-name": "LoadBalancerClasses"
+        },
         "network": {
           "description": "Network holds the name of the internal network\nWhen specified, all worker nodes will be attached to this network. If not specified, a network, subnet \u0026 router will be created.\n\nNote that the network is internal if the \"External\" field is set to false",
           "type": "string",
