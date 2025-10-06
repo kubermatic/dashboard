@@ -21,8 +21,7 @@ type KubeLBDatacenterSettings struct {
 	// DisableIngressClass is used to disable the ingress class `kubelb` filter for kubeLB.
 	DisableIngressClass bool `json:"disableIngressClass,omitempty"`
 
-	// EnableGatewayAPI is used to configure the use of gateway API for kubeLB.
-	// When this option is enabled for the user cluster, KKP installs the Gateway API CRDs for the user cluster.
+	// EnableGatewayAPI is used to configure the use of gateway API for kubeLB. Once enabled, Gateway API CRDs are installed for the user cluster.
 	EnableGatewayAPI bool `json:"enableGatewayAPI,omitempty"`
 
 	// EnableSecretSynchronizer is used to configure the use of secret synchronizer for kubeLB.

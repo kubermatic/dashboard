@@ -276,33 +276,6 @@ func GetOpenstackNetworks(ctx context.Context, userInfo *provider.UserInfo, seed
 	return apiNetworks, nil
 }
 
-func GetOpenstackFloatingNetworks(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName string, caBundle *x509.CertPool) ([]apiv1.OpenstackNetwork, error) {
-	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
-	if err != nil {
-		return nil, err
-	}
-
-	networks, err := openstack.GetNetworks(ctx, authURL, region, credentials, caBundle)
-	if err != nil {
-		return nil, err
-	}
-
-	apiNetworks := []apiv1.OpenstackNetwork{}
-	for _, network := range networks {
-		if network.External {
-			apiNetwork := apiv1.OpenstackNetwork{
-				Name:     network.Name,
-				ID:       network.ID,
-				External: network.External,
-			}
-
-			apiNetworks = append(apiNetworks, apiNetwork)
-		}
-	}
-
-	return apiNetworks, nil
-}
-
 func GetOpenstackSubnetPools(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName string, ipVersion int, caBundle *x509.CertPool) ([]apiv2.OpenstackSubnetPool, error) {
 	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
 	if err != nil {
@@ -478,49 +451,6 @@ func GetOpenstackServerGroups(ctx context.Context, userInfo *provider.UserInfo, 
 	return apiServerGroups, nil
 }
 
-func getClusterForOpenstack(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string) (*kubermaticv1.Cluster, error) {
-	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
-	if err != nil {
-		return nil, err
-	}
-	if cluster.Spec.Cloud.Openstack == nil {
-		return nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
-	}
-	return cluster, nil
-}
-
-func getOpenstackAuthURLAndRegion(userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, datacenterName string) (string, string, error) {
-	_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
-	if err != nil {
-		return "", "", fmt.Errorf("failed to find datacenter %q: %w", datacenterName, err)
-	}
-
-	if len(dc.Spec.Openstack.AuthURL) == 0 {
-		return "", "", fmt.Errorf("empty authURL in datacenter %q", datacenterName)
-	}
-
-	if len(dc.Spec.Openstack.Region) == 0 {
-		return "", "", fmt.Errorf("empty region in datacenter %q", datacenterName)
-	}
-
-	return dc.Spec.Openstack.AuthURL, dc.Spec.Openstack.Region, nil
-}
-
-func getCredentials(ctx context.Context, cloudSpec kubermaticv1.CloudSpec) (*resources.OpenstackCredentials, error) {
-	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
-	if !ok {
-		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
-	}
-
-	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
-	credentials, err := openstack.GetCredentialsForCluster(cloudSpec, secretKeySelector)
-	if err != nil {
-		return nil, err
-	}
-	return credentials, nil
-}
-
 func GetOpenstackLoadBalancers(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName, vipNetworkID string, caBundle *x509.CertPool) ([]apiv2.OpenStackLoadBalancer, error) {
 	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
 	if err != nil {
@@ -566,4 +496,47 @@ func GetOpenstackLoadBalancerPoolMembers(ctx context.Context, userInfo *provider
 	}
 
 	return apiMembers, nil
+}
+
+func getClusterForOpenstack(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string) (*kubermaticv1.Cluster, error) {
+	cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID, &provider.ClusterGetOptions{CheckInitStatus: true})
+	if err != nil {
+		return nil, err
+	}
+	if cluster.Spec.Cloud.Openstack == nil {
+		return nil, utilerrors.NewNotFound("cloud spec for ", clusterID)
+	}
+	return cluster, nil
+}
+
+func getOpenstackAuthURLAndRegion(userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, datacenterName string) (string, string, error) {
+	_, dc, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to find datacenter %q: %w", datacenterName, err)
+	}
+
+	if len(dc.Spec.Openstack.AuthURL) == 0 {
+		return "", "", fmt.Errorf("empty authURL in datacenter %q", datacenterName)
+	}
+
+	if len(dc.Spec.Openstack.Region) == 0 {
+		return "", "", fmt.Errorf("empty region in datacenter %q", datacenterName)
+	}
+
+	return dc.Spec.Openstack.AuthURL, dc.Spec.Openstack.Region, nil
+}
+
+func getCredentials(ctx context.Context, cloudSpec kubermaticv1.CloudSpec) (*resources.OpenstackCredentials, error) {
+	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
+	if !ok {
+		return nil, utilerrors.New(http.StatusInternalServerError, "failed to assert clusterProvider")
+	}
+
+	secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, assertedClusterProvider.GetSeedClusterAdminRuntimeClient())
+	credentials, err := openstack.GetCredentialsForCluster(cloudSpec, secretKeySelector)
+	if err != nil {
+		return nil, err
+	}
+	return credentials, nil
 }

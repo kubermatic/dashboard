@@ -378,34 +378,12 @@ func OpenstackSubnetPoolEndpoint(seedsGetter provider.SeedsGetter, presetProvide
 	}
 }
 
-func OpenstackFloatingNetworksEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
-	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(OpenstackProjectReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
-		}
-
-		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
-		if err != nil {
-			return nil, err
-		}
-
-		return providercommon.GetOpenstackFloatingNetworks(ctx, userInfo, seedsGetter, cred, req.DatacenterName, caBundle)
-	}
-}
-
 func OpenstackMemberSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProvider provider.PresetProvider,
 	userInfoGetter provider.UserInfoGetter, caBundle *x509.CertPool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(OpenstackProjectSubnetReq)
+		req, ok := request.(OpenstackProjectMemberSubnetReq)
 		if !ok {
 			return nil, utilerrors.NewBadRequest("invalid request")
-		}
-
-		networkID := req.NetworkID
-		if networkID == "" {
-			return nil, utilerrors.NewBadRequest("'network_id' query parameter is required")
 		}
 
 		userInfo, cred, err := GetOpenstackAuthInfo(ctx, req.OpenstackReq, req.GetProjectID(), userInfoGetter, presetProvider)
@@ -413,7 +391,7 @@ func OpenstackMemberSubnetsEndpoint(seedsGetter provider.SeedsGetter, presetProv
 			return nil, err
 		}
 
-		loadbalancers, err := providercommon.GetOpenstackLoadBalancers(ctx, userInfo, seedsGetter, cred, req.DatacenterName, networkID, caBundle)
+		loadbalancers, err := providercommon.GetOpenstackLoadBalancers(ctx, userInfo, seedsGetter, cred, req.DatacenterName, req.NetworkID, caBundle)
 		if err != nil {
 			return nil, err
 		}
@@ -591,7 +569,7 @@ func (r OpenstackReq) GetProjectIdOrDefaultToTenantId() string {
 }
 
 // OpenstackProjectReq represent a request for Openstack data within the context of a KKP project.
-// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listProjectOpenstackServerGroups listProjectOpenstackExternalNetworks listProjectOpenstackFloatingNetworks
+// swagger:parameters listProjectOpenstackSizes listProjectOpenstackAvailabilityZones listProjectOpenstackNetworks listProjectOpenstackSecurityGroups listProjectOpenstackServerGroups
 type OpenstackProjectReq struct {
 	OpenstackReq
 	common.ProjectReq
@@ -647,8 +625,15 @@ type OpenstackSubnetReq struct {
 }
 
 // OpenstackProjectSubnetReq represent a request for openstack subnets (or resources requiring a network_id) within the context of a KKP project.
-// swagger:parameters listProjectOpenstackSubnets listProjectOpenstackSubnetTags listProjectOpenstackMemberSubnets
+// swagger:parameters listProjectOpenstackSubnets listProjectOpenstackSubnetTags
 type OpenstackProjectSubnetReq struct {
+	OpenstackSubnetReq
+	common.ProjectReq
+}
+
+// OpenstackProjectMemberSubnetReq represent a request for openstack subnets members within the context of a KKP project.
+// swagger:parameters listProjectOpenstackMemberSubnets
+type OpenstackProjectMemberSubnetReq struct {
 	OpenstackSubnetReq
 	common.ProjectReq
 }
@@ -763,6 +748,28 @@ func DecodeOpenstackProjectSubnetReq(c context.Context, r *http.Request) (interf
 	}
 
 	return OpenstackProjectSubnetReq{
+		ProjectReq:         projectReq.(common.ProjectReq),
+		OpenstackSubnetReq: openstackReq.(OpenstackSubnetReq),
+	}, nil
+}
+
+func DecodeOpenstackProjectMemberSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	openstackReq, err := DecodeOpenstackSubnetReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	networkID := r.URL.Query().Get("network_id")
+	if networkID == "" {
+		return nil, fmt.Errorf("'network_id' is a required parameter and may not be empty")
+	}
+
+	return OpenstackProjectMemberSubnetReq{
 		ProjectReq:         projectReq.(common.ProjectReq),
 		OpenstackSubnetReq: openstackReq.(OpenstackSubnetReq),
 	}, nil

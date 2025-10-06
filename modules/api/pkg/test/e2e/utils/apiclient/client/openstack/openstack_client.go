@@ -48,8 +48,6 @@ type ClientService interface {
 
 	ListProjectOpenstackAvailabilityZones(params *ListProjectOpenstackAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackAvailabilityZonesOK, error)
 
-	ListProjectOpenstackFloatingNetworks(params *ListProjectOpenstackFloatingNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackFloatingNetworksOK, error)
-
 	ListProjectOpenstackMemberSubnets(params *ListProjectOpenstackMemberSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackMemberSubnetsOK, error)
 
 	ListProjectOpenstackNetworks(params *ListProjectOpenstackNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackNetworksOK, error)
@@ -446,44 +444,6 @@ func (a *Client) ListProjectOpenstackAvailabilityZones(params *ListProjectOpenst
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListProjectOpenstackAvailabilityZonesDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListProjectOpenstackFloatingNetworks Lists floating networks from openstack (router:external=true)
-*/
-func (a *Client) ListProjectOpenstackFloatingNetworks(params *ListProjectOpenstackFloatingNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectOpenstackFloatingNetworksOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListProjectOpenstackFloatingNetworksParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listProjectOpenstackFloatingNetworks",
-		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/providers/openstack/floatingnetworks",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListProjectOpenstackFloatingNetworksReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListProjectOpenstackFloatingNetworksOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListProjectOpenstackFloatingNetworksDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
