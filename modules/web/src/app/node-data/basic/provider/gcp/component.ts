@@ -29,7 +29,7 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
@@ -91,11 +91,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   @ViewChild('zonesCombobox')
   private _zonesCombobox: FilteredComboboxComponent;
-  @ViewChild('diskTypesCombobox')
-  private _diskTypesCombobox: FilteredComboboxComponent;
-  @ViewChild('machineTypesCombobox')
-  private _machineTypesCombobox: FilteredComboboxComponent;
-
   readonly Controls = Controls;
 
   machineTypes: GCPMachineSize[] = [];
@@ -109,7 +104,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   diskTypeLabel = DiskTypeState.Empty;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private _quotaCalculationService: QuotaCalculationService;
-  private _dialogEditMode: boolean;
 
   private get _zonesObservable(): Observable<GCPZone[]> {
     return this._nodeDataService.gcp
@@ -150,21 +144,12 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
       [Controls.Preemptible]: this._builder.control(''),
     });
 
-    if (this.isDialogView()) {
-      this._dialogEditMode = !!this._nodeDataService.nodeData.name;
-    }
-
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
   }
 
   ngAfterViewInit(): void {
     this._zonesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultZone.bind(this));
-
-    if (this._dialogEditMode) {
-      this._diskTypesObservable.pipe(take(1)).subscribe(this._setDefaultDiskType.bind(this));
-      this._machineTypesObservable.pipe(take(1)).subscribe(this._setDefaultMachineType.bind(this));
-    }
 
     this._zoneChanges
       .pipe(tap(_ => this._clearDiskTypes()))
@@ -255,8 +240,8 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
     if (!this.selectedZone && !_.isEmpty(this.zones)) {
       this.selectedZone = this.zones[0].name;
-      this._zoneChanges.emit(!!this.selectedZone);
     }
+    this._zoneChanges.emit(!!this.selectedZone);
 
     this.zoneLabel = this.selectedZone ? ZoneState.Ready : ZoneState.Empty;
     this._cdr.detectChanges();
@@ -266,7 +251,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.diskTypes = [];
     this.selectedDiskType = '';
     this.diskTypeLabel = DiskTypeState.Empty;
-    this._diskTypesCombobox.reset();
     this._cdr.detectChanges();
   }
 
@@ -294,7 +278,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this.machineTypes = [];
     this.selectedMachineType = '';
     this.machineTypeLabel = MachineTypeState.Empty;
-    this._machineTypesCombobox.reset();
     this._cdr.detectChanges();
   }
 
