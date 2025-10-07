@@ -32,13 +32,17 @@ import (
 
 	"github.com/gorilla/mux"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 // listPolicyBindingReq defines HTTP request for getting a list of policy bindings
@@ -48,6 +52,12 @@ type listPolicyBindingReq struct {
 	// in: path
 	// required: true
 	ClusterID string `json:"cluster_id"`
+}
+
+func (req listPolicyBindingReq) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: req.ClusterID,
+	}
 }
 
 // getPolicyBindingReq defines HTTP request for getting a policy binding
@@ -62,6 +72,12 @@ type getPolicyBindingReq struct {
 	PolicyBindingName string `json:"binding_name"`
 }
 
+func (req getPolicyBindingReq) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: req.ClusterID,
+	}
+}
+
 // createPolicyBindingReq defines HTTP request for creating a policy binding
 // swagger:parameters createPolicyBinding
 type createPolicyBindingReq struct {
@@ -72,6 +88,12 @@ type createPolicyBindingReq struct {
 	// in: body
 	// required: true
 	Body createPolicyBindingBody
+}
+
+func (req createPolicyBindingReq) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: req.ClusterID,
+	}
 }
 
 // patchPolicyBindingReq defines HTTP request for patching a policy binding
@@ -89,6 +111,12 @@ type patchPolicyBindingReq struct {
 	Body patchPolicyBindingBody `json:"body"`
 }
 
+func (req patchPolicyBindingReq) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: req.ClusterID,
+	}
+}
+
 // deletePolicyBindingReq defines HTTP request for deleting a policy binding
 // swagger:parameters deletePolicyBinding
 type deletePolicyBindingReq struct {
@@ -101,6 +129,12 @@ type deletePolicyBindingReq struct {
 	PolicyBindingName string `json:"binding_name"`
 }
 
+func (req deletePolicyBindingReq) GetSeedCluster() apiv1.SeedCluster {
+	return apiv1.SeedCluster{
+		ClusterID: req.ClusterID,
+	}
+}
+
 type createPolicyBindingBody struct {
 	Name string                         `json:"name"`
 	Spec kubermaticv1.PolicyBindingSpec `json:"spec"`
@@ -110,7 +144,7 @@ type patchPolicyBindingBody struct {
 	Spec kubermaticv1.PolicyBindingSpec
 }
 
-func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
+func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
 	req, ok := request.(listPolicyBindingReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -126,10 +160,15 @@ func ListEndpoint(ctx context.Context, request interface{}, userInfoGetter provi
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
 
-	policyBindingList, err := provider.ListUnsecured(ctx, req.ClusterID)
-	if err != nil {
+	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+	policyBindingList := &kubermaticv1.PolicyBindingList{}
+	namespace := fmt.Sprintf("cluster-%s", req.ClusterID)
+
+	if err := seedClient.List(ctx, policyBindingList, ctrlruntimeclient.InNamespace(namespace)); err != nil {
 		return nil, err
 	}
+
 	res := []*apiv2.PolicyBinding{}
 	for _, policyBinding := range policyBindingList.Items {
 		res = append(res, &apiv2.PolicyBinding{
@@ -161,7 +200,7 @@ func DecodeListPolicyBindingReq(ctx context.Context, r *http.Request) (interface
 	return req, nil
 }
 
-func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
+func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
 	req, ok := request.(getPolicyBindingReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -175,10 +214,11 @@ func GetEndpoint(ctx context.Context, request interface{}, userInfoGetter provid
 	if req.ProjectID == "" && !user.IsAdmin {
 		return nil, fmt.Errorf("project_id parameter is required for non-admin users.")
 	}
-
-	policyBinding, err := provider.GetUnsecured(ctx, req.PolicyBindingName, req.ClusterID)
-
-	if err != nil {
+	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+	policyBinding := &kubermaticv1.PolicyBinding{}
+	namespace := fmt.Sprintf("cluster-%s", req.ClusterID)
+	if err := seedClient.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: req.PolicyBindingName}, policyBinding); err != nil {
 		return nil, err
 	}
 
@@ -213,8 +253,10 @@ func DecodeGetPolicyBindingReq(ctx context.Context, r *http.Request) (interface{
 	return req, nil
 }
 
-func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
+func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
 	req, ok := request.(createPolicyBindingReq)
+	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
@@ -238,15 +280,14 @@ func CreateEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		},
 		Spec: *policyBindingSpec,
 	}
-	created, err := provider.CreateUnsecured(ctx, policyBinding)
-
-	if err != nil {
+	if err := seedClient.Create(ctx, policyBinding); err != nil {
 		return nil, err
 	}
+
 	return &apiv2.PolicyBinding{
-		Name:   created.Name,
-		Spec:   created.Spec,
-		Status: created.Status,
+		Name:   policyBinding.Name,
+		Spec:   policyBinding.Spec,
+		Status: policyBinding.Status,
 	}, nil
 }
 
@@ -272,7 +313,7 @@ func DecodeCreatePolicyBindingReq(ctx context.Context, r *http.Request) (interfa
 	return req, nil
 }
 
-func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) (interface{}, error) {
+func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) (interface{}, error) {
 	req, ok := request.(patchPolicyBindingReq)
 	if !ok {
 		return nil, utilerrors.NewBadRequest("invalid request")
@@ -288,24 +329,28 @@ func PatchEndpoint(ctx context.Context, request interface{}, userInfoGetter prov
 		return nil, fmt.Errorf("Only admins and project owners can update policy bindings")
 	}
 
+	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+
 	policyBindingSpec := req.Body.Spec.DeepCopy()
 	namespace := fmt.Sprintf("cluster-%s", req.ClusterID)
-	policyBinding := &kubermaticv1.PolicyBinding{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      req.PolicyBindingName,
-			Namespace: namespace,
-		},
-		Spec: *policyBindingSpec,
-	}
 
-	patchedPolicyBinding, err := provider.PatchUnsecured(ctx, policyBinding)
-	if err != nil {
+	existing := &kubermaticv1.PolicyBinding{}
+	if err := seedClient.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: req.PolicyBindingName}, existing); err != nil {
 		return nil, err
 	}
+
+	updated := existing.DeepCopy()
+	updated.Spec = *policyBindingSpec
+
+	if err := seedClient.Patch(ctx, updated, ctrlruntimeclient.MergeFrom(existing)); err != nil {
+		return nil, err
+	}
+
 	return &apiv2.PolicyBinding{
-		Name:   patchedPolicyBinding.Name,
-		Spec:   *patchedPolicyBinding.Spec.DeepCopy(),
-		Status: patchedPolicyBinding.Status,
+		Name:   updated.Name,
+		Spec:   *updated.Spec.DeepCopy(),
+		Status: updated.Status,
 	}, nil
 }
 
@@ -337,7 +382,7 @@ func DecodePatchPolicyBindingReq(ctx context.Context, r *http.Request) (interfac
 	return req, nil
 }
 
-func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter, provider provider.PolicyBindingProvider) error {
+func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter provider.UserInfoGetter) error {
 	req, ok := request.(deletePolicyBindingReq)
 	if !ok {
 		return utilerrors.NewBadRequest("invalid request")
@@ -352,7 +397,20 @@ func DeleteEndpoint(ctx context.Context, request interface{}, userInfoGetter pro
 		return fmt.Errorf("Only admins and project owners can delete policy template")
 	}
 
-	if err := provider.DeleteUnsecured(ctx, req.PolicyBindingName, req.ClusterID); err != nil {
+	privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(provider.PrivilegedClusterProvider)
+	seedClient := privilegedClusterProvider.GetSeedClusterAdminRuntimeClient()
+
+	namespace := fmt.Sprintf("cluster-%s", req.ClusterID)
+
+	existing := &kubermaticv1.PolicyBinding{}
+	if err := seedClient.Get(ctx, ctrlruntimeclient.ObjectKey{Namespace: namespace, Name: req.PolicyBindingName}, existing); err != nil {
+		if apierrors.IsNotFound(err) {
+			return nil
+		}
+		return err
+	}
+
+	if err := seedClient.Delete(ctx, existing); err != nil {
 		return err
 	}
 

@@ -11373,7 +11373,8 @@ func (r Routing) listKyvernoPolicyBindings() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.ListEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.ListEndpoint(r.userInfoGetter)),
 		policybinding.DecodeListPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11398,7 +11399,8 @@ func (r Routing) getKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.GetEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.GetEndpoint(r.userInfoGetter)),
 		policybinding.DecodeGetPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11425,7 +11427,8 @@ func (r Routing) createKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.CreateEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.CreateEndpoint(r.userInfoGetter)),
 		policybinding.DecodeCreatePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11452,7 +11455,8 @@ func (r Routing) patchKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.PatchEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.PatchEndpoint(r.userInfoGetter)),
 		policybinding.DecodePatchPolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -11474,7 +11478,8 @@ func (r Routing) deleteKyvernoPolicyBinding() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(policybinding.DeleteEndpoint(r.userInfoGetter, r.policyBindingProvider)),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(policybinding.DeleteEndpoint(r.userInfoGetter)),
 		policybinding.DecodeDeletePolicyBindingReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

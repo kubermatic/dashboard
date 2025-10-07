@@ -430,7 +430,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 
 	policyTemplateProvider := policyTemplateProviderFactory(client)
 
-	policyBindingProvider := policyBindingProviderFactory(client)
 	return providers{
 		sshKey:                                         sshKeyProvider,
 		privilegedSSHKeyProvider:                       privilegedSSHKeyProvider,
@@ -475,7 +474,6 @@ func createInitProviders(ctx context.Context, options serverRunOptions, masterCf
 		etcdRestoreProjectProviderGetter:               etcdRestoreProjectProviderGetter,
 		backupStorageProvider:                          backupStorageProvider,
 		policyTemplateProvider:                         policyTemplateProvider,
-		policyBindingProvider:                          policyBindingProvider,
 		backupCredentialsProviderGetter:                backupCredentialsProviderGetter,
 		privilegedMLAAdminSettingProviderGetter:        privilegedMLAAdminSettingProviderGetter,
 		seedProvider:                                   seedProvider,
@@ -602,7 +600,6 @@ func createAPIHandler(
 		EtcdRestoreProjectProviderGetter:               prov.etcdRestoreProjectProviderGetter,
 		BackupStorageProvider:                          prov.backupStorageProvider,
 		PolicyTemplateProvider:                         prov.policyTemplateProvider,
-		PolicyBindingProvider:                          prov.policyBindingProvider,
 		BackupCredentialsProviderGetter:                prov.backupCredentialsProviderGetter,
 		PrivilegedMLAAdminSettingProviderGetter:        prov.privilegedMLAAdminSettingProviderGetter,
 		SeedProvider:                                   prov.seedProvider,
