@@ -330,7 +330,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           }
 
           if (this.provider === NodeProvider.OPENSTACK) {
-            this.form.addControl(Controls.RouterReconciliation, this._builder.control(false));
+            this.form.addControl(
+              Controls.RouterReconciliation,
+              this._builder.control(
+                this._clusterSpecService?.cluster.annotations[
+                  InternalClusterSpecAnnotations.SkipRouterReconciliation
+                ] === 'true'
+              )
+            );
             this.form
               .get(Controls.RouterReconciliation)
               .valueChanges.pipe(takeUntil(this._unsubscribe))
