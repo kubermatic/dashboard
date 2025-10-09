@@ -49,6 +49,7 @@ import {ProviderExtendedComponent} from './step/provider-settings/provider/exten
 import {GCPProviderExtendedComponent} from './step/provider-settings/provider/extended/gcp/component';
 import {HetznerProviderExtendedComponent} from './step/provider-settings/provider/extended/hetzner/component';
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
+import {OpenstackLoadBalancerClassDialogComponent} from './step/provider-settings/provider/extended/openstack/lb-class-dialog/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {SummaryStepComponent} from './step/summary/component';
 import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/nutanix/component';
@@ -75,7 +76,7 @@ const components = [
   OpenstackProviderBasicComponent,
   OpenstackProviderExtendedComponent,
   OpenstackProviderExtendedCredentialsComponent,
-
+  OpenstackLoadBalancerClassDialogComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,

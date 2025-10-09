@@ -48,11 +48,11 @@ import {
   ClusterAnnotation,
   ClusterNetwork,
   ClusterSpec,
-  InternalClusterSpecAnnotations,
   CNIPlugin,
   ContainerRuntime,
   ExposeStrategy,
   ExtraCloudSpecOptions,
+  InternalClusterSpecAnnotations,
   IPFamily,
   MasterVersion,
   NetworkRanges,
@@ -78,12 +78,12 @@ import _ from 'lodash';
 import {combineLatest, merge, Subscription} from 'rxjs';
 import {filter, finalize, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {coerce, compare, gte} from 'semver';
+import {WizardMode} from '../../types/wizard-mode';
 import {StepBase} from '../base';
 import {
   CiliumApplicationValuesDialogComponent,
   CiliumApplicationValuesDialogData,
 } from './cilium-application-values-dialog/component';
-import {WizardMode} from '../../types/wizard-mode';
 
 export enum BSLListState {
   Ready = 'Backup Storage Location',
@@ -333,7 +333,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             this.form.addControl(
               Controls.RouterReconciliation,
               this._builder.control(
-                this._clusterSpecService?.cluster.annotations[
+                this._clusterSpecService?.cluster?.annotations?.[
                   InternalClusterSpecAnnotations.SkipRouterReconciliation
                 ] === 'true'
               )

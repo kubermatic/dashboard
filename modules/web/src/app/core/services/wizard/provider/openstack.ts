@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {
   OpenstackAvailabilityZone,
   OpenstackFlavor,
   OpenstackNetwork,
   OpenstackSecurityGroup,
+  OpenstackServerGroup,
   OpenstackSubnet,
   OpenstackSubnetPool,
   OpenstackTenant,
-  OpenstackServerGroup,
 } from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
@@ -35,6 +35,7 @@ export class Openstack extends Provider {
   readonly networksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/networks`;
   readonly availabilityZonesUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/availabilityzones`;
   readonly serverGroupsURL = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/servergroups`;
+  readonly floatingNetworksUrl = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/floatingnetworks`;
   private _usingApplicationCredentials = false;
 
   constructor(http: HttpClient, projectID: string, provider: NodeProvider) {
@@ -324,6 +325,58 @@ export class Openstack extends Provider {
     return this._http.get<OpenstackAvailabilityZone[]>(this.availabilityZonesUrl, {
       headers: this._headers,
     });
+  }
+
+  floatingNetworks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
+
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<OpenstackNetwork[]>(this.floatingNetworksUrl, {
+      headers: this._headers,
+    });
+  }
+
+  memberSubnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
+    if (!this._hasRequiredHeaders() || !network) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${this._projectID}/providers/openstack/membersubnets?network_id=${network}`;
+    return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
   }
 }
 

@@ -42,4 +42,22 @@ limitations under the License.
       is set to <code>nip.io</code> by default.
     </mat-hint>
   </mat-form-field>
+
+  <div fxLayout="row"
+       fxLayoutAlign="start center"
+       fxLayoutGap="10px">
+    <button type="button"
+            mat-flat-button
+            [disabled]="isLoadBalancerClassButtonDisabled"
+            (click)="openLoadBalancerClassDialog()">
+      <i class="km-icon-mask km-icon-settings"
+         matButtonIcon></i>
+      <span>Configure Load Balancer Classes</span>
+    </button>
+    <span *ngIf="loadBalancerClassCount > 0"
+          class="lb-class-count">
+      ({{loadBalancerClassCount}} configured)
+    </span>
+  </div>
+
 </form>
