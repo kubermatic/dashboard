@@ -51,23 +51,23 @@ enum Controls {
 })
 export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
-  readonly displayedColumns: string[] = ['number', 'name', 'floatingNetwork', 'actions'];
+  readonly displayedColumns: string[] = ['number', 'name', 'floatingNetwork', 'network', 'actions'];
   form: FormGroup;
-  addedClasses: OpenstackLoadBalancerClass[] = [];
 
+  isPresetSelected = false;
+  isFloatingNetworksLoading = false;
+  isFloatingSubnetsLoading = false;
+  isNetworksLoading = false;
+  isSubnetsLoading = false;
+  isMemberSubnetsLoading = false;
+  
   floatingNetworks: OpenstackNetwork[] = [];
   floatingSubnets: OpenstackSubnet[] = [];
   networks: OpenstackNetwork[] = [];
   subnets: OpenstackSubnet[] = [];
   memberSubnets: OpenstackSubnet[] = [];
+  openstackConfiguredClasses: OpenstackLoadBalancerClass[] = [];
 
-  floatingNetworksLoading = false;
-  floatingSubnetsLoading = false;
-  networksLoading = false;
-  subnetsLoading = false;
-  memberSubnetsLoading = false;
-
-  isPresetSelected = false;
 
   private readonly _unsubscribe = new Subject<void>();
   private readonly _debounceTime = 500;
@@ -94,9 +94,9 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   ngOnInit(): void {
     this._initForm();
 
-    // Load existing classes into the addedClasses list
+    // Load existing classes into the openstackConfiguredClasses list
     if (this.data?.loadBalancerClasses?.length > 0) {
-      this.addedClasses = [...this.data.loadBalancerClasses];
+      this.openstackConfiguredClasses = [...this.data.loadBalancerClasses];
     }
 
     this._initNetworkSetup();
@@ -151,6 +151,68 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getNetworkDisplayName(network: OpenstackNetwork): string {
+    return network.name ? `${network.name} (${network.id})` : network.id;
+  }
+
+  getSubnetDisplayName(subnet: OpenstackSubnet): string {
+    return subnet.name ? `${subnet.name} (${subnet.id})` : subnet.id;
+  }
+
+  getDisplayNameForNetworkID(networkID: string): string {
+    if (!networkID) return '-';
+    const network = [...this.floatingNetworks, ...this.networks].find(n => n.id === networkID);
+    return network?.name || this.truncateID(networkID);
+  }
+
+  truncateID(id: string): string {
+    if (!id) return '-';
+    return id.length > 12 ? `${id.substring(0, 8)}...${id.substring(id.length - 4)}` : id;
+  }
+
+  addClass(): void {
+    if (!this.form.valid) {
+      return;
+    }
+
+    const floatingSubnetTags = this.form.get(Controls.FloatingSubnetTags).value;
+    const newClass: OpenstackLoadBalancerClass = {
+      name: this.form.get(Controls.Name).value,
+      config: {
+        floatingNetworkID: this.form.get(Controls.FloatingNetworkID).value || undefined,
+        floatingSubnetID: this.form.get(Controls.FloatingSubnetID).value || undefined,
+        floatingSubnetName: this.form.get(Controls.FloatingSubnetName).value || undefined,
+        floatingSubnetTags: floatingSubnetTags?.length > 0 ? floatingSubnetTags.join(',') : undefined,
+        networkID: this.form.get(Controls.NetworkID).value || undefined,
+        subnetID: this.form.get(Controls.SubnetID).value || undefined,
+        memberSubnetID: this.form.get(Controls.MemberSubnetID).value || undefined,
+      },
+    };
+
+    // Check for duplicate names
+    if (this.openstackConfiguredClasses.some(cls => cls.name === newClass.name)) {
+      this.form.get(Controls.Name).setErrors({duplicateName: true});
+      return;
+    }
+
+    this.openstackConfiguredClasses = [...this.openstackConfiguredClasses, newClass];
+    this.form.reset();
+    this.form.get(Controls.FloatingSubnetTags).setValue([]);
+  }
+
+  deleteClass(index: number): void {
+    this.openstackConfiguredClasses = this.openstackConfiguredClasses.filter((_, i) => i !== index);
+  }
+
+  clearForm(): void {
+    this.form.reset();
+    this.form.get(Controls.FloatingSubnetTags).setValue([]);
+  }
+
+  onSave(): void {
+    this.dialogRef.close(this.openstackConfiguredClasses);
   }
 
   private _initForm(): void {
@@ -234,17 +296,17 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   }
 
   private _loadFloatingNetworks(): void {
-    this.floatingNetworksLoading = true;
+    this.isFloatingNetworksLoading = true;
     this._floatingNetworkListObservable()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: networks => {
           this.floatingNetworks = networks;
-          this.floatingNetworksLoading = false;
+          this.isFloatingNetworksLoading = false;
         },
         error: () => {
           this.floatingNetworks = [];
-          this.floatingNetworksLoading = false;
+          this.isFloatingNetworksLoading = false;
         },
       });
   }
@@ -268,33 +330,33 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   }
 
   private _loadFloatingSubnets(networkID: string): void {
-    this.floatingSubnetsLoading = true;
+    this.isFloatingSubnetsLoading = true;
     this._subnetListObservable(networkID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: subnets => {
           this.floatingSubnets = subnets;
-          this.floatingSubnetsLoading = false;
+          this.isFloatingSubnetsLoading = false;
         },
         error: () => {
           this.floatingSubnets = [];
-          this.floatingSubnetsLoading = false;
+          this.isFloatingSubnetsLoading = false;
         },
       });
   }
 
   private _loadNetworks(): void {
-    this.networksLoading = true;
+    this.isNetworksLoading = true;
     this._networkListObservable()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: networks => {
           this.networks = networks.filter(network => !network.external);
-          this.networksLoading = false;
+          this.isNetworksLoading = false;
         },
         error: () => {
           this.networks = [];
-          this.networksLoading = false;
+          this.isNetworksLoading = false;
         },
       });
   }
@@ -318,17 +380,17 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   }
 
   private _loadSubnets(networkID: string): void {
-    this.subnetsLoading = true;
+    this.isSubnetsLoading = true;
     this._subnetListObservable(networkID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: subnets => {
           this.subnets = subnets;
-          this.subnetsLoading = false;
+          this.isSubnetsLoading = false;
         },
         error: () => {
           this.subnets = [];
-          this.subnetsLoading = false;
+          this.isSubnetsLoading = false;
         },
       });
   }
@@ -352,17 +414,17 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   }
 
   private _loadMemberSubnets(networkID: string): void {
-    this.memberSubnetsLoading = true;
+    this.isMemberSubnetsLoading = true;
     this._memberSubnetListObservable(networkID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: subnets => {
           this.memberSubnets = subnets;
-          this.memberSubnetsLoading = false;
+          this.isMemberSubnetsLoading = false;
         },
         error: () => {
           this.memberSubnets = [];
-          this.memberSubnetsLoading = false;
+          this.isMemberSubnetsLoading = false;
         },
       });
   }
@@ -383,56 +445,5 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
       .memberSubnets(networkID)
       .pipe(map(subnets => _.sortBy(subnets, s => s.name?.toLowerCase())))
       .pipe(catchError(() => onErrorResumeNext(EMPTY)));
-  }
-
-  getNetworkDisplayName(network: OpenstackNetwork): string {
-    return network.name ? `${network.name} (${network.id})` : network.id;
-  }
-
-  getSubnetDisplayName(subnet: OpenstackSubnet): string {
-    return subnet.name ? `${subnet.name} (${subnet.id})` : subnet.id;
-  }
-
-  addClass(): void {
-    if (!this.form.valid) {
-      return;
-    }
-
-    const floatingSubnetTags = this.form.get(Controls.FloatingSubnetTags).value;
-    const newClass: OpenstackLoadBalancerClass = {
-      name: this.form.get(Controls.Name).value,
-      config: {
-        floatingNetworkID: this.form.get(Controls.FloatingNetworkID).value || undefined,
-        floatingSubnetID: this.form.get(Controls.FloatingSubnetID).value || undefined,
-        floatingSubnetName: this.form.get(Controls.FloatingSubnetName).value || undefined,
-        floatingSubnetTags: floatingSubnetTags?.length > 0 ? floatingSubnetTags.join(',') : undefined,
-        networkID: this.form.get(Controls.NetworkID).value || undefined,
-        subnetID: this.form.get(Controls.SubnetID).value || undefined,
-        memberSubnetID: this.form.get(Controls.MemberSubnetID).value || undefined,
-      },
-    };
-
-    // Check for duplicate names
-    if (this.addedClasses.some(cls => cls.name === newClass.name)) {
-      this.form.get(Controls.Name).setErrors({duplicateName: true});
-      return;
-    }
-
-    this.addedClasses = [...this.addedClasses, newClass];
-    this.form.reset();
-    this.form.get(Controls.FloatingSubnetTags).setValue([]);
-  }
-
-  deleteClass(index: number): void {
-    this.addedClasses = this.addedClasses.filter((_, i) => i !== index);
-  }
-
-  clearForm(): void {
-    this.form.reset();
-    this.form.get(Controls.FloatingSubnetTags).setValue([]);
-  }
-
-  onSave(): void {
-    this.dialogRef.close(this.addedClasses);
   }
 }

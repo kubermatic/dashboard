@@ -49,13 +49,13 @@ import {ProviderExtendedComponent} from './step/provider-settings/provider/exten
 import {GCPProviderExtendedComponent} from './step/provider-settings/provider/extended/gcp/component';
 import {HetznerProviderExtendedComponent} from './step/provider-settings/provider/extended/hetzner/component';
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
-import {OpenstackLoadBalancerClassDialogComponent} from './step/provider-settings/provider/extended/openstack/lb-class-dialog/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {SummaryStepComponent} from './step/summary/component';
 import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/nutanix/component';
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
 import {VMwareCloudDirectorProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/vmware-cloud-director/component';
 import {VMwareCloudDirectorProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/vmware-cloud-director/component';
+import {OpenstackLoadBalancerClassDialogComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/loadbalancer-class-dialog/component';
 
 const components = [
   WizardComponent,

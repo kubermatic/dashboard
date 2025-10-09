@@ -43,21 +43,28 @@ limitations under the License.
     </mat-hint>
   </mat-form-field>
 
-  <div fxLayout="row"
-       fxLayoutAlign="start center"
-       fxLayoutGap="10px">
-    <button type="button"
-            mat-flat-button
-            [disabled]="isLoadBalancerClassButtonDisabled"
-            (click)="openLoadBalancerClassDialog()">
-      <i class="km-icon-mask km-icon-settings"
-         matButtonIcon></i>
-      <span>Configure Load Balancer Classes</span>
-    </button>
-    <span *ngIf="loadBalancerClassCount > 0"
-          class="lb-class-count">
-      ({{loadBalancerClassCount}} configured)
-    </span>
+  <div class="button-navigation">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+      <button type="button"
+              mat-flat-button
+              color="primary"
+              matTooltip="Configure Load Balancer Classes for advanced load balancing options"km-
+              [disabled]="isLoadBalancerClassButtonDisabled"
+              (click)="openLoadBalancerClassDialog()"
+              [matTooltipDisabled]="!isLoadBalancerClassButtonDisabled">
+        <i class="km-icon-mask km-icon-add" matButtonIcon></i>
+        <span>Configure Load Balancer Classes</span>
+      </button>
+      <span *ngIf="loadBalancerClassCount > 0"
+            class="km-text-muted km-pointer"
+            (click)="openLoadBalancerClassDialog()"
+            matTooltip="Click to view/edit configured LoadBalancer classes">
+        ({{loadBalancerClassCount}} configured)
+      </span>
+    </div>
+    <div class="km-muted-light">
+      Set up Load Balancer Classes to enable advanced options for load balancing
+    </div>
   </div>
 
 </form>

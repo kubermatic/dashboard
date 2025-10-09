@@ -14,23 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>Configure Load Balancer Classes</km-dialog-title>
+<km-dialog-title>Configure LoadBalancer Classes</km-dialog-title>
 <mat-dialog-content>
-  <p class="km-dialog-description">Configure one or more Load Balancer classes for your OpenStack cluster.</p>
+  <p class="km-dialog-context-description">Configure one or more LoadBalancer classes for your OpenStack cluster.</p>
 
+  <!-- LoadBalancer Class Form -->
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutGap="15px">
-    <h4 class="form-section-title">Load Balancer Class</h4>
-
     <mat-form-field>
-      <mat-label>LB Class Name</mat-label>
+      <mat-label>LoadBalancer Class Name</mat-label>
       <input matInput
              [formControlName]="Controls.Name"
              type="text"
              autocomplete="off"
              required>
-      <mat-hint>Unique name for this load balancer class</mat-hint>
+      <mat-hint>Unique name for this loadbalancer class</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).errors?.required">
         Name is required.
       </mat-error>
@@ -42,11 +41,11 @@ limitations under the License.
     <mat-form-field>
       <mat-label>Floating Network ID</mat-label>
       <mat-select [formControlName]="Controls.FloatingNetworkID">
-        <mat-option *ngIf="floatingNetworksLoading"
+        <mat-option *ngIf="isFloatingNetworksLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!floatingNetworksLoading && !floatingNetworks?.length"
+        <mat-option *ngIf="!isFloatingNetworksLoading && !floatingNetworks?.length"
                     disabled>
           No floating networks available
         </mat-option>
@@ -62,15 +61,15 @@ limitations under the License.
       <mat-label>Floating Subnet Name</mat-label>
       <mat-select [formControlName]="Controls.FloatingSubnetName"
                   [disabled]="!form.get(Controls.FloatingNetworkID).value">
-        <mat-option *ngIf="floatingSubnetsLoading"
+        <mat-option *ngIf="isFloatingSubnetsLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!floatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
+        <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
                     disabled>
           Select a floating network first
         </mat-option>
-        <mat-option *ngIf="!floatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
+        <mat-option *ngIf="!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
                     disabled>
           No subnets available
         </mat-option>
@@ -98,15 +97,15 @@ limitations under the License.
                   [disabled]="!form.get(Controls.FloatingNetworkID).value"
                   multiple
                   panelClass="km-multiple-values-dropdown">
-        <mat-option *ngIf="floatingSubnetsLoading"
+        <mat-option *ngIf="isFloatingSubnetsLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!floatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
+        <mat-option *ngIf="!isFloatingSubnetsLoading && !form.get(Controls.FloatingNetworkID).value"
                     disabled>
           Select a floating network first
         </mat-option>
-        <mat-option *ngIf="!floatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
+        <mat-option *ngIf="!isFloatingSubnetsLoading && form.get(Controls.FloatingNetworkID).value && !floatingSubnets?.length"
                     disabled>
           No subnets available
         </mat-option>
@@ -121,11 +120,11 @@ limitations under the License.
     <mat-form-field>
       <mat-label>Network ID</mat-label>
       <mat-select [formControlName]="Controls.NetworkID">
-        <mat-option *ngIf="networksLoading"
+        <mat-option *ngIf="isNetworksLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!networksLoading && !networks?.length"
+        <mat-option *ngIf="!isNetworksLoading && !networks?.length"
                     disabled>
           No networks available
         </mat-option>
@@ -134,22 +133,22 @@ limitations under the License.
           {{ getNetworkDisplayName(network) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Internal network for load balancer</mat-hint>
+      <mat-hint>Internal network for loadbalancer</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Subnet ID</mat-label>
       <mat-select [formControlName]="Controls.SubnetID"
                   [disabled]="!form.get(Controls.NetworkID).value">
-        <mat-option *ngIf="subnetsLoading"
+        <mat-option *ngIf="isSubnetsLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!subnetsLoading && !form.get(Controls.NetworkID).value"
+        <mat-option *ngIf="!isSubnetsLoading && !form.get(Controls.NetworkID).value"
                     disabled>
           Select a network first
         </mat-option>
-        <mat-option *ngIf="!subnetsLoading && form.get(Controls.NetworkID).value && !subnets?.length"
+        <mat-option *ngIf="!isSubnetsLoading && form.get(Controls.NetworkID).value && !subnets?.length"
                     disabled>
           No subnets available
         </mat-option>
@@ -158,22 +157,22 @@ limitations under the License.
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Subnet for the load balancer</mat-hint>
+      <mat-hint>Subnet for the loadbalancer</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Member Subnet ID</mat-label>
       <mat-select [formControlName]="Controls.MemberSubnetID"
                   [disabled]="!form.get(Controls.NetworkID).value">
-        <mat-option *ngIf="memberSubnetsLoading"
+        <mat-option *ngIf="isMemberSubnetsLoading"
                     disabled>
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
-        <mat-option *ngIf="!memberSubnetsLoading && !form.get(Controls.NetworkID).value"
+        <mat-option *ngIf="!isMemberSubnetsLoading && !form.get(Controls.NetworkID).value"
                     disabled>
           Select a network first
         </mat-option>
-        <mat-option *ngIf="!memberSubnetsLoading && form.get(Controls.NetworkID).value && !memberSubnets?.length"
+        <mat-option *ngIf="!isMemberSubnetsLoading && form.get(Controls.NetworkID).value && !memberSubnets?.length"
                     disabled>
           No member subnets available
         </mat-option>
@@ -182,12 +181,19 @@ limitations under the License.
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Subnet where load balancer members are located</mat-hint>
+      <mat-hint>Subnet where loadbalancer members are located</mat-hint>
     </mat-form-field>
 
     <div fxLayout="row"
-         fxLayoutGap="10px">
-      <button mat-stroked-button
+         fxLayoutAlign="start center"
+         fxLayoutGap="10px"
+         class="form-buttons">
+      <button mat-flat-button
+              type="button"
+              (click)="clearForm()">
+        <span>Clear Form</span>
+      </button>
+      <button mat-flat-button
               type="button"
               [disabled]="!form.valid"
               (click)="addClass()">
@@ -195,21 +201,17 @@ limitations under the License.
            matButtonIcon></i>
         <span>Add Class</span>
       </button>
-      <button mat-stroked-button
-              type="button"
-              (click)="clearForm()">
-        <span>Clear Form</span>
-      </button>
     </div>
   </form>
 
-  <div *ngIf="addedClasses.length > 0"
-       class="added-classes-section">
+
+<!-- LoadBalancer Configured Classes -->
+  <div class="loadbalancer-classes-section">
+    <p class="km-text-muted">LoadBalancer Classes ({{openstackConfiguredClasses.length}})</p>
     <mat-divider></mat-divider>
-    <h4 class="added-classes-title">Load Balancer Classes ({{addedClasses.length}})</h4>
     <table class="km-table"
            mat-table
-           [dataSource]="addedClasses">
+           [dataSource]="openstackConfiguredClasses">
       <ng-container matColumnDef="number">
         <th mat-header-cell
             *matHeaderCellDef
@@ -221,7 +223,7 @@ limitations under the License.
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Name</th>
+            class="km-header-cell p-15">Name</th>
         <td mat-cell
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
@@ -229,9 +231,29 @@ limitations under the License.
       <ng-container matColumnDef="floatingNetwork">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Floating Network</th>
+            class="km-header-cell p-25">Floating Network</th>
         <td mat-cell
-            *matCellDef="let element">{{element.config?.floatingNetworkID || '-'}}</td>
+            *matCellDef="let element">
+          <span [matTooltip]="element.config?.floatingNetworkID || ''"
+                [matTooltipDisabled]="!element.config?.floatingNetworkID"
+                class="km-pointer">
+            {{getDisplayNameForNetworkID(element.config?.floatingNetworkID)}}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="network">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Network</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span [matTooltip]="element.config?.networkID || ''"
+                [matTooltipDisabled]="!element.config?.networkID"
+                class="km-pointer">
+            {{getDisplayNameForNetworkID(element.config?.networkID)}}
+          </span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -256,6 +278,10 @@ limitations under the License.
           *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row"></tr>
     </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="!openstackConfiguredClasses.length">No loadbalancer classes available.
+    </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

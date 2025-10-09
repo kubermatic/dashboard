@@ -27,7 +27,8 @@ import {OpenstackLoadBalancerClass} from '@shared/entity/provider/openstack';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {LoadBalancerClassDialogData, OpenstackLoadBalancerClassDialogComponent} from './lb-class-dialog/component';
+import { LoadBalancerClassDialogData, OpenstackLoadBalancerClassDialogComponent } from './loadbalancer-class-dialog/component';
+
 
 enum Controls {
   Credentials = 'credentials',
@@ -38,6 +39,7 @@ enum Controls {
 @Component({
   selector: 'km-wizard-openstack-provider-extended',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -145,7 +147,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
 
           const dialogRef = this._matDialog.open(OpenstackLoadBalancerClassDialogComponent, {
             data: dialogData,
-            width: '800px',
+            disableClose: true,
           });
 
           return dialogRef.afterClosed();

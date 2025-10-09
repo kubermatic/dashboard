@@ -68,6 +68,11 @@
     color: map.get($colors, text-secondary);
   }
 
+  .km-muted-light {
+    color: map.get($colors, muted-light);
+  }
+
+
   .km-muted-bg {
     background-color: map.get($colors, text-secondary);
   }
