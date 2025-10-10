@@ -60,14 +60,13 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   isNetworksLoading = false;
   isSubnetsLoading = false;
   isMemberSubnetsLoading = false;
-  
+
   floatingNetworks: OpenstackNetwork[] = [];
   floatingSubnets: OpenstackSubnet[] = [];
   networks: OpenstackNetwork[] = [];
   subnets: OpenstackSubnet[] = [];
   memberSubnets: OpenstackSubnet[] = [];
   openstackConfiguredClasses: OpenstackLoadBalancerClass[] = [];
-
 
   private readonly _unsubscribe = new Subject<void>();
   private readonly _debounceTime = 500;
@@ -168,8 +167,15 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   }
 
   truncateID(id: string): string {
-    if (!id) return '-';
-    return id.length > 12 ? `${id.substring(0, 8)}...${id.substring(id.length - 4)}` : id;
+    if (!id) {
+      return '-';
+    }
+    const MAX_LENGTH = 12;
+    const START_CHARS = 8;
+    const END_CHARS = 4;
+    return id.length > MAX_LENGTH
+      ? `${id.substring(0, START_CHARS)}...${id.substring(id.length - END_CHARS)}`
+      : id;
   }
 
   addClass(): void {

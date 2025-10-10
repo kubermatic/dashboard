@@ -27,8 +27,10 @@ import {OpenstackLoadBalancerClass} from '@shared/entity/provider/openstack';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import { LoadBalancerClassDialogData, OpenstackLoadBalancerClassDialogComponent } from './loadbalancer-class-dialog/component';
-
+import {
+  LoadBalancerClassDialogData,
+  OpenstackLoadBalancerClassDialogComponent,
+} from './loadbalancer-class-dialog/component';
 
 enum Controls {
   Credentials = 'credentials',
@@ -114,10 +116,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       this.loadBalancerClasses = [...existingClasses];
     }
 
-    merge(
-      this._credentialsTypeService.credentialsTypeChanges,
-      this._presets.presetChanges
-    )
+    merge(this._credentialsTypeService.credentialsTypeChanges, this._presets.presetChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.clearLoadBalancerClasses());
 
