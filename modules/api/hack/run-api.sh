@@ -22,7 +22,7 @@ source ../../hack/lib.sh
 # Please make sure to set -feature-gates=PrometheusEndpoint=true if you want to use that endpoint.
 # Please make sure to set -feature-gates=OIDCKubeCfgEndpoint=true if you want to use that endpoint.
 
-FEATURE_GATES="${FEATURE_GATES:-}"
+FEATURE_GATES="${FEATURE_GATES:-OIDCKubeCfgEndpoint=true}"
 KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
 KUBERMATIC_DEBUG=${KUBERMATIC_DEBUG:-true}
 PPROF_PORT=${PPROF_PORT:-6600}
@@ -46,19 +46,17 @@ fi
 
 SERVICE_ACCOUNT_SIGNING_KEY="${SERVICE_ACCOUNT_SIGNING_KEY:-$(vault kv get -field=service-account-signing-key dev/seed-clusters/dev.kubermatic.io)}"
 
-if [[ "$FEATURE_GATES" =~ "OIDCKubeCfgEndpoint=true" ]]; then
-  echodate "Preparing OIDCKubeCfgEndpoint feature..."
+echodate "Preparing OIDCKubeCfgEndpoint feature..."
 
-  OIDC_ISSUER_CLIENT_ID="${OIDC_ISSUER_CLIENT_ID:-$(vault kv get -field=oidc-issuer-client-id dev/seed-clusters/dev.kubermatic.io)}"
-  OIDC_ISSUER_CLIENT_SECRET="${OIDC_ISSUER_CLIENT_SECRET:-$(vault kv get -field=oidc-issuer-client-secret dev/seed-clusters/dev.kubermatic.io)}"
-  OIDC_ISSUER_REDIRECT_URI="${OIDC_ISSUER_REDIRECT_URI:-$(vault kv get -field=oidc-issuer-redirect-uri dev/seed-clusters/dev.kubermatic.io)}"
-  OIDC_ISSUER_COOKIE_HASH_KEY="${OIDC_ISSUER_COOKIE_HASH_KEY:-$(vault kv get -field=oidc-issuer-cookie-hash-key dev/seed-clusters/dev.kubermatic.io)}"
+OIDC_ISSUER_CLIENT_ID="${OIDC_ISSUER_CLIENT_ID:-$(vault kv get -field=oidc-issuer-client-id dev/seed-clusters/dev.kubermatic.io)}"
+OIDC_ISSUER_CLIENT_SECRET="${OIDC_ISSUER_CLIENT_SECRET:-$(vault kv get -field=oidc-issuer-client-secret dev/seed-clusters/dev.kubermatic.io)}"
+OIDC_ISSUER_REDIRECT_URI="${OIDC_ISSUER_REDIRECT_URI:-$(vault kv get -field=oidc-issuer-redirect-uri dev/seed-clusters/dev.kubermatic.io)}"
+OIDC_ISSUER_COOKIE_HASH_KEY="${OIDC_ISSUER_COOKIE_HASH_KEY:-$(vault kv get -field=oidc-issuer-cookie-hash-key dev/seed-clusters/dev.kubermatic.io)}"
 
-  API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-id=$OIDC_ISSUER_CLIENT_ID"
-  API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-secret=$OIDC_ISSUER_CLIENT_SECRET"
-  API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-redirect-uri=$OIDC_ISSUER_REDIRECT_URI"
-  API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-cookie-hash-key=$OIDC_ISSUER_COOKIE_HASH_KEY"
-fi
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-id=$OIDC_ISSUER_CLIENT_ID"
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-client-secret=$OIDC_ISSUER_CLIENT_SECRET"
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-redirect-uri=$OIDC_ISSUER_REDIRECT_URI"
+API_EXTRA_ARGS="$API_EXTRA_ARGS -oidc-issuer-cookie-hash-key=$OIDC_ISSUER_COOKIE_HASH_KEY"
 
 echodate "Starting API..."
 set -x
