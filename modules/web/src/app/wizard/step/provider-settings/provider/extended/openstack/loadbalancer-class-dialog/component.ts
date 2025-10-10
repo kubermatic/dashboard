@@ -15,6 +15,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {KmValidators} from '@shared/validators/validators';
 import {
   CredentialsType,
   OpenstackCredentialsTypeService,
@@ -43,6 +44,10 @@ enum Controls {
   MemberSubnetID = 'memberSubnetID',
 }
 
+enum ControlErrors {
+  Duplicate = 'duplicate',
+}
+
 @Component({
   selector: 'km-openstack-lb-class-dialog',
   templateUrl: './template.html',
@@ -51,6 +56,7 @@ enum Controls {
 })
 export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly ControlErrors = ControlErrors;
   readonly displayedColumns: string[] = ['number', 'name', 'floatingNetwork', 'network', 'actions'];
   form: FormGroup;
 
@@ -92,13 +98,13 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
 
   ngOnInit(): void {
     this._initForm();
+    this._initNetworkSetup();
 
     // Load existing classes into the openstackConfiguredClasses list
     if (this.data?.loadBalancerClasses?.length > 0) {
       this.openstackConfiguredClasses = [...this.data.loadBalancerClasses];
     }
 
-    this._initNetworkSetup();
 
     // Watch for floating network changes to load subnets
     this.form
@@ -197,19 +203,15 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
       },
     };
 
-    // Check for duplicate names
-    if (this.openstackConfiguredClasses.some(cls => cls.name === newClass.name)) {
-      this.form.get(Controls.Name).setErrors({duplicateName: true});
-      return;
-    }
-
     this.openstackConfiguredClasses = [...this.openstackConfiguredClasses, newClass];
+    this._updateNameValidator();
     this.form.reset();
     this.form.get(Controls.FloatingSubnetTags).setValue([]);
   }
 
   deleteClass(index: number): void {
     this.openstackConfiguredClasses = this.openstackConfiguredClasses.filter((_, i) => i !== index);
+    this._updateNameValidator();
   }
 
   clearForm(): void {
@@ -232,6 +234,14 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
       [Controls.SubnetID]: [''],
       [Controls.MemberSubnetID]: [''],
     });
+    this._updateNameValidator();
+  }
+
+  private _updateNameValidator(): void {
+    const nameControl = this.form.get(Controls.Name);
+    const existingNames = this.openstackConfiguredClasses.map(cls => cls.name);
+    nameControl.setValidators([Validators.required, KmValidators.duplicate(existingNames)]);
+    nameControl.updateValueAndValidity();
   }
 
   private _initNetworkSetup(): void {

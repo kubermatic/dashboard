@@ -33,7 +33,7 @@ limitations under the License.
       <mat-error *ngIf="form.get(Controls.Name).errors?.required">
         Name is required.
       </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).errors?.duplicateName">
+      <mat-error *ngIf="form.get(Controls.Name).errors?.[ControlErrors.Duplicate]">
         Name must be unique.
       </mat-error>
     </mat-form-field>
