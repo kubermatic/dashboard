@@ -114,6 +114,13 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       this.loadBalancerClasses = [...existingClasses];
     }
 
+    merge(
+      this._credentialsTypeService.credentialsTypeChanges,
+      this._presets.presetChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.clearLoadBalancerClasses());
+
     this.form
       .get(Controls.EnableIngressHostname)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
@@ -158,6 +165,11 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
         this.loadBalancerClasses = classes;
         this._clusterSpecService.cluster = this._getClusterEntity();
       });
+  }
+
+  clearLoadBalancerClasses(): void {
+    this.loadBalancerClasses = [];
+    this._clusterSpecService.cluster = this._getClusterEntity();
   }
 
   private _getClusterEntity(): Cluster {
