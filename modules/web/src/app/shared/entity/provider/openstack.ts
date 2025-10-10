@@ -71,3 +71,18 @@ export class OpenstackSubnetPool {
   isDefault: boolean;
   prefixes?: string[];
 }
+
+export class OpenstackLBClassConfig {
+  floatingNetworkID?: string;
+  floatingSubnetID?: string;
+  floatingSubnetName?: string;
+  floatingSubnetTags?: string;
+  networkID?: string;
+  subnetID?: string;
+  memberSubnetID?: string;
+}
+
+export class OpenstackLoadBalancerClass {
+  name: string;
+  config: OpenstackLBClassConfig;
+}

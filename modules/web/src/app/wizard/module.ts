@@ -55,6 +55,7 @@ import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
 import {VMwareCloudDirectorProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/vmware-cloud-director/component';
 import {VMwareCloudDirectorProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/vmware-cloud-director/component';
+import {OpenstackLoadBalancerClassDialogComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/loadbalancer-class-dialog/component';
 
 const components = [
   WizardComponent,
@@ -75,7 +76,7 @@ const components = [
   OpenstackProviderBasicComponent,
   OpenstackProviderExtendedComponent,
   OpenstackProviderExtendedCredentialsComponent,
-
+  OpenstackLoadBalancerClassDialogComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,
