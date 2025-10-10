@@ -27,7 +27,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
-import { expandCollapse } from '@app/shared/animations/expand';
+import {expandCollapse} from '@app/shared/animations/expand';
 
 export interface LoadBalancerClassDialogData {
   loadBalancerClasses?: OpenstackLoadBalancerClass[];
@@ -100,60 +100,15 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   ) {}
 
   ngOnInit(): void {
-    this._initForm();
-    this._initNetworkSetup();
-
     // Load existing classes into the openstackConfiguredClasses list
     if (this.data?.loadBalancerClasses?.length > 0) {
       this.openstackConfiguredClasses = [...this.data.loadBalancerClasses];
       this.expandedStates = new Array(this.openstackConfiguredClasses.length).fill(false);
     }
 
-    // Watch for floating network changes to load subnets
-    this.form
-      .get(Controls.FloatingNetworkID)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(networkID => {
-        if (networkID) {
-          this._loadFloatingSubnets(networkID);
-        } else {
-          this.floatingSubnets = [];
-          this.form.get(Controls.FloatingSubnetID).setValue('');
-          this.form.get(Controls.FloatingSubnetName).setValue('');
-          this.form.get(Controls.FloatingSubnetTags).setValue([]);
-        }
-      });
-
-    // Watch for floating subnet name changes to auto-populate ID
-    this.form
-      .get(Controls.FloatingSubnetName)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(subnetName => {
-        if (subnetName) {
-          const subnet = this.floatingSubnets.find(s => s.name === subnetName);
-          if (subnet) {
-            this.form.get(Controls.FloatingSubnetID).setValue(subnet.id);
-          }
-        } else {
-          this.form.get(Controls.FloatingSubnetID).setValue('');
-        }
-      });
-
-    // Watch for network changes to load subnets and member subnets
-    this.form
-      .get(Controls.NetworkID)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(networkID => {
-        if (networkID) {
-          this._loadSubnets(networkID);
-          this._loadMemberSubnets(networkID);
-        } else {
-          this.subnets = [];
-          this.memberSubnets = [];
-          this.form.get(Controls.SubnetID).setValue('');
-          this.form.get(Controls.MemberSubnetID).setValue('');
-        }
-      });
+    this._initForm();
+    this._initSubscriptions();
+    this._initNetworkSetup();
   }
 
   ngOnDestroy(): void {
@@ -234,14 +189,7 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
     this._updateNameValidator();
   }
 
-  private _updateNameValidator(): void {
-    const nameControl = this.form.get(Controls.Name);
-    const existingNames = this.openstackConfiguredClasses.map(cls => cls.name);
-    nameControl.setValidators([Validators.required, KmValidators.duplicate(existingNames)]);
-    nameControl.updateValueAndValidity();
-  }
-
-  private _initNetworkSetup(): void {
+  private _initSubscriptions(): void {
     // Setup preset handling
     this._presets.presetDetailedChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this.isPresetSelected = !!preset;
@@ -266,6 +214,61 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
       .pipe(takeUntil(this._unsubscribe))
       .subscribe();
 
+    // Watch for floating network changes to load subnets
+    this.form
+      .get(Controls.FloatingNetworkID)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(networkID => {
+        if (networkID) {
+          this._loadFloatingSubnets(networkID);
+        } else {
+          this.floatingSubnets = [];
+          this.form.get(Controls.FloatingSubnetID).setValue('');
+          this.form.get(Controls.FloatingSubnetName).setValue('');
+          this.form.get(Controls.FloatingSubnetTags).setValue([]);
+        }
+      });
+
+    // Watch for floating subnet name changes to auto-populate ID
+    this.form
+      .get(Controls.FloatingSubnetName)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(subnetName => {
+        if (subnetName) {
+          const subnet = this.floatingSubnets.find(s => s.name === subnetName);
+          if (subnet) {
+            this.form.get(Controls.FloatingSubnetID).setValue(subnet.id);
+          }
+        } else {
+          this.form.get(Controls.FloatingSubnetID).setValue('');
+        }
+      });
+
+    // Watch for network changes to load subnets and member subnets
+    this.form
+      .get(Controls.NetworkID)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(networkID => {
+        if (networkID) {
+          this._loadSubnets(networkID);
+          this._loadMemberSubnets(networkID);
+        } else {
+          this.subnets = [];
+          this.memberSubnets = [];
+          this.form.get(Controls.SubnetID).setValue('');
+          this.form.get(Controls.MemberSubnetID).setValue('');
+        }
+      });
+  }
+
+  private _updateNameValidator(): void {
+    const nameControl = this.form.get(Controls.Name);
+    const existingNames = this.openstackConfiguredClasses.map(cls => cls.name);
+    nameControl.setValidators([Validators.required, KmValidators.duplicate(existingNames)]);
+    nameControl.updateValueAndValidity();
+  }
+
+  private _initNetworkSetup(): void {
     // Always load data when dialog opens
     this._loadNetworks();
     this._loadFloatingNetworks();
