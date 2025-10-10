@@ -27,6 +27,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
+import { expandCollapse } from '@app/shared/animations/expand';
 
 export interface LoadBalancerClassDialogData {
   loadBalancerClasses?: OpenstackLoadBalancerClass[];
@@ -53,11 +54,12 @@ enum ControlErrors {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
   standalone: false,
+  animations: [expandCollapse],
 })
 export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
   readonly ControlErrors = ControlErrors;
-  readonly displayedColumns: string[] = ['number', 'name', 'floatingNetwork', 'network', 'actions'];
+  readonly displayedColumns: string[] = ['class', 'actions'];
   form: FormGroup;
 
   isPresetSelected = false;
@@ -73,6 +75,7 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   subnets: OpenstackSubnet[] = [];
   memberSubnets: OpenstackSubnet[] = [];
   openstackConfiguredClasses: OpenstackLoadBalancerClass[] = [];
+  expandedStates: boolean[] = [];
 
   private readonly _unsubscribe = new Subject<void>();
   private readonly _debounceTime = 500;
@@ -103,8 +106,8 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
     // Load existing classes into the openstackConfiguredClasses list
     if (this.data?.loadBalancerClasses?.length > 0) {
       this.openstackConfiguredClasses = [...this.data.loadBalancerClasses];
+      this.expandedStates = new Array(this.openstackConfiguredClasses.length).fill(false);
     }
-
 
     // Watch for floating network changes to load subnets
     this.form
@@ -169,19 +172,11 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
   getDisplayNameForNetworkID(networkID: string): string {
     if (!networkID) return '-';
     const network = [...this.floatingNetworks, ...this.networks].find(n => n.id === networkID);
-    return network?.name || this.truncateID(networkID);
+    return network?.name || networkID;
   }
 
-  truncateID(id: string): string {
-    if (!id) {
-      return '-';
-    }
-    const MAX_LENGTH = 12;
-    const START_CHARS = 8;
-    const END_CHARS = 4;
-    return id.length > MAX_LENGTH
-      ? `${id.substring(0, START_CHARS)}...${id.substring(id.length - END_CHARS)}`
-      : id;
+  toggleExpanded(index: number): void {
+    this.expandedStates[index] = !this.expandedStates[index];
   }
 
   addClass(): void {
@@ -204,6 +199,7 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
     };
 
     this.openstackConfiguredClasses = [...this.openstackConfiguredClasses, newClass];
+    this.expandedStates = [...this.expandedStates, false];
     this._updateNameValidator();
     this.form.reset();
     this.form.get(Controls.FloatingSubnetTags).setValue([]);
@@ -211,6 +207,7 @@ export class OpenstackLoadBalancerClassDialogComponent implements OnInit, OnDest
 
   deleteClass(index: number): void {
     this.openstackConfiguredClasses = this.openstackConfiguredClasses.filter((_, i) => i !== index);
+    this.expandedStates = this.expandedStates.filter((_, i) => i !== index);
     this._updateNameValidator();
   }
 

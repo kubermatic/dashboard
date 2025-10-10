@@ -211,63 +211,84 @@ limitations under the License.
     <mat-divider></mat-divider>
     <table class="km-table"
            mat-table
+           multiTemplateDataRows
            [dataSource]="openstackConfiguredClasses">
-      <ng-container matColumnDef="number">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">#</th>
-        <td mat-cell
-            *matCellDef="let element; let i = index">{{i + 1}}</td>
-      </ng-container>
 
-      <ng-container matColumnDef="name">
+      <!-- Class Name Column with Expand/Collapse -->
+      <ng-container matColumnDef="class">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-15">Name</th>
+            class="km-header-cell">Class</th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="floatingNetwork">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-25">Floating Network</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <span [matTooltip]="element.config?.floatingNetworkID || ''"
-                [matTooltipDisabled]="!element.config?.floatingNetworkID"
-                class="km-pointer">
-            {{getDisplayNameForNetworkID(element.config?.floatingNetworkID)}}
-          </span>
+            *matCellDef="let element; let i = index">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <button mat-icon-button
+                    (click)="toggleExpanded(i)"
+                    class="expand-button">
+              <i class="km-icon-mask"
+                 [class.km-icon-arrow-down]="!expandedStates[i]"
+                 [class.km-icon-arrow-up]="expandedStates[i]"></i>
+            </button>
+            <span class="class-name">{{element.name}}</span>
+          </div>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="network">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Network</th>
-        <td mat-cell
-            *matCellDef="let element">
-          <span [matTooltip]="element.config?.networkID || ''"
-                [matTooltipDisabled]="!element.config?.networkID"
-                class="km-pointer">
-            {{getDisplayNameForNetworkID(element.config?.networkID)}}
-          </span>
-        </td>
-      </ng-container>
-
+      <!-- Actions Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Action</th>
+            class="km-header-cell">Actions</th>
         <td mat-cell
             *matCellDef="let element; let i = index">
           <button mat-icon-button
                   type="button"
-                  (click)="deleteClass(i)">
+                  (click)="deleteClass(i)"
+                  matTooltip="Delete class">
             <i class="km-icon-mask km-icon-delete"
                aria-hidden="true"></i>
           </button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Details Column -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell
+            *matCellDef="let element; let i = index"
+            [attr.colspan]="displayedColumns.length"
+            class="expanded-detail">
+          <div class="element-detail"
+               [@detailExpand]="expandedStates[i] ? 'expanded' : 'collapsed'">
+            <div class="detail-content">
+              <div *ngIf="element.config?.floatingNetworkID">
+                <strong>Floating Network ID:</strong> {{element.config.floatingNetworkID}}
+                <span *ngIf="getDisplayNameForNetworkID(element.config.floatingNetworkID) !== element.config.floatingNetworkID">
+                  ({{getDisplayNameForNetworkID(element.config.floatingNetworkID)}})
+                </span>
+              </div>
+              <div *ngIf="element.config?.floatingSubnetID">
+                <strong>Floating Subnet ID:</strong> {{element.config.floatingSubnetID}}
+              </div>
+              <div *ngIf="element.config?.floatingSubnetName">
+                <strong>Floating Subnet Name:</strong> {{element.config.floatingSubnetName}}
+              </div>
+              <div *ngIf="element.config?.floatingSubnetTags">
+                <strong>Floating Subnet Tags:</strong> {{element.config.floatingSubnetTags}}
+              </div>
+              <div *ngIf="element.config?.networkID">
+                <strong>Network ID:</strong> {{element.config.networkID}}
+                <span *ngIf="getDisplayNameForNetworkID(element.config.networkID) !== element.config.networkID">
+                  ({{getDisplayNameForNetworkID(element.config.networkID)}})
+                </span>
+              </div>
+              <div *ngIf="element.config?.subnetID">
+                <strong>Subnet ID:</strong> {{element.config.subnetID}}
+              </div>
+              <div *ngIf="element.config?.memberSubnetID">
+                <strong>Member Subnet ID:</strong> {{element.config.memberSubnetID}}
+              </div>
+            </div>
+          </div>
         </td>
       </ng-container>
 
@@ -275,8 +296,13 @@ limitations under the License.
           class="km-header-row"
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
+          *matRowDef="let element; columns: displayedColumns; let i = index"
+          class="km-mat-row main-row"
+          [class.expanded]="expandedStates[i]"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: ['expandedDetail']; let i = index"
+          class="detail-row"
+          [class.expanded]="expandedStates[i]"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"
