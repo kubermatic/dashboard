@@ -25,7 +25,7 @@ limitations under the License.
          fxLayoutAlign=" center">
       <span>Enable Ingress Hostname</span>
       <i class="km-pointer km-icon-info"
-         matTooltip="Enable the &quot;enable-ingress-hostname&quot; cloud provider option on the Openstack CCM."></i>
+         matTooltip='Enable the "enable-ingress-hostname" cloud provider option on the Openstack CCM.'></i>
     </div>
   </mat-checkbox>
 
@@ -35,11 +35,10 @@ limitations under the License.
            [formControlName]="Controls.IngressHostnameSuffix"
            [name]="Controls.IngressHostnameSuffix"
            type="text"
-           autocomplete="off">
+           autocomplete="off" />
     <mat-hint>
-      Set a specific suffix for the hostnames used for the PROXY protocol
-      workaround that is enabled by <code>EnableIngressHostname</code>. The suffix
-      is set to <code>nip.io</code> by default.
+      Set a specific suffix for the hostnames used for the PROXY protocol workaround that is enabled by
+      <code>EnableIngressHostname</code>. The suffix is set to <code>nip.io</code> by default.
     </mat-hint>
   </mat-form-field>
 
@@ -67,8 +66,8 @@ limitations under the License.
       </span>
     </div>
     <div class="km-muted-light">
-      Set up Load Balancer Classes to enable advanced options for load balancing
+      Set up Load Balancer Classes for this Cluster. This can be used to configure multiple classes with different
+      floating networks and subnets, etc.
     </div>
   </div>
-
 </form>
