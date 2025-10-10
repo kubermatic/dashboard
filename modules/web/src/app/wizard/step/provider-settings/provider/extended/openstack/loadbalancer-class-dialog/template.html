@@ -28,14 +28,10 @@ limitations under the License.
              [formControlName]="Controls.Name"
              type="text"
              autocomplete="off"
-             required>
+             required />
       <mat-hint>Unique name for this load balancer class</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Name).errors?.required">
-        Name is required.
-      </mat-error>
-      <mat-error *ngIf="form.get(Controls.Name).errors?.[ControlErrors.Duplicate]">
-        Name must be unique.
-      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).errors?.required"> Name is required. </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).errors?.[ControlErrors.Duplicate]"> Name must be unique. </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -87,7 +83,7 @@ limitations under the License.
              [formControlName]="Controls.FloatingSubnetID"
              type="text"
              readonly
-             disabled>
+             disabled />
       <mat-hint>Auto-populated from subnet name selection</mat-hint>
     </mat-form-field>
 
@@ -125,9 +121,7 @@ limitations under the License.
           <mat-spinner [diameter]="16"></mat-spinner> Loading...
         </mat-option>
         <mat-option *ngIf="!isNetworksLoading && !networks?.length"
-                    disabled>
-          No networks available
-        </mat-option>
+                    disabled> No networks available </mat-option>
         <mat-option *ngFor="let network of networks"
                     [value]="network.id">
           {{ getNetworkDisplayName(network) }}
@@ -153,9 +147,7 @@ limitations under the License.
           No subnets available
         </mat-option>
         <mat-option *ngFor="let subnet of subnets"
-                    [value]="subnet.id">
-          {{ getSubnetDisplayName(subnet) }}
-        </mat-option>
+                    [value]="subnet.id"> {{ getSubnetDisplayName(subnet) }} </mat-option>
       </mat-select>
       <mat-hint>Subnet for the load balancer</mat-hint>
     </mat-form-field>
@@ -190,20 +182,21 @@ limitations under the License.
          class="form-buttons">
       <button mat-flat-button
               type="button"
-              (click)="clearForm()">
-        <span>Clear Form</span>
-      </button>
-      <button mat-flat-button
-              type="button"
               [disabled]="!form.valid"
               (click)="addClass()">
         <i class="km-icon-mask km-icon-add"
            matButtonIcon></i>
         <span>Add Class</span>
       </button>
+      <button mat-flat-button
+              type="button"
+              (click)="clearForm()">
+        <i class="km-icon-mask km-icon-clear"
+           matButtonIcon></i>
+        <span>Clear Form</span>
+      </button>
     </div>
   </form>
-
 
   <!-- Load balancer Configured Classes -->
   <div class="loadbalancer-classes-section">
@@ -213,27 +206,13 @@ limitations under the License.
            mat-table
            multiTemplateDataRows
            [dataSource]="openstackConfiguredClasses">
-
-      <!-- Class Name Column with Expand/Collapse -->
+      <!-- Class Name Column -->
       <ng-container matColumnDef="class">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell">Class</th>
         <td mat-cell
-            *matCellDef="let element; let i = index">
-          <div fxLayout="row"
-               fxLayoutAlign="start center"
-               fxLayoutGap="10px">
-            <button mat-icon-button
-                    (click)="toggleExpanded(i)"
-                    class="expand-button">
-              <i class="km-icon-mask"
-                 [class.km-icon-arrow-down]="!expandedStates[i]"
-                 [class.km-icon-arrow-up]="expandedStates[i]"></i>
-            </button>
-            <span class="class-name">{{element.name}}</span>
-          </div>
-        </td>
+            *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
       <!-- Actions Column -->
@@ -242,21 +221,33 @@ limitations under the License.
             *matHeaderCellDef
             class="km-header-cell">Actions</th>
         <td mat-cell
-            *matCellDef="let element; let i = index">
-          <button mat-icon-button
-                  type="button"
-                  (click)="deleteClass(i)"
-                  matTooltip="Delete class">
-            <i class="km-icon-mask km-icon-delete"
-               aria-hidden="true"></i>
-          </button>
+            *matCellDef="let element; let i = dataIndex">
+          <div fxLayout="row"
+               fxLayoutAlign="start center"
+               fxLayoutGap="5px">
+            <button mat-icon-button
+                    (click)="toggleExpanded(i)"
+                    matTooltip="Expand details"
+                    class="expand-button">
+              <i class="km-icon-mask"
+                 [class.km-icon-arrow-down]="!expandedStates[i]"
+                 [class.km-icon-arrow-up]="expandedStates[i]"></i>
+            </button>
+            <button mat-icon-button
+                    type="button"
+                    (click)="deleteClass(i)"
+                    matTooltip="Delete class">
+              <i class="km-icon-mask km-icon-delete"
+                 aria-hidden="true"></i>
+            </button>
+          </div>
         </td>
       </ng-container>
 
       <!-- Expanded Details Column -->
       <ng-container matColumnDef="expandedDetail">
         <td mat-cell
-            *matCellDef="let element; let i = index"
+            *matCellDef="let element; let i = dataIndex"
             [attr.colspan]="displayedColumns.length"
             class="expanded-detail">
           <div class="element-detail"
@@ -283,9 +274,7 @@ limitations under the License.
                   ({{getDisplayNameForNetworkID(element.config.networkID)}})
                 </span>
               </div>
-              <div *ngIf="element.config?.subnetID">
-                <strong>Subnet ID:</strong> {{element.config.subnetID}}
-              </div>
+              <div *ngIf="element.config?.subnetID"><strong>Subnet ID:</strong> {{element.config.subnetID}}</div>
               <div *ngIf="element.config?.memberSubnetID">
                 <strong>Member Subnet ID:</strong> {{element.config.memberSubnetID}}
               </div>
@@ -298,26 +287,25 @@ limitations under the License.
           class="km-header-row"
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
-          *matRowDef="let element; columns: displayedColumns; let i = index"
+          *matRowDef="let element; columns: displayedColumns; let i = dataIndex"
           class="km-mat-row main-row"
           [class.expanded]="expandedStates[i]"></tr>
       <tr mat-row
-          *matRowDef="let row; columns: ['expandedDetail']; let i = index"
+          *matRowDef="let row; columns: ['expandedDetail']; let i = dataIndex"
           class="detail-row"
           [class.expanded]="expandedStates[i]"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="!openstackConfiguredClasses.length">No load balancer classes available.
+         *ngIf="!openstackConfiguredClasses.length">
+      No load balancer classes available.
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
           type="button"
-          (click)="dialogRef.close()">
-    Cancel
-  </button>
+          (click)="dialogRef.close()">Cancel</button>
   <button mat-flat-button
           type="button"
           kmThrottleClick
