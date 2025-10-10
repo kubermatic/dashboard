@@ -153,7 +153,7 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
 
           const dialogRef = this._matDialog.open(OpenstackLoadBalancerClassDialogComponent, {
             data: dialogData,
-            disableClose: true,
+            disableClose: this.loadBalancerClassCount > 0,
           });
 
           return dialogRef.afterClosed();

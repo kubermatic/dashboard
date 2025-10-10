@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>Configure LoadBalancer Classes</km-dialog-title>
+<km-dialog-title>Configure Load Balancer Classes</km-dialog-title>
 <mat-dialog-content>
-  <p class="km-dialog-context-description">Configure one or more LoadBalancer classes for your OpenStack cluster.</p>
+  <p class="km-dialog-context-description">Configure one or more Load Balancer classes for your OpenStack cluster.</p>
 
-  <!-- LoadBalancer Class Form -->
+  <!-- Load Balancer Class Form -->
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutGap="15px">
     <mat-form-field>
-      <mat-label>LoadBalancer Class Name</mat-label>
+      <mat-label>Class Name</mat-label>
       <input matInput
              [formControlName]="Controls.Name"
              type="text"
              autocomplete="off"
              required>
-      <mat-hint>Unique name for this loadbalancer class</mat-hint>
+      <mat-hint>Unique name for this load balancer class</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).errors?.required">
         Name is required.
       </mat-error>
@@ -133,7 +133,7 @@ limitations under the License.
           {{ getNetworkDisplayName(network) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Internal network for loadbalancer</mat-hint>
+      <mat-hint>Internal network for load balancer</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
@@ -157,7 +157,7 @@ limitations under the License.
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Subnet for the loadbalancer</mat-hint>
+      <mat-hint>Subnet for the load balancer</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
@@ -181,7 +181,7 @@ limitations under the License.
           {{ getSubnetDisplayName(subnet) }}
         </mat-option>
       </mat-select>
-      <mat-hint>Subnet where loadbalancer members are located</mat-hint>
+      <mat-hint>Subnet where load balancer members are located</mat-hint>
     </mat-form-field>
 
     <div fxLayout="row"
@@ -205,9 +205,9 @@ limitations under the License.
   </form>
 
 
-<!-- LoadBalancer Configured Classes -->
+<!-- Load balancer Configured Classes -->
   <div class="loadbalancer-classes-section">
-    <p class="km-text-muted">LoadBalancer Classes ({{openstackConfiguredClasses.length}})</p>
+    <p class="km-text-muted">Load Balancer Classes ({{openstackConfiguredClasses.length}})</p>
     <mat-divider></mat-divider>
     <table class="km-table"
            mat-table
@@ -280,7 +280,7 @@ limitations under the License.
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="!openstackConfiguredClasses.length">No loadbalancer classes available.
+         *ngIf="!openstackConfiguredClasses.length">No load balancer classes available.
     </div>
   </div>
 </mat-dialog-content>
