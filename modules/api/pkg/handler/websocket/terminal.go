@@ -72,7 +72,7 @@ const (
 	pingMessage                       = "PING"
 	pongMessage                       = "PONG"
 
-	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.11.0"
+	webTerminalImage                   = resources.WEBTerminalImage
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 
@@ -647,7 +647,7 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 	pod.Spec.Containers = []corev1.Container{
 		{
 			Name:         userAppName,
-			Image:        registry.Must(registry.RewriteImage(webTerminalImage, webTerminalImage)),
+			Image:        registry.Must(registry.RewriteImage(webTerminalImage, overwriteRegistry)),
 			Command:      []string{"/bin/bash", "-c", "--"},
 			Args:         []string{"while true; do sleep 30; done;"},
 			Env:          env,
@@ -683,7 +683,7 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string,
 					Containers: []corev1.Container{
 						{
 							Name:    userAppName,
-							Image:   registry.Must(registry.RewriteImage(webTerminalImage, webTerminalImage)),
+							Image:   registry.Must(registry.RewriteImage(webTerminalImage, overwriteRegistry)),
 							Command: []string{"/bin/bash", "-c"},
 							Args: []string{`
 
