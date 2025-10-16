@@ -116,8 +116,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-  readonly MinReplicasCount = 1;
-  readonly MaxReplicasCount = 1000;
+  readonly minReplicasCount = 0;
+  readonly maxReplicasCount = 1000;
+  readonly autoscalerMinReplicasCount = 1;
   readonly ipv4AndIPv6Regex = IPV4_IPV6_PATTERN;
 
   @Input() provider: NodeProvider;
@@ -235,11 +236,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.EnableClusterAutoscalingApp]: this._builder.control(!!this.autoscalerApplication),
       [Controls.MaxReplicas]: this._builder.control(
         this._nodeDataService.nodeData.maxReplicas,
-        Validators.max(this.MaxReplicasCount)
+        Validators.max(this.maxReplicasCount)
       ),
       [Controls.MinReplicas]: this._builder.control(
         this._nodeDataService.nodeData.minReplicas,
-        Validators.min(this.MinReplicasCount)
+        Validators.min(this.autoscalerMinReplicasCount)
       ),
     });
 
@@ -502,6 +503,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   isClusterAutoscalingEnabled(): boolean {
     return !!this.clusterAutoscalerAppDefinition || (this.isDialogView() && !!this.autoscalerApplication);
+  }
+
+  isMinMaxReplicasDisabled(): boolean {
+    return (
+      (this.isDialogView() && !this.autoscalerApplication) ||
+      (!this.isDialogView() && !this.form.get(Controls.EnableClusterAutoscalingApp).value)
+    );
   }
 
   private _init(): void {

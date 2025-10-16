@@ -97,6 +97,7 @@
     }
 
     mat-card-content {
+      margin-top: 0;
       padding: 10px;
     }
 
@@ -108,6 +109,7 @@
       align-items: center;
       display: flex;
       flex-direction: row;
+      font-size: variables.$font-size-subhead;
       place-content: center space-between;
 
       &:not(:last-child) {

@@ -188,7 +188,10 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     if ((!!this.max || this.max === 0) && +(this._value ?? 0) + +this.step > this.max) {
       return;
     }
-
+    if (!this.value && this.min) {
+      this.value = this.min;
+      return;
+    }
     this.value = +(this._value ?? this.min ?? 0) + +this.step;
   }
 

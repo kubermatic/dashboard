@@ -64,8 +64,8 @@ limitations under the License.
                          mode="errors"
                          label="Replicas"
                          required
-                         [min]="form.get(Controls.MinReplicas).value ?? MinReplicasCount"
-                         [max]="form.get(Controls.MaxReplicas).value"
+                         [min]="form.get(Controls.MinReplicas).value ?? minReplicasCount"
+                         [max]="form.get(Controls.MaxReplicas).value ?? maxReplicasCount"
                          [formControlName]="Controls.Count">
       </km-number-stepper>
 
@@ -261,12 +261,16 @@ limitations under the License.
               {{clusterAutoscalerWarningMessage}}
             </p>
           </div>
-          <mat-checkbox [name]="Controls.EnableClusterAutoscalingApp"
-                        [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
-          </mat-checkbox>
-          <i *ngIf="isClusterAutoscalingEnabled()"
-             class="km-icon-info km-pointer"
-             matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
+          <ng-container *ngIf="!isDialogView()">
+            <mat-checkbox id="km-enable-cluster-autoscaling-app"
+                          kmValueChangedIndicator
+                          [name]="Controls.EnableClusterAutoscalingApp"
+                          [formControlName]="Controls.EnableClusterAutoscalingApp">Enable Cluster Autoscaler Application
+            </mat-checkbox>
+            <i *ngIf="isClusterAutoscalingEnabled()"
+               class="km-icon-info km-pointer"
+               matTooltip="Autoscaling of machines requires the Cluster Autoscaler application to be installed. Enable this option to install Cluster Autoscaler Application."></i>
+          </ng-container>
         </div>
         <button *ngIf="form.get(Controls.EnableClusterAutoscalingApp).value"
                 mat-flat-button
@@ -282,20 +286,20 @@ limitations under the License.
       <km-number-stepper label="Min Replicas"
                          mode="all"
                          hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
-                         [min]="MinReplicasCount"
-                         [max]="form.get(Controls.MaxReplicas).value  || MaxReplicasCount"
+                         [min]="autoscalerMinReplicasCount"
+                         [max]="form.get(Controls.MaxReplicas).value  || maxReplicasCount"
                          [required]="form.get(Controls.MaxReplicas).value"
-                         [disabled]="!isClusterAutoscalingEnabled()"
+                         [disabled]="isMinMaxReplicasDisabled()"
                          [formControlName]="Controls.MinReplicas">
       </km-number-stepper>
 
       <km-number-stepper label="Max Replicas"
                          mode="all"
                          hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
-                         [min]="form.get(Controls.MinReplicas).value || MinReplicasCount"
-                         [max]="MaxReplicasCount"
+                         [min]="form.get(Controls.MinReplicas).value || autoscalerMinReplicasCount"
+                         [max]="maxReplicasCount"
                          [required]="form.get(Controls.MinReplicas).value"
-                         [disabled]="!isClusterAutoscalingEnabled()"
+                         [disabled]="isMinMaxReplicasDisabled()"
                          [formControlName]="Controls.MaxReplicas">
       </km-number-stepper>
     </ng-container>
