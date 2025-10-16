@@ -37,6 +37,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/sdk/v2/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
+	"k8c.io/kubermatic/v2/pkg/resources/registry"
 
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -71,7 +72,7 @@ const (
 	pingMessage                       = "PING"
 	pongMessage                       = "PONG"
 
-	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.11.0"
+	webTerminalImage                   = resources.WEBTerminalImage
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 
@@ -383,7 +384,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
 	userAppName := userAppName(userEmailID)
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
@@ -395,7 +396,7 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 			return err
 		}
 		// create NetworkPolicy, Pod and cleanup Job
-		if err := createOrUpdateResources(ctx, client, seedClient, userEmailID, userAppName, cluster, options); err != nil {
+		if err := createOrUpdateResources(ctx, client, seedClient, userEmailID, userAppName, cluster, options, overwriteRegistry); err != nil {
 			return err
 		}
 	}
@@ -477,7 +478,7 @@ func startProcess(ctx context.Context, client, seedClient ctrlruntimeclient.Clie
 	return nil
 }
 
-func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions) error {
+func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, overwriteRegistry string) error {
 	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster, options)
 	if err != nil {
 		return err
@@ -492,13 +493,13 @@ func createOrUpdateResources(ctx context.Context, client, seedClient ctrlruntime
 		}
 	}
 
-	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID, options)); err != nil {
+	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID, options, overwriteRegistry)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
 	}
 
-	if err := seedClient.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID, cluster.Name)); err != nil {
+	if err := seedClient.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID, cluster.Name, overwriteRegistry)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
@@ -617,7 +618,7 @@ func genWebTerminalNetworkPolicy(userAppName string, cluster *kubermaticv1.Clust
 	}, nil
 }
 
-func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.WebTerminalOptions) *corev1.Pod {
+func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.WebTerminalOptions, overwriteRegistry string) *corev1.Pod {
 	pod := &corev1.Pod{}
 	pod.Name = userAppName
 	pod.Namespace = metav1.NamespaceSystem
@@ -646,7 +647,7 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 	pod.Spec.Containers = []corev1.Container{
 		{
 			Name:         userAppName,
-			Image:        webTerminalImage,
+			Image:        registry.Must(registry.RewriteImage(webTerminalImage, overwriteRegistry)),
 			Command:      []string{"/bin/bash", "-c", "--"},
 			Args:         []string{"while true; do sleep 30; done;"},
 			Env:          env,
@@ -660,7 +661,7 @@ func genWebTerminalPod(userAppName, userEmailID string, options *kubermaticv1.We
 	return pod
 }
 
-func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string) *batchv1.Job {
+func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string, overwriteRegistry string) *batchv1.Job {
 	namespace := fmt.Sprintf("cluster-%s", clusterID)
 	return &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
@@ -682,7 +683,7 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string, clusterID string)
 					Containers: []corev1.Container{
 						{
 							Name:    userAppName,
-							Image:   webTerminalImage,
+							Image:   registry.Must(registry.RewriteImage(webTerminalImage, overwriteRegistry)),
 							Command: []string{"/bin/bash", "-c"},
 							Args: []string{`
 
@@ -820,7 +821,7 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, options *kubermaticv1.WebTerminalOptions, oidcIssuerVerifier authtypes.OIDCIssuerVerifier, kubeconfigSecret *corev1.Secret, overwriteRegistry string) {
 	if err := startProcess(
 		ctx,
 		client,
@@ -832,6 +833,7 @@ func Terminal(ctx context.Context, ws *websocket.Conn, client, seedClient ctrlru
 		options,
 		oidcIssuerVerifier,
 		kubeconfigSecret,
+		overwriteRegistry,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,

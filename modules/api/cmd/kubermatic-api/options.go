@@ -41,6 +41,7 @@ import (
 type serverRunOptions struct {
 	listenAddress                  string
 	internalAddr                   string
+	overwriteRegistry              string
 	prometheusURL                  string
 	workerName                     string
 	swaggerFile                    string
@@ -88,6 +89,7 @@ func newServerRunOptions() (serverRunOptions, error) {
 	flag.StringVar(&s.listenAddress, "address", ":8080", "The address to listen on")
 	flag.StringVar(&s.internalAddr, "internal-address", "127.0.0.1:8085", "The address on which the internal handler should be exposed")
 	flag.StringVar(&s.prometheusURL, "prometheus-url", "http://prometheus.monitoring.svc.local:web", "The URL on which this API can talk to Prometheus")
+	flag.StringVar(&s.overwriteRegistry, "overwrite-registry", "", "registry to use for all images")
 	flag.StringVar(&s.workerName, "worker-name", "", "Create clusters only processed by worker-name cluster controller")
 	flag.StringVar(&s.swaggerFile, "swagger", "./cmd/kubermatic-api/swagger.json", "The swagger.json file path")
 	flag.StringVar(&caBundleFile, "ca-bundle", "", "The path to the certificate for the CA that signed your identity provider’s web certificate.")
