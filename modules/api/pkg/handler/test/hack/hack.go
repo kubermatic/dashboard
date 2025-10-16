@@ -173,7 +173,7 @@ func NewTestRouting(
 	r.RegisterV1(v1Router, generateDefaultMetrics())
 	r.RegisterV1Optional(v1Router, true)
 	r.RegisterV1Admin(v1Router)
-	r.RegisterV1Websocket(v1Router)
+	r.RegisterV1Websocket(v1Router, "")
 	rv2.RegisterV2(v2Router, true)
 	return mainRouter
 }
