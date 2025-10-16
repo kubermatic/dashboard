@@ -20,10 +20,7 @@ export class EncryptionKeyValidator implements Validator {
     if (!value) {
       return null;
     }
-
-    // 32-byte encryption key must encode to exactly 44 base64 characters
-    // Format: 43 base64 characters + exactly 1 padding character ('=')
-    // This strict pattern prevents malformed keys that could decode to wrong byte length
+    // 32-byte key must be exactly 44 base64 characters (43 chars + 1 padding)
     const base64Regex = /^[A-Za-z0-9+/]{43}=$/;
     if (!base64Regex.test(value)) {
       return this._invalidBase64Error();

@@ -44,7 +44,6 @@ export function generateEncryptionKey(): string {
   const bytes = new Uint8Array(byteLength);
   crypto.getRandomValues(bytes);
 
-  // Convert bytes → binary string
   let binary = '';
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i]);
