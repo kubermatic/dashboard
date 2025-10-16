@@ -493,6 +493,9 @@ limitations under the License.
               <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('required')">
                 <strong>Required</strong>
               </mat-error>
+              <mat-error *ngIf="form.get(Controls.EncryptionAtRestKey)?.hasError('invalidBase64')">
+                <strong>Invalid base64 format</strong>
+              </mat-error>
               <mat-hint>Provide a base64-encoded 32-byte encryption key or use the generate button.</mat-hint>
             </mat-form-field>
 

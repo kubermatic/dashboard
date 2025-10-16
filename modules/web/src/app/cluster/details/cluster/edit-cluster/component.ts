@@ -51,6 +51,7 @@ import {
 import {getEditionVersion} from '@shared/utils/common';
 import {AsyncValidators} from '@shared/validators/async.validators';
 import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
+import {KmValidators} from '@shared/validators/validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -205,7 +206,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ),
       [Controls.NodePortsAllowedIPRanges]: new FormControl([]),
       [Controls.EncryptionAtRest]: new FormControl(!!this.cluster.spec.encryptionConfiguration?.enabled),
-      [Controls.EncryptionAtRestKey]: new FormControl(''),
+      [Controls.EncryptionAtRestKey]: new FormControl('', [KmValidators.encryptionKey()]),
     });
 
     if (this.form.get(Controls.ClusterBackup).value) {
@@ -344,7 +345,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         const wasEnabled = this.cluster.spec.encryptionConfiguration?.enabled;
 
         if (enabled && !wasEnabled) {
-          EncryptionAtRestControl.setValidators([Validators.required]);
+          EncryptionAtRestControl.setValidators([Validators.required, KmValidators.encryptionKey()]);
         } else {
           EncryptionAtRestControl.clearValidators();
           if (!enabled) {
